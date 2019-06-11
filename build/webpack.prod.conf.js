@@ -10,9 +10,15 @@ var env = process.env.NODE_ENV === 'testing'
     ? require('../config/test.env')
     : config.build.env
 
-let commitHash = require('child_process')
+let commitHash = 'unknown';
+
+try {
+  commitHash = require('child_process')
     .execSync('git rev-parse --short HEAD')
     .toString();
+} catch (e) {
+  console.log('Couldn\'t get commit hash')
+}
 
 var webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
