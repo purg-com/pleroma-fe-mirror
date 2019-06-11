@@ -9,7 +9,7 @@ try {
   console.log('Local dev server settings not found (/config/local.json)')
 }
 
-const target = settings.target || 'http://localhost:4000/'
+const target = settings.target || process.env.API_TARGET || 'http://localhost:4000/'
 
 module.exports = {
   build: {
