@@ -225,15 +225,17 @@
           />
           <!-- eslint-enable vue/no-v-html -->
         </div>
+
         <div
-          v-if="serverValidationErrors.length"
+          v-if="serverValidationErrors && serverValidationErrors.error"
           class="form-group"
         >
           <div class="alert error">
+            {{ serverValidationErrors.error }}<br>
             <span
-              v-for="error in serverValidationErrors"
-              :key="error"
-            >{{ error }}</span>
+              v-for="(errors, field) in serverValidationErrors.fields"
+              :key="field"
+            >{{ errors.join(', ') }}</span>
           </div>
         </div>
       </form>
