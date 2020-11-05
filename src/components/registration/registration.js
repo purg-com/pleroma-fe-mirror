@@ -37,6 +37,7 @@ const registration = {
   },
   computed: {
     token () { return this.$route.params.token },
+    hasErrors () { return this.serverValidationErrors && this.serverValidationErrors.error },
     bioPlaceholder () {
       return this.$t('registration.bio_placeholder').replace(/\s*\n\s*/g, ' \n')
     },
@@ -73,6 +74,13 @@ const registration = {
     },
     setCaptcha () {
       this.getCaptcha().then(cpt => { this.captcha = cpt })
+    },
+    prettyError (errors) {
+      if (Array.isArray(errors)) {
+        return errors.join(', ')
+      } else {
+        return errors
+      }
     }
   }
 }

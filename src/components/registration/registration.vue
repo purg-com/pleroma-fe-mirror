@@ -227,7 +227,7 @@
         </div>
 
         <div
-          v-if="serverValidationErrors && serverValidationErrors.error"
+          v-if="hasErrors"
           class="form-group"
         >
           <div class="alert error">
@@ -235,7 +235,7 @@
             <span
               v-for="(errors, field) in serverValidationErrors.fields"
               :key="field"
-            >{{ errors.join(', ') }}</span>
+            >{{ prettyErrors(errors) }}</span>
           </div>
         </div>
       </form>
