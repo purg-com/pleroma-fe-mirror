@@ -75,7 +75,7 @@ const registration = {
     setCaptcha () {
       this.getCaptcha().then(cpt => { this.captcha = cpt })
     },
-    prettyError (errors) {
+    prettyErrors (errors) {
       if (Array.isArray(errors)) {
         return errors.join(', ')
       } else {
