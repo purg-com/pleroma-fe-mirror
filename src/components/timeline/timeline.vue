@@ -1,5 +1,5 @@
 <template>
-  <div :class="[classes.root, 'timeline']">
+  <div :class="[classes.root, 'Timeline']">
     <div :class="classes.header">
       <TimelineMenu v-if="!embedded" />
       <div
@@ -92,7 +92,11 @@
         v-else
         class="new-status-notification text-center panel-footer"
       >
-        <i class="icon-spin3 animate-spin" />
+        <FAIcon
+          icon="circle-notch"
+          spin
+          size="lg"
+        />
       </div>
     </div>
   </div>
@@ -103,9 +107,13 @@
 <style lang="scss">
 @import '../../_variables.scss';
 
-.timeline {
+.Timeline {
   .loadmore-text {
     opacity: 1;
+  }
+
+  &.-blocked {
+    cursor: progress;
   }
 }
 

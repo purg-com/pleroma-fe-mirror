@@ -1,3 +1,4 @@
+import ReplyButton from '../reply_button/reply_button.vue'
 import FavoriteButton from '../favorite_button/favorite_button.vue'
 import ReactButton from '../react_button/react_button.vue'
 import RetweetButton from '../retweet_button/retweet_button.vue'
@@ -16,9 +17,47 @@ import { highlightClass, highlightStyle } from '../../services/user_highlighter/
 import { muteWordHits } from '../../services/status_parser/status_parser.js'
 import { unescape, uniqBy } from 'lodash'
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import {
+  faEnvelope,
+  faLock,
+  faLockOpen,
+  faGlobe,
+  faTimes,
+  faRetweet,
+  faReply,
+  faExternalLinkSquareAlt,
+  faPlusSquare,
+  faSmileBeam,
+  faEllipsisH,
+  faStar,
+  faEyeSlash,
+  faEye,
+  faThumbtack
+} from '@fortawesome/free-solid-svg-icons'
+
+library.add(
+  faEnvelope,
+  faGlobe,
+  faLock,
+  faLockOpen,
+  faTimes,
+  faRetweet,
+  faReply,
+  faExternalLinkSquareAlt,
+  faPlusSquare,
+  faStar,
+  faSmileBeam,
+  faEllipsisH,
+  faEyeSlash,
+  faEye,
+  faThumbtack
+)
+
 const Status = {
   name: 'Status',
   components: {
+    ReplyButton,
     FavoriteButton,
     ReactButton,
     RetweetButton,
@@ -158,7 +197,7 @@ const Status = {
       return this.mergedConfig.hideFilteredStatuses
     },
     hideStatus () {
-      return this.deleted || (this.muted && this.hideFilteredStatuses) || this.virtualHidden
+      return (this.muted && this.hideFilteredStatuses) || this.virtualHidden
     },
     isFocused () {
       // retweet or root of an expanded conversation
@@ -225,13 +264,13 @@ const Status = {
     visibilityIcon (visibility) {
       switch (visibility) {
         case 'private':
-          return 'icon-lock'
+          return 'lock'
         case 'unlisted':
-          return 'icon-lock-open-alt'
+          return 'lock-open'
         case 'direct':
-          return 'icon-mail-alt'
+          return 'envelope'
         default:
-          return 'icon-globe'
+          return 'globe'
       }
     },
     showError (error) {
