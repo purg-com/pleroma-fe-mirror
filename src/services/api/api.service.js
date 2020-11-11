@@ -79,6 +79,9 @@ const MASTODON_USER_SEARCH_URL = '/api/v1/accounts/search'
 const MASTODON_DOMAIN_BLOCKS_URL = '/api/v1/domain_blocks'
 const MASTODON_STREAMING = '/api/v1/streaming'
 const MASTODON_KNOWN_DOMAIN_LIST_URL = '/api/v1/instance/peers'
+const MASTODON_LISTS_URL = '/api/v1/lists'
+const MASTODON_LIST_URL = id => `/api/v1/lists/${id}`
+const MASTODON_LIST_ACCOUNTS_URL = id => `/api/v1/lists/${id}/accounts`
 const PLEROMA_EMOJI_REACTIONS_URL = id => `/api/v1/pleroma/statuses/${id}/reactions`
 const PLEROMA_EMOJI_REACT_URL = (id, emoji) => `/api/v1/pleroma/statuses/${id}/reactions/${emoji}`
 const PLEROMA_EMOJI_UNREACT_URL = (id, emoji) => `/api/v1/pleroma/statuses/${id}/reactions/${emoji}`
@@ -560,7 +563,7 @@ const fetchTimeline = ({
     })
     .then((data) => data.json())
     .then((data) => {
-      if (!data.error) {
+      if (!data.errors) {
         return { data: data.map(isNotifications ? parseNotification : parseStatus), pagination }
       } else {
         data.status = status
@@ -1257,6 +1260,77 @@ const deleteChatMessage = ({ chatId, messageId, credentials }) => {
   })
 }
 
+const lists = ({ credentials }) => {
+  return promisedRequest({
+    url: MASTODON_LISTS_URL,
+    method: 'GET',
+    credentials
+  })
+}
+
+const list = ({ listId, credentials }) => {
+  return promisedRequest({
+    url: MASTODON_LIST_URL(listId),
+    method: 'GET',
+    credentials
+  })
+}
+
+const createList = ({ title, credentials }) => {
+  return promisedRequest({
+    url: MASTODON_LISTS_URL,
+    method: 'POST',
+    payload: { title },
+    credentials
+  })
+}
+
+const updateList = ({ title, listId, credentials }) => {
+  return promisedRequest({
+    url: MASTODON_LIST_URL(listId),
+    method: 'PUT',
+    payload: { title },
+    credentials
+  })
+}
+
+const deleteList = ({ listId, credentials }) => {
+  return promisedRequest({
+    url: MASTODON_LIST_URL(listId),
+    method: 'DELETE',
+    credentials
+  })
+}
+
+const listUsers = ({ listId, credentials }) => {
+  // TODO: pagination
+  return promisedRequest({
+    url: MASTODON_LIST_ACCOUNTS_URL(listId),
+    method: 'GET',
+    credentials
+  })
+    .then(data => data.json())
+    .then(response => response.map(u => parseUser(u)))
+}
+
+const addUsersToList = ({ listId, userIds, credentials }) => {
+  return promisedRequest({
+    url: MASTODON_LIST_ACCOUNTS_URL(listId),
+    method: 'POST',
+    payload: { 'account_ids': userIds },
+    credentials
+  })
+}
+
+const removeUsersFromList = ({ listId, userIds, credentials }) => {
+  return promisedRequest({
+    url: MASTODON_LIST_ACCOUNTS_URL(listId),
+    method: 'DELETE',
+    payload: { 'account_ids': userIds },
+    credentials
+  })
+}
+
 const apiService = {
   verifyCredentials,
   fetchTimeline,
@@ -1342,7 +1416,15 @@ const apiService = {
   chatMessages,
   sendChatMessage,
   readChat,
-  deleteChatMessage
+  deleteChatMessage,
+  lists,
+  list,
+  createList,
+  updateList,
+  deleteList,
+  listUsers,
+  addUsersToList,
+  removeUsersFromList
 }
 
 export default apiService
