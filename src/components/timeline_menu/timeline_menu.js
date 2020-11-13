@@ -28,7 +28,8 @@ export const timelineNames = () => {
     'dms': 'nav.dms',
     'public-timeline': 'nav.public_tl',
     'public-external-timeline': 'nav.twkn',
-    'tag-timeline': 'tag'
+    'tag-timeline': 'tag',
+    'lists': 'nav.lists'
   }
 }
 

@@ -70,8 +70,8 @@ export default (store) => {
     { name: 'search', path: '/search', component: Search, props: (route) => ({ query: route.query.query }) },
     { name: 'who-to-follow', path: '/who-to-follow', component: WhoToFollow, beforeEnter: validateAuthenticatedRoute },
     { name: 'about', path: '/about', component: About },
-    { name: 'user-profile', path: '/(users/)?:name', component: UserProfile },
-    { name: 'lists', path: '/lists', component: Lists, beforeEnter: validateAuthenticatedRoute }
+    { name: 'lists', path: '/lists', component: Lists, beforeEnter: validateAuthenticatedRoute },
+    { name: 'user-profile', path: '/(users/)?:name', component: UserProfile }
   ]
 
   if (store.state.instance.pleromaChatMessagesAvailable) {
