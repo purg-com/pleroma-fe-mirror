@@ -14,7 +14,7 @@ const store = new Vuex.Store({
   }
 })
 
-describe.only('routes', () => {
+describe('routes', () => {
   const router = new VueRouter({
     mode: 'abstract',
     routes: routes(store)

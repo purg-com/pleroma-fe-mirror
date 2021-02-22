@@ -571,7 +571,6 @@ const fetchTimeline = ({
     })
     .then((data) => {
       if (status >= 400) {
-        console.log(data.error, data.errors)
         data.status = status
         data.statusText = statusText
         if (data.error) {
