@@ -6,7 +6,7 @@
     <div class="user-reporting-panel panel">
       <div class="panel-heading">
         <div class="title">
-          {{ $t('user_reporting.title', [user.screen_name]) }}
+          {{ $t('user_reporting.title', [user.screen_name_ui]) }}
         </div>
       </div>
       <div class="panel-body">
@@ -29,7 +29,7 @@
           </div>
           <div>
             <button
-              class="btn btn-default"
+              class="btn button-default"
               :disabled="processing"
               @click="reportUser"
             >

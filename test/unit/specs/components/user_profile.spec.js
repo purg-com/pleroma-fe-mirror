@@ -8,8 +8,7 @@ const localVue = createLocalVue()
 localVue.use(Vuex)
 
 const mutations = {
-  clearTimeline: () => {},
-  setError: () => {}
+  clearTimeline: () => {}
 }
 
 const actions = {
@@ -32,13 +31,15 @@ const testGetters = {
 const localUser = {
   id: 100,
   is_local: true,
-  screen_name: 'testUser'
+  screen_name: 'testUser',
+  screen_name_ui: 'testUser'
 }
 
 const extUser = {
   id: 100,
   is_local: false,
-  screen_name: 'testUser@test.instance'
+  screen_name: 'testUser@test.instance',
+  screen_name_ui: 'testUser@test.instance'
 }
 
 const externalProfileStore = new Vuex.Store({

@@ -23,23 +23,25 @@
         <div class="form-group">
           <div class="login-bottom">
             <div>
-              <a
-                href="#"
+              <button
+                class="button-unstyled -link"
+                type="button"
                 @click.prevent="requireTOTP"
               >
                 {{ $t('login.enter_two_factor_code') }}
-              </a>
+              </button>
               <br>
-              <a
-                href="#"
+              <button
+                class="button-unstyled -link"
+                type="button"
                 @click.prevent="abortMFA"
               >
                 {{ $t('general.cancel') }}
-              </a>
+              </button>
             </div>
             <button
               type="submit"
-              class="btn btn-default"
+              class="btn button-default"
             >
               {{ $t('general.verify') }}
             </button>

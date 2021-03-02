@@ -11,17 +11,18 @@
     >
       <small>
         <router-link :to="userProfileLink">
-          {{ notification.from_profile.screen_name }}
+          {{ notification.from_profile.screen_name_ui }}
         </router-link>
       </small>
-      <a
-        href="#"
-        class="unmute"
+      <button
+        class="button-unstyled unmute"
         @click.prevent="toggleMute"
-      ><FAIcon
-        class="fa-scale-110 fa-old-padding"
-        icon="eye-slash"
-      /></a>
+      >
+        <FAIcon
+          class="fa-scale-110 fa-old-padding"
+          icon="eye-slash"
+        />
+      </button>
     </div>
     <div
       v-else
@@ -53,14 +54,14 @@
             <bdi
               v-if="!!notification.from_profile.name_html"
               class="username"
-              :title="'@'+notification.from_profile.screen_name"
+              :title="'@'+notification.from_profile.screen_name_ui"
               v-html="notification.from_profile.name_html"
             />
             <!-- eslint-enable vue/no-v-html -->
             <span
               v-else
               class="username"
-              :title="'@'+notification.from_profile.screen_name"
+              :title="'@'+notification.from_profile.screen_name_ui"
             >{{ notification.from_profile.name }}</span>
             <span v-if="notification.type === 'like'">
               <FAIcon
@@ -132,14 +133,16 @@
               />
             </span>
           </div>
-          <a
+          <button
             v-if="needMute"
-            href="#"
+            class="button-unstyled"
             @click.prevent="toggleMute"
-          ><FAIcon
-            class="fa-scale-110 fa-old-padding"
-            icon="eye-slash"
-          /></a>
+          >
+            <FAIcon
+              class="fa-scale-110 fa-old-padding"
+              icon="eye-slash"
+            />
+          </button>
         </span>
         <div
           v-if="notification.type === 'follow' || notification.type === 'follow_request'"
@@ -149,7 +152,7 @@
             :to="userProfileLink"
             class="follow-name"
           >
-            @{{ notification.from_profile.screen_name }}
+            @{{ notification.from_profile.screen_name_ui }}
           </router-link>
           <div
             v-if="notification.type === 'follow_request'"
@@ -174,7 +177,7 @@
           class="move-text"
         >
           <router-link :to="targetUserProfileLink">
-            @{{ notification.target.screen_name }}
+            @{{ notification.target.screen_name_ui }}
           </router-link>
         </div>
         <template v-else>

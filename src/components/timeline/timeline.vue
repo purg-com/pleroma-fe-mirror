@@ -2,23 +2,9 @@
   <div :class="[classes.root, 'Timeline']">
     <div :class="classes.header">
       <TimelineMenu v-if="!embedded" />
-      <div
-        v-if="timelineError"
-        class="loadmore-error alert error"
-        @click.prevent
-      >
-        {{ $t('timeline.error_fetching') }}
-      </div>
-      <div
-        v-else-if="errorData"
-        class="loadmore-error alert error"
-        @click.prevent
-      >
-        {{ errorData.statusText }}
-      </div>
       <button
-        v-else-if="showLoadButton"
-        class="loadmore-button"
+        v-if="showLoadButton"
+        class="button-default loadmore-button"
         @click.prevent="showNewStatuses"
       >
         {{ loadButtonString }}
@@ -30,6 +16,7 @@
       >
         {{ $t('timeline.up_to_date') }}
       </div>
+      <TimelineQuickSettings v-if="!embedded" />
     </div>
     <div :class="classes.body">
       <div
@@ -75,19 +62,15 @@
       >
         {{ $t('timeline.no_more_statuses') }}
       </div>
-      <a
-        v-else-if="!timeline.loading && !errorData"
-        href="#"
+      <button
+        v-else-if="!timeline.loading"
+        class="button-unstyled -link -fullwidth"
         @click.prevent="fetchOlderStatuses()"
       >
-        <div class="new-status-notification text-center panel-footer">{{ $t('timeline.load_older') }}</div>
-      </a>
-      <a
-        v-else-if="errorData"
-        href="#"
-      >
-        <div class="new-status-notification text-center panel-footer">{{ errorData.error }}</div>
-      </a>
+        <div class="new-status-notification text-center panel-footer">
+          {{ $t('timeline.load_older') }}
+        </div>
+      </button>
       <div
         v-else
         class="new-status-notification text-center panel-footer"
@@ -120,9 +103,13 @@
 .timeline-heading {
   max-width: 100%;
   flex-wrap: nowrap;
+  align-items: center;
+  position: relative;
+
   .loadmore-button {
     flex-shrink: 0;
   }
+
   .loadmore-text {
     flex-shrink: 0;
     line-height: 1em;

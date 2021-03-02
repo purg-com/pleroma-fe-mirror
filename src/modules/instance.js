@@ -43,6 +43,7 @@ const defaultState = {
   subjectLineBehavior: 'email',
   theme: 'pleroma-dark',
   virtualScrolling: true,
+  sensitiveByDefault: false,
 
   // Nasty stuff
   customEmoji: [],
@@ -127,7 +128,7 @@ const instance = {
               imageUrl: false,
               replacement: values[key]
             }
-          }).sort((a, b) => a.displayText - b.displayText)
+          }).sort((a, b) => a.name > b.name ? 1 : -1)
           commit('setInstanceOption', { name: 'emoji', value: emoji })
         } else {
           throw (res)
@@ -154,7 +155,7 @@ const instance = {
             }
             // Technically could use tags but those are kinda useless right now,
             // should have been "pack" field, that would be more useful
-          }).sort((a, b) => a.displayText.toLowerCase() > b.displayText.toLowerCase() ? 1 : 0)
+          }).sort((a, b) => a.displayText.toLowerCase() > b.displayText.toLowerCase() ? 1 : -1)
           commit('setInstanceOption', { name: 'customEmoji', value: emoji })
         } else {
           throw (res)

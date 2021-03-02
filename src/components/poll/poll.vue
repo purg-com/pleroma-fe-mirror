@@ -42,14 +42,15 @@
           :value="index"
         >
         <label class="option-vote">
-          <div>{{ option.title }}</div>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <div v-html="option.title_html" />
         </label>
       </div>
     </div>
     <div class="footer faint">
       <button
         v-if="!showResults"
-        class="btn btn-default poll-vote-button"
+        class="btn button-default poll-vote-button"
         type="button"
         :disabled="isDisabled"
         @click="vote"
@@ -57,7 +58,12 @@
         {{ $t('polls.vote') }}
       </button>
       <div class="total">
-        {{ totalVotesCount }} {{ $t("polls.votes") }}&nbsp;·&nbsp;
+        <template v-if="typeof poll.voters_count === 'number'">
+          {{ $tc("polls.people_voted_count", poll.voters_count, { count: poll.voters_count }) }}&nbsp;·&nbsp;
+        </template>
+        <template v-else>
+          {{ $tc("polls.votes_count", poll.votes_count, { count: poll.votes_count }) }}&nbsp;·&nbsp;
+        </template>
       </div>
       <i18n :path="expired ? 'polls.expired' : 'polls.expires_in'">
         <Timeago

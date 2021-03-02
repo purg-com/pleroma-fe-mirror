@@ -23,17 +23,31 @@ const ReactButton = {
         this.$store.dispatch('reactWithEmoji', { id: this.status.id, emoji })
       }
       close()
+    },
+    focusInput () {
+      this.$nextTick(() => {
+        const input = this.$el.querySelector('input')
+        if (input) input.focus()
+      })
     }
   },
   computed: {
     commonEmojis () {
-      return ['👍', '😠', '👀', '😂', '🔥']
+      return [
+        { displayText: 'thumbsup', replacement: '👍' },
+        { displayText: 'angry', replacement: '😠' },
+        { displayText: 'eyes', replacement: '👀' },
+        { displayText: 'joy', replacement: '😂' },
+        { displayText: 'fire', replacement: '🔥' }
+      ]
     },
     emojis () {
       if (this.filterWord !== '') {
         const filterWordLowercase = this.filterWord.toLowerCase()
         let orderedEmojiList = []
         for (const emoji of this.$store.state.instance.emoji) {
+          if (emoji.replacement === this.filterWord) return [emoji]
+
           const indexOfFilterWord = emoji.displayText.toLowerCase().indexOf(filterWordLowercase)
           if (indexOfFilterWord > -1) {
             if (!Array.isArray(orderedEmojiList[indexOfFilterWord])) {

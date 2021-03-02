@@ -5,10 +5,12 @@ import {
   faBookmark,
   faEyeSlash,
   faThumbtack,
-  faShareAlt
+  faShareAlt,
+  faExternalLinkAlt
 } from '@fortawesome/free-solid-svg-icons'
 import {
-  faBookmark as faBookmarkReg
+  faBookmark as faBookmarkReg,
+  faFlag
 } from '@fortawesome/free-regular-svg-icons'
 
 library.add(
@@ -17,7 +19,9 @@ library.add(
   faBookmarkReg,
   faEyeSlash,
   faThumbtack,
-  faShareAlt
+  faShareAlt,
+  faExternalLinkAlt,
+  faFlag
 )
 
 const ExtraButtons = {
@@ -64,6 +68,9 @@ const ExtraButtons = {
       this.$store.dispatch('unbookmark', { id: this.status.id })
         .then(() => this.$emit('onSuccess'))
         .catch(err => this.$emit('onError', err.error.error))
+    },
+    reportStatus () {
+      this.$store.dispatch('openUserReportingModal', { userId: this.status.user.id, statusIds: [this.status.id] })
     }
   },
   computed: {

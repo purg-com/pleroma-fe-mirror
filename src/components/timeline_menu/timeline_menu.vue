@@ -74,10 +74,16 @@
       slot="trigger"
       class="title timeline-menu-title"
     >
-      <span>{{ timelineName() }}</span>
-      <FAIcon
-        size="sm"
-        icon="chevron-down"
+      <span class="timeline-title">{{ timelineName() }}</span>
+      <span>
+        <FAIcon
+          size="sm"
+          icon="chevron-down"
+        />
+      </span>
+      <span
+        class="click-blocker"
+        @click="blockOpen"
       />
     </div>
   </Popover>
@@ -126,8 +132,9 @@
     cursor: pointer;
     user-select: none;
     width: 100%;
+    display: flex;
 
-    span {
+    .timeline-menu-name {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -136,6 +143,11 @@
     svg {
       margin-left: 0.6em;
       transition: transform 100ms;
+    }
+
+    .click-blocker {
+      cursor: default;
+      flex-grow: 1;
     }
   }
 
