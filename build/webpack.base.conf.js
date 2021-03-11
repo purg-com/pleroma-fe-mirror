@@ -34,7 +34,7 @@ module.exports = {
       path.join(__dirname, '../node_modules')
     ],
     alias: {
-      'vue$': 'vue/dist/vue.runtime.common',
+      vue: "@vue/runtime-dom",
       'static': path.resolve(__dirname, '../static'),
       'src': path.resolve(__dirname, '../src'),
       'assets': path.resolve(__dirname, '../src/assets'),

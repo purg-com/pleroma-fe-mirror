@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { reactive } from 'vue'
 
 /* By default async components don't have any way to recover, if component is
  * failed, it is failed forever. This helper tries to remedy that by recreating
@@ -13,7 +13,7 @@ function getResettableAsyncComponent (asyncComponent, options) {
     ...options
   })
 
-  const observe = Vue.observable({ c: asyncComponentFactory() })
+  const observe = reactive({ c: asyncComponentFactory() })
 
   return {
     functional: true,

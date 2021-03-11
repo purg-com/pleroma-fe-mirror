@@ -1,4 +1,3 @@
-import { set } from 'vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faChevronDown
@@ -40,7 +39,7 @@ export default {
         return this.dValue.family
       },
       set (v) {
-        set(this.lValue, 'family', v)
+        this.lValue.family = v
         this.$emit('input', this.lValue)
       }
     },

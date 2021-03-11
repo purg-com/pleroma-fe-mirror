@@ -1,10 +1,9 @@
-import Vue from 'vue'
 import { mapState } from 'vuex'
 import { FontAwesomeIcon as FAIcon } from '@fortawesome/vue-fontawesome'
 
 import './tab_switcher.scss'
 
-export default Vue.component('tab-switcher', {
+export default {
   name: 'TabSwitcher',
   props: {
     renderOnlyFocused: {
@@ -153,4 +152,4 @@ export default Vue.component('tab-switcher', {
       </div>
     )
   }
-})
+}
