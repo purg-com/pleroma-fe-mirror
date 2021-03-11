@@ -3,25 +3,35 @@ const Popover = {
   props: {
     // Action to trigger popover: either 'hover' or 'click'
     trigger: String,
+
     // Either 'top' or 'bottom'
     placement: String,
+
     // Takes object with properties 'x' and 'y', values of these can be
     // 'container' for using offsetParent as boundaries for either axis
     // or 'viewport'
     boundTo: Object,
+
     // Takes a selector to use as a replacement for the parent container
     // for getting boundaries for x an y axis
     boundToSelector: String,
+
     // Takes a top/bottom/left/right object, how much space to leave
     // between boundary and popover element
     margin: Object,
+
     // Takes a x/y object and tells how many pixels to offset from
     // anchor point on either axis
     offset: Object,
+
     // Replaces the classes you may want for the popover container.
     // Use 'popover-default' in addition to get the default popover
     // styles with your custom class.
-    popoverClass: String
+    popoverClass: String,
+
+    // If true, subtract padding when calculating position for the popover,
+    // use it when popover offset looks to be different on top vs bottom.
+    removePadding: Boolean
   },
   data () {
     return {
@@ -96,9 +106,15 @@ const Popover = {
       if (origin.y + content.offsetHeight > yBounds.max) usingTop = true
       if (origin.y - content.offsetHeight < yBounds.min) usingTop = false
 
+      let vPadding = 0
+      if (this.removePadding && usingTop) {
+        const anchorStyle = getComputedStyle(anchorEl)
+        vPadding = parseFloat(anchorStyle.paddingTop) + parseFloat(anchorStyle.paddingBottom)
+      }
+
       const yOffset = (this.offset && this.offset.y) || 0
       const translateY = usingTop
-        ? -anchorEl.offsetHeight - yOffset - content.offsetHeight
+        ? -anchorEl.offsetHeight + vPadding - yOffset - content.offsetHeight
         : yOffset
 
       const xOffset = (this.offset && this.offset.x) || 0
@@ -112,9 +128,12 @@ const Popover = {
       }
     },
     showPopover () {
-      if (this.hidden) this.$emit('show')
+      const wasHidden = this.hidden
       this.hidden = false
-      this.$nextTick(this.updateStyles)
+      this.$nextTick(() => {
+        if (wasHidden) this.$emit('show')
+        this.updateStyles()
+      })
     },
     hidePopover () {
       if (!this.hidden) this.$emit('close')

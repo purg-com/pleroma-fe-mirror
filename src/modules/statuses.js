@@ -13,7 +13,11 @@ import {
   omitBy
 } from 'lodash'
 import { set } from 'vue'
-import { isStatusNotification, maybeShowNotification } from '../services/notification_utils/notification_utils.js'
+import {
+  isStatusNotification,
+  isValidNotification,
+  maybeShowNotification
+} from '../services/notification_utils/notification_utils.js'
 import apiService from '../services/api/api.service.js'
 
 const emptyTl = (userId = 0) => ({
@@ -39,8 +43,7 @@ const emptyNotifications = () => ({
   minId: Number.POSITIVE_INFINITY,
   data: [],
   idStore: {},
-  loading: false,
-  error: false
+  loading: false
 })
 
 export const defaultState = () => ({
@@ -50,8 +53,6 @@ export const defaultState = () => ({
   maxId: 0,
   notifications: emptyNotifications(),
   favorites: new Set(),
-  error: false,
-  errorData: null,
   timelines: {
     mentions: emptyTl(),
     public: emptyTl(),
@@ -313,8 +314,24 @@ const addNewStatuses = (state, { statuses, showImmediately = false, timeline, us
   }
 }
 
+const updateNotificationsMinMaxId = (state, notification) => {
+  state.notifications.maxId = notification.id > state.notifications.maxId
+    ? notification.id
+    : state.notifications.maxId
+  state.notifications.minId = notification.id < state.notifications.minId
+    ? notification.id
+    : state.notifications.minId
+}
+
 const addNewNotifications = (state, { dispatch, notifications, older, visibleNotificationTypes, rootGetters, newNotificationSideEffects }) => {
   each(notifications, (notification) => {
+    // If invalid notification, update ids but don't add it to store
+    if (!isValidNotification(notification)) {
+      console.error('Invalid notification:', notification)
+      updateNotificationsMinMaxId(state, notification)
+      return
+    }
+
     if (isStatusNotification(notification.type)) {
       notification.action = addStatusToGlobalStorage(state, notification.action).item
       notification.status = notification.status && addStatusToGlobalStorage(state, notification.status).item
@@ -326,12 +343,7 @@ const addNewNotifications = (state, { dispatch, notifications, older, visibleNot
 
     // Only add a new notification if we don't have one for the same action
     if (!state.notifications.idStore.hasOwnProperty(notification.id)) {
-      state.notifications.maxId = notification.id > state.notifications.maxId
-        ? notification.id
-        : state.notifications.maxId
-      state.notifications.minId = notification.id < state.notifications.minId
-        ? notification.id
-        : state.notifications.minId
+      updateNotificationsMinMaxId(state, notification)
 
       state.notifications.data.push(notification)
       state.notifications.idStore[notification.id] = notification
@@ -462,17 +474,8 @@ export const mutations = {
     const newStatus = state.allStatusesObject[id]
     newStatus.nsfw = nsfw
   },
-  setError (state, { value }) {
-    state.error = value
-  },
-  setErrorData (state, { value }) {
-    state.errorData = value
-  },
   setNotificationsLoading (state, { value }) {
     state.notifications.loading = value
-  },
-  setNotificationsError (state, { value }) {
-    state.notifications.error = value
   },
   setNotificationsSilence (state, { value }) {
     state.notifications.desktopNotificationSilence = value
@@ -588,17 +591,8 @@ const statuses = {
       }
       commit('addNewNotifications', { dispatch, notifications, older, rootGetters, newNotificationSideEffects })
     },
-    setError ({ rootState, commit }, { value }) {
-      commit('setError', { value })
-    },
-    setErrorData ({ rootState, commit }, { value }) {
-      commit('setErrorData', { value })
-    },
     setNotificationsLoading ({ rootState, commit }, { value }) {
       commit('setNotificationsLoading', { value })
-    },
-    setNotificationsError ({ rootState, commit }, { value }) {
-      commit('setNotificationsError', { value })
     },
     setNotificationsSilence ({ rootState, commit }, { value }) {
       commit('setNotificationsSilence', { value })

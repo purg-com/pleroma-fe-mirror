@@ -28,7 +28,6 @@ import pushNotifications from './lib/push_notifications_plugin.js'
 
 import messages from './i18n/messages.js'
 
-import VueChatScroll from 'vue-chat-scroll'
 import VueClickOutside from 'v-click-outside'
 import PortalVue from 'portal-vue'
 import VBodyScrollLock from './directives/body_scroll_lock'
@@ -49,8 +48,7 @@ const i18n = createI18n({
 
 Vue.use(Vuex)
 Vue.use(VueRouter)
-Vue.use(i18n)
-Vue.use(VueChatScroll)
+Vue.use(VueI18n)
 Vue.use(VueClickOutside)
 Vue.use(PortalVue)
 Vue.use(VBodyScrollLock)

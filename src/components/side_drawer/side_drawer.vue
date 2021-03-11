@@ -70,7 +70,7 @@
             /> {{ $t("nav.chats") }}
             <span
               v-if="unreadChatCount"
-              class="badge badge-notification unread-chat-count"
+              class="badge badge-notification"
             >
               {{ unreadChatCount }}
             </span>
@@ -99,7 +99,7 @@
             /> {{ $t("nav.friend_requests") }}
             <span
               v-if="followRequestCount > 0"
-              class="badge follow-request-count"
+              class="badge badge-notification"
             >
               {{ followRequestCount }}
             </span>
@@ -109,7 +109,7 @@
           v-if="chat"
           @click="toggleDrawer"
         >
-          <router-link :to="{ name: 'chat' }">
+          <router-link :to="{ name: 'chat-panel' }">
             <FAIcon
               fixed-width
               class="fa-scale-110 fa-old-padding"
@@ -144,8 +144,8 @@
           </router-link>
         </li>
         <li @click="toggleDrawer">
-          <a
-            href="#"
+          <button
+            class="button-unstyled -link -fullwidth"
             @click="openSettingsModal"
           >
             <FAIcon
@@ -153,7 +153,7 @@
               class="fa-scale-110 fa-old-padding"
               icon="cog"
             /> {{ $t("settings.settings") }}
-          </a>
+          </button>
         </li>
         <li @click="toggleDrawer">
           <router-link :to="{ name: 'about'}">
@@ -183,8 +183,8 @@
           v-if="currentUser"
           @click="toggleDrawer"
         >
-          <a
-            href="#"
+          <button
+            class="button-unstyled -link -fullwidth"
             @click="doLogout"
           >
             <FAIcon
@@ -192,7 +192,7 @@
               class="fa-scale-110 fa-old-padding"
               icon="sign-out-alt"
             /> {{ $t("login.logout") }}
-          </a>
+          </button>
         </li>
       </ul>
     </div>
@@ -272,12 +272,11 @@
   --lightText: var(--popoverLightText, $fallback--lightText);
   --icon: var(--popoverIcon, $fallback--icon);
 
-  .follow-request-count {
-    vertical-align: baseline;
-    background-color: $fallback--bg;
-    background-color: var(--input, $fallback--faint);
+  .badge {
+    position: absolute;
+    right: 0.7rem;
+    top: 1em;
   }
-
 }
 
 .side-drawer-logo-wrapper {
@@ -332,7 +331,7 @@
 .side-drawer li {
   padding: 0;
 
-  a {
+  a, button {
     box-sizing: border-box;
     display: block;
     height: 3em;

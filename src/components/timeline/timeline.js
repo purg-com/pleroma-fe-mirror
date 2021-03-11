@@ -2,12 +2,14 @@ import Status from '../status/status.vue'
 import timelineFetcher from '../../services/timeline_fetcher/timeline_fetcher.service.js'
 import Conversation from '../conversation/conversation.vue'
 import TimelineMenu from '../timeline_menu/timeline_menu.vue'
+import TimelineQuickSettings from './timeline_quick_settings.vue'
 import { debounce, throttle, keyBy } from 'lodash'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
+import { faCircleNotch, faCog } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
-  faCircleNotch
+  faCircleNotch,
+  faCog
 )
 
 export const getExcludedStatusIdsByPinning = (statuses, pinnedStatusIds) => {
@@ -47,20 +49,14 @@ const Timeline = {
   components: {
     Status,
     Conversation,
-    TimelineMenu
+    TimelineMenu,
+    TimelineQuickSettings
   },
   computed: {
-    timelineError () {
-      return this.$store.state.statuses.error
-    },
-    errorData () {
-      return this.$store.state.statuses.errorData
-    },
     newStatusCount () {
       return this.timeline.newStatusCount
     },
     showLoadButton () {
-      if (this.timelineError || this.errorData) return false
       return this.timeline.newStatusCount > 0 || this.timeline.flushMarker !== 0
     },
     loadButtonString () {
@@ -72,7 +68,7 @@ const Timeline = {
     },
     classes () {
       let rootClasses = !this.embedded ? ['panel', 'panel-default'] : []
-      if (this.blockingClicks) rootClasses = rootClasses.concat(['-blocked'])
+      if (this.blockingClicks) rootClasses = rootClasses.concat(['-blocked', '_misclick-prevention'])
       return {
         root: rootClasses,
         header: ['timeline-heading'].concat(!this.embedded ? ['panel-heading'] : []),
@@ -171,11 +167,12 @@ const Timeline = {
         userId: this.userId,
         tag: this.tag
       }).then(({ statuses }) => {
-        store.commit('setLoading', { timeline: this.timelineName, value: false })
         if (statuses && statuses.length === 0) {
           this.bottomedOut = true
         }
-      })
+      }).finally(() =>
+        store.commit('setLoading', { timeline: this.timelineName, value: false })
+      )
     }, 1000, this),
     determineVisibleStatuses () {
       if (!this.$refs.timeline) return

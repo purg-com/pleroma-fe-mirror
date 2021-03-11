@@ -10,7 +10,8 @@
     "text_limit": "Limo de teksto",
     "title": "Funkcioj",
     "who_to_follow": "Kiun aboni",
-    "pleroma_chat_messages": "Babilejo de Pleroma"
+    "pleroma_chat_messages": "Babilejo de Pleroma",
+    "upload_limit": "Limo de alŝutoj"
   },
   "finder": {
     "error_fetching_user": "Eraris alporto de uzanto",
@@ -34,7 +35,11 @@
     "retry": "Reprovi",
     "error_retry": "Bonvolu reprovi",
     "loading": "Enlegante…",
-    "peek": "Antaŭmontri"
+    "peek": "Antaŭmontri",
+    "role": {
+      "moderator": "Reguligisto",
+      "admin": "Administranto"
+    }
   },
   "image_cropper": {
     "crop_picture": "Tondi bildon",
@@ -95,7 +100,8 @@
     "no_more_notifications": "Neniuj pliaj sciigoj",
     "reacted_with": "reagis per {0}",
     "migrated_to": "migris al",
-    "follow_request": "volas vin aboni"
+    "follow_request": "volas vin aboni",
+    "error": "Eraris akirado de sciigoj: {0}"
   },
   "post_status": {
     "new_status": "Afiŝi novan staton",
@@ -134,14 +140,14 @@
   "registration": {
     "bio": "Priskribo",
     "email": "Retpoŝtadreso",
-    "fullname": "Vidiga nomo",
+    "fullname": "Prezenta nomo",
     "password_confirm": "Konfirmo de pasvorto",
     "registration": "Registriĝo",
     "token": "Invita ĵetono",
     "captcha": "TESTO DE HOMECO",
     "new_captcha": "Klaku la bildon por akiri novan teston",
     "username_placeholder": "ekz. lain",
-    "fullname_placeholder": "ekz. Lain Iwakura",
+    "fullname_placeholder": "ekz. Lain Ivakura",
     "bio_placeholder": "ekz.\nSaluton, mi estas Lain.\nMi estas animea knabino vivanta en Japanujo. Eble vi konas min pro la retejo « Wired ».",
     "validations": {
       "username_required": "ne povas resti malplena",
@@ -164,7 +170,7 @@
     "blocks_tab": "Blokitoj",
     "btnRadius": "Butonoj",
     "cBlue": "Blua (respondi, aboni)",
-    "cGreen": "Verda (kunhavigi)",
+    "cGreen": "Verda (diskonigi)",
     "cOrange": "Oranĝa (ŝati)",
     "cRed": "Ruĝa (nuligi)",
     "change_password": "Ŝanĝi pasvorton",
@@ -207,8 +213,8 @@
     "import_theme": "Enlegi antaŭagordojn",
     "inputRadius": "Enigaj kampoj",
     "checkboxRadius": "Markbutonoj",
-    "instance_default": "(implicita: {value})",
-    "instance_default_simple": "(implicita)",
+    "instance_default": "(originale: {value})",
+    "instance_default_simple": "(originale)",
     "interface": "Fasado",
     "interfaceLanguage": "Lingvo de fasado",
     "invalid_theme_imported": "La elektita dosiero ne estas subtenata haŭto de Pleromo. Neniuj ŝanĝoj al via haŭto okazis.",
@@ -219,7 +225,7 @@
     "loop_video_silent_only": "Ripetadi nur filmojn sen sono (ekz. la «GIF-ojn» de Mastodon)",
     "mutes_tab": "Silentigoj",
     "play_videos_in_modal": "Ludi filmojn en ŝpruca kadro",
-    "use_contain_fit": "Ne tondi la kunsendaĵon en bildetoj",
+    "use_contain_fit": "Ne pritondi bildetojn de kunsendaĵoj",
     "name": "Nomo",
     "name_bio": "Nomo kaj priskribo",
     "new_password": "Nova pasvorto",
@@ -235,7 +241,7 @@
     "hide_followers_description": "Ne montri kiu min sekvas",
     "show_admin_badge": "Montri la insignon de administranto en mia profilo",
     "show_moderator_badge": "Montri la insignon de reguligisto en mia profilo",
-    "nsfw_clickthrough": "Ŝalti traklakan kaŝadon de konsternaj kunsendaĵoj",
+    "nsfw_clickthrough": "Ŝalti traklakan kaŝadon de kunsendaĵoj kaj antaŭmontroj de ligiloj por konsternaj statoj",
     "oauth_tokens": "Ĵetonoj de OAuth",
     "token": "Ĵetono",
     "refresh_token": "Ĵetono de aktualigo",
@@ -265,7 +271,7 @@
     "subject_line_email": "Kiel retpoŝto: «re: temo»",
     "subject_line_mastodon": "Kiel Mastodon: kopii senŝanĝe",
     "subject_line_noop": "Ne kopii",
-    "post_status_content_type": "Afiŝi specon de la enhavo de la stato",
+    "post_status_content_type": "Speco de enhavo de afiŝo",
     "stop_gifs": "Movi GIF-bildojn dum ŝvebo de muso",
     "streaming": "Ŝalti memagan fluigon de novaj afiŝoj kiam vi vidas la supron de la paĝo",
     "text": "Teksto",
@@ -363,7 +369,8 @@
         "post": "Afiŝoj/Priskriboj de uzantoj",
         "alert_neutral": "Neŭtrala",
         "alert_warning": "Averto",
-        "toggled": "Ŝaltita"
+        "toggled": "Ŝaltita",
+        "wallpaper": "Fonbildo"
       },
       "radii": {
         "_tab_label": "Rondeco"
@@ -379,7 +386,7 @@
         "hint": "Por ombroj vi ankaŭ povas uzi --variable kiel koloran valoron, por uzi variantojn de CSS3. Bonvolu rimarki, ke tiuokaze agordoj de maltravidebleco ne funkcios.",
         "filter_hint": {
           "always_drop_shadow": "Averto: ĉi tiu ombro ĉiam uzas {0} kiam la foliumilo tion subtenas.",
-          "drop_shadow_syntax": "{0} ne subtenas parametron {1} kaj ŝlosilvorton {2}.",
+          "drop_shadow_syntax": "{0} ne subtenas parametron {1} kaj ĉefvorton {2}.",
           "avatar_inset": "Bonvolu rimarki, ke agordi ambaŭ internajn kaj eksterajn ombrojn por profilbildoj povas redoni neatenditajn rezultojn ĉe profilbildoj travideblaj.",
           "spread_zero": "Ombroj kun vastigo > 0 aperos kvazaŭ ĝi estus fakte nulo",
           "inset_classic": "Internaj ombroj uzos {0}"
@@ -394,7 +401,7 @@
           "button": "Butono",
           "buttonHover": "Butono (je ŝvebo)",
           "buttonPressed": "Butono (premita)",
-          "buttonPressedHover": "Butono (premita kaj je ŝvebo)",
+          "buttonPressedHover": "Butono (je premo kaj ŝvebo)",
           "input": "Eniga kampo"
         },
         "hintV3": "Kolorojn de ombroj vi ankaŭ povas skribi per la sistemo {0}."
@@ -514,7 +521,9 @@
     "mute_import_error": "Eraris enporto de silentigoj",
     "mute_import": "Enporto de silentigoj",
     "mute_export_button": "Elportu viajn silentigojn al CSV-dosiero",
-    "mute_export": "Elporto de silentigoj"
+    "mute_export": "Elporto de silentigoj",
+    "hide_wallpaper": "Kaŝi fonbildon de nodo",
+    "setting_changed": "Agordo malsamas de la implicita"
   },
   "timeline": {
     "collapse": "Maletendi",
@@ -527,7 +536,8 @@
     "up_to_date": "Ĝisdata",
     "no_more_statuses": "Neniuj pliaj statoj",
     "no_statuses": "Neniuj statoj",
-    "reload": "Enlegi ree"
+    "reload": "Enlegi ree",
+    "error": "Eraris akirado de historio: {0}"
   },
   "user_card": {
     "approve": "Aprobi",
@@ -583,7 +593,8 @@
     "show_repeats": "Montri ripetojn",
     "hide_repeats": "Kaŝi ripetojn",
     "unsubscribe": "Ne ricevi sciigojn",
-    "subscribe": "Ricevi sciigojn"
+    "subscribe": "Ricevi sciigojn",
+    "bot": "Roboto"
   },
   "user_profile": {
     "timeline_title": "Historio de uzanto",
@@ -609,7 +620,8 @@
     "error": {
       "base": "Alŝuto malsukcesis.",
       "file_too_big": "Dosiero estas tro granda [{filesize}{filesizeunit} / {allowedsize}{allowedsizeunit}]",
-      "default": "Reprovu pli poste"
+      "default": "Reprovu pli poste",
+      "message": "Malsukcesis alŝuto: {0}"
     },
     "file_size_units": {
       "B": "B",
@@ -642,7 +654,9 @@
     "votes": "voĉoj",
     "option": "Elekteblo",
     "add_option": "Aldoni elekteblon",
-    "add_poll": "Aldoni enketon"
+    "add_poll": "Aldoni enketon",
+    "votes_count": "{count} voĉdono | {count} voĉdonoj",
+    "people_voted_count": "{count} persono voĉdonis | {count} personoj voĉdonis"
   },
   "importer": {
     "error": "Eraris enporto de ĉi tiu dosiero.",
@@ -683,7 +697,7 @@
         "replace": "Anstataŭigi",
         "reject": "Rifuzi",
         "ftl_removal": "Forigo el la historio de «La tuta konata reto»",
-        "keyword_policies": "Politiko pri ŝlosilvortoj"
+        "keyword_policies": "Politiko pri ĉefvortoj"
       },
       "federation": "Federado",
       "mrf_policies_desc": "Politikoj de Mesaĝa ŝanĝilaro (MRF) efikas sur federa konduto de la nodo.  La sekvaj politikoj estas ŝaltitaj:"
@@ -728,7 +742,10 @@
     "delete": "Forigi staton",
     "repeats": "Ripetoj",
     "favorites": "Ŝatoj",
-    "status_deleted": "Ĉi tiu afiŝo foriĝis"
+    "status_deleted": "Ĉi tiu afiŝo foriĝis",
+    "nsfw": "Konsterna",
+    "expand": "Etendi",
+    "external_source": "Ekstera fonto"
   },
   "time": {
     "years_short": "{0}j",
@@ -739,8 +756,8 @@
     "week_short": "{0}s",
     "weeks": "{0} semajnoj",
     "week": "{0} semajno",
-    "seconds_short": "{0}s",
-    "second_short": "{0}s",
+    "seconds_short": "{0}sek",
+    "second_short": "{0}sek",
     "seconds": "{0} sekundoj",
     "second": "{0} sekundo",
     "now_short": "nun",
@@ -749,14 +766,14 @@
     "month_short": "{0}m",
     "months": "{0} monatoj",
     "month": "{0} monato",
-    "minutes_short": "{0}m",
-    "minute_short": "{0}m",
+    "minutes_short": "{0}min",
+    "minute_short": "{0}min",
     "minutes": "{0} minutoj",
     "minute": "{0} minuto",
     "in_past": "antaŭ {0}",
     "in_future": "post {0}",
-    "hours_short": "{0}h",
-    "hour_short": "{0}h",
+    "hours_short": "{0}hor",
+    "hour_short": "{0}hor",
     "hours": "{0} horoj",
     "hour": "{0} horo",
     "days_short": "{0}t",

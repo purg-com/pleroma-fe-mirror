@@ -81,7 +81,7 @@ export default Vue.component('tab-switcher', {
     const tabs = this.$slots.default
       .map((slot, index) => {
         if (!slot.tag) return
-        const classesTab = ['tab']
+        const classesTab = ['tab', 'button-default']
         const classesWrapper = ['tab-wrapper']
         if (this.activeIndex === index) {
           classesTab.push('active')
@@ -93,7 +93,9 @@ export default Vue.component('tab-switcher', {
               <button
                 disabled={slot.data.attrs.disabled}
                 onClick={this.clickTab(index)}
-                class={classesTab.join(' ')}>
+                class={classesTab.join(' ')}
+                type="button"
+              >
                 <img src={slot.data.attrs.image} title={slot.data.attrs['image-tooltip']}/>
                 {slot.data.attrs.label ? '' : slot.data.attrs.label}
               </button>

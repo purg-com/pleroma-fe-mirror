@@ -73,23 +73,23 @@
             <div class="bottom-line">
               <router-link
                 class="user-screen-name"
-                :title="user.screen_name"
+                :title="user.screen_name_ui"
                 :to="userProfileLink(user)"
               >
-                @{{ user.screen_name }}
+                @{{ user.screen_name_ui }}
               </router-link>
               <template v-if="!hideBio">
                 <span
                   v-if="!!visibleRole"
                   class="alert user-role"
                 >
-                  {{ visibleRole }}
+                  {{ $t(`general.role.${visibleRole}`) }}
                 </span>
                 <span
                   v-if="user.bot"
                   class="alert user-role"
                 >
-                  bot
+                  {{ $t('user_card.bot') }}
                 </span>
               </template>
               <span v-if="user.locked">
@@ -141,10 +141,10 @@
                 v-model="userHighlightType"
                 class="userHighlightSel"
               >
-                <option value="disabled">No highlight</option>
-                <option value="solid">Solid bg</option>
-                <option value="striped">Striped bg</option>
-                <option value="side">Side stripe</option>
+                <option value="disabled">{{ $t('user_card.highlight.disabled') }}</option>
+                <option value="solid">{{ $t('user_card.highlight.solid') }}</option>
+                <option value="striped">{{ $t('user_card.highlight.striped') }}</option>
+                <option value="side">{{ $t('user_card.highlight.side') }}</option>
               </select>
               <FAIcon
                 class="select-down-icon"
@@ -162,7 +162,7 @@
             <template v-if="relationship.following">
               <ProgressButton
                 v-if="!relationship.subscribing"
-                class="btn btn-default"
+                class="btn button-default"
                 :click="subscribeUser"
                 :title="$t('user_card.subscribe')"
               >
@@ -170,7 +170,7 @@
               </ProgressButton>
               <ProgressButton
                 v-else
-                class="btn btn-default toggled"
+                class="btn button-default toggled"
                 :click="unsubscribeUser"
                 :title="$t('user_card.unsubscribe')"
               >
@@ -192,14 +192,14 @@
           <div>
             <button
               v-if="relationship.muting"
-              class="btn btn-default btn-block toggled"
+              class="btn button-default btn-block toggled"
               @click="unmuteUser"
             >
               {{ $t('user_card.muted') }}
             </button>
             <button
               v-else
-              class="btn btn-default btn-block"
+              class="btn button-default btn-block"
               @click="muteUser"
             >
               {{ $t('user_card.mute') }}
@@ -207,7 +207,7 @@
           </div>
           <div>
             <button
-              class="btn btn-default btn-block"
+              class="btn button-default btn-block"
               @click="mentionUser"
             >
               {{ $t('user_card.mention') }}
@@ -507,7 +507,6 @@
 
     .user-role {
       flex: none;
-      text-transform: capitalize;
       color: $fallback--text;
       color: var(--alertNeutralText, $fallback--text);
       background-color: $fallback--fg;

@@ -10,12 +10,13 @@
       class="panel-heading conversation-heading"
     >
       <span class="title"> {{ $t('timeline.conversation') }} </span>
-      <span v-if="collapsable">
-        <a
-          href="#"
-          @click.prevent="toggleExpanded"
-        >{{ $t('timeline.collapse') }}</a>
-      </span>
+      <button
+        v-if="collapsable"
+        class="button-unstyled -link"
+        @click.prevent="toggleExpanded"
+      >
+        {{ $t('timeline.collapse') }}
+      </button>
     </div>
     <status
       v-for="status in conversation"
@@ -49,7 +50,6 @@
 
 .Conversation {
   .conversation-status {
-    border-left: none;
     border-bottom-width: 1px;
     border-bottom-style: solid;
     border-bottom-color: var(--border, $fallback--border);
@@ -57,13 +57,6 @@
   }
 
   &.-expanded {
-    .conversation-status {
-      border-color: $fallback--border;
-      border-color: var(--border, $fallback--border);
-      border-left-color: $fallback--cRed;
-      border-left-color: var(--cRed, $fallback--cRed);
-    }
-
     .conversation-status:last-child {
       border-bottom: none;
       border-radius: 0 0 $fallback--panelRadius $fallback--panelRadius;

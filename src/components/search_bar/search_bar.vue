@@ -3,17 +3,19 @@
     class="SearchBar"
     :class="{ '-expanded': !hidden }"
   >
-    <a
+    <button
       v-if="hidden"
-      href="#"
-      class="nav-icon"
+      class="button-unstyled nav-icon"
       :title="$t('nav.search')"
-    ><FAIcon
-      fixed-width
-      class="fa-scale-110 fa-old-padding"
-      icon="search"
+      type="button"
       @click.prevent.stop="toggleHidden"
-    /></a>
+    >
+      <FAIcon
+        fixed-width
+        class="fa-scale-110 fa-old-padding"
+        icon="search"
+      />
+    </button>
     <template v-else>
       <input
         id="search-bar-input"
@@ -25,7 +27,8 @@
         @keyup.enter="find(searchTerm)"
       >
       <button
-        class="btn search-button"
+        class="button-default search-button"
+        type="submit"
         @click="find(searchTerm)"
       >
         <FAIcon
@@ -33,14 +36,17 @@
           icon="search"
         />
       </button>
-      <span>
+      <button
+        class="button-unstyled cancel-search"
+        type="button"
+        @click.prevent.stop="toggleHidden"
+      >
         <FAIcon
           fixed-width
           icon="times"
           class="cancel-icon fa-scale-110 fa-old-padding"
-          @click.prevent.stop="toggleHidden"
         />
-      </span>
+      </button>
     </template>
   </div>
 </template>
@@ -69,8 +75,11 @@
     flex: 1 0 auto;
   }
 
+  .cancel-search {
+    height: 50px;
+  }
+
   .cancel-icon {
-    cursor: pointer;
     color: $fallback--text;
     color: var(--btnTopBarText, $fallback--text);
   }

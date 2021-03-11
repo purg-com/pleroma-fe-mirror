@@ -50,7 +50,8 @@
     "scope_options": "Scope options",
     "text_limit": "Text limit",
     "title": "Features",
-    "who_to_follow": "Who to follow"
+    "who_to_follow": "Who to follow",
+    "upload_limit": "Upload limit"
   },
   "finder": {
     "error_fetching_user": "Error fetching user",
@@ -74,7 +75,11 @@
     "confirm": "Confirm",
     "verify": "Verify",
     "close": "Close",
-    "peek": "Peek"
+    "peek": "Peek",
+    "role": {
+      "admin": "Admin",
+      "moderator": "Moderator"
+    }
   },
   "image_cropper": {
     "crop_picture": "Crop picture",
@@ -130,6 +135,7 @@
   },
   "notifications": {
     "broken_favorite": "Unknown status, searching for it…",
+    "error": "Error fetching notifications: {0}",
     "favorited_you": "favorited your status",
     "followed_you": "followed you",
     "follow_request": "wants to follow you",
@@ -146,6 +152,8 @@
     "add_option": "Add Option",
     "option": "Option",
     "votes": "votes",
+    "people_voted_count": "{count} person voted | {count} people voted",
+    "votes_count": "{count} vote | {count} votes",
     "vote": "Vote",
     "type": "Poll type",
     "single_choice": "Single choice",
@@ -220,6 +228,8 @@
     "username_placeholder": "e.g. lain",
     "fullname_placeholder": "e.g. Lain Iwakura",
     "bio_placeholder": "e.g.\nHi, I'm Lain.\nI’m an anime girl living in suburban Japan. You may know me from the Wired.",
+    "reason": "Reason to register",
+    "reason_placeholder": "This instance approves registrations manually.\nLet the administration know why you want to register.",
     "validations": {
       "username_required": "cannot be left blank",
       "fullname_required": "cannot be left blank",
@@ -240,6 +250,7 @@
   "settings": {
     "app_name": "App name",
     "security": "Security",
+    "setting_changed": "Setting is different from default",
     "enter_current_password_to_confirm": "Enter your current password to confirm your identity",
     "mfa": {
       "otp": "OTP",
@@ -314,6 +325,7 @@
     "export_theme": "Save preset",
     "filtering": "Filtering",
     "filtering_explanation": "All statuses containing these words will be muted, one per line",
+    "word_filter": "Word filter",
     "follow_export": "Follow export",
     "follow_export_button": "Export your follows to a csv file",
     "follow_import": "Follow import",
@@ -324,9 +336,12 @@
     "general": "General",
     "hide_attachments_in_convo": "Hide attachments in conversations",
     "hide_attachments_in_tl": "Hide attachments in timeline",
+    "hide_media_previews": "Hide media previews",
     "hide_muted_posts": "Hide posts of muted users",
+    "hide_all_muted_posts": "Hide muted posts",
     "max_thumbnails": "Maximum amount of thumbnails per post",
     "hide_isp": "Hide instance-specific panel",
+    "hide_wallpaper": "Hide instance wallpaper",
     "preload_images": "Preload images",
     "use_one_click_nsfw": "Open NSFW attachments with just one click",
     "hide_post_stats": "Hide post statistics (e.g. the number of favorites)",
@@ -376,7 +391,7 @@
     "hide_followers_count_description": "Don't show follower count",
     "show_admin_badge": "Show Admin badge in my profile",
     "show_moderator_badge": "Show Moderator badge in my profile",
-    "nsfw_clickthrough": "Enable clickthrough NSFW attachment hiding",
+    "nsfw_clickthrough": "Enable clickthrough attachment and link preview image hiding for NSFW statuses",
     "oauth_tokens": "OAuth tokens",
     "token": "Token",
     "refresh_token": "Refresh Token",
@@ -393,6 +408,8 @@
     "reply_visibility_all": "Show all replies",
     "reply_visibility_following": "Only show replies directed at me or users I'm following",
     "reply_visibility_self": "Only show replies directed at me",
+    "reply_visibility_following_short": "Show replies to my follows",
+    "reply_visibility_self_short": "Show replies to self only",
     "autohide_floating_post_button": "Automatically hide New Post button (mobile)",
     "saving_err": "Error saving settings",
     "saving_ok": "Settings saved",
@@ -417,6 +434,7 @@
     "subject_line_mastodon": "Like mastodon: copy as is",
     "subject_line_noop": "Do not copy",
     "post_status_content_type": "Post status content type",
+    "sensitive_by_default": "Mark posts as sensitive by default",
     "stop_gifs": "Play-on-hover GIFs",
     "streaming": "Enable automatic streaming of new posts when scrolled to the top",
     "user_mutes": "Users",
@@ -446,6 +464,7 @@
     "notification_mutes": "To stop receiving notifications from a specific user, use a mute.",
     "notification_blocks": "Blocking a user stops all notifications as well as unsubscribes them.",
     "enable_web_push_notifications": "Enable web push notifications",
+    "more_settings": "More settings",
     "style": {
       "switcher": {
         "keep_color": "Keep colors",
@@ -514,6 +533,7 @@
         "inputs": "Input fields",
         "faint_text": "Faded text",
         "underlay": "Underlay",
+        "wallpaper": "Wallpaper",
         "poll": "Poll graph",
         "icons": "Icons",
         "highlight": "Highlighted elements",
@@ -634,7 +654,7 @@
   "timeline": {
     "collapse": "Collapse",
     "conversation": "Conversation",
-    "error_fetching": "Error fetching updates",
+    "error": "Error fetching timeline: {0}",
     "load_older": "Load older statuses",
     "no_retweet_hint": "Post is marked as followers-only or direct and cannot be repeated",
     "repeated": "repeated",
@@ -660,13 +680,16 @@
     "unmute_conversation": "Unmute conversation",
     "status_unavailable": "Status unavailable",
     "copy_link": "Copy link to status",
+    "external_source": "External source",
     "thread_muted": "Thread muted",
     "thread_muted_and_words": ", has words:",
     "show_full_subject": "Show full subject",
     "hide_full_subject": "Hide full subject",
     "show_content": "Show content",
     "hide_content": "Hide content",
-    "status_deleted": "This post was deleted"
+    "status_deleted": "This post was deleted",
+    "nsfw": "NSFW",
+    "expand": "Expand"
   },
   "user_card": {
     "approve": "Approve",
@@ -704,6 +727,7 @@
     "mute_progress": "Muting…",
     "hide_repeats": "Hide repeats",
     "show_repeats": "Show repeats",
+    "bot": "Bot",
     "admin_menu": {
       "moderation": "Moderation",
       "grant_admin": "Grant Admin",
@@ -722,6 +746,12 @@
       "quarantine": "Disallow user posts from federating",
       "delete_user": "Delete user",
       "delete_user_confirmation": "Are you absolutely sure? This action cannot be undone."
+    },
+    "highlight": {
+      "disabled": "No highlight",
+      "solid": "Solid bg",
+      "striped": "Striped bg",
+      "side": "Side stripe"
     }
   },
   "user_profile": {
@@ -756,6 +786,7 @@
   "upload": {
     "error": {
       "base": "Upload failed.",
+      "message": "Upload failed: {0}",
       "file_too_big": "File too big [{filesize}{filesizeunit} / {allowedsize}{allowedsizeunit}]",
       "default": "Try again later"
     },

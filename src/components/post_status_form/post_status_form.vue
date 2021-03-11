@@ -24,12 +24,12 @@
           tag="p"
           class="visibility-notice"
         >
-          <a
-            href="#"
+          <button
+            class="button-unstyled -link"
             @click="openProfileTab"
           >
             {{ $t('post_status.account_not_locked_warning_link') }}
-          </a>
+          </button>
         </i18n>
         <p
           v-if="!hideScopeNotice && newStatus.visibility === 'public'"
@@ -243,38 +243,34 @@
             @upload-failed="uploadFailed"
             @all-uploaded="finishedUploadingFiles"
           />
-          <div
-            class="emoji-icon"
+          <button
+            class="emoji-icon button-unstyled"
+            :title="$t('emoji.add_emoji')"
+            @click="showEmojiPicker"
           >
-            <div
-              :title="$t('emoji.add_emoji')"
-              class="btn btn-default"
-              @click="showEmojiPicker"
-            >
-              <FAIcon icon="smile-beam" />
-            </div>
-          </div>
-          <div
+            <FAIcon icon="smile-beam" />
+          </button>
+          <button
             v-if="pollsAvailable"
-            class="poll-icon"
+            class="poll-icon button-unstyled"
             :class="{ selected: pollFormVisible }"
             :title="$t('polls.add_poll')"
             @click="togglePollForm"
           >
             <FAIcon icon="poll-h" />
-          </div>
+          </button>
         </div>
         <button
           v-if="posting"
           disabled
-          class="btn btn-default"
+          class="btn button-default"
         >
           {{ $t('post_status.posting') }}
         </button>
         <button
           v-else-if="isOverLengthLimit"
           disabled
-          class="btn btn-default"
+          class="btn button-default"
         >
           {{ $t('general.submit') }}
         </button>
@@ -282,7 +278,7 @@
         <button
           v-else
           :disabled="uploadingFiles || disableSubmit"
-          class="btn btn-default"
+          class="btn button-default"
           @touchstart.stop.prevent="postStatus($event, newStatus)"
           @click.stop.prevent="postStatus($event, newStatus)"
         >
@@ -306,11 +302,12 @@
           :key="file.url"
           class="media-upload-wrapper"
         >
-          <FAIcon
-            class="fa-scale-110 fa-old-padding"
-            icon="times"
+          <button
+            class="button-unstyled hider"
             @click="removeMediaFile(file)"
-          />
+          >
+            <FAIcon icon="times" />
+          </button>
           <attachment
             :attachment="file"
             :set-media="() => $store.dispatch('setMedia', newStatus.files)"
@@ -520,26 +517,11 @@
   }
 
    .attachments .media-upload-wrapper {
-    padding: 0 0.5em;
+    position: relative;
 
     .attachment {
       margin: 0;
       padding: 0;
-      position: relative;
-    }
-
-    .fa-scale-110 fa-old-padding {
-      position: absolute;
-      margin: 10px;
-      margin: .75em;
-      padding: .5em;
-      background: rgba(230,230,230,0.6);
-      z-index: 2;
-      color: black;
-      border-radius: $fallback--attachmentRadius;
-      border-radius: var(--attachmentRadius, $fallback--attachmentRadius);
-      font-weight: bold;
-      cursor: pointer;
     }
   }
 

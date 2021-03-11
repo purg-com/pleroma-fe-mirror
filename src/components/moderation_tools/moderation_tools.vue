@@ -12,13 +12,13 @@
         <div class="dropdown-menu">
           <span v-if="user.is_local">
             <button
-              class="dropdown-item"
+              class="button-default dropdown-item"
               @click="toggleRight(&quot;admin&quot;)"
             >
               {{ $t(!!user.rights.admin ? 'user_card.admin_menu.revoke_admin' : 'user_card.admin_menu.grant_admin') }}
             </button>
             <button
-              class="dropdown-item"
+              class="button-default dropdown-item"
               @click="toggleRight(&quot;moderator&quot;)"
             >
               {{ $t(!!user.rights.moderator ? 'user_card.admin_menu.revoke_moderator' : 'user_card.admin_menu.grant_moderator') }}
@@ -29,13 +29,13 @@
             />
           </span>
           <button
-            class="dropdown-item"
+            class="button-default dropdown-item"
             @click="toggleActivationStatus()"
           >
             {{ $t(!!user.deactivated ? 'user_card.admin_menu.activate_account' : 'user_card.admin_menu.deactivate_account') }}
           </button>
           <button
-            class="dropdown-item"
+            class="button-default dropdown-item"
             @click="deleteUserDialog(true)"
           >
             {{ $t('user_card.admin_menu.delete_account') }}
@@ -47,84 +47,84 @@
           />
           <span v-if="hasTagPolicy">
             <button
-              class="dropdown-item"
+              class="button-default dropdown-item"
               @click="toggleTag(tags.FORCE_NSFW)"
             >
-              {{ $t('user_card.admin_menu.force_nsfw') }}
               <span
                 class="menu-checkbox"
                 :class="{ 'menu-checkbox-checked': hasTag(tags.FORCE_NSFW) }"
               />
+              {{ $t('user_card.admin_menu.force_nsfw') }}
             </button>
             <button
-              class="dropdown-item"
+              class="button-default dropdown-item"
               @click="toggleTag(tags.STRIP_MEDIA)"
             >
-              {{ $t('user_card.admin_menu.strip_media') }}
               <span
                 class="menu-checkbox"
                 :class="{ 'menu-checkbox-checked': hasTag(tags.STRIP_MEDIA) }"
               />
+              {{ $t('user_card.admin_menu.strip_media') }}
             </button>
             <button
-              class="dropdown-item"
+              class="button-default dropdown-item"
               @click="toggleTag(tags.FORCE_UNLISTED)"
             >
-              {{ $t('user_card.admin_menu.force_unlisted') }}
               <span
                 class="menu-checkbox"
                 :class="{ 'menu-checkbox-checked': hasTag(tags.FORCE_UNLISTED) }"
               />
+              {{ $t('user_card.admin_menu.force_unlisted') }}
             </button>
             <button
-              class="dropdown-item"
+              class="button-default dropdown-item"
               @click="toggleTag(tags.SANDBOX)"
             >
-              {{ $t('user_card.admin_menu.sandbox') }}
               <span
                 class="menu-checkbox"
                 :class="{ 'menu-checkbox-checked': hasTag(tags.SANDBOX) }"
               />
+              {{ $t('user_card.admin_menu.sandbox') }}
             </button>
             <button
               v-if="user.is_local"
-              class="dropdown-item"
+              class="button-default dropdown-item"
               @click="toggleTag(tags.DISABLE_REMOTE_SUBSCRIPTION)"
             >
-              {{ $t('user_card.admin_menu.disable_remote_subscription') }}
               <span
                 class="menu-checkbox"
                 :class="{ 'menu-checkbox-checked': hasTag(tags.DISABLE_REMOTE_SUBSCRIPTION) }"
               />
+              {{ $t('user_card.admin_menu.disable_remote_subscription') }}
             </button>
             <button
               v-if="user.is_local"
-              class="dropdown-item"
+              class="button-default dropdown-item"
               @click="toggleTag(tags.DISABLE_ANY_SUBSCRIPTION)"
             >
-              {{ $t('user_card.admin_menu.disable_any_subscription') }}
               <span
                 class="menu-checkbox"
                 :class="{ 'menu-checkbox-checked': hasTag(tags.DISABLE_ANY_SUBSCRIPTION) }"
               />
+              {{ $t('user_card.admin_menu.disable_any_subscription') }}
             </button>
             <button
               v-if="user.is_local"
-              class="dropdown-item"
+              class="button-default dropdown-item"
               @click="toggleTag(tags.QUARANTINE)"
             >
-              {{ $t('user_card.admin_menu.quarantine') }}
               <span
                 class="menu-checkbox"
                 :class="{ 'menu-checkbox-checked': hasTag(tags.QUARANTINE) }"
               />
+              {{ $t('user_card.admin_menu.quarantine') }}
             </button>
           </span>
         </div>
       </div>
       <button
         slot="trigger"
-        class="btn btn-default btn-block"
+        class="btn button-default btn-block"
         :class="{ toggled }"
       >
         {{ $t('user_card.admin_menu.moderation') }}
@@ -141,13 +141,13 @@
         <p>{{ $t('user_card.admin_menu.delete_user_confirmation') }}</p>
         <template slot="footer">
           <button
-            class="btn btn-default"
+            class="btn button-default"
             @click="deleteUserDialog(false)"
           >
             {{ $t('general.cancel') }}
           </button>
           <button
-            class="btn btn-default danger"
+            class="btn button-default danger"
             @click="deleteUser()"
           >
             {{ $t('user_card.admin_menu.delete_user') }}
@@ -162,25 +162,6 @@
 
 <style lang="scss">
 @import '../../_variables.scss';
-
-.menu-checkbox {
-  float: right;
-  min-width: 22px;
-  max-width: 22px;
-  min-height: 22px;
-  max-height: 22px;
-  line-height: 22px;
-  text-align: center;
-  border-radius: 0px;
-  background-color: $fallback--fg;
-  background-color: var(--input, $fallback--fg);
-  box-shadow: 0px 0px 2px black inset;
-  box-shadow: var(--inputShadow);
-
-  &.menu-checkbox-checked::after {
-    content: '✓';
-  }
-}
 
 .moderation-tools-popover {
   height: 100%;

@@ -29,6 +29,8 @@ $status-margin: 0.75em;
   &.-conversation {
     border-left-width: 4px;
     border-left-style: solid;
+    border-left-color: $fallback--cRed;
+    border-left-color: var(--cRed, $fallback--cRed);
   }
 
   .gravestone {
@@ -57,6 +59,15 @@ $status-margin: 0.75em;
     display: flex;
     align-items: center;
     justify-content: flex-end;
+  }
+
+  ._misclick-prevention & {
+    pointer-events: none;
+
+    .attachments {
+      pointer-events: initial;
+      cursor: initial;
+    }
   }
 
   .left-side {
@@ -128,6 +139,20 @@ $status-margin: 0.75em;
   .heading-right {
     display: flex;
     flex-shrink: 0;
+
+    .button-unstyled {
+      padding: 5px;
+      margin: -5px;
+
+      &:hover svg {
+        color: $fallback--lightText;
+        color: var(--lightText, $fallback--lightText);
+      }
+    }
+
+    .svg-inline--fa {
+      margin-left: 0.25em;
+    }
   }
 
   .timeago {
