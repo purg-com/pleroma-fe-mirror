@@ -1,4 +1,6 @@
+import Vue from 'vue'
 import Attachment from '../attachment/attachment.vue'
+import StillImage from '../still-image/still-image.vue'
 import Poll from '../poll/poll.vue'
 import Gallery from '../gallery/gallery.vue'
 import LinkPreview from '../link-preview/link-preview.vue'
@@ -40,10 +42,24 @@ const StatusContent = {
       showingTall: this.fullContent || (this.inConversation && this.focused),
       showingLongSubject: false,
       // not as computed because it sets the initial state which will be changed later
-      expandingSubject: !this.$store.getters.mergedConfig.collapseMessageWithSubject
+      expandingSubject: !this.$store.getters.mergedConfig.collapseMessageWithSubject,
+      stillImages: []
     }
   },
+
+  updated () {
+    this.patchEmoji()
+  },
+  mounted () {
+    this.patchEmoji()
+  },
+  beforeDestroy() {
+    this.stillImages.forEach(vm => vm.$destroy())
+  },
   computed: {
+    stopGifs () {
+      return this.$store.getters.mergedConfig.stopGifs
+    },
     localCollapseSubjectDefault () {
       return this.mergedConfig.collapseMessageWithSubject
     },
@@ -167,6 +183,43 @@ const StatusContent = {
     LinkPreview
   },
   methods: {
+    patchEmoji () {
+      [this.$refs.subject, this.$refs.content].forEach(el => {
+        if (!el) return
+        const imgs = el.querySelectorAll('*:not(.still-image) > img')
+
+        imgs.forEach((img, i) => {
+          // extract relevant info from image
+          // TODO do a better job at "cloning" node and splicing it into a span
+          const { src, title, className } = img
+          // Outer placeholder, thing that will contain stillimage
+          const placeholder = document.createElement('span')
+          // Inner placeholder, this will be REPLACED by stillimage
+          const placeholderInner = document.createElement('span')
+          // Use special classname for emoji, just to be safe
+          placeholder.className = className === 'emoji' ? '__pleromafe_emoji' : 'emoji'
+          // Overall it seems to be easier to use a wrapper and add stuff to it
+          // than to add stuff to component (how??)
+          placeholder.title = title
+          // Insert inner into outer
+          placeholder.appendChild(placeholderInner)
+          // put our placeholder before the image
+          img.parentNode.insertBefore(placeholder, img)
+
+          // Render StillImage into placeholder
+          const opts = {
+            el: placeholder,
+            props: { src }
+          }
+          const vm = new Vue({ el: placeholderInner, render: h => h(StillImage, opts)})
+          this.stillImages.push(vm)
+
+          if (img.className === 'emoji') {
+            img.className = img.className + ' __pleromafe_emoji_orig'
+          }
+        })
+      })
+    },
     linkClicked (event) {
       const target = event.target.closest('.status-content a')
       if (target) {

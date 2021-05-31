@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 const StillImage = {
   props: [
     'src',
@@ -8,8 +10,9 @@ const StillImage = {
     'alt'
   ],
   data () {
+    console.log('test', this.$store === undefined)
     return {
-      stopGifs: this.$store.getters.mergedConfig.stopGifs
+      stopGifs: this.$store === undefined ? true : this.$store.getters.mergedConfig.stopGifs
     }
   },
   computed: {
@@ -36,4 +39,4 @@ const StillImage = {
   }
 }
 
-export default StillImage
+export default Vue.component('still-image', StillImage)

@@ -1,6 +1,6 @@
 <template>
   <!-- eslint-disable vue/no-v-html -->
-  <div class="StatusContent">
+  <div class="StatusContent" :class="{'-stop-gifs': stopGifs}">
     <slot name="header" />
     <div
       v-if="status.summary_html"
@@ -10,6 +10,7 @@
       <div
         class="media-body summary"
         @click.prevent="linkClicked"
+        ref="subject"
         v-html="status.summary_html"
       />
       <button
@@ -45,6 +46,7 @@
         :class="{ 'single-line': singleLine }"
         class="status-content media-body"
         @click.prevent="linkClicked"
+        ref="content"
         v-html="postBodyHtml"
       />
       <button
@@ -140,6 +142,22 @@ $status-margin: 0.75em;
   flex: 1;
   min-width: 0;
 
+  &:hover {
+    --_still-image-img-visibility: visible;
+    --_still-image-canvas-visibility: hidden;
+    --_still-image-label-visibility: hidden;
+  }
+
+  &.-stop-gifs {
+    .__pleromafe_emoji {
+      display: inline-block;
+    }
+
+    .__pleromafe_emoji_orig {
+      display: none;
+    }
+  }
+
   .status-content-wrapper {
     display: flex;
     flex-direction: column;
@@ -192,9 +210,19 @@ $status-margin: 0.75em;
     object-fit: contain;
 
     &.emoji {
-      width: 32px;
-      height: 32px;
+      width: var(--big-emoji-size, 32px);
+      height: var(--big-emoji-size, 32px);
     }
+  }
+
+  .__pleromafe_emoji {
+    display: none; // overriden elsewhere (in the beginning of css file)
+    max-width: 100%;
+    max-height: 400px;
+    vertical-align: middle;
+    object-fit: contain;
+    width: var(--big-emoji-size, 32px);
+    height: var(--big-emoji-size, 32px);
   }
 
   .summary-wrapper {
