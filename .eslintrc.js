@@ -21,6 +21,10 @@ module.exports = {
     'generator-star-spacing': 0,
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
-    'vue/require-prop-types': 0
+    'vue/require-prop-types': 0,
+    'vue/v-slot-style': 0,
+    'vue/component-definition-name-casing': 0,
+    'vue/no-lone-template': 0,
+    'vue/component-tags-order': 0
   }
 }

@@ -16,7 +16,8 @@ var now = Date.now()
 
 module.exports = {
   entry: {
-    app: './src/main.js'
+    app: './src/main.js',
+    'sw-pleroma': './src/sw.js'
   },
   output: {
     path: config.build.assetsRoot,
@@ -91,10 +92,10 @@ module.exports = {
     ]
   },
   plugins: [
-    new ServiceWorkerWebpackPlugin({
-      entry: path.join(__dirname, '..', 'src/sw.js'),
-      filename: 'sw-pleroma.js'
-    }),
+    // new ServiceWorkerWebpackPlugin({
+    //   entry: path.join(__dirname, '..', 'src/sw.js'),
+    //   filename: 'sw-pleroma.js'
+    // }),
     // This copies Ruffle's WASM to a directory so that JS side can access it
     new CopyPlugin({
       patterns: [
