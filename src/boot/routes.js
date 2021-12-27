@@ -43,6 +43,7 @@ export default (store) => {
     // Redirects from Mastodon, Soapbox FE, etc. to fix old bookmarks
     { path: '/@:username/posts/:statusId', redirect: '/notice/:statusId' },
     { path: '/@:username/:statusId', redirect: '/notice/:statusId' },
+    { path: '/:username/status/:statusId', redirect: '/notice/:statusId' },
 
     { name: 'public-external-timeline', path: '/main/all', component: PublicAndExternalTimeline },
     { name: 'public-timeline', path: '/main/public', component: PublicTimeline },
