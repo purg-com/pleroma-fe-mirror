@@ -143,4 +143,4 @@ self.addEventListener('notificationclick', (event) => {
   }))
 })
 
-console.log('sw here')
+self.addEventListener('fetch', _ => _)
