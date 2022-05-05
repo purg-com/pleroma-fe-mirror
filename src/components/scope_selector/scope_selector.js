@@ -3,14 +3,16 @@ import {
   faEnvelope,
   faLock,
   faLockOpen,
-  faGlobe
+  faGlobe,
+  faMapMarkerAlt
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
   faEnvelope,
   faGlobe,
   faLock,
-  faLockOpen
+  faLockOpen,
+  faMapMarkerAlt
 )
 
 const ScopeSelector = {
@@ -33,6 +35,9 @@ const ScopeSelector = {
     showPublic () {
       return this.originalScope !== 'direct' && this.shouldShow('public')
     },
+    showLocal () {
+      return this.originalScope !== 'direct' && this.shouldShow('local')
+    },
     showUnlisted () {
       return this.originalScope !== 'direct' && this.shouldShow('unlisted')
     },
@@ -45,6 +50,7 @@ const ScopeSelector = {
     css () {
       return {
         public: { selected: this.currentScope === 'public' },
+        local: { selected: this.currentScope === 'local' },
         unlisted: { selected: this.currentScope === 'unlisted' },
         private: { selected: this.currentScope === 'private' },
         direct: { selected: this.currentScope === 'direct' }
