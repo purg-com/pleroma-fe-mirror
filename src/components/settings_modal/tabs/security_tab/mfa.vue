@@ -97,8 +97,15 @@
                 <h4>{{ $t('general.verify') }}</h4>
                 <p>{{ $t('settings.mfa.verify.desc') }}</p>
                 <input
-                  v-model="otpConfirmToken"
+                  autocomplete="one-time-code"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  id="totp"
+                  name="totp"
+                  pattern="[0-9]*"
+                  spellcheck="false"
                   type="text"
+                  v-model="otpConfirmToken"
                 >
 
                 <p>{{ $t('settings.enter_current_password_to_confirm') }}:</p>

@@ -16,9 +16,16 @@
             {{ $t('login.authentication_code') }}
           </label>
           <input
-            id="code"
-            v-model="code"
+            autocomplete="one-time-code"
+            autocorrect="off"
+            autocapitalize="off"
+            autofocus="true"
             class="form-control"
+            id="totp"
+            name="totp"
+            spellcheck="false"
+            type="text"
+            v-model="code"
           >
         </div>
 

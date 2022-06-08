@@ -72,7 +72,7 @@
         {{ changePasswordError }}
       </p>
     </div>
-
+    <mfa />
     <div class="setting-item">
       <h2>{{ $t('settings.oauth_tokens') }}</h2>
       <table class="oauth-tokens">
@@ -102,7 +102,6 @@
         </tbody>
       </table>
     </div>
-    <mfa />
     <div class="setting-item">
       <h2>{{ $t('settings.delete_account') }}</h2>
       <p v-if="!deletingAccount">
