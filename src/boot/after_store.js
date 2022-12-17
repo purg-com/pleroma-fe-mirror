@@ -125,6 +125,7 @@ const setSettings = async ({ apiConfig, staticConfig, store }) => {
   copyInstanceOption('hideUserStats')
   copyInstanceOption('hideFilteredStatuses')
   copyInstanceOption('logo')
+  copyInstanceOption('dailyAvgTimeframe')
 
   store.dispatch('setInstanceOption', {
     name: 'logoMask',

@@ -25,5 +25,6 @@
   "sidebarRight": false,
   "subjectLineBehavior": "email",
   "theme": "pleroma-dark",
-  "webPushNotifications": false
+  "webPushNotifications": false,
+  "dailyAvgTimeframe": 7
 }
