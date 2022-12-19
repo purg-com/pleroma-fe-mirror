@@ -39,20 +39,23 @@ export default {
   display: inline-block;
   min-height: 1.2em;
 
+  & > * {
+    vertical-align: middle;
+  }
+
   &-indicator {
+    display: inline-block;
     position: relative;
-    padding-left: 1.2em;
+    width: 1.2em;
+    height: 1.2em;
   }
 
   &-indicator::before {
     position: absolute;
-    right: 0;
-    top: 0;
+    inset: 0;
     display: block;
     content: '✓';
     transition: color 200ms;
-    width: 1.1em;
-    height: 1.1em;
     border-radius: $fallback--checkboxRadius;
     border-radius: var(--checkboxRadius, $fallback--checkboxRadius);
     box-shadow: 0px 0px 2px black inset;
