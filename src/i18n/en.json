@@ -853,6 +853,8 @@
     "unbookmark": "Unbookmark",
     "delete_confirm": "Do you really want to delete this status?",
     "reply_to": "Reply to",
+    "reply_to_with_icon": "{icon} {replyTo}",
+    "reply_to_with_arg": "{replyToWithIcon} {user}",
     "mentions": "Mentions",
     "replies_list": "Replies:",
     "replies_list_with_others": "Replies (+{numReplies} other): | Replies (+{numReplies} others):",
