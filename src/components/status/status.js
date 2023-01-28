@@ -19,6 +19,7 @@ import MentionLink from 'src/components/mention_link/mention_link.vue'
 import generateProfileLink from 'src/services/user_profile_link_generator/user_profile_link_generator'
 import { highlightClass, highlightStyle } from '../../services/user_highlighter/user_highlighter.js'
 import { muteWordHits } from '../../services/status_parser/status_parser.js'
+import { controlledOrUncontrolledGetters, controlledOrUncontrolledSet, controlledOrUncontrolledToggle } from 'src/services/control/control.service.js'
 import { unescape, uniqBy } from 'lodash'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -61,41 +62,6 @@ library.add(
   faChevronDown,
   faAngleDoubleRight
 )
-
-const camelCase = name => name.charAt(0).toUpperCase() + name.slice(1)
-
-const controlledOrUncontrolledGetters = list => list.reduce((res, name) => {
-  const camelized = camelCase(name)
-  const toggle = `controlledToggle${camelized}`
-  const controlledName = `controlled${camelized}`
-  const uncontrolledName = `uncontrolled${camelized}`
-  res[name] = function () {
-    return ((this.$data[toggle] !== undefined || this.$props[toggle] !== undefined) && this[toggle]) ? this[controlledName] : this[uncontrolledName]
-  }
-  return res
-}, {})
-
-const controlledOrUncontrolledToggle = (obj, name) => {
-  const camelized = camelCase(name)
-  const toggle = `controlledToggle${camelized}`
-  const uncontrolledName = `uncontrolled${camelized}`
-  if (obj[toggle]) {
-    obj[toggle]()
-  } else {
-    obj[uncontrolledName] = !obj[uncontrolledName]
-  }
-}
-
-const controlledOrUncontrolledSet = (obj, name, val) => {
-  const camelized = camelCase(name)
-  const set = `controlledSet${camelized}`
-  const uncontrolledName = `uncontrolled${camelized}`
-  if (obj[set]) {
-    obj[set](val)
-  } else {
-    obj[uncontrolledName] = val
-  }
-}
 
 const Status = {
   name: 'Status',
@@ -149,6 +115,8 @@ const Status = {
     'controlledToggleReplying',
     'controlledMediaPlaying',
     'controlledSetMediaPlaying',
+    'controlledCurrentLanguage',
+    'controlledSetCurrentLanguage',
     'dive'
   ],
   data () {
@@ -157,13 +125,14 @@ const Status = {
       unmuted: false,
       userExpanded: false,
       uncontrolledMediaPlaying: [],
+      uncontrolledCurrentLanguage: undefined,
       suspendable: true,
       error: null,
       headTailLinks: null
     }
   },
   computed: {
-    ...controlledOrUncontrolledGetters(['replying', 'mediaPlaying']),
+    ...controlledOrUncontrolledGetters(['replying', 'mediaPlaying', 'currentLanguage']),
     muteWords () {
       return this.mergedConfig.muteWords
     },
@@ -447,6 +416,9 @@ const Status = {
     },
     removeMediaPlaying (id) {
       controlledOrUncontrolledSet(this, 'mediaPlaying', this.mediaPlaying.filter(mediaId => mediaId !== id))
+    },
+    setCurrentLanguage (language) {
+      controlledOrUncontrolledSet(this, 'currentLanguage', language)
     },
     setHeadTailLinks (headTailLinks) {
       this.headTailLinks = headTailLinks

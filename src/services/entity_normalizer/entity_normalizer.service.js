@@ -2,6 +2,7 @@ import escape from 'escape-html'
 import parseLinkHeader from 'parse-link-header'
 import { isStatusNotification } from '../notification_utils/notification_utils.js'
 import punycode from 'punycode.js'
+import { uniq } from 'lodash'
 
 /** NOTICE! **
  * Do not initialize UI-generated data here.
@@ -309,6 +310,7 @@ export const parseStatus = (data) => {
     output.nsfw = data.sensitive
 
     output.raw_html = data.content
+    output.raw_html_map = data.content_map || {}
     output.emojis = data.emojis
 
     output.tags = data.tags
@@ -339,6 +341,11 @@ export const parseStatus = (data) => {
     }
 
     output.summary_raw_html = escape(data.spoiler_text)
+    output.summary_raw_html_map = Object.entries(data.spoiler_text_map || {})
+      .reduce((acc, [lang, txt]) => {
+        acc[lang] = escape(txt)
+        return acc
+      }, {})
     output.external_url = data.url
     output.poll = data.poll
     if (output.poll) {
@@ -349,6 +356,7 @@ export const parseStatus = (data) => {
     }
     output.pinned = data.pinned
     output.muted = data.muted
+    output.languages = uniq(Object.keys(output.raw_html_map).concat(Object.keys(output.summary_raw_html_map)))
   } else {
     output.favorited = data.favorited
     output.fave_num = data.fave_num

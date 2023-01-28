@@ -24,11 +24,13 @@
       :controlled-showing-long-subject="currentProp.showingLongSubject"
       :controlled-replying="currentProp.replying"
       :controlled-media-playing="currentProp.mediaPlaying"
+      :controlled-current-language="currentProp.currentLanguage"
       :controlled-toggle-showing-tall="() => toggleCurrentProp('showingTall')"
       :controlled-toggle-expanding-subject="() => toggleCurrentProp('expandingSubject')"
       :controlled-toggle-showing-long-subject="() => toggleCurrentProp('showingLongSubject')"
       :controlled-toggle-replying="() => toggleCurrentProp('replying')"
       :controlled-set-media-playing="(newVal) => setCurrentProp('mediaPlaying', newVal)"
+      :controlled-set-current-language="(newVal) => setCurrentProp('currentLanguage', newVal)"
       :dive="dive ? () => dive(status.id) : undefined"
 
       @goto="setHighlight"

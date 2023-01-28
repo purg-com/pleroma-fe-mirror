@@ -4,6 +4,7 @@ import Gallery from '../gallery/gallery.vue'
 import StatusBody from 'src/components/status_body/status_body.vue'
 import LinkPreview from '../link-preview/link-preview.vue'
 import { mapGetters, mapState } from 'vuex'
+import { controlledOrUncontrolledGetters, controlledOrUncontrolledSet, controlledOrUncontrolledToggle } from 'src/services/control/control.service.js'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faCircleNotch,
@@ -23,30 +24,6 @@ library.add(
   faPollH
 )
 
-const camelCase = name => name.charAt(0).toUpperCase() + name.slice(1)
-
-const controlledOrUncontrolledGetters = list => list.reduce((res, name) => {
-  const camelized = camelCase(name)
-  const toggle = `controlledToggle${camelized}`
-  const controlledName = `controlled${camelized}`
-  const uncontrolledName = `uncontrolled${camelized}`
-  res[name] = function () {
-    return ((this.$data[toggle] !== undefined || this.$props[toggle] !== undefined) && this[toggle]) ? this[controlledName] : this[uncontrolledName]
-  }
-  return res
-}, {})
-
-const controlledOrUncontrolledToggle = (obj, name) => {
-  const camelized = camelCase(name)
-  const toggle = `controlledToggle${camelized}`
-  const uncontrolledName = `uncontrolled${camelized}`
-  if (obj[toggle]) {
-    obj[toggle]()
-  } else {
-    obj[uncontrolledName] = !obj[uncontrolledName]
-  }
-}
-
 const StatusContent = {
   name: 'StatusContent',
   props: [
@@ -61,18 +38,21 @@ const StatusContent = {
     'controlledToggleShowingTall',
     'controlledToggleExpandingSubject',
     'controlledShowingLongSubject',
-    'controlledToggleShowingLongSubject'
+    'controlledToggleShowingLongSubject',
+    'controlledCurrentLanguage',
+    'controlledSetCurrentLanguage'
   ],
   data () {
     return {
       uncontrolledShowingTall: this.fullContent || (this.inConversation && this.focused),
       uncontrolledShowingLongSubject: false,
       // not as computed because it sets the initial state which will be changed later
-      uncontrolledExpandingSubject: !this.$store.getters.mergedConfig.collapseMessageWithSubject
+      uncontrolledExpandingSubject: !this.$store.getters.mergedConfig.collapseMessageWithSubject,
+      uncontrolledCurrentLanguage: undefined
     }
   },
   computed: {
-    ...controlledOrUncontrolledGetters(['showingTall', 'expandingSubject', 'showingLongSubject']),
+    ...controlledOrUncontrolledGetters(['showingTall', 'expandingSubject', 'showingLongSubject', 'currentLanguage']),
     hideAttachments () {
       return (this.mergedConfig.hideAttachments && !this.inConversation) ||
         (this.mergedConfig.hideAttachmentsInConv && this.inConversation)
@@ -120,6 +100,9 @@ const StatusContent = {
     },
     toggleShowingLongSubject () {
       controlledOrUncontrolledToggle(this, 'showingLongSubject')
+    },
+    setCurrentLanguage (language) {
+      controlledOrUncontrolledSet(this, 'currentLanguage', language)
     },
     setMedia () {
       const attachments = this.attachmentSize === 'hide' ? this.status.attachments : this.galleryAttachments

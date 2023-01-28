@@ -320,7 +320,8 @@ const conversation = {
             expandingSubject: false,
             showingLongSubject: false,
             isReplying: false,
-            mediaPlaying: []
+            mediaPlaying: [],
+            currentLanguage: undefined
           }
 
           if (this.statusContentPropertiesObject[id]) {

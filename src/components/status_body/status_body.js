@@ -32,7 +32,9 @@ const StatusContent = {
     'showingLongSubject',
     'toggleShowingTall',
     'toggleExpandingSubject',
-    'toggleShowingLongSubject'
+    'toggleShowingLongSubject',
+    'currentLanguage',
+    'setCurrentLanguage'
   ],
   data () {
     return {
@@ -77,6 +79,18 @@ const StatusContent = {
     },
     attachmentTypes () {
       return this.status.attachments.map(file => fileType.fileType(file.mimetype))
+    },
+    languages () {
+      return this.status.languages
+    },
+    currentLanguageOrDefault () {
+      return this.currentLanguage || this.languages[0]
+    },
+    summary () {
+      return this.currentLanguageOrDefault ? this.status.summary_raw_html_map[this.currentLanguageOrDefault] : this.status.summary_raw_html
+    },
+    content () {
+      return this.currentLanguageOrDefault ? this.status.raw_html_map[this.currentLanguageOrDefault] : this.status.raw_html
     },
     ...mapGetters(['mergedConfig'])
   },
