@@ -56,7 +56,7 @@
 <script src="./search_bar.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
+@import "../../variables";
 
 .SearchBar {
   display: inline-flex;

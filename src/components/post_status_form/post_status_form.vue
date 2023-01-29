@@ -331,7 +331,7 @@
 <script src="./post_status_form.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
+@import "../../variables";
 
 .post-status-form {
   position: relative;
@@ -378,7 +378,9 @@
     &:hover {
       text-decoration: underline;
     }
-    svg, i {
+
+    svg,
+    i {
       margin-left: 0.2em;
       font-size: 0.8em;
       transform: rotate(90deg);
@@ -428,36 +430,6 @@
     }
   }
 
-  .media-upload-icon, .poll-icon, .emoji-icon {
-    font-size: 1.85em;
-    line-height: 1.1;
-    flex: 1;
-    padding: 0 0.1em;
-    display: flex;
-    align-items: center;
-
-    &.selected, &:hover {
-      // needs to be specific to override icon default color
-      svg, i, label {
-        color: $fallback--lightText;
-        color: var(--lightText, $fallback--lightText);
-      }
-    }
-
-    &.disabled {
-      svg, i {
-        cursor: not-allowed;
-        color: $fallback--icon;
-        color: var(--btnDisabledText, $fallback--icon);
-
-        &:hover {
-          color: $fallback--icon;
-          color: var(--btnDisabledText, $fallback--icon);
-        }
-      }
-    }
-  }
-
   // Order is not necessary but a good indicator
   .media-upload-icon {
     order: 1;
@@ -474,16 +446,53 @@
     justify-content: right;
   }
 
+  .media-upload-icon,
+  .poll-icon,
+  .emoji-icon {
+    font-size: 1.85em;
+    line-height: 1.1;
+    flex: 1;
+    padding: 0 0.1em;
+    display: flex;
+    align-items: center;
+
+    &.selected,
+    &:hover {
+      // needs to be specific to override icon default color
+      svg,
+      i,
+      label {
+        color: $fallback--lightText;
+        color: var(--lightText, $fallback--lightText);
+      }
+    }
+
+    &.disabled {
+      svg,
+      i {
+        cursor: not-allowed;
+        color: $fallback--icon;
+        color: var(--btnDisabledText, $fallback--icon);
+
+        &:hover {
+          color: $fallback--icon;
+          color: var(--btnDisabledText, $fallback--icon);
+        }
+      }
+    }
+  }
+
   .error {
     text-align: center;
   }
 
   .media-upload-wrapper {
-    margin-right: .2em;
-    margin-bottom: .5em;
+    margin-right: 0.2em;
+    margin-bottom: 0.5em;
     width: 18em;
 
-    img, video {
+    img,
+    video {
       object-fit: contain;
       max-height: 10em;
     }
@@ -557,18 +566,14 @@
     }
   }
 
-  .btn[disabled] {
-    cursor: not-allowed;
-  }
-
   @keyframes fade-in {
     from { opacity: 0; }
-    to   { opacity: 0.6; }
+    to { opacity: 0.6; }
   }
 
   @keyframes fade-out {
     from { opacity: 0.6; }
-    to   { opacity: 0; }
+    to { opacity: 0; }
   }
 
   .drop-indicator {

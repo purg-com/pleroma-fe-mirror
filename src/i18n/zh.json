@@ -53,7 +53,13 @@
       "direct": "私讯",
       "private": "仅关注者",
       "unlisted": "列外"
-    }
+    },
+    "scroll_to_top": "滚动至顶",
+    "generic_error_message": "发生一个错误：{0}",
+    "never_show_again": "不再显示",
+    "undo": "撤销",
+    "yes": "是",
+    "no": "否"
   },
   "image_cropper": {
     "crop_picture": "裁剪图片",
@@ -109,7 +115,12 @@
     "chats": "聊天",
     "timelines": "时间线",
     "bookmarks": "书签",
-    "home_timeline": "主页时间线"
+    "home_timeline": "主页时间线",
+    "lists": "列表",
+    "edit_finish": "完成编辑",
+    "mobile_notifications": "打开通知（有未读的）",
+    "mobile_notifications_close": "关闭通知",
+    "announcements": "公告"
   },
   "notifications": {
     "broken_favorite": "未知的状态，正在搜索中…",
@@ -890,7 +901,18 @@
     "search_emoji": "搜索表情符号",
     "emoji": "表情符号",
     "load_all": "加载所有表情符号（共 {emojiAmount} 个）",
-    "load_all_hint": "最先加载的 {saneAmount} 表情符号，加载全部表情符号可能会带来性能问题。"
+    "load_all_hint": "最先加载的 {saneAmount} 表情符号，加载全部表情符号可能会带来性能问题。",
+    "unicode_groups": {
+      "flags": "旗帜",
+      "food-and-drink": "饮食",
+      "objects": "物件",
+      "people-and-body": "人和身体",
+      "symbols": "符号",
+      "travel-and-places": "旅行和地点",
+      "activities": "活动",
+      "animals-and-nature": "动物和自然"
+    },
+    "regional_indicator": "地区指示符 {letter}"
   },
   "about": {
     "mrf": {
@@ -958,5 +980,26 @@
     "delete": "删除",
     "message_user": "发消息给 {nickname}",
     "you": "你："
+  },
+  "announcements": {
+    "page_header": "公告",
+    "title": "公告",
+    "mark_as_read_action": "标为已读",
+    "post_form_header": "发布公告",
+    "post_placeholder": "在这里输入公告内容...",
+    "post_action": "发布",
+    "post_error": "错误：{error}",
+    "close_error": "关闭",
+    "delete_action": "删除",
+    "start_time_prompt": "起始时间： ",
+    "end_time_prompt": "终止时间： ",
+    "all_day_prompt": "这是全天的事件",
+    "published_time_display": "发表于 {time}",
+    "start_time_display": "开始于 {time}",
+    "end_time_display": "结束于 {time}",
+    "edit_action": "编辑",
+    "submit_edit_action": "提交",
+    "cancel_edit_action": "取消",
+    "inactive_message": "这个公告不活跃"
   }
 }

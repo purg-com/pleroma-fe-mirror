@@ -59,14 +59,26 @@
     >
       {{ status.repeat_num }}
     </span>
+    <teleport to="#modal">
+      <confirm-modal
+        v-if="showingConfirmDialog"
+        :title="$t('status.repeat_confirm_title')"
+        :confirm-text="$t('status.repeat_confirm_accept_button')"
+        :cancel-text="$t('status.repeat_confirm_cancel_button')"
+        @accepted="doRetweet"
+        @cancelled="hideConfirmDialog"
+      >
+        {{ $t('status.repeat_confirm') }}
+      </confirm-modal>
+    </teleport>
   </div>
 </template>
 
 <script src="./retweet_button.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-@import '../../_mixins.scss';
+@import "../../variables";
+@import "../../mixins";
 
 .RetweetButton {
   display: flex;

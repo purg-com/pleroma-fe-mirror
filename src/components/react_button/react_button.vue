@@ -73,8 +73,8 @@
 <script src="./react_button.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-@import '../../_mixins.scss';
+@import "../../variables";
+@import "../../mixins";
 
 .ReactButton {
   .reaction-picker-filter {
@@ -104,20 +104,19 @@
     text-align: center;
     align-content: flex-start;
     user-select: none;
-
-    mask: linear-gradient(to top, white 0, transparent 100%) bottom no-repeat,
-          linear-gradient(to bottom, white 0, transparent 100%) top no-repeat,
-          linear-gradient(to top, white, white);
+    mask:
+      linear-gradient(to top, white 0, transparent 100%) bottom no-repeat,
+      linear-gradient(to bottom, white 0, transparent 100%) top no-repeat,
+      linear-gradient(to top, white, white);
     transition: mask-size 150ms;
     mask-size: 100% 20px, 100% 20px, auto;
 
     /* Autoprefixed seem to ignore this one, and also syntax is different */
-    -webkit-mask-composite: xor;
+    mask-composite: xor;
     mask-composite: exclude;
 
     .emoji-button {
       cursor: pointer;
-
       flex-basis: 20%;
       line-height: 1.5;
       align-content: center;
@@ -128,11 +127,6 @@
     }
   }
 
-  /* override of popover internal stuff */
-  .popover-trigger-button {
-    width: auto;
-  }
-
   .popover-trigger {
     padding: 10px;
     margin: -10px;
@@ -141,10 +135,12 @@
       color: $fallback--text;
       color: var(--text, $fallback--text);
     }
-
   }
 
   .popover-trigger-button {
+    /* override of popover internal stuff */
+    width: auto;
+
     @include unfocused-style {
       .focus-marker {
         visibility: hidden;

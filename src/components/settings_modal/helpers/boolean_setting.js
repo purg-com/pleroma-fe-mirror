@@ -41,7 +41,13 @@ export default {
   },
   methods: {
     update (e) {
+      const [firstSegment, ...rest] = this.path.split('.')
       set(this.$parent, this.path, e)
+      // Updating nested properties does not trigger update on its parent.
+      // probably still not as reliable, but works for depth=1 at least
+      if (rest.length > 0) {
+        set(this.$parent, firstSegment, { ...get(this.$parent, firstSegment) })
+      }
     },
     reset () {
       set(this.$parent, this.path, this.defaultState)

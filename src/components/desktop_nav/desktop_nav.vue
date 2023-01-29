@@ -38,7 +38,7 @@
         />
         <button
           class="button-unstyled nav-icon"
-          @click="openSettingsModal"
+          @click.stop="openSettingsModal"
         >
           <FAIcon
             fixed-width
@@ -65,7 +65,7 @@
         <button
           v-if="currentUser"
           class="button-unstyled nav-icon"
-          @click.prevent="logout"
+          @click.stop.prevent="logout"
         >
           <FAIcon
             fixed-width
@@ -76,6 +76,18 @@
         </button>
       </div>
     </div>
+    <teleport to="#modal">
+      <confirm-modal
+        v-if="showingConfirmLogout"
+        :title="$t('login.logout_confirm_title')"
+        :confirm-text="$t('login.logout_confirm_accept_button')"
+        :cancel-text="$t('login.logout_confirm_cancel_button')"
+        @accepted="doLogout"
+        @cancelled="hideConfirmLogout"
+      >
+        {{ $t('login.logout_confirm') }}
+      </confirm-modal>
+    </teleport>
   </nav>
 </template>
 <script src="./desktop_nav.js"></script>

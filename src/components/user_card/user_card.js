@@ -1,12 +1,15 @@
+import { unitToSeconds } from 'src/services/date_utils/date_utils.js'
 import UserAvatar from '../user_avatar/user_avatar.vue'
 import RemoteFollow from '../remote_follow/remote_follow.vue'
 import ProgressButton from '../progress_button/progress_button.vue'
 import FollowButton from '../follow_button/follow_button.vue'
 import ModerationTools from '../moderation_tools/moderation_tools.vue'
 import AccountActions from '../account_actions/account_actions.vue'
+import UserNote from '../user_note/user_note.vue'
 import Select from '../select/select.vue'
 import UserLink from '../user_link/user_link.vue'
 import RichContent from 'src/components/rich_content/rich_content.jsx'
+import ConfirmModal from '../confirm_modal/confirm_modal.vue'
 import generateProfileLink from 'src/services/user_profile_link_generator/user_profile_link_generator'
 import { mapGetters } from 'vuex'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -39,12 +42,16 @@ export default {
     'rounded',
     'bordered',
     'avatarAction', // default - open profile, 'zoom' - zoom, function - call function
-    'onClose'
+    'onClose',
+    'hasNoteEditor'
   ],
   data () {
     return {
       followRequestInProgress: false,
-      betterShadow: this.$store.state.interface.browserSupport.cssFilter
+      betterShadow: this.$store.state.interface.browserSupport.cssFilter,
+      showingConfirmMute: false,
+      muteExpiryAmount: 0,
+      muteExpiryUnit: 'minutes'
     }
   },
   created () {
@@ -129,6 +136,18 @@ export default {
       const privileges = this.loggedIn.privileges
       return this.loggedIn.role === 'admin' || privileges.includes('users_manage_activation_state') || privileges.includes('users_delete') || privileges.includes('users_manage_tags')
     },
+    hasNote () {
+      return this.relationship.note
+    },
+    supportsNote () {
+      return 'note' in this.relationship
+    },
+    shouldConfirmMute () {
+      return this.mergedConfig.modalOnMute
+    },
+    muteExpiryUnits () {
+      return ['minutes', 'hours', 'days']
+    },
     ...mapGetters(['mergedConfig'])
   },
   components: {
@@ -140,11 +159,30 @@ export default {
     FollowButton,
     Select,
     RichContent,
-    UserLink
+    UserLink,
+    UserNote,
+    ConfirmModal
   },
   methods: {
+    showConfirmMute () {
+      this.showingConfirmMute = true
+    },
+    hideConfirmMute () {
+      this.showingConfirmMute = false
+    },
     muteUser () {
-      this.$store.dispatch('muteUser', this.user.id)
+      if (!this.shouldConfirmMute) {
+        this.doMuteUser()
+      } else {
+        this.showConfirmMute()
+      }
+    },
+    doMuteUser () {
+      this.$store.dispatch('muteUser', {
+        id: this.user.id,
+        expiresIn: this.shouldConfirmMute ? unitToSeconds(this.muteExpiryUnit, this.muteExpiryAmount) : 0
+      })
+      this.hideConfirmMute()
     },
     unmuteUser () {
       this.$store.dispatch('unmuteUser', this.user.id)

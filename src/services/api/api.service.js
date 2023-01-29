@@ -70,6 +70,7 @@ const MASTODON_UNMUTE_USER_URL = id => `/api/v1/accounts/${id}/unmute`
 const MASTODON_REMOVE_USER_FROM_FOLLOWERS = id => `/api/v1/accounts/${id}/remove_from_followers`
 const MASTODON_SUBSCRIBE_USER = id => `/api/v1/pleroma/accounts/${id}/subscribe`
 const MASTODON_UNSUBSCRIBE_USER = id => `/api/v1/pleroma/accounts/${id}/unsubscribe`
+const MASTODON_USER_NOTE_URL = id => `/api/v1/accounts/${id}/note`
 const MASTODON_BOOKMARK_STATUS_URL = id => `/api/v1/statuses/${id}/bookmark`
 const MASTODON_UNBOOKMARK_STATUS_URL = id => `/api/v1/statuses/${id}/unbookmark`
 const MASTODON_POST_STATUS_URL = '/api/v1/statuses'
@@ -163,7 +164,7 @@ const updateNotificationSettings = ({ credentials, settings }) => {
     form.append(key, value)
   })
 
-  return fetch(NOTIFICATION_SETTINGS_URL, {
+  return fetch(`${NOTIFICATION_SETTINGS_URL}?${new URLSearchParams(settings)}`, {
     headers: authHeaders(credentials),
     method: 'PUT',
     body: form
@@ -319,6 +320,17 @@ const removeUserFromFollowers = ({ id, credentials }) => {
     headers: authHeaders(credentials),
     method: 'POST'
   }).then((data) => data.json())
+}
+
+const editUserNote = ({ id, credentials, comment }) => {
+  return promisedRequest({
+    url: MASTODON_USER_NOTE_URL(id),
+    credentials,
+    payload: {
+      comment
+    },
+    method: 'POST'
+  })
 }
 
 const approveUser = ({ id, credentials }) => {
@@ -722,26 +734,22 @@ const fetchTimeline = ({
   const queryString = map(params, (param) => `${param[0]}=${param[1]}`).join('&')
   url += `?${queryString}`
 
-  let status = ''
-  let statusText = ''
-
-  let pagination = {}
   return fetch(url, { headers: authHeaders(credentials) })
-    .then((data) => {
-      status = data.status
-      statusText = data.statusText
-      pagination = parseLinkHeaderPagination(data.headers.get('Link'), {
-        flakeId: timeline !== 'bookmarks' && timeline !== 'notifications'
-      })
-      return data
-    })
-    .then((data) => data.json())
-    .then((data) => {
-      if (!data.errors) {
+    .then(async (response) => {
+      const success = response.ok
+
+      const data = await response.json()
+
+      if (success && !data.errors) {
+        const pagination = parseLinkHeaderPagination(response.headers.get('Link'), {
+          flakeId: timeline !== 'bookmarks' && timeline !== 'notifications'
+        })
+
         return { data: data.map(isNotifications ? parseNotification : parseStatus), pagination }
       } else {
-        data.status = status
-        data.statusText = statusText
+        data.errors ||= []
+        data.status = response.status
+        data.statusText = response.statusText
         return data
       }
     })
@@ -1110,8 +1118,12 @@ const fetchMutes = ({ credentials }) => {
     .then((users) => users.map(parseUser))
 }
 
-const muteUser = ({ id, credentials }) => {
-  return promisedRequest({ url: MASTODON_MUTE_USER_URL(id), credentials, method: 'POST' })
+const muteUser = ({ id, expiresIn, credentials }) => {
+  const payload = {}
+  if (expiresIn) {
+    payload.expires_in = expiresIn
+  }
+  return promisedRequest({ url: MASTODON_MUTE_USER_URL(id), credentials, method: 'POST', payload })
 }
 
 const unmuteUser = ({ id, credentials }) => {
@@ -1667,6 +1679,7 @@ const apiService = {
   blockUser,
   unblockUser,
   removeUserFromFollowers,
+  editUserNote,
   fetchUser,
   fetchUserByName,
   fetchUserRelationship,

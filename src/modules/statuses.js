@@ -765,6 +765,7 @@ const statuses = {
       return store.rootState.api.backendInteractor.search2({ q, resolve, limit, offset, following, type })
         .then((data) => {
           store.commit('addNewUsers', data.accounts)
+          store.commit('addNewUsers', data.statuses.map(s => s.user).filter(u => u))
           store.commit('addNewStatuses', { statuses: data.statuses })
           return data
         })

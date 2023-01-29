@@ -101,6 +101,9 @@ const Notifications = {
     if (!this.scrollerRef) {
       this.scrollerRef = this.$refs.root.closest('.mobile-notifications')
     }
+    if (!this.scrollerRef) {
+      this.scrollerRef = this.$refs.root.closest('.column.main')
+    }
     this.scrollerRef.addEventListener('scroll', this.updateScrollPosition)
   },
   unmounted () {

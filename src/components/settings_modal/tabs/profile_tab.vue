@@ -35,6 +35,18 @@
           </template>
         </Checkbox>
       </p>
+      <div>
+        <p>{{ $t('settings.birthday.label') }}</p>
+        <input
+          id="birthday"
+          v-model="newBirthday"
+          type="date"
+          class="birthday-input"
+        >
+        <Checkbox v-model="showBirthday">
+          {{ $t('settings.birthday.show_birthday') }}
+        </Checkbox>
+      </div>
       <div v-if="maxFields > 0">
         <p>{{ $t('settings.profile_fields.label') }}</p>
         <div

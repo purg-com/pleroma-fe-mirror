@@ -78,6 +78,15 @@ export const defaultState = {
   minimalScopesMode: undefined, // instance default
   // This hides statuses filtered via a word filter
   hideFilteredStatuses: undefined, // instance default
+  modalOnRepeat: undefined, // instance default
+  modalOnUnfollow: undefined, // instance default
+  modalOnBlock: undefined, // instance default
+  modalOnMute: undefined, // instance default
+  modalOnDelete: undefined, // instance default
+  modalOnLogout: undefined, // instance default
+  modalOnApproveFollow: undefined, // instance default
+  modalOnDenyFollow: undefined, // instance default
+  modalOnRemoveUserFromFollowers: undefined, // instance default
   playVideosInModal: false,
   useOneClickNsfw: false,
   useContainFit: true,
@@ -184,7 +193,10 @@ const config = {
         case 'interfaceLanguage':
           messages.setLanguage(this.getters.i18n, value)
           dispatch('loadUnicodeEmojiData', value)
-          Cookies.set(BACKEND_LANGUAGE_COOKIE_NAME, localeService.internalToBackendLocale(value))
+          Cookies.set(
+            BACKEND_LANGUAGE_COOKIE_NAME,
+            localeService.internalToBackendLocaleMulti(value)
+          )
           break
         case 'thirdColumnMode':
           dispatch('setLayoutWidth', undefined)

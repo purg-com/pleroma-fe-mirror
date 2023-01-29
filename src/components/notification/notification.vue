@@ -144,13 +144,25 @@
             <router-link
               v-if="notification.status"
               :to="{ name: 'conversation', params: { id: notification.status.id } }"
-              class="faint-link"
+              class="timeago-link faint-link"
             >
               <Timeago
                 :time="notification.created_at"
                 :auto-update="240"
               />
             </router-link>
+            <button
+              class="button-unstyled expand-icon"
+              @click.prevent="toggleStatusExpanded"
+              :title="$t('tool_tip.toggle_expand')"
+              :aria-expanded="statusExpanded"
+            >
+              <FAIcon
+                class="fa-scale-110"
+                fixed-width
+                :icon="statusExpanded ? 'compress-alt' : 'expand-alt'"
+              />
+            </button>
           </div>
           <div
             v-else
@@ -166,6 +178,8 @@
           <button
             v-if="needMute"
             class="button-unstyled"
+            :title="$t('tool_tip.toggle_mute')"
+            :aria-expanded="!unmuted"
             @click.prevent="toggleMute"
           >
             <FAIcon
@@ -222,13 +236,35 @@
         />
         <template v-else>
           <StatusContent
-            class="faint"
-            :compact="true"
+            :class="{ faint: !statusExpanded }"
+            :compact="!statusExpanded"
             :status="notification.action"
           />
         </template>
       </div>
     </div>
+    <teleport to="#modal">
+      <confirm-modal
+        v-if="showingApproveConfirmDialog"
+        :title="$t('user_card.approve_confirm_title')"
+        :confirm-text="$t('user_card.approve_confirm_accept_button')"
+        :cancel-text="$t('user_card.approve_confirm_cancel_button')"
+        @accepted="doApprove"
+        @cancelled="hideApproveConfirmDialog"
+      >
+        {{ $t('user_card.approve_confirm', { user: user.screen_name_ui }) }}
+      </confirm-modal>
+      <confirm-modal
+        v-if="showingDenyConfirmDialog"
+        :title="$t('user_card.deny_confirm_title')"
+        :confirm-text="$t('user_card.deny_confirm_accept_button')"
+        :cancel-text="$t('user_card.deny_confirm_cancel_button')"
+        @accepted="doDeny"
+        @cancelled="hideDenyConfirmDialog"
+      >
+        {{ $t('user_card.deny_confirm', { user: user.screen_name_ui }) }}
+      </confirm-modal>
+    </teleport>
   </article>
 </template>
 

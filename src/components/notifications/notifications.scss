@@ -1,4 +1,4 @@
-@import '../../_variables.scss';
+@import "../../variables";
 
 .Notifications {
   &:not(.minimal) {
@@ -25,12 +25,13 @@
 
     &.unseen {
       .notification-overlay {
-        background-image: linear-gradient(135deg, var(--badgeNotification, $fallback--cRed) 4px, transparent 10px)
+        background-image: linear-gradient(135deg, var(--badgeNotification, $fallback--cRed) 4px, transparent 10px);
       }
     }
   }
 }
 
+/* stylelint-disable-next-line no-descending-specificity */
 .notification {
   box-sizing: border-box;
 
@@ -38,6 +39,7 @@
     canvas {
       display: none;
     }
+
     img {
       visibility: visible;
     }
@@ -79,7 +81,8 @@
     }
   }
 
-  .follow-text, .move-text {
+  .follow-text,
+  .move-text {
     padding: 0.5em 0;
     overflow-wrap: break-word;
     display: flex;
@@ -111,6 +114,16 @@
     .timeago {
       min-width: 3em;
       text-align: right;
+    }
+
+    .timeago-link {
+      margin-right: 0.2em;
+    }
+
+    .expand-icon {
+      .svg-inline--fa {
+        margin-left: 0.25em;
+      }
     }
   }
 

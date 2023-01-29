@@ -50,17 +50,20 @@
 <script src="./font_control.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
+@import "../../variables";
+
 .font-control {
   input.custom-font {
     min-width: 10em;
   }
+
   &.custom {
     /* TODO Should make proper joiners... */
     .font-switcher {
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
     }
+
     .custom-font {
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;

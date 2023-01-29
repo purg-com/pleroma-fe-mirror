@@ -28,7 +28,7 @@
 
 <script src="./emoji_reactions.js"></script>
 <style lang="scss">
-@import '../../_variables.scss';
+@import "../../variables";
 
 .EmojiReactions {
   display: flex;
@@ -55,6 +55,7 @@
 
     &.not-clickable {
       cursor: default;
+
       &:hover {
         box-shadow: $fallback--buttonShadow;
         box-shadow: var(--buttonShadow);
@@ -75,10 +76,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
     &:hover {
       text-decoration: underline;
     }
   }
-
 }
 </style>

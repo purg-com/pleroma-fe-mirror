@@ -35,7 +35,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../_variables.scss';
+@import "../../variables";
 
 .list {
   &-item:not(:last-child) {

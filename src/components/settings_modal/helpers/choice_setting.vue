@@ -28,8 +28,3 @@
 </template>
 
 <script src="./choice_setting.js"></script>
-
-<style lang="scss">
-.ChoiceSetting {
-}
-</style>

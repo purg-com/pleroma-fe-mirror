@@ -58,8 +58,8 @@
 <script src="./favorite_button.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-@import '../../_mixins.scss';
+@import "../../variables";
+@import "../../mixins";
 
 .FavoriteButton {
   display: flex;

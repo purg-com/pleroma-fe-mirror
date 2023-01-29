@@ -84,7 +84,7 @@
           :user="statusoid.user"
         />
         <div class="right-side faint">
-          <span
+          <bdi
             class="status-username repeater-name"
             :title="retweeter"
           >
@@ -101,7 +101,7 @@
               v-else
               :to="retweeterProfileLink"
             >{{ retweeter }}</router-link>
-          </span>
+          </bdi>
           {{ ' ' }}
           <FAIcon
             icon="retweet"
@@ -261,7 +261,7 @@
                   v-if="!isPreview"
                   :status-id="status.parent_visible && status.in_reply_to_status_id"
                   class="reply-to-popover"
-                  style="min-width: 0"
+                  style="min-width: 0;"
                   :class="{ '-strikethrough': !status.parent_visible }"
                 >
                   <button

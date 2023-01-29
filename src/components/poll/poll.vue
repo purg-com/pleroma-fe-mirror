@@ -90,7 +90,7 @@
 <script src="./poll.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
+@import "../../variables";
 
 .poll {
   .votes {
@@ -98,9 +98,11 @@
     flex-direction: column;
     margin: 0 0 0.5em;
   }
+
   .poll-option {
     margin: 0.75em 0.5em;
   }
+
   .option-result {
     height: 100%;
     display: flex;
@@ -109,6 +111,7 @@
     color: $fallback--lightText;
     color: var(--lightText, $fallback--lightText);
   }
+
   .option-result-label {
     display: flex;
     align-items: center;
@@ -116,10 +119,12 @@
     z-index: 1;
     word-break: break-word;
   }
+
   .result-percentage {
     width: 3.5em;
     flex-shrink: 0;
   }
+
   .result-fill {
     height: 100%;
     position: absolute;
@@ -133,20 +138,25 @@
     left: 0;
     transition: width 0.5s;
   }
+
   .option-vote {
     display: flex;
     align-items: center;
   }
+
   input {
     width: 3.5em;
   }
+
   .footer {
     display: flex;
     align-items: center;
   }
+
   &.loading * {
     cursor: progress;
   }
+
   .poll-vote-button {
     padding: 0 0.5em;
     margin-right: 0.5em;

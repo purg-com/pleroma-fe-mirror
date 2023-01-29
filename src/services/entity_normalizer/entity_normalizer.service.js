@@ -125,6 +125,8 @@ export const parseUser = (data) => {
         output.role = 'member'
       }
 
+      output.birthday = data.pleroma.birthday
+
       if (data.pleroma.privileges) {
         output.privileges = data.pleroma.privileges
       } else if (data.pleroma.is_admin) {
@@ -162,6 +164,7 @@ export const parseUser = (data) => {
         output.no_rich_text = data.source.pleroma.no_rich_text
         output.show_role = data.source.pleroma.show_role
         output.discoverable = data.source.pleroma.discoverable
+        output.show_birthday = data.pleroma.show_birthday
       }
     }
 

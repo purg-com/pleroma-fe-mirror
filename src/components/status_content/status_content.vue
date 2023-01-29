@@ -33,6 +33,7 @@
       <gallery
         v-if="status.attachments.length !== 0"
         class="attachments media-body"
+        :compact="compact"
         :nsfw="nsfwClickthrough"
         :attachments="status.attachments"
         :limit="compact ? 1 : 0"

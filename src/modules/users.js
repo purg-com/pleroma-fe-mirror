@@ -56,13 +56,21 @@ const removeUserFromFollowers = (store, id) => {
     .then((relationship) => store.commit('updateUserRelationship', [relationship]))
 }
 
-const muteUser = (store, id) => {
+const editUserNote = (store, { id, comment }) => {
+  return store.rootState.api.backendInteractor.editUserNote({ id, comment })
+    .then((relationship) => store.commit('updateUserRelationship', [relationship]))
+}
+
+const muteUser = (store, args) => {
+  const id = typeof args === 'object' ? args.id : args
+  const expiresIn = typeof args === 'object' ? args.expiresIn : 0
+
   const predictedRelationship = store.state.relationships[id] || { id }
   predictedRelationship.muting = true
   store.commit('updateUserRelationship', [predictedRelationship])
   store.commit('addMuteId', id)
 
-  return store.rootState.api.backendInteractor.muteUser({ id })
+  return store.rootState.api.backendInteractor.muteUser({ id, expiresIn })
     .then((relationship) => {
       store.commit('updateUserRelationship', [relationship])
       store.commit('addMuteId', id)
@@ -334,6 +342,9 @@ const users = {
     },
     unblockUsers (store, ids = []) {
       return Promise.all(ids.map(id => unblockUser(store, id)))
+    },
+    editUserNote (store, args) {
+      return editUserNote(store, args)
     },
     fetchMutes (store) {
       return store.rootState.api.backendInteractor.fetchMutes()

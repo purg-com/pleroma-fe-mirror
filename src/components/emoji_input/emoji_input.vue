@@ -91,22 +91,18 @@
 <script src="./emoji_input.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
+@import "../../variables";
 
 .emoji-input {
   display: flex;
   flex-direction: column;
   position: relative;
 
-  &.with-picker input {
-    padding-right: 30px;
-  }
-
   .emoji-picker-icon {
     position: absolute;
     top: 0;
     right: 0;
-    margin: .2em .25em;
+    margin: 0.2em 0.25em;
     font-size: 1.3em;
     cursor: pointer;
     line-height: 24px;
@@ -123,12 +119,17 @@
     margin-top: 2px;
 
     &.hide {
-      display: none
+      display: none;
     }
   }
 
-  input, textarea {
+  input,
+  textarea {
     flex: 1 0 auto;
+  }
+
+  &.with-picker input {
+    padding-right: 30px;
   }
 
   .hidden-overlay {
@@ -140,8 +141,10 @@
     right: 0;
     left: 0;
     overflow: hidden;
+
     /* DEBUG STUFF */
     color: red;
+
     /* set opacity to non-zero to see the overlay */
 
     .caret {
@@ -151,6 +154,7 @@
     }
   }
 }
+
 .autocomplete {
   &-panel {
     position: absolute;
@@ -160,7 +164,7 @@
     display: flex;
     cursor: pointer;
     padding: 0.2em 0.4em;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid rgb(0 0 0 / 40%);
     height: 32px;
 
     .image {
@@ -169,7 +173,6 @@
       line-height: 32px;
       text-align: center;
       font-size: 32px;
-
       margin-right: 4px;
 
       img {
@@ -199,6 +202,7 @@
       background-color: $fallback--fg;
       background-color: var(--selectedMenuPopover, $fallback--fg);
       color: var(--selectedMenuPopoverText, $fallback--text);
+
       --faint: var(--selectedMenuPopoverFaintText, $fallback--faint);
       --faintLink: var(--selectedMenuPopoverFaintLink, $fallback--faint);
       --lightText: var(--selectedMenuPopoverLightText, $fallback--lightText);

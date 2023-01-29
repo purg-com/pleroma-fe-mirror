@@ -29,7 +29,7 @@
 <script src="./media_upload.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
+@import "../../variables";
 
 .media-upload {
   cursor: pointer; // We use <label> for interactivity... i wonder if it's fine
