@@ -39,7 +39,8 @@ export default {
   display: inline-block;
   min-height: 1.2em;
 
-  .checkbox-indicator, .label {
+  &-indicator,
+  & .label {
     vertical-align: middle;
   }
 
