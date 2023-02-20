@@ -104,6 +104,7 @@ const defaultState = {
   conversationOtherRepliesButton: 'below',
   conversationTreeFadeAncestors: false,
   maxDepthInThread: 6,
+  dailyAvgTimeframe: 'old', // use old daily average timeframe, which is from user creation date.
 
   // Nasty stuff
   customEmoji: [],

@@ -22,6 +22,7 @@ import {
   faTimes,
   faExpandAlt
 } from '@fortawesome/free-solid-svg-icons'
+import { isNumber } from 'lodash'
 
 library.add(
   faRss,
@@ -92,8 +93,23 @@ export default {
       return this.$store.state.users.currentUser
     },
     dailyAvg () {
-      const days = Math.ceil((new Date() - new Date(this.user.created_at)) / (60 * 60 * 24 * 1000))
-      return Math.round(this.user.statuses_count / days)
+      const timeframe = this.$store.state.instance.dailyAvgTimeframe
+      console.log(timeframe)
+      const useOldBehaviour = timeframe === 'old'
+      // old behaviour
+      if (useOldBehaviour) {
+        const days = Math.ceil((new Date() - new Date(this.user.created_at)) / (60 * 60 * 24 * 1000))
+        return Math.round(this.user.statuses_count / days)
+      } else {
+        if (!isNumber(timeframe)) {
+          throw new Error('Timeframe is not a number')
+        }
+        return Math.round(this.$store.state.statuses.timelines.user.statuses.filter(status => { // this could probably be optimised
+          const timeSince = new Date() - status.created_at
+          const timeframeMs = 1000 * 60 * 60 * 24 * timeframe
+          return timeSince <= timeframeMs
+        }).length / timeframe)
+      }
     },
     userHighlightType: {
       get () {
@@ -103,7 +119,11 @@ export default {
       set (type) {
         const data = this.$store.getters.mergedConfig.highlight[this.user.screen_name]
         if (type !== 'disabled') {
-          this.$store.dispatch('setHighlight', { user: this.user.screen_name, color: (data && data.color) || '#FFFFFF', type })
+          this.$store.dispatch('setHighlight', {
+            user: this.user.screen_name,
+            color: (data && data.color) || '#FFFFFF',
+            type
+          })
         } else {
           this.$store.dispatch('setHighlight', { user: this.user.screen_name, color: undefined })
         }
@@ -121,7 +141,9 @@ export default {
     },
     visibleRole () {
       const rights = this.user.rights
-      if (!rights) { return }
+      if (!rights) {
+        return
+      }
       const validRole = rights.admin || rights.moderator
       const roleTitle = rights.admin ? 'admin' : 'moderator'
       return validRole && roleTitle
