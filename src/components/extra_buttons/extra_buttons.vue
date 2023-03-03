@@ -192,11 +192,6 @@
     position: static;
     padding: 10px;
     margin: -10px;
-
-    &:hover .svg-inline--fa {
-      color: $fallback--text;
-      color: var(--text, $fallback--text);
-    }
   }
 
   .popover-trigger-button {
@@ -212,6 +207,11 @@
     @include focused-style {
       .focus-marker {
         visibility: visible;
+      }
+
+      .svg-inline--fa {
+        color: $fallback--text;
+        color: var(--text, $fallback--text);
       }
     }
   }

@@ -121,7 +121,7 @@
       line-height: 1.5;
       align-content: center;
 
-      &:hover {
+      @include focused-style {
         transform: scale(1.25);
       }
     }
@@ -130,11 +130,6 @@
   .popover-trigger {
     padding: 10px;
     margin: -10px;
-
-    &:hover .svg-inline--fa {
-      color: $fallback--text;
-      color: var(--text, $fallback--text);
-    }
   }
 
   .popover-trigger-button {
@@ -150,6 +145,11 @@
     @include focused-style {
       .focus-marker {
         visibility: visible;
+      }
+
+      .svg-inline--fa {
+        color: $fallback--text;
+        color: var(--text, $fallback--text);
       }
     }
   }

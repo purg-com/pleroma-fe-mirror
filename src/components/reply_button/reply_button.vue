@@ -76,7 +76,6 @@
   }
 
   .interactive {
-    &:hover .svg-inline--fa,
     &.-active .svg-inline--fa {
       color: $fallback--cBlue;
       color: var(--cBlue, $fallback--cBlue);
@@ -89,6 +88,11 @@
     }
 
     @include focused-style {
+      .svg-inline--fa {
+        color: $fallback--cBlue;
+        color: var(--cBlue, $fallback--cBlue);
+      }
+
       .focus-marker {
         visibility: visible;
       }

@@ -86,7 +86,6 @@
       animation-duration: 0.6s;
     }
 
-    &:hover .svg-inline--fa,
     &.-favorited .svg-inline--fa {
       color: $fallback--cOrange;
       color: var(--cOrange, $fallback--cOrange);
@@ -103,6 +102,11 @@
     }
 
     @include focused-style {
+      .svg-inline--fa {
+        color: $fallback--cOrange;
+        color: var(--cOrange, $fallback--cOrange);
+      }
+
       .focus-marker {
         visibility: visible;
       }

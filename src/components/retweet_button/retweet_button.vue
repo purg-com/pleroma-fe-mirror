@@ -105,7 +105,6 @@
       animation-duration: 0.6s;
     }
 
-    &:hover .svg-inline--fa,
     &.-repeated .svg-inline--fa {
       color: $fallback--cGreen;
       color: var(--cGreen, $fallback--cGreen);
@@ -122,6 +121,11 @@
     }
 
     @include focused-style {
+      .svg-inline--fa {
+        color: $fallback--cGreen;
+        color: var(--cGreen, $fallback--cGreen);
+      }
+
       .focus-marker {
         visibility: visible;
       }
