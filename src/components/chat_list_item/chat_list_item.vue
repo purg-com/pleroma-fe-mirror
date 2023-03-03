@@ -1,6 +1,7 @@
 <template>
   <div
     class="chat-list-item"
+    tabindex="0"
     @click.capture.prevent="openChat"
   >
     <div class="chat-list-item-left">

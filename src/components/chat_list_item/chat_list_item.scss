@@ -1,3 +1,5 @@
+@import "src/mixins";
+
 .chat-list-item {
   display: flex;
   flex-direction: row;
@@ -7,11 +9,11 @@
   box-sizing: border-box;
   cursor: pointer;
 
-  :focus {
+  @include unfocused-style {
     outline: none;
   }
 
-  &:hover {
+  @include focused-style {
     background-color: var(--selectedPost, $fallback--lightBg);
     box-shadow: 0 0 3px 1px rgb(0 0 0 / 10%);
   }
@@ -63,13 +65,15 @@
     pointer-events: none;
   }
 
-  &:hover .animated.avatar {
-    canvas {
-      display: none;
-    }
+  @include focused-style {
+    .animated.avatar {
+      canvas {
+        display: none;
+      }
 
-    img {
-      visibility: visible;
+      img {
+        visibility: visible;
+      }
     }
   }
 
