@@ -16,3 +16,15 @@
     @content;
   }
 }
+
+@mixin focused-style-with($selectors...) {
+  @include focused-style {
+    @content;
+  }
+
+  @each $selector in $selectors {
+    #{$selector} {
+      @content;
+    }
+  }
+}

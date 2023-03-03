@@ -88,6 +88,9 @@
         >
           <a
             class="preview-toggle faint"
+            role="button"
+            tabindex="0"
+            :aria-expanded="showPreview"
             @click.stop.prevent="togglePreview"
           >
             {{ $t('post_status.preview') }}
@@ -346,6 +349,7 @@
 
 <style lang="scss">
 @import "../../variables";
+@import "src/mixins";
 
 .post-status-form {
   position: relative;
@@ -389,7 +393,7 @@
     cursor: pointer;
     user-select: none;
 
-    &:hover {
+    @focused-style {
       text-decoration: underline;
     }
 
@@ -470,8 +474,7 @@
     display: flex;
     align-items: center;
 
-    &.selected,
-    &:hover {
+    @include focused-style-with("&.selected") {
       // needs to be specific to override icon default color
       svg,
       i,
@@ -488,7 +491,7 @@
         color: $fallback--icon;
         color: var(--btnDisabledText, $fallback--icon);
 
-        &:hover {
+        @include focused-style {
           color: $fallback--icon;
           color: var(--btnDisabledText, $fallback--icon);
         }
