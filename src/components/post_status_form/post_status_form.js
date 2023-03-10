@@ -327,18 +327,8 @@ const PostStatusForm = {
 
       return false
     },
-    saveDraft () {
-      return debounce(() => {
-        if (this.newStatus.status) {
-          console.debug('Saving status', this.newStatus)
-          this.$store.dispatch('addOrSaveDraft', { draft: this.newStatus })
-            .then(id => {
-              if (this.newStatus.id !== id) {
-                this.newStatus.id = id
-              }
-            })
-        }
-      }, 3000)
+    debouncedSaveDraft () {
+      return debounce(this.saveDraft, 3000)
     },
     ...mapGetters(['mergedConfig']),
     ...mapState({
@@ -353,11 +343,14 @@ const PostStatusForm = {
       }
     }
   },
+  beforeUnmount () {
+    this.saveDraft()
+  },
   methods: {
     statusChanged () {
       this.autoPreview()
       this.updateIdempotencyKey()
-      this.saveDraft()
+      this.debouncedSaveDraft()
     },
     clearStatus () {
       const newStatus = this.newStatus
@@ -713,6 +706,17 @@ const PostStatusForm = {
     },
     propsToNative (props) {
       return propsToNative(props)
+    },
+    saveDraft () {
+      if (this.newStatus.status) {
+        console.debug('Saving status', this.newStatus)
+        this.$store.dispatch('addOrSaveDraft', { draft: this.newStatus })
+          .then(id => {
+            if (this.newStatus.id !== id) {
+              this.newStatus.id = id
+            }
+          })
+      }
     }
   }
 }
