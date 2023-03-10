@@ -141,59 +141,48 @@ const PostStatusForm = {
 
     const [statusType, refId] = typeAndRefId({ replyTo: this.replyTo, profileMention: this.profileMention, statusId: this.statusId })
 
-    if (statusType === 'reply' || statusType === 'mention') {
-      const currentUser = this.$store.state.users.currentUser
-      statusText = buildMentionsString({ user: this.repliedUser, attentions: this.attentions }, currentUser)
-    }
+    let statusParams = this.getDraft(statusType, refId)
 
-    const scope = ((this.copyMessageScope && scopeCopy) || this.copyMessageScope === 'direct')
-      ? this.copyMessageScope
-      : this.$store.state.users.currentUser.default_scope
+    if (!statusParams) {
+      if (statusType === 'reply' || statusType === 'mention') {
+        const currentUser = this.$store.state.users.currentUser
+        statusText = buildMentionsString({ user: this.repliedUser, attentions: this.attentions }, currentUser)
+      }
 
-    const { postContentType: contentType, sensitiveByDefault } = this.$store.getters.mergedConfig
+      const scope = ((this.copyMessageScope && scopeCopy) || this.copyMessageScope === 'direct')
+        ? this.copyMessageScope
+        : this.$store.state.users.currentUser.default_scope
 
-    let statusParams = {
-      type: statusType,
-      refId,
-      spoilerText: this.subject || '',
-      status: statusText,
-      nsfw: !!sensitiveByDefault,
-      files: [],
-      poll: {},
-      mediaDescriptions: {},
-      visibility: scope,
-      contentType
-    }
+      const { postContentType: contentType, sensitiveByDefault } = this.$store.getters.mergedConfig
 
-    if (statusType === 'edit') {
-      const statusContentType = this.statusContentType || contentType
       statusParams = {
         type: statusType,
         refId,
         spoilerText: this.subject || '',
-        status: this.statusText || '',
-        nsfw: this.statusIsSensitive || !!sensitiveByDefault,
-        files: this.statusFiles || [],
-        poll: this.statusPoll || {},
-        mediaDescriptions: this.statusMediaDescriptions || {},
-        visibility: this.statusScope || scope,
-        contentType: statusContentType,
+        status: statusText,
+        nsfw: !!sensitiveByDefault,
+        files: [],
+        poll: {},
+        mediaDescriptions: {},
+        visibility: scope,
+        contentType,
         quoting: false
       }
-    }
 
-    console.debug('type and ref:', [statusType, refId])
-
-    const maybeDraft = this.$store.state.drafts.drafts[this.draftId]
-    if (this.draftId && maybeDraft) {
-      console.debug('current draft:', maybeDraft)
-      statusParams = maybeDraft
-    } else {
-      const existingDrafts = this.$store.getters.draftsByTypeAndRefId(statusType, refId)
-
-      console.debug('existing drafts:', existingDrafts)
-      if (existingDrafts.length) {
-        statusParams = existingDrafts[0]
+      if (statusType === 'edit') {
+        const statusContentType = this.statusContentType || contentType
+        statusParams = {
+          type: statusType,
+          refId,
+          spoilerText: this.subject || '',
+          status: this.statusText || '',
+          nsfw: this.statusIsSensitive || !!sensitiveByDefault,
+          files: this.statusFiles || [],
+          poll: this.statusPoll || {},
+          mediaDescriptions: this.statusMediaDescriptions || {},
+          visibility: this.statusScope || scope,
+          contentType: statusContentType
+        }
       }
     }
 
@@ -717,6 +706,23 @@ const PostStatusForm = {
             }
           })
       }
+    },
+    getDraft (statusType, refId) {
+      console.debug('type and ref:', [statusType, refId])
+
+      const maybeDraft = this.$store.state.drafts.drafts[this.draftId]
+      if (this.draftId && maybeDraft) {
+        console.debug('current draft:', maybeDraft)
+        return maybeDraft
+      } else {
+        const existingDrafts = this.$store.getters.draftsByTypeAndRefId(statusType, refId)
+
+        console.debug('existing drafts:', existingDrafts)
+        if (existingDrafts.length) {
+          return existingDrafts[0]
+        }
+      }
+      // No draft available, fall back
     }
   }
 }

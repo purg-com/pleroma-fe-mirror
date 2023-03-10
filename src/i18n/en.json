@@ -190,7 +190,8 @@
     "mobile_notifications_close": "Close notifications",
     "mobile_notifications_mark_as_seen": "Mark all as seen",
     "announcements": "Announcements",
-    "quotes": "Quotes"
+    "quotes": "Quotes",
+    "drafts": "Drafts"
   },
   "notifications": {
     "broken_favorite": "Unknown status, searching for it…",
@@ -1401,5 +1402,9 @@
   },
   "unicode_domain_indicator": {
     "tooltip": "This domain contains non-ascii characters."
+  },
+  "drafts": {
+    "drafts": "Drafts",
+    "continue": "Continue editing"
   }
 }

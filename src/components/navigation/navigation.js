@@ -78,6 +78,11 @@ export const ROOT_ITEMS = {
     label: 'nav.announcements',
     badgeGetter: 'unreadAnnouncementCount',
     criteria: ['announcements']
+  },
+  drafts: {
+    route: 'drafts',
+    icon: 'file-pen',
+    label: 'nav.drafts'
   }
 }
 

@@ -22,6 +22,9 @@ export const getters = {
     return (type, refId) => {
       return Object.values(state.drafts).filter(draft => draft.type === type && draft.refId === refId)
     }
+  },
+  draftsArray (state) {
+    return Object.values(state.drafts)
   }
 }
 
