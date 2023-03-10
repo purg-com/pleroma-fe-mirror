@@ -55,6 +55,18 @@ const pxStringToNumber = (str) => {
   return Number(str.substring(0, str.length - 2))
 }
 
+const typeAndRefId = ({ replyTo, profileMention, statusId }) => {
+  if (replyTo) {
+    return ['reply', replyTo]
+  } else if (profileMention) {
+    return ['mention', profileMention]
+  } else if (statusId) {
+    return ['edit', statusId]
+  } else {
+    return ['new', '']
+  }
+}
+
 const PostStatusForm = {
   props: [
     'statusId',
@@ -88,7 +100,8 @@ const PostStatusForm = {
     'submitOnEnter',
     'emojiPickerPlacement',
     'optimisticPosting',
-    'profileMention'
+    'profileMention',
+    'draftId'
   ],
   emits: [
     'posted',
@@ -126,7 +139,9 @@ const PostStatusForm = {
 
     const { scopeCopy } = this.$store.getters.mergedConfig
 
-    if (this.replyTo || this.profileMention) {
+    const [statusType, refId] = typeAndRefId({ replyTo: this.replyTo, profileMention: this.profileMention, statusId: this.statusId })
+
+    if (statusType === 'reply' || statusType === 'mention') {
       const currentUser = this.$store.state.users.currentUser
       statusText = buildMentionsString({ user: this.repliedUser, attentions: this.attentions }, currentUser)
     }
@@ -138,6 +153,8 @@ const PostStatusForm = {
     const { postContentType: contentType, sensitiveByDefault } = this.$store.getters.mergedConfig
 
     let statusParams = {
+      type: statusType,
+      refId,
       spoilerText: this.subject || '',
       status: statusText,
       nsfw: !!sensitiveByDefault,
@@ -148,9 +165,11 @@ const PostStatusForm = {
       contentType
     }
 
-    if (this.statusId) {
+    if (statusType === 'edit') {
       const statusContentType = this.statusContentType || contentType
       statusParams = {
+        type: statusType,
+        refId,
         spoilerText: this.subject || '',
         status: this.statusText || '',
         nsfw: this.statusIsSensitive || !!sensitiveByDefault,
@@ -160,6 +179,21 @@ const PostStatusForm = {
         visibility: this.statusScope || scope,
         contentType: statusContentType,
         quoting: false
+      }
+    }
+
+    console.debug('type and ref:', [statusType, refId])
+
+    const maybeDraft = this.$store.state.drafts.drafts[this.draftId]
+    if (this.draftId && maybeDraft) {
+      console.debug('current draft:', maybeDraft)
+      statusParams = maybeDraft
+    } else {
+      const existingDrafts = this.$store.getters.draftsByTypeAndRefId(statusType, refId)
+
+      console.debug('existing drafts:', existingDrafts)
+      if (existingDrafts.length) {
+        statusParams = existingDrafts[0]
       }
     }
 
@@ -293,6 +327,19 @@ const PostStatusForm = {
 
       return false
     },
+    saveDraft () {
+      return debounce(() => {
+        if (this.newStatus.status) {
+          console.debug('Saving status', this.newStatus)
+          this.$store.dispatch('addOrSaveDraft', { draft: this.newStatus })
+            .then(id => {
+              if (this.newStatus.id !== id) {
+                this.newStatus.id = id
+              }
+            })
+        }
+      }, 3000)
+    },
     ...mapGetters(['mergedConfig']),
     ...mapState({
       mobileLayout: state => state.interface.mobileLayout
@@ -310,6 +357,7 @@ const PostStatusForm = {
     statusChanged () {
       this.autoPreview()
       this.updateIdempotencyKey()
+      this.saveDraft()
     },
     clearStatus () {
       const newStatus = this.newStatus
