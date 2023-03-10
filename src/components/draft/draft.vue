@@ -1,8 +1,5 @@
 <template>
   <article class="Draft">
-    <div v-if="draft.inReplyToStatusId">
-      {{ draft.inReplyToStatusId }}
-    </div>
     <div class="actions">
       <button
         class="btn button-default"
@@ -19,12 +16,34 @@
         {{ $t('drafts.abandon') }}
       </button>
     </div>
-    <p
+    <div
       v-if="!editing"
-      class="draft-content"
+      class="status-content"
     >
-      {{ draft.status }}
-    </p>
+      <div>
+        <i18n-t
+          v-if="draft.type === 'reply' || draft.type === 'edit'"
+          tag="span"
+          :keypath="draft.type === 'reply' ? 'drafts.replying' : 'drafts.editing'"
+        >
+          <template #statusLink>
+            <router-link
+              class="faint-link"
+              :to="{ name: 'conversation', params: { id: draft.refId } }"
+            >
+              {{ refStatus.external_url }}
+            </router-link>
+          </template>
+        </i18n-t>
+        <StatusContent
+          v-if="draft.refId"
+          class="status-content"
+          :status="refStatus"
+          :compact="true"
+        />
+      </div>
+      <p>{{ draft.status }}</p>
+    </div>
     <div v-if="editing">
       <PostStatusForm
         v-bind="postStatusFormProps"
@@ -49,8 +68,21 @@
 <script src="./draft.js"></script>
 
 <style lang="scss">
+@import "src/variables";
+
 .Draft {
   margin: 1em;
+
+  .status-content {
+    border: 1px solid $fallback--faint;
+    border-color: var(--faint, $fallback--faint);
+    border-radius: $fallback--inputRadius;
+    border-radius: var(--inputRadius, $fallback--inputRadius);
+    color: $fallback--text;
+    color: var(--text, $fallback--text);
+    padding: 0.5em;
+    margin: 0.5em 0;
+  }
 
   .actions {
     display: flex;

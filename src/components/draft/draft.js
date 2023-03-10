@@ -1,10 +1,12 @@
 import PostStatusForm from 'src/components/post_status_form/post_status_form.vue'
 import ConfirmModal from 'src/components/confirm_modal/confirm_modal.vue'
+import StatusContent from 'src/components/status_content/status_content.vue'
 
 const Draft = {
   components: {
     PostStatusForm,
-    ConfirmModal
+    ConfirmModal,
+    StatusContent
   },
   props: {
     draft: {
@@ -33,6 +35,9 @@ const Draft = {
         draftId: this.draft.id,
         ...this.relAttrs
       }
+    },
+    refStatus () {
+      return this.draft.refId ? this.$store.state.statuses.allStatusesObject[this.draft.refId] : undefined
     }
   },
   methods: {
