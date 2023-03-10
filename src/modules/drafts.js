@@ -6,6 +6,9 @@ export const defaultState = {
 export const mutations = {
   addOrSaveDraft (state, { draft }) {
     state.drafts[draft.id] = draft
+  },
+  abandonDraft (state, { id }) {
+    delete state.drafts[id]
   }
 }
 
@@ -14,6 +17,9 @@ export const actions = {
     const id = draft.id || (new Date().getTime()).toString()
     store.commit('addOrSaveDraft', { draft: { ...draft, id } })
     return id
+  },
+  abandonDraft (store, { id }) {
+    store.commit('abandonDraft', { id })
   }
 }
 

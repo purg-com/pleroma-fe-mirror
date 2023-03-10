@@ -1,8 +1,10 @@
 import PostStatusForm from 'src/components/post_status_form/post_status_form.vue'
+import ConfirmModal from 'src/components/confirm_modal/confirm_modal.vue'
 
 const Draft = {
   components: {
-    PostStatusForm
+    PostStatusForm,
+    ConfirmModal
   },
   props: {
     draft: {
@@ -12,7 +14,8 @@ const Draft = {
   },
   data () {
     return {
-      editing: false
+      editing: false,
+      showingConfirmDialog: false
     }
   },
   computed: {
@@ -35,6 +38,23 @@ const Draft = {
   methods: {
     toggleEditing () {
       this.editing = !this.editing
+    },
+    abandon () {
+      this.showingConfirmDialog = true
+    },
+    doAbandon () {
+      console.debug('abandoning')
+      this.$store.dispatch('abandonDraft', { id: this.draft.id })
+        .then(() => {
+          this.hideConfirmDialog()
+        })
+    },
+    hideConfirmDialog () {
+      this.showingConfirmDialog = false
+    },
+    handlePosted () {
+      console.debug('posted')
+      this.doAbandon()
     }
   }
 }
