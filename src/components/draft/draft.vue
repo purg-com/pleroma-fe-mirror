@@ -46,7 +46,13 @@
     </div>
     <div v-if="editing">
       <PostStatusForm
+        v-if="draft.type !== 'edit'"
         v-bind="postStatusFormProps"
+        @posted="handlePosted"
+      />
+      <EditStatusForm
+        v-else
+        :params="postStatusFormProps"
         @posted="handlePosted"
       />
     </div>

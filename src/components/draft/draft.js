@@ -1,10 +1,12 @@
 import PostStatusForm from 'src/components/post_status_form/post_status_form.vue'
+import EditStatusForm from 'src/components/edit_status_form/edit_status_form.vue'
 import ConfirmModal from 'src/components/confirm_modal/confirm_modal.vue'
 import StatusContent from 'src/components/status_content/status_content.vue'
 
 const Draft = {
   components: {
     PostStatusForm,
+    EditStatusForm,
     ConfirmModal,
     StatusContent
   },

@@ -8,12 +8,9 @@
       <div class="panel-heading">
         {{ $t('post_status.edit_status') }}
       </div>
-      <PostStatusForm
+      <EditStatusForm
         class="panel-body"
-        v-bind="params"
-        :post-handler="doEditStatus"
-        :disable-polls="true"
-        :disable-visibility-selector="true"
+        :params="params"
         @posted="closeModal"
       />
     </div>
