@@ -1,6 +1,6 @@
 /* eslint-env serviceworker */
 
-import localForage from 'localforage'
+import { storage } from 'src/lib/storage.js'
 import { parseNotification } from './services/entity_normalizer/entity_normalizer.service.js'
 import { prepareNotificationObject } from './services/notification_utils/notification_utils.js'
 import { createI18n } from 'vue-i18n'

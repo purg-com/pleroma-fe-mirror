@@ -362,6 +362,8 @@ const afterStoreSetup = async ({ store, i18n }) => {
     getInstanceConfig({ store })
   ])
 
+  await store.dispatch('loadDrafts')
+
   // Start fetching things that don't need to block the UI
   store.dispatch('fetchMutes')
   store.dispatch('startFetchingAnnouncements')

@@ -31,12 +31,12 @@
               class="faint-link"
               :to="{ name: 'conversation', params: { id: draft.refId } }"
             >
-              {{ refStatus.external_url }}
+              {{ refStatus ? refStatus.external_url : $t('drafts.unavailable') }}
             </router-link>
           </template>
         </i18n-t>
         <StatusContent
-          v-if="draft.refId"
+          v-if="draft.refId && refStatus"
           class="status-content"
           :status="refStatus"
           :compact="true"
