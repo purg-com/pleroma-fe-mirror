@@ -707,7 +707,6 @@ const PostStatusForm = {
     },
     saveDraft () {
       if (!this.saveInhibited) {
-        console.debug('Saving status', this.newStatus)
         this.$store.dispatch('addOrSaveDraft', { draft: this.newStatus })
           .then(id => {
             if (this.newStatus.id !== id) {
@@ -720,16 +719,12 @@ const PostStatusForm = {
       this.$store.dispatch('abandonDraft', { id: this.newStatus.id })
     },
     getDraft (statusType, refId) {
-      console.debug('type and ref:', [statusType, refId])
-
       const maybeDraft = this.$store.state.drafts.drafts[this.draftId]
       if (this.draftId && maybeDraft) {
-        console.debug('current draft:', maybeDraft)
         return maybeDraft
       } else {
         const existingDrafts = this.$store.getters.draftsByTypeAndRefId(statusType, refId)
 
-        console.debug('existing drafts:', existingDrafts)
         if (existingDrafts.length) {
           return existingDrafts[0]
         }

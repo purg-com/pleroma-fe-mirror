@@ -8,7 +8,6 @@ const Drafts = {
   },
   computed: {
     drafts () {
-      console.debug('available drafts:', this.$store.getters.draftsArray)
       return this.$store.getters.draftsArray
     }
   }

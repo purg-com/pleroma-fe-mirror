@@ -50,7 +50,6 @@ const Draft = {
       this.showingConfirmDialog = true
     },
     doAbandon () {
-      console.debug('abandoning')
       this.$store.dispatch('abandonDraft', { id: this.draft.id })
         .then(() => {
           this.hideConfirmDialog()
