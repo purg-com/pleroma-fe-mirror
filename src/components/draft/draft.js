@@ -58,10 +58,6 @@ const Draft = {
     },
     hideConfirmDialog () {
       this.showingConfirmDialog = false
-    },
-    handlePosted () {
-      console.debug('posted')
-      this.doAbandon()
     }
   }
 }

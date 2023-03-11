@@ -418,6 +418,7 @@ const PostStatusForm = {
 
       postHandler(postingOptions).then((data) => {
         if (!data.error) {
+          this.abandonDraft()
           this.clearStatus()
           this.$emit('posted', data)
         } else {
@@ -706,6 +707,9 @@ const PostStatusForm = {
             }
           })
       }
+    },
+    abandonDraft () {
+      this.$store.dispatch('abandonDraft', { id: this.newStatus.id })
     },
     getDraft (statusType, refId) {
       console.debug('type and ref:', [statusType, refId])
