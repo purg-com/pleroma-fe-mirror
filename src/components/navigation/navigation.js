@@ -82,7 +82,8 @@ export const ROOT_ITEMS = {
   drafts: {
     route: 'drafts',
     icon: 'file-pen',
-    label: 'nav.drafts'
+    label: 'nav.drafts',
+    badgeGetter: 'draftCount'
   }
 }
 

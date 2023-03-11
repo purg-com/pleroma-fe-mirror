@@ -31,6 +31,9 @@ export const getters = {
   },
   draftsArray (state) {
     return Object.values(state.drafts)
+  },
+  draftCount (state) {
+    return Object.values(state.drafts).length
   }
 }
 
