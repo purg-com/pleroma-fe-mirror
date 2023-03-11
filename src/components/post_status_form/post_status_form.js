@@ -10,6 +10,7 @@ import StatusContent from '../status_content/status_content.vue'
 import fileTypeService from '../../services/file_type/file_type.service.js'
 import { findOffset } from '../../services/offset_finder/offset_finder.service.js'
 import { propsToNative } from '../../services/attributes_helper/attributes_helper.service.js'
+import { pollFormToMasto } from 'src/services/poll/poll.service.js'
 import { reject, map, uniqBy, debounce } from 'lodash'
 import suggestor from '../emoji_input/suggestor.js'
 import { mapGetters, mapState } from 'vuex'
@@ -163,6 +164,7 @@ const PostStatusForm = {
         nsfw: !!sensitiveByDefault,
         files: [],
         poll: {},
+        hasPoll: false,
         mediaDescriptions: {},
         visibility: scope,
         contentType,
@@ -179,6 +181,7 @@ const PostStatusForm = {
           nsfw: this.statusIsSensitive || !!sensitiveByDefault,
           files: this.statusFiles || [],
           poll: this.statusPoll || {},
+          hasPoll: false,
           mediaDescriptions: this.statusMediaDescriptions || {},
           visibility: this.statusScope || scope,
           contentType: statusContentType
@@ -195,7 +198,6 @@ const PostStatusForm = {
       highlighted: 0,
       newStatus: statusParams,
       caret: 0,
-      pollFormVisible: false,
       showDropIcon: 'hide',
       dropStopTimeout: null,
       preview: null,
@@ -320,6 +322,9 @@ const PostStatusForm = {
     debouncedSaveDraft () {
       return debounce(this.saveDraft, 3000)
     },
+    pollFormVisible () {
+      return this.newStatus.hasPoll
+    },
     ...mapGetters(['mergedConfig']),
     ...mapState({
       mobileLayout: state => state.interface.mobileLayout
@@ -353,10 +358,10 @@ const PostStatusForm = {
         visibility: newStatus.visibility,
         contentType: newStatus.contentType,
         poll: {},
+        hasPoll: false,
         mediaDescriptions: {},
         quoting: false
       }
-      this.pollFormVisible = false
       this.$refs.mediaUpload && this.$refs.mediaUpload.clearFile()
       this.clearPollForm()
       if (this.preserveFocus) {
@@ -386,7 +391,7 @@ const PostStatusForm = {
         return
       }
 
-      const poll = this.pollFormVisible ? this.newStatus.poll : {}
+      const poll = this.newStatus.hasPoll ? pollFormToMasto(this.newStatus.poll) : {}
       if (this.pollContentError) {
         this.error = this.pollContentError
         return
@@ -666,7 +671,7 @@ const PostStatusForm = {
       this.newStatus.visibility = visibility
     },
     togglePollForm () {
-      this.pollFormVisible = !this.pollFormVisible
+      this.newStatus.hasPoll = !this.newStatus.hasPoll
     },
     setPoll (poll) {
       this.newStatus.poll = poll

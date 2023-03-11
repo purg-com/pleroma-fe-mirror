@@ -1,5 +1,5 @@
 import * as DateUtils from 'src/services/date_utils/date_utils.js'
-import { uniq } from 'lodash'
+import { pollFallback } from 'src/services/poll/poll.service.js'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import Select from '../select/select.vue'
 import {
@@ -17,14 +17,31 @@ export default {
     Select
   },
   name: 'PollForm',
-  props: ['visible'],
-  data: () => ({
-    pollType: 'single',
-    options: ['', ''],
-    expiryAmount: 10,
-    expiryUnit: 'minutes'
-  }),
+  props: {
+    visible: {},
+    modelValue: {
+      type: Object,
+      required: true
+    }
+  },
+  emits: ['update:modelValue'],
   computed: {
+    pollType: {
+      get () { return pollFallback(this.modelValue, 'pollType') },
+      set (newVal) { this.$emit('update:modelValue', { ...this.modelValue, pollType: newVal }) }
+    },
+    options: {
+      get () { return pollFallback(this.modelValue, 'options') },
+      set (newVal) { this.$emit('update:modelValue', { ...this.modelValue, options: newVal }) }
+    },
+    expiryAmount: {
+      get () { return pollFallback(this.modelValue, 'expiryAmount') },
+      set (newVal) { this.$emit('update:modelValue', { ...this.modelValue, expiryAmount: newVal }) }
+    },
+    expiryUnit: {
+      get () { return pollFallback(this.modelValue, 'expiryUnit') },
+      set (newVal) { this.$emit('update:modelValue', { ...this.modelValue, expiryUnit: newVal }) }
+    },
     pollLimits () {
       return this.$store.state.instance.pollLimits
     },
@@ -107,21 +124,6 @@ export default {
       this.updatePollToParent()
     },
     updatePollToParent () {
-      const expiresIn = this.convertExpiryFromUnit(
-        this.expiryUnit,
-        this.expiryAmount
-      )
-
-      const options = uniq(this.options.filter(option => option !== ''))
-      if (options.length < 2) {
-        this.$emit('update-poll', { error: this.$t('polls.not_enough_options') })
-        return
-      }
-      this.$emit('update-poll', {
-        options,
-        multiple: this.pollType === 'multiple',
-        expiresIn
-      })
     }
   }
 }
