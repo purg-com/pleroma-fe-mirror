@@ -245,6 +245,27 @@
           @click="toggleDrawer"
         >
           <router-link
+            :to="{ name: 'drafts' }"
+            class="menu-item"
+          >
+            <FAIcon
+              fixed-width
+              class="fa-scale-110 fa-old-padding"
+              icon="file-pen"
+            /> {{ $t('nav.drafts') }}
+            <span
+              v-if="draftCount"
+              class="badge badge-notification"
+            >
+              {{ draftCount }}
+            </span>
+          </router-link>
+        </li>
+        <li
+          v-if="currentUser"
+          @click="toggleDrawer"
+        >
+          <router-link
             :to="{ name: 'edit-navigation' }"
             class="menu-item"
           >
