@@ -201,7 +201,8 @@ const PostStatusForm = {
       preview: null,
       previewLoading: false,
       emojiInputShown: false,
-      idempotencyKey: ''
+      idempotencyKey: '',
+      saveInhibited: true
     }
   },
   computed: {
@@ -340,9 +341,11 @@ const PostStatusForm = {
       this.autoPreview()
       this.updateIdempotencyKey()
       this.debouncedSaveDraft()
+      this.saveInhibited = false
     },
     clearStatus () {
       const newStatus = this.newStatus
+      this.saveInhibited = true
       this.newStatus = {
         status: '',
         spoilerText: '',
@@ -698,7 +701,7 @@ const PostStatusForm = {
       return propsToNative(props)
     },
     saveDraft () {
-      if (this.newStatus.status) {
+      if (!this.saveInhibited) {
         console.debug('Saving status', this.newStatus)
         this.$store.dispatch('addOrSaveDraft', { draft: this.newStatus })
           .then(id => {
