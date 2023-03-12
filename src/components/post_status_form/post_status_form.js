@@ -706,7 +706,11 @@ const PostStatusForm = {
       return propsToNative(props)
     },
     saveDraft () {
-      if (!this.saveInhibited) {
+      if (!this.saveInhibited &&
+          (this.newStatus.status ||
+           this.newStatus.files?.length ||
+           this.newStatus.hasPoll
+          )) {
         this.$store.dispatch('addOrSaveDraft', { draft: this.newStatus })
           .then(id => {
             if (this.newStatus.id !== id) {
