@@ -67,11 +67,6 @@ const persistedStateOptions = {
   }
   const store = createStore({
     modules: {
-      i18n: {
-        getters: {
-          i18n: () => i18n.global
-        }
-      },
       interface: interfaceModule,
       instance: instanceModule,
       // TODO refactor users/statuses modules, they depend on each other
@@ -99,6 +94,7 @@ const persistedStateOptions = {
     strict: false // Socket modifies itself, let's ignore this for now.
     // strict: process.env.NODE_ENV !== 'production'
   })
+
   if (storageError) {
     store.dispatch('pushGlobalNotice', { messageKey: 'errors.storage_unavailable', level: 'error' })
   }

@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 import { createRouter, createWebHistory } from 'vue-router'
 import vClickOutside from 'click-outside-vue3'
 import VueVirtualScroller from 'vue-virtual-scroller'
@@ -16,6 +17,8 @@ import backendInteractorService from '../services/backend_interactor_service/bac
 import { CURRENT_VERSION } from '../services/theme_data/theme_data.service.js'
 import { applyTheme, applyConfig } from '../services/style_setter/style_setter.js'
 import FaviconService from '../services/favicon_service/favicon_service.js'
+
+import { useI18nStore } from '../stores/i18n'
 
 let staticInitialResults = null
 
@@ -395,6 +398,11 @@ const afterStoreSetup = async ({ store, i18n }) => {
   })
 
   const app = createApp(App)
+  const pinia = createPinia()
+
+  app.use(pinia)
+
+  useI18nStore().setI18n(i18n)
 
   app.use(router)
   app.use(store)
