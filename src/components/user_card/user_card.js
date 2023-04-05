@@ -12,6 +12,7 @@ import RichContent from 'src/components/rich_content/rich_content.jsx'
 import ConfirmModal from '../confirm_modal/confirm_modal.vue'
 import generateProfileLink from 'src/services/user_profile_link_generator/user_profile_link_generator'
 import { mapGetters } from 'vuex'
+import { usePostStatusStore } from '../../stores/postStatus'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faBell,
@@ -225,7 +226,7 @@ export default {
       this.$store.dispatch('setCurrentMedia', attachment)
     },
     mentionUser () {
-      this.$store.dispatch('openPostStatusModal', { replyTo: true, repliedUser: this.user })
+      usePostStatusStore().openPostStatusModal({ replyTo: true, repliedUser: this.user })
     },
     onAvatarClickHandler (e) {
       if (this.onAvatarClick) {
