@@ -1,4 +1,5 @@
 import { createStore } from 'vuex'
+import { createPinia } from 'pinia'
 
 import 'custom-event-polyfill'
 import './lib/event_target_polyfill.js'
@@ -12,7 +13,6 @@ import apiModule from './modules/api.js'
 import configModule from './modules/config.js'
 import serverSideConfigModule from './modules/serverSideConfig.js'
 import serverSideStorageModule from './modules/serverSideStorage.js'
-import shoutModule from './modules/shout.js'
 import oauthModule from './modules/oauth.js'
 import authFlowModule from './modules/auth_flow.js'
 import mediaViewerModule from './modules/media_viewer.js'
@@ -58,6 +58,7 @@ const persistedStateOptions = {
 (async () => {
   let storageError = false
   const plugins = [pushNotifications]
+  const pinia = createPinia()
   try {
     const persistedState = await createPersistedState(persistedStateOptions)
     plugins.push(persistedState)
@@ -77,7 +78,6 @@ const persistedStateOptions = {
       config: configModule,
       serverSideConfig: serverSideConfigModule,
       serverSideStorage: serverSideStorageModule,
-      shout: shoutModule,
       oauth: oauthModule,
       authFlow: authFlowModule,
       mediaViewer: mediaViewerModule,
@@ -98,7 +98,9 @@ const persistedStateOptions = {
   if (storageError) {
     store.dispatch('pushGlobalNotice', { messageKey: 'errors.storage_unavailable', level: 'error' })
   }
-  afterStoreSetup({ store, i18n })
+
+  // Temporarily passing both vuex and pinia stores until migration is fully complete.
+  afterStoreSetup({ pinia, store, i18n })
 })()
 
 // These are inlined by webpack's DefinePlugin

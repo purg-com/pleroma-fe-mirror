@@ -2,6 +2,7 @@ import backendInteractorService from '../services/backend_interactor_service/bac
 import { WSConnectionStatus } from '../services/api/api.service.js'
 import { maybeShowChatNotification } from '../services/chat_utils/chat_utils.js'
 import { Socket } from 'phoenix'
+import { useShoutStore } from '../stores/shout.js'
 
 const retryTimeout = (multiplier) => 1000 * multiplier
 
@@ -283,7 +284,7 @@ const api = {
         socket.connect()
 
         commit('setSocket', socket)
-        dispatch('initializeShout', socket)
+        useShoutStore().initializeShout(socket)
       }
     },
     disconnectFromSocket ({ commit, state }) {

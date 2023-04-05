@@ -19,6 +19,7 @@ import {
   faCompass,
   faList
 } from '@fortawesome/free-solid-svg-icons'
+import { useShoutStore } from '../../stores/shout'
 
 library.add(
   faSignInAlt,
@@ -54,7 +55,7 @@ const SideDrawer = {
     currentUser () {
       return this.$store.state.users.currentUser
     },
-    shout () { return this.$store.state.shout.joined },
+    shout () { return useShoutStore().joined },
     unseenNotifications () {
       return unseenNotificationsFromStore(this.$store)
     },

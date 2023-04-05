@@ -1,5 +1,4 @@
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
 import { createRouter, createWebHistory } from 'vue-router'
 import vClickOutside from 'click-outside-vue3'
 import VueVirtualScroller from 'vue-virtual-scroller'
@@ -341,7 +340,10 @@ const checkOAuthToken = async ({ store }) => {
   })
 }
 
-const afterStoreSetup = async ({ store, i18n }) => {
+const afterStoreSetup = async ({ pinia, store, i18n }) => {
+  const app = createApp(App)
+  app.use(pinia)
+
   store.dispatch('setLayoutWidth', windowWidth())
   store.dispatch('setLayoutHeight', windowHeight())
 
@@ -396,11 +398,6 @@ const afterStoreSetup = async ({ store, i18n }) => {
       return savedPosition || { left: 0, top: 0 }
     }
   })
-
-  const app = createApp(App)
-  const pinia = createPinia()
-
-  app.use(pinia)
 
   useI18nStore().setI18n(i18n)
 

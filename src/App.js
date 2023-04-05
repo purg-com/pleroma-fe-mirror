@@ -17,6 +17,7 @@ import GlobalNoticeList from './components/global_notice_list/global_notice_list
 import { windowWidth, windowHeight } from './services/window_utils/window_utils'
 import { mapGetters } from 'vuex'
 import { defineAsyncComponent } from 'vue'
+import { useShoutStore } from './stores/shout'
 
 export default {
   name: 'app',
@@ -86,7 +87,7 @@ export default {
         }
       }
     },
-    shout () { return this.$store.state.shout.joined },
+    shout () { return useShoutStore().joined },
     suggestionsEnabled () { return this.$store.state.instance.suggestionsEnabled },
     showInstanceSpecificPanel () {
       return this.$store.state.instance.showInstanceSpecificPanel &&
