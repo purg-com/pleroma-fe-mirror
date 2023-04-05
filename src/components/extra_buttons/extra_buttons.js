@@ -16,6 +16,7 @@ import {
   faBookmark as faBookmarkReg,
   faFlag
 } from '@fortawesome/free-regular-svg-icons'
+import { useEditStatusStore } from '../../stores/editStatus'
 
 library.add(
   faEllipsisH,
@@ -107,7 +108,7 @@ const ExtraButtons = {
     },
     editStatus () {
       this.$store.dispatch('fetchStatusSource', { id: this.status.id })
-        .then(data => this.$store.dispatch('openEditStatusModal', {
+        .then(data => useEditStatusStore().openEditStatusModal({
           statusId: this.status.id,
           subject: data.spoiler_text,
           statusText: data.text,
