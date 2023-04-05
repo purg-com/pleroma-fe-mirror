@@ -18,7 +18,6 @@ import authFlowModule from './modules/auth_flow.js'
 import oauthTokensModule from './modules/oauth_tokens.js'
 import reportsModule from './modules/reports.js'
 import pollsModule from './modules/polls.js'
-import statusHistoryModule from './modules/statusHistory.js'
 
 import chatsModule from './modules/chats.js'
 import announcementsModule from './modules/announcements.js'
@@ -80,7 +79,6 @@ const persistedStateOptions = {
       oauthTokens: oauthTokensModule,
       reports: reportsModule,
       polls: pollsModule,
-      statusHistory: statusHistoryModule,
       chats: chatsModule,
       announcements: announcementsModule
     },

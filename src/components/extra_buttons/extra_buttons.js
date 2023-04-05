@@ -17,6 +17,7 @@ import {
   faFlag
 } from '@fortawesome/free-regular-svg-icons'
 import { useEditStatusStore } from '../../stores/editStatus'
+import { useStatusHistoryStore } from '../../stores/statusHistory'
 
 library.add(
   faEllipsisH,
@@ -123,7 +124,7 @@ const ExtraButtons = {
       const originalStatus = { ...this.status }
       const stripFieldsList = ['attachments', 'created_at', 'emojis', 'text', 'raw_html', 'nsfw', 'poll', 'summary', 'summary_raw_html']
       stripFieldsList.forEach(p => delete originalStatus[p])
-      this.$store.dispatch('openStatusHistoryModal', originalStatus)
+      useStatusHistoryStore().openStatusHistoryModal(originalStatus)
     }
   },
   computed: {
