@@ -23,6 +23,7 @@ import {
   faTimes,
   faExpandAlt
 } from '@fortawesome/free-solid-svg-icons'
+import { useMediaViewerStore } from '../../stores/media_viewer'
 
 library.add(
   faRss,
@@ -222,8 +223,8 @@ export default {
         url: this.user.profile_image_url_original,
         mimetype: 'image'
       }
-      this.$store.dispatch('setMedia', [attachment])
-      this.$store.dispatch('setCurrentMedia', attachment)
+      useMediaViewerStore().setMedia([attachment])
+      useMediaViewerStore().setCurrentMedia(attachment)
     },
     mentionUser () {
       usePostStatusStore().openPostStatusModal({ replyTo: true, repliedUser: this.user })

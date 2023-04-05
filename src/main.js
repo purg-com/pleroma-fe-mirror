@@ -15,7 +15,6 @@ import serverSideConfigModule from './modules/serverSideConfig.js'
 import serverSideStorageModule from './modules/serverSideStorage.js'
 import oauthModule from './modules/oauth.js'
 import authFlowModule from './modules/auth_flow.js'
-import mediaViewerModule from './modules/media_viewer.js'
 import oauthTokensModule from './modules/oauth_tokens.js'
 import reportsModule from './modules/reports.js'
 import pollsModule from './modules/polls.js'
@@ -78,7 +77,6 @@ const persistedStateOptions = {
       serverSideStorage: serverSideStorageModule,
       oauth: oauthModule,
       authFlow: authFlowModule,
-      mediaViewer: mediaViewerModule,
       oauthTokens: oauthTokensModule,
       reports: reportsModule,
       polls: pollsModule,
