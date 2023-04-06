@@ -20,6 +20,7 @@ import {
   faList
 } from '@fortawesome/free-solid-svg-icons'
 import { useShoutStore } from '../../stores/shout'
+import { useInterfaceStore } from '../../stores/interface'
 
 library.add(
   faSignInAlt,
@@ -85,8 +86,8 @@ const SideDrawer = {
     },
     timelinesRoute () {
       let name
-      if (this.$store.state.interface.lastTimeline) {
-        name = this.$store.state.interface.lastTimeline
+      if (useInterfaceStore().lastTimeline) {
+        name = useInterfaceStore().lastTimeline
       }
       name = this.currentUser ? 'friends' : 'public-timeline'
       if (USERNAME_ROUTES.has(name)) {
@@ -116,7 +117,7 @@ const SideDrawer = {
       GestureService.updateSwipe(e, this.closeGesture)
     },
     openSettingsModal () {
-      this.$store.dispatch('openSettingsModal')
+      useInterfaceStore().openSettingsModal()
     }
   }
 }

@@ -18,6 +18,7 @@ import { applyTheme, applyConfig } from '../services/style_setter/style_setter.j
 import FaviconService from '../services/favicon_service/favicon_service.js'
 
 import { useI18nStore } from '../stores/i18n'
+import { useInterfaceStore } from '../stores/interface'
 
 let staticInitialResults = null
 
@@ -340,12 +341,16 @@ const checkOAuthToken = async ({ store }) => {
   })
 }
 
-const afterStoreSetup = async ({ pinia, store, i18n }) => {
+const afterStoreSetup = async ({ pinia, store, storageError, i18n }) => {
   const app = createApp(App)
   app.use(pinia)
 
-  store.dispatch('setLayoutWidth', windowWidth())
-  store.dispatch('setLayoutHeight', windowHeight())
+  if (storageError) {
+    useInterfaceStore().pushGlobalNotice({ messageKey: 'errors.storage_unavailable', level: 'error' })
+  }
+
+  useInterfaceStore().setLayoutWidth(windowWidth())
+  useInterfaceStore().setLayoutHeight(windowHeight())
 
   FaviconService.initFaviconService()
 

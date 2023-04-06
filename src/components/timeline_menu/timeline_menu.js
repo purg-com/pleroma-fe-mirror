@@ -8,6 +8,7 @@ import { filterNavigation } from 'src/components/navigation/filter.js'
 import {
   faChevronDown
 } from '@fortawesome/free-solid-svg-icons'
+import { useInterfaceStore } from '../../stores/interface'
 
 library.add(faChevronDown)
 
@@ -36,7 +37,7 @@ const TimelineMenu = {
   },
   created () {
     if (timelineNames()[this.$route.name]) {
-      this.$store.dispatch('setLastTimeline', this.$route.name)
+      useInterfaceStore().setLastTimeline(this.$route.name)
     }
   },
   computed: {

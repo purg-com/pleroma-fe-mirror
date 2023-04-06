@@ -9,6 +9,7 @@ import {
   faSearch,
   faChevronLeft
 } from '@fortawesome/free-solid-svg-icons'
+import { useInterfaceStore } from '../../stores/interface'
 
 library.add(
   faSearch,
@@ -128,7 +129,7 @@ const ListsNew = {
           this.$router.push({ name: 'lists-timeline', params: { id: listId } })
         })
         .catch((e) => {
-          this.$store.dispatch('pushGlobalNotice', {
+          useInterfaceStore().pushGlobalNotice({
             messageKey: 'lists.error',
             messageArgs: [e.message],
             level: 'error'

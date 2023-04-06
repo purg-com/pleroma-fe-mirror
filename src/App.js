@@ -18,6 +18,7 @@ import { windowWidth, windowHeight } from './services/window_utils/window_utils'
 import { mapGetters } from 'vuex'
 import { defineAsyncComponent } from 'vue'
 import { useShoutStore } from './stores/shout'
+import { useInterfaceStore } from './stores/interface'
 
 export default {
   name: 'app',
@@ -113,7 +114,7 @@ export default {
     hideShoutbox () {
       return this.$store.getters.mergedConfig.hideShoutbox
     },
-    layoutType () { return this.$store.state.interface.layoutType },
+    layoutType () { return useInterfaceStore().layoutType },
     privateMode () { return this.$store.state.instance.private },
     reverseLayout () {
       const { thirdColumnMode, sidebarRight: reverseSetting } = this.$store.getters.mergedConfig
@@ -129,8 +130,8 @@ export default {
   },
   methods: {
     updateMobileState () {
-      this.$store.dispatch('setLayoutWidth', windowWidth())
-      this.$store.dispatch('setLayoutHeight', windowHeight())
+      useInterfaceStore().setLayoutWidth(windowWidth())
+      useInterfaceStore().setLayoutHeight(windowHeight())
     }
   }
 }

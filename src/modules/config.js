@@ -3,6 +3,7 @@ import { setPreset, applyTheme, applyConfig } from '../services/style_setter/sty
 import messages from '../i18n/messages'
 import localeService from '../services/locale/locale.service.js'
 import { useI18nStore } from '../stores/i18n.js'
+import { useInterfaceStore } from '../stores/interface.js'
 
 const BACKEND_LANGUAGE_COOKIE_NAME = 'userLanguage'
 
@@ -203,7 +204,7 @@ const config = {
           )
           break
         case 'thirdColumnMode':
-          dispatch('setLayoutWidth', undefined)
+          useInterfaceStore().setLayoutWidth(undefined)
           break
       }
     }

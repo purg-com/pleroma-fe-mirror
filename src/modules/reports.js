@@ -1,4 +1,5 @@
 import filter from 'lodash/filter'
+import { useInterfaceStore } from '../stores/interface'
 
 const reports = {
   state: {
@@ -46,7 +47,7 @@ const reports = {
       commit('setReportState', { id, state })
       rootState.api.backendInteractor.setReportState({ id, state }).catch(e => {
         console.error('Failed to set report state', e)
-        dispatch('pushGlobalNotice', {
+        useInterfaceStore().pushGlobalNotice({
           level: 'error',
           messageKey: 'general.generic_error_message',
           messageArgs: [e.message],

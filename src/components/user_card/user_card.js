@@ -24,6 +24,7 @@ import {
   faExpandAlt
 } from '@fortawesome/free-solid-svg-icons'
 import { useMediaViewerStore } from '../../stores/media_viewer'
+import { useInterfaceStore } from '../../stores/interface'
 
 library.add(
   faRss,
@@ -50,7 +51,7 @@ export default {
   data () {
     return {
       followRequestInProgress: false,
-      betterShadow: this.$store.state.interface.browserSupport.cssFilter,
+      betterShadow: useInterfaceStore().browserSupport.cssFilter,
       showingConfirmMute: false,
       muteExpiryAmount: 0,
       muteExpiryUnit: 'minutes'
@@ -216,7 +217,7 @@ export default {
       )
     },
     openProfileTab () {
-      this.$store.dispatch('openSettingsModalTab', 'profile')
+      useInterfaceStore().openSettingsModalTab('profile')
     },
     zoomAvatar () {
       const attachment = {

@@ -4,7 +4,6 @@ import { createPinia } from 'pinia'
 import 'custom-event-polyfill'
 import './lib/event_target_polyfill.js'
 
-import interfaceModule from './modules/interface.js'
 import instanceModule from './modules/instance.js'
 import statusesModule from './modules/statuses.js'
 import listsModule from './modules/lists.js'
@@ -62,9 +61,10 @@ const persistedStateOptions = {
     console.error(e)
     storageError = true
   }
-  const store = createStore({
+
+  // Temporarily storing as a global variable while we migrate to Pinia
+  window.vuex = createStore({
     modules: {
-      interface: interfaceModule,
       instance: instanceModule,
       // TODO refactor users/statuses modules, they depend on each other
       users: usersModule,
@@ -87,12 +87,10 @@ const persistedStateOptions = {
     // strict: process.env.NODE_ENV !== 'production'
   })
 
-  if (storageError) {
-    store.dispatch('pushGlobalNotice', { messageKey: 'errors.storage_unavailable', level: 'error' })
-  }
+  const store = window.vuex
 
-  // Temporarily passing both vuex and pinia stores until migration is fully complete.
-  afterStoreSetup({ pinia, store, i18n })
+  // Temporarily passing pinia and vuex stores along with storageError result until migration is fully complete.
+  afterStoreSetup({ pinia, store, storageError, i18n })
 })()
 
 // These are inlined by webpack's DefinePlugin
