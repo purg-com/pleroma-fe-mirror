@@ -98,7 +98,7 @@ export default {
     },
     addOption () {
       if (this.options.length < this.maxOptions) {
-        this.options.push('')
+        this.options = [...this.options, '']
         return true
       }
       return false
@@ -106,7 +106,7 @@ export default {
     deleteOption (index, event) {
       if (this.options.length > 2) {
         this.options.splice(index, 1)
-        this.updatePollToParent()
+        this.options = [...this.options]
       }
     },
     convertExpiryToUnit (unit, amount) {
@@ -121,9 +121,6 @@ export default {
         Math.max(this.minExpirationInCurrentUnit, this.expiryAmount)
       this.expiryAmount =
         Math.min(this.maxExpirationInCurrentUnit, this.expiryAmount)
-      this.updatePollToParent()
-    },
-    updatePollToParent () {
     }
   }
 }
