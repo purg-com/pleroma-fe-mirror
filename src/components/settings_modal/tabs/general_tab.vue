@@ -460,7 +460,7 @@
             {{ $t('settings.auto_save_draft') }}
           </BooleanSetting>
         </li>
-        <li>
+        <li v-if="!autoSaveDraft">
           <ChoiceSetting
             id="unsavedPostAction"
             path="unsavedPostAction"

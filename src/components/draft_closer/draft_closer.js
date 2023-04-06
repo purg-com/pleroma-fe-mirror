@@ -15,7 +15,11 @@ const DraftCloser = {
   ],
   computed: {
     action () {
-      return this.$store.getters.mergedConfig.unsavedPostAction
+      if (this.$store.getters.mergedConfig.autoSaveDraft) {
+        return 'save'
+      } else {
+        return this.$store.getters.mergedConfig.unsavedPostAction
+      }
     },
     shouldConfirm () {
       return this.action === 'confirm'
