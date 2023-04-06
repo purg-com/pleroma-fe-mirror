@@ -16,6 +16,7 @@ import suggestor from '../emoji_input/suggestor.js'
 import { mapGetters, mapState } from 'vuex'
 import Checkbox from '../checkbox/checkbox.vue'
 import Select from '../select/select.vue'
+import DraftCloser from 'src/components/draft_closer/draft_closer.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -108,7 +109,8 @@ const PostStatusForm = {
     'posted',
     'resize',
     'mediaplay',
-    'mediapause'
+    'mediapause',
+    'can-close'
   ],
   components: {
     MediaUpload,
@@ -119,7 +121,8 @@ const PostStatusForm = {
     Select,
     Attachment,
     StatusContent,
-    Gallery
+    Gallery,
+    DraftCloser
   },
   mounted () {
     this.updateIdempotencyKey()
@@ -205,7 +208,8 @@ const PostStatusForm = {
       previewLoading: false,
       emojiInputShown: false,
       idempotencyKey: '',
-      saveInhibited: true
+      saveInhibited: true,
+      savable: false
     }
   },
   computed: {
@@ -320,9 +324,9 @@ const PostStatusForm = {
 
       return false
     },
-    debouncedSaveDraft () {
-      return debounce(this.saveDraft, 3000)
-    },
+    // debouncedSaveDraft () {
+    //   return debounce(this.saveDraft, 3000)
+    // },
     pollFormVisible () {
       return this.newStatus.hasPoll
     },
@@ -340,13 +344,14 @@ const PostStatusForm = {
     }
   },
   beforeUnmount () {
-    this.saveDraft()
+    // this.saveDraft()
   },
   methods: {
     statusChanged () {
       this.autoPreview()
       this.updateIdempotencyKey()
-      this.debouncedSaveDraft()
+      // this.debouncedSaveDraft()
+      this.savable = true
       this.saveInhibited = false
     },
     clearStatus () {
@@ -375,6 +380,7 @@ const PostStatusForm = {
       el.style.height = undefined
       this.error = null
       if (this.preview) this.previewStatus()
+      this.savable = false
     },
     async postStatus (event, newStatus, opts = {}) {
       if (this.posting && !this.optimisticPosting) { return }
@@ -712,16 +718,18 @@ const PostStatusForm = {
            this.newStatus.files?.length ||
            this.newStatus.hasPoll
           )) {
-        this.$store.dispatch('addOrSaveDraft', { draft: this.newStatus })
+        return this.$store.dispatch('addOrSaveDraft', { draft: this.newStatus })
           .then(id => {
             if (this.newStatus.id !== id) {
               this.newStatus.id = id
+              this.savable = false
             }
           })
       }
+      return Promise.resolve()
     },
     abandonDraft () {
-      this.$store.dispatch('abandonDraft', { id: this.newStatus.id })
+      return this.$store.dispatch('abandonDraft', { id: this.newStatus.id })
     },
     getDraft (statusType, refId) {
       const maybeDraft = this.$store.state.drafts.drafts[this.draftId]
@@ -735,6 +743,23 @@ const PostStatusForm = {
         }
       }
       // No draft available, fall back
+    },
+    requestClose () {
+      if (!this.savable) {
+        this.$emit('can-close')
+      } else {
+        this.$refs.draftCloser.requestClose()
+      }
+    },
+    saveAndCloseDraft () {
+      this.saveDraft().then(() => {
+        this.$emit('can-close')
+      })
+    },
+    discardAndCloseDraft () {
+      this.abandonDraft().then(() => {
+        this.$emit('can-close')
+      })
     }
   }
 }

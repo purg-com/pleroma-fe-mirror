@@ -308,7 +308,12 @@
       "private": "Followers-only - post to followers only",
       "public": "Public - post to public timelines",
       "unlisted": "Unlisted - do not post to public timelines"
-    }
+    },
+    "close_confirm_title": "Closing post form",
+    "close_confirm": "What do you want to do with your current writing?",
+    "close_confirm_save_button": "Save",
+    "close_confirm_discard_button": "Discard",
+    "close_confirm_continue_composing_button": "Continue composing"
   },
   "registration": {
     "bio_optional": "Bio (optional)",
@@ -505,6 +510,10 @@
     "avatar_size_instruction": "The recommended minimum size for avatar images is 150x150 pixels.",
     "pad_emoji": "Pad emoji with spaces when adding from picker",
     "autocomplete_select_first": "Automatically select the first candidate when autocomplete results are available",
+    "unsaved_post_action": "When you try to close an unsaved posting form",
+    "unsaved_post_action_save": "Save it to drafts",
+    "unsaved_post_action_discard": "Discard it",
+    "unsaved_post_action_confirm": "Ask every time",
     "emoji_reactions_on_timeline": "Show emoji reactions on timeline",
     "emoji_reactions_scale": "Reactions scale factor",
     "export_theme": "Save preset",

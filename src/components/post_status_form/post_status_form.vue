@@ -369,6 +369,11 @@
         </Checkbox>
       </div>
     </form>
+    <DraftCloser
+      ref="draftCloser"
+      @save="saveAndCloseDraft"
+      @discard="discardAndCloseDraft"
+    />
   </div>
 </template>
 

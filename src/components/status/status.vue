@@ -598,13 +598,15 @@
         class="status-container reply-form"
       >
         <PostStatusForm
+          ref="postStatusForm"
           class="reply-body"
           :reply-to="status.id"
           :attentions="status.attentions"
           :replied-user="status.user"
           :copy-message-scope="status.visibility"
           :subject="replySubject"
-          @posted="toggleReplying"
+          @posted="doToggleReplying"
+          @can-close="doToggleReplying"
         />
       </div>
     </template>

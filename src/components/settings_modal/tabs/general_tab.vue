@@ -453,6 +453,15 @@
             {{ $t('settings.autocomplete_select_first') }}
           </BooleanSetting>
         </li>
+        <li>
+          <ChoiceSetting
+            id="unsavedPostAction"
+            path="unsavedPostAction"
+            :options="unsavedPostActionOptions"
+          >
+            {{ $t('settings.unsaved_post_action') }}
+          </ChoiceSetting>
+        </li>
       </ul>
     </div>
   </div>
