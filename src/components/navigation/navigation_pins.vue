@@ -20,6 +20,7 @@
       <div
         v-if="item.badgeGetter && getters[item.badgeGetter]"
         class="badge -dot -notification"
+        :class="[`alert-dot-${item.badgeStyle}`]"
       />
     </router-link>
   </span>
@@ -33,6 +34,16 @@
   flex-wrap: wrap;
   overflow: hidden;
   height: 100%;
+
+  &.alert-dot-notification {
+    background-color: $fallback--cRed;
+    background-color: var(--badgeNotification, $fallback--cRed);
+  }
+
+  &.alert-dot-neutral {
+    background-color: $fallback--cGreen;
+    background-color: var(--badgeNeutral, $fallback--cGreen);
+  }
 
   .pinned-item {
     position: relative;

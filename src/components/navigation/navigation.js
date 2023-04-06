@@ -56,6 +56,7 @@ export const ROOT_ITEMS = {
     route: 'chats',
     icon: 'comments',
     label: 'nav.chats',
+    badgeStyle: 'notification',
     badgeGetter: 'unreadChatCount',
     criteria: ['chats']
   },
@@ -63,6 +64,7 @@ export const ROOT_ITEMS = {
     route: 'friend-requests',
     icon: 'user-plus',
     label: 'nav.friend_requests',
+    badgeStyle: 'notification',
     criteria: ['lockedUser'],
     badgeGetter: 'followRequestCount'
   },
@@ -76,6 +78,7 @@ export const ROOT_ITEMS = {
     route: 'announcements',
     icon: 'bullhorn',
     label: 'nav.announcements',
+    badgeStyle: 'notification',
     badgeGetter: 'unreadAnnouncementCount',
     criteria: ['announcements']
   },
@@ -83,6 +86,7 @@ export const ROOT_ITEMS = {
     route: 'drafts',
     icon: 'file-pen',
     label: 'nav.drafts',
+    badgeStyle: 'neutral',
     badgeGetter: 'draftCount'
   }
 }

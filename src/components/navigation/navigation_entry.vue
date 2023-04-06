@@ -35,6 +35,7 @@
       <div
         v-if="item.badgeGetter && getters[item.badgeGetter]"
         class="badge -notification"
+        :class="[`badge-${item.badgeStyle}`]"
       >
         {{ getters[item.badgeGetter] }}
       </div>

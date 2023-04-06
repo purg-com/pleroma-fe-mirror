@@ -255,7 +255,7 @@
             /> {{ $t('nav.drafts') }}
             <span
               v-if="draftCount"
-              class="badge badge-notification"
+              class="badge badge-neutral"
             >
               {{ draftCount }}
             </span>
