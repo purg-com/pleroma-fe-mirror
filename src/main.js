@@ -18,7 +18,6 @@ import oauthTokensModule from './modules/oauth_tokens.js'
 import reportsModule from './modules/reports.js'
 
 import chatsModule from './modules/chats.js'
-import announcementsModule from './modules/announcements.js'
 
 import { createI18n } from 'vue-i18n'
 
@@ -77,8 +76,7 @@ const persistedStateOptions = {
       authFlow: authFlowModule,
       oauthTokens: oauthTokensModule,
       reports: reportsModule,
-      chats: chatsModule,
-      announcements: announcementsModule
+      chats: chatsModule
     },
     plugins,
     strict: false // Socket modifies itself, let's ignore this for now.

@@ -1,4 +1,5 @@
 import { mapState, mapGetters } from 'vuex'
+import { mapState as mapPiniaState } from 'pinia'
 import UserCard from '../user_card/user_card.vue'
 import { unseenNotificationsFromStore } from '../../services/notification_utils/notification_utils'
 import GestureService from '../../services/gesture_service/gesture_service'
@@ -21,6 +22,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { useShoutStore } from '../../stores/shout'
 import { useInterfaceStore } from '../../stores/interface'
+import { useAnnouncementsStore } from '../../stores/announcements'
 
 library.add(
   faSignInAlt,
@@ -96,11 +98,14 @@ const SideDrawer = {
         return { name }
       }
     },
-    ...mapState({
-      pleromaChatMessagesAvailable: state => state.instance.pleromaChatMessagesAvailable,
-      supportsAnnouncements: state => state.announcements.supportsAnnouncements
+    ...mapPiniaState(useAnnouncementsStore, {
+      supportsAnnouncements: store => store.supportsAnnouncements,
+      unreadAnnouncementCount: 'unreadAnnouncementCount'
     }),
-    ...mapGetters(['unreadChatCount', 'unreadAnnouncementCount'])
+    ...mapState({
+      pleromaChatMessagesAvailable: state => state.instance.pleromaChatMessagesAvailable
+    }),
+    ...mapGetters(['unreadChatCount'])
   },
   methods: {
     toggleDrawer () {

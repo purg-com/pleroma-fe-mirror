@@ -19,6 +19,7 @@ import FaviconService from '../services/favicon_service/favicon_service.js'
 
 import { useI18nStore } from '../stores/i18n'
 import { useInterfaceStore } from '../stores/interface'
+import { useAnnouncementsStore } from '../stores/announcements'
 
 let staticInitialResults = null
 
@@ -389,7 +390,7 @@ const afterStoreSetup = async ({ pinia, store, storageError, i18n }) => {
 
   // Start fetching things that don't need to block the UI
   store.dispatch('fetchMutes')
-  store.dispatch('startFetchingAnnouncements')
+  useAnnouncementsStore().startFetchingAnnouncements()
   getTOS({ store })
   getStickers({ store })
 

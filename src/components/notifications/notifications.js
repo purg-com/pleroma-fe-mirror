@@ -1,5 +1,6 @@
 import { computed } from 'vue'
 import { mapGetters } from 'vuex'
+import { mapState } from 'pinia'
 import Notification from '../notification/notification.vue'
 import NotificationFilters from './notification_filters.vue'
 import notificationsFetcher from '../../services/notifications_fetcher/notifications_fetcher.service.js'
@@ -12,6 +13,7 @@ import FaviconService from '../../services/favicon_service/favicon_service.js'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCircleNotch, faArrowUp, faMinus } from '@fortawesome/free-solid-svg-icons'
 import { useInterfaceStore } from '../../stores/interface'
+import { useAnnouncementsStore } from '../../stores/announcements'
 
 library.add(
   faCircleNotch,
@@ -95,7 +97,8 @@ const Notifications = {
       return this.filteredNotifications.slice(0, this.unseenCount + this.seenToDisplayCount)
     },
     noSticky () { return this.$store.getters.mergedConfig.disableStickyHeaders },
-    ...mapGetters(['unreadChatCount', 'unreadAnnouncementCount'])
+    ...mapState(useAnnouncementsStore, ['unreadAnnouncementCount']),
+    ...mapGetters(['unreadChatCount'])
   },
   mounted () {
     this.scrollerRef = this.$refs.root.closest('.column.-scrollable')
