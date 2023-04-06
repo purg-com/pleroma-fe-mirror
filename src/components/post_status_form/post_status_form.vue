@@ -297,6 +297,18 @@
             <FAIcon icon="poll-h" />
           </button>
         </div>
+        <span
+          v-if="shouldAutoSaveDraft"
+          class="auto-save-status"
+        >
+          {{ autoSaveState }}
+        </span>
+        <button
+          v-else
+          class="btn button-default"
+        >
+          {{ $t('post_status.save_to_drafts_button') }}
+        </button>
         <button
           v-if="posting"
           disabled
@@ -611,6 +623,10 @@
     background-color: var(--bg);
     border-radius: var(--roundness);
     border: 2px dashed var(--text);
+  }
+
+  .auto-save-status {
+    align-self: center;
   }
 }
 </style>

@@ -324,11 +324,23 @@ const PostStatusForm = {
 
       return false
     },
-    // debouncedSaveDraft () {
-    //   return debounce(this.saveDraft, 3000)
-    // },
+    debouncedMaybeAutoSaveDraft () {
+      return debounce(this.maybeAutoSaveDraft, 3000)
+    },
     pollFormVisible () {
       return this.newStatus.hasPoll
+    },
+    shouldAutoSaveDraft () {
+      return this.$store.getters.mergedConfig.autoSaveDraft
+    },
+    autoSaveState () {
+      if (this.savable) {
+        return this.$t('post_status.auto_save_saving')
+      } else if (this.newStatus.id) {
+        return this.$t('post_status.auto_save_saved')
+      } else {
+        return this.$t('post_status.auto_save_nothing_new')
+      }
     },
     ...mapGetters(['mergedConfig']),
     ...mapState({
@@ -344,13 +356,13 @@ const PostStatusForm = {
     }
   },
   beforeUnmount () {
-    // this.saveDraft()
+    this.maybeAutoSaveDraft()
   },
   methods: {
     statusChanged () {
       this.autoPreview()
       this.updateIdempotencyKey()
-      // this.debouncedSaveDraft()
+      this.debouncedMaybeAutoSaveDraft()
       this.savable = true
       this.saveInhibited = false
     },
@@ -722,11 +734,16 @@ const PostStatusForm = {
           .then(id => {
             if (this.newStatus.id !== id) {
               this.newStatus.id = id
-              this.savable = false
             }
+            this.savable = false
           })
       }
       return Promise.resolve()
+    },
+    maybeAutoSaveDraft () {
+      if (this.shouldAutoSaveDraft) {
+        this.saveDraft()
+      }
     },
     abandonDraft () {
       return this.$store.dispatch('abandonDraft', { id: this.newStatus.id })

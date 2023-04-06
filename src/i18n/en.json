@@ -313,7 +313,11 @@
     "close_confirm": "What do you want to do with your current writing?",
     "close_confirm_save_button": "Save",
     "close_confirm_discard_button": "Discard",
-    "close_confirm_continue_composing_button": "Continue composing"
+    "close_confirm_continue_composing_button": "Continue composing",
+    "auto_save_nothing_new": "Nothing new to save.",
+    "auto_save_saved": "Saved.",
+    "auto_save_saving": "Saving...",
+    "save_to_drafts_button": "Save to drafts"
   },
   "registration": {
     "bio_optional": "Bio (optional)",
@@ -514,6 +518,7 @@
     "unsaved_post_action_save": "Save it to drafts",
     "unsaved_post_action_discard": "Discard it",
     "unsaved_post_action_confirm": "Ask every time",
+    "auto_save_draft": "Save drafts as you compose",
     "emoji_reactions_on_timeline": "Show emoji reactions on timeline",
     "emoji_reactions_scale": "Reactions scale factor",
     "export_theme": "Save preset",

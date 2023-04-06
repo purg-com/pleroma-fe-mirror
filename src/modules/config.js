@@ -182,7 +182,8 @@ export const defaultState = {
   closingDrawerMarksAsSeen: undefined, // instance default
   unseenAtTop: undefined, // instance default
   ignoreInactionableSeen: undefined, // instance default
-  unsavedPostAction: undefined // instance default
+  unsavedPostAction: undefined, // instance default
+  autoSaveDraft: undefined // instance default
 }
 
 // caching the instance default properties

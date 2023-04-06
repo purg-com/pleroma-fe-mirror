@@ -120,6 +120,7 @@ const defaultState = {
   unseenAtTop: false,
   ignoreInactionableSeen: false,
   unsavedPostAction: 'confirm',
+  autoSaveDraft: false,
 
   // Nasty stuff
   customEmoji: [],

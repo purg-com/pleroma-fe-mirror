@@ -454,6 +454,13 @@
           </BooleanSetting>
         </li>
         <li>
+          <BooleanSetting
+            path="autoSaveDraft"
+          >
+            {{ $t('settings.auto_save_draft') }}
+          </BooleanSetting>
+        </li>
+        <li>
           <ChoiceSetting
             id="unsavedPostAction"
             path="unsavedPostAction"
