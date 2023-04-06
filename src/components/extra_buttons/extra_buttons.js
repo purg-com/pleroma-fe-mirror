@@ -18,6 +18,7 @@ import {
 } from '@fortawesome/free-regular-svg-icons'
 import { useEditStatusStore } from '../../stores/editStatus'
 import { useStatusHistoryStore } from '../../stores/statusHistory'
+import { useReportsStore } from '../../stores/reports'
 
 library.add(
   faEllipsisH,
@@ -105,7 +106,7 @@ const ExtraButtons = {
         .catch(err => this.$emit('onError', err.error.error))
     },
     reportStatus () {
-      this.$store.dispatch('openUserReportingModal', { userId: this.status.user.id, statusIds: [this.status.id] })
+      useReportsStore().openUserReportingModal({ userId: this.status.user.id, statusIds: [this.status.id] })
     },
     editStatus () {
       this.$store.dispatch('fetchStatusSource', { id: this.status.id })
