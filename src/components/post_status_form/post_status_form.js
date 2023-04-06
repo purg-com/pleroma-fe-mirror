@@ -142,7 +142,8 @@ const PostStatusForm = {
 
     const [statusType, refId] = typeAndRefId({ replyTo: this.replyTo, profileMention: this.profileMention, statusId: this.statusId })
 
-    let statusParams = this.getDraft(statusType, refId)
+    // If we are starting a new post, do not associate it with old drafts
+    let statusParams = (this.draftId || statusType !== 'new') ? this.getDraft(statusType, refId) : null
 
     if (!statusParams) {
       if (statusType === 'reply' || statusType === 'mention') {
