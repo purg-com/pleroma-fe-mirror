@@ -1,5 +1,6 @@
 <template>
   <PostStatusForm
+    ref="postStatusForm"
     v-bind="params"
     :post-handler="doEditStatus"
     :disable-polls="true"

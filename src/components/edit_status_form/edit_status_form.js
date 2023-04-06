@@ -12,6 +12,9 @@ const EditStatusForm = {
     }
   },
   methods: {
+    requestClose () {
+      this.$refs.postStatusForm.requestClose()
+    },
     doEditStatus ({ status, spoilerText, sensitive, media, contentType, poll }) {
       const params = {
         store: this.$store,

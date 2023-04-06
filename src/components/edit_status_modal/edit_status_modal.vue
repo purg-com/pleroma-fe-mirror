@@ -9,9 +9,11 @@
         {{ $t('post_status.edit_status') }}
       </div>
       <EditStatusForm
+        ref="editStatusForm"
         class="panel-body"
         :params="params"
-        @posted="closeModal"
+        @posted="doCloseModal"
+        @can-close="doCloseModal"
       />
     </div>
   </Modal>

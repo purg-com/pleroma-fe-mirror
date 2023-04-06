@@ -43,6 +43,9 @@ const EditStatusModal = {
   },
   methods: {
     closeModal () {
+      this.$refs.editStatusForm.requestClose()
+    },
+    doCloseModal () {
       this.$store.dispatch('closeEditStatusModal')
     }
   }
