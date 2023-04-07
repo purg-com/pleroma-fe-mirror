@@ -47,7 +47,7 @@ export const useListsStore = defineStore('lists', {
         this.allListsObject[listId] = { accountIds: [] }
       }
       this.allListsObject[listId].title = title
-  
+
       const entry = find(this.allLists, { id: listId })
       if (!entry) {
         this.allLists.push({ id: listId, title })
@@ -96,13 +96,13 @@ export const useListsStore = defineStore('lists', {
           const set = new Set(accountIds)
           set.delete(accountId)
           this.allListsObject[listId].accountIds = [...set]
-  
+
           return result
         })
     },
     deleteList ({ listId }) {
       window.vuex.state.api.backendInteractor.deleteList({ listId })
-  
+
       delete this.allListsObject[listId]
       remove(this.allLists, list => list.id === listId)
     }
