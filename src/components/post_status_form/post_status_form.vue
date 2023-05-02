@@ -306,6 +306,7 @@
         <button
           v-else
           class="btn button-default"
+          @click="saveDraft"
         >
           {{ $t('post_status.save_to_drafts_button') }}
         </button>
