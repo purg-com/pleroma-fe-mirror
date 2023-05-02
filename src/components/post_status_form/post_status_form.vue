@@ -263,7 +263,7 @@
         v-if="pollsAvailable"
         ref="pollForm"
         :visible="pollFormVisible"
-        v-model="newStatus.poll"
+        :params="newStatus.poll"
       />
       <div
         ref="bottom"

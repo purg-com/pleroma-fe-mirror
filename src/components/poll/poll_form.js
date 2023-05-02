@@ -19,28 +19,30 @@ export default {
   name: 'PollForm',
   props: {
     visible: {},
-    modelValue: {
+    params: {
       type: Object,
       required: true
     }
   },
-  emits: ['update:modelValue'],
   computed: {
     pollType: {
-      get () { return pollFallback(this.modelValue, 'pollType') },
-      set (newVal) { this.modelValue.pollType = newVal }
+      get () { return pollFallback(this.params, 'pollType') },
+      set (newVal) { this.params.pollType = newVal }
     },
-    options: {
-      get () { return pollFallback(this.modelValue, 'options') },
-      set (newVal) { this.modelValue.options = newVal }
+    options () {
+      const hasOptions = !!this.params.options
+      if (!hasOptions) {
+        this.params.options = pollFallback(this.params, 'options')
+      }
+      return this.params.options
     },
     expiryAmount: {
-      get () { return pollFallback(this.modelValue, 'expiryAmount') },
-      set (newVal) { this.modelValue.expiryAmount = newVal }
+      get () { return pollFallback(this.params, 'expiryAmount') },
+      set (newVal) { this.params.expiryAmount = newVal }
     },
     expiryUnit: {
-      get () { return pollFallback(this.modelValue, 'expiryUnit') },
-      set (newVal) { this.modelValue.expiryUnit = newVal }
+      get () { return pollFallback(this.params, 'expiryUnit') },
+      set (newVal) { this.params.expiryUnit = newVal }
     },
     pollLimits () {
       return this.$store.state.instance.pollLimits
