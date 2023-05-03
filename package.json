@@ -32,7 +32,7 @@
     "click-outside-vue3": "4.0.1",
     "cropperjs": "1.5.13",
     "escape-html": "1.0.3",
-    "js-cookie": "3.0.1",
+    "js-cookie": "3.0.5",
     "localforage": "1.10.0",
     "parse-link-header": "2.0.0",
     "phoenix": "1.6.2",
