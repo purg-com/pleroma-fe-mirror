@@ -67,6 +67,7 @@ export const defaultState = {
   },
   webPushNotifications: false,
   muteWords: [],
+  muteRegexes: [],
   highlight: {},
   interfaceLanguage: browserLocale,
   hideScopeNotice: false,

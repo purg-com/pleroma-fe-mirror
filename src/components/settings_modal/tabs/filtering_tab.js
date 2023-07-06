@@ -39,6 +39,23 @@ const FilteringTab = {
           value: filter(value.split('\n'), (word) => trim(word).length > 0)
         })
       }, 1000)
+    },
+    muteRegexesString: {
+      get () {
+        return this.muteRegexesStringLocal
+      },
+      set (value) {
+        this.muteRegexesStringLocal = value
+        this.debouncedSetRegexes(value)
+      }
+    },
+    debouncedSetRegexes () {
+      return debounce((value) => {
+        this.$store.dispatch('setOption', {
+          name: 'muteRegexes',
+          value: filter(value.split('\n'), (word) => trim(word).length > 0)
+        })
+      }, 1000)
     }
   },
   // Updating nested properties
