@@ -231,7 +231,7 @@ const Status = {
       return muteWordHits(this.status, this.muteWords)
     },
     muteRegexHits () {
-      return muteRegexHits(this.status, this.muteRegex)
+      return muteRegexHits(this.status, this.muteRegexes)
     },
     rtBotStatus () {
       return this.statusoid.user.bot

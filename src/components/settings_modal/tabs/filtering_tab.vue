@@ -74,8 +74,8 @@
         <li>
           <h3>{{ $t('settings.regexfilter') }}</h3>
           <textarea
-            id="muteRegex"
-            v-model="muteRegexString"
+            id="muteRegexes"
+            v-model="muteRegexesString"
             class="resize-height"
           />
           <div>{{ $t('settings.filtering_regex_explanation') }}</div>

@@ -48,6 +48,12 @@
         >
           {{ muteWordHits.join(', ') }}
         </small>
+        <small
+          class="mute-regexes"
+          :title="muteRegexHits.join(', ')"
+        >
+          {{ muteRegexHits.join(', ') }}
+        </small>
         <button
           class="unmute button-unstyled"
           @click.prevent="toggleMute"

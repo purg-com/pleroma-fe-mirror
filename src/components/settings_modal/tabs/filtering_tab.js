@@ -9,6 +9,7 @@ const FilteringTab = {
   data () {
     return {
       muteWordsStringLocal: this.$store.getters.mergedConfig.muteWords.join('\n'),
+      muteRegexesStringLocal: this.$store.getters.mergedConfig.muteRegexes.join('\n'),
       replyVisibilityOptions: ['all', 'following', 'self'].map(mode => ({
         key: mode,
         value: mode,
