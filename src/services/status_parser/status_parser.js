@@ -14,7 +14,15 @@ export const muteRegexHits = (status, muteRegexes) => {
   const statusText = status.text
   const statusSummary = status.summary
   const hits = filter(muteRegexes, (muteRegex) => {
-    return statusText.match(new RegExp(muteRegex)) || statusSummary.match(new RegExp(muteRegex))
+
+    try{
+      muteRegexPattern = new RegExp(muteRegex)
+      return statusText.match(muteRegexPattern) || statusSummary.match(muteRegexPattern)
+    }
+    catch(exception){
+      console.log("Exception: " + e )
+      return false;
+    }
   })
 
   return hits
