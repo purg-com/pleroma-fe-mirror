@@ -17,7 +17,7 @@ export const muteRegexHits = (status, muteRegexes) => {
     try {
       const muteRegexPattern = new RegExp(muteRegex)
       return statusText.match(muteRegexPattern) || statusSummary.match(muteRegexPattern)
-    } catch(exception){
+    } catch (exception) {
       console.log('Exception: ' + exception)
       return false
     }
