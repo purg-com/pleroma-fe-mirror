@@ -14,14 +14,12 @@ export const muteRegexHits = (status, muteRegexes) => {
   const statusText = status.text
   const statusSummary = status.summary
   const hits = filter(muteRegexes, (muteRegex) => {
-
-    try{
-      muteRegexPattern = new RegExp(muteRegex)
+    try {
+      const muteRegexPattern = new RegExp(muteRegex)
       return statusText.match(muteRegexPattern) || statusSummary.match(muteRegexPattern)
-    }
-    catch(exception){
-      console.log("Exception: " + exception )
-      return false;
+    } catch(exception){
+      console.log('Exception: ' + exception)
+      return false
     }
   })
 
