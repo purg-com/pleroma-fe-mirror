@@ -473,7 +473,7 @@
     "wordfilter": "Wordfilter",
     "filtering_explanation": "All statuses containing these words will be muted, one per line",
     "regexfilter": "Regular-expression Filter",
-    "filtering_regex_explanation": "All statuses containing these regular expression (RegEx, eg. [a-s]) will be muted, one per line. It may slow down the performance of the frontend.",
+    "filtering_regex_explanation": "All statuses containing these regular expression (RegEx, eg. <code>[a-s0-9]</code>) will be muted, one per line. It may slow down the performance of the frontend.",
     "word_filter_and_more": "Word filter and more...",
     "follow_export": "Follow export",
     "follow_export_button": "Export your follows to a csv file",
