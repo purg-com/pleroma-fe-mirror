@@ -11,9 +11,11 @@
       :showing-tall="showingTall"
       :expanding-subject="expandingSubject"
       :showing-long-subject="showingLongSubject"
+      :current-language="currentLanguage"
       :toggle-showing-tall="toggleShowingTall"
       :toggle-expanding-subject="toggleExpandingSubject"
       :toggle-showing-long-subject="toggleShowingLongSubject"
+      :set-current-language="setCurrentLanguage"
       @parseReady="$emit('parseReady', $event)"
     >
       <div v-if="status.poll && status.poll.options && !compact">

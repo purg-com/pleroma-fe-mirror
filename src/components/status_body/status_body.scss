@@ -4,6 +4,12 @@
   display: flex;
   flex-direction: column;
 
+  .language-selector {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+  }
+
   .emoji {
     --_still_image-label-scale: 0.5;
   }

@@ -5,13 +5,27 @@
   >
     <div class="body">
       <div
-        v-if="status.summary_raw_html"
+        v-if="languages"
+        class="language-selector"
+      >
+        <button
+          v-for="language in languages"
+          :key="language"
+          class="language-selector-item tab button-default"
+          :class="{ active: language === currentLanguageOrDefault }"
+          @click="setCurrentLanguage(language)"
+        >
+          {{ language }}
+        </button>
+      </div>
+      <div
+        v-if="summary"
         class="summary-wrapper"
         :class="{ '-tall': (longSubject && !showingLongSubject) }"
       >
         <RichContent
           class="media-body summary"
-          :html="status.summary_raw_html"
+          :html="summary"
           :emoji="status.emojis"
         />
         <button
@@ -42,10 +56,10 @@
           {{ $t("general.show_more") }}
         </button>
         <RichContent
-          v-if="!hideSubjectStatus && !(singleLine && status.summary_raw_html)"
+          v-if="!hideSubjectStatus && !(singleLine && summary)"
           :class="{ '-single-line': singleLine }"
           class="text media-body"
-          :html="status.raw_html"
+          :html="content"
           :emoji="status.emojis"
           :handle-links="true"
           :greentext="mergedConfig.greentext"
