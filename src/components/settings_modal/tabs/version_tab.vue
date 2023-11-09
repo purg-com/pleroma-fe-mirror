@@ -7,7 +7,7 @@
           <ul class="option-list">
             <li>
               <a
-                :href="backendVersionLink"
+                :href="backendRepository"
                 target="_blank"
               >{{ backendVersion }}</a>
             </li>

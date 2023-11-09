@@ -242,7 +242,7 @@ const resolveStaffAccounts = ({ store, accounts }) => {
 
 const getNodeInfo = async ({ store }) => {
   try {
-    const res = await preloadFetch('/nodeinfo/2.0.json')
+    const res = await preloadFetch('/nodeinfo/2.1.json')
     if (res.ok) {
       const data = await res.json()
       const metadata = data.metadata
@@ -277,6 +277,7 @@ const getNodeInfo = async ({ store }) => {
 
       const software = data.software
       store.dispatch('setInstanceOption', { name: 'backendVersion', value: software.version })
+      store.dispatch('setInstanceOption', { name: 'backendRepository', value: software.repository })
       store.dispatch('setInstanceOption', { name: 'pleromaBackend', value: software.name === 'pleroma' })
 
       const priv = metadata.private

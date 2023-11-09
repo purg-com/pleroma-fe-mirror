@@ -141,6 +141,7 @@ const defaultState = {
 
   // Version Information
   backendVersion: '',
+  backendRepository: '',
   frontendVersion: '',
 
   pollsAvailable: false,
