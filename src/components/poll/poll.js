@@ -1,7 +1,6 @@
 import Timeago from 'components/timeago/timeago.vue'
 import genRandomSeed from '../../services/random_seed/random_seed.service.js'
 import RichContent from 'components/rich_content/rich_content.jsx'
-import { forEach, map } from 'lodash'
 
 export default {
   name: 'Poll',
@@ -81,25 +80,17 @@ export default {
       this.$store.dispatch('refreshPoll', { id: this.statusId, pollId: this.poll.id })
     },
     activateOption (index) {
-      // forgive me father: doing checking the radio/checkboxes
-      // in code because of customized input elements need either
-      // a) an extra element for the actual graphic, or b) use a
-      // pseudo element for the label. We use b) which mandates
-      // using "for" and "id" matching which isn't nice when the
-      // same poll appears multiple times on the site (notifs and
-      // timeline for example). With code we can make sure it just
-      // works without altering the pseudo element implementation.
-      const allElements = this.$el.querySelectorAll('input')
-      const clickedElement = this.$el.querySelector(`input[value="${index}"]`)
       if (this.poll.multiple) {
-        // Checkboxes, toggle only the clicked one
-        clickedElement.checked = !clickedElement.checked
+        // Multiple choice: toggle the current index
+        const nextChoices = [...this.choices]
+        nextChoices[index] = !nextChoices[index]
+        this.choices = nextChoices
       } else {
         // Radio button, uncheck everything and check the clicked one
-        forEach(allElements, element => { element.checked = false })
-        clickedElement.checked = true
+        const nextChoices = new Array(this.choices.length).fill(false)
+        nextChoices[index] = true
+        this.choices = nextChoices
       }
-      this.choices = map(allElements, e => e.checked)
     },
     optionId (index) {
       return `poll${this.poll.id}-${index}`
