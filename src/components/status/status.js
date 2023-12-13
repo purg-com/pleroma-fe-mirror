@@ -18,7 +18,7 @@ import MentionsLine from 'src/components/mentions_line/mentions_line.vue'
 import MentionLink from 'src/components/mention_link/mention_link.vue'
 import generateProfileLink from 'src/services/user_profile_link_generator/user_profile_link_generator'
 import { highlightClass, highlightStyle } from '../../services/user_highlighter/user_highlighter.js'
-import { muteWordHits } from '../../services/status_parser/status_parser.js'
+import { muteWordHits, muteRegexHits } from '../../services/status_parser/status_parser.js'
 import { unescape, uniqBy } from 'lodash'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -171,6 +171,9 @@ const Status = {
     muteWords () {
       return this.mergedConfig.muteWords
     },
+    muteRegexes () {
+      return this.mergedConfig.muteRegexes
+    },
     showReasonMutedThread () {
       return (
         this.status.thread_muted ||
@@ -230,6 +233,9 @@ const Status = {
     },
     muteWordHits () {
       return muteWordHits(this.status, this.muteWords)
+    },
+    muteRegexHits () {
+      return muteRegexHits(this.status, this.muteRegexes)
     },
     rtBotStatus () {
       return this.statusoid.user.bot

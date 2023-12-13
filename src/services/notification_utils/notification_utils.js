@@ -1,5 +1,5 @@
 import { filter, sortBy, includes } from 'lodash'
-import { muteWordHits } from '../status_parser/status_parser.js'
+import { muteWordHits, muteRegexHits } from '../status_parser/status_parser.js'
 import { showDesktopNotification } from '../desktop_notification_utils/desktop_notification_utils.js'
 
 export const notificationsFromStore = store => store.state.statuses.notifications.data
@@ -49,7 +49,9 @@ const sortById = (a, b) => {
 
 const isMutedNotification = (store, notification) => {
   if (!notification.status) return
-  return notification.status.muted || muteWordHits(notification.status, store.rootGetters.mergedConfig.muteWords).length > 0
+  return notification.status.muted ||
+  muteWordHits(notification.status, store.rootGetters.mergedConfig.muteWords).length > 0 ||
+  muteRegexHits(notification.status, store.rootGetters.mergedConfig.muteRegexes).length > 0
 }
 
 export const maybeShowNotification = (store, notification) => {

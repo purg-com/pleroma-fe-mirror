@@ -9,6 +9,7 @@ const FilteringTab = {
   data () {
     return {
       muteWordsStringLocal: this.$store.getters.mergedConfig.muteWords.join('\n'),
+      muteRegexesStringLocal: this.$store.getters.mergedConfig.muteRegexes.join('\n'),
       replyVisibilityOptions: ['all', 'following', 'self'].map(mode => ({
         key: mode,
         value: mode,
@@ -36,6 +37,23 @@ const FilteringTab = {
       return debounce((value) => {
         this.$store.dispatch('setOption', {
           name: 'muteWords',
+          value: filter(value.split('\n'), (word) => trim(word).length > 0)
+        })
+      }, 1000)
+    },
+    muteRegexesString: {
+      get () {
+        return this.muteRegexesStringLocal
+      },
+      set (value) {
+        this.muteRegexesStringLocal = value
+        this.debouncedSetRegexes(value)
+      }
+    },
+    debouncedSetRegexes () {
+      return debounce((value) => {
+        this.$store.dispatch('setOption', {
+          name: 'muteRegexes',
           value: filter(value.split('\n'), (word) => trim(word).length > 0)
         })
       }, 1000)

@@ -27,14 +27,16 @@
 
     & .status-username,
     & .mute-thread,
-    & .mute-words {
+    & .mute-words,
+    & .mute-regexes {
       word-wrap: normal;
       word-break: normal;
       white-space: nowrap;
     }
 
     & .status-username,
-    & .mute-words {
+    & .mute-words,
+    & .mute-regexes {
       text-overflow: ellipsis;
       overflow: hidden;
     }
@@ -50,7 +52,8 @@
       flex: 0 0 auto;
     }
 
-    .mute-words {
+    & .mute-words,
+    & .mute-regexes {
       flex: 1 0 5em;
       margin-left: 0.2em;
 

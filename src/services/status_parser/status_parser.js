@@ -9,3 +9,19 @@ export const muteWordHits = (status, muteWords) => {
 
   return hits
 }
+
+export const muteRegexHits = (status, muteRegexes) => {
+  const statusText = status.text
+  const statusSummary = status.summary
+  const hits = filter(muteRegexes, (muteRegex) => {
+    try {
+      const muteRegexPattern = new RegExp(muteRegex, 'i')
+      return statusText.match(muteRegexPattern) || statusSummary.match(muteRegexPattern)
+    } catch (exception) {
+      console.log('Exception: ' + exception)
+      return false
+    }
+  })
+
+  return hits
+}

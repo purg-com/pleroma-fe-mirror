@@ -71,6 +71,15 @@
           />
           <div>{{ $t('settings.filtering_explanation') }}</div>
         </li>
+        <li>
+          <h3>{{ $t('settings.regexfilter') }}</h3>
+          <textarea
+            id="muteRegexes"
+            v-model="muteRegexesString"
+            class="resize-height"
+          />
+          <div>{{ $t('settings.filtering_regex_explanation') }}</div>
+        </li>
         <h3>{{ $t('settings.attachments') }}</h3>
         <li>
           <IntegerSetting
