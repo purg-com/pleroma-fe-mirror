@@ -3,6 +3,7 @@ import TabSwitcher from 'src/components/tab_switcher/tab_switcher.jsx'
 import InstanceTab from './admin_tabs/instance_tab.vue'
 import LimitsTab from './admin_tabs/limits_tab.vue'
 import FrontendsTab from './admin_tabs/frontends_tab.vue'
+import EmojiTab from './admin_tabs/emoji_tab.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -33,7 +34,8 @@ const SettingsModalAdminContent = {
 
     InstanceTab,
     LimitsTab,
-    FrontendsTab
+    FrontendsTab,
+    EmojiTab
   },
   computed: {
     user () {

@@ -877,7 +877,8 @@
       "nodb": "No DB Config",
       "instance": "Instance",
       "limits": "Limits",
-      "frontends": "Front-ends"
+      "frontends": "Front-ends",
+      "emoji": "Emoji"
     },
     "nodb": {
       "heading": "Database config is disabled",
@@ -930,6 +931,10 @@
       "available_frontends": "Available for install",
       "failure_installing_frontend": "Failed to install frontend {version}: {reason}",
       "success_installing_frontend": "Frontend {version} successfully installed"
+    },
+    "emoji": {
+      "reload": "Reload emoji",
+      "importFS": "Import emoji from filesystem"
     },
     "temp_overrides": {
       ":pleroma": {
