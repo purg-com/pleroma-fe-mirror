@@ -55,9 +55,13 @@ const FrontendsTab = {
       return fe.refs.includes(frontend.ref)
     },
     getSuggestedRef (frontend) {
-      const defaultFe = this.adminDraft[':pleroma'][':frontends'][':primary']
-      if (defaultFe?.name === frontend.name && this.canInstall(defaultFe)) {
-        return defaultFe.ref
+      if (this.adminDraft) {
+        const defaultFe = this.adminDraft[':pleroma'][':frontends'][':primary']
+        if (defaultFe?.name === frontend.name && this.canInstall(defaultFe)) {
+          return defaultFe.ref
+        } else {
+          return frontend.refs[0]
+        }
       } else {
         return frontend.refs[0]
       }

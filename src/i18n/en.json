@@ -928,6 +928,7 @@
       "wip_notice": "Please note that this section is a WIP and lacks certain features as backend implementation of front-end management is incomplete.",
       "default_frontend": "Default front-end",
       "default_frontend_tip": "Default front-end will be shown to all users. Currently there's no way to for a user to select personal front-end. If you switch away from PleromaFE you'll most likely have to use old and buggy AdminFE to do instance configuration until we replace it.",
+      "default_frontend_unavail": "Default frontend settings are not available, as this requires configuration in the database",
       "available_frontends": "Available for install",
       "failure_installing_frontend": "Failed to install frontend {version}: {reason}",
       "success_installing_frontend": "Frontend {version} successfully installed"
