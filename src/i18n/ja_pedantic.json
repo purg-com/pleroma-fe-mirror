@@ -175,7 +175,8 @@
     "custom": "カスタム絵文字",
     "unicode": "Unicode絵文字",
     "load_all": "全 {emojiAmount} 絵文字を読み込む",
-    "load_all_hint": "最初の {saneAmount} 件の絵文字を読み込みました。すべて読み込むとパフォーマンスに影響を与える可能性があります。"
+    "load_all_hint": "最初の {saneAmount} 件の絵文字を読み込みました。すべて読み込むとパフォーマンスに影響を与える可能性があります。",
+    "unpacked": "パック外の絵文字"
   },
   "stickers": {
     "add_sticker": "ステッカーを追加"
@@ -766,7 +767,9 @@
     "list_backups_error": "バックアップ一覧の取得に失敗しました: {error}",
     "added_backup": "バックアップがキューに追加されました。",
     "add_backup_error": "バックアップの追加に失敗しました: {error}",
-    "user_popover_avatar_action_close": "ユーザーカードを閉じる"
+    "user_popover_avatar_action_close": "ユーザーカードを閉じる",
+    "tree_advanced": "高度なナビゲーションボタンを表示する",
+    "tree_fade_ancestors": "スレッド上で祖先にあたるステータスを薄いテキストで表示する"
   },
   "time": {
     "day": "{0}日",
@@ -897,7 +900,13 @@
     "replies_list_with_others": "返信 (+{numReplies}人): | 返信 (+{numReplies}人):",
     "more_actions": "その他のアクション",
     "thread_show_full": "このスレッドをすべて表示 (全部で{depth}層、{numStatus}件の投稿があります) | このスレッドを全て表示 (全部で{depth}層、{numStatus}件の投稿があります)",
-    "thread_show_full_with_icon": "{icon} {text}"
+    "thread_show_full_with_icon": "{icon} {text}",
+    "show_attachment_in_modal": "メディアビューアで開く",
+    "show_attachment_description": "メディアの説明文をポップアップで表示 (全文を読むにはメディアを開いてください)",
+    "thread_hide": "このスレッドをたたむ",
+    "thread_show": "このスレッドを開く",
+    "open_gallery": "メディアビューアで開く",
+    "status_history": "編集履歴"
   },
   "user_card": {
     "approve": "承認",
@@ -937,7 +946,7 @@
       "grant_moderator": "モデレーター権限を付与",
       "revoke_moderator": "モデレーター権限を解除",
       "activate_account": "アカウントをアクティブにする",
-      "deactivate_account": "アカウントをアクティブでなくする",
+      "deactivate_account": "アカウントを無効化する",
       "delete_account": "アカウントを削除",
       "force_nsfw": "すべての投稿を閲覧注意にする",
       "strip_media": "すべての投稿からメディアを除去する",
@@ -996,7 +1005,8 @@
     "unfollow_confirm": "本当に{user}のフォローを解除しますか？",
     "unfollow_confirm_accept_button": "解除する",
     "remove_follower_confirm_accept_button": "解除する",
-    "mute_confirm_title": "ミュートの確認"
+    "mute_confirm_title": "ミュートの確認",
+    "deactivated": "無効化済み"
   },
   "user_profile": {
     "timeline_title": "ユーザータイムライン",
@@ -1048,7 +1058,8 @@
     "person_talking": "{count} 人が話しています",
     "people_talking": "{count} 人が話しています",
     "no_results": "見つかりませんでした",
-    "load_more": "さらに読み込む"
+    "load_more": "さらに読み込む",
+    "no_more_results": "結果は以上です"
   },
   "password_reset": {
     "forgot_password": "パスワードを忘れましたか？",
@@ -1234,7 +1245,7 @@
     "following_only": "フォローしているユーザーのみ表示",
     "manage_lists": "リストの管理",
     "manage_members": "メンバーの管理",
-    "add_members": "ユーザーの追加",
+    "add_members": "メンバーの追加",
     "remove_from_list": "リストから削除",
     "add_to_list": "リストに追加",
     "is_in_list": "追加済み"
@@ -1277,6 +1288,7 @@
     "end_time_display": "{time}に終了",
     "edit_action": "編集",
     "start_time_prompt": "開始日時: ",
-    "end_time_prompt": "終了日時: "
+    "end_time_prompt": "終了日時: ",
+    "all_day_prompt": "終日"
   }
 }
