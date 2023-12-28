@@ -79,7 +79,7 @@
         <UserAvatar
           v-if="retweet"
           class="left-side repeater-avatar"
-          :bot="rtBotIndicator"
+          :show-actor-type-indicator="showActorTypeIndicator"
           :better-shadow="betterShadow"
           :user="statusoid.user"
         />
@@ -133,7 +133,7 @@
             >
               <UserAvatar
                 class="post-avatar"
-                :bot="botIndicator"
+                :show-actor-type-indicator="showActorTypeIndicator"
                 :compact="compact"
                 :better-shadow="betterShadow"
                 :user="status.user"
@@ -559,7 +559,7 @@
           <UserAvatar
             class="post-avatar"
             :compact="compact"
-            :bot="botIndicator"
+            :show-actor-type-indicator="showActorTypeIndicator"
           />
         </div>
         <div class="right-side">

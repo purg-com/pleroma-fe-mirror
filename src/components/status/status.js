@@ -232,17 +232,11 @@ const Status = {
     muteWordHits () {
       return muteWordHits(this.status, this.muteWords)
     },
-    rtBotStatus () {
-      return this.statusoid.user.bot
-    },
     botStatus () {
       return this.status.user.bot
     },
-    botIndicator () {
-      return this.botStatus && !this.hideBotIndication
-    },
-    rtBotIndicator () {
-      return this.rtBotStatus && !this.hideBotIndication
+    showActorTypeIndicator () {
+      return !this.hideBotIndication
     },
     mentionsLine () {
       if (!this.headTailLinks) return []
