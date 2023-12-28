@@ -109,9 +109,18 @@
         </button>
       </div>
       <p>
-        <Checkbox v-model="bot">
-          {{ $t('settings.bot') }}
-        </Checkbox>
+        <label>
+          {{ $t('settings.actor_type') }}
+          <Select v-model="actorType">
+            <option
+              v-for="option in availableActorTypes"
+              :key="option"
+              :value="option"
+            >
+              {{ $t('settings.actor_type_' + option) }}
+            </option>
+          </Select>
+        </label>
       </p>
       <p>
         <interface-language-switcher

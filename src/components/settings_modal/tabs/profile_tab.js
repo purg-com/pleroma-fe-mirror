@@ -9,6 +9,7 @@ import suggestor from 'src/components/emoji_input/suggestor.js'
 import Autosuggest from 'src/components/autosuggest/autosuggest.vue'
 import Checkbox from 'src/components/checkbox/checkbox.vue'
 import InterfaceLanguageSwitcher from 'src/components/interface_language_switcher/interface_language_switcher.vue'
+import Select from 'src/components/select/select.vue'
 import BooleanSetting from '../helpers/boolean_setting.vue'
 import SharedComputedObject from '../helpers/shared_computed_object.js'
 import localeService from 'src/services/locale/locale.service.js'
@@ -39,6 +40,7 @@ const ProfileTab = {
       showRole: this.$store.state.users.currentUser.show_role,
       role: this.$store.state.users.currentUser.role,
       bot: this.$store.state.users.currentUser.bot,
+      actorType: this.$store.state.users.currentUser.actor_type,
       pickAvatarBtnVisible: true,
       bannerUploading: false,
       backgroundUploading: false,
@@ -57,7 +59,8 @@ const ProfileTab = {
     ProgressButton,
     Checkbox,
     BooleanSetting,
-    InterfaceLanguageSwitcher
+    InterfaceLanguageSwitcher,
+    Select
   },
   computed: {
     user () {
@@ -116,6 +119,9 @@ const ProfileTab = {
     bannerImgSrc () {
       const src = this.$store.state.users.currentUser.cover_photo
       return (!src) ? this.defaultBanner : src
+    },
+    availableActorTypes () {
+      return this.$store.state.instance.groupActorAvailable ? ['Person', 'Service', 'Group'] : ['Person', 'Service']
     }
   },
   methods: {
@@ -127,7 +133,7 @@ const ProfileTab = {
         /* eslint-disable camelcase */
         display_name: this.newName,
         fields_attributes: this.newFields.filter(el => el != null),
-        bot: this.bot,
+        actor_type: this.actorType,
         show_role: this.showRole,
         birthday: this.newBirthday || '',
         show_birthday: this.showBirthday

@@ -165,6 +165,7 @@ export const parseUser = (data) => {
         output.show_role = data.source.pleroma.show_role
         output.discoverable = data.source.pleroma.discoverable
         output.show_birthday = data.pleroma.show_birthday
+        output.actor_type = data.source.pleroma.actor_type
       }
     }
 
