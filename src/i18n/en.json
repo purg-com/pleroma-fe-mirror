@@ -360,6 +360,7 @@
     "primary_language": "Primary language:",
     "fallback_language": "Fallback language {index}:",
     "actor_type": "This account is:",
+    "actor_type_description": "Marking your account as a group will make it automatically repeat statuses that mention it.",
     "actor_type_Person": "a normal user",
     "actor_type_Service": "a bot",
     "actor_type_Group": "a group",

@@ -122,6 +122,11 @@
           </Select>
         </label>
       </p>
+      <div v-if="groupActorAvailable">
+        <small>
+          {{ $t('settings.actor_type_description') }}
+        </small>
+      </div>
       <p>
         <interface-language-switcher
           :prompt-text="$t('settings.email_language')"

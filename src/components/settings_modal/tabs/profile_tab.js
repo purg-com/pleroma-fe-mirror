@@ -120,8 +120,11 @@ const ProfileTab = {
       const src = this.$store.state.users.currentUser.cover_photo
       return (!src) ? this.defaultBanner : src
     },
+    groupActorAvailable () {
+      return this.$store.state.instance.groupActorAvailable
+    },
     availableActorTypes () {
-      return this.$store.state.instance.groupActorAvailable ? ['Person', 'Service', 'Group'] : ['Person', 'Service']
+      return this.groupActorAvailable ? ['Person', 'Service', 'Group'] : ['Person', 'Service']
     }
   },
   methods: {
