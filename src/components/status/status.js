@@ -233,7 +233,7 @@ const Status = {
       return muteWordHits(this.status, this.muteWords)
     },
     botStatus () {
-      return this.status.user.bot
+      return this.status.user.actor_type === 'Service'
     },
     showActorTypeIndicator () {
       return !this.hideBotIndication
