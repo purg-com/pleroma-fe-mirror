@@ -1131,6 +1131,7 @@
     "hide_repeats": "Hide repeats",
     "show_repeats": "Show repeats",
     "bot": "Bot",
+    "group": "Group",
     "birthday": "Born {birthday}",
     "admin_menu": {
       "moderation": "Moderation",
