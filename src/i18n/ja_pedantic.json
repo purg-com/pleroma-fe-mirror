@@ -60,7 +60,8 @@
       "unlisted": "アンリステッド"
     },
     "generic_error_message": "エラーが発生しました: {0}",
-    "never_show_again": "二度と表示しない"
+    "never_show_again": "二度と表示しない",
+    "undo": "取り消す"
   },
   "image_cropper": {
     "crop_picture": "画像を切り抜く",
