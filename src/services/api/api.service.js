@@ -108,6 +108,7 @@ const PLEROMA_POST_ANNOUNCEMENT_URL = '/api/v1/pleroma/admin/announcements'
 const PLEROMA_EDIT_ANNOUNCEMENT_URL = id => `/api/v1/pleroma/admin/announcements/${id}`
 const PLEROMA_DELETE_ANNOUNCEMENT_URL = id => `/api/v1/pleroma/admin/announcements/${id}`
 const PLEROMA_SCROBBLES_URL = id => `/api/v1/pleroma/accounts/${id}/scrobbles`
+const PLEROMA_STATUS_QUOTES_URL = id => `/api/v1/pleroma/statuses/${id}/quotes`
 
 const PLEROMA_ADMIN_CONFIG_URL = '/api/pleroma/admin/config'
 const PLEROMA_ADMIN_DESCRIPTIONS_URL = '/api/pleroma/admin/config/descriptions'
@@ -675,6 +676,7 @@ const fetchTimeline = ({
   until = false,
   userId = false,
   listId = false,
+  statusId = false,
   tag = false,
   withMuted = false,
   replyVisibility = 'all',
@@ -691,7 +693,8 @@ const fetchTimeline = ({
     list: MASTODON_LIST_TIMELINE_URL,
     favorites: MASTODON_USER_FAVORITES_TIMELINE_URL,
     tag: MASTODON_TAG_TIMELINE_URL,
-    bookmarks: MASTODON_BOOKMARK_TIMELINE_URL
+    bookmarks: MASTODON_BOOKMARK_TIMELINE_URL,
+    quotes: PLEROMA_STATUS_QUOTES_URL
   }
   const isNotifications = timeline === 'notifications'
   const params = []
@@ -704,6 +707,10 @@ const fetchTimeline = ({
 
   if (timeline === 'list') {
     url = url(listId)
+  }
+
+  if (timeline === 'quotes') {
+    url = url(statusId)
   }
 
   if (minId) {
