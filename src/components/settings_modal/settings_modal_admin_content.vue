@@ -63,7 +63,7 @@
 
     <div
       :label="$t('admin_dash.tabs.emoji')"
-      icon="laptop-code"
+      icon="face-smile-beam"
       data-tab-name="emoji"
     >
       <EmojiTab />

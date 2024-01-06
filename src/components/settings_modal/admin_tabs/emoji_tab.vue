@@ -6,84 +6,166 @@
     <div class="setting-item">
       <h2>{{ $t('admin_dash.tabs.emoji') }}</h2>
 
-      <span class="btn-group">
-        <button
-          class="button button-default btn"
-          type="button"
-          @click="reloadEmoji">
-          {{ $t('admin_dash.emoji.reload') }}
-        </button>
-        <button
-          class="button button-default btn"
-          type="button"
-          @click="importFromFS">
-          {{ $t('admin_dash.emoji.importFS') }}
-        </button>
-      </span>
+      <ul class="setting-list">
+        <li class="btn-group setting-item">
+          <button
+            class="button button-default btn"
+            type="button"
+            @click="reloadEmoji">
+            {{ $t('admin_dash.emoji.reload') }}
+          </button>
+          <button
+            class="button button-default btn"
+            type="button"
+            @click="importFromFS">
+            {{ $t('admin_dash.emoji.importFS') }}
+          </button>
+        </li>
 
-      <tab-switcher :scrollable-tabs="true" v-if="Object.keys(knownPacks).length > 0">
-        <div v-for="(pack, packName) in knownPacks" :label="packName" :key="packName">
-          <div class="pack-info-wrapper">
-            <ul class="setting-list">
-              <li>
-                <div>Description</div>
-                <textarea
-                  v-model="pack.pack.description"
-                  class="bio resize-height" />
-              </li>
-              <li>
-                <div>Homepage</div>
-                <input class="emoji-info-input" v-model="pack.pack.homepage">
-              </li>
-              <li>
-                <div>Fallback source</div>
-                <input class="emoji-info-input" v-model="pack.pack['fallback-src']">
-              </li>
-              <li>
-                <Checkbox v-model="pack.pack['can-download']">Downloadable</Checkbox>
-              </li>
-            </ul>
-          </div>
+        <li class="setting-item btn-group">
+          <button
+            class="button button-default btn"
+            type="button"
+            @click="$refs.createPackPopover.showPopover">
+            Create pack
+          </button>
+          <Popover
+            ref="createPackPopover"
+            trigger="click"
+            placement="bottom"
+            bound-to-selector=".emoji-tab"
+            :bound-to="{ x: 'container' }"
+            :offset="{ y: 5 }"
+          >
+            <template #content>
+              <input v-model="newPackName" placeholder="New pack name">
+              <button
+                class="button button-default btn emoji-tab-popover-button"
+                type="button"
+                @click="createEmojiPack">
+                Create
+              </button>
+            </template>
+          </Popover>
 
-          <h2>Files</h2>
+          <button
+            class="button button-default btn"
+            :disabled="packName == ''"
+            type="button"
+            @click="deleteModalVisible = true">
+            Delete pack
+          </button>
+          <ConfirmModal
+            v-if="deleteModalVisible"
+            title="Delete?"
+            :cancel-text="$t('status.delete_confirm_cancel_button')"
+            :confirm-text="$t('status.delete_confirm_accept_button')"
+            @cancelled="deleteModalVisible = false"
+            @accepted="deleteEmojiPack" >
+            Are you sure you want to delete {{ packName }}?
+          </ConfirmModal>
+        </li>
 
+        <li>
+          <Select class="form-control" v-model="packName">
+            <option value="" disabled hidden>Emoji pack</option>
+            <option v-for="(pack, listPackName) in knownPacks" :label="listPackName" :key="listPackName">
+              {{ listPackName }}
+            </option>
+          </Select>
+        </li>
+      </ul>
+
+      <div v-if="packName !== ''">
+        <div class="pack-info-wrapper">
           <ul class="setting-list">
-            <li v-for="(file, shortcode) in pack.files" :key="shortcode">
-              <StillImage
-                class="emoji img"
-                :src="emojiAddr(packName, file)"
-                :title="`:${shortcode}:`"
-                :alt="`:${shortcode}:`"
-              />
+            <li>
+              <div>
+                Description
+                <ModifiedIndicator :changed="metaEdited('description')" />
+              </div>
+              <textarea
+                v-model="packMeta.description"
+                class="bio resize-height" />
+            </li>
+            <li>
+              <div>
+                Homepage
+                <ModifiedIndicator :changed="metaEdited('homepage')" />
+              </div>
+              <input class="emoji-info-input" v-model="packMeta.homepage">
+            </li>
+            <li>
+              <div>
+                Fallback source
+                <ModifiedIndicator :changed="metaEdited('fallback-src')" />
+              </div>
+              <input class="emoji-info-input" v-model="packMeta['fallback-src']">
+            </li>
+            <li>
+              <div>Fallback SHA256</div>
+              <input :disabled="true" class="emoji-info-input" v-model="packMeta['fallback-src-sha256']">
+            </li>
+            <li>
+              <Checkbox v-model="packMeta['share-files']">Share</Checkbox>
 
-              <template v-if="editedParts[packName] !== undefined && editedParts[packName][shortcode] !== undefined">
+              <ModifiedIndicator :changed="metaEdited('share-files')" />
+            </li>
+            <li>
+              <button
+                class="button button-default btn"
+                type="button"
+                @click="savePackMetadata">
+                Save
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <h2>Files</h2>
+
+        <div class="emoji-list" v-if="pack">
+          <Popover
+            v-for="(file, shortcode) in pack.files" :key="shortcode"
+            trigger="click"
+            placement="top"
+            :class="{'emoji-unsaved': editedParts[packName] !== undefined && editedParts[packName][shortcode] !== undefined}"
+            popover-class="emoji-tab-edit-popover popover-default"
+            bound-to-selector=".emoji-list"
+            :bound-to="{ x: 'container' }"
+            :offset="{ y: 5 }"
+            @show="editEmoji(shortcode)"
+          >
+            <template #content>
+              <h3>
+                Editing <i>{{ shortcode }}</i>
+              </h3>
+              <div v-if="editedParts[packName] !== undefined && editedParts[packName][shortcode] !== undefined">
                 <input class="emoji-data-input"
                   v-model="editedParts[packName][shortcode].shortcode">
                 <input class="emoji-data-input"
                   v-model="editedParts[packName][shortcode].file">
 
                 <button
-                  class="button button-default btn"
+                  class="button button-default btn emoji-tab-popover-button"
                   type="button"
-                  @click="saveEditedEmoji(packName, shortcode)">
+                  @click="saveEditedEmoji(shortcode)">
                   Save
                 </button>
-              </template>
-              <template v-else>
-                <input disabled class="emoji-data-input" :value="shortcode">
-                <input disabled class="emoji-data-input" :value="file">
 
-                <button
-                  class="button button-default btn"
-                  type="button"
-                  @click="editEmoji(packName, shortcode)">
-                  Edit
-                </button>
-              </template>
-            </li>
-          </ul>
+              </div>
+            </template>
+            <template #trigger>
+              <StillImage
+                class="emoji"
+                :src="emojiAddr(file)"
+                :title="`:${shortcode}:`"
+                :alt="`:${shortcode}:`"
+              />
+            </template>
+          </Popover>
         </div>
-      </tab-switcher>
+      </div>
     </div>
   </div>
 </template>

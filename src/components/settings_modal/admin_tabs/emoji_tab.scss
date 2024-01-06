@@ -1,3 +1,5 @@
+@import "src/variables";
+
 .emoji-tab {
   .btn-group .btn {
     margin-left: 0.5em;
@@ -21,4 +23,24 @@
     width: 32px;
     height: 32px;
   }
+
+  .emoji-unsaved {
+    box-shadow: 2px 3px 5px var(--cBlue, $fallback--cBlue);
+  }
+
+  .emoji-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em 1em;
+  }
+}
+
+.emoji-tab-edit-popover {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+.emoji-tab-popover-button {
+  margin-left: 0.5em;
 }

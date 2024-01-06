@@ -116,12 +116,12 @@ const PLEROMA_ADMIN_FRONTENDS_INSTALL_URL = '/api/pleroma/admin/frontends/instal
 
 const PLEROMA_EMOJI_RELOAD_URL = '/api/pleroma/admin/reload_emoji'
 const PLEROMA_EMOJI_IMPORT_FS_URL = '/api/pleroma/emoji/packs/import'
-const PLEROMA_EMOJI_PACKS_URL = (page, pageSize) => `/api/pleroma/emoji/packs?page=${page}&page_size=${pageSize}`
-const PLEROMA_EMOJI_PACK_URL = (name) => `/api/pleroma/emoji/pack?name=${name}`
-const PLEROMA_EMOJI_PACKS_DL_REMOTE_URL = '/api/pleroma/emoji/packs/download'
+const PLEROMA_EMOJI_PACKS_URL = (page, pageSize) => `/api/v1/pleroma/emoji/packs?page=${page}&page_size=${pageSize}`
+const PLEROMA_EMOJI_PACK_URL = (name) => `/api/v1/pleroma/emoji/pack?name=${name}`
+const PLEROMA_EMOJI_PACKS_DL_REMOTE_URL = '/api/v1/pleroma/emoji/packs/download'
 const PLEROMA_EMOJI_PACKS_LS_REMOTE_URL =
-  (url, page, pageSize) => `/api/pleroma/emoji/packs/remote?url=${url}&page=${page}&page_size=${pageSize}`
-const PLEROMA_EMOJI_UPDATE_FILE_URL = (name) => `/api/pleroma/emoji/packs/files?name=${name}`
+  (url, page, pageSize) => `/api/v1/pleroma/emoji/packs/remote?url=${url}&page=${page}&page_size=${pageSize}`
+const PLEROMA_EMOJI_UPDATE_FILE_URL = (name) => `/api/v1/pleroma/emoji/packs/files?name=${name}`
 
 const oldfetch = window.fetch
 
@@ -1809,7 +1809,7 @@ const importEmojiFromFS = () => {
 }
 
 const createEmojiPack = ({ name }) => {
-  return fetch(PLEROMA_EMOJI_PACK_URL(name), { method: 'PUT' })
+  return fetch(PLEROMA_EMOJI_PACK_URL(name), { method: 'POST' })
 }
 
 const listEmojiPacks = () => {
@@ -1850,7 +1850,7 @@ const saveEmojiPackMetadata = ({ name, newData }) => {
     {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, new_data: newData })
+      body: JSON.stringify({ metadata: newData })
     }
   )
 }
