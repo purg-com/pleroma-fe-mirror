@@ -1817,28 +1817,26 @@ const listEmojiPacks = () => {
 }
 
 const listRemoteEmojiPacks = ({ instance }) => {
+  if (!instance.startsWith('http')) {
+    instance = 'https://' + instance
+  }
+
   return fetch(
-    PLEROMA_EMOJI_PACKS_LS_REMOTE_URL,
+    PLEROMA_EMOJI_PACKS_LS_REMOTE_URL(instance, 1, 25),
     {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ instance_address: instance })
+      headers: { 'Content-Type': 'application/json' }
     }
   )
 }
 
 const downloadRemoteEmojiPack = ({ instance, packName, as }) => {
-  if (as.trim() === '') {
-    as = null
-  }
-
   return fetch(
     PLEROMA_EMOJI_PACKS_DL_REMOTE_URL,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        instance_address: instance, pack_name: packName, as
+        url: instance, name: packName, as
       })
     }
   )
