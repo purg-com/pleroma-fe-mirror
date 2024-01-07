@@ -22,7 +22,7 @@
           </button>
         </li>
 
-        <li class="setting-item btn-group">
+        <li class="btn-group setting-item">
           <button
             class="button button-default btn"
             type="button"
@@ -62,7 +62,7 @@
             :confirm-text="$t('status.delete_confirm_accept_button')"
             @cancelled="deleteModalVisible = false"
             @accepted="deleteEmojiPack" >
-            Are you sure you want to delete {{ packName }}?
+            Are you sure you want to delete <i>{{ packName }}</i>?
           </ConfirmModal>
         </li>
 
@@ -111,12 +111,57 @@
 
               <ModifiedIndicator :changed="metaEdited('share-files')" />
             </li>
-            <li>
+            <li class="btn-group">
               <button
                 class="button button-default btn"
                 type="button"
                 @click="savePackMetadata">
                 Save
+              </button>
+
+              <Popover
+                ref="addEmojiPopover"
+                trigger="click"
+                placement="bottom"
+                bound-to-selector=".emoji-tab"
+                popover-class="emoji-tab-edit-popover popover-default"
+                :bound-to="{ x: 'container' }"
+                :offset="{ y: 5 }"
+              >
+                <template #content>
+                  <h3>Adding new emoji</h3>
+                  <div>
+                    <input
+                      type="file"
+                      class="emoji-tab-popover-input emoji-tab-popover-file"
+                      @change="newEmojiUpload.upload = $event.target.files"
+                    >
+                  </div>
+                  <div>
+                    <div>
+                      <input class="emoji-data-input emoji-tab-popover-input"
+                        v-model="newEmojiUpload.shortcode"
+                        placeholder="Shortcode, leave blank to infer">
+                      <input class="emoji-data-input emoji-tab-popover-input"
+                        v-model="newEmojiUpload.file"
+                        placeholder="Filename, leave blank infer">
+
+                      <button
+                        class="button button-default btn emoji-tab-popover-button"
+                        type="button"
+                        :disabled="this.newEmojiUpload.upload.length == 0"
+                        @click="uploadEmoji">
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                </template>
+              </Popover>
+              <button
+                class="button button-default btn"
+                type="button"
+                @click="$refs.addEmojiPopover.showPopover">
+                Add file
               </button>
             </li>
           </ul>
@@ -152,7 +197,21 @@
                   @click="saveEditedEmoji(shortcode)">
                   Save
                 </button>
-
+                <button
+                  class="button button-default btn emoji-tab-popover-button"
+                  type="button"
+                  @click="editedParts[packName][shortcode].deleteModalVisible = true">
+                  Delete
+                </button>
+                <ConfirmModal
+                  v-if="editedParts[packName][shortcode].deleteModalVisible"
+                  title="Delete?"
+                  :cancel-text="$t('status.delete_confirm_cancel_button')"
+                  :confirm-text="$t('status.delete_confirm_accept_button')"
+                  @cancelled="editedParts[packName][shortcode].deleteModalVisible = false"
+                  @accepted="deleteEmoji(shortcode)" >
+                  Are you sure you want to delete <i>{{ shortcode }}</i>?
+                </ConfirmModal>
               </div>
             </template>
             <template #trigger>

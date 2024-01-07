@@ -1863,7 +1863,7 @@ const addNewEmojiFile = ({ packName, file, shortcode, filename }) => {
 
   return fetch(
     PLEROMA_EMOJI_UPDATE_FILE_URL(packName),
-    { method: 'POST', data }
+    { method: 'POST', body: data }
   )
 }
 

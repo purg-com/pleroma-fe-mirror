@@ -25,7 +25,7 @@
   }
 
   .emoji-unsaved {
-    box-shadow: 2px 3px 5px var(--cBlue, $fallback--cBlue);
+    box-shadow: 0 3px 5px var(--cBlue, $fallback--cBlue);
   }
 
   .emoji-list {
@@ -43,4 +43,13 @@
 
 .emoji-tab-popover-button {
   margin-left: 0.5em;
+}
+
+.emoji-tab-popover-input {
+  width: 20em;
+  margin-bottom: 0.5em;
+
+  &:not(:first-child) {
+    margin-left: 0.5em;
+  }
 }
