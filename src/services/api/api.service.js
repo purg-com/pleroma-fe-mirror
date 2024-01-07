@@ -1812,17 +1812,17 @@ const createEmojiPack = ({ name }) => {
   return fetch(PLEROMA_EMOJI_PACK_URL(name), { method: 'POST' })
 }
 
-const listEmojiPacks = () => {
-  return fetch(PLEROMA_EMOJI_PACKS_URL(1, 25))
+const listEmojiPacks = ({ page, pageSize }) => {
+  return fetch(PLEROMA_EMOJI_PACKS_URL(page, pageSize))
 }
 
-const listRemoteEmojiPacks = ({ instance }) => {
+const listRemoteEmojiPacks = ({ instance, page, pageSize }) => {
   if (!instance.startsWith('http')) {
     instance = 'https://' + instance
   }
 
   return fetch(
-    PLEROMA_EMOJI_PACKS_LS_REMOTE_URL(instance, 1, 25),
+    PLEROMA_EMOJI_PACKS_LS_REMOTE_URL(instance, page, pageSize),
     {
       headers: { 'Content-Type': 'application/json' }
     }

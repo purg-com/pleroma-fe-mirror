@@ -195,7 +195,7 @@
                   :confirm-text="$t('status.delete_confirm_accept_button')"
                   @cancelled="deleteModalVisible = false"
                   @accepted="deleteEmojiPack" >
-                  {{ $t('admin_dash.emoji.delete_confirm', packName) }}
+                  {{ $t('admin_dash.emoji.delete_confirm', [packName]) }}
                 </ConfirmModal>
               </button>
 
@@ -282,7 +282,7 @@
                   :confirm-text="$t('status.delete_confirm_accept_button')"
                   @cancelled="editedParts[packName][shortcode].deleteModalVisible = false"
                   @accepted="deleteEmoji(shortcode)" >
-                  {{ $t('admin_dash.emoji.delete_confirm', shortcode) }}
+                  {{ $t('admin_dash.emoji.delete_confirm', [shortcode]) }}
                 </ConfirmModal>
               </div>
             </template>

@@ -1,4 +1,4 @@
-import { clone } from 'lodash'
+import { clone, assign } from 'lodash'
 import TabSwitcher from 'src/components/tab_switcher/tab_switcher.jsx'
 import StringSetting from '../helpers/string_setting.vue'
 import Checkbox from 'components/checkbox/checkbox.vue'
@@ -203,45 +203,67 @@ const EmojiTab = {
         this.sortPackFiles(this.packName)
       })
     },
-    refreshPackList () {
-      return this.$store.state.api.backendInteractor.listEmojiPacks()
+
+    loadPacksPaginated (listFunction) {
+      const pageSize = 25
+      const allPacks = {}
+
+      return listFunction({ instance: this.remotePackInstance, page: 1, pageSize: 0 })
         .then(data => data.json())
-        .then(packData => {
-          if (packData.error !== undefined) {
-            this.displayError(packData.error)
-            return
+        .then(data => {
+          if (data.error !== undefined) { return Promise.reject(data.error) }
+
+          let resultingPromise = Promise.resolve({})
+          for (let i = 0; i < Math.ceil(data.count / pageSize); i++) {
+            resultingPromise = resultingPromise.then(() => listFunction({ instance: this.remotePackInstance, page: i, pageSize })
+            ).then(data => data.json()).then(pageData => {
+              if (pageData.error !== undefined) { return Promise.reject(pageData.error) }
+
+              assign(allPacks, pageData.packs)
+            })
           }
 
-          this.knownLocalPacks = packData.packs
+          return resultingPromise
+        })
+        .then(finished => allPacks)
+        .catch(data => {
+          this.displayError(data)
+        })
+    },
+
+    refreshPackList () {
+      this.loadPacksPaginated(this.$store.state.api.backendInteractor.listEmojiPacks)
+        .then(allPacks => {
+          this.knownLocalPacks = allPacks
           for (const name of Object.keys(this.knownLocalPacks)) {
             this.sortPackFiles(name)
           }
         })
     },
     listRemotePacks () {
-      this.$store.state.api.backendInteractor.listRemoteEmojiPacks({ instance: this.remotePackInstance })
-        .then(data => data.json())
-        .then(packData => {
-          if (packData.error !== undefined) {
-            this.displayError(packData.error)
-            return
-          }
-
+      this.loadPacksPaginated(this.$store.state.api.backendInteractor.listRemoteEmojiPacks)
+        .then(allPacks => {
           let inst = this.remotePackInstance
           if (!inst.startsWith('http')) { inst = 'https://' + inst }
           const instUrl = new URL(inst)
           inst = instUrl.host
 
-          for (const packName in packData.packs) {
-            packData.packs[packName].remote = {
+          for (const packName in allPacks) {
+            allPacks[packName].remote = {
               baseName: packName,
               instance: instUrl.origin
             }
           }
 
-          this.knownRemotePacks[inst] = packData.packs
+          this.knownRemotePacks[inst] = allPacks
+          for (const pack in this.knownRemotePacks[inst]) {
+            this.sortPackFiles(`${pack}@${inst}`)
+          }
 
           this.$refs.remotePackPopover.hidePopover()
+        })
+        .catch(data => {
+          this.displayError(data)
         })
     },
     downloadRemotePack () {
