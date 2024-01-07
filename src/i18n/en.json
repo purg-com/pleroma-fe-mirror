@@ -955,7 +955,7 @@
       "add_file": "Add file",
       "adding_new": "Adding new emoji",
       "new_shortcode": "Shortcode, leave blank to infer",
-      "new_filename": "Filename, leave blank infer",
+      "new_filename": "Filename, leave blank to infer",
       "delete_confirm": "Are you sure you want to delete {0}?",
       "download_pack": "Download pack",
       "downloading_pack": "Downloading {0}",
