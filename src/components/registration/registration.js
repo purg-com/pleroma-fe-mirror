@@ -112,9 +112,9 @@ const registration = {
           const status = await this.signUp(this.user)
           if (status === 'ok') {
             this.$router.push({ name: 'friends' })
-          } else {
-            // display sign up notice, do not switch anywhere
           }
+          // If status is not 'ok' (i.e. it needs further actions to be done
+          // before you can login), display sign up notice, do not switch anywhere
         } catch (error) {
           console.warn('Registration failed: ', error)
           this.setCaptcha()
