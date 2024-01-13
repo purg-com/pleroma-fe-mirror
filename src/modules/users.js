@@ -250,6 +250,7 @@ export const mutations = {
   signUpPending (state) {
     state.signUpPending = true
     state.signUpErrors = []
+    state.signUpNotice = {}
   },
   signUpSuccess (state) {
     state.signUpPending = false
@@ -257,6 +258,12 @@ export const mutations = {
   signUpFailure (state, errors) {
     state.signUpPending = false
     state.signUpErrors = errors
+    state.signUpNotice = {}
+  },
+  signUpNotice (state, notice) {
+    state.signUpPending = false
+    state.signUpErrors = []
+    state.signUpNotice = notice
   }
 }
 
@@ -287,6 +294,7 @@ export const defaultState = {
   usersByNameObject: {},
   signUpPending: false,
   signUpErrors: [],
+  signUpNotice: {},
   relationships: {}
 }
 
@@ -524,9 +532,16 @@ const users = {
         const data = await rootState.api.backendInteractor.register(
           { params: { ...userInfo } }
         )
-        store.commit('signUpSuccess')
-        store.commit('setToken', data.access_token)
-        store.dispatch('loginUser', data.access_token)
+
+        if (data.access_token) {
+          store.commit('signUpSuccess')
+          store.commit('setToken', data.access_token)
+          store.dispatch('loginUser', data.access_token)
+          return 'ok'
+        } else { // Request succeeded, but user cannot login yet.
+          store.commit('signUpNotice', data)
+          return 'request_sent'
+        }
       } catch (e) {
         const errors = e.message
         store.commit('signUpFailure', errors)
