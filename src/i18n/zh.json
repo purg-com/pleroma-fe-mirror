@@ -943,7 +943,7 @@
       "sandbox": "强制帖子为只有关注者可看",
       "disable_remote_subscription": "禁止从远程实例关注用户",
       "disable_any_subscription": "完全禁止关注用户",
-      "quarantine": "从联合实例中禁止用户帖子",
+      "quarantine": "不许帖子传入别站",
       "delete_user": "删除用户",
       "delete_user_data_and_deactivate_confirmation": "这将永久删除该账户的数据并停用该账户。你完全确定吗？"
     },
