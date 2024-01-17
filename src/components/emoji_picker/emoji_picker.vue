@@ -142,6 +142,17 @@
               {{ $t('emoji.keep_open') }}
             </Checkbox>
           </div>
+          <div
+            v-if="!hideCustomEmoji"
+            class="hide-custom-emoji"
+          >
+            <Checkbox
+              v-model="hideCustomEmojiInPicker"
+              @change="onShowing"
+            >
+              {{ $t('emoji.hide_custom_emoji') }}
+            </Checkbox>
+          </div>
         </div>
         <div
           v-if="showingStickers"

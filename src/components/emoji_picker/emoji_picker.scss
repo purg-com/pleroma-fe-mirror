@@ -39,9 +39,14 @@ $emoji-picker-emoji-size: 32px;
   }
 
   .keep-open,
-  .too-many-emoji {
+  .too-many-emoji,
+  .hide-custom-emoji {
     padding: 7px;
     line-height: normal;
+  }
+
+  .hide-custom-emoji {
+    padding-top: 0;
   }
 
   .too-many-emoji {
