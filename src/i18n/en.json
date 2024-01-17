@@ -934,6 +934,7 @@
       "success_installing_frontend": "Frontend {version} successfully installed"
     },
     "emoji": {
+      "global_actions": "Global actions",
       "reload": "Reload emoji",
       "importFS": "Import emoji from filesystem",
       "error": "Error: {0}",
@@ -941,6 +942,7 @@
       "delete_pack": "Delete pack",
       "new_pack_name": "New pack name",
       "create": "Create",
+      "emoji_packs": "Emoji packs",
       "remote_packs": "Remote packs",
       "do_list": "List",
       "remote_pack_instance": "Remote pack instance",
@@ -951,19 +953,27 @@
       "fallback_sha256": "Fallback SHA256",
       "share": "Share",
       "save": "Save",
+      "save_meta": "Save metadata",
+      "revert_meta": "Revert metadata",
       "delete": "Delete",
+      "revert": "Revert",
       "add_file": "Add file",
       "adding_new": "Adding new emoji",
+      "shortcode": "Shortcode",
+      "filename": "Filename",
       "new_shortcode": "Shortcode, leave blank to infer",
       "new_filename": "Filename, leave blank to infer",
       "delete_confirm": "Are you sure you want to delete {0}?",
       "download_pack": "Download pack",
       "downloading_pack": "Downloading {0}",
       "download": "Download",
-      "download_as_name": "New name, leave blank to reuse",
+      "download_as_name": "New name",
+      "download_as_name_full": "New name, leave blank to reuse",
       "files": "Files",
       "editing": "Editing {0}",
-      "delete_title": "Delete?"
+      "delete_title": "Delete?",
+      "metadata_changed": "Metadata different from saved",
+      "emoji_changed": "Unsaved emoji file changes, check highlighted emoji"
     },
     "temp_overrides": {
       ":pleroma": {

@@ -1,7 +1,7 @@
 @import "src/variables";
 
 .emoji-tab {
-  .btn-group .btn {
+  .btn-group .btn:not(:first-child) {
     margin-left: 0.5em;
   }
 
@@ -35,21 +35,34 @@
   }
 }
 
+.emoji-tab-popover-button:not(:first-child) {
+  margin-left: 0.5em;
+}
+
 .emoji-tab-edit-popover {
   padding-left: 0.5em;
   padding-right: 0.5em;
   padding-bottom: 0.5em;
-}
 
-.emoji-tab-popover-button {
-  margin-left: 0.5em;
+  .emoji {
+    width: 32px;
+    height: 32px;
+  }
 }
 
 .emoji-tab-popover-input {
-  width: 20em;
   margin-bottom: 0.5em;
 
-  &:not(:first-child) {
-    margin-left: 0.5em;
+  label {
+    display: block;
+    margin-bottom: 0.5em;
+  }
+
+  input {
+    width: 20em;
+  }
+
+  .emoji-tab-popover-file {
+    padding-top: 3px;
   }
 }

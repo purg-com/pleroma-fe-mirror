@@ -58,6 +58,11 @@ const EmojiTab = {
       }
 
       return result
+    },
+    newEmojiUploadPreview () {
+      if (this.newEmojiUpload.upload.length > 0) {
+        return URL.createObjectURL(this.newEmojiUpload.upload[0])
+      }
     }
   },
 
@@ -135,7 +140,11 @@ const EmojiTab = {
     },
 
     metaEdited (prop) {
-      return this.pack && this.packMeta[prop] !== this.pack.pack[prop]
+      if (!this.pack) return
+
+      const def = this.pack.pack[prop] || ''
+      const edited = this.packMeta[prop] || ''
+      return edited !== def
     },
     savePackMetadata () {
       this.$store.state.api.backendInteractor.saveEmojiPackMetadata({ name: this.packName, newData: this.packMeta }).then(
@@ -153,6 +162,11 @@ const EmojiTab = {
       })
     },
 
+    revertEmoji (shortcode) {
+      // Delete current changes and overwrite them with defaults. If the window is closed, they'll get cleared anyway
+      delete this.editedParts[this.packName][shortcode]
+      this.editEmoji(shortcode)
+    },
     editEmoji (shortcode) {
       if (this.editedParts[this.packName] === undefined) { this.editedParts[this.packName] = {} }
 
@@ -179,13 +193,21 @@ const EmojiTab = {
         this.sortPackFiles(this.packName)
       })
     },
-    saveEditedEmoji (shortcode) {
+    closedEditedEmoji (shortcode) {
       const edited = this.editedParts[this.packName][shortcode]
 
       if (edited.shortcode === shortcode && edited.file === this.pack.files[shortcode]) {
         delete this.editedParts[this.packName][shortcode]
-        return
+
+        return true
       }
+
+      return false
+    },
+    saveEditedEmoji (shortcode) {
+      if (this.closedEditedEmoji(shortcode)) return
+
+      const edited = this.editedParts[this.packName][shortcode]
 
       this.$store.state.api.backendInteractor.updateEmojiFile(
         { packName: this.packName, shortcode, newShortcode: edited.shortcode, newFilename: edited.file, force: false }
