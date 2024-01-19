@@ -7,8 +7,7 @@ import Select from 'components/select/select.vue'
 import Popover from 'components/popover/popover.vue'
 import ConfirmModal from 'components/confirm_modal/confirm_modal.vue'
 import ModifiedIndicator from '../helpers/modified_indicator.vue'
-
-const newEmojiUploadBase = { shortcode: '', file: '', upload: [] }
+import EmojiEditingPopover from '../helpers/emoji_editing_popover.vue'
 
 const EmojiTab = {
   components: {
@@ -19,21 +18,28 @@ const EmojiTab = {
     Select,
     Popover,
     ConfirmModal,
-    ModifiedIndicator
+    ModifiedIndicator,
+    EmojiEditingPopover
   },
 
   data () {
     return {
       knownLocalPacks: { },
       knownRemotePacks: { },
-      editedParts: { },
       editedMetadata: { },
       packName: '',
       newPackName: '',
       deleteModalVisible: false,
-      newEmojiUpload: clone(newEmojiUploadBase),
       remotePackInstance: '',
       remotePackDownloadAs: ''
+    }
+  },
+
+  provide () {
+    return {
+      // Functions
+      emojiAddr: this.emojiAddr,
+      displayError: this.displayError
     }
   },
 
@@ -58,11 +64,6 @@ const EmojiTab = {
       }
 
       return result
-    },
-    newEmojiUploadPreview () {
-      if (this.newEmojiUpload.upload.length > 0) {
-        return URL.createObjectURL(this.newEmojiUpload.upload[0])
-      }
     }
   },
 
@@ -80,27 +81,6 @@ const EmojiTab = {
       } else {
         return `${this.$store.state.instance.server}/emoji/${encodeURIComponent(this.packName)}/${name}`
       }
-    },
-
-    uploadEmoji () {
-      this.$refs.addEmojiPopover.hidePopover()
-
-      this.$store.state.api.backendInteractor.addNewEmojiFile({
-        packName: this.packName,
-        file: this.newEmojiUpload.upload[0],
-        shortcode: this.newEmojiUpload.shortcode,
-        filename: this.newEmojiUpload.file
-      }).then(resp => resp.json()).then(resp => {
-        if (resp.error !== undefined) {
-          this.displayError(resp.error)
-          return
-        }
-
-        this.pack.files = resp
-        this.sortPackFiles(this.packName)
-
-        this.newEmojiUpload = clone(newEmojiUploadBase)
-      })
     },
 
     createEmojiPack () {
@@ -132,7 +112,6 @@ const EmojiTab = {
         }
       }).then(done => {
         delete this.editedMetadata[this.packName]
-        delete this.editedParts[this.packName]
 
         this.deleteModalVisible = false
         this.packName = ''
@@ -162,68 +141,9 @@ const EmojiTab = {
       })
     },
 
-    revertEmoji (shortcode) {
-      // Delete current changes and overwrite them with defaults. If the window is closed, they'll get cleared anyway
-      delete this.editedParts[this.packName][shortcode]
-      this.editEmoji(shortcode)
-    },
-    editEmoji (shortcode) {
-      if (this.editedParts[this.packName] === undefined) { this.editedParts[this.packName] = {} }
-
-      if (this.editedParts[this.packName][shortcode] === undefined) {
-        this.editedParts[this.packName][shortcode] = {
-          shortcode, file: this.pack.files[shortcode]
-        }
-      }
-    },
-    deleteEmoji (shortcode) {
-      this.editedParts[this.packName][shortcode].deleteModalVisible = false
-
-      this.$store.state.api.backendInteractor.deleteEmojiFile(
-        { packName: this.packName, shortcode }
-      ).then(resp => resp.json()).then(resp => {
-        if (resp.error !== undefined) {
-          this.displayError(resp.error)
-          return
-        }
-
-        this.pack.files = resp
-        delete this.editedParts[this.packName][shortcode]
-
-        this.sortPackFiles(this.packName)
-      })
-    },
-    closedEditedEmoji (shortcode) {
-      const edited = this.editedParts[this.packName][shortcode]
-
-      if (edited.shortcode === shortcode && edited.file === this.pack.files[shortcode]) {
-        delete this.editedParts[this.packName][shortcode]
-
-        return true
-      }
-
-      return false
-    },
-    saveEditedEmoji (shortcode) {
-      if (this.closedEditedEmoji(shortcode)) return
-
-      const edited = this.editedParts[this.packName][shortcode]
-
-      this.$store.state.api.backendInteractor.updateEmojiFile(
-        { packName: this.packName, shortcode, newShortcode: edited.shortcode, newFilename: edited.file, force: false }
-      ).then(resp => {
-        if (resp.error !== undefined) {
-          this.displayError(resp.error)
-          return Promise.reject(resp.error)
-        }
-
-        return resp.json()
-      }).then(resp => {
-        this.pack.files = resp
-        delete this.editedParts[this.packName][shortcode]
-
-        this.sortPackFiles(this.packName)
-      })
+    updatePackFiles (newFiles) {
+      this.pack.files = newFiles
+      this.sortPackFiles(this.packName)
     },
 
     loadPacksPaginated (listFunction) {
