@@ -478,7 +478,7 @@
 
           <transition name="fade">
             <div
-              v-if="!hidePostStats && isFocused && combinedFavsAndRepeatsUsers.length > 0"
+              v-if="shouldDisplayFavsAndRepeats"
               class="favs-repeated-users"
             >
               <div class="stats">
