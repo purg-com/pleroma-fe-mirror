@@ -7,7 +7,7 @@
       <h2>{{ $t('admin_dash.tabs.emoji') }}</h2>
 
       <ul class="setting-list">
-        <h2>{{ $t('admin_dash.emoji.global_actions') }}</h2>
+        <h3>{{ $t('admin_dash.emoji.global_actions') }}</h3>
 
         <li class="btn-group setting-item">
           <button
@@ -56,7 +56,7 @@
           </button>
         </li>
 
-        <h2>{{ $t('admin_dash.emoji.emoji_packs') }}</h2>
+        <h3>{{ $t('admin_dash.emoji.emoji_packs') }}</h3>
 
         <li>
           <Select class="form-control" v-model="packName">
@@ -214,13 +214,13 @@
         </div>
 
         <ul class="setting-list">
-          <h3>
+          <h4>
             {{ $t('admin_dash.emoji.files') }}
 
             <ModifiedIndicator v-if="pack"
               :changed="editedParts[packName] && Object.keys(editedParts[packName]).length > 0"
               message-key="admin_dash.emoji.emoji_changed"/>
-          </h3>
+          </h4>
 
           <div class="emoji-list" v-if="pack">
             <Popover
