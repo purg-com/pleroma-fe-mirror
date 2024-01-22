@@ -59,6 +59,8 @@
         <h3>{{ $t('admin_dash.emoji.emoji_packs') }}</h3>
 
         <li>
+          <h4>{{ $t('admin_dash.emoji.edit_pack') }}</h4>
+
           <Select class="form-control" v-model="packName">
             <option value="" disabled hidden>{{ $t('admin_dash.emoji.emoji_pack') }}</option>
             <option v-for="(pack, listPackName) in knownPacks" :label="listPackName" :key="listPackName">
@@ -233,7 +235,8 @@
               v-if="pack.remote === undefined"
               placement="bottom" new-upload
               :title="$t('admin_dash.emoji.adding_new')"
-              :packName="packName" @updatePackFiles="updatePackFiles"
+              :packName="packName"
+              @updatePackFiles="updatePackFiles" @displayError="displayError"
             >
               <template #trigger>
                 <FAIcon icon="plus" size="2x" :title="$t('admin_dash.emoji.add_file')" />
@@ -246,7 +249,7 @@
               :title="$t('admin_dash.emoji.editing', [shortcode])"
               :disabled="pack.remote !== undefined"
               :shortcode="shortcode" :file="file" :packName="packName"
-              @updatePackFiles="updatePackFiles"
+              @updatePackFiles="updatePackFiles" @displayError="displayError"
             >
               <template #trigger>
                 <StillImage

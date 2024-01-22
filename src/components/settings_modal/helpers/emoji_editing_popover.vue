@@ -113,7 +113,7 @@ export default {
       return !this.newUpload && (this.editedShortcode !== this.shortcode || this.editedFile !== this.file)
     }
   },
-  inject: ['emojiAddr', 'displayError'],
+  inject: ['emojiAddr'],
   methods: {
     saveEditedEmoji () {
       if (!this.isEdited) return
@@ -122,7 +122,7 @@ export default {
         { packName: this.packName, shortcode: this.shortcode, newShortcode: this.editedShortcode, newFilename: this.editedFile, force: false }
       ).then(resp => {
         if (resp.error !== undefined) {
-          this.displayError(resp.error)
+          this.$emit('displayError', resp.error)
           return Promise.reject(resp.error)
         }
 
@@ -137,7 +137,7 @@ export default {
         filename: this.editedFile
       }).then(resp => resp.json()).then(resp => {
         if (resp.error !== undefined) {
-          this.displayError(resp.error)
+          this.$emit('displayError', resp.error)
           return
         }
 
@@ -160,7 +160,7 @@ export default {
         { packName: this.packName, shortcode: this.editedShortcode }
       ).then(resp => resp.json()).then(resp => {
         if (resp.error !== undefined) {
-          this.displayError(resp.error)
+          this.$emit('displayError', resp.error)
           return
         }
 
@@ -168,6 +168,7 @@ export default {
       })
     }
   },
+  emits: ['updatePackFiles', 'displaError'],
   props: {
     placement: String,
     disabled: {

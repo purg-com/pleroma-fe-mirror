@@ -36,11 +36,7 @@ const EmojiTab = {
   },
 
   provide () {
-    return {
-      // Functions
-      emojiAddr: this.emojiAddr,
-      displayError: this.displayError
-    }
+    return { emojiAddr: this.emojiAddr }
   },
 
   computed: {
