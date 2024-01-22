@@ -200,10 +200,16 @@
                     <div>
                       <div>
                         <div class="emoji-tab-popover-input">
-                          <label for="remote-download-as-input">{{ $t('admin_dash.emoji.download_as_name') }}</label>
-                          <input id="remote-download-as-input" class="emoji-data-input"
-                            v-model="remotePackDownloadAs"
-                            :placeholder="$t('admin_dash.emoji.download_as_name_full')">
+                          <label>
+                            {{ $t('admin_dash.emoji.download_as_name') }}
+                            <input class="emoji-data-input"
+                              v-model="remotePackDownloadAs"
+                              :placeholder="$t('admin_dash.emoji.download_as_name_full')">
+                          </label>
+
+                          <div v-if="downloadWillReplaceLocal" class="warning">
+                            <em>{{ $t('admin_dash.emoji.replace_warning') }}</em>
+                          </div>
                         </div>
 
                         <button

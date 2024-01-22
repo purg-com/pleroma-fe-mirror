@@ -54,4 +54,8 @@
   .emoji-tab-popover-file {
     padding-top: 3px;
   }
+
+  .warning {
+    color: var(--cOrange, $fallback--cOrange);
+  }
 }

@@ -168,7 +168,7 @@ export default {
       })
     }
   },
-  emits: ['updatePackFiles', 'displaError'],
+  emits: ['updatePackFiles', 'displayError'],
   props: {
     placement: String,
     disabled: {

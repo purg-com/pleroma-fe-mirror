@@ -60,6 +60,10 @@ const EmojiTab = {
       }
 
       return result
+    },
+    downloadWillReplaceLocal () {
+      return (this.remotePackDownloadAs.trim() === '' && this.pack.remote && this.pack.remote.baseName in this.knownLocalPacks) ||
+             (this.remotePackDownloadAs in this.knownLocalPacks)
     }
   },
 

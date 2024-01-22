@@ -974,7 +974,8 @@
       "editing": "Editing {0}",
       "delete_title": "Delete?",
       "metadata_changed": "Metadata different from saved",
-      "emoji_changed": "Unsaved emoji file changes, check highlighted emoji"
+      "emoji_changed": "Unsaved emoji file changes, check highlighted emoji",
+      "replace_warning": "This will REPLACE the local pack of the same name"
     },
     "temp_overrides": {
       ":pleroma": {
