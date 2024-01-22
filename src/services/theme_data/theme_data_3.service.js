@@ -14,7 +14,7 @@ const components = {
 }
 
 // This gives you an array of arrays of all possible unique (i.e. order-insensitive) combinations
-const getAllPossibleCombinations = (array) => {
+export const getAllPossibleCombinations = (array) => {
   const combos = [array.map(x => [x])]
   for (let comboSize = 2; comboSize <= array.length; comboSize++) {
     const previous = combos[combos.length - 1]
@@ -30,15 +30,52 @@ const getAllPossibleCombinations = (array) => {
   return combos.reduce((acc, x) => [...acc, ...x], [])
 }
 
-export const init = () => {
+export const ruleToSelector = (rule) => {
+  const component = components[rule.component]
+  const { states, variants, selector } = component
+
+  const applicableStates = (rule.state.filter(x => x !== 'normal') || []).map(state => states[state])
+
+  const applicableVariantName = (rule.variant || 'normal')
+  let applicableVariant = ''
+  if (applicableVariantName !== 'normal') {
+    applicableVariant = variants[applicableVariantName]
+  }
+
+  const selectors = [selector, applicableVariant, ...applicableStates]
+    .toSorted((a, b) => {
+      if (a.startsWith(':')) return 1
+      else return -1
+    })
+    .join('')
+
+  if (rule.parent) {
+    return ruleToSelector(rule.parent) + ' ' + selectors
+  }
+  return selectors
+}
+
+export const init = (ruleset) => {
   const rootName = root.name
   const rules = []
+  const rulesByComponent = {}
+
+  const addRule = (rule) => {
+    rules.push(rule)
+    rulesByComponent[rule.component] = rulesByComponent[rule.component] || []
+    rulesByComponent.push(rule)
+  }
+
+  ruleset.forEach(rule => {
+
+  })
 
   const processInnerComponent = (component, parent) => {
     const {
-      validInnerComponents,
+      validInnerComponents = [],
       states: originalStates = {},
-      variants: originalVariants = {}
+      variants: originalVariants = {},
+      name
     } = component
 
     const states = { normal: '', ...originalStates }
@@ -51,16 +88,17 @@ export const init = () => {
     }).reduce((acc, x) => [...acc, ...x], [])
 
     stateVariantCombination.forEach(combination => {
-      rules.push(({
-        parent,
-        component: component.name,
-        state: combination.state,
-        variant: combination.variant
-      }))
+      // addRule(({
+      //   parent,
+      //   component: component.name,
+      //   state: combination.state,
+      //   variant: combination.variant
+      // }))
 
-      innerComponents.forEach(innerComponent => processInnerComponent(innerComponent, combination))
+      innerComponents.forEach(innerComponent => processInnerComponent(innerComponent, { parent, component: name, ...combination }))
     })
   }
 
   processInnerComponent(components[rootName])
+  return rules
 }

@@ -1,5 +1,6 @@
 export default {
   name: 'Button',
+  selector: '.btn',
   states: {
     hover: ':hover',
     disabled: ':disabled',

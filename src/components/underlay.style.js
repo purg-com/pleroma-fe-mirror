@@ -1,5 +1,6 @@
 export default {
-  name: 'Panel',
+  name: 'Underlay',
+  selector: '.underlay',
   validInnerComponents: [
     'Panel'
   ]

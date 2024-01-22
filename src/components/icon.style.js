@@ -1,3 +1,4 @@
 export default {
-  name: 'Icon'
+  name: 'Icon',
+  selector: '.icon'
 }
