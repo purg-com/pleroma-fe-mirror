@@ -2,10 +2,10 @@ export default {
   name: 'Button',
   selector: '.btn',
   states: {
-    hover: ':hover',
     disabled: ':disabled',
+    toggled: '.toggled',
     pressed: ':active',
-    toggled: '.toggled'
+    hover: ':hover'
   },
   variants: {
     danger: '.danger',

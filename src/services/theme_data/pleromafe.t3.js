@@ -4,7 +4,7 @@ export const sampleRules = [
     // variant: 'normal',
     // state: 'normal'
     directives: {
-      background: '#000',
+      background: '#000000',
       opacity: 0.2
     }
   },
@@ -16,10 +16,16 @@ export const sampleRules = [
     }
   },
   {
+    component: 'PanelHeader',
+    directives: {
+      background: '#000000',
+      opacity: 0.9
+    }
+  },
+  {
     component: 'Button',
     directives: {
       background: '#808080',
-      text: '#FFFFFF',
       opacity: 0.5
     }
   }

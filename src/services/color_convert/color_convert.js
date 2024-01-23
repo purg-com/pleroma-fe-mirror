@@ -188,6 +188,7 @@ export const rgba2css = function (rgba) {
  */
 export const getTextColor = function (bg, text, preserve) {
   const contrast = getContrastRatio(bg, text)
+  console.log(contrast)
 
   if (contrast < 4.5) {
     const base = typeof text.a !== 'undefined' ? { a: text.a } : {}

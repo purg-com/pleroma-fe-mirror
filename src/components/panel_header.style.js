@@ -1,10 +1,9 @@
 export default {
-  name: 'Panel',
-  selector: '.panel',
+  name: 'PanelHeader',
+  selector: '.panel-heading',
   validInnerComponents: [
     'Text',
     'Icon',
-    'Button',
-    'PanelHeader'
+    'Button'
   ]
 }

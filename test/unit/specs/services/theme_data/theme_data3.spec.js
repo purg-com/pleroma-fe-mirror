@@ -1,8 +1,7 @@
 // import { topoSort } from 'src/services/theme_data/theme_data.service.js'
 import {
   getAllPossibleCombinations,
-  init,
-  ruleToSelector
+  init
 } from 'src/services/theme_data/theme_data_3.service.js'
 import {
   sampleRules
@@ -19,8 +18,8 @@ describe.only('Theme Data 3', () => {
   describe('init', () => {
     it('test simple case', () => {
       const out = init(sampleRules)
-      console.log(JSON.stringify(out, null, 2))
-      out.forEach(r => console.log(ruleToSelector(r)))
+      // console.log(JSON.stringify(out, null, 2))
+      console.log('\n' + out.css.join('\n') + '\n')
     })
   })
 })

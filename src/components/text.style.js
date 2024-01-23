@@ -1,6 +1,6 @@
 export default {
   name: 'Text',
-  selector: '',
+  selector: '/*text*/',
   states: {
     faint: '.faint'
   }
