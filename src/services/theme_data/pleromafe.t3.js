@@ -25,8 +25,16 @@ export const sampleRules = [
   {
     component: 'Button',
     directives: {
-      background: '#808080',
-      opacity: 0.5
+      background: '#000000',
+      opacity: 0.8
+    }
+  },
+  {
+    component: 'Button',
+    state: ['hover'],
+    directives: {
+      background: '#FF00FF',
+      opacity: 0.9
     }
   }
 ]

@@ -81,7 +81,10 @@ export const init = (ruleset) => {
 
     if (Object.prototype.hasOwnProperty.call(rule, 'state')) {
       const ruleStatesSet = new Set(['normal', ...(rule.state || [])])
-      return combination.state.every(state => ruleStatesSet.has(state))
+      const combinationSet = new Set(['normal', ...combination.state])
+      const setsAreEqual = combination.state.every(state => ruleStatesSet.has(state)) &&
+            [...ruleStatesSet].every(state => combinationSet.has(state))
+      return setsAreEqual
     } else {
       if (combination.state.length !== 1 || combination.state[0] !== 'normal') return false
       return true
@@ -93,6 +96,7 @@ export const init = (ruleset) => {
     let currentParent = parent
     while (currentParent) {
       const rulesParent = ruleset.filter(findRules(currentParent, true))
+      rulesParent > 1 && console.log('OOPS')
       lowerLevelComponent = rulesParent[rulesParent.length - 1]
       currentParent = currentParent.parent
       if (lowerLevelComponent && filter(lowerLevelComponent)) currentParent = null
