@@ -177,7 +177,8 @@
     "unicode": "Unicode絵文字",
     "load_all": "全 {emojiAmount} 絵文字を読み込む",
     "load_all_hint": "最初の {saneAmount} 件の絵文字を読み込みました。すべて読み込むとパフォーマンスに影響を与える可能性があります。",
-    "unpacked": "パック外の絵文字"
+    "unpacked": "パック外の絵文字",
+    "hide_custom_emoji": "カスタム絵文字を表示しない"
   },
   "stickers": {
     "add_sticker": "ステッカーを追加"
@@ -329,7 +330,7 @@
     "pad_emoji": "絵文字ピッカーから絵文字を挿入するとき、絵文字の前後に空白を挿入する",
     "export_theme": "ファイルにテーマを出力",
     "filtering": "フィルタリング",
-    "filtering_explanation": "以下の単語を含むステータスはミュートされます。(1行に1単語)",
+    "filtering_explanation": "これらの単語を含むステータスはミュートされます。(1行に1単語)",
     "follow_export": "フォローのエクスポート",
     "follow_export_button": "エクスポート",
     "follow_export_processing": "お待ちください。まもなくファイルをダウンロードできます。",
@@ -728,7 +729,7 @@
     "remove_backup": "削除",
     "add_backup": "新規バックアップを作成",
     "account_backup_description": "アカウント情報と投稿のアーカイブをダウンロードできます。開発段階の機能であり、現状、ダウンロードしたデータをインポートすることはできません。",
-    "mute_bot_posts": "bot アカウントの投稿をミュートする",
+    "mute_bot_posts": "BOTアカウントの投稿をミュートする",
     "auto_update": "自動でタイムラインを更新する",
     "enable_web_push_always_show_tip": "この設定は、Chromeなどのブラウザで「このサイトはバックグラウンドで更新されました」という通知が表示されることを防止します。その他のブラウザでこの設定を有効化すると、通知が二重で表示されることがあります。",
     "backup_failed": "バックアップに失敗しました。",
@@ -770,7 +771,11 @@
     "add_backup_error": "バックアップの追加に失敗しました: {error}",
     "user_popover_avatar_action_close": "ユーザーカードを閉じる",
     "tree_advanced": "高度なナビゲーションボタンを表示する",
-    "tree_fade_ancestors": "スレッド上で祖先にあたるステータスを薄いテキストで表示する"
+    "tree_fade_ancestors": "スレッド上で祖先にあたるステータスを薄いテキストで表示する",
+    "actor_type_description": "グループとして設定されたアカウントは、メンションのついたステータスを自動的にリピートします。",
+    "actor_type_Person": "通常アカウント",
+    "actor_type_Service": "BOTアカウント",
+    "actor_type_Group": "グループアカウント"
   },
   "time": {
     "day": "{0}日",
@@ -1007,7 +1012,8 @@
     "unfollow_confirm_accept_button": "解除する",
     "remove_follower_confirm_accept_button": "解除する",
     "mute_confirm_title": "ミュートの確認",
-    "deactivated": "無効化済み"
+    "deactivated": "無効化済み",
+    "group": "グループ"
   },
   "user_profile": {
     "timeline_title": "ユーザータイムライン",
