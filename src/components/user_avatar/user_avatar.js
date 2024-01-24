@@ -3,11 +3,13 @@ import StillImage from '../still-image/still-image.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 
 import {
-  faRobot
+  faRobot,
+  faPeopleGroup
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
-  faRobot
+  faRobot,
+  faPeopleGroup
 )
 
 const UserAvatar = {
@@ -15,7 +17,7 @@ const UserAvatar = {
     'user',
     'betterShadow',
     'compact',
-    'bot'
+    'showActorTypeIndicator'
   ],
   data () {
     return {

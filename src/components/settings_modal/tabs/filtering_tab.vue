@@ -51,7 +51,7 @@
         </li>
         <li>
           <BooleanSetting path="hideBotIndication">
-            {{ $t('settings.hide_bot_indication') }}
+            {{ $t('settings.hide_actor_type_indication') }}
           </BooleanSetting>
         </li>
         <ChoiceSetting
