@@ -75,13 +75,16 @@
       </button>
       <div class="total">
         <template v-if="typeof poll.voters_count === 'number'">
-          {{ $tc("polls.people_voted_count", poll.voters_count, { count: poll.voters_count }) }}&nbsp;·&nbsp;
+          {{ $tc("polls.people_voted_count", poll.voters_count, { count: poll.voters_count }) }}
         </template>
         <template v-else>
-          {{ $tc("polls.votes_count", poll.votes_count, { count: poll.votes_count }) }}&nbsp;·&nbsp;
+          {{ $tc("polls.votes_count", poll.votes_count, { count: poll.votes_count }) }}
         </template>
+        <span v-if="expiresAt !== null">
+          &nbsp;·&nbsp;
+        </span>
       </div>
-      <span>
+      <span v-if="expiresAt !== null">
         <i18n-t
           scope="global"
           :keypath="expired ? 'polls.expired' : 'polls.expires_in'"
