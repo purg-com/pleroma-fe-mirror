@@ -149,7 +149,10 @@
     "configuration_tip_dismiss": "二度と表示しない",
     "unread_announcements": "未読のお知らせが{num}件あります | 未読のお知らせが{num}件あります",
     "unread_chats": "未読のチャットが{num}件あります | 未読のチャットが{num}件あります",
-    "unread_follow_requests": "フォローリクエストが{num}件来ています | フォローリクエストが{num}件来ています"
+    "unread_follow_requests": "フォローリクエストが{num}件来ています | フォローリクエストが{num}件来ています",
+    "configuration_tip": "ここに表示する通知の種類は{theSettings}にて変更することができます。 {dismiss}",
+    "submitted_report": "通報が送信されました",
+    "configuration_tip_settings": "設定"
   },
   "polls": {
     "add_poll": "投票を追加",
@@ -775,7 +778,20 @@
     "actor_type_description": "グループとして設定されたアカウントは、メンションのついたステータスを自動的にリピートします。",
     "actor_type_Person": "通常アカウント",
     "actor_type_Service": "BOTアカウント",
-    "actor_type_Group": "グループアカウント"
+    "actor_type_Group": "グループアカウント",
+    "notification_visibility_in_column": "通知カラム(PC)、通知サイドバー(モバイル)に表示する",
+    "notification_setting_annoyance": "通知のカスタマイズ",
+    "notification_setting_unseen_at_top": "未読の通知を最上部に表示する",
+    "enable_web_push_always_show": "プッシュ通知を常に表示する",
+    "hide_scrobbles": "Scrobbleを表示しない",
+    "actor_type": "アカウントタイプ:",
+    "hide_actor_type_indication": "投稿にアカウントタイプ(BOTアカウント、グループアカウントなど)を示すアイコンを表示しない",
+    "notification_show_extra": "その他の通知を通知カラムに表示する",
+    "notification_setting_drawer_marks_as_seen": "モバイルUIで、通知サイドバーを閉じた時すべての通知を既読にする",
+    "notification_setting_ignore_inactionable_seen_tip": "この設定は通知を自動的に既読にするわけではなく、この設定を有効にしてもプッシュ通知などは届きます",
+    "notification_setting_ignore_inactionable_seen": "お気にいりやリピートの通知など、アクション不可な通知を未読として扱わない",
+    "notification_extra_tip": "通知カラムをカスマイズするためのヒントを表示する",
+    "use_at_icon": "メンションリンク内の{'@'}記号を画像にする"
   },
   "time": {
     "day": "{0}日",
@@ -1042,7 +1058,9 @@
     "bookmark": "ブックマーク",
     "reject_follow_request": "フォローリクエストを拒否",
     "accept_follow_request": "フォローリクエストを承認",
-    "add_reaction": "リアクションを追加"
+    "add_reaction": "リアクションを追加",
+    "toggle_mute": "ミュートされた通知を開く/閉じる",
+    "toggle_expand": "この投稿を開く/閉じる"
   },
   "upload": {
     "error": {
