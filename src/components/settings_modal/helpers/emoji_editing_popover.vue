@@ -51,7 +51,7 @@
         <button
           class="button button-default btn"
           type="button"
-          :disabled="uploadFile.length == 0"
+          :disabled="newUpload ? uploadFile.length == 0 : !isEdited"
           @click="newUpload ? uploadEmoji() : saveEditedEmoji()">
           {{ $t('admin_dash.emoji.save') }}
         </button>
@@ -157,7 +157,7 @@ export default {
       this.deleteModalVisible = false
 
       this.$store.state.api.backendInteractor.deleteEmojiFile(
-        { packName: this.packName, shortcode: this.editedShortcode }
+        { packName: this.packName, shortcode: this.shortcode }
       ).then(resp => resp.json()).then(resp => {
         if (resp.error !== undefined) {
           this.$emit('displayError', resp.error)
