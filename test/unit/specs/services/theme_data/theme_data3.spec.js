@@ -17,7 +17,7 @@ describe.only('Theme Data 3', () => {
 
   describe('init', () => {
     it('test simple case', () => {
-      const out = init(sampleRules)
+      const out = init(sampleRules, palette)
       // console.log(JSON.stringify(out, null, 2))
       console.log('\n' + out.css.join('\n') + '\n')
     })

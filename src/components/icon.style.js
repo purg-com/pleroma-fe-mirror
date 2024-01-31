@@ -1,4 +1,15 @@
 export default {
   name: 'Icon',
-  selector: '.icon'
+  virtual: true,
+  selector: '.svg-inline--fa',
+  defaultRules: [
+    {
+      component: 'Icon',
+      directives: {
+        textColor: '--text',
+        textOpacity: 0.5,
+        textOpacityMode: 'mixrgb'
+      }
+    }
+  ]
 }

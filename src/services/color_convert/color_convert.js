@@ -173,7 +173,7 @@ export const mixrgb = (a, b) => {
  * @returns {String} CSS rgba() color
  */
 export const rgba2css = function (rgba) {
-  return `rgba(${Math.floor(rgba.r)}, ${Math.floor(rgba.g)}, ${Math.floor(rgba.b)}, ${rgba.a})`
+  return `rgba(${Math.floor(rgba.r)}, ${Math.floor(rgba.g)}, ${Math.floor(rgba.b)}, ${rgba.a ?? 1})`
 }
 
 /**
@@ -188,7 +188,6 @@ export const rgba2css = function (rgba) {
  */
 export const getTextColor = function (bg, text, preserve) {
   const contrast = getContrastRatio(bg, text)
-  console.log(contrast)
 
   if (contrast < 4.5) {
     const base = typeof text.a !== 'undefined' ? { a: text.a } : {}

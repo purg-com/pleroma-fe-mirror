@@ -24,8 +24,7 @@ body {
   font-family: sans-serif;
   font-family: var(--interfaceFont, sans-serif);
   margin: 0;
-  color: $fallback--text;
-  color: var(--text, $fallback--text);
+  color: var(--text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overscroll-behavior-y: none;
@@ -111,8 +110,7 @@ body {
 
 a {
   text-decoration: none;
-  color: $fallback--link;
-  color: var(--link, $fallback--link);
+  color: var(--link);
 }
 
 h4 {
@@ -128,8 +126,7 @@ h4 {
 i[class*="icon-"],
 .svg-inline--fa,
 .iconLetter {
-  color: $fallback--icon;
-  color: var(--icon, $fallback--icon);
+  color: var(--icon);
 }
 
 .button-unstyled:hover,
@@ -763,17 +760,11 @@ option {
 }
 
 .faint {
-  color: $fallback--faint;
-  color: var(--faint, $fallback--faint);
-}
+  --text: var(--textFaint);
+  --textGreentext: var(--textGreentextFaint);
+  --link: var(--linkFaint);
 
-.faint-link {
-  color: $fallback--faint;
-  color: var(--faint, $fallback--faint);
-
-  &:hover {
-    text-decoration: underline;
-  }
+  color: var(--text);
 }
 
 .visibility-notice {
@@ -814,6 +805,11 @@ option {
 
 .veryfaint {
   opacity: 0.25;
+}
+
+.timeago {
+  --link: var(--text);
+  --linkFaint: var(--textFaint);
 }
 
 .login-hint {

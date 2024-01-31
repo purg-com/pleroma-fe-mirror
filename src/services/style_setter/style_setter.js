@@ -1,10 +1,15 @@
 import { convert } from 'chromatism'
 import { rgb2hex, hex2rgb, rgba2css, getCssColor, relativeLuminance } from '../color_convert/color_convert.js'
 import { getColors, computeDynamicColor, getOpacitySlot } from '../theme_data/theme_data.service.js'
+import { init } from '../theme_data/theme_data_3.service.js'
+import {
+  sampleRules
+} from 'src/services/theme_data/pleromafe.t3.js'
 import { defaultState } from '../../modules/config.js'
 
 export const applyTheme = (input) => {
-  const { rules } = generatePreset(input)
+  const { rules, t3b } = generatePreset(input)
+  const themes3 = init(sampleRules, t3b)
   const head = document.head
   const body = document.body
   body.classList.add('hidden')
@@ -18,6 +23,10 @@ export const applyTheme = (input) => {
   styleSheet.insertRule(`:root { ${rules.colors} }`, 'index-max')
   styleSheet.insertRule(`:root { ${rules.shadows} }`, 'index-max')
   styleSheet.insertRule(`:root { ${rules.fonts} }`, 'index-max')
+  themes3.css.forEach(rule => {
+    console.log(rule)
+    styleSheet.insertRule(rule, 'index-max')
+  })
   body.classList.remove('hidden')
 }
 
@@ -326,7 +335,7 @@ export const generateShadows = (input, colors) => {
   }
 }
 
-export const composePreset = (colors, radii, shadows, fonts) => {
+export const composePreset = (colors, radii, shadows, fonts, t3b) => {
   return {
     rules: {
       ...shadows.rules,
@@ -339,7 +348,8 @@ export const composePreset = (colors, radii, shadows, fonts) => {
       ...colors.theme,
       ...radii.theme,
       ...fonts.theme
-    }
+    },
+    t3b
   }
 }
 
@@ -349,7 +359,8 @@ export const generatePreset = (input) => {
     colors,
     generateRadii(input),
     generateShadows(input, colors.theme.colors, colors.mod),
-    generateFonts(input)
+    generateFonts(input),
+    colors.theme.colors
   )
 }
 

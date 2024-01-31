@@ -1,11 +1,12 @@
 import { convert } from 'chromatism'
-import { alphaBlend, getTextColor, rgba2css } from '../color_convert/color_convert.js'
+import { alphaBlend, getTextColor, rgba2css, mixrgb } from '../color_convert/color_convert.js'
 
 import Underlay from 'src/components/underlay.style.js'
 import Panel from 'src/components/panel.style.js'
 import PanelHeader from 'src/components/panel_header.style.js'
 import Button from 'src/components/button.style.js'
 import Text from 'src/components/text.style.js'
+import Link from 'src/components/link.style.js'
 import Icon from 'src/components/icon.style.js'
 
 const root = Underlay
@@ -15,6 +16,7 @@ const components = {
   PanelHeader,
   Button,
   Text,
+  Link,
   Icon
 }
 
@@ -35,9 +37,9 @@ export const getAllPossibleCombinations = (array) => {
   return combos.reduce((acc, x) => [...acc, ...x], [])
 }
 
-export const ruleToSelector = (rule) => {
+export const ruleToSelector = (rule, isParent) => {
   const component = components[rule.component]
-  const { states, variants, selector } = component
+  const { states, variants, selector, outOfTreeSelector } = component
 
   const applicableStates = ((rule.state || []).filter(x => x !== 'normal')).map(state => states[state])
 
@@ -47,23 +49,37 @@ export const ruleToSelector = (rule) => {
     applicableVariant = variants[applicableVariantName]
   }
 
-  const selectors = [selector, applicableVariant, ...applicableStates]
+  let realSelector
+  if (isParent) {
+    realSelector = selector
+  } else {
+    if (outOfTreeSelector) realSelector = outOfTreeSelector
+    else realSelector = selector
+  }
+
+  const selectors = [realSelector, applicableVariant, ...applicableStates]
     .toSorted((a, b) => {
       if (a.startsWith(':')) return 1
-      else return -1
+      if (!a.startsWith('.')) return -1
+      else return 0
     })
     .join('')
 
   if (rule.parent) {
-    return ruleToSelector(rule.parent) + ' ' + selectors
+    return ruleToSelector(rule.parent, true) + ' ' + selectors
   }
   return selectors
 }
 
-export const init = (ruleset) => {
+export const init = (extraRuleset, palette) => {
   const rootName = root.name
   const rules = []
   const rulesByComponent = {}
+
+  const ruleset = [
+    ...Object.values(components).map(c => c.defaultRules || []).reduce((acc, arr) => [...acc, ...arr], []),
+    ...extraRuleset
+  ]
 
   const addRule = (rule) => {
     rules.push(rule)
@@ -71,37 +87,100 @@ export const init = (ruleset) => {
     rulesByComponent[rule.component].push(rule)
   }
 
-  const findRules = (combination) => rule => {
-    if (combination.component !== rule.component) return false
-    if (Object.prototype.hasOwnProperty.call(rule, 'variant')) {
-      if (combination.variant !== rule.variant) return false
-    } else {
-      if (combination.variant !== 'normal') return false
-    }
+  const findRules = (combination, parent) => rule => {
+    // inexact search
+    const doesCombinationMatch = () => {
+      if (combination.component !== rule.component) return false
+      if (Object.prototype.hasOwnProperty.call(rule, 'variant')) {
+        if (combination.variant !== rule.variant) return false
+      } else {
+        if (combination.variant !== 'normal') return false
+      }
 
-    if (Object.prototype.hasOwnProperty.call(rule, 'state')) {
-      const ruleStatesSet = new Set(['normal', ...(rule.state || [])])
-      const combinationSet = new Set(['normal', ...combination.state])
-      const setsAreEqual = combination.state.every(state => ruleStatesSet.has(state)) &&
-            [...ruleStatesSet].every(state => combinationSet.has(state))
-      return setsAreEqual
-    } else {
-      if (combination.state.length !== 1 || combination.state[0] !== 'normal') return false
-      return true
+      if (Object.prototype.hasOwnProperty.call(rule, 'state')) {
+        const ruleStatesSet = new Set(['normal', ...(rule.state || [])])
+        const combinationSet = new Set(['normal', ...combination.state])
+        const setsAreEqual = combination.state.every(state => ruleStatesSet.has(state)) &&
+              [...ruleStatesSet].every(state => combinationSet.has(state))
+        return setsAreEqual
+      } else {
+        if (combination.state.length !== 1 || combination.state[0] !== 'normal') return false
+        return true
+      }
     }
+    const combinationMatches = doesCombinationMatch()
+    if (!parent || !combinationMatches) return combinationMatches
+
+    // exact search
+
+    // unroll parents into array
+    const unroll = (item) => {
+      const out = []
+      let currentParent = item.parent
+      while (currentParent) {
+        const { parent: newParent, ...rest } = currentParent
+        out.push(rest)
+        currentParent = newParent
+      }
+      return out
+    }
+    const { parent: _, ...rest } = parent
+    const pathSearch = [rest, ...unroll(parent)]
+    const pathRule = unroll(rule)
+    if (pathSearch.length !== pathRule.length) return false
+    const pathsMatch = pathSearch.every((searchRule, i) => {
+      const existingRule = pathRule[i]
+      if (existingRule.component !== searchRule.component) return false
+      if (existingRule.variant !== searchRule.variant) return false
+      const existingRuleStatesSet = new Set(['normal', ...(existingRule.state || [])])
+      const searchStatesSet = new Set(['normal', ...(searchRule.state || [])])
+      const setsAreEqual = existingRule.state.every(state => searchStatesSet.has(state)) &&
+              [...searchStatesSet].every(state => existingRuleStatesSet.has(state))
+      return setsAreEqual
+    })
+    return pathsMatch
   }
 
   const findLowerLevelRule = (parent, filter = () => true) => {
     let lowerLevelComponent = null
     let currentParent = parent
     while (currentParent) {
-      const rulesParent = ruleset.filter(findRules(currentParent, true))
-      rulesParent > 1 && console.log('OOPS')
+      const rulesParent = ruleset.filter(findRules(currentParent))
+      rulesParent > 1 && console.warn('OOPS')
       lowerLevelComponent = rulesParent[rulesParent.length - 1]
       currentParent = currentParent.parent
       if (lowerLevelComponent && filter(lowerLevelComponent)) currentParent = null
     }
     return filter(lowerLevelComponent) ? lowerLevelComponent : null
+  }
+
+  const findColor = (color) => {
+    if (typeof color === 'string' && color.startsWith('--')) {
+      const name = color.substring(2)
+      return palette[name]
+    }
+    return color
+  }
+
+  const getTextColorAlpha = (rule, lowerRule, value) => {
+    const opacity = rule.directives.textOpacity
+    const textColor = convert(findColor(value)).rgb
+    if (opacity === null || opacity === undefined || opacity >= 1) {
+      return convert(textColor).hex
+    }
+    const backgroundColor = convert(lowerRule.cache.background).rgb
+    if (opacity === 0) {
+      return convert(backgroundColor).hex
+    }
+    const opacityMode = rule.directives.textOpacityMode
+    switch (opacityMode) {
+      case 'fake':
+        return convert(alphaBlend(textColor, opacity, backgroundColor)).hex
+      case 'mixrgb':
+        return convert(mixrgb(backgroundColor, textColor)).hex
+      default:
+        return rgba2css({ a: opacity, ...textColor })
+    }
   }
 
   const processInnerComponent = (component, parent) => {
@@ -124,79 +203,156 @@ export const init = (ruleset) => {
     const VIRTUAL_COMPONENTS = new Set(['Text', 'Link', 'Icon'])
 
     stateVariantCombination.forEach(combination => {
-      const existingRules = ruleset.filter(findRules({ component: component.name, ...combination }))
-      const lastRule = existingRules[existingRules.length - 1]
+      let needRuleAdd = false
 
-      if (existingRules.length !== 0) {
-        const { directives } = lastRule
-        const rgb = convert(directives.background).rgb
+      if (VIRTUAL_COMPONENTS.has(component.name)) {
+        const selector = component.name + ruleToSelector({ component: component.name, ...combination })
+        const virtualName = [
+          '--',
+          component.name.toLowerCase(),
+          combination.variant === 'normal'
+            ? ''
+            : combination.variant[0].toUpperCase() + combination.variant.slice(1).toLowerCase(),
+          ...combination.state.filter(x => x !== 'normal').toSorted().map(state => state[0].toUpperCase() + state.slice(1).toLowerCase())
+        ].join('')
 
-        // TODO: DEFAULT TEXT COLOR
-        const bg = findLowerLevelRule(parent)?.cache.background || convert('#FFFFFF').rgb
+        const lowerLevel = findLowerLevelRule(parent, (r) => {
+          if (components[r.component].validInnerComponents.indexOf(component.name) < 0) return false
+          if (r.cache.background === undefined) return false
+          if (r.cache.textDefined) {
+            return !r.cache.textDefined[selector]
+          }
+          return true
+        })
 
-        if (!lastRule.cache?.background) {
-          const blend = directives.opacity < 1 ? alphaBlend(rgb, directives.opacity, bg) : rgb
-          lastRule.cache = lastRule.cache || {}
-          lastRule.cache.background = blend
+        if (!lowerLevel) return
 
-          addRule(lastRule)
+        let inheritedTextColorRule
+        const inheritedTextColorRules = findLowerLevelRule(parent, (r) => {
+          return r.cache?.textDefined?.[selector]
+        })
+
+        if (!inheritedTextColorRule) {
+          const generalTextColorRules = ruleset.filter(findRules({ component: component.name, ...combination }, null, true))
+          inheritedTextColorRule = generalTextColorRules[generalTextColorRules.length - 1]
+        } else {
+          inheritedTextColorRule = inheritedTextColorRules[inheritedTextColorRules.length - 1]
         }
-      } else {
-        if (VIRTUAL_COMPONENTS.has(component.name)) {
-          const selector = component.name + ruleToSelector({ component: component.name, ...combination })
 
-          const lowerLevel = findLowerLevelRule(parent, (r) => {
-            if (components[r.component].validInnerComponents.indexOf(component.name) < 0) return false
-            if (r.cache?.background === undefined) return false
-            if (r.cache.textDefined) {
-              return !r.cache.textDefined[selector]
+        let inheritedTextColor
+        let inheritedTextOpacity = {}
+        if (inheritedTextColorRule) {
+          inheritedTextColor = findColor(inheritedTextColorRule.directives.textColor)
+          // also inherit opacity settings
+          const { textOpacity, textOpacityMode } = inheritedTextColorRule.directives
+          inheritedTextOpacity = { textOpacity, textOpacityMode }
+        } else {
+          // Emergency fallback
+          inheritedTextColor = '#000000'
+        }
+
+        const textColor = getTextColor(
+          convert(lowerLevel.cache.background).rgb,
+          convert(inheritedTextColor).rgb,
+          component.name === 'Link' // make it configurable?
+        )
+
+        lowerLevel.cache.textDefined = lowerLevel.cache.textDefined || {}
+        lowerLevel.cache.textDefined[selector] = textColor
+        lowerLevel.virtualDirectives = lowerLevel.virtualDirectives || {}
+        lowerLevel.virtualDirectives[virtualName] = getTextColorAlpha(inheritedTextColorRule, lowerLevel, textColor)
+
+        const directives = {
+          textColor,
+          ...inheritedTextOpacity
+        }
+
+        // Debug: lets you see what it think background color should be
+        directives.background = convert(lowerLevel.cache.background).hex
+
+        addRule({
+          parent,
+          virtual: true,
+          component: component.name,
+          ...combination,
+          cache: { background: lowerLevel.cache.background },
+          directives
+        })
+      } else {
+        const existingGlobalRules = ruleset.filter(findRules({ component: component.name, ...combination }, null))
+        const existingRules = ruleset.filter(findRules({ component: component.name, ...combination }, parent))
+
+        // Global (general) rules
+        if (existingGlobalRules.length !== 0) {
+          const lastRule = existingGlobalRules[existingGlobalRules.length - 1]
+          const { directives } = lastRule
+          lastRule.cache = lastRule.cache || {}
+
+          if (directives.background) {
+            const rgb = convert(findColor(directives.background)).rgb
+
+            // TODO: DEFAULT TEXT COLOR
+            const bg = findLowerLevelRule(parent)?.cache.background || convert('#FFFFFF').rgb
+
+            if (!lastRule.cache.background) {
+              const blend = directives.opacity < 1 ? alphaBlend(rgb, directives.opacity, bg) : rgb
+              lastRule.cache.background = blend
+
+              needRuleAdd = true
             }
-            return true
-          })
-          if (!lowerLevel) return
-          lowerLevel.cache.textDefined = lowerLevel.cache.textDefined || {}
-          lowerLevel.cache.textDefined[selector] = true
-          addRule({
-            parent,
-            component: component.name,
-            ...combination,
-            directives: {
-              // TODO: DEFAULT TEXT COLOR
-              textColor: getTextColor(convert(lowerLevel.cache.background).rgb, convert('#FFFFFF').rgb, component.name === 'Link'),
-              // Debug: lets you see what it think background color should be
-              background: convert(lowerLevel.cache.background).hex
-            }
-          })
+          }
+
+          if (needRuleAdd) {
+            addRule(lastRule)
+          }
+        }
+
+        if (existingRules.length !== 0) {
+          console.warn('MORE EXISTING RULES', existingRules)
         }
       }
-
       innerComponents.forEach(innerComponent => processInnerComponent(innerComponent, { parent, component: name, ...combination }))
     })
   }
 
   processInnerComponent(components[rootName])
 
-  // console.info(rules.map(x => [
-  //   (parent?.component || 'root') + ' -> ' + x.component,
-  //   // 'Cached background:' + convert(bg).hex,
-  //   // 'Color: ' + convert(x.directives.background).hex + ' A:' + x.directives.opacity,
-  //   JSON.stringify(x.directives)
-  //   // '=> Blend: ' + convert(x.cache.background).hex
-  // ].join(' ')))
-
   return {
     raw: rules,
     css: rules.map(rule => {
-      const header = ruleToSelector(rule) + ' {'
+      if (rule.virtual) return ''
+
+      let selector = ruleToSelector(rule).replace(/\/\*.*\*\//g, '')
+      if (!selector) {
+        selector = 'body'
+      }
+      const header = selector + ' {'
       const footer = '}'
+
+      const virtualDirectives = Object.entries(rule.virtualDirectives || {}).map(([k, v]) => {
+        return '  ' + k + ': ' + v
+      }).join(';\n')
+
       const directives = Object.entries(rule.directives).map(([k, v]) => {
         switch (k) {
-          case 'background': return 'background-color: ' + rgba2css({ ...convert(v).rgb, a: rule.directives.opacity ?? 1 })
-          case 'textColor': return 'color: ' + rgba2css({ ...convert(v).rgb, a: rule.directives.opacity ?? 1 })
+          case 'background': {
+            return 'background-color: ' + rgba2css({ ...convert(findColor(v)).rgb, a: rule.directives.opacity ?? 1 })
+          }
+          case 'textColor': {
+            return 'color: ' + v
+          }
           default: return ''
         }
       }).filter(x => x).map(x => '  ' + x).join(';\n')
-      return [header, directives, footer].join('\n')
-    })
+
+      return [
+        header,
+        directives + ';',
+        '  color: var(--text);',
+        '',
+        virtualDirectives,
+        footer
+      ].join('\n')
+    }).filter(x => x)
   }
 }

@@ -1,6 +1,7 @@
 export default {
   name: 'Underlay',
-  selector: '#app',
+  selector: '#content',
+  outOfTreeSelector: '.underlay',
   validInnerComponents: [
     'Panel'
   ]

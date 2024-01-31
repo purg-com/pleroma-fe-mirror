@@ -180,7 +180,7 @@
 
               <span class="heading-right">
                 <router-link
-                  class="timeago faint-link"
+                  class="timeago faint"
                   :to="{ name: 'conversation', params: { id: status.id } }"
                 >
                   <Timeago

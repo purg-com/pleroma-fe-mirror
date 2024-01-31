@@ -3,6 +3,7 @@ export default {
   selector: '.panel',
   validInnerComponents: [
     'Text',
+    'Link',
     'Icon',
     'Button',
     'PanelHeader'

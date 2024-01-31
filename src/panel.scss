@@ -143,12 +143,6 @@
     box-shadow: var(--panelHeaderShadow);
   }
 
-  a,
-  .-link {
-    color: $fallback--link;
-    color: var(--panelLink, $fallback--link);
-  }
-
   .button-unstyled:hover,
   a:hover {
     i[class*="icon-"],
@@ -162,11 +156,6 @@
     background-color: transparent;
     color: $fallback--faint;
     color: var(--panelFaint, $fallback--faint);
-  }
-
-  .faint-link {
-    color: $fallback--faint;
-    color: var(--faintLink, $fallback--faint);
   }
 
   &:not(.-flexible-height) {

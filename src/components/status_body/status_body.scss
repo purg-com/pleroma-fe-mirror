@@ -113,12 +113,11 @@
   }
 
   .greentext {
-    color: $fallback--cGreen;
-    color: var(--postGreentext, $fallback--cGreen);
+    color: var(--textGreentext);
   }
 
   .cyantext {
-    color: var(--postCyantext, $fallback--cBlue);
+    color: var(--textCyantext);
   }
 
   &.-compact {
