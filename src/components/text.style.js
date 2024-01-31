@@ -19,7 +19,6 @@ export default {
       component: 'Text',
       state: ['faint'],
       directives: {
-        textColor: '--text',
         textOpacity: 0.5
       }
     },
@@ -28,15 +27,6 @@ export default {
       variant: 'greentext',
       directives: {
         textColor: '--cGreen'
-      }
-    },
-    {
-      component: 'Text',
-      variant: 'greentext',
-      state: ['faint'],
-      directives: {
-        textColor: '--cGreen',
-        textOpacity: 0.5
       }
     }
   ]

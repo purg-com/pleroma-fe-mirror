@@ -1,5 +1,6 @@
-import { convert } from 'chromatism'
-import { alphaBlend, getTextColor, rgba2css, mixrgb } from '../color_convert/color_convert.js'
+import { convert, brightness } from 'chromatism'
+import merge from 'lodash.merge'
+import { alphaBlend, getTextColor, rgba2css, mixrgb, relativeLuminance } from '../color_convert/color_convert.js'
 
 import Underlay from 'src/components/underlay.style.js'
 import Panel from 'src/components/panel.style.js'
@@ -87,27 +88,35 @@ export const init = (extraRuleset, palette) => {
     rulesByComponent[rule.component].push(rule)
   }
 
-  const findRules = (combination, parent) => rule => {
+  const findRules = (searchCombination, parent) => rule => {
     // inexact search
     const doesCombinationMatch = () => {
-      if (combination.component !== rule.component) return false
-      if (Object.prototype.hasOwnProperty.call(rule, 'variant')) {
-        if (combination.variant !== rule.variant) return false
-      } else {
-        if (combination.variant !== 'normal') return false
+      if (searchCombination.component !== rule.component) return false
+      const ruleVariant = Object.prototype.hasOwnProperty.call(rule, 'variant') ? rule.variant : 'normal'
+
+      if (ruleVariant !== 'normal') {
+        if (searchCombination.variant !== rule.variant) return false
       }
 
-      if (Object.prototype.hasOwnProperty.call(rule, 'state')) {
-        const ruleStatesSet = new Set(['normal', ...(rule.state || [])])
-        const combinationSet = new Set(['normal', ...combination.state])
-        const setsAreEqual = combination.state.every(state => ruleStatesSet.has(state)) &&
+      const ruleHasStateDefined = Object.prototype.hasOwnProperty.call(rule, 'state')
+      let ruleStateSet
+      if (ruleHasStateDefined) {
+        ruleStateSet = new Set(['normal', ...rule.state])
+      } else {
+        ruleStateSet = new Set(['normal'])
+      }
+
+      if (ruleStateSet.size > 1) {
+        const ruleStatesSet = ruleStateSet
+        const combinationSet = new Set(['normal', ...searchCombination.state])
+        const setsAreEqual = searchCombination.state.every(state => ruleStatesSet.has(state)) &&
               [...ruleStatesSet].every(state => combinationSet.has(state))
         return setsAreEqual
       } else {
-        if (combination.state.length !== 1 || combination.state[0] !== 'normal') return false
         return true
       }
     }
+
     const combinationMatches = doesCombinationMatch()
     if (!parent || !combinationMatches) return combinationMatches
 
@@ -154,21 +163,31 @@ export const init = (extraRuleset, palette) => {
     return filter(lowerLevelComponent) ? lowerLevelComponent : null
   }
 
-  const findColor = (color) => {
-    if (typeof color === 'string' && color.startsWith('--')) {
-      const name = color.substring(2)
-      return palette[name]
+  const findColor = (color, background) => {
+    if (typeof color !== 'string' || !color.startsWith('--')) return color
+    let targetColor = null
+    // Color references other color
+    const [variable, modifier] = color.split(/,/g).map(str => str.trim())
+    const variableSlot = variable.substring(2)
+    targetColor = palette[variableSlot]
+
+    if (modifier) {
+      const effectiveBackground = background ?? targetColor
+      const isLightOnDark = relativeLuminance(convert(effectiveBackground).rgb) < 0.5
+      const mod = isLightOnDark ? 1 : -1
+      targetColor = brightness(Number.parseFloat(modifier) * mod, targetColor).rgb
     }
-    return color
+
+    return targetColor
   }
 
   const getTextColorAlpha = (rule, lowerRule, value) => {
     const opacity = rule.directives.textOpacity
-    const textColor = convert(findColor(value)).rgb
+    const backgroundColor = convert(lowerRule.cache.background).rgb
+    const textColor = convert(findColor(value, backgroundColor)).rgb
     if (opacity === null || opacity === undefined || opacity >= 1) {
       return convert(textColor).hex
     }
-    const backgroundColor = convert(lowerRule.cache.background).rgb
     if (opacity === 0) {
       return convert(backgroundColor).hex
     }
@@ -217,6 +236,7 @@ export const init = (extraRuleset, palette) => {
         ].join('')
 
         const lowerLevel = findLowerLevelRule(parent, (r) => {
+          if (!r) return false
           if (components[r.component].validInnerComponents.indexOf(component.name) < 0) return false
           if (r.cache.background === undefined) return false
           if (r.cache.textDefined) {
@@ -234,15 +254,15 @@ export const init = (extraRuleset, palette) => {
 
         if (!inheritedTextColorRule) {
           const generalTextColorRules = ruleset.filter(findRules({ component: component.name, ...combination }, null, true))
-          inheritedTextColorRule = generalTextColorRules[generalTextColorRules.length - 1]
+          inheritedTextColorRule = generalTextColorRules.reduce((acc, rule) => merge(acc, rule), {})
         } else {
-          inheritedTextColorRule = inheritedTextColorRules[inheritedTextColorRules.length - 1]
+          inheritedTextColorRule = inheritedTextColorRules.reduce((acc, rule) => merge(acc, rule), {})
         }
 
         let inheritedTextColor
         let inheritedTextOpacity = {}
         if (inheritedTextColorRule) {
-          inheritedTextColor = findColor(inheritedTextColorRule.directives.textColor)
+          inheritedTextColor = findColor(inheritedTextColorRule.directives.textColor, convert(lowerLevel.cache.background).rgb)
           // also inherit opacity settings
           const { textOpacity, textOpacityMode } = inheritedTextColorRule.directives
           inheritedTextOpacity = { textOpacity, textOpacityMode }
@@ -284,8 +304,11 @@ export const init = (extraRuleset, palette) => {
 
         // Global (general) rules
         if (existingGlobalRules.length !== 0) {
+          const totalRule = existingGlobalRules.reduce((acc, rule) => merge(acc, rule), {})
+          const { directives } = totalRule
+
+          // last rule is used as a cache
           const lastRule = existingGlobalRules[existingGlobalRules.length - 1]
-          const { directives } = lastRule
           lastRule.cache = lastRule.cache || {}
 
           if (directives.background) {

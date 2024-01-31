@@ -7,5 +7,13 @@ export default {
     'Icon',
     'Button',
     'PanelHeader'
+  ],
+  defaultRules: [
+    {
+      component: 'Panel',
+      directives: {
+        background: '--fg'
+      }
+    }
   ]
 }

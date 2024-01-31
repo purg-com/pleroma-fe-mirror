@@ -15,5 +15,20 @@ export default {
   validInnerComponents: [
     'Text',
     'Icon'
+  ],
+  defaultRules: [
+    {
+      component: 'Button',
+      directives: {
+        background: '--fg'
+      }
+    },
+    {
+      component: 'Button',
+      state: ['hover'],
+      directives: {
+        background: '#FFFFFF'
+      }
+    }
   ]
 }

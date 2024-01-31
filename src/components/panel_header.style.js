@@ -6,5 +6,14 @@ export default {
     'Link',
     'Icon',
     'Button'
+  ],
+  defaultRules: [
+    {
+      component: 'PanelHeader',
+      directives: {
+        background: '--fg'
+        // opacity: 0.9
+      }
+    }
   ]
 }
