@@ -6,10 +6,8 @@ export default {
     {
       component: 'Icon',
       directives: {
-        textColor: '--text',
-        // textAuto: 'no-auto', // doesn't work well with mixrgb?
-        textOpacity: 0.5,
-        textOpacityMode: 'mixrgb'
+        textColor: '$blend(--parent, 0.5, --parent--text)',
+        textAuto: 'no-auto'
       }
     }
   ]

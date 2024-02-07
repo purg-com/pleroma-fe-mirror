@@ -141,12 +141,12 @@ export const ruleToSelector = (rule, ignoreOutOfTreeSelector, isParent) => {
   return selectors.trim()
 }
 
-const combinationsMatch = (criteria, subject) => {
+const combinationsMatch = (criteria, subject, strict) => {
   if (criteria.component !== subject.component) return false
 
   // All variants inherit from normal
   const subjectVariant = Object.prototype.hasOwnProperty.call(subject, 'variant') ? subject.variant : 'normal'
-  if (subjectVariant !== 'normal') {
+  if (subjectVariant !== 'normal' || strict) {
     if (criteria.variant !== subject.variant) return false
   }
 
@@ -154,7 +154,7 @@ const combinationsMatch = (criteria, subject) => {
   const criteriaStatesSet = new Set(['normal', ...(criteria.state || [])])
 
   // Subject states > 1 essentially means state is "normal" and therefore matches
-  if (subjectStatesSet.size > 1) {
+  if (subjectStatesSet.size > 1 || strict) {
     const setsAreEqual =
       [...criteriaStatesSet].every(state => subjectStatesSet.has(state)) &&
       [...subjectStatesSet].every(state => criteriaStatesSet.has(state))
@@ -164,13 +164,13 @@ const combinationsMatch = (criteria, subject) => {
   return true
 }
 
-const findRules = criteria => subject => {
+const findRules = (criteria, strict) => subject => {
   // If we searching for "general" rules - ignore "specific" ones
   if (criteria.parent === null && !!subject.parent) return false
-  if (!combinationsMatch(criteria, subject)) return false
+  if (!combinationsMatch(criteria, subject, strict)) return false
 
   if (criteria.parent !== undefined && criteria.parent !== null) {
-    if (!subject.parent) return true
+    if (!subject.parent && !strict) return true
     const pathCriteria = unroll(criteria)
     const pathSubject = unroll(subject)
     if (pathCriteria.length < pathSubject.length) return false
@@ -182,7 +182,7 @@ const findRules = criteria => subject => {
       const criteriaParent = pathCriteria[i]
       const subjectParent = pathSubject[i]
       if (!subjectParent) return true
-      if (!combinationsMatch(criteriaParent, subjectParent)) return false
+      if (!combinationsMatch(criteriaParent, subjectParent, strict)) return false
     }
   }
   return true
@@ -205,21 +205,24 @@ export const init = (extraRuleset, palette) => {
     rules.push(rule)
   }
 
-  const findColor = (color, inheritedBackground, lowerLevelBackground) => {
+  const findColor = (color, dynamicVars) => {
     if (typeof color !== 'string' || (!color.startsWith('--') && !color.startsWith('$'))) return color
     let targetColor = null
     if (color.startsWith('--')) {
       const [variable, modifier] = color.split(/,/g).map(str => str.trim())
       const variableSlot = variable.substring(2)
       if (variableSlot.startsWith('parent')) {
-        // TODO support more than just background?
         if (variableSlot === 'parent') {
-          targetColor = lowerLevelBackground
+          targetColor = dynamicVars.lowerLevelBackground
+        } else {
+          const virtualSlot = variableSlot.replace(/^parent/, '')
+          targetColor = dynamicVars.lowerLevelVirtualDirectives[virtualSlot]
         }
       } else {
+      // TODO add support for --current prefix
         switch (variableSlot) {
           case 'background':
-            targetColor = inheritedBackground
+            targetColor = dynamicVars.inheritedBackground
             break
           default:
             targetColor = palette[variableSlot]
@@ -227,12 +230,13 @@ export const init = (extraRuleset, palette) => {
       }
 
       if (modifier) {
-        const effectiveBackground = lowerLevelBackground ?? targetColor
+        const effectiveBackground = dynamicVars.lowerLevelBackground ?? targetColor
         const isLightOnDark = relativeLuminance(convert(effectiveBackground).rgb) < 0.5
         const mod = isLightOnDark ? 1 : -1
         targetColor = brightness(Number.parseFloat(modifier) * mod, targetColor).rgb
       }
     }
+
     if (color.startsWith('$')) {
       try {
         const { funcName, argsString } = /\$(?<funcName>\w+)\((?<argsString>[a-zA-Z0-9-,.'"\s]*)\)/.exec(color).groups
@@ -242,9 +246,10 @@ export const init = (extraRuleset, palette) => {
             if (args.length !== 3) {
               throw new Error(`$blend requires 3 arguments, ${args.length} were provided`)
             }
-            const backgroundArg = findColor(args[2], inheritedBackground, lowerLevelBackground)
-            const foregroundArg = findColor(args[0], inheritedBackground, lowerLevelBackground)
+            const backgroundArg = convert(findColor(args[2], dynamicVars)).rgb
+            const foregroundArg = convert(findColor(args[0], dynamicVars)).rgb
             const amount = Number(args[1])
+            console.log('ASS', backgroundArg, foregroundArg, amount)
             targetColor = alphaBlend(backgroundArg, amount, foregroundArg)
             break
           }
@@ -260,17 +265,17 @@ export const init = (extraRuleset, palette) => {
 
   const cssColorString = (color, alpha) => rgba2css({ ...convert(color).rgb, a: alpha })
 
-  const getTextColorAlpha = (rule, lowerColor, value) => {
-    const opacity = rule.directives.textOpacity
-    const backgroundColor = convert(lowerColor).rgb
-    const textColor = convert(findColor(value, backgroundColor)).rgb
+  const getTextColorAlpha = (directives, intendedTextColor, dynamicVars) => {
+    const opacity = directives.textOpacity
+    const backgroundColor = convert(dynamicVars.lowerLevelBackground).rgb
+    const textColor = convert(findColor(intendedTextColor, dynamicVars)).rgb
     if (opacity === null || opacity === undefined || opacity >= 1) {
       return convert(textColor).hex
     }
     if (opacity === 0) {
       return convert(backgroundColor).hex
     }
-    const opacityMode = rule.directives.textOpacityMode
+    const opacityMode = directives.textOpacityMode
     switch (opacityMode) {
       case 'fake':
         return convert(alphaBlend(textColor, opacity, backgroundColor)).hex
@@ -341,6 +346,16 @@ export const init = (extraRuleset, palette) => {
       const soloSelector = ruleToSelector({ component: component.name, ...combination }, true)
       const selector = ruleToSelector({ component: component.name, ...combination, parent }, true)
 
+      const lowerLevelSelector = selector.split(/ /g).slice(0, -1).join(' ')
+      const lowerLevelBackground = cache[lowerLevelSelector]?.background
+      const lowerLevelVirtualDirectives = cache[lowerLevelSelector]?.virtualDirectives
+      // console.log('ASS', lowerLevelVirtualDirectives)
+
+      const dynamicVars = {
+        lowerLevelBackground,
+        lowerLevelVirtualDirectives
+      }
+
       // Inheriting all of the applicable rules
       const existingRules = ruleset.filter(findRules({ component: component.name, ...combination, parent }))
       const { directives: computedDirectives } = existingRules.reduce((acc, rule) => merge(acc, rule), {})
@@ -389,11 +404,10 @@ export const init = (extraRuleset, palette) => {
           }
         }
 
-        const lowerLevelSelector = selector.split(/ /g).slice(0, -1).join(' ')
-        const lowerLevelBackground = cache[lowerLevelSelector].background
+        dynamicVars.inheritedBackground = lowerLevelBackground
 
         // TODO properly provide "parent" text color?
-        const intendedTextColor = convert(findColor(inheritedTextColor, null, lowerLevelBackground)).rgb
+        const intendedTextColor = convert(findColor(inheritedTextColor, dynamicVars)).rgb
         const textColor = newTextRule.directives.textAuto === 'no-auto'
           ? intendedTextColor
           : getTextColor(
@@ -402,22 +416,24 @@ export const init = (extraRuleset, palette) => {
             newTextRule.directives.textAuto === 'preserve'
           )
 
+        // Updating previously added rule
+        const earlyLowerLevelRules = rules.filter(findRules(parent, true))
+        const earlyLowerLevelRule = earlyLowerLevelRules.slice(-1)[0]
+
+        const virtualDirectives = earlyLowerLevelRule.virtualDirectives || {}
+
         // Storing color data in lower layer to use as custom css properties
-        cache[lowerLevelSelector].textDefined = cache[lowerLevelSelector].textDefined || {}
-        cache[lowerLevelSelector].textDefined[selector] = textColor
+        virtualDirectives[virtualName] = getTextColorAlpha(newTextRule.directives, textColor, dynamicVars)
+        earlyLowerLevelRule.virtualDirectives = virtualDirectives
+        cache[lowerLevelSelector].virtualDirectives = virtualDirectives
 
-        const virtualDirectives = {}
-        virtualDirectives[virtualName] = getTextColorAlpha(newTextRule, lowerLevelBackground, textColor)
-
-        // lastRule.computed = lastRule.computed || {}
+        // Debug: lets you see what it think background color should be
 
         const directives = {
           textColor,
+          background: convert(cache[lowerLevelSelector].background).hex,
           ...inheritedTextOpacity
         }
-
-        // Debug: lets you see what it think background color should be
-        // directives.background = convert(cache[lowerLevelSelector].background).hex
 
         addRule({
           parent,
@@ -445,15 +461,16 @@ export const init = (extraRuleset, palette) => {
 
           const inheritSelector = ruleToSelector({ ...inheritRule, parent }, true)
           const inheritedBackground = cache[inheritSelector].background
-          const lowerLevelSelector = selector.split(/ /g).slice(0, -1).join(' ')
 
           // TODO: DEFAULT TEXT COLOR
-          const bg = cache[lowerLevelSelector]?.background || convert('#FFFFFF').rgb
+          const lowerLevelComputedBackground = computed[lowerLevelSelector]?.background || convert('#FFFFFF').rgb
 
-          const rgb = convert(findColor(computedDirectives.background, inheritedBackground, cache[lowerLevelSelector].background)).rgb
+          dynamicVars.inheritedBackground = inheritedBackground
+
+          const rgb = convert(findColor(computedDirectives.background, dynamicVars)).rgb
 
           if (!cache[selector].background) {
-            const blend = computedDirectives.opacity < 1 ? alphaBlend(rgb, computedDirectives.opacity, bg) : rgb
+            const blend = computedDirectives.opacity < 1 ? alphaBlend(rgb, computedDirectives.opacity, lowerLevelComputedBackground) : rgb
             cache[selector].background = blend
             computed[selector].background = rgb
 
@@ -479,7 +496,7 @@ export const init = (extraRuleset, palette) => {
   return {
     raw: rules,
     css: rules.map(rule => {
-      // if (rule.virtual) return ''
+      if (rule.virtual) return ''
 
       let selector = ruleToSelector(rule).replace(/\/\*.*\*\//g, '')
       if (!selector) {
