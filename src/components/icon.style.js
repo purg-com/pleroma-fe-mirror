@@ -7,9 +7,9 @@ export default {
       component: 'Icon',
       directives: {
         textColor: '--text',
+        // textAuto: 'no-auto', // doesn't work well with mixrgb?
         textOpacity: 0.5,
-        textOpacityMode: 'mixrgb',
-        textAuto: 'no-auto'
+        textOpacityMode: 'mixrgb'
       }
     }
   ]
