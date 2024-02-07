@@ -11,14 +11,14 @@
         <input
           v-model="selected.y"
           :disabled="!present"
-          class="input-number"
+          class="input input-number"
           type="number"
         >
         <div class="wrap">
           <input
             v-model="selected.y"
             :disabled="!present"
-            class="input-range"
+            class="input input-range"
             type="range"
             max="20"
             min="-20"
@@ -38,14 +38,14 @@
         <input
           v-model="selected.x"
           :disabled="!present"
-          class="input-number"
+          class="input input-number"
           type="number"
         >
         <div class="wrap">
           <input
             v-model="selected.x"
             :disabled="!present"
-            class="input-range"
+            class="input input-range"
             type="range"
             max="20"
             min="-20"
@@ -129,7 +129,7 @@
           v-model="selected.inset"
           :disabled="!present"
           name="inset"
-          class="input-inset visible-for-screenreader-only"
+          class="input input-inset visible-for-screenreader-only"
           type="checkbox"
         >
         <label
@@ -153,7 +153,7 @@
           v-model="selected.blur"
           :disabled="!present"
           name="blur"
-          class="input-range"
+          class="input input-range"
           type="range"
           max="20"
           min="0"
@@ -161,7 +161,7 @@
         <input
           v-model="selected.blur"
           :disabled="!present"
-          class="input-number"
+          class="input input-number"
           type="number"
           min="0"
         >
@@ -181,7 +181,7 @@
           v-model="selected.spread"
           :disabled="!present"
           name="spread"
-          class="input-range"
+          class="input input-range"
           type="range"
           max="20"
           min="-20"
@@ -189,7 +189,7 @@
         <input
           v-model="selected.spread"
           :disabled="!present"
-          class="input-number"
+          class="input input-number"
           type="number"
         >
       </div>

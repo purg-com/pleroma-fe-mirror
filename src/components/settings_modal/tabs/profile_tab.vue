@@ -12,7 +12,7 @@
           <input
             id="username"
             v-model="newName"
-            class="name-changer"
+            class="input name-changer"
             v-bind="propsToNative(inputProps)"
           >
         </template>
@@ -26,7 +26,7 @@
         <template #default="inputProps">
           <textarea
             v-model="newBio"
-            class="bio resize-height"
+            class="input bio resize-height"
             v-bind="propsToNative(inputProps)"
           />
         </template>
@@ -47,7 +47,7 @@
           id="birthday"
           v-model="newBirthday"
           type="date"
-          class="birthday-input"
+          class="input birthday-input"
         >
         <Checkbox v-model="showBirthday">
           {{ $t('settings.birthday.show_birthday') }}
@@ -71,6 +71,7 @@
                 v-model="newFields[i].name"
                 :placeholder="$t('settings.profile_fields.name')"
                 v-bind="propsToNative(inputProps)"
+                class="input"
               >
             </template>
           </EmojiInput>
@@ -85,6 +86,7 @@
                 v-model="newFields[i].value"
                 :placeholder="$t('settings.profile_fields.value')"
                 v-bind="propsToNative(inputProps)"
+                class="input"
               >
             </template>
           </EmojiInput>
@@ -192,6 +194,7 @@
         <input
           type="file"
           @change="uploadFile('banner', $event)"
+          class="input"
         >
       </div>
       <FAIcon
@@ -234,6 +237,7 @@
         <input
           type="file"
           @change="uploadFile('background', $event)"
+          class="input"
         >
       </div>
       <FAIcon

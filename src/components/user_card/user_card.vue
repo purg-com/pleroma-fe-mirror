@@ -160,14 +160,14 @@
               v-if="userHighlightType !== 'disabled'"
               :id="'userHighlightColorTx'+user.id"
               v-model="userHighlightColor"
-              class="userHighlightText"
+              class="input userHighlightText"
               type="text"
             >
             <input
               v-if="userHighlightType !== 'disabled'"
               :id="'userHighlightColor'+user.id"
               v-model="userHighlightColor"
-              class="userHighlightCl"
+              class="input userHighlightCl"
               type="color"
             >
             {{ ' ' }}

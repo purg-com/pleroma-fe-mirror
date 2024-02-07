@@ -22,7 +22,7 @@
         id="search-bar-input"
         ref="searchInput"
         v-model="searchTerm"
-        class="search-bar-input"
+        class="input search-bar-input"
         :placeholder="$t('nav.search')"
         type="text"
         @keyup.enter="find(searchTerm)"

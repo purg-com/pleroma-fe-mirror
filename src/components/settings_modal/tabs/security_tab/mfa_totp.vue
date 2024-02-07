@@ -30,6 +30,7 @@
       <input
         v-model="currentPassword"
         type="password"
+        class="input"
       >
     </confirm>
     <div

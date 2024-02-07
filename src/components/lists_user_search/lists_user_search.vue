@@ -8,6 +8,7 @@
         />
       </div>
       <input
+        class="input"
         ref="search"
         v-model="query"
         :placeholder="$t('lists.search')"

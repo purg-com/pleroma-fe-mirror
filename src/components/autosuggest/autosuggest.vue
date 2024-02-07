@@ -6,7 +6,7 @@
     <input
       v-model="term"
       :placeholder="placeholder"
-      class="autosuggest-input"
+      class="input autosuggest-input"
       @click="onInputClick"
     >
     <div

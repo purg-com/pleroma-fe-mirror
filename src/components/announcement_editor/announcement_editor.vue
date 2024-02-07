@@ -3,7 +3,7 @@
     <textarea
       ref="textarea"
       v-model="announcement.content"
-      class="post-textarea"
+      class="input post-textarea"
       rows="1"
       cols="1"
       :placeholder="$t('announcements.post_placeholder')"
@@ -13,6 +13,7 @@
       <label for="announcement-start-time">{{ $t('announcements.start_time_prompt') }}</label>
       <input
         id="announcement-start-time"
+        class="input"
         v-model="announcement.startsAt"
         :type="announcement.allDay ? 'date' : 'datetime-local'"
         :disabled="disabled"
@@ -22,6 +23,7 @@
       <label for="announcement-end-time">{{ $t('announcements.end_time_prompt') }}</label>
       <input
         id="announcement-end-time"
+        class="input"
         v-model="announcement.endsAt"
         :type="announcement.allDay ? 'date' : 'datetime-local'"
         :disabled="disabled"

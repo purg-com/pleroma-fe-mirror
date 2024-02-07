@@ -137,7 +137,7 @@
     box-sizing: border-box;
 
     a {
-      color: var(--topBarLink, $fallback--link);
+      color: var(--link);
     }
   }
 

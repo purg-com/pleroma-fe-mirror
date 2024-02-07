@@ -29,7 +29,7 @@
         <label for="path">{{ $t('settings.url') }}</label>
         <input
           :id="path"
-          class="string-input"
+          class="input string-input"
           :disabled="shouldBeDisabled"
           :value="realDraftMode ? draft : state"
           @change="update"

@@ -43,7 +43,7 @@
                 v-model="user.email"
                 :disabled="isPending"
                 :placeholder="$t('password_reset.placeholder')"
-                class="form-control"
+                class="input form-control"
                 type="input"
               >
             </div>

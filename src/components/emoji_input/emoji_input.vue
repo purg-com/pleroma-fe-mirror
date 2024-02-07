@@ -112,7 +112,7 @@
 <style lang="scss">
 @import "../../variables";
 
-.emoji-input {
+.input.emoji-input {
   display: flex;
   flex-direction: column;
   position: relative;
@@ -127,8 +127,7 @@
     line-height: 24px;
 
     &:hover i {
-      color: $fallback--text;
-      color: var(--text, $fallback--text);
+      color: var(--text);
     }
   }
 
@@ -145,6 +144,10 @@
   input,
   textarea {
     flex: 1 0 auto;
+    color: inherit;
+    background: none;
+    border: none;
+    outline: none;
   }
 
   &.with-picker input {

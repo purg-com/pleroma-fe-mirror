@@ -9,7 +9,7 @@
       <input
         ref="searchInput"
         v-model="searchTerm"
-        class="search-input"
+        class="input search-input"
         :placeholder="$t('nav.search')"
         @keyup.enter="newQuery(searchTerm)"
       >

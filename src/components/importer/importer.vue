@@ -2,6 +2,7 @@
   <div class="importer">
     <form>
       <input
+        class="input"
         ref="input"
         type="file"
         @change="change"

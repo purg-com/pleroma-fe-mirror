@@ -19,7 +19,7 @@
             <p>{{ $t('user_reporting.add_comment_description') }}</p>
             <textarea
               v-model="comment"
-              class="form-control"
+              class="input form-control"
               :placeholder="$t('user_reporting.additional_comments')"
               rows="1"
               @input="resize"

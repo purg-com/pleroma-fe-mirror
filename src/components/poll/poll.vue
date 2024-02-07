@@ -39,10 +39,11 @@
           :aria-checked="choices[index]"
           @click="activateOption(index)"
         >
+          <!-- TODO: USE CHECKBOX -->
           <input
             v-if="poll.multiple"
             type="checkbox"
-            class="poll-checkbox"
+            class="input poll-checkbox"
             :disabled="loading"
             :value="index"
           >
@@ -51,6 +52,7 @@
             type="radio"
             :disabled="loading"
             :value="index"
+            class="input"
           >
           <label class="option-vote">
             <RichContent

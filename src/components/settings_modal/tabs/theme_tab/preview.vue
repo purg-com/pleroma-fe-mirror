@@ -95,6 +95,7 @@
         <input
           :value="$t('settings.style.preview.input')"
           type="text"
+          class="input"
         >
 
         <div class="actions">
@@ -103,6 +104,7 @@
               id="preview_checkbox"
               checked="very yes"
               type="checkbox"
+              class="input"
             >
             <label for="preview_checkbox">{{ $t('settings.style.preview.checkbox') }}</label>
           </span>

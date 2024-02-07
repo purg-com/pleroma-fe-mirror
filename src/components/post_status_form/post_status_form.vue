@@ -161,7 +161,7 @@
           v-model="newStatus.spoilerText"
           enable-emoji-picker
           :suggest="emojiSuggestor"
-          class="form-control"
+          class="input form-control"
         >
           <template #default="inputProps">
             <input
@@ -180,7 +180,7 @@
           v-model="newStatus.status"
           :suggest="emojiUserSuggestor"
           :placement="emojiPickerPlacement"
-          class="form-control main-input"
+          class="input form-control main-input"
           enable-emoji-picker
           hide-emoji-button
           :newline-on-ctrl-enter="submitOnEnter"
@@ -237,7 +237,7 @@
             <Select
               id="post-content-type"
               v-model="newStatus.contentType"
-              class="form-control"
+              class="input form-control"
               :attrs="{ 'aria-label': $t('post_status.content_type_selection') }"
             >
               <option
@@ -591,6 +591,8 @@
     height: calc(var(--post-line-height) * 1em);
     min-height: calc(var(--post-line-height) * 1em);
     resize: none;
+    text: inherit;
+    background: transparent;
 
     &.scrollable-form {
       overflow-y: auto;

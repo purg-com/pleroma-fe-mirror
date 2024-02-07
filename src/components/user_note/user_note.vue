@@ -33,7 +33,7 @@
     <textarea
       v-show="editing"
       v-model="localNote"
-      class="note-text"
+      class="input note-text"
     />
     <span
       v-show="!editing"

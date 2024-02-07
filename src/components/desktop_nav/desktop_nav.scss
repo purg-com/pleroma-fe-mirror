@@ -9,7 +9,7 @@
   }
 
   a {
-    color: var(--topBarLink, $fallback--link);
+    color: var(--link);
   }
 
   .inner-nav {
@@ -54,27 +54,7 @@
   .button-default {
     &,
     svg {
-      color: $fallback--text;
-      color: var(--btnTopBarText, $fallback--text);
-    }
-
-    &:active {
-      background-color: $fallback--fg;
-      background-color: var(--btnPressedTopBar, $fallback--fg);
-      color: $fallback--text;
-      color: var(--btnPressedTopBarText, $fallback--text);
-    }
-
-    &:disabled {
-      color: $fallback--text;
-      color: var(--btnDisabledTopBarText, $fallback--text);
-    }
-
-    &.toggled {
-      color: $fallback--text;
-      color: var(--btnToggledTopBarText, $fallback--text);
-      background-color: $fallback--fg;
-      background-color: var(--btnToggledTopBar, $fallback--fg);
+      color: var(--text);
     }
   }
 
@@ -94,8 +74,7 @@
       mask-repeat: no-repeat;
       mask-position: center;
       mask-size: contain;
-      background-color: $fallback--fg;
-      background-color: var(--topBarText, $fallback--fg);
+      background-color: var(--text);
       position: absolute;
       top: 0;
       bottom: 0;
@@ -116,8 +95,7 @@
     text-align: center;
 
     .svg-inline--fa {
-      color: $fallback--link;
-      color: var(--topBarLink, $fallback--link);
+      color: var(--link);
     }
   }
 

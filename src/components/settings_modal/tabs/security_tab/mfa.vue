@@ -99,12 +99,14 @@
                 <input
                   v-model="otpConfirmToken"
                   type="text"
+                  class="input"
                 >
 
                 <p>{{ $t('settings.enter_current_password_to_confirm') }}:</p>
                 <input
                   v-model="currentPassword"
                   type="password"
+                  class="input"
                 >
                 <div class="confirm-otp-actions">
                   <button

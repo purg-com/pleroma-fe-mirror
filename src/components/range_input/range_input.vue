@@ -14,7 +14,7 @@
       v-if="typeof fallback !== 'undefined'"
       :id="name + '-o'"
       :aria-labelledby="name + '-label'"
-      class="opt visible-for-screenreader-only"
+      class="input opt visible-for-screenreader-only"
       type="checkbox"
       :checked="present"
       @change="$emit('update:modelValue', !present ? fallback : undefined)"
@@ -27,7 +27,7 @@
     />
     <input
       :id="name"
-      class="input-number"
+      class="input input-number"
       type="range"
       :value="modelValue || fallback"
       :disabled="!present || disabled"
@@ -38,7 +38,7 @@
     >
     <input
       :id="name + '-numeric'"
-      class="input-number"
+      class="input input-number"
       type="number"
       :aria-labelledby="name + '-label'"
       :value="modelValue || fallback"
