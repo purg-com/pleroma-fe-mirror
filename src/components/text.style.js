@@ -12,7 +12,8 @@ export default {
     {
       component: 'Text',
       directives: {
-        textColor: '--text'
+        textColor: '--text',
+        textAuto: 'no-preserve'
       }
     },
     {
@@ -26,7 +27,8 @@ export default {
       component: 'Text',
       variant: 'greentext',
       directives: {
-        textColor: '--cGreen'
+        textColor: '--cGreen',
+        textAuto: 'preserve'
       }
     }
   ]

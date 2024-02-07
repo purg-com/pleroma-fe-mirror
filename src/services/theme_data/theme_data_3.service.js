@@ -365,6 +365,7 @@ export const init = (extraRuleset, palette) => {
         ].join('')
 
         let inheritedTextColor = computedDirectives.textColor
+        let inheritedTextAuto = computedDirectives.textAuto
         let inheritedTextOpacity = computedDirectives.textOpacity
         let inheritedTextOpacityMode = computedDirectives.textOpacityMode
         const lowerLevelTextSelector = [...selector.split(/ /g).slice(0, -1), soloSelector].join(' ')
@@ -372,6 +373,7 @@ export const init = (extraRuleset, palette) => {
 
         if (inheritedTextColor == null || inheritedTextOpacity == null || inheritedTextOpacityMode == null) {
           inheritedTextColor = computedDirectives.textColor ?? lowerLevelTextRule.textColor
+          inheritedTextAuto = computedDirectives.textAuto ?? lowerLevelTextRule.textAuto
           inheritedTextOpacity = computedDirectives.textOpacity ?? lowerLevelTextRule.textOpacity
           inheritedTextOpacityMode = computedDirectives.textOpacityMode ?? lowerLevelTextRule.textOpacityMode
         }
@@ -381,6 +383,7 @@ export const init = (extraRuleset, palette) => {
           directives: {
             ...computedRule.directives,
             textColor: inheritedTextColor,
+            textAuto: inheritedTextAuto ?? 'preserve',
             textOpacity: inheritedTextOpacity,
             textOpacityMode: inheritedTextOpacityMode
           }
@@ -393,7 +396,7 @@ export const init = (extraRuleset, palette) => {
           convert(lowerLevelBackground).rgb,
           // TODO properly provide "parent" text color?
           convert(findColor(inheritedTextColor, null, lowerLevelBackground)).rgb,
-          true // component.name === 'Link' || combination.variant === 'greentext' // make it configurable?
+          newTextRule.directives.textAuto === 'preserve'
         )
 
         // Storing color data in lower layer to use as custom css properties
@@ -443,8 +446,6 @@ export const init = (extraRuleset, palette) => {
 
           // TODO: DEFAULT TEXT COLOR
           const bg = cache[lowerLevelSelector]?.background || convert('#FFFFFF').rgb
-
-          console.log('SELECTOR', lowerLevelSelector)
 
           const rgb = convert(findColor(computedDirectives.background, inheritedBackground, cache[lowerLevelSelector].background)).rgb
 
