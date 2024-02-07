@@ -1,15 +1,16 @@
 export default {
-  name: 'PanelHeader',
-  selector: '.panel-heading',
+  name: 'DropdownMenu',
+  selector: '.dropdown',
   validInnerComponents: [
     'Text',
-    'Link',
     'Icon',
-    'Button'
+    'Input'
   ],
+  states: {
+    hover: ':hover'
+  },
   defaultRules: [
     {
-      component: 'PanelHeader',
       directives: {
         background: '--fg'
       }

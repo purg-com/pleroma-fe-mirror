@@ -371,8 +371,7 @@ nav {
   border-radius: $fallback--btnRadius;
   border-radius: var(--btnRadius, $fallback--btnRadius);
   cursor: pointer;
-  box-shadow: $fallback--buttonShadow;
-  box-shadow: var(--buttonShadow);
+  box-shadow: var(--shadow);
   font-size: 1em;
   font-family: sans-serif;
   font-family: var(--interfaceFont, sans-serif);
@@ -383,25 +382,14 @@ nav {
 
   i[class*="icon-"],
   .svg-inline--fa {
-    color: $fallback--text;
-    color: var(--btnText, $fallback--text);
+    color: var(--icon);
   }
 
   &::-moz-focus-inner {
     border: none;
   }
 
-  &:hover {
-    box-shadow: 0 0 4px rgb(255 255 255 / 30%);
-    box-shadow: var(--buttonHoverShadow);
-  }
-
   &:active {
-    box-shadow:
-      0 0 4px 0 rgb(255 255 255 / 30%),
-      0 1px 0 0 rgb(0 0 0 / 20%) inset,
-      0 -1px 0 0 rgb(255 255 255 / 20%) inset;
-    box-shadow: var(--buttonPressedShadow);
     color: $fallback--text;
     color: var(--btnPressedText, $fallback--text);
     background-color: $fallback--fg;
@@ -487,7 +475,12 @@ nav {
 }
 
 input,
-textarea,
+textarea {
+  border: none;
+  display: inline-block;
+  outline: none;
+}
+
 .input {
   &.unstyled {
     border-radius: 0;
@@ -501,15 +494,7 @@ textarea,
   border: none;
   border-radius: $fallback--inputRadius;
   border-radius: var(--inputRadius, $fallback--inputRadius);
-  box-shadow:
-    0 1px 0 0 rgb(0 0 0 / 20%) inset,
-    0 -1px 0 0 rgb(255 255 255 / 20%) inset,
-    0 0 2px 0 rgb(0 0 0 / 100%) inset;
-  box-shadow: var(--inputShadow);
-  background-color: $fallback--fg;
-  background-color: var(--input, $fallback--fg);
-  color: $fallback--lightText;
-  color: var(--inputText, $fallback--lightText);
+  box-shadow: var(--shadow);
   font-family: sans-serif;
   font-family: var(--inputFont, sans-serif);
   font-size: 1em;
@@ -561,11 +546,9 @@ textarea,
       width: 1.1em;
       height: 1.1em;
       border-radius: 100%; // Radio buttons should always be circle
-      box-shadow: 0 0 2px black inset;
-      box-shadow: var(--inputShadow);
+      background-color: var(--background);
+      box-shadow: var(--shadow);
       margin-right: 0.5em;
-      background-color: $fallback--fg;
-      background-color: var(--input, $fallback--fg);
       vertical-align: top;
       text-align: center;
       line-height: 1.1;
@@ -578,8 +561,9 @@ textarea,
 
   &[type="checkbox"] {
     &:checked + label::before {
-      color: $fallback--text;
-      color: var(--inputText, $fallback--text);
+      color: var(--text);
+      background-color: var(--background);
+      box-shadow: var(--shadow);
     }
 
     &:disabled {

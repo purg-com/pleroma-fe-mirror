@@ -1,19 +1,17 @@
 export default {
-  name: 'Panel',
-  selector: '.panel',
+  name: 'TopBar',
+  selector: 'nav',
   validInnerComponents: [
-    'Text',
     'Link',
+    'Text',
     'Icon',
     'Button',
-    'Input',
-    'PanelHeader',
-    'DropdownMenu'
+    'Input'
   ],
   defaultRules: [
     {
       directives: {
-        background: '--bg'
+        background: '--fg'
       }
     }
   ]

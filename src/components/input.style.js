@@ -8,7 +8,6 @@ const border = (top, shadow) => ({
   inset: true
 })
 
-const buttonInsetFakeBorders = [border(true, false), border(false, true)]
 const inputInsetFakeBorders = [border(true, true), border(false, false)]
 
 const hoverGlow = {
@@ -21,11 +20,10 @@ const hoverGlow = {
 }
 
 export default {
-  name: 'Button',
-  selector: '.button-default',
+  name: 'Input',
+  selector: '.input',
   states: {
     disabled: ':disabled',
-    toggled: '.toggled',
     pressed: ':active',
     hover: ':hover',
     focused: ':focus-within'
@@ -36,12 +34,10 @@ export default {
     sublime: '.sublime'
   },
   validInnerComponents: [
-    'Text',
-    'Icon'
+    'Text'
   ],
   defaultRules: [
     {
-      component: 'Button',
       directives: {
         background: '--fg',
         shadow: [{
@@ -51,41 +47,13 @@ export default {
           spread: 0,
           color: '#000000',
           alpha: 1
-        }, ...buttonInsetFakeBorders]
+        }, ...inputInsetFakeBorders]
       }
     },
     {
-      component: 'Button',
       state: ['hover'],
       directives: {
-        shadow: [hoverGlow, ...buttonInsetFakeBorders]
-      }
-    },
-    {
-      component: 'Button',
-      state: ['hover', 'pressed'],
-      directives: {
-        background: '--accent,-24.2',
         shadow: [hoverGlow, ...inputInsetFakeBorders]
-      }
-    },
-    {
-      component: 'Button',
-      state: ['disabled'],
-      directives: {
-        background: '$blend(--background, 0.25, --parent)',
-        shadow: [...buttonInsetFakeBorders]
-      }
-    },
-    {
-      component: 'Text',
-      parent: {
-        component: 'Button',
-        state: ['disabled']
-      },
-      directives: {
-        textOpacity: 0.25,
-        textOpacityMode: 'blend'
       }
     }
   ]

@@ -1,6 +1,6 @@
 export default {
-  name: 'Panel',
-  selector: '.panel',
+  name: 'Popover',
+  selector: '.popover',
   validInnerComponents: [
     'Text',
     'Link',
@@ -13,7 +13,7 @@ export default {
   defaultRules: [
     {
       directives: {
-        background: '--bg'
+        background: '--fg'
       }
     }
   ]

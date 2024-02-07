@@ -20,8 +20,8 @@ export const applyTheme = (input) => {
 
   styleSheet.toString()
   styleSheet.insertRule(`:root { ${rules.radii} }`, 'index-max')
-  styleSheet.insertRule(`:root { ${rules.colors} }`, 'index-max')
-  styleSheet.insertRule(`:root { ${rules.shadows} }`, 'index-max')
+  // styleSheet.insertRule(`:root { ${rules.colors} }`, 'index-max')
+  // styleSheet.insertRule(`:root { ${rules.shadows} }`, 'index-max')
   styleSheet.insertRule(`:root { ${rules.fonts} }`, 'index-max')
   themes3.css.forEach(rule => {
     console.log(rule)
