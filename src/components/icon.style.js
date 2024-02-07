@@ -8,7 +8,8 @@ export default {
       directives: {
         textColor: '--text',
         textOpacity: 0.5,
-        textOpacityMode: 'mixrgb'
+        textOpacityMode: 'mixrgb',
+        textAuto: 'no-auto'
       }
     }
   ]

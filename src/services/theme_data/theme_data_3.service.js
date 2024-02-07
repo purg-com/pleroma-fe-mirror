@@ -392,12 +392,15 @@ export const init = (extraRuleset, palette) => {
         const lowerLevelSelector = selector.split(/ /g).slice(0, -1).join(' ')
         const lowerLevelBackground = cache[lowerLevelSelector].background
 
-        const textColor = getTextColor(
-          convert(lowerLevelBackground).rgb,
-          // TODO properly provide "parent" text color?
-          convert(findColor(inheritedTextColor, null, lowerLevelBackground)).rgb,
-          newTextRule.directives.textAuto === 'preserve'
-        )
+        // TODO properly provide "parent" text color?
+        const intendedTextColor = convert(findColor(inheritedTextColor, null, lowerLevelBackground)).rgb
+        const textColor = newTextRule.directives.textAuto === 'no-auto'
+          ? intendedTextColor
+          : getTextColor(
+            convert(lowerLevelBackground).rgb,
+            intendedTextColor,
+            newTextRule.directives.textAuto === 'preserve'
+          )
 
         // Storing color data in lower layer to use as custom css properties
         cache[lowerLevelSelector].textDefined = cache[lowerLevelSelector].textDefined || {}
