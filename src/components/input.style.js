@@ -28,11 +28,8 @@ export default {
     hover: ':hover',
     focused: ':focus-within'
   },
-  variants: {
-    danger: '.danger',
-    unstyled: '.unstyled',
-    sublime: '.sublime'
-  },
+  // variants: {
+  // },
   validInnerComponents: [
     'Text'
   ],

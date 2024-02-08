@@ -77,7 +77,7 @@ const components = {
 // into an array [item2, item3] for iterating
 const unroll = (item) => {
   const out = []
-  let currentParent = item.parent
+  let currentParent = item
   while (currentParent) {
     const { parent: newParent, ...rest } = currentParent
     out.push(rest)
@@ -115,6 +115,8 @@ export const ruleToSelector = (rule, ignoreOutOfTreeSelector, isParent) => {
   let applicableVariant = ''
   if (applicableVariantName !== 'normal') {
     applicableVariant = variants[applicableVariantName]
+  } else {
+    applicableVariant = variants?.normal ?? ''
   }
 
   let realSelector
@@ -130,7 +132,7 @@ export const ruleToSelector = (rule, ignoreOutOfTreeSelector, isParent) => {
   const selectors = [realSelector, applicableVariant, ...applicableStates]
     .toSorted((a, b) => {
       if (a.startsWith(':')) return 1
-      if (!a.startsWith('.')) return -1
+      if (/^[a-z]/.exec(a)) return -1
       else return 0
     })
     .join('')
@@ -189,7 +191,7 @@ const findRules = (criteria, strict) => subject => {
 }
 
 export const init = (extraRuleset, palette) => {
-  const cache = {}
+  const stacked = {}
   const computed = {}
 
   const rules = []
@@ -213,19 +215,20 @@ export const init = (extraRuleset, palette) => {
       const variableSlot = variable.substring(2)
       if (variableSlot.startsWith('parent')) {
         if (variableSlot === 'parent') {
-          targetColor = dynamicVars.lowerLevelBackground
+          const { r, g, b } = dynamicVars.lowerLevelBackground
+          targetColor = { r, g, b }
         } else {
           const virtualSlot = variableSlot.replace(/^parent/, '')
-          targetColor = dynamicVars.lowerLevelVirtualDirectives[virtualSlot]
+          targetColor = convert(dynamicVars.lowerLevelVirtualDirectivesRaw[virtualSlot]).rgb
         }
       } else {
-      // TODO add support for --current prefix
+        // TODO add support for --current prefix
         switch (variableSlot) {
           case 'background':
-            targetColor = dynamicVars.inheritedBackground
+            targetColor = convert(dynamicVars.inheritedBackground).rgb
             break
           default:
-            targetColor = palette[variableSlot]
+            targetColor = convert(palette[variableSlot]).rgb
         }
       }
 
@@ -249,7 +252,6 @@ export const init = (extraRuleset, palette) => {
             const backgroundArg = convert(findColor(args[2], dynamicVars)).rgb
             const foregroundArg = convert(findColor(args[0], dynamicVars)).rgb
             const amount = Number(args[1])
-            console.log('ASS', backgroundArg, foregroundArg, amount)
             targetColor = alphaBlend(backgroundArg, amount, foregroundArg)
             break
           }
@@ -325,6 +327,12 @@ export const init = (extraRuleset, palette) => {
   }
 
   const processInnerComponent = (component, parent) => {
+    const parentList = parent ? unroll(parent).reverse().map(c => c.component) : []
+    if (!component.virtual) {
+      const path = [...parentList, component.name].join(' > ')
+      console.log('Component ' + path + ' process starting')
+    }
+    const t0 = performance.now()
     const {
       validInnerComponents = [],
       states: originalStates = {},
@@ -338,6 +346,7 @@ export const init = (extraRuleset, palette) => {
     const innerComponents = validInnerComponents.map(name => components[name])
 
     const stateCombinations = getAllPossibleCombinations(Object.keys(states))
+
     const stateVariantCombination = Object.keys(variants).map(variant => {
       return stateCombinations.map(state => ({ variant, state }))
     }).reduce((acc, x) => [...acc, ...x], [])
@@ -347,13 +356,14 @@ export const init = (extraRuleset, palette) => {
       const selector = ruleToSelector({ component: component.name, ...combination, parent }, true)
 
       const lowerLevelSelector = selector.split(/ /g).slice(0, -1).join(' ')
-      const lowerLevelBackground = cache[lowerLevelSelector]?.background
-      const lowerLevelVirtualDirectives = cache[lowerLevelSelector]?.virtualDirectives
-      // console.log('ASS', lowerLevelVirtualDirectives)
+      const lowerLevelBackground = computed[lowerLevelSelector]?.background
+      const lowerLevelVirtualDirectives = computed[lowerLevelSelector]?.virtualDirectives
+      const lowerLevelVirtualDirectivesRaw = computed[lowerLevelSelector]?.virtualDirectivesRaw
 
       const dynamicVars = {
         lowerLevelBackground,
-        lowerLevelVirtualDirectives
+        lowerLevelVirtualDirectives,
+        lowerLevelVirtualDirectivesRaw
       }
 
       // Inheriting all of the applicable rules
@@ -411,7 +421,7 @@ export const init = (extraRuleset, palette) => {
         const textColor = newTextRule.directives.textAuto === 'no-auto'
           ? intendedTextColor
           : getTextColor(
-            convert(lowerLevelBackground).rgb,
+            convert(stacked[lowerLevelSelector]).rgb,
             intendedTextColor,
             newTextRule.directives.textAuto === 'preserve'
           )
@@ -421,17 +431,21 @@ export const init = (extraRuleset, palette) => {
         const earlyLowerLevelRule = earlyLowerLevelRules.slice(-1)[0]
 
         const virtualDirectives = earlyLowerLevelRule.virtualDirectives || {}
+        const virtualDirectivesRaw = earlyLowerLevelRule.virtualDirectivesRaw || {}
 
         // Storing color data in lower layer to use as custom css properties
         virtualDirectives[virtualName] = getTextColorAlpha(newTextRule.directives, textColor, dynamicVars)
+        virtualDirectivesRaw[virtualName] = textColor
         earlyLowerLevelRule.virtualDirectives = virtualDirectives
-        cache[lowerLevelSelector].virtualDirectives = virtualDirectives
+        earlyLowerLevelRule.virtualDirectivesRaw = virtualDirectivesRaw
+        computed[lowerLevelSelector].virtualDirectives = virtualDirectives
+        computed[lowerLevelSelector].virtualDirectivesRaw = virtualDirectivesRaw
 
         // Debug: lets you see what it think background color should be
 
         const directives = {
           textColor,
-          background: convert(cache[lowerLevelSelector].background).hex,
+          background: convert(computed[lowerLevelSelector].background).hex,
           ...inheritedTextOpacity
         }
 
@@ -441,10 +455,10 @@ export const init = (extraRuleset, palette) => {
           component: component.name,
           ...combination,
           directives,
-          virtualDirectives
+          virtualDirectives,
+          virtualDirectivesRaw
         })
       } else {
-        cache[selector] = cache[selector] || {}
         computed[selector] = computed[selector] || {}
 
         if (computedDirectives.background) {
@@ -460,7 +474,7 @@ export const init = (extraRuleset, palette) => {
           }
 
           const inheritSelector = ruleToSelector({ ...inheritRule, parent }, true)
-          const inheritedBackground = cache[inheritSelector].background
+          const inheritedBackground = computed[inheritSelector].background
 
           // TODO: DEFAULT TEXT COLOR
           const lowerLevelComputedBackground = computed[lowerLevelSelector]?.background || convert('#FFFFFF').rgb
@@ -469,10 +483,18 @@ export const init = (extraRuleset, palette) => {
 
           const rgb = convert(findColor(computedDirectives.background, dynamicVars)).rgb
 
-          if (!cache[selector].background) {
-            const blend = computedDirectives.opacity < 1 ? alphaBlend(rgb, computedDirectives.opacity, lowerLevelComputedBackground) : rgb
-            cache[selector].background = blend
-            computed[selector].background = rgb
+          if (!stacked[selector]) {
+            let blend
+            const alpha = computedDirectives.opacity
+            if (alpha >= 1) {
+              blend = rgb
+            } else if (alpha <= 0) {
+              blend = lowerLevelComputedBackground
+            } else {
+              blend = alphaBlend(rgb, computedDirectives.opacity, lowerLevelComputedBackground)
+            }
+            stacked[selector] = blend
+            computed[selector].background = { ...rgb, a: computedDirectives.opacity ?? 1 }
 
             addRule({
               component: component.name,
@@ -482,16 +504,19 @@ export const init = (extraRuleset, palette) => {
             })
           }
         }
-
-        if (existingRules.length !== 0) {
-          console.warn('MORE EXISTING RULES', existingRules)
-        }
       }
+
       innerComponents.forEach(innerComponent => processInnerComponent(innerComponent, { parent, component: name, ...combination }))
     })
+
+    const t1 = performance.now()
+    if (!component.virtual) {
+      const path = [...parentList, component.name].join(' > ')
+      console.log('Component ' + path + ' procession time: ' + (t1 - t0) + 'ms')
+    }
   }
 
-  processInnerComponent(components.Root, { component: 'Root' })
+  processInnerComponent(components.Root)
 
   return {
     raw: rules,

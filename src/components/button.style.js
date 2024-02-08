@@ -22,7 +22,7 @@ const hoverGlow = {
 
 export default {
   name: 'Button',
-  selector: '.button-default',
+  selector: '.button',
   states: {
     disabled: ':disabled',
     toggled: '.toggled',
@@ -31,9 +31,9 @@ export default {
     focused: ':focus-within'
   },
   variants: {
+    normal: '-default',
     danger: '.danger',
-    unstyled: '.unstyled',
-    sublime: '.sublime'
+    unstyled: '-unstyled'
   },
   validInnerComponents: [
     'Text',
@@ -52,6 +52,14 @@ export default {
           color: '#000000',
           alpha: 1
         }, ...buttonInsetFakeBorders]
+      }
+    },
+    {
+      component: 'Button',
+      variant: 'unstyled',
+      directives: {
+        background: '--fg',
+        opacity: 0
       }
     },
     {
