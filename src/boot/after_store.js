@@ -63,6 +63,7 @@ const getInstanceConfig = async ({ store }) => {
       store.dispatch('setInstanceOption', { name: 'accountApprovalRequired', value: data.approval_required })
       store.dispatch('setInstanceOption', { name: 'birthdayRequired', value: !!data.pleroma.metadata.birthday_required })
       store.dispatch('setInstanceOption', { name: 'birthdayMinAge', value: data.pleroma.metadata.birthday_min_age || 0 })
+      store.dispatch('setInstanceOption', { name: 'domains', value: data.pleroma.metadata.multitenancy?.enabled ? data.pleroma.metadata.multitenancy.domains : undefined })
 
       if (vapidPublicKey) {
         store.dispatch('setInstanceOption', { name: 'vapidPublicKey', value: vapidPublicKey })

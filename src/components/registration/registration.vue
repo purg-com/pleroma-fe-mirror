@@ -42,6 +42,29 @@
             </div>
 
             <div
+              v-if="domains"
+              class="form-group"
+              :class="{ 'form-group--error': v$.user.domain.$error }"
+            >
+              <label
+                for="sign-up-domain"
+                class="form--label"
+              >{{ $t('registration.domain') }}</label>
+              <Select
+                id="sign-up-domain"
+                v-model="v$.user.domain.$model"
+              >
+                <option
+                  v-for="domain in domains"
+                  :key="domain.id"
+                  :value="domain.id"
+                >
+                  {{ domain.domain }}
+                </option>
+              </Select>
+            </div>
+
+            <div
               class="form-group"
               :class="{ 'form-group--error': v$.user.fullname.$error }"
             >

@@ -309,6 +309,7 @@
   },
   "registration": {
     "bio_optional": "Bio (optional)",
+    "domain": "Domain",
     "email": "Email",
     "email_optional": "Email (optional)",
     "fullname": "Display name",
