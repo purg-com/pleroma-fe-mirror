@@ -352,6 +352,7 @@ export const init = (extraRuleset, palette) => {
     }).reduce((acc, x) => [...acc, ...x], [])
 
     stateVariantCombination.forEach(combination => {
+      const tt0 = performance.now()
       const soloSelector = ruleToSelector({ component: component.name, ...combination }, true)
       const selector = ruleToSelector({ component: component.name, ...combination, parent }, true)
 
@@ -507,6 +508,10 @@ export const init = (extraRuleset, palette) => {
       }
 
       innerComponents.forEach(innerComponent => processInnerComponent(innerComponent, { parent, component: name, ...combination }))
+      const tt1 = performance.now()
+      if (!component.virtual) {
+        console.log('State-variant ' + combination.variant + ' : ' + combination.state.join('+') + ' procession time: ' + (tt1 - tt0) + 'ms')
+      }
     })
 
     const t1 = performance.now()
