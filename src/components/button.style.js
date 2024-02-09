@@ -21,17 +21,20 @@ const hoverGlow = {
 }
 
 export default {
-  name: 'Button',
-  selector: '.button',
+  name: 'Button', // Name of the component
+  selector: '.button', // CSS selector/prefix
+  // States, system witll calculate ALL possible combinations of those and append a "normal" to them + standalone "normal" state
   states: {
+    // normal: state is implicitly added
     disabled: ':disabled',
     toggled: '.toggled',
     pressed: ':active',
     hover: ':hover',
     focused: ':focus-within'
   },
+  // Variants are mutually exclusive, which saves on computation time
   variants: {
-    normal: '-default',
+    normal: '-default', // you can override normal variant
     danger: '.danger',
     unstyled: '-unstyled'
   },

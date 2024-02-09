@@ -20,6 +20,8 @@ import Text from 'src/components/text.style.js'
 import Link from 'src/components/link.style.js'
 import Icon from 'src/components/icon.style.js'
 
+const DEBUG = false
+
 export const DEFAULT_SHADOWS = {
   panel: [{
     x: 1,
@@ -150,11 +152,11 @@ const combinationsMatch = (criteria, subject, strict) => {
     if (criteria.variant !== subject.variant) return false
   }
 
-  const subjectStatesSet = new Set(subject.state)
-  const criteriaStatesSet = new Set(criteria.state)
-
   // Subject states > 1 essentially means state is "normal" and therefore matches
-  if (subjectStatesSet.size > 1 || strict) {
+  if (subject.state.length > 1 || strict) {
+    const subjectStatesSet = new Set(subject.state)
+    const criteriaStatesSet = new Set(criteria.state)
+
     const setsAreEqual =
       [...criteriaStatesSet].every(state => subjectStatesSet.has(state)) &&
       [...subjectStatesSet].every(state => criteriaStatesSet.has(state))
@@ -448,6 +450,7 @@ export const init = (extraRuleset, palette) => {
         computed[lowerLevelSelector].virtualDirectivesRaw = virtualDirectivesRaw
 
         // Debug: lets you see what it think background color should be
+        if (!DEBUG) return
 
         const directives = {
           textColor,
@@ -456,9 +459,10 @@ export const init = (extraRuleset, palette) => {
         }
 
         addRule({
-          parent,
+          selector,
           virtual: true,
           component: component.name,
+          parent,
           ...combination,
           directives,
           virtualDirectives,
@@ -503,6 +507,7 @@ export const init = (extraRuleset, palette) => {
             computed[selector].background = { ...rgb, a: computedDirectives.opacity ?? 1 }
 
             addRule({
+              selector,
               component: component.name,
               ...combination,
               parent,
@@ -531,9 +536,7 @@ export const init = (extraRuleset, palette) => {
   return {
     raw: rules,
     css: rules.map(rule => {
-      if (rule.virtual) return ''
-
-      let selector = ruleToSelector(rule).replace(/\/\*.*\*\//g, '')
+      let selector = rule.selector
       if (!selector) {
         selector = 'body'
       }
