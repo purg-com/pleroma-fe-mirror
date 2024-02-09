@@ -1,5 +1,4 @@
 import { convert, brightness } from 'chromatism'
-import merge from 'lodash.merge'
 import {
   alphaBlend,
   getTextColor,
@@ -369,7 +368,7 @@ export const init = (extraRuleset, palette) => {
 
       // Inheriting all of the applicable rules
       const existingRules = ruleset.filter(findRules({ component: component.name, ...combination, parent }))
-      const { directives: computedDirectives } = existingRules.reduce((acc, rule) => merge(acc, rule), {})
+      const computedDirectives = existingRules.map(r => r.directives).reduce((acc, directives) => ({ ...acc, ...directives }), {})
       const computedRule = {
         component: component.name,
         ...combination,

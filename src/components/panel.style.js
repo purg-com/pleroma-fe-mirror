@@ -7,8 +7,7 @@ export default {
     'Icon',
     'Button',
     'Input',
-    'PanelHeader',
-    'DropdownMenu'
+    'PanelHeader'
   ],
   defaultRules: [
     {
