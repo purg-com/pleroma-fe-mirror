@@ -60,6 +60,9 @@ const SettingsModalAdminContent = {
     },
     noDb () {
       return this.$store.state.adminSettings.dbConfigEnabled === false
+    },
+    multitenancyAvailable () {
+      return this.$store.state.instance.multitenancyAvailable
     }
   },
   created () {
