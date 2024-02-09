@@ -1,5 +1,7 @@
+import BooleanSetting from '../helpers/boolean_setting.vue'
 import Checkbox from 'src/components/checkbox/checkbox.vue'
 import Domain from 'src/components/domain/domain.vue'
+import GroupSetting from '../helpers/group_setting.vue'
 import PanelLoading from 'src/components/panel_loading/panel_loading.vue'
 
 import SharedComputedObject from '../helpers/shared_computed_object.js'
@@ -22,6 +24,8 @@ const DomainsTab = {
     }
   },
   components: {
+    BooleanSetting,
+    GroupSetting,
     PanelLoading,
     Domain,
     Checkbox

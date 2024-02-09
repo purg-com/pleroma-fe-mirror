@@ -5,6 +5,17 @@
   >
     <div class="setting-item">
       <h2>{{ $t('admin_dash.tabs.domains') }}</h2>
+      <ul class="setting-list">
+        <li>
+          <BooleanSetting path=":pleroma.:instance.:multitenancy.:enabled" />
+        </li>
+        <li>
+          <BooleanSetting path=":pleroma.:instance.:multitenancy.:separate_timelines" />
+        </li>
+        <li>
+          <GroupSetting path=":pleroma.:instance.:multitenancy" />
+        </li>
+      </ul>
       <div class="domain-editor">
         <div class="heading">
           <h4>{{ $t('admin_dash.domains.post_form_header') }}</h4>
@@ -52,7 +63,10 @@
           </div>
         </div>
       </div>
-      <PanelLoading class="overlay" v-if="working"/>
+      <PanelLoading
+        v-if="working"
+        class="overlay"
+      />
       <section
         v-for="domain in domains"
         :key="domain.id"
@@ -70,7 +84,14 @@
 <style lang="scss">
 @import "../../../variables";
 
+.domains-tab .setting-list {
+  padding: var(--status-margin, $status-margin);
+  margin-bottom: 0;
+}
+
 .domain-editor {
+  padding: var(--status-margin, $status-margin);
+
   .body {
     display: flex;
     align-items: stretch;
