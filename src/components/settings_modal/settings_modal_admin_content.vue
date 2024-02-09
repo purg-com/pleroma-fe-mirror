@@ -60,6 +60,13 @@
     >
       <FrontendsTab />
     </div>
+    <div
+      :label="$t('admin_dash.tabs.domains')"
+      icon="globe"
+      data-tab-name="domains"
+    >
+      <DomainsTab />
+    </div>
   </tab-switcher>
 </template>
 

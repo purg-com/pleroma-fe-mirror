@@ -115,6 +115,9 @@ const PLEROMA_ADMIN_DESCRIPTIONS_URL = '/api/pleroma/admin/config/descriptions'
 const PLEROMA_ADMIN_FRONTENDS_URL = '/api/pleroma/admin/frontends'
 const PLEROMA_ADMIN_FRONTENDS_INSTALL_URL = '/api/pleroma/admin/frontends/install'
 
+const PLEROMA_ADMIN_DOMAINS_URL = '/api/pleroma/admin/domains'
+const PLEROMA_ADMIN_DOMAIN_UPDATE_URL = id => `/api/pleroma/admin/domains/${id}`
+
 const oldfetch = window.fetch
 
 const fetch = (url, options) => {
@@ -1468,6 +1471,36 @@ const deleteAnnouncement = ({ id, credentials }) => {
   })
 }
 
+const fetchDomains = ({ credentials }) => {
+  return promisedRequest({ url: PLEROMA_ADMIN_DOMAINS_URL, credentials })
+}
+
+const createDomain = ({ credentials, domain, state }) => {
+  return promisedRequest({
+    url: PLEROMA_ADMIN_DOMAINS_URL,
+    credentials,
+    method: 'POST',
+    payload: { domain, public: state }
+  })
+}
+
+const editDomain = ({ credentials, id, domain, state }) => {
+  return promisedRequest({
+    url: PLEROMA_ADMIN_DOMAIN_UPDATE_URL(id),
+    credentials,
+    method: 'PATCH',
+    payload: { domain, public: state }
+  })
+}
+
+const deleteDomain = ({ credentials, id }) => {
+  return promisedRequest({
+    url: PLEROMA_ADMIN_DOMAIN_UPDATE_URL(id),
+    credentials,
+    method: 'DELETE'
+  })
+}
+
 export const getMastodonSocketURI = ({ credentials, stream, args = {} }) => {
   return Object.entries({
     ...(credentials
@@ -1912,7 +1945,11 @@ const apiService = {
   fetchInstanceConfigDescriptions,
   fetchAvailableFrontends,
   pushInstanceDBConfig,
-  installFrontend
+  installFrontend,
+  fetchDomains,
+  createDomain,
+  editDomain,
+  deleteDomain
 }
 
 export default apiService
