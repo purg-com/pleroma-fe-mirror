@@ -146,13 +146,12 @@ const combinationsMatch = (criteria, subject, strict) => {
   if (criteria.component !== subject.component) return false
 
   // All variants inherit from normal
-  const subjectVariant = Object.prototype.hasOwnProperty.call(subject, 'variant') ? subject.variant : 'normal'
-  if (subjectVariant !== 'normal' || strict) {
+  if (subject.variant !== 'normal' || strict) {
     if (criteria.variant !== subject.variant) return false
   }
 
-  const subjectStatesSet = new Set(['normal', ...(subject.state || [])])
-  const criteriaStatesSet = new Set(['normal', ...(criteria.state || [])])
+  const subjectStatesSet = new Set(subject.state)
+  const criteriaStatesSet = new Set(criteria.state)
 
   // Subject states > 1 essentially means state is "normal" and therefore matches
   if (subjectStatesSet.size > 1 || strict) {
@@ -198,7 +197,12 @@ export const init = (extraRuleset, palette) => {
   const ruleset = [
     ...Object.values(components).map(c => c.defaultRules.map(r => ({ component: c.name, ...r })) || []).reduce((acc, arr) => [...acc, ...arr], []),
     ...extraRuleset
-  ]
+  ].map(rule => {
+    rule.variant = rule.variant ?? 'normal'
+    rule.state = [...new Set(['normal', ...(rule.state || [])])]
+
+    return rule
+  })
 
   const virtualComponents = new Set(Object.values(components).filter(c => c.virtual).map(c => c.name))
 
@@ -344,7 +348,9 @@ export const init = (extraRuleset, palette) => {
     const variants = { normal: '', ...originalVariants }
     const innerComponents = validInnerComponents.map(name => components[name])
 
-    const stateCombinations = getAllPossibleCombinations(Object.keys(states))
+    // Optimization: we only really need combinations without "normal" because all states implicitly have it
+    const permutationStateKeys = Object.keys(states).filter(s => s !== 'normal')
+    const stateCombinations = [['normal'], ...getAllPossibleCombinations(permutationStateKeys).map(combination => ['normal', ...combination])]
 
     const stateVariantCombination = Object.keys(variants).map(variant => {
       return stateCombinations.map(state => ({ variant, state }))
