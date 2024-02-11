@@ -69,7 +69,7 @@
 
   .footer {
     .error {
-    margin: 0 0 var(--status-margin, $status-margin);
+      margin: 0 0 var(--status-margin, $status-margin);
     }
 
     .actions {
