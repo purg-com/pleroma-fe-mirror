@@ -23,28 +23,37 @@ const hoverGlow = {
 export default {
   name: 'Button', // Name of the component
   selector: '.button', // CSS selector/prefix
-  // States, system witll calculate ALL possible combinations of those and append a "normal" to them + standalone "normal" state
+  // outOfTreeSelector: '' // out-of-tree selector is used when other components are laid over it but it's not part of the tree, see Underlay component
+  // States, system witll calculate ALL possible combinations of those and prepend "normal" to them + standalone "normal" state
   states: {
-    // normal: state is implicitly added
+    // States are a bit expensive - the amount of combinations generated is about (1/6)n^3+n, so adding more state increased number of combination by an order of magnitude!
+    // All states inherit from "normal" state, there is no other inheirtance, i.e. hover+disabled only inherits from "normal", not from hover nor disabled.
+    // However, cascading still works, so resulting state will be result of merging of all relevant states/variants
+    // normal: '' // normal state is implicitly added, it is always included
     disabled: ':disabled',
     toggled: '.toggled',
     pressed: ':active',
     hover: ':hover',
     focused: ':focus-within'
   },
-  // Variants are mutually exclusive, which saves on computation time
+  // Variants are mutually exclusive, each component implicitly has "normal" variant, and all other variants inherit from it.
   variants: {
-    normal: '-default', // you can override normal variant
-    danger: '.danger',
-    unstyled: '-unstyled'
+    // Variants save on computation time since adding new variant just adds one more "set".
+    normal: '-default', // you can override normal variant, it will be appenended to the main class
+    danger: '-default.danger'
+    // Overall the compuation difficulty is N*((1/6)M^3+M) where M is number of distinct states and N is number of variants.
+    // This (currently) is further multipled by number of places where component can exist.
   },
+  // This lists all other components that can possibly exist within one. Recursion is currently not supported (and probably won't be supported ever).
   validInnerComponents: [
     'Text',
     'Icon'
   ],
+  // Default rules, used as "default theme", essentially.
   defaultRules: [
     {
-      component: 'Button',
+      // component: 'Button', // no need to specify components every time unless you're specifying how other component should look
+      // like within it
       directives: {
         background: '--fg',
         shadow: [{
@@ -58,7 +67,6 @@ export default {
       }
     },
     {
-      component: 'Button',
       variant: 'unstyled',
       directives: {
         background: '--fg',
@@ -66,14 +74,12 @@ export default {
       }
     },
     {
-      component: 'Button',
       state: ['hover'],
       directives: {
         shadow: [hoverGlow, ...buttonInsetFakeBorders]
       }
     },
     {
-      component: 'Button',
       state: ['hover', 'pressed'],
       directives: {
         background: '--accent,-24.2',
@@ -81,7 +87,6 @@ export default {
       }
     },
     {
-      component: 'Button',
       state: ['disabled'],
       directives: {
         background: '$blend(--background, 0.25, --parent)',

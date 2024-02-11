@@ -129,15 +129,6 @@ i[class*="icon-"],
   color: var(--icon);
 }
 
-.button-unstyled:hover,
-a:hover {
-  > i[class*="icon-"],
-  > .svg-inline--fa,
-  > .iconLetter {
-    color: var(--text);
-  }
-}
-
 nav {
   z-index: var(--ZI_navbar);
   background-color: $fallback--fg;
@@ -192,8 +183,7 @@ nav {
   grid-column: 1 / span 3;
   grid-row: 1 / 1;
   pointer-events: none;
-  background-color: rgb(0 0 0 / 15%);
-  background-color: var(--underlay, rgb(0 0 0 / 15%));
+  background-color: var(--underlay);
   z-index: -1000;
 }
 
@@ -363,10 +353,7 @@ nav {
 
 .button-default {
   user-select: none;
-  color: $fallback--text;
-  color: var(--btnText, $fallback--text);
-  background-color: $fallback--fg;
-  background-color: var(--btn, $fallback--fg);
+  color: var(--text);
   border: none;
   border-radius: $fallback--btnRadius;
   border-radius: var(--btnRadius, $fallback--btnRadius);
@@ -376,70 +363,12 @@ nav {
   font-family: sans-serif;
   font-family: var(--interfaceFont, sans-serif);
 
-  &.-sublime {
-    background: transparent;
-  }
-
-  i[class*="icon-"],
-  .svg-inline--fa {
-    color: var(--icon);
-  }
-
   &::-moz-focus-inner {
     border: none;
   }
 
-  &:active {
-    color: $fallback--text;
-    color: var(--btnPressedText, $fallback--text);
-    background-color: $fallback--fg;
-    background-color: var(--btnPressed, $fallback--fg);
-
-    svg,
-    i {
-      color: $fallback--text;
-      color: var(--btnPressedText, $fallback--text);
-    }
-  }
-
   &:disabled {
     cursor: not-allowed;
-    color: $fallback--text;
-    color: var(--btnDisabledText, $fallback--text);
-    background-color: $fallback--fg;
-    background-color: var(--btnDisabled, $fallback--fg);
-
-    svg,
-    i {
-      color: $fallback--text;
-      color: var(--btnDisabledText, $fallback--text);
-    }
-  }
-
-  &.toggled {
-    color: $fallback--text;
-    color: var(--btnToggledText, $fallback--text);
-    background-color: $fallback--fg;
-    background-color: var(--btnToggled, $fallback--fg);
-    box-shadow:
-      0 0 4px 0 rgb(255 255 255 / 30%),
-      0 1px 0 0 rgb(0 0 0 / 20%) inset,
-      0 -1px 0 0 rgb(255 255 255 / 20%) inset;
-    box-shadow: var(--buttonPressedShadow);
-
-    svg,
-    i {
-      color: $fallback--text;
-      color: var(--btnToggledText, $fallback--text);
-    }
-  }
-
-  &.danger {
-    // TODO: add better color variable
-    color: $fallback--text;
-    color: var(--alertErrorPanelText, $fallback--text);
-    background-color: $fallback--alertError;
-    background-color: var(--alertError, $fallback--alertError);
   }
 }
 
@@ -458,8 +387,7 @@ nav {
   color: inherit;
 
   &.-link {
-    color: $fallback--link;
-    color: var(--link, $fallback--link);
+    color: var(--link);
   }
 
   &.-fullwidth {
@@ -510,7 +438,6 @@ textarea {
   &[disabled="disabled"],
   &.disabled {
     cursor: not-allowed;
-    opacity: 0.5;
   }
 
   &[type="range"] {
@@ -610,9 +537,7 @@ textarea {
 }
 
 option {
-  color: $fallback--text;
-  color: var(--text, $fallback--text);
-  background-color: $fallback--bg;
+  color: var(--text);
   background-color: var(--bg, $fallback--bg);
 }
 
@@ -746,6 +671,7 @@ option {
 .faint {
   --text: var(--textFaint);
   --textGreentext: var(--textGreentextFaint);
+  --textCyantext: var(--textCyantextFaint);
   --link: var(--linkFaint);
 
   color: var(--text);

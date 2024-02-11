@@ -11,7 +11,8 @@ import Root from 'src/components/root.style.js'
 import TopBar from 'src/components/top_bar.style.js'
 import Underlay from 'src/components/underlay.style.js'
 import Popover from 'src/components/popover.style.js'
-import DropdownMenu from 'src/components/dropdown_menu.style.js'
+import Modals from 'src/components/modals.style.js'
+import MenuItem from 'src/components/menu_item.style.js'
 import Panel from 'src/components/panel.style.js'
 import PanelHeader from 'src/components/panel_header.style.js'
 import Button from 'src/components/button.style.js'
@@ -19,34 +20,11 @@ import Input from 'src/components/input.style.js'
 import Text from 'src/components/text.style.js'
 import Link from 'src/components/link.style.js'
 import Icon from 'src/components/icon.style.js'
+import Border from 'src/components/border.style.js'
 
 const DEBUG = false
 
 export const DEFAULT_SHADOWS = {
-  panel: [{
-    x: 1,
-    y: 1,
-    blur: 4,
-    spread: 0,
-    color: '#000000',
-    alpha: 0.6
-  }],
-  topBar: [{
-    x: 0,
-    y: 0,
-    blur: 4,
-    spread: 0,
-    color: '#000000',
-    alpha: 0.6
-  }],
-  popup: [{
-    x: 2,
-    y: 2,
-    blur: 3,
-    spread: 0,
-    color: '#000000',
-    alpha: 0.5
-  }],
   avatar: [{
     x: 0,
     y: 1,
@@ -54,9 +32,7 @@ export const DEFAULT_SHADOWS = {
     spread: 0,
     color: '#000000',
     alpha: 0.7
-  }],
-  avatarStatus: [],
-  panelHeader: []
+  }]
 }
 
 const components = {
@@ -64,9 +40,11 @@ const components = {
   Text,
   Link,
   Icon,
+  Border,
   Underlay,
+  Modals,
   Popover,
-  DropdownMenu,
+  MenuItem,
   Panel,
   PanelHeader,
   TopBar,
@@ -196,16 +174,41 @@ export const init = (extraRuleset, palette) => {
 
   const rules = []
 
-  const ruleset = [
-    ...Object.values(components).map(c => c.defaultRules.map(r => ({ component: c.name, ...r })) || []).reduce((acc, arr) => [...acc, ...arr], []),
-    ...extraRuleset
-  ].map(rule => {
+  const normalizeCombination = rule => {
     rule.variant = rule.variant ?? 'normal'
     rule.state = [...new Set(['normal', ...(rule.state || [])])]
+  }
+
+  const rulesetUnsorted = [
+    ...Object.values(components)
+      .map(c => (c.defaultRules || []).map(r => ({ component: c.name, ...r })))
+      .reduce((acc, arr) => [...acc, ...arr], []),
+    ...extraRuleset
+  ].map(rule => {
+    normalizeCombination(rule)
+    let currentParent = rule.parent
+    while (currentParent) {
+      normalizeCombination(currentParent)
+      currentParent = currentParent.parent
+    }
 
     return rule
   })
 
+  const ruleset = rulesetUnsorted
+    .map((data, index) => ({ data, index }))
+    .sort(({ data: a, index: ai }, { data: b, index: bi }) => {
+      const parentsA = unroll(a).length
+      const parentsB = unroll(b).length
+
+      if (parentsA === parentsB || (parentsB !== 0 && parentsA !== 0)) return ai - bi
+      if (parentsA === 0 && parentsB !== 0) return -1
+      if (parentsB === 0 && parentsA !== 0) return 1
+      return 0 // failsafe, shouldn't happen?
+    })
+    .map(({ data }) => data)
+
+  console.log(ruleset)
   const virtualComponents = new Set(Object.values(components).filter(c => c.virtual).map(c => c.name))
 
   const addRule = (rule) => {
@@ -258,6 +261,18 @@ export const init = (extraRuleset, palette) => {
             const foregroundArg = convert(findColor(args[0], dynamicVars)).rgb
             const amount = Number(args[1])
             targetColor = alphaBlend(backgroundArg, amount, foregroundArg)
+            break
+          }
+          case 'mod': {
+            if (args.length !== 2) {
+              throw new Error(`$mod requires 2 arguments, ${args.length} were provided`)
+            }
+            const color = convert(findColor(args[0], dynamicVars)).rgb
+            const amount = Number(args[1])
+            const effectiveBackground = dynamicVars.lowerLevelBackground
+            const isLightOnDark = relativeLuminance(convert(effectiveBackground).rgb) < 0.5
+            const mod = isLightOnDark ? 1 : -1
+            targetColor = brightness(amount * mod, color).rgb
             break
           }
         }
@@ -332,12 +347,12 @@ export const init = (extraRuleset, palette) => {
   }
 
   const processInnerComponent = (component, parent) => {
-    const parentList = parent ? unroll(parent).reverse().map(c => c.component) : []
-    if (!component.virtual) {
-      const path = [...parentList, component.name].join(' > ')
-      console.log('Component ' + path + ' process starting')
-    }
-    const t0 = performance.now()
+    // const parentList = parent ? unroll(parent).reverse().map(c => c.component) : []
+    // if (!component.virtual) {
+    //   const path = [...parentList, component.name].join(' > ')
+    //   console.log('Component ' + path + ' process starting')
+    // }
+    // const t0 = performance.now()
     const {
       validInnerComponents = [],
       states: originalStates = {},
@@ -359,7 +374,7 @@ export const init = (extraRuleset, palette) => {
     }).reduce((acc, x) => [...acc, ...x], [])
 
     stateVariantCombination.forEach(combination => {
-      const tt0 = performance.now()
+      // const tt0 = performance.now()
       const soloSelector = ruleToSelector({ component: component.name, ...combination }, true)
       const selector = ruleToSelector({ component: component.name, ...combination, parent }, true)
 
@@ -420,6 +435,11 @@ export const init = (extraRuleset, palette) => {
             textOpacity: inheritedTextOpacity,
             textOpacityMode: inheritedTextOpacityMode
           }
+        }
+
+        if (component.name === 'Text' && combination.variant === 'normal' && computedRule.parent.component === 'MenuItem' && computedRule.parent.state.indexOf('hover') >= 0) {
+          console.log(existingRules)
+          console.log(computedRule, newTextRule)
         }
 
         dynamicVars.inheritedBackground = lowerLevelBackground
@@ -518,17 +538,17 @@ export const init = (extraRuleset, palette) => {
       }
 
       innerComponents.forEach(innerComponent => processInnerComponent(innerComponent, { parent, component: name, ...combination }))
-      const tt1 = performance.now()
-      if (!component.virtual) {
-        console.log('State-variant ' + combination.variant + ' : ' + combination.state.join('+') + ' procession time: ' + (tt1 - tt0) + 'ms')
-      }
+      // const tt1 = performance.now()
+      // if (!component.virtual) {
+      //   console.log('State-variant ' + combination.variant + ' : ' + combination.state.join('+') + ' procession time: ' + (tt1 - tt0) + 'ms')
+      // }
     })
 
-    const t1 = performance.now()
-    if (!component.virtual) {
-      const path = [...parentList, component.name].join(' > ')
-      console.log('Component ' + path + ' procession time: ' + (t1 - t0) + 'ms')
-    }
+    // const t1 = performance.now()
+    // if (!component.virtual) {
+    //   const path = [...parentList, component.name].join(' > ')
+    //   console.log('Component ' + path + ' procession time: ' + (t1 - t0) + 'ms')
+    // }
   }
 
   processInnerComponent(components.Root)

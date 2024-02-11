@@ -1,7 +1,6 @@
 <template>
   <OptionalRouterLink
     v-slot="{ isActive, href, navigate } = {}"
-    ass="ass"
     :to="routeTo"
   >
     <li
@@ -94,41 +93,6 @@
 
     &:last-child {
       margin-right: -0.8em;
-    }
-  }
-
-  &:hover {
-    background-color: $fallback--lightBg;
-    background-color: var(--selectedMenu, $fallback--lightBg);
-    color: $fallback--link;
-    color: var(--selectedMenuText, $fallback--link);
-
-    --faint: var(--selectedMenuFaintText, $fallback--faint);
-    --faintLink: var(--selectedMenuFaintLink, $fallback--faint);
-    --lightText: var(--selectedMenuLightText, $fallback--lightText);
-
-    .menu-icon {
-      --icon: var(--text, $fallback--icon);
-    }
-  }
-
-  &.-active {
-    font-weight: bolder;
-    background-color: $fallback--lightBg;
-    background-color: var(--selectedMenu, $fallback--lightBg);
-    color: $fallback--text;
-    color: var(--selectedMenuText, $fallback--text);
-
-    --faint: var(--selectedMenuFaintText, $fallback--faint);
-    --faintLink: var(--selectedMenuFaintLink, $fallback--faint);
-    --lightText: var(--selectedMenuLightText, $fallback--lightText);
-
-    .menu-icon {
-      --icon: var(--text, $fallback--icon);
-    }
-
-    &:hover {
-      text-decoration: underline;
     }
   }
 }

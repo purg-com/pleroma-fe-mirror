@@ -107,7 +107,7 @@
 .NavPanel {
   .panel {
     overflow: hidden;
-    box-shadow: var(--panelShadow);
+    box-shadow: var(--shadow);
   }
 
   ul {
@@ -124,14 +124,14 @@
   }
 
   > li {
-    &:first-child .menu-item {
+    &:first-child.menu-item {
       border-top-right-radius: $fallback--panelRadius;
       border-top-right-radius: var(--panelRadius, $fallback--panelRadius);
       border-top-left-radius: $fallback--panelRadius;
       border-top-left-radius: var(--panelRadius, $fallback--panelRadius);
     }
 
-    &:last-child .menu-item {
+    &:last-child.menu-item {
       border-bottom-right-radius: $fallback--panelRadius;
       border-bottom-right-radius: var(--panelRadius, $fallback--panelRadius);
       border-bottom-left-radius: $fallback--panelRadius;

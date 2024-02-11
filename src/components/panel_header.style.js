@@ -11,7 +11,8 @@ export default {
     {
       component: 'PanelHeader',
       directives: {
-        background: '--fg'
+        background: '--fg',
+        shadow: []
       }
     }
   ]

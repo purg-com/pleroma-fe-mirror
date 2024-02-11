@@ -3,8 +3,8 @@ export default {
   selector: ':root',
   validInnerComponents: [
     'Underlay',
-    'TopBar',
-    'Popover'
+    'Modals',
+    'TopBar'
   ],
   defaultRules: [
     {

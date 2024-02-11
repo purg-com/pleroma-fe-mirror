@@ -3,8 +3,6 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: $fallback--bg;
-  background-color: var(--bg, $fallback--bg);
 
   .panel-heading {
     background-color: inherit;
@@ -24,8 +22,7 @@
     left: 0;
     right: 0;
     z-index: 5;
-    box-shadow: 1px 1px 4px rgb(0 0 0 / 60%);
-    box-shadow: var(--panelShadow);
+    box-shadow: var(--shadow);
     pointer-events: none;
   }
 }
@@ -133,58 +130,18 @@
   border-radius: var(--panelRadius, $fallback--panelRadius) var(--panelRadius, $fallback--panelRadius) 0 0;
   border-width: 0 0 1px;
   align-items: start;
-  // panel theme
-  color: var(--panelText);
 
   &::after {
     background-color: var(--background);
     z-index: -2;
     border-radius: $fallback--panelRadius $fallback--panelRadius 0 0;
     border-radius: var(--panelRadius, $fallback--panelRadius) var(--panelRadius, $fallback--panelRadius) 0 0;
-    box-shadow: var(--panelHeaderShadow);
-  }
-
-  .button-unstyled:hover,
-  a:hover {
-    i[class*="icon-"],
-    .svg-inline--fa,
-    .iconLetter {
-      color: var(--panelText);
-    }
-  }
-
-  .faint {
-    background-color: transparent;
-    color: $fallback--faint;
-    color: var(--panelFaint, $fallback--faint);
+    box-shadow: var(--shadow);
   }
 
   &:not(.-flexible-height) {
     > .button-default {
       flex-shrink: 0;
-
-      &,
-      i[class*="icon-"] {
-        color: $fallback--text;
-        color: var(--btnPanelText, $fallback--text);
-      }
-
-      &:active {
-        background-color: $fallback--fg;
-        background-color: var(--btnPressedPanel, $fallback--fg);
-        color: $fallback--text;
-        color: var(--btnPressedPanelText, $fallback--text);
-      }
-
-      &:disabled {
-        color: $fallback--text;
-        color: var(--btnDisabledPanelText, $fallback--text);
-      }
-
-      &.toggled {
-        color: $fallback--text;
-        color: var(--btnToggledPanelText, $fallback--text);
-      }
     }
   }
 
@@ -227,6 +184,6 @@
   align-items: center;
   border-width: 1px 0 0;
   border-style: solid;
-  border-color: var(--border, $fallback--border);
+  border-color: var(--border);
 }
 /* stylelint-enable no-descending-specificity */
