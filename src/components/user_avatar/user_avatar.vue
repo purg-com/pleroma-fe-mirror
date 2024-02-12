@@ -30,9 +30,9 @@
 @import "../../variables";
 
 .Avatar {
-  --_avatarShadowBox: var(--avatarStatusShadow);
-  --_avatarShadowFilter: var(--avatarStatusShadowFilter);
-  --_avatarShadowInset: var(--avatarStatusShadowInset);
+  --_avatarShadowBox: var(--shadow);
+  --_avatarShadowFilter: var(--shadowFilter);
+  --_avatarShadowInset: var(--shadowInset);
   --_still-image-label-visibility: hidden;
 
   display: inline-block;

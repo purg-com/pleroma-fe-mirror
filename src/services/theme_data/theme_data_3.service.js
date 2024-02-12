@@ -26,19 +26,9 @@ import Border from 'src/components/border.style.js'
 import Post from 'src/components/post.style.js'
 import Notification from 'src/components/notification.style.js'
 import RichContent from 'src/components/rich_content.style.js'
+import Avatar from 'src/components/avatar.style.js'
 
 const DEBUG = false
-
-export const DEFAULT_SHADOWS = {
-  avatar: [{
-    x: 0,
-    y: 1,
-    blur: 8,
-    spread: 0,
-    color: '#000000',
-    alpha: 0.7
-  }]
-}
 
 const components = {
   Root,
@@ -59,7 +49,8 @@ const components = {
   Input,
   Post,
   Notification,
-  RichContent
+  RichContent,
+  Avatar
 }
 
 // "Unrolls" a tree structure of item: { parent: { ...item2, parent: { ...item3, parent: {...} } }}
@@ -372,7 +363,7 @@ export const init = (extraRuleset, palette) => {
     // Normalizing states and variants to always include "normal"
     const states = { normal: '', ...originalStates }
     const variants = { normal: '', ...originalVariants }
-    const innerComponents = validInnerComponents.map(name => components[name])
+    const innerComponents = (validInnerComponents).map(name => components[name])
 
     // Optimization: we only really need combinations without "normal" because all states implicitly have it
     const permutationStateKeys = Object.keys(states).filter(s => s !== 'normal')
@@ -448,7 +439,6 @@ export const init = (extraRuleset, palette) => {
 
         dynamicVars.inheritedBackground = lowerLevelBackground
 
-        // TODO properly provide "parent" text color?
         const intendedTextColor = convert(findColor(inheritedTextColor, dynamicVars)).rgb
         const textColor = newTextRule.directives.textAuto === 'no-auto'
           ? intendedTextColor
@@ -495,6 +485,7 @@ export const init = (extraRuleset, palette) => {
       } else {
         computed[selector] = computed[selector] || {}
 
+        // TODO make background non-mandatory
         if (computedDirectives.background) {
           let inheritRule = null
           const variantRules = ruleset.filter(findRules({ component: component.name, variant: combination.variant, parent }))

@@ -11,9 +11,9 @@ export const applyTheme = (input) => {
   const t0 = performance.now()
   const { rules, t3b } = generatePreset(input)
   const t1 = performance.now()
+  console.log('Themes 2 initialization took ' + (t1 - t0) + 'ms')
   const themes3 = init(sampleRules, t3b)
   const t2 = performance.now()
-  console.log('Themes 2 initialization took ' + (t1 - t0) + 'ms')
   console.log('Themes 3 initialization took ' + (t2 - t1) + 'ms')
   const head = document.head
   const body = document.body
@@ -29,6 +29,7 @@ export const applyTheme = (input) => {
   // styleSheet.insertRule(`:root { ${rules.shadows} }`, 'index-max')
   styleSheet.insertRule(`:root { ${rules.fonts} }`, 'index-max')
   themes3.css.forEach(rule => {
+    console.log(rule)
     styleSheet.insertRule(rule, 'index-max')
   })
   body.classList.remove('hidden')
