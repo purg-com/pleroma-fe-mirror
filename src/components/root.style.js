@@ -4,6 +4,7 @@ export default {
   validInnerComponents: [
     'Underlay',
     'Modals',
+    'Popover',
     'TopBar'
   ],
   defaultRules: [

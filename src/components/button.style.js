@@ -80,7 +80,26 @@ export default {
       }
     },
     {
+      state: ['pressed'],
+      directives: {
+        shadow: [...inputInsetFakeBorders]
+      }
+    },
+    {
       state: ['hover', 'pressed'],
+      directives: {
+        shadow: [hoverGlow, ...inputInsetFakeBorders]
+      }
+    },
+    {
+      state: ['toggled'],
+      directives: {
+        background: '--accent,-24.2',
+        shadow: [...inputInsetFakeBorders]
+      }
+    },
+    {
+      state: ['toggled', 'hover'],
       directives: {
         background: '--accent,-24.2',
         shadow: [hoverGlow, ...inputInsetFakeBorders]
