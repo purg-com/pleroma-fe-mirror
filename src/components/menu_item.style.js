@@ -14,7 +14,15 @@ export default {
   defaultRules: [
     {
       directives: {
-        background: '--fg'
+        background: '--bg',
+        opacity: 0
+      }
+    },
+    {
+      state: ['hover'],
+      directives: {
+        background: '$mod(--bg, 5)',
+        opacity: 1
       }
     },
     {

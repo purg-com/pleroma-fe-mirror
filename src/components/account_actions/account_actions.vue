@@ -130,11 +130,6 @@
     margin: -0.5em 0;
     padding: 0.5em 0;
     text-align: center;
-
-    &:not(:hover) .icon {
-      color: $fallback--lightText;
-      color: var(--lightText, $fallback--lightText);
-    }
   }
 }
 </style>

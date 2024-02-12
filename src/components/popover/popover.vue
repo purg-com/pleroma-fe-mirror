@@ -53,8 +53,7 @@
   position: fixed;
   min-width: 0;
   max-width: calc(100vw - 20px);
-  box-shadow: 2px 2px 3px rgb(0 0 0 / 50%);
-  box-shadow: var(--popupShadow);
+  box-shadow: var(--shadow);
 }
 
 .popover-default {
@@ -66,24 +65,12 @@
     left: 0;
     right: 0;
     z-index: 3;
-    box-shadow: 1px 1px 4px rgb(0 0 0 / 60%);
-    box-shadow: var(--panelShadow);
+    box-shadow: var(--shadow);
     pointer-events: none;
   }
 
   border-radius: $fallback--btnRadius;
   border-radius: var(--btnRadius, $fallback--btnRadius);
-  background-color: $fallback--bg;
-  background-color: var(--popover, $fallback--bg);
-  color: $fallback--text;
-  color: var(--popoverText, $fallback--text);
-
-  --faint: var(--popoverFaintText, $fallback--faint);
-  --faintLink: var(--popoverFaintLink, $fallback--faint);
-  --lightText: var(--popoverLightText, $fallback--lightText);
-  --postLink: var(--popoverPostLink, $fallback--link);
-  --postFaintLink: var(--popoverPostFaintLink, $fallback--link);
-  --icon: var(--popoverIcon, $fallback--icon);
 }
 
 .dropdown-menu {
@@ -127,7 +114,6 @@
       svg {
         width: 22px;
         margin-right: 0.75rem;
-        color: var(--menuPopoverIcon, $fallback--icon);
       }
     }
 
@@ -135,25 +121,6 @@
       .chevron-icon {
         margin-right: 0.25rem;
         margin-left: 2rem;
-      }
-    }
-
-    &:active,
-    &:hover {
-      background-color: $fallback--lightBg;
-      background-color: var(--selectedMenuPopover, $fallback--lightBg);
-      box-shadow: none;
-
-      --btnText: var(--selectedMenuPopoverText, $fallback--link);
-      --faint: var(--selectedMenuPopoverFaintText, $fallback--faint);
-      --faintLink: var(--selectedMenuPopoverFaintLink, $fallback--faint);
-      --lightText: var(--selectedMenuPopoverLightText, $fallback--lightText);
-      --icon: var(--selectedMenuPopoverIcon, $fallback--icon);
-
-      svg {
-        color: var(--selectedMenuPopoverIcon, $fallback--icon);
-
-        --icon: var(--selectedMenuPopoverIcon, $fallback--icon);
       }
     }
 
@@ -186,31 +153,6 @@
           content: "•";
         }
       }
-    }
-  }
-
-  .button-default.dropdown-item {
-    &,
-    i[class*="icon-"] {
-      color: $fallback--text;
-      color: var(--btnText, $fallback--text);
-    }
-
-    &:active {
-      background-color: $fallback--lightBg;
-      background-color: var(--selectedMenuPopover, $fallback--lightBg);
-      color: $fallback--link;
-      color: var(--selectedMenuPopoverText, $fallback--link);
-    }
-
-    &:disabled {
-      color: $fallback--text;
-      color: var(--btnDisabledText, $fallback--text);
-    }
-
-    &.toggled {
-      color: $fallback--text;
-      color: var(--btnToggledText, $fallback--text);
     }
   }
 }

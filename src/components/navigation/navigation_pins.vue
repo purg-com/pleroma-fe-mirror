@@ -3,7 +3,8 @@
     <router-link
       v-for="item in pinnedList"
       :key="item.name"
-      class="pinned-item"
+      class="button-unstyled pinned-item"
+      activeClass="toggled"
       :to="getRouteTo(item)"
       :title="item.labelRaw || $t(item.label)"
     >
@@ -60,15 +61,8 @@
       margin: 0;
     }
 
-    &.router-link-active {
-      color: $fallback--text;
-      color: var(--panelText, $fallback--text);
+    &.toggled {
       border-bottom: 4px solid;
-
-      & .svg-inline--fa,
-      & .iconLetter {
-        color: inherit;
-      }
     }
   }
 }

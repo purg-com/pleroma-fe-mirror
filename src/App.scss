@@ -372,14 +372,24 @@ nav {
   }
 }
 
+.menu-item {
+  border: none;
+  outline: none;
+  text-align: initial;
+  font-size: inherit;
+  font-family: inherit;
+  cursor: pointer;
+  color: inherit;
+}
+
 .button-unstyled {
-  background: none;
   border: none;
   outline: none;
   display: inline;
   text-align: initial;
   font-size: 100%;
   font-family: inherit;
+  box-shadow: var(--shadow);
   padding: 0;
   line-height: unset;
   cursor: pointer;
@@ -392,13 +402,6 @@ nav {
 
   &.-fullwidth {
     width: 100%;
-  }
-
-  &.-hover-highlight {
-    &:hover svg {
-      color: $fallback--lightText;
-      color: var(--lightText, $fallback--lightText);
-    }
   }
 }
 

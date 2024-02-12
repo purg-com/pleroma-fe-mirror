@@ -103,7 +103,7 @@
                       <button
                         v-for="ref in frontend.refs"
                         :key="ref"
-                        class="button-default dropdown-item"
+                        class="menu-item dropdown-item"
                         @click.prevent="update(frontend, ref)"
                         @click="close"
                       >
@@ -160,7 +160,7 @@
                       <button
                         v-for="ref in frontend.installedRefs || frontend.refs"
                         :key="ref"
-                        class="button-default dropdown-item"
+                        class="menu-item dropdown-item"
                         @click.prevent="setDefault(frontend, ref)"
                         @click="close"
                       >

@@ -5,7 +5,8 @@ export default {
     'Text',
     'Link',
     'Icon',
-    'Button'
+    'Button',
+    'ButtonUnstyled'
   ],
   defaultRules: [
     {

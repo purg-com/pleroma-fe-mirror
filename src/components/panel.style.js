@@ -6,6 +6,7 @@ export default {
     'Link',
     'Icon',
     'Button',
+    'ButtonUnstyled',
     'Input',
     'PanelHeader',
     'MenuItem'

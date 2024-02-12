@@ -16,6 +16,7 @@ import MenuItem from 'src/components/menu_item.style.js'
 import Panel from 'src/components/panel.style.js'
 import PanelHeader from 'src/components/panel_header.style.js'
 import Button from 'src/components/button.style.js'
+import ButtonUnstyled from 'src/components/button_unstyled.style.js'
 import Input from 'src/components/input.style.js'
 import Text from 'src/components/text.style.js'
 import Link from 'src/components/link.style.js'
@@ -49,6 +50,7 @@ const components = {
   PanelHeader,
   TopBar,
   Button,
+  ButtonUnstyled,
   Input
 }
 
@@ -208,7 +210,6 @@ export const init = (extraRuleset, palette) => {
     })
     .map(({ data }) => data)
 
-  console.log(ruleset)
   const virtualComponents = new Set(Object.values(components).filter(c => c.virtual).map(c => c.name))
 
   const addRule = (rule) => {
@@ -435,11 +436,6 @@ export const init = (extraRuleset, palette) => {
             textOpacity: inheritedTextOpacity,
             textOpacityMode: inheritedTextOpacityMode
           }
-        }
-
-        if (component.name === 'Text' && combination.variant === 'normal' && computedRule.parent.component === 'MenuItem' && computedRule.parent.state.indexOf('hover') >= 0) {
-          console.log(existingRules)
-          console.log(computedRule, newTextRule)
         }
 
         dynamicVars.inheritedBackground = lowerLevelBackground

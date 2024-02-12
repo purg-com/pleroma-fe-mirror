@@ -10,7 +10,7 @@
           <button
             v-for="list in lists"
             :key="list.id"
-            class="button-default dropdown-item"
+            class="menu-item dropdown-item"
             @click="toggleList(list.id)"
           >
             <span

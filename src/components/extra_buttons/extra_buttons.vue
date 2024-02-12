@@ -18,7 +18,7 @@
       >
         <button
           v-if="canMute && !status.thread_muted"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
           role="menuitem"
           @click.prevent="muteConversation"
         >
@@ -29,7 +29,7 @@
         </button>
         <button
           v-if="canMute && status.thread_muted"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
           role="menuitem"
           @click.prevent="unmuteConversation"
         >
@@ -40,7 +40,7 @@
         </button>
         <button
           v-if="!status.pinned && canPin"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
           role="menuitem"
           @click.prevent="pinStatus"
           @click="close"
@@ -52,7 +52,7 @@
         </button>
         <button
           v-if="status.pinned && canPin"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
           role="menuitem"
           @click.prevent="unpinStatus"
           @click="close"
@@ -65,7 +65,7 @@
         <template v-if="canBookmark">
           <button
             v-if="!status.bookmarked"
-            class="button-default dropdown-item dropdown-item-icon"
+            class="menu-item dropdown-item dropdown-item-icon"
             role="menuitem"
             @click.prevent="bookmarkStatus"
             @click="close"
@@ -77,7 +77,7 @@
           </button>
           <button
             v-if="status.bookmarked"
-            class="button-default dropdown-item dropdown-item-icon"
+            class="menu-item dropdown-item dropdown-item-icon"
             role="menuitem"
             @click.prevent="unbookmarkStatus"
             @click="close"
@@ -90,7 +90,7 @@
         </template>
         <button
           v-if="ownStatus && editingAvailable"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
           role="menuitem"
           @click.prevent="editStatus"
           @click="close"
@@ -102,7 +102,7 @@
         </button>
         <button
           v-if="isEdited && editingAvailable"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
           role="menuitem"
           @click.prevent="showStatusHistory"
           @click="close"
@@ -114,7 +114,7 @@
         </button>
         <button
           v-if="canDelete"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
           role="menuitem"
           @click.prevent="deleteStatus"
           @click="close"
@@ -125,7 +125,7 @@
           /><span>{{ $t("status.delete") }}</span>
         </button>
         <button
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
           role="menuitem"
           @click.prevent="copyLink"
           @click="close"
@@ -137,7 +137,7 @@
         </button>
         <a
           v-if="!status.is_local"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
           role="menuitem"
           title="Source"
           :href="status.external_url"
@@ -149,7 +149,7 @@
           /><span>{{ $t("status.external_source") }}</span>
         </a>
         <button
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
           role="menuitem"
           @click.prevent="reportStatus"
           @click="close"

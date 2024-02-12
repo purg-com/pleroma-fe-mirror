@@ -70,10 +70,14 @@
   align-items: baseline;
   height: 3.5em;
   line-height: 3.5em;
-  padding: 0 1em;
+  padding: 0;
   width: 100%;
   color: $fallback--link;
   color: var(--link, $fallback--link);
+
+  &[aria-expanded] {
+    padding-right: 1em;
+  }
 
   .timelines-chevron {
     margin-right: 0;
@@ -81,6 +85,7 @@
 
   .main-link {
     flex: 1;
+    padding: 0 1em;
   }
 
   .menu-icon {

@@ -25,8 +25,6 @@
     right: 1.5em;
     // TODO: this needs its own color, it has to stand out enough and link color
     // is not very optimal for this particular use.
-    background-color: $fallback--fg;
-    background-color: var(--btn, $fallback--fg);
     display: flex;
     justify-content: center;
     align-items: center;

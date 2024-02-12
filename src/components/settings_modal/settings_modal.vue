@@ -70,7 +70,7 @@
           <template #content="{close}">
             <div class="dropdown-menu">
               <button
-                class="button-default dropdown-item dropdown-item-icon"
+                class="menu-item dropdown-item dropdown-item-icon"
                 @click.prevent="backup"
                 @click="close"
               >
@@ -80,7 +80,7 @@
                 /><span>{{ $t("settings.file_export_import.backup_settings") }}</span>
               </button>
               <button
-                class="button-default dropdown-item dropdown-item-icon"
+                class="menu-item dropdown-item dropdown-item-icon"
                 @click.prevent="backupWithTheme"
                 @click="close"
               >
@@ -90,7 +90,7 @@
                 /><span>{{ $t("settings.file_export_import.backup_settings_theme") }}</span>
               </button>
               <button
-                class="button-default dropdown-item dropdown-item-icon"
+                class="menu-item dropdown-item dropdown-item-icon"
                 @click.prevent="restore"
                 @click="close"
               >

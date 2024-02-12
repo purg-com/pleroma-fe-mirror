@@ -8,7 +8,7 @@
     <template #content>
       <div class="dropdown-menu">
         <button
-          class="button-default dropdown-item"
+          class="menu-item dropdown-item"
           @click="toggleNotificationFilter('likes')"
         >
           <span
@@ -17,7 +17,7 @@
           />{{ $t('settings.notification_visibility_likes') }}
         </button>
         <button
-          class="button-default dropdown-item"
+          class="menu-item dropdown-item"
           @click="toggleNotificationFilter('repeats')"
         >
           <span
@@ -26,7 +26,7 @@
           />{{ $t('settings.notification_visibility_repeats') }}
         </button>
         <button
-          class="button-default dropdown-item"
+          class="menu-item dropdown-item"
           @click="toggleNotificationFilter('follows')"
         >
           <span
@@ -35,7 +35,7 @@
           />{{ $t('settings.notification_visibility_follows') }}
         </button>
         <button
-          class="button-default dropdown-item"
+          class="menu-item dropdown-item"
           @click="toggleNotificationFilter('mentions')"
         >
           <span
@@ -44,7 +44,7 @@
           />{{ $t('settings.notification_visibility_mentions') }}
         </button>
         <button
-          class="button-default dropdown-item"
+          class="menu-item dropdown-item"
           @click="toggleNotificationFilter('emojiReactions')"
         >
           <span
@@ -53,7 +53,7 @@
           />{{ $t('settings.notification_visibility_emoji_reactions') }}
         </button>
         <button
-          class="button-default dropdown-item"
+          class="menu-item dropdown-item"
           @click="toggleNotificationFilter('moves')"
         >
           <span
@@ -62,7 +62,7 @@
           />{{ $t('settings.notification_visibility_moves') }}
         </button>
         <button
-          class="button-default dropdown-item"
+          class="menu-item dropdown-item"
           @click="toggleNotificationFilter('polls')"
         >
           <span

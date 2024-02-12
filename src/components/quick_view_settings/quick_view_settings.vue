@@ -12,7 +12,7 @@
       >
         <div role="group">
           <button
-            class="button-default dropdown-item"
+            class="menu-item dropdown-item"
             :aria-checked="conversationDisplay === 'tree'"
             role="menuitemradio"
             @click="conversationDisplay = 'tree'"
@@ -27,7 +27,7 @@
             /> {{ $t('settings.conversation_display_tree_quick') }}
           </button>
           <button
-            class="button-default dropdown-item"
+            class="menu-item dropdown-item"
             :aria-checked="conversationDisplay === 'linear'"
             role="menuitemradio"
             @click="conversationDisplay = 'linear'"
@@ -47,7 +47,7 @@
           class="dropdown-divider"
         />
         <button
-          class="button-default dropdown-item"
+          class="menu-item dropdown-item"
           role="menuitemcheckbox"
           :aria-checked="showUserAvatars"
           @click="showUserAvatars = !showUserAvatars"
@@ -60,7 +60,7 @@
         </button>
         <button
           v-if="!conversation"
-          class="button-default dropdown-item"
+          class="menu-item dropdown-item"
           role="menuitemcheckbox"
           :aria-checked="autoUpdate"
           @click="autoUpdate = !autoUpdate"
@@ -73,7 +73,7 @@
         </button>
         <button
           v-if="!conversation"
-          class="button-default dropdown-item"
+          class="menu-item dropdown-item"
           role="menuitemcheckbox"
           :aria-checked="collapseWithSubjects"
           @click="collapseWithSubjects = !collapseWithSubjects"
@@ -85,7 +85,7 @@
           />{{ $t('settings.collapse_subject') }}
         </button>
         <button
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
           role="menuitem"
           @click="openTab('general')"
         >

@@ -38,6 +38,7 @@
         <div
           v-show="showTimelines"
           class="timelines-background"
+          :class="{ expanded: showTimelines }"
         >
           <div class="timelines">
             <NavigationEntry
@@ -57,12 +58,11 @@
         >
           <router-link
             :title="$t('lists.manage_lists')"
-            class="extra-button"
+            class="button-unstyled extra-button"
             :to="{ name: 'lists' }"
             @click.stop
           >
             <FAIcon
-              class="extra-button"
               fixed-width
               icon="wrench"
             />
@@ -76,6 +76,7 @@
         <div
           v-show="showLists"
           class="timelines-background"
+          :class="{ expanded: showTimelines }"
         >
           <ListsMenuContent
             :show-pin="editMode || forceEditMode"
@@ -156,16 +157,11 @@
 
   .timelines-background {
     padding: 0 0 0 0.6em;
-    background-color: $fallback--lightBg;
-    background-color: var(--selectedMenu, $fallback--lightBg);
-    border-bottom: 1px solid;
-    border-color: $fallback--border;
-    border-color: var(--border, $fallback--border);
   }
 
-  .timelines {
-    background-color: $fallback--bg;
-    background-color: var(--bg, $fallback--bg);
+  .timelines-background.expanded + .NavigationEntry {
+    border-top: 1px solid;
+    border-color: var(--border);
   }
 
   .nav-panel-heading {

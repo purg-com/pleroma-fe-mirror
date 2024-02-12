@@ -23,9 +23,9 @@
             v-for="group in filteredEmojiGroups"
             :ref="setGroupRef('group-header-' + group.id)"
             :key="group.id"
-            class="emoji-tabs-item"
+            class="button-unstyled emoji-tabs-item"
             :class="{
-              active: activeGroupView === group.id
+              toggled: activeGroupView === group.id
             }"
             :title="group.text"
             role="button"
@@ -52,8 +52,8 @@
           class="additional-tabs"
         >
           <span
-            class="stickers-tab-icon additional-tabs-item"
-            :class="{active: showingStickers}"
+            class="button-unstyled stickers-tab-icon additional-tabs-item"
+            :class="{toggled: showingStickers}"
             :title="$t('emoji.stickers')"
             @click.prevent="toggleStickers"
           >

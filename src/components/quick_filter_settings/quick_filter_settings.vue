@@ -16,7 +16,7 @@
         >
           <button
             v-if="!conversation"
-            class="button-default dropdown-item"
+            class="menu-item dropdown-item"
             :aria-checked="replyVisibilityAll"
             role="menuitemradio"
             @click="replyVisibilityAll = true"
@@ -29,7 +29,7 @@
           </button>
           <button
             v-if="!conversation"
-            class="button-default dropdown-item"
+            class="menu-item dropdown-item"
             :aria-checked="replyVisibilityFollowing"
             role="menuitemradio"
             @click="replyVisibilityFollowing = true"
@@ -42,7 +42,7 @@
           </button>
           <button
             v-if="!conversation"
-            class="button-default dropdown-item"
+            class="menu-item dropdown-item"
             :aria-checked="replyVisibilitySelf"
             role="menuitemradio"
             @click="replyVisibilitySelf = true"
@@ -60,7 +60,7 @@
           />
         </div>
         <button
-          class="button-default dropdown-item"
+          class="menu-item dropdown-item"
           role="menuitemcheckbox"
           :aria-checked="muteBotStatuses"
           @click="muteBotStatuses = !muteBotStatuses"
@@ -72,7 +72,7 @@
           />{{ $t('settings.mute_bot_posts') }}
         </button>
         <button
-          class="button-default dropdown-item"
+          class="menu-item dropdown-item"
           role="menuitemcheckbox"
           :aria-checked="hideMedia"
           @click="hideMedia = !hideMedia"
@@ -84,7 +84,7 @@
           />{{ $t('settings.hide_media_previews') }}
         </button>
         <button
-          class="button-default dropdown-item"
+          class="menu-item dropdown-item"
           role="menuitemcheckbox"
           :aria-checked="hideMutedPosts"
           @click="hideMutedPosts = !hideMutedPosts"
@@ -96,7 +96,7 @@
           />{{ $t('settings.hide_all_muted_posts') }}
         </button>
         <button
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
           role="menuitem"
           @click="openTab('filtering')"
         >

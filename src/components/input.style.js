@@ -24,19 +24,16 @@ export default {
   selector: '.input',
   states: {
     disabled: ':disabled',
-    pressed: ':active',
     hover: ':hover',
     focused: ':focus-within'
   },
-  // variants: {
-  // },
   validInnerComponents: [
     'Text'
   ],
   defaultRules: [
     {
       directives: {
-        background: '--fg',
+        background: '--fg, -5',
         shadow: [{
           x: 0,
           y: 0,

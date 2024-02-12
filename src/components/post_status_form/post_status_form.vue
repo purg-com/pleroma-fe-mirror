@@ -503,31 +503,6 @@
     padding: 0 0.1em;
     display: flex;
     align-items: center;
-
-    &.selected,
-    &:hover {
-      // needs to be specific to override icon default color
-      svg,
-      i,
-      label {
-        color: $fallback--lightText;
-        color: var(--lightText, $fallback--lightText);
-      }
-    }
-
-    &.disabled {
-      svg,
-      i {
-        cursor: not-allowed;
-        color: $fallback--icon;
-        color: var(--btnDisabledText, $fallback--icon);
-
-        &:hover {
-          color: $fallback--icon;
-          color: var(--btnDisabledText, $fallback--icon);
-        }
-      }
-    }
   }
 
   .error {

@@ -10,15 +10,6 @@ $emoji-picker-emoji-size: 32px;
   max-width: calc(100vw - 20px); // popover gives 10px margin from window edge
   display: flex;
   flex-direction: column;
-  background-color: $fallback--bg;
-  background-color: var(--popover, $fallback--bg);
-  color: $fallback--link;
-  color: var(--popoverText, $fallback--link);
-
-  --faint: var(--popoverFaintText, $fallback--faint);
-  --faintLink: var(--popoverFaintLink, $fallback--faint);
-  --lightText: var(--popoverLightText, $fallback--lightText);
-  --icon: var(--popoverIcon, $fallback--icon);
 
   &-header-image {
     display: inline-flex;
@@ -104,13 +95,8 @@ $emoji-picker-emoji-size: 32px;
         pointer-events: none;
       }
 
-      &.active {
+      &.toggled {
         border-bottom: 4px solid;
-
-        svg {
-          color: $fallback--lightText;
-          color: var(--lightText, $fallback--lightText);
-        }
       }
     }
   }

@@ -6,6 +6,7 @@ export default {
     'Text',
     'Icon',
     'Button',
+    'ButtonUnstyled',
     'Input'
   ],
   defaultRules: [

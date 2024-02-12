@@ -110,18 +110,7 @@
 }
 
 .user-info {
-  color: $fallback--lightText;
-  color: var(--lightText, $fallback--lightText);
   padding: 0 26px;
-
-  a {
-    color: $fallback--lightText;
-    color: var(--lightText, $fallback--lightText);
-
-    &:hover {
-      color: var(--icon);
-    }
-  }
 
   .container {
     min-width: 0;
@@ -334,8 +323,6 @@
   padding: 0.5em 1.5em 0;
   text-align: center;
   justify-content: space-between;
-  color: $fallback--lightText;
-  color: var(--lightText, $fallback--lightText);
   flex-wrap: wrap;
 }
 

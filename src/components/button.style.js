@@ -10,6 +10,14 @@ const border = (top, shadow) => ({
 
 const buttonInsetFakeBorders = [border(true, false), border(false, true)]
 const inputInsetFakeBorders = [border(true, true), border(false, false)]
+const buttonOuterShadow = {
+  x: 0,
+  y: 0,
+  blur: 2,
+  spread: 0,
+  color: '#000000',
+  alpha: 1
+}
 
 const hoverGlow = {
   x: 0,
@@ -22,7 +30,7 @@ const hoverGlow = {
 
 export default {
   name: 'Button', // Name of the component
-  selector: '.button', // CSS selector/prefix
+  selector: '.button-default', // CSS selector/prefix
   // outOfTreeSelector: '' // out-of-tree selector is used when other components are laid over it but it's not part of the tree, see Underlay component
   // States, system witll calculate ALL possible combinations of those and prepend "normal" to them + standalone "normal" state
   states: {
@@ -39,8 +47,8 @@ export default {
   // Variants are mutually exclusive, each component implicitly has "normal" variant, and all other variants inherit from it.
   variants: {
     // Variants save on computation time since adding new variant just adds one more "set".
-    normal: '-default', // you can override normal variant, it will be appenended to the main class
-    danger: '-default.danger'
+    // normal: '', // you can override normal variant, it will be appenended to the main class
+    danger: '.danger'
     // Overall the compuation difficulty is N*((1/6)M^3+M) where M is number of distinct states and N is number of variants.
     // This (currently) is further multipled by number of places where component can exist.
   },
@@ -56,21 +64,7 @@ export default {
       // like within it
       directives: {
         background: '--fg',
-        shadow: [{
-          x: 0,
-          y: 0,
-          blur: 2,
-          spread: 0,
-          color: '#000000',
-          alpha: 1
-        }, ...buttonInsetFakeBorders]
-      }
-    },
-    {
-      variant: 'unstyled',
-      directives: {
-        background: '--fg',
-        opacity: 0
+        shadow: [buttonOuterShadow, ...buttonInsetFakeBorders]
       }
     },
     {
@@ -82,7 +76,7 @@ export default {
     {
       state: ['pressed'],
       directives: {
-        shadow: [...inputInsetFakeBorders]
+        shadow: [buttonOuterShadow, ...inputInsetFakeBorders]
       }
     },
     {
@@ -95,7 +89,7 @@ export default {
       state: ['toggled'],
       directives: {
         background: '--accent,-24.2',
-        shadow: [...inputInsetFakeBorders]
+        shadow: [buttonOuterShadow, ...inputInsetFakeBorders]
       }
     },
     {
@@ -113,10 +107,28 @@ export default {
       }
     },
     {
+      state: ['disabled', 'hover'],
+      directives: {
+        background: '$blend(--background, 0.25, --parent)',
+        shadow: [...buttonInsetFakeBorders]
+      }
+    },
+    {
       component: 'Text',
       parent: {
         component: 'Button',
         state: ['disabled']
+      },
+      directives: {
+        textOpacity: 0.25,
+        textOpacityMode: 'blend'
+      }
+    },
+    {
+      component: 'Text',
+      parent: {
+        component: 'Button',
+        state: ['disabled', 'hover']
       },
       directives: {
         textOpacity: 0.25,
