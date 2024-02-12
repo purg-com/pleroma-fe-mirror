@@ -12,7 +12,6 @@ export default {
     'Button',
     'ButtonUnstyled',
     'Input',
-    'PanelHeader',
     'MenuItem',
     'Post'
   ],
