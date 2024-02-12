@@ -13,7 +13,8 @@ export default {
     'ButtonUnstyled',
     'Input',
     'PanelHeader',
-    'MenuItem'
+    'MenuItem',
+    'Post'
   ],
   defaultRules: [
     {

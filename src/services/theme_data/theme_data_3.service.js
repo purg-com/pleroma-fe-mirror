@@ -19,9 +19,13 @@ import Button from 'src/components/button.style.js'
 import ButtonUnstyled from 'src/components/button_unstyled.style.js'
 import Input from 'src/components/input.style.js'
 import Text from 'src/components/text.style.js'
+import FunText from 'src/components/fun_text.style.js'
 import Link from 'src/components/link.style.js'
 import Icon from 'src/components/icon.style.js'
 import Border from 'src/components/border.style.js'
+import Post from 'src/components/post.style.js'
+import Notification from 'src/components/notification.style.js'
+import RichContent from 'src/components/rich_content.style.js'
 
 const DEBUG = false
 
@@ -39,6 +43,7 @@ export const DEFAULT_SHADOWS = {
 const components = {
   Root,
   Text,
+  FunText,
   Link,
   Icon,
   Border,
@@ -51,7 +56,10 @@ const components = {
   TopBar,
   Button,
   ButtonUnstyled,
-  Input
+  Input,
+  Post,
+  Notification,
+  RichContent
 }
 
 // "Unrolls" a tree structure of item: { parent: { ...item2, parent: { ...item3, parent: {...} } }}
@@ -582,6 +590,7 @@ export const init = (extraRuleset, palette) => {
               ].join(';\n')
             }
             case 'textColor': {
+              if (rule.directives.textNoCssColor === 'yes') { return '' }
               return 'color: ' + v
             }
             default: return ''
@@ -594,7 +603,7 @@ export const init = (extraRuleset, palette) => {
       return [
         header,
         directives + ';',
-        !rule.virtual ? '  color: var(--text);' : '',
+        (!rule.virtual && rule.directives.textNoCssColor !== 'yes') ? '  color: var(--text);' : '',
         '',
         virtualDirectives,
         footer

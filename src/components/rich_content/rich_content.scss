@@ -65,4 +65,12 @@
     vertical-align: middle;
     object-fit: contain;
   }
+
+  .greentext {
+    color: var(--funtextGreentext);
+  }
+
+  .cyantext {
+    color: var(--funtextCyantext);
+  }
 }
