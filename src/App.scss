@@ -391,6 +391,7 @@ nav {
   &:last-child {
     border-bottom-right-radius: var(--roundness);
     border-bottom-left-radius: var(--roundness);
+    border: none;
   }
 }
 
