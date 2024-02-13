@@ -410,7 +410,27 @@
         "borders": "Okraje",
         "buttons": "Tlačítka",
         "inputs": "Vstupní pole",
-        "faint_text": "Vybledlý text"
+        "faint_text": "Vybledlý text",
+        "popover": "Popisy, menu, popovery",
+        "underlay": "Podklad",
+        "pressed": "Zmáčknuté",
+        "selectedPost": "Vybraný příspěvek",
+        "selectedMenu": "Vybraná položka menu",
+        "alert_warning": "Varování",
+        "alert_neutral": "Neutrální",
+        "toggled": "Přepnuto",
+        "disabled": "Vypnuto",
+        "tabs": "Karty",
+        "chat": {
+          "incoming": "Příchozí",
+          "border": "Okraj",
+          "outgoing": "Odchozí"
+        },
+        "post": "Příspěvky/Bio uživatelů",
+        "wallpaper": "Tapeta",
+        "poll": "Graf ankety",
+        "icons": "Ikony",
+        "highlight": "Zvýrazněné prvky"
       },
       "radii": {
         "_tab_label": "Kulatost"
@@ -706,7 +726,18 @@
     "show_yous": "Zobrazit (Vy)",
     "notification_setting_filters": "Filtry",
     "notification_setting_ignore_inactionable_seen_tip": "Toto ve skutečnosti neoznačí tyto oznámení jako přečtené a stále o nich budete dostávat oznámení na počítači, pokud si tak vyberete",
-    "notification_setting_filters_chrome_push": "V některých prohlížečích (Chrome) nemusí být možné kompletně vyfiltrovat oznámení, pokud přijdou jako push oznámení"
+    "notification_setting_filters_chrome_push": "V některých prohlížečích (Chrome) nemusí být možné kompletně vyfiltrovat oznámení, pokud přijdou jako push oznámení",
+    "commit_value": "Uložit",
+    "reset_value": "Resetovat",
+    "reset_value_tooltip": "Resetovat koncept",
+    "hard_reset_value": "Tvrdý reset",
+    "version": {
+      "title": "Verze",
+      "backend_version": "Backend verze",
+      "frontend_version": "Frontend verze"
+    },
+    "commit_value_tooltip": "Hodnota není uložena, stiskněte toto tlačítko pro potvrzení změn",
+    "hard_reset_value_tooltip": "Odstranit nastavení z úložiště a vynutit výchozí hodnotu"
   },
   "time": {
     "day": "{0} day",
@@ -956,5 +987,21 @@
   },
   "selectable_list": {
     "select_all": "Vybrat vše"
+  },
+  "admin_dash": {
+    "window_title": "Administrace",
+    "commit_all": "Uložit vše",
+    "tabs": {
+      "nodb": "Žádné nastavení v databázi",
+      "frontends": "Frontendy",
+      "instance": "Instance",
+      "limits": "Limity"
+    },
+    "nodb": {
+      "heading": "Nastavení v databázi je vypnuto"
+    },
+    "wip_notice": "Tento administrační panel je experimentální a v aktivní vývoji, {adminFeLink}.",
+    "old_ui_link": "staré administrační rozhraní je dostupné zde",
+    "reset_all": "Resetovat vše"
   }
 }
