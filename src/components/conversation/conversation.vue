@@ -275,11 +275,11 @@
 
   /* expanded conversation in timeline */
   &.status-fadein.-expanded .thread-body {
-    border-left: 4px solid $fallback--cRed;
-    border-left-color: var(--cRed, $fallback--cRed);
-    border-radius: 0 0 $fallback--panelRadius $fallback--panelRadius;
-    border-radius: 0 0 var(--panelRadius, $fallback--panelRadius) var(--panelRadius, $fallback--panelRadius);
-    border-bottom: 1px solid var(--border, $fallback--border);
+    border-left: 4px solid var(--cRed);
+    border-radius: var(--roundness);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom: 1px solid var(--border);
   }
 
   &.-expanded.status-fadein {

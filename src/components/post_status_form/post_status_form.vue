@@ -171,7 +171,7 @@
               :disabled="posting && !optimisticPosting"
               v-bind="propsToNative(inputProps)"
               size="1"
-              class="form-post-subject"
+              class="input form-post-subject"
             >
           </template>
         </EmojiInput>
@@ -198,7 +198,7 @@
               rows="1"
               cols="1"
               :disabled="posting && !optimisticPosting"
-              class="form-post-body"
+              class="input form-post-body"
               :class="{ 'scrollable-form': !!maxHeight }"
               v-bind="propsToNative(inputProps)"
               @keydown.exact.enter="submitOnEnter && postStatus($event, newStatus)"
@@ -555,7 +555,7 @@
     line-height: 1.85;
   }
 
-  .form-post-body {
+  .input.form-post-body {
     // TODO: make a resizable textarea component?
     box-sizing: content-box; // needed for easier computation of dynamic size
     overflow: hidden;
@@ -566,7 +566,6 @@
     height: calc(var(--post-line-height) * 1em);
     min-height: calc(var(--post-line-height) * 1em);
     resize: none;
-    text: inherit;
     background: transparent;
 
     &.scrollable-form {

@@ -181,9 +181,8 @@
     .user-profile-field {
       display: flex;
       margin: 0.25em;
-      border: 1px solid var(--border, $fallback--border);
-      border-radius: $fallback--inputRadius;
-      border-radius: var(--inputRadius, $fallback--inputRadius);
+      border: 1px solid var(--border);
+      border-radius: var(--roundness);
 
       .user-profile-field-name {
         flex: 0 1 30%;
@@ -191,7 +190,7 @@
         text-align: right;
         color: var(--lightText);
         min-width: 120px;
-        border-right: 1px solid var(--border, $fallback--border);
+        border-right: 1px solid var(--border);
       }
 
       .user-profile-field-value {

@@ -117,29 +117,6 @@
     padding: 0;
   }
 
-  li {
-    position: relative;
-    border-bottom: 1px solid;
-    border-color: $fallback--border;
-    border-color: var(--border, $fallback--border);
-  }
-
-  > li {
-    &:first-child.menu-item {
-      border-top-right-radius: var(--roundness);
-      border-top-left-radius: var(--roundness);
-    }
-
-    &:last-child.menu-item {
-      border-bottom-right-radius: var(--roundness);
-      border-bottom-left-radius: var(--roundness);
-    }
-  }
-
-  li:last-child {
-    border: none;
-  }
-
   .navigation-chevron {
     margin-left: 0.8em;
     margin-right: 0.8em;

@@ -50,8 +50,7 @@
     position: absolute;
     top: 0.2em;
     right: 0.2em;
-    border-radius: $fallback--tooltipRadius;
-    border-radius: var(--tooltipRadius, $fallback--tooltipRadius);
+    border-radius: var(--roundness);
     background-color: rgb(0 0 0 / 60%);
     opacity: 0.7;
     width: 1.5em;

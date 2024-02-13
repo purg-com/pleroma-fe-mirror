@@ -140,12 +140,7 @@
   .result-fill {
     height: 100%;
     position: absolute;
-    color: $fallback--text;
-    color: var(--pollText, $fallback--text);
-    background-color: $fallback--lightBg;
-    background-color: var(--poll, $fallback--lightBg);
-    border-radius: $fallback--panelRadius;
-    border-radius: var(--panelRadius, $fallback--panelRadius);
+    border-radius: var(--roundness);
     top: 0;
     left: 0;
     transition: width 0.5s;

@@ -379,6 +379,9 @@ nav {
   font-family: inherit;
   cursor: pointer;
   color: inherit;
+  position: relative;
+  border-bottom: 1px solid;
+  border-color: var(--border);
 
   &:first-child {
     border-top-right-radius: var(--roundness);

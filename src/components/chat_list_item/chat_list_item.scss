@@ -73,11 +73,6 @@
     }
   }
 
-  .Avatar {
-    border-radius: $fallback--avatarAltRadius;
-    border-radius: var(--avatarAltRadius, $fallback--avatarAltRadius);
-  }
-
   .chat-preview-body {
     --emoji-size: 1.4em;
 
