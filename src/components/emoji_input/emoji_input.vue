@@ -146,7 +146,8 @@
     flex: 1 0 auto;
     color: inherit;
     padding: 0;
-    background: none;
+    // stylint-disable-next-line declaration-no-important
+    background: none !important;
     box-shadow: none;
     border: none;
     outline: none;
