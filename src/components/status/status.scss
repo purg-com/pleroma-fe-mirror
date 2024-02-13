@@ -247,7 +247,7 @@
   }
 
   .repeater-avatar {
-    border-radius: var(--avatarAltRadius, $fallback--avatarAltRadius);
+    border-radius: var(--roundness);
     margin-left: 28px;
     width: 20px;
     height: 20px;
@@ -363,7 +363,6 @@
 
   .avatar-row {
     flex: 1;
-    overflow: hidden;
     position: relative;
     display: flex;
     align-items: center;
@@ -421,7 +420,7 @@
   .quoted-status {
     margin-top: 0.5em;
     border: 1px solid var(--border, $fallback--border);
-    border-radius: var(--attachmentRadius, $fallback--attachmentRadius);
+    border-radius: var(--roundness);
 
     &.-unavailable-prompt {
       padding: 0.5em;

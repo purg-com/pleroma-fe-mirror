@@ -293,16 +293,14 @@
         linear-gradient(-45deg, transparent 75%, #666 75%);
       background-size: 20px 20px;
       background-position: 0 0, 0 10px, 10px -10px, -10px 0;
-      border-radius: $fallback--inputRadius;
-      border-radius: var(--inputRadius, $fallback--inputRadius);
+      border-radius: var(--roundness);
 
       .preview-block {
         width: 33%;
         height: 33%;
         background-color: $fallback--bg;
         background-color: var(--bg, $fallback--bg);
-        border-radius: $fallback--panelRadius;
-        border-radius: var(--panelRadius, $fallback--panelRadius);
+        border-radius: var(--roundness);
       }
     }
   }

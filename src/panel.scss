@@ -10,8 +10,7 @@
 
   &::after,
   & {
-    border-radius: $fallback--panelRadius;
-    border-radius: var(--panelRadius, $fallback--panelRadius);
+    border-radius: var(--roundness);
   }
 
   &::after {
@@ -77,8 +76,7 @@
   &.-stub {
     &,
     &::after {
-      border-radius: $fallback--panelRadius;
-      border-radius: var(--panelRadius, $fallback--panelRadius);
+      border-radius: var(--roundness);
     }
   }
 
@@ -126,16 +124,15 @@
 // TODO Should refactor panels into separate component and utilize slots
 
 .panel-heading {
-  border-radius: $fallback--panelRadius $fallback--panelRadius 0 0;
-  border-radius: var(--panelRadius, $fallback--panelRadius) var(--panelRadius, $fallback--panelRadius) 0 0;
+  border-radius: var(--roundness) var(--roundness) 0 0;
   border-width: 0 0 1px;
   align-items: start;
 
   &::after {
     background-color: var(--background);
     z-index: -2;
-    border-radius: $fallback--panelRadius $fallback--panelRadius 0 0;
-    border-radius: var(--panelRadius, $fallback--panelRadius) var(--panelRadius, $fallback--panelRadius) 0 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
     box-shadow: var(--shadow);
   }
 
@@ -179,8 +176,8 @@
 }
 
 .panel-footer {
-  border-radius: 0 0 $fallback--panelRadius $fallback--panelRadius;
-  border-radius: 0 0 var(--panelRadius, $fallback--panelRadius) var(--panelRadius, $fallback--panelRadius);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
   align-items: center;
   border-width: 1px 0 0;
   border-style: solid;

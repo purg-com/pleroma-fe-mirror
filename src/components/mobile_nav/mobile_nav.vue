@@ -20,7 +20,7 @@
           />
           <div
             v-if="(unreadChatCount && !chatsPinned) || unreadAnnouncementCount"
-            class="alert-dot"
+            class="badge alert-dot"
           />
         </button>
         <NavigationPins class="pins" />
@@ -37,7 +37,7 @@
           />
           <div
             v-if="unseenNotificationsCount"
-            class="alert-dot"
+            class="badge alert-dot"
           />
         </button>
       </div>

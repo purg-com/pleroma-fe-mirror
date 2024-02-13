@@ -484,9 +484,20 @@ export const init = (extraRuleset, palette) => {
         })
       } else {
         computed[selector] = computed[selector] || {}
+        let addRuleNeeded = false
 
-        // TODO make background non-mandatory
+        // TODO: DEFAULT TEXT COLOR
+        const lowerLevelComputedBackground = computed[lowerLevelSelector]?.background || convert('#FFFFFF').rgb
+
+        if (
+          computedDirectives.shadow != null ||
+          computedDirectives.roundness != null
+        ) {
+          addRuleNeeded = true
+        }
+
         if (computedDirectives.background) {
+          addRuleNeeded = true
           let inheritRule = null
           const variantRules = ruleset.filter(findRules({ component: component.name, variant: combination.variant, parent }))
           const lastVariantRule = variantRules[variantRules.length - 1]
@@ -500,9 +511,6 @@ export const init = (extraRuleset, palette) => {
 
           const inheritSelector = ruleToSelector({ ...inheritRule, parent }, true)
           const inheritedBackground = computed[inheritSelector].background
-
-          // TODO: DEFAULT TEXT COLOR
-          const lowerLevelComputedBackground = computed[lowerLevelSelector]?.background || convert('#FFFFFF').rgb
 
           dynamicVars.inheritedBackground = inheritedBackground
 
@@ -520,15 +528,24 @@ export const init = (extraRuleset, palette) => {
             }
             stacked[selector] = blend
             computed[selector].background = { ...rgb, a: computedDirectives.opacity ?? 1 }
-
-            addRule({
-              selector,
-              component: component.name,
-              ...combination,
-              parent,
-              directives: computedDirectives
-            })
           }
+        }
+
+        if (!stacked[selector]) {
+          computedDirectives.background = 'transparent'
+          computedDirectives.opacity = 0
+          stacked[selector] = lowerLevelComputedBackground
+          computed[selector].background = { ...lowerLevelComputedBackground, a: 0 }
+        }
+
+        if (addRuleNeeded) {
+          addRule({
+            selector,
+            component: component.name,
+            ...combination,
+            parent,
+            directives: computedDirectives
+          })
         }
       }
 
@@ -566,6 +583,11 @@ export const init = (extraRuleset, palette) => {
       if (rule.component !== 'Root') {
         directives = Object.entries(rule.directives).map(([k, v]) => {
           switch (k) {
+            case 'roundness': {
+              return '  ' + [
+                '--roundness: ' + v + 'px'
+              ].join(';\n  ')
+            }
             case 'shadow': {
               return '  ' + [
                 '--shadow: ' + getCssShadow(v),
@@ -574,6 +596,12 @@ export const init = (extraRuleset, palette) => {
               ].join(';\n  ')
             }
             case 'background': {
+              if (v === 'transparent') {
+                return [
+                  'background-color: ' + v,
+                  '  --background: ' + v
+                ].join(';\n')
+              }
               const color = cssColorString(computed[ruleToSelector(rule, true)].background, rule.directives.opacity)
               return [
                 'background-color: ' + color,

@@ -43,16 +43,14 @@
   &.-compact {
     width: 32px;
     height: 32px;
-    border-radius: $fallback--avatarAltRadius;
-    border-radius: var(--avatarAltRadius, $fallback--avatarAltRadius);
+    border-radius: var(--roundness);
   }
 
   .avatar {
     width: 100%;
     height: 100%;
     box-shadow: var(--_avatarShadowBox);
-    border-radius: $fallback--avatarRadius;
-    border-radius: var(--avatarRadius, $fallback--avatarRadius);
+    border-radius: var(--roundness);
 
     &.-better-shadow {
       box-shadow: var(--_avatarShadowInset);
@@ -64,13 +62,11 @@
     }
 
     &.-compact {
-      border-radius: $fallback--avatarAltRadius;
-      border-radius: var(--avatarAltRadius, $fallback--avatarAltRadius);
+      border-radius: var(--roundness);
     }
 
     &.-placeholder {
-      background-color: $fallback--fg;
-      background-color: var(--fg, $fallback--fg);
+      background-color: var(--background);
     }
   }
 
@@ -87,7 +83,7 @@
     padding: 0.2em;
     background: rgb(127 127 127 / 50%);
     color: #fff;
-    border-radius: var(--tooltipRadius);
+    border-radius: var(--roundness);
   }
 }
 </style>

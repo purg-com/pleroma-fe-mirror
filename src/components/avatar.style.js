@@ -1,11 +1,13 @@
 export default {
   name: 'Avatar',
   selector: '.Avatar',
+  variants: {
+    compact: '.-compact'
+  },
   defaultRules: [
     {
       directives: {
-        background: '--bg',
-        opacity: 0,
+        roundness: 3,
         shadow: [{
           x: 0,
           y: 1,

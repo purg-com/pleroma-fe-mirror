@@ -1,7 +1,7 @@
 <template>
   <div
     ref="root"
-    class="emoji-input"
+    class="input emoji-input"
     :class="{ 'with-picker': !hideEmojiButton }"
   >
     <slot
@@ -68,9 +68,9 @@
             v-for="(suggestion, index) in suggestions"
             :id="suggestionItemId(index)"
             :key="index"
-            class="autocomplete-item"
+            class="menu-item autocomplete-item"
             role="option"
-            :class="{ highlighted: index === highlighted }"
+            :class="{ active: index === highlighted }"
             :aria-label="autoCompleteItemLabel(suggestion)"
             :aria-selected="index === highlighted"
             @click.stop.prevent="onClick($event, suggestion)"
@@ -145,7 +145,9 @@
   textarea {
     flex: 1 0 auto;
     color: inherit;
+    padding: 0;
     background: none;
+    box-shadow: none;
     border: none;
     outline: none;
   }
@@ -186,7 +188,6 @@
     display: flex;
     cursor: pointer;
     padding: 0.2em 0.4em;
-    border-bottom: 1px solid rgb(0 0 0 / 40%);
     height: 32px;
 
     .image {
@@ -218,16 +219,6 @@
         font-size: 9px;
         line-height: 9px;
       }
-    }
-
-    &.highlighted {
-      background-color: $fallback--fg;
-      background-color: var(--selectedMenuPopover, $fallback--fg);
-      color: var(--selectedMenuPopoverText, $fallback--text);
-
-      --faint: var(--selectedMenuPopoverFaintText, $fallback--faint);
-      --faintLink: var(--selectedMenuPopoverFaintLink, $fallback--faint);
-      --icon: var(--selectedMenuPopoverIcon, $fallback--icon);
     }
   }
 }

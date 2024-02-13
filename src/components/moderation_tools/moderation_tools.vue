@@ -54,7 +54,7 @@
               @click="toggleTag(tags.FORCE_NSFW)"
             >
               <span
-                class="menu-checkbox"
+                class="input menu-checkbox"
                 :class="{ 'menu-checkbox-checked': hasTag(tags.FORCE_NSFW) }"
               />
               {{ $t('user_card.admin_menu.force_nsfw') }}
@@ -64,7 +64,7 @@
               @click="toggleTag(tags.STRIP_MEDIA)"
             >
               <span
-                class="menu-checkbox"
+                class="input menu-checkbox"
                 :class="{ 'menu-checkbox-checked': hasTag(tags.STRIP_MEDIA) }"
               />
               {{ $t('user_card.admin_menu.strip_media') }}
@@ -74,7 +74,7 @@
               @click="toggleTag(tags.FORCE_UNLISTED)"
             >
               <span
-                class="menu-checkbox"
+                class="input menu-checkbox"
                 :class="{ 'menu-checkbox-checked': hasTag(tags.FORCE_UNLISTED) }"
               />
               {{ $t('user_card.admin_menu.force_unlisted') }}
@@ -84,7 +84,7 @@
               @click="toggleTag(tags.SANDBOX)"
             >
               <span
-                class="menu-checkbox"
+                class="input menu-checkbox"
                 :class="{ 'menu-checkbox-checked': hasTag(tags.SANDBOX) }"
               />
               {{ $t('user_card.admin_menu.sandbox') }}
@@ -95,7 +95,7 @@
               @click="toggleTag(tags.DISABLE_REMOTE_SUBSCRIPTION)"
             >
               <span
-                class="menu-checkbox"
+                class="input menu-checkbox"
                 :class="{ 'menu-checkbox-checked': hasTag(tags.DISABLE_REMOTE_SUBSCRIPTION) }"
               />
               {{ $t('user_card.admin_menu.disable_remote_subscription') }}
@@ -106,7 +106,7 @@
               @click="toggleTag(tags.DISABLE_ANY_SUBSCRIPTION)"
             >
               <span
-                class="menu-checkbox"
+                class="input menu-checkbox"
                 :class="{ 'menu-checkbox-checked': hasTag(tags.DISABLE_ANY_SUBSCRIPTION) }"
               />
               {{ $t('user_card.admin_menu.disable_any_subscription') }}
@@ -117,7 +117,7 @@
               @click="toggleTag(tags.QUARANTINE)"
             >
               <span
-                class="menu-checkbox"
+                class="input menu-checkbox"
                 :class="{ 'menu-checkbox-checked': hasTag(tags.QUARANTINE) }"
               />
               {{ $t('user_card.admin_menu.quarantine') }}

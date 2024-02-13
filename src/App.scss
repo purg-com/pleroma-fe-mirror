@@ -355,8 +355,7 @@ nav {
   user-select: none;
   color: var(--text);
   border: none;
-  border-radius: $fallback--btnRadius;
-  border-radius: var(--btnRadius, $fallback--btnRadius);
+  border-radius: var(--roundness);
   cursor: pointer;
   box-shadow: var(--shadow);
   font-size: 1em;
@@ -380,6 +379,16 @@ nav {
   font-family: inherit;
   cursor: pointer;
   color: inherit;
+
+  &:first-child {
+    border-top-right-radius: var(--roundness);
+    border-top-left-radius: var(--roundness);
+  }
+
+  &:last-child {
+    border-bottom-right-radius: var(--roundness);
+    border-bottom-left-radius: var(--roundness);
+  }
 }
 
 .button-unstyled {
@@ -423,8 +432,7 @@ textarea {
   --_padding: 0.5em;
 
   border: none;
-  border-radius: $fallback--inputRadius;
-  border-radius: var(--inputRadius, $fallback--inputRadius);
+  border-radius: var(--roundness);
   box-shadow: var(--shadow);
   font-family: sans-serif;
   font-family: var(--inputFont, sans-serif);
@@ -511,8 +519,7 @@ textarea {
       transition: color 200ms;
       width: 1.1em;
       height: 1.1em;
-      border-radius: $fallback--checkboxRadius;
-      border-radius: var(--checkboxRadius, $fallback--checkboxRadius);
+      border-radius: var(--roundness);
       box-shadow: 0 0 2px black inset;
       box-shadow: var(--inputShadow);
       margin-right: 0.5em;
@@ -562,7 +569,7 @@ option {
 
   li {
     border: 1px solid var(--border);
-    border-radius: var(--inputRadius);
+    border-radius: var(--roundness);
     padding: 0.5em;
     margin: 0.25em;
   }
@@ -634,8 +641,7 @@ option {
 .alert {
   margin: 0 0.35em;
   padding: 0 0.25em;
-  border-radius: $fallback--tooltipRadius;
-  border-radius: var(--tooltipRadius, $fallback--tooltipRadius);
+  border-radius: var(--roundness);
 
   &.error {
     background-color: $fallback--alertError;
@@ -682,8 +688,7 @@ option {
   padding: 0.5em;
   border: 1px solid $fallback--faint;
   border: 1px solid var(--faint, $fallback--faint);
-  border-radius: $fallback--inputRadius;
-  border-radius: var(--inputRadius, $fallback--inputRadius);
+  border-radius: var(--roundness);
 }
 
 .notice-dismissible {

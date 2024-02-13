@@ -6,13 +6,5 @@ export default {
     'Modals',
     'Popover',
     'TopBar'
-  ],
-  defaultRules: [
-    {
-      directives: {
-        background: '--bg',
-        opacity: 0
-      }
-    }
   ]
 }

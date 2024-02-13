@@ -12,7 +12,7 @@
           @click="toggleNotificationFilter('likes')"
         >
           <span
-            class="menu-checkbox"
+            class="input menu-checkbox"
             :class="{ 'menu-checkbox-checked': filters.likes }"
           />{{ $t('settings.notification_visibility_likes') }}
         </button>
@@ -21,7 +21,7 @@
           @click="toggleNotificationFilter('repeats')"
         >
           <span
-            class="menu-checkbox"
+            class="input menu-checkbox"
             :class="{ 'menu-checkbox-checked': filters.repeats }"
           />{{ $t('settings.notification_visibility_repeats') }}
         </button>
@@ -30,7 +30,7 @@
           @click="toggleNotificationFilter('follows')"
         >
           <span
-            class="menu-checkbox"
+            class="input menu-checkbox"
             :class="{ 'menu-checkbox-checked': filters.follows }"
           />{{ $t('settings.notification_visibility_follows') }}
         </button>
@@ -39,7 +39,7 @@
           @click="toggleNotificationFilter('mentions')"
         >
           <span
-            class="menu-checkbox"
+            class="input menu-checkbox"
             :class="{ 'menu-checkbox-checked': filters.mentions }"
           />{{ $t('settings.notification_visibility_mentions') }}
         </button>
@@ -48,7 +48,7 @@
           @click="toggleNotificationFilter('emojiReactions')"
         >
           <span
-            class="menu-checkbox"
+            class="input menu-checkbox"
             :class="{ 'menu-checkbox-checked': filters.emojiReactions }"
           />{{ $t('settings.notification_visibility_emoji_reactions') }}
         </button>
@@ -57,7 +57,7 @@
           @click="toggleNotificationFilter('moves')"
         >
           <span
-            class="menu-checkbox"
+            class="input menu-checkbox"
             :class="{ 'menu-checkbox-checked': filters.moves }"
           />{{ $t('settings.notification_visibility_moves') }}
         </button>
@@ -66,7 +66,7 @@
           @click="toggleNotificationFilter('polls')"
         >
           <span
-            class="menu-checkbox"
+            class="input menu-checkbox"
             :class="{ 'menu-checkbox-checked': filters.polls }"
           />{{ $t('settings.notification_visibility_polls') }}
         </button>

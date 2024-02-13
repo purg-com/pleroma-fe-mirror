@@ -64,7 +64,8 @@ export default {
       // like within it
       directives: {
         background: '--fg',
-        shadow: [buttonOuterShadow, ...buttonInsetFakeBorders]
+        shadow: [buttonOuterShadow, ...buttonInsetFakeBorders],
+        roundness: 3
       }
     },
     {

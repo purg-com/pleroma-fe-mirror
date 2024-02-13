@@ -128,8 +128,7 @@
     img {
       height: 24px;
       width: 24px;
-      border-radius: $fallback--avatarRadius;
-      border-radius: var(--avatarRadius, $fallback--avatarRadius);
+      border-radius: var(--roundness);
       margin-right: 0.5em;
       margin-top: 0.25em;
     }

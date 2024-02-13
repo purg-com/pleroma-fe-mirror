@@ -1,3 +1,4 @@
+<!-- FIXME THIS NEEDS TO BE REFACTORED TO USE POPOVER -->
 <template>
   <div
     v-click-outside="onClickOutside"
@@ -11,7 +12,7 @@
     >
     <div
       v-if="resultsVisible && filtered.length > 0"
-      class="autosuggest-results"
+      class="panel autosuggest-results"
     >
       <slot
         v-for="item in filtered"
@@ -45,13 +46,12 @@
     border-style: solid;
     border-width: 1px;
     border-color: $fallback--border;
-    border-color: var(--border, $fallback--border);
-    border-radius: $fallback--inputRadius;
-    border-radius: var(--inputRadius, $fallback--inputRadius);
+    border-color: var(--border);
+    border-radius: var(--roundness);
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     box-shadow: 1px 1px 4px rgb(0 0 0 / 60%);
-    box-shadow: var(--panelShadow);
+    box-shadow: var(--shadow);
     overflow-y: auto;
     z-index: 1;
   }

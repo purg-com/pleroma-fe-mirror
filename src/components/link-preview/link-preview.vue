@@ -51,8 +51,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: $fallback--attachmentRadius;
-      border-radius: var(--attachmentRadius, $fallback--attachmentRadius);
+      border-radius: var(--roundness);
     }
   }
 
@@ -86,8 +85,7 @@
   color: var(--text, $fallback--text);
   border-style: solid;
   border-width: 1px;
-  border-radius: $fallback--attachmentRadius;
-  border-radius: var(--attachmentRadius, $fallback--attachmentRadius);
+  border-radius: var(--roundness);
   border-color: $fallback--border;
   border-color: var(--border, $fallback--border);
 }

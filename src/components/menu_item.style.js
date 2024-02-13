@@ -9,7 +9,7 @@ export default {
   ],
   states: {
     hover: ':hover',
-    active: 'active'
+    active: '.active'
   },
   defaultRules: [
     {
@@ -20,6 +20,13 @@ export default {
     },
     {
       state: ['hover'],
+      directives: {
+        background: '$mod(--bg, 5)',
+        opacity: 1
+      }
+    },
+    {
+      state: ['active'],
       directives: {
         background: '$mod(--bg, 5)',
         opacity: 1

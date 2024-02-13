@@ -14,7 +14,7 @@
             @click="toggleList(list.id)"
           >
             <span
-              class="menu-checkbox"
+              class="input menu-checkbox"
               :class="{ 'menu-checkbox-checked': list.inList }"
             />
             {{ list.title }}

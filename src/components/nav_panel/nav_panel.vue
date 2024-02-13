@@ -126,17 +126,13 @@
 
   > li {
     &:first-child.menu-item {
-      border-top-right-radius: $fallback--panelRadius;
-      border-top-right-radius: var(--panelRadius, $fallback--panelRadius);
-      border-top-left-radius: $fallback--panelRadius;
-      border-top-left-radius: var(--panelRadius, $fallback--panelRadius);
+      border-top-right-radius: var(--roundness);
+      border-top-left-radius: var(--roundness);
     }
 
     &:last-child.menu-item {
-      border-bottom-right-radius: $fallback--panelRadius;
-      border-bottom-right-radius: var(--panelRadius, $fallback--panelRadius);
-      border-bottom-left-radius: $fallback--panelRadius;
-      border-bottom-left-radius: var(--panelRadius, $fallback--panelRadius);
+      border-bottom-right-radius: var(--roundness);
+      border-bottom-left-radius: var(--roundness);
     }
   }
 

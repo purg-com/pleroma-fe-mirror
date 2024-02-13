@@ -153,8 +153,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      border-radius: $fallback--avatarRadius;
-      border-radius: var(--avatarRadius, $fallback--avatarRadius);
+      border-radius: var(--roundness);
       opacity: 0;
       transition: opacity 0.2s ease;
 

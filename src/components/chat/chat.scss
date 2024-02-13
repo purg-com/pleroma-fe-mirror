@@ -18,8 +18,9 @@
     overflow: visible;
     min-height: calc(100vh - var(--navbar-height));
     margin: 0;
-    border-radius: 10px 10px 0 0;
-    border-radius: var(--panelRadius, 10px) var(--panelRadius, 10px) 0 0;
+    border-radius: var(--roundness);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
 
     &::after {
       border-radius: 0;

@@ -69,13 +69,15 @@
     pointer-events: none;
   }
 
-  border-radius: $fallback--btnRadius;
-  border-radius: var(--btnRadius, $fallback--btnRadius);
+  border-radius: var(--roundness);
+  border-color: var(--border);
+  border-style: solid;
+  border-width: 1px;
 }
 
 .dropdown-menu {
   display: block;
-  padding: 0.5rem 0;
+  padding: 0;
   font-size: 1em;
   text-align: left;
   list-style: none;
@@ -108,8 +110,6 @@
     height: 100%;
     box-sizing: border-box;
 
-    --btnText: var(--popoverText, $fallback--text);
-
     &-icon {
       svg {
         width: 22px;
@@ -134,10 +134,7 @@
       line-height: 22px;
       text-align: center;
       border-radius: 0;
-      background-color: $fallback--fg;
-      background-color: var(--input, $fallback--fg);
-      box-shadow: 0 0 2px black inset;
-      box-shadow: var(--inputShadow);
+      box-shadow: var(--shadow);
       margin-right: 0.75em;
 
       &.menu-checkbox-checked::after {

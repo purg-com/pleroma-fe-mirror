@@ -22,7 +22,7 @@
             @click="replyVisibilityAll = true"
           >
             <span
-              class="menu-checkbox -radio"
+              class="input menu-checkbox -radio"
               :class="{ 'menu-checkbox-checked': replyVisibilityAll }"
               :aria-hidden="true"
             />{{ $t('settings.reply_visibility_all') }}
@@ -35,7 +35,7 @@
             @click="replyVisibilityFollowing = true"
           >
             <span
-              class="menu-checkbox -radio"
+              class="input menu-checkbox -radio"
               :class="{ 'menu-checkbox-checked': replyVisibilityFollowing }"
               :aria-hidden="true"
             />{{ $t('settings.reply_visibility_following_short') }}
@@ -48,7 +48,7 @@
             @click="replyVisibilitySelf = true"
           >
             <span
-              class="menu-checkbox -radio"
+              class="input menu-checkbox -radio"
               :class="{ 'menu-checkbox-checked': replyVisibilitySelf }"
               :aria-hidden="true"
             />{{ $t('settings.reply_visibility_self_short') }}
@@ -66,7 +66,7 @@
           @click="muteBotStatuses = !muteBotStatuses"
         >
           <span
-            class="menu-checkbox"
+            class="input menu-checkbox"
             :class="{ 'menu-checkbox-checked': muteBotStatuses }"
             :aria-hidden="true"
           />{{ $t('settings.mute_bot_posts') }}
@@ -78,7 +78,7 @@
           @click="hideMedia = !hideMedia"
         >
           <span
-            class="menu-checkbox"
+            class="input menu-checkbox"
             :class="{ 'menu-checkbox-checked': hideMedia }"
             :aria-hidden="true"
           />{{ $t('settings.hide_media_previews') }}
@@ -90,7 +90,7 @@
           @click="hideMutedPosts = !hideMutedPosts"
         >
           <span
-            class="menu-checkbox"
+            class="input menu-checkbox"
             :class="{ 'menu-checkbox-checked': hideMutedPosts }"
             :aria-hidden="true"
           />{{ $t('settings.hide_all_muted_posts') }}

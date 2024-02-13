@@ -19,7 +19,7 @@
       >{{ item.iconLetter }}</span>
       <div
         v-if="item.badgeGetter && getters[item.badgeGetter]"
-        class="alert-dot"
+        class="badge alert-dot"
       />
     </router-link>
   </span>

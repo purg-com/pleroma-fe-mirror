@@ -18,7 +18,7 @@
             @click="conversationDisplay = 'tree'"
           >
             <span
-              class="menu-checkbox -radio"
+              class="input menu-checkbox -radio"
               :aria-hidden="true"
               :class="{ 'menu-checkbox-checked': conversationDisplay === 'tree' }"
             /><FAIcon
@@ -33,7 +33,7 @@
             @click="conversationDisplay = 'linear'"
           >
             <span
-              class="menu-checkbox -radio"
+              class="input menu-checkbox -radio"
               :class="{ 'menu-checkbox-checked': conversationDisplay === 'linear' }"
               :aria-hidden="true"
             /><FAIcon
@@ -53,7 +53,7 @@
           @click="showUserAvatars = !showUserAvatars"
         >
           <span
-            class="menu-checkbox"
+            class="input menu-checkbox"
             :class="{ 'menu-checkbox-checked': showUserAvatars }"
             :aria-hidden="true"
           />{{ $t('settings.mention_link_show_avatar_quick') }}
@@ -66,7 +66,7 @@
           @click="autoUpdate = !autoUpdate"
         >
           <span
-            class="menu-checkbox"
+            class="input menu-checkbox"
             :class="{ 'menu-checkbox-checked': autoUpdate }"
             :aria-hidden="true"
           />{{ $t('settings.auto_update') }}
@@ -79,7 +79,7 @@
           @click="collapseWithSubjects = !collapseWithSubjects"
         >
           <span
-            class="menu-checkbox"
+            class="input menu-checkbox"
             :class="{ 'menu-checkbox-checked': collapseWithSubjects }"
             :aria-hidden="true"
           />{{ $t('settings.collapse_subject') }}

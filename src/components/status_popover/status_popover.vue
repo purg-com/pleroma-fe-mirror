@@ -47,12 +47,9 @@
   font-size: 1rem;
   min-width: 15em;
   max-width: 95%;
-  border-color: $fallback--border;
-  border-color: var(--border, $fallback--border);
+  border-color: var(--border);
   border-style: solid;
   border-width: 1px;
-  border-radius: $fallback--tooltipRadius;
-  border-radius: var(--tooltipRadius, $fallback--tooltipRadius);
 
   /* TODO cleanup this */
   .Status.Status {
