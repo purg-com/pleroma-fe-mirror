@@ -6,8 +6,7 @@ export default {
     'Icon'
   ],
   variants: {
-    normal: '.neutral',
-    notification: '.notification'
+    notification: '.-notification'
   },
   defaultRules: [
     {

@@ -18,7 +18,7 @@
             {{ $t('notifications.notifications') }}
             <span
               v-if="unseenCountBadgeText"
-              class="badge badge-notification unseen-count"
+              class="badge -notification unseen-count"
             >{{ unseenCountBadgeText }}</span>
           </div>
           <div

@@ -61,7 +61,7 @@
               <FAIcon icon="chevron-down" />
               <div
                 v-if="newMessageCount"
-                class="badge badge-notification unread-chat-count unread-message-count"
+                class="badge -notification unread-chat-count unread-message-count"
               >
                 {{ newMessageCount }}
               </div>

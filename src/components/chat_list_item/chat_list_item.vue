@@ -36,7 +36,7 @@
         />
         <div
           v-if="chat.unread > 0"
-          class="badge badge-notification unread-chat-count"
+          class="badge -notification unread-chat-count"
         >
           {{ chat.unread }}
         </div>

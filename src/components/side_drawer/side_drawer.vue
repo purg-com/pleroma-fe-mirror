@@ -82,7 +82,7 @@
             /> {{ $t("nav.chats") }}
             <span
               v-if="unreadChatCount"
-              class="badge badge-notification"
+              class="badge -notification"
             >
               {{ unreadChatCount }}
             </span>
@@ -111,7 +111,7 @@
             /> {{ $t("nav.friend_requests") }}
             <span
               v-if="followRequestCount > 0"
-              class="badge badge-notification"
+              class="badge -notification"
             >
               {{ followRequestCount }}
             </span>
@@ -205,7 +205,7 @@
             /> {{ $t("nav.announcements") }}
             <span
               v-if="unreadAnnouncementCount"
-              class="badge badge-notification"
+              class="badge -notification"
             >
               {{ unreadAnnouncementCount }}
             </span>

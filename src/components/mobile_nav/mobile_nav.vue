@@ -20,7 +20,7 @@
           />
           <div
             v-if="(unreadChatCount && !chatsPinned) || unreadAnnouncementCount"
-            class="badge alert-dot"
+            class="badge -dot -notification"
           />
         </button>
         <NavigationPins class="pins" />
@@ -37,14 +37,14 @@
           />
           <div
             v-if="unseenNotificationsCount"
-            class="badge alert-dot"
+            class="badge -dot -notification"
           />
         </button>
       </div>
     </nav>
     <aside
       v-if="currentUser"
-      class="mobile-notifications-drawer"
+      class="panel mobile-notifications-drawer"
       :class="{ '-closed': !notificationsOpen }"
       @touchstart.stop="notificationsTouchStart"
       @touchmove.stop="notificationsTouchMove"
@@ -54,7 +54,7 @@
           {{ $t('notifications.notifications') }}
           <span
             v-if="unseenCountBadgeText"
-            class="badge badge-notification unseen-count"
+            class="badge -notification unseen-count"
           >{{ unseenCountBadgeText }}</span>
         </span>
         <span class="spacer" />
@@ -165,19 +165,6 @@
     display: flex;
   }
 
-  .alert-dot {
-    border-radius: 100%;
-    height: 8px;
-    width: 8px;
-    position: absolute;
-    left: calc(50% - 4px);
-    top: calc(50% - 4px);
-    margin-left: 6px;
-    margin-top: -6px;
-    background-color: $fallback--cRed;
-    background-color: var(--badgeNotification, $fallback--cRed);
-  }
-
   .mobile-notifications-drawer {
     width: 100%;
     height: 100vh;
@@ -238,10 +225,6 @@
     height: calc(100vh - var(--navbar-height));
     overflow-x: hidden;
     overflow-y: scroll;
-    color: $fallback--text;
-    color: var(--text, $fallback--text);
-    background-color: $fallback--bg;
-    background-color: var(--bg, $fallback--bg);
 
     .notifications {
       padding: 0;

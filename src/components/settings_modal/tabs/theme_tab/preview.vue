@@ -5,7 +5,7 @@
       <div class="panel-heading">
         <div class="title">
           {{ $t('settings.style.preview.header') }}
-          <span class="badge badge-notification">
+          <span class="badge -notification">
             99
           </span>
         </div>

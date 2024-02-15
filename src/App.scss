@@ -634,11 +634,21 @@ option {
   overflow: hidden;
   text-overflow: ellipsis;
 
-  &.badge-notification {
-    background-color: $fallback--cRed;
-    background-color: var(--badgeNotification, $fallback--cRed);
-    color: white;
-    color: var(--badgeNotificationText, white);
+  &.-dot {
+    border-radius: 100%;
+    min-height: 8px;
+    max-height: 8px;
+    min-width: 8px;
+    max-width: 8px;
+    padding: 0;
+    line-height: 0;
+    margin: 0;
+    font-size: 0;
+    position: absolute;
+    left: calc(50% - 4px);
+    top: calc(50% - 4px);
+    margin-left: 6px;
+    margin-top: -6px;
   }
 }
 
@@ -646,39 +656,7 @@ option {
   margin: 0 0.35em;
   padding: 0 0.25em;
   border-radius: var(--roundness);
-
-  &.error {
-    background-color: $fallback--alertError;
-    background-color: var(--alertError, $fallback--alertError);
-    color: $fallback--text;
-    color: var(--alertErrorText, $fallback--text);
-
-    .panel-heading & {
-      color: $fallback--text;
-      color: var(--alertErrorPanelText, $fallback--text);
-    }
-  }
-
-  &.warning {
-    background-color: $fallback--alertWarning;
-    background-color: var(--alertWarning, $fallback--alertWarning);
-    color: $fallback--text;
-    color: var(--alertWarningText, $fallback--text);
-
-    .panel-heading & {
-      color: $fallback--text;
-      color: var(--alertWarningPanelText, $fallback--text);
-    }
-  }
-
-  &.success {
-    background-color: var(--alertSuccess, $fallback--alertWarning);
-    color: var(--alertSuccessText, $fallback--text);
-
-    .panel-heading & {
-      color: var(--alertSuccessPanelText, $fallback--text);
-    }
-  }
+  border: 1px solid var(--border);
 }
 
 .faint {

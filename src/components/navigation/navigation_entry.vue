@@ -34,7 +34,7 @@
       <slot />
       <div
         v-if="item.badgeGetter && getters[item.badgeGetter]"
-        class="badge badge-notification"
+        class="badge -notification"
       >
         {{ getters[item.badgeGetter] }}
       </div>
@@ -99,6 +99,10 @@
     &:last-child {
       margin-right: -0.8em;
     }
+  }
+
+  .badge {
+     margin: 0 0.8em;
   }
 }
 </style>

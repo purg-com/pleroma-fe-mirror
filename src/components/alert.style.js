@@ -17,8 +17,15 @@ export default {
     {
       directives: {
         background: '--text',
-        opacity: 0.8
+        opacity: 0.5
       }
+    },
+    {
+      parent: {
+        component: 'Alert'
+      },
+      component: 'Border',
+      textColor: '--parent'
     },
     {
       variant: 'error',
