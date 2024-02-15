@@ -7,7 +7,8 @@ export default {
     'Icon',
     'Button',
     'ButtonUnstyled',
-    'Input'
+    'Input',
+    'Badge'
   ],
   defaultRules: [
     {

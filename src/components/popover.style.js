@@ -1,8 +1,8 @@
 export default {
   name: 'Popover',
   selector: '.popover',
+  lazy: true,
   variants: {
-    tooltip: '.tooltip',
     modal: '.modal'
   },
   validInnerComponents: [

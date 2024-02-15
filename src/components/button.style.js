@@ -38,11 +38,11 @@ export default {
     // All states inherit from "normal" state, there is no other inheirtance, i.e. hover+disabled only inherits from "normal", not from hover nor disabled.
     // However, cascading still works, so resulting state will be result of merging of all relevant states/variants
     // normal: '' // normal state is implicitly added, it is always included
-    disabled: ':disabled',
     toggled: '.toggled',
     pressed: ':active',
     hover: ':hover',
-    focused: ':focus-within'
+    focused: ':focus-within',
+    disabled: ':disabled'
   },
   // Variants are mutually exclusive, each component implicitly has "normal" variant, and all other variants inherit from it.
   variants: {
@@ -108,28 +108,10 @@ export default {
       }
     },
     {
-      state: ['disabled', 'hover'],
-      directives: {
-        background: '$blend(--background, 0.25, --parent)',
-        shadow: [...buttonInsetFakeBorders]
-      }
-    },
-    {
       component: 'Text',
       parent: {
         component: 'Button',
         state: ['disabled']
-      },
-      directives: {
-        textOpacity: 0.25,
-        textOpacityMode: 'blend'
-      }
-    },
-    {
-      component: 'Text',
-      parent: {
-        component: 'Button',
-        state: ['disabled', 'hover']
       },
       directives: {
         textOpacity: 0.25,

@@ -11,7 +11,8 @@ export default {
     'PanelHeader',
     'MenuItem',
     'Post',
-    'Notification'
+    'Notification',
+    'Alert'
   ],
   defaultRules: [
     {

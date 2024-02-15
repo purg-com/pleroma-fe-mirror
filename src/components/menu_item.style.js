@@ -5,7 +5,8 @@ export default {
     'Text',
     'Icon',
     'Input',
-    'Border'
+    'Border',
+    'ButtonUnstyled'
   ],
   states: {
     hover: ':hover',

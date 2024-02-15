@@ -10,7 +10,8 @@ export default {
   },
   validInnerComponents: [
     'Text',
-    'Icon'
+    'Icon',
+    'Badge'
   ],
   defaultRules: [
     {

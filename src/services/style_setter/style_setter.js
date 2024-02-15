@@ -28,11 +28,17 @@ export const applyTheme = (input) => {
   // styleSheet.insertRule(`:root { ${rules.colors} }`, 'index-max')
   // styleSheet.insertRule(`:root { ${rules.shadows} }`, 'index-max')
   styleSheet.insertRule(`:root { ${rules.fonts} }`, 'index-max')
-  themes3.css.forEach(rule => {
-    console.log(rule)
+  themes3.css(themes3.eager).forEach(rule => {
     styleSheet.insertRule(rule, 'index-max')
   })
   body.classList.remove('hidden')
+  themes3.lazy.then(lazyRules => {
+    themes3.css(lazyRules).forEach(rule => {
+      styleSheet.insertRule(rule, 'index-max')
+    })
+    const t3 = performance.now()
+    console.log('Themes 3 finalization took ' + (t3 - t2) + 'ms')
+  })
 }
 
 const configColumns = ({ sidebarColumnWidth, contentColumnWidth, notifsColumnWidth, emojiReactionsScale }) =>

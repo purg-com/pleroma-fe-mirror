@@ -27,6 +27,8 @@ import Post from 'src/components/post.style.js'
 import Notification from 'src/components/notification.style.js'
 import RichContent from 'src/components/rich_content.style.js'
 import Avatar from 'src/components/avatar.style.js'
+import Badge from 'src/components/badge.style.js'
+import Alert from 'src/components/alert.style.js'
 
 const DEBUG = false
 
@@ -50,7 +52,9 @@ const components = {
   Post,
   Notification,
   RichContent,
-  Avatar
+  Avatar,
+  Alert,
+  Badge
 }
 
 // "Unrolls" a tree structure of item: { parent: { ...item2, parent: { ...item3, parent: {...} } }}
@@ -59,9 +63,8 @@ const unroll = (item) => {
   const out = []
   let currentParent = item
   while (currentParent) {
-    const { parent: newParent, ...rest } = currentParent
-    out.push(rest)
-    currentParent = newParent
+    out.push(currentParent)
+    currentParent = currentParent.parent
   }
   return out
 }
@@ -173,7 +176,8 @@ export const init = (extraRuleset, palette) => {
   const stacked = {}
   const computed = {}
 
-  const rules = []
+  const eagerRules = []
+  const lazyRules = []
 
   const normalizeCombination = rule => {
     rule.variant = rule.variant ?? 'normal'
@@ -210,10 +214,6 @@ export const init = (extraRuleset, palette) => {
     .map(({ data }) => data)
 
   const virtualComponents = new Set(Object.values(components).filter(c => c.virtual).map(c => c.name))
-
-  const addRule = (rule) => {
-    rules.push(rule)
-  }
 
   const findColor = (color, dynamicVars) => {
     if (typeof color !== 'string' || (!color.startsWith('--') && !color.startsWith('$'))) return color
@@ -346,7 +346,14 @@ export const init = (extraRuleset, palette) => {
       .join(' ')
   }
 
-  const processInnerComponent = (component, parent) => {
+  let counter = 0
+  const promises = []
+  const processInnerComponent = (component, rules, parent) => {
+    const addRule = (rule) => {
+      rules.push(rule)
+    }
+
+    const parentSelector = ruleToSelector(parent, true)
     // const parentList = parent ? unroll(parent).reverse().map(c => c.component) : []
     // if (!component.virtual) {
     //   const path = [...parentList, component.name].join(' > ')
@@ -367,18 +374,36 @@ export const init = (extraRuleset, palette) => {
 
     // Optimization: we only really need combinations without "normal" because all states implicitly have it
     const permutationStateKeys = Object.keys(states).filter(s => s !== 'normal')
-    const stateCombinations = [['normal'], ...getAllPossibleCombinations(permutationStateKeys).map(combination => ['normal', ...combination])]
+    const stateCombinations = [
+      ['normal'],
+      ...getAllPossibleCombinations(permutationStateKeys)
+        .map(combination => ['normal', ...combination])
+        .filter(combo => {
+          // Optimization: filter out some hard-coded combinations that don't make sense
+          if (combo.indexOf('disabled') >= 0) {
+            return !(
+              combo.indexOf('hover') >= 0 ||
+                combo.indexOf('focused') >= 0 ||
+                combo.indexOf('pressed') >= 0
+            )
+          }
+          return true
+        })
+    ]
 
     const stateVariantCombination = Object.keys(variants).map(variant => {
       return stateCombinations.map(state => ({ variant, state }))
     }).reduce((acc, x) => [...acc, ...x], [])
 
     stateVariantCombination.forEach(combination => {
+      counter++
       // const tt0 = performance.now()
-      const soloSelector = ruleToSelector({ component: component.name, ...combination }, true)
-      const selector = ruleToSelector({ component: component.name, ...combination, parent }, true)
 
-      const lowerLevelSelector = selector.split(/ /g).slice(0, -1).join(' ')
+      combination.component = component.name
+      const soloSelector = ruleToSelector(combination, true)
+      const selector = [parentSelector, soloSelector].filter(x => x).join(' ')
+
+      const lowerLevelSelector = parentSelector
       const lowerLevelBackground = computed[lowerLevelSelector]?.background
       const lowerLevelVirtualDirectives = computed[lowerLevelSelector]?.virtualDirectives
       const lowerLevelVirtualDirectivesRaw = computed[lowerLevelSelector]?.virtualDirectivesRaw
@@ -489,10 +514,7 @@ export const init = (extraRuleset, palette) => {
         // TODO: DEFAULT TEXT COLOR
         const lowerLevelComputedBackground = computed[lowerLevelSelector]?.background || convert('#FFFFFF').rgb
 
-        if (
-          computedDirectives.shadow != null ||
-          computedDirectives.roundness != null
-        ) {
+        if (computedDirectives.shadow != null || computedDirectives.roundness != null) {
           addRuleNeeded = true
         }
 
@@ -549,7 +571,22 @@ export const init = (extraRuleset, palette) => {
         }
       }
 
-      innerComponents.forEach(innerComponent => processInnerComponent(innerComponent, { parent, component: name, ...combination }))
+      innerComponents.forEach(innerComponent => {
+        if (innerComponent.lazy) {
+          promises.push(new Promise((resolve, reject) => {
+            setTimeout(() => {
+              try {
+                processInnerComponent(innerComponent, lazyRules, { parent, component: name, ...combination })
+                resolve()
+              } catch (e) {
+                reject(e)
+              }
+            }, 0)
+          }))
+        } else {
+          processInnerComponent(innerComponent, rules, { parent, component: name, ...combination })
+        }
+      })
       // const tt1 = performance.now()
       // if (!component.virtual) {
       //   console.log('State-variant ' + combination.variant + ' : ' + combination.state.join('+') + ' procession time: ' + (tt1 - tt0) + 'ms')
@@ -563,11 +600,16 @@ export const init = (extraRuleset, palette) => {
     // }
   }
 
-  processInnerComponent(components.Root)
+  processInnerComponent(components.Root, eagerRules)
+  console.log('TOTAL COMBOS: ' + counter)
+  const lazyExec = Promise.all(promises).then(() => {
+    console.log('TOTAL COMBOS: ' + counter)
+  }).then(() => lazyRules)
 
   return {
-    raw: rules,
-    css: rules.map(rule => {
+    lazy: lazyExec,
+    eager: eagerRules,
+    css: rules => rules.map(rule => {
       let selector = rule.selector
       if (!selector) {
         selector = 'body'
