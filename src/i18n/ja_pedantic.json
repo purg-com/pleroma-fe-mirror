@@ -85,11 +85,11 @@
     "hint": "会話に加わるには、ログインしてください",
     "authentication_code": "認証コード",
     "enter_recovery_code": "リカバリーコードを入力",
-    "enter_two_factor_code": "2段階認証コードを入力",
+    "enter_two_factor_code": "二段階認証コードを入力",
     "recovery_code": "リカバリーコード",
     "heading": {
-      "totp": "2段階認証",
-      "recovery": "2段階認証リカバリー"
+      "totp": "二段階認証",
+      "recovery": "二段階認証リカバリー"
     },
     "logout_confirm": "本当にログアウトしますか？",
     "logout_confirm_accept_button": "ログアウト",
@@ -279,7 +279,7 @@
       "setup_otp": "OTPのセットアップ",
       "wait_pre_setup_otp": "OTPのプリセット",
       "confirm_and_enable": "OTPの確認と有効化",
-      "title": "2段階認証",
+      "title": "二段階認証",
       "generate_new_recovery_codes": "新しいリカバリーコードを生成",
       "warning_of_generate_new_codes": "新しいリカバリーコードを生成すると、古いコードは使用できなくなります。",
       "recovery_codes": "リカバリーコード。",
@@ -292,7 +292,7 @@
         "secret_code": "キー"
       },
       "verify": {
-        "desc": "2段階認証を有効にするには、2段階認証アプリに表示されたコードを入力してください:"
+        "desc": "二段階認証を有効にするには、二段階認証アプリに表示されたコードを入力してください:"
       }
     },
     "attachmentRadius": "ファイル",
@@ -789,7 +789,7 @@
     "notification_show_extra": "その他の通知を通知カラムに表示する",
     "notification_setting_drawer_marks_as_seen": "モバイルUIで、通知サイドバーを閉じた時すべての通知を既読にする",
     "notification_setting_ignore_inactionable_seen_tip": "この設定は通知を自動的に既読にするわけではなく、この設定を有効にしてもプッシュ通知などは届きます",
-    "notification_setting_ignore_inactionable_seen": "お気にいりやリピートの通知など、アクション不可な通知を未読として扱わない",
+    "notification_setting_ignore_inactionable_seen": "お気に入りやリピートの通知など、アクション不可な通知を未読として扱わない",
     "notification_extra_tip": "通知カラムをカスマイズするためのヒントを表示する",
     "use_at_icon": "メンションリンク内の{'@'}記号を画像にする"
   },
@@ -1104,7 +1104,7 @@
       "federation": "連合",
       "simple": {
         "media_nsfw_desc": "このインスタンスでは、以下のインスタンスからの投稿に対して、メディアを閲覧注意に設定します:",
-        "media_nsfw": "メディアを閲覧注意に設定",
+        "media_nsfw": "強制閲覧注意",
         "media_removal_desc": "このインスタンスでは、以下のインスタンスからの投稿に対して、メディアを除去します:",
         "media_removal": "メディア除去",
         "ftl_removal": "「すべてのネットワーク」タイムラインから除外",
@@ -1114,14 +1114,14 @@
         "reject_desc": "このインスタンスでは、以下のインスタンスからのメッセージを受け付けません:",
         "accept_desc": "このインスタンスでは、以下のインスタンスからのメッセージのみを受け付けます:",
         "accept": "許可",
-        "simple_policies": "インスタンス固有のポリシー",
+        "simple_policies": "インスタンスに対するポリシー",
         "reject": "拒否",
         "instance": "インスタンス",
         "reason": "理由"
       },
       "mrf_policies": "有効なMRFポリシー",
       "keyword": {
-        "replace": "置き換え",
+        "replace": "置換",
         "ftl_removal": "「すべてのネットワーク」タイムラインから除外",
         "keyword_policies": "キーワードポリシー",
         "is_replaced_by": "→",
