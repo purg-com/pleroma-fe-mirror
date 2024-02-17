@@ -6729,10 +6729,10 @@ nightwatch-axe-verbose@^2.1.0:
   dependencies:
     axe-core "^4.6.1"
 
-nightwatch@2.6.20:
-  version "2.6.20"
-  resolved "https://registry.yarnpkg.com/nightwatch/-/nightwatch-2.6.20.tgz#8c3b808f4f33699bcd67987b22e6ebeee61ddc9c"
-  integrity sha512-XEyxuSGhESdHj4LHqA5snrc/nMgH4tsB/mWrbyGt3EwW1AgjyE7DRzJUbhG7J00Np3Dv3k2nmyJs0Xq0FX/yvQ==
+nightwatch@2.6.25:
+  version "2.6.25"
+  resolved "https://registry.yarnpkg.com/nightwatch/-/nightwatch-2.6.25.tgz#99c2abdd8a7f1ce8be2882ac5458a776caf1b5ab"
+  integrity sha512-aYc5eA6M/iADdbKbD6dMHlhUsaJm/Y4/VOtSHSC23nimGTXMUKbe1Bb14Iz3/SNyz2joHOkpxaDIPIAZCSlOiQ==
   dependencies:
     "@nightwatch/chai" "5.0.2"
     "@nightwatch/html-reporter-template" "0.2.1"

@@ -99,7 +99,7 @@
     "lodash": "4.17.21",
     "mini-css-extract-plugin": "2.7.6",
     "mocha": "10.2.0",
-    "nightwatch": "2.6.20",
+    "nightwatch": "2.6.25",
     "opn": "5.5.0",
     "ora": "0.4.1",
     "postcss": "8.4.23",
