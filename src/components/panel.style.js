@@ -5,6 +5,7 @@ export default {
     'Text',
     'Link',
     'Icon',
+    'Border',
     'Button',
     'ButtonUnstyled',
     'Input',
