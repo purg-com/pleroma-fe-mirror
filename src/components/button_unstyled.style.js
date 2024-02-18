@@ -16,6 +16,8 @@ export default {
   defaultRules: [
     {
       directives: {
+        background: '#ffffff',
+        opacity: 0,
         shadow: []
       }
     },

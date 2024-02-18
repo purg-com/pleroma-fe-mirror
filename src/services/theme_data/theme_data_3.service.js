@@ -16,7 +16,8 @@ const components = {
   FunText: null,
   Link: null,
   Icon: null,
-  Border: null
+  Border: null,
+  Panel: null
 }
 
 // Loading all style.js[on] files dynamically
@@ -175,10 +176,14 @@ export const init = (extraRuleset, palette) => {
       const parentsA = unroll(a).length
       const parentsB = unroll(b).length
 
-      if (parentsA === parentsB || (parentsB !== 0 && parentsA !== 0)) return ai - bi
+      if (parentsA === parentsB) {
+        if (a.component === 'Text') return -1
+        if (b.component === 'Text') return 1
+        return ai - bi
+      }
       if (parentsA === 0 && parentsB !== 0) return -1
       if (parentsB === 0 && parentsA !== 0) return 1
-      return 0 // failsafe, shouldn't happen?
+      return parentsA - parentsB
     })
     .map(({ data }) => data)
 
@@ -190,7 +195,12 @@ export const init = (extraRuleset, palette) => {
     if (color.startsWith('--')) {
       const [variable, modifier] = color.split(/,/g).map(str => str.trim())
       const variableSlot = variable.substring(2)
-      if (variableSlot.startsWith('parent')) {
+      if (variableSlot === 'stack') {
+        console.log(dynamicVars)
+        console.log(stacked)
+        const { r, g, b } = dynamicVars.stacked
+        targetColor = { r, g, b }
+      } else if (variableSlot.startsWith('parent')) {
         if (variableSlot === 'parent') {
           const { r, g, b } = dynamicVars.lowerLevelBackground
           targetColor = { r, g, b }
@@ -451,6 +461,7 @@ export const init = (extraRuleset, palette) => {
         }
 
         dynamicVars.inheritedBackground = lowerLevelBackground
+        dynamicVars.stacked = convert(stacked[lowerLevelSelector]).rgb
 
         const intendedTextColor = convert(findColor(inheritedTextColor, dynamicVars)).rgb
         const textColor = newTextRule.directives.textAuto === 'no-auto'
@@ -500,7 +511,7 @@ export const init = (extraRuleset, palette) => {
         let addRuleNeeded = false
 
         // TODO: DEFAULT TEXT COLOR
-        const lowerLevelComputedBackground = computed[lowerLevelSelector]?.background || convert('#FFFFFF').rgb
+        const lowerLevelStackedBackground = stacked[lowerLevelSelector] || convert('#FF00FF').rgb
 
         if (computedDirectives.shadow != null || computedDirectives.roundness != null) {
           addRuleNeeded = true
@@ -532,11 +543,12 @@ export const init = (extraRuleset, palette) => {
             if (alpha >= 1) {
               blend = rgb
             } else if (alpha <= 0) {
-              blend = lowerLevelComputedBackground
+              blend = lowerLevelStackedBackground
             } else {
-              blend = alphaBlend(rgb, computedDirectives.opacity, lowerLevelComputedBackground)
+              blend = alphaBlend(rgb, computedDirectives.opacity, lowerLevelStackedBackground)
             }
             stacked[selector] = blend
+            dynamicVars.stacked = blend
             computed[selector].background = { ...rgb, a: computedDirectives.opacity ?? 1 }
           }
         }
@@ -544,11 +556,12 @@ export const init = (extraRuleset, palette) => {
         if (!stacked[selector]) {
           computedDirectives.background = 'transparent'
           computedDirectives.opacity = 0
-          stacked[selector] = lowerLevelComputedBackground
-          computed[selector].background = { ...lowerLevelComputedBackground, a: 0 }
+          stacked[selector] = lowerLevelStackedBackground
+          computed[selector].background = { ...lowerLevelStackedBackground, a: 0 }
         }
 
-        computed[selector].dynamicVars.background = computed[selector].background
+        dynamicVars.stacked = lowerLevelStackedBackground
+        dynamicVars.background = computed[selector].background
 
         if (addRuleNeeded) {
           addRule({
