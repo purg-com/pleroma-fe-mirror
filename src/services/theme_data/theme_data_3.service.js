@@ -169,6 +169,7 @@ export const init = (extraRuleset, palette) => {
 
     return rule
   })
+  console.log(rulesetUnsorted)
 
   const ruleset = rulesetUnsorted
     .map((data, index) => ({ data, index }))
@@ -187,6 +188,8 @@ export const init = (extraRuleset, palette) => {
     })
     .map(({ data }) => data)
 
+  console.log(ruleset.filter(c => c.component === 'ButtonUnstyled'))
+
   const virtualComponents = new Set(Object.values(components).filter(c => c.virtual).map(c => c.name))
 
   const findColor = (color, dynamicVars) => {
@@ -196,8 +199,6 @@ export const init = (extraRuleset, palette) => {
       const [variable, modifier] = color.split(/,/g).map(str => str.trim())
       const variableSlot = variable.substring(2)
       if (variableSlot === 'stack') {
-        console.log(dynamicVars)
-        console.log(stacked)
         const { r, g, b } = dynamicVars.stacked
         targetColor = { r, g, b }
       } else if (variableSlot.startsWith('parent')) {
@@ -660,7 +661,6 @@ export const init = (extraRuleset, palette) => {
             }
             default:
               if (k.startsWith('--')) {
-                console.log('LOL', k, rgba2css(findColor(v, computed[selector].dynamicVars)))
                 return k + ': ' + rgba2css(findColor(v, computed[selector].dynamicVars))
               }
               return ''
