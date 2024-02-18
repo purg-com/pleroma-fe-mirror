@@ -26,7 +26,21 @@ export const applyTheme = (input) => {
   styleSheet.toString()
   styleSheet.insertRule(`:root { ${rules.fonts} }`, 'index-max')
   themes3.css(themes3.eager).forEach(rule => {
-    styleSheet.insertRule(rule, 'index-max')
+    // Hack to support multiple selectors on same component
+    if (rule.match(/::-webkit-scrollbar-button/)) {
+      const parts = rule.split(/[{}]/g)
+      const newRule = [
+        parts[0],
+        ', ',
+        parts[0].replace(/button/, 'thumb'),
+        ' {',
+        parts[1],
+        '}'
+      ].join('')
+      styleSheet.insertRule(newRule, 'index-max')
+    } else {
+      styleSheet.insertRule(rule, 'index-max')
+    }
   })
   body.classList.remove('hidden')
   themes3.lazy.then(lazyRules => {

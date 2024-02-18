@@ -1,6 +1,6 @@
 export default {
-  name: 'Panel',
-  selector: '.panel',
+  name: 'UserCard',
+  selector: '.user-card',
   validInnerComponents: [
     'Text',
     'Link',
@@ -8,12 +8,8 @@ export default {
     'Button',
     'ButtonUnstyled',
     'Input',
-    'PanelHeader',
-    'MenuItem',
-    'Post',
-    'Notification',
-    'Alert',
-    'UserCard'
+    'RichContent',
+    'Alert'
   ],
   defaultRules: [
     {
@@ -27,7 +23,17 @@ export default {
           spread: 0,
           color: '#000000',
           alpha: 0.6
-        }]
+        }],
+        '--profileTint': '$alpha(--background, 0.5)'
+      }
+    },
+    {
+      parent: {
+        component: 'UserCard'
+      },
+      component: 'RichContent',
+      directives: {
+        opacity: 0
       }
     }
   ]

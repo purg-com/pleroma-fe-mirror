@@ -201,8 +201,11 @@ export const init = (extraRuleset, palette) => {
       } else {
         // TODO add support for --current prefix
         switch (variableSlot) {
-          case 'background':
+          case 'inheritedBackground':
             targetColor = convert(dynamicVars.inheritedBackground).rgb
+            break
+          case 'background':
+            targetColor = convert(dynamicVars.background).rgb
             break
           default:
             targetColor = convert(palette[variableSlot]).rgb
@@ -222,6 +225,15 @@ export const init = (extraRuleset, palette) => {
         const { funcName, argsString } = /\$(?<funcName>\w+)\((?<argsString>[a-zA-Z0-9-,.'"\s]*)\)/.exec(color).groups
         const args = argsString.split(/,/g).map(a => a.trim())
         switch (funcName) {
+          case 'alpha': {
+            if (args.length !== 2) {
+              throw new Error(`$alpha requires 2 arguments, ${args.length} were provided`)
+            }
+            const colorArg = convert(findColor(args[0], dynamicVars)).rgb
+            const amount = Number(args[1])
+            targetColor = { ...colorArg, a: amount }
+            break
+          }
           case 'blend': {
             if (args.length !== 3) {
               throw new Error(`$blend requires 3 arguments, ${args.length} were provided`)
@@ -374,7 +386,9 @@ export const init = (extraRuleset, palette) => {
 
       combination.component = component.name
       const soloSelector = ruleToSelector(combination, true)
+      const soloCssSelector = ruleToSelector(combination)
       const selector = [parentSelector, soloSelector].filter(x => x).join(' ')
+      const cssSelector = [parentSelector, soloCssSelector].filter(x => x).join(' ')
 
       const lowerLevelSelector = parentSelector
       const lowerLevelBackground = computed[lowerLevelSelector]?.background
@@ -399,6 +413,7 @@ export const init = (extraRuleset, palette) => {
 
       computed[selector] = computed[selector] || {}
       computed[selector].computedRule = computedRule
+      computed[selector].dynamicVars = dynamicVars
 
       if (virtualComponents.has(component.name)) {
         const virtualName = [
@@ -471,7 +486,7 @@ export const init = (extraRuleset, palette) => {
         }
 
         addRule({
-          selector,
+          selector: cssSelector,
           virtual: true,
           component: component.name,
           parent,
@@ -533,9 +548,11 @@ export const init = (extraRuleset, palette) => {
           computed[selector].background = { ...lowerLevelComputedBackground, a: 0 }
         }
 
+        computed[selector].dynamicVars.background = computed[selector].background
+
         if (addRuleNeeded) {
           addRule({
-            selector,
+            selector: cssSelector,
             component: component.name,
             ...combination,
             parent,
@@ -597,6 +614,7 @@ export const init = (extraRuleset, palette) => {
       let directives
       if (rule.component !== 'Root') {
         directives = Object.entries(rule.directives).map(([k, v]) => {
+          const selector = ruleToSelector(rule, true)
           switch (k) {
             case 'roundness': {
               return '  ' + [
@@ -617,7 +635,7 @@ export const init = (extraRuleset, palette) => {
                   '  --background: ' + v
                 ].join(';\n')
               }
-              const color = cssColorString(computed[ruleToSelector(rule, true)].background, rule.directives.opacity)
+              const color = cssColorString(computed[selector].background, rule.directives.opacity)
               return [
                 'background-color: ' + color,
                 '  --background: ' + color
@@ -627,7 +645,12 @@ export const init = (extraRuleset, palette) => {
               if (rule.directives.textNoCssColor === 'yes') { return '' }
               return 'color: ' + v
             }
-            default: return ''
+            default:
+              if (k.startsWith('--')) {
+                console.log('LOL', k, rgba2css(findColor(v, computed[selector].dynamicVars)))
+                return k + ': ' + rgba2css(findColor(v, computed[selector].dynamicVars))
+              }
+              return ''
           }
         }).filter(x => x).map(x => '  ' + x).join(';\n')
       } else {

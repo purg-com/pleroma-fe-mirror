@@ -5,6 +5,8 @@ export default {
     'Underlay',
     'Modals',
     'Popover',
-    'TopBar'
+    'TopBar',
+    'Scrollbar',
+    'ScrollbarElement'
   ]
 }
