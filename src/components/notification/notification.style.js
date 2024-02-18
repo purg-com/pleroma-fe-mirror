@@ -10,7 +10,8 @@ export default {
     'ButtonUnstyled',
     'RichContent',
     'Input',
-    'Avatar'
+    'Avatar',
+    'Attachment'
   ],
   defaultRules: [
     {

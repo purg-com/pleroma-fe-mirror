@@ -10,7 +10,9 @@ export default {
     'ButtonUnstyled',
     'RichContent',
     'Input',
-    'Avatar'
+    'Avatar',
+    'Attachment',
+    'PollGraph'
   ],
   defaultRules: [
     {

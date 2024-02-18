@@ -7,55 +7,24 @@ import {
   relativeLuminance
 } from '../color_convert/color_convert.js'
 
-import Root from 'src/components/root.style.js'
-import TopBar from 'src/components/top_bar.style.js'
-import Underlay from 'src/components/underlay.style.js'
-import Popover from 'src/components/popover.style.js'
-import Modals from 'src/components/modals.style.js'
-import MenuItem from 'src/components/menu_item.style.js'
-import Panel from 'src/components/panel.style.js'
-import PanelHeader from 'src/components/panel_header.style.js'
-import Button from 'src/components/button.style.js'
-import ButtonUnstyled from 'src/components/button_unstyled.style.js'
-import Input from 'src/components/input.style.js'
-import Text from 'src/components/text.style.js'
-import FunText from 'src/components/fun_text.style.js'
-import Link from 'src/components/link.style.js'
-import Icon from 'src/components/icon.style.js'
-import Border from 'src/components/border.style.js'
-import Post from 'src/components/post.style.js'
-import Notification from 'src/components/notification.style.js'
-import RichContent from 'src/components/rich_content.style.js'
-import Avatar from 'src/components/avatar.style.js'
-import Badge from 'src/components/badge.style.js'
-import Alert from 'src/components/alert.style.js'
-
 const DEBUG = false
 
+// Ensuring the order of components
 const components = {
-  Root,
-  Text,
-  FunText,
-  Link,
-  Icon,
-  Border,
-  Underlay,
-  Modals,
-  Popover,
-  MenuItem,
-  Panel,
-  PanelHeader,
-  TopBar,
-  Button,
-  ButtonUnstyled,
-  Input,
-  Post,
-  Notification,
-  RichContent,
-  Avatar,
-  Alert,
-  Badge
+  Root: null,
+  Text: null,
+  FunText: null,
+  Link: null,
+  Icon: null,
+  Border: null
 }
+
+// Loading all style.js[on] files dynamically
+const componentsContext = require.context('src', true, /\.style.js(on)?$/)
+componentsContext.keys().forEach(key => {
+  const component = componentsContext(key).default
+  components[component.name] = component
+})
 
 // "Unrolls" a tree structure of item: { parent: { ...item2, parent: { ...item3, parent: {...} } }}
 // into an array [item2, item3] for iterating
@@ -370,7 +339,11 @@ export const init = (extraRuleset, palette) => {
     // Normalizing states and variants to always include "normal"
     const states = { normal: '', ...originalStates }
     const variants = { normal: '', ...originalVariants }
-    const innerComponents = (validInnerComponents).map(name => components[name])
+    const innerComponents = (validInnerComponents).map(name => {
+      const result = components[name]
+      if (result === undefined) console.error(`Component ${component.name} references a component ${name} which does not exist!`)
+      return result
+    })
 
     // Optimization: we only really need combinations without "normal" because all states implicitly have it
     const permutationStateKeys = Object.keys(states).filter(s => s !== 'normal')

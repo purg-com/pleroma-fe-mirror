@@ -5,7 +5,7 @@ export default {
     disabled: ':disabled',
     toggled: '.toggled',
     pressed: ':active',
-    hover: ':hover',
+    hover: ':hover:not(:disabled)',
     focused: ':focus-within'
   },
   validInnerComponents: [

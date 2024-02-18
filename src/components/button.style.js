@@ -40,7 +40,7 @@ export default {
     // normal: '' // normal state is implicitly added, it is always included
     toggled: '.toggled',
     pressed: ':active',
-    hover: ':hover',
+    hover: ':hover:not(:disabled)',
     focused: ':focus-within',
     disabled: ':disabled'
   },

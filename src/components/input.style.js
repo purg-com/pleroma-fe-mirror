@@ -24,7 +24,7 @@ export default {
   selector: '.input',
   states: {
     disabled: ':disabled',
-    hover: ':hover',
+    hover: ':hover:not(:disabled)',
     focused: ':focus-within'
   },
   validInnerComponents: [
