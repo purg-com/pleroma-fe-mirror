@@ -24,6 +24,9 @@ const components = {
 const componentsContext = require.context('src', true, /\.style.js(on)?$/)
 componentsContext.keys().forEach(key => {
   const component = componentsContext(key).default
+  if (components[component.name] != null) {
+    console.warn(`Component in file ${key} is trying to override existing component ${component.name}! You have collisions/duplicates!`)
+  }
   components[component.name] = component
 })
 
@@ -169,7 +172,6 @@ export const init = (extraRuleset, palette) => {
 
     return rule
   })
-  console.log(rulesetUnsorted)
 
   const ruleset = rulesetUnsorted
     .map((data, index) => ({ data, index }))
@@ -187,8 +189,6 @@ export const init = (extraRuleset, palette) => {
       return parentsA - parentsB
     })
     .map(({ data }) => data)
-
-  console.log(ruleset.filter(c => c.component === 'ButtonUnstyled'))
 
   const virtualComponents = new Set(Object.values(components).filter(c => c.virtual).map(c => c.name))
 
