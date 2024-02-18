@@ -262,7 +262,8 @@
   }
 
   .thread-ancestor-has-other-replies .conversation-status,
-  &:last-child .conversation-status,
+  &:last-child:not(.-expanded) .conversation-status,
+  &.-expanded .conversation-status:last-child,
   .thread-ancestor:last-child .conversation-status,
   .thread-ancestor:last-child .thread-ancestor-dive-box,
   &.-expanded .thread-tree .conversation-status {
