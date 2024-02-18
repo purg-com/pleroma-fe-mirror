@@ -661,7 +661,13 @@ export const init = (extraRuleset, palette) => {
             }
             default:
               if (k.startsWith('--')) {
-                return k + ': ' + rgba2css(findColor(v, computed[selector].dynamicVars))
+                const [type, value] = v.split('|').map(x => x.trim()) // woah, Extreme!
+                switch (type) {
+                  case 'color':
+                    return k + ': ' + rgba2css(findColor(value, computed[selector].dynamicVars))
+                  default:
+                    return ''
+                }
               }
               return ''
           }
