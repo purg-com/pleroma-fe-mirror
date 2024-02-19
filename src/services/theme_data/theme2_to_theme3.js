@@ -222,7 +222,7 @@ export const convertTheme2To3 = (data) => {
       rule.variant = 'outgoing'
     } else if (prefix === 'panel') {
       rule.component = 'PanelHeader'
-    } else if (prefix === 'topbar') {
+    } else if (prefix === 'topBar') {
       rule.component = 'TopBar'
     } else if (prefix === 'chatMessage') {
       rule.component = 'ChatMessage'
@@ -248,6 +248,7 @@ export const convertTheme2To3 = (data) => {
         case 'Border':
           newRule.parent = rule
           newRule.directives.textColor = data.colors[key]
+          newRule.directives.textAuto = 'no-auto'
           variantArray = parts.slice(0, -1)
           break
         default:

@@ -13,7 +13,6 @@ export const applyTheme = (input) => {
   const t1 = performance.now()
   console.log('Themes 2 initialization took ' + (t1 - t0) + 'ms')
   const extraRules = convertTheme2To3(theme)
-  console.log(extraRules)
   const themes3 = init(extraRules)
   const t2 = performance.now()
   console.log('Themes 3 initialization took ' + (t2 - t1) + 'ms')
