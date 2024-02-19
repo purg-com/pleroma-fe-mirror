@@ -1,7 +1,8 @@
 import { convert } from 'chromatism'
 import { rgb2hex, hex2rgb, rgba2css, getCssColor, relativeLuminance } from '../color_convert/color_convert.js'
 import { getColors, computeDynamicColor, getOpacitySlot } from '../theme_data/theme_data.service.js'
-import { init, getCssRules } from '../theme_data/theme_data_3.service.js'
+import { init } from '../theme_data/theme_data_3.service.js'
+import { getCssRules } from '../theme_data/css_utils.js'
 import {
   sampleRules
 } from 'src/services/theme_data/pleromafe.t3.js'

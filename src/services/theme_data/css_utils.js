@@ -41,3 +41,75 @@ export const getCssShadowFilter = (input) => {
     .map(_ => `drop-shadow(${_})`)
     .join(' ')
 }
+
+export const getCssRules = (rules) => rules.map(rule => {
+  let selector = rule.selector
+  if (!selector) {
+    selector = 'body'
+  }
+  const header = selector + ' {'
+  const footer = '}'
+
+  const virtualDirectives = Object.entries(rule.virtualDirectives || {}).map(([k, v]) => {
+    return '  ' + k + ': ' + v
+  }).join(';\n')
+
+  let directives
+  if (rule.component !== 'Root') {
+    directives = Object.entries(rule.directives).map(([k, v]) => {
+      switch (k) {
+        case 'roundness': {
+          return '  ' + [
+            '--roundness: ' + v + 'px'
+          ].join(';\n  ')
+        }
+        case 'shadow': {
+          return '  ' + [
+            '--shadow: ' + getCssShadow(rule.dynamicVars.shadow),
+            '--shadowFilter: ' + getCssShadowFilter(rule.dynamicVars.shadow),
+            '--shadowInset: ' + getCssShadow(rule.dynamicVars.shadow, true)
+          ].join(';\n  ')
+        }
+        case 'background': {
+          if (v === 'transparent') {
+            return [
+              rule.directives.backgroundNoCssColor !== 'yes' ? ('background-color: ' + v) : '',
+              '  --background: ' + v
+            ].filter(x => x).join(';\n')
+          }
+          const color = getCssColorString(rule.dynamicVars.background, rule.directives.opacity)
+          return [
+            rule.directives.backgroundNoCssColor !== 'yes' ? ('background-color: ' + color) : '',
+            '  --background: ' + color
+          ].filter(x => x).join(';\n')
+        }
+        case 'textColor': {
+          if (rule.directives.textNoCssColor === 'yes') { return '' }
+          return 'color: ' + v
+        }
+        default:
+          if (k.startsWith('--')) {
+            const [type] = v.split('|').map(x => x.trim()) // woah, Extreme!
+            switch (type) {
+              case 'color':
+                return k + ': ' + rgba2css(rule.dynamicVars[k])
+              default:
+                return ''
+            }
+          }
+          return ''
+      }
+    }).filter(x => x).map(x => '  ' + x).join(';\n')
+  } else {
+    directives = {}
+  }
+
+  return [
+    header,
+    directives + ';',
+    (!rule.virtual && rule.directives.textNoCssColor !== 'yes') ? '  color: var(--text);' : '',
+    '',
+    virtualDirectives,
+    footer
+  ].join('\n')
+}).filter(x => x)

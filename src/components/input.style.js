@@ -1,14 +1,4 @@
-const border = (top, shadow) => ({
-  x: 0,
-  y: top ? 1 : -1,
-  blur: 0,
-  spread: 0,
-  color: shadow ? '#000000' : '#FFFFFF',
-  alpha: 0.2,
-  inset: true
-})
-
-const inputInsetFakeBorders = [border(true, true), border(false, false)]
+const inputInsetFakeBorders = ['$borderSide(#FFFFFF, bottom, 0.2)', '$borderSide(#000000, top, 0.2)']
 
 const hoverGlow = {
   x: 0,
