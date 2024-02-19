@@ -1,7 +1,7 @@
 import { convert } from 'chromatism'
 import { rgb2hex, hex2rgb, rgba2css, getCssColor, relativeLuminance } from '../color_convert/color_convert.js'
 import { getColors, computeDynamicColor, getOpacitySlot } from '../theme_data/theme_data.service.js'
-import { init } from '../theme_data/theme_data_3.service.js'
+import { init, getCssRules } from '../theme_data/theme_data_3.service.js'
 import {
   sampleRules
 } from 'src/services/theme_data/pleromafe.t3.js'
@@ -25,7 +25,7 @@ export const applyTheme = (input) => {
 
   styleSheet.toString()
   styleSheet.insertRule(`:root { ${rules.fonts} }`, 'index-max')
-  themes3.css(themes3.eager).forEach(rule => {
+  getCssRules(themes3.eager, t3b).forEach(rule => {
     // Hack to support multiple selectors on same component
     if (rule.match(/::-webkit-scrollbar-button/)) {
       const parts = rule.split(/[{}]/g)
@@ -44,7 +44,7 @@ export const applyTheme = (input) => {
   })
   body.classList.remove('hidden')
   themes3.lazy.then(lazyRules => {
-    themes3.css(lazyRules).forEach(rule => {
+    getCssRules(lazyRules, t3b).forEach(rule => {
       styleSheet.insertRule(rule, 'index-max')
     })
     const t3 = performance.now()

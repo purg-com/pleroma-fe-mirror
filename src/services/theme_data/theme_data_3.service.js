@@ -7,6 +7,18 @@ import {
   relativeLuminance
 } from '../color_convert/color_convert.js'
 
+import {
+  colorFunctions,
+  shadowFunctions,
+  process
+} from './theme3_slot_functions.js'
+
+import {
+  getCssShadow,
+  getCssShadowFilter,
+  getCssColorString
+} from './css_utils.js'
+
 const DEBUG = false
 
 // Ensuring the order of components
@@ -21,6 +33,149 @@ const components = {
   Chat: null,
   ChatMessage: null
 }
+
+const findColor = (color, dynamicVars, staticVars) => {
+  if (typeof color !== 'string' || (!color.startsWith('--') && !color.startsWith('$'))) return color
+  let targetColor = null
+  if (color.startsWith('--')) {
+    const [variable, modifier] = color.split(/,/g).map(str => str.trim())
+    const variableSlot = variable.substring(2)
+    if (variableSlot === 'stack') {
+      const { r, g, b } = dynamicVars.stacked
+      targetColor = { r, g, b }
+    } else if (variableSlot.startsWith('parent')) {
+      if (variableSlot === 'parent') {
+        const { r, g, b } = dynamicVars.lowerLevelBackground
+        targetColor = { r, g, b }
+      } else {
+        const virtualSlot = variableSlot.replace(/^parent/, '')
+        targetColor = convert(dynamicVars.lowerLevelVirtualDirectivesRaw[virtualSlot]).rgb
+      }
+    } else {
+      switch (variableSlot) {
+        case 'inheritedBackground':
+          targetColor = convert(dynamicVars.inheritedBackground).rgb
+          break
+        case 'background':
+          targetColor = convert(dynamicVars.background).rgb
+          break
+        default:
+          targetColor = convert(staticVars[variableSlot]).rgb
+      }
+    }
+
+    if (modifier) {
+      const effectiveBackground = dynamicVars.lowerLevelBackground ?? targetColor
+      const isLightOnDark = relativeLuminance(convert(effectiveBackground).rgb) < 0.5
+      const mod = isLightOnDark ? 1 : -1
+      targetColor = brightness(Number.parseFloat(modifier) * mod, targetColor).rgb
+    }
+  }
+
+  if (color.startsWith('$')) {
+    try {
+      targetColor = process(color, colorFunctions, findColor, dynamicVars, staticVars)
+    } catch (e) {
+      console.error('Failure executing color function', e)
+      targetColor = '#FF00FF'
+    }
+  }
+  // Color references other color
+  return targetColor
+}
+
+const getTextColorAlpha = (directives, intendedTextColor, dynamicVars, staticVars) => {
+  const opacity = directives.textOpacity
+  const backgroundColor = convert(dynamicVars.lowerLevelBackground).rgb
+  const textColor = convert(findColor(intendedTextColor, dynamicVars, staticVars)).rgb
+  if (opacity === null || opacity === undefined || opacity >= 1) {
+    return convert(textColor).hex
+  }
+  if (opacity === 0) {
+    return convert(backgroundColor).hex
+  }
+  const opacityMode = directives.textOpacityMode
+  switch (opacityMode) {
+    case 'fake':
+      return convert(alphaBlend(textColor, opacity, backgroundColor)).hex
+    case 'mixrgb':
+      return convert(mixrgb(backgroundColor, textColor)).hex
+    default:
+      return rgba2css({ a: opacity, ...textColor })
+  }
+}
+
+export const getCssRules = (rules, staticVars) => rules.map(rule => {
+  let selector = rule.selector
+  if (!selector) {
+    selector = 'body'
+  }
+  const header = selector + ' {'
+  const footer = '}'
+
+  const virtualDirectives = Object.entries(rule.virtualDirectives || {}).map(([k, v]) => {
+    return '  ' + k + ': ' + v
+  }).join(';\n')
+
+  let directives
+  if (rule.component !== 'Root') {
+    directives = Object.entries(rule.directives).map(([k, v]) => {
+      switch (k) {
+        case 'roundness': {
+          return '  ' + [
+            '--roundness: ' + v + 'px'
+          ].join(';\n  ')
+        }
+        case 'shadow': {
+          return '  ' + [
+            '--shadow: ' + getCssShadow(rule.dynamicVars.shadow),
+            '--shadowFilter: ' + getCssShadowFilter(rule.dynamicVars.shadow),
+            '--shadowInset: ' + getCssShadow(rule.dynamicVars.shadow, true)
+          ].join(';\n  ')
+        }
+        case 'background': {
+          if (v === 'transparent') {
+            return [
+              rule.directives.backgroundNoCssColor !== 'yes' ? ('background-color: ' + v) : '',
+              '  --background: ' + v
+            ].filter(x => x).join(';\n')
+          }
+          const color = getCssColorString(rule.dynamicVars.background, rule.directives.opacity)
+          return [
+            rule.directives.backgroundNoCssColor !== 'yes' ? ('background-color: ' + color) : '',
+            '  --background: ' + color
+          ].filter(x => x).join(';\n')
+        }
+        case 'textColor': {
+          if (rule.directives.textNoCssColor === 'yes') { return '' }
+          return 'color: ' + v
+        }
+        default:
+          if (k.startsWith('--')) {
+            const [type, value] = v.split('|').map(x => x.trim()) // woah, Extreme!
+            switch (type) {
+              case 'color':
+                return k + ': ' + rgba2css(findColor(value, rule.dynamicVars, staticVars))
+              default:
+                return ''
+            }
+          }
+          return ''
+      }
+    }).filter(x => x).map(x => '  ' + x).join(';\n')
+  } else {
+    directives = {}
+  }
+
+  return [
+    header,
+    directives + ';',
+    (!rule.virtual && rule.directives.textNoCssColor !== 'yes') ? '  color: var(--text);' : '',
+    '',
+    virtualDirectives,
+    footer
+  ].join('\n')
+}).filter(x => x)
 
 // Loading all style.js[on] files dynamically
 const componentsContext = require.context('src', true, /\.style.js(on)?$/)
@@ -147,17 +302,17 @@ const findRules = (criteria, strict) => subject => {
   return true
 }
 
+const normalizeCombination = rule => {
+  rule.variant = rule.variant ?? 'normal'
+  rule.state = [...new Set(['normal', ...(rule.state || [])])]
+}
+
 export const init = (extraRuleset, palette) => {
   const stacked = {}
   const computed = {}
 
   const eagerRules = []
   const lazyRules = []
-
-  const normalizeCombination = rule => {
-    rule.variant = rule.variant ?? 'normal'
-    rule.state = [...new Set(['normal', ...(rule.state || [])])]
-  }
 
   const rulesetUnsorted = [
     ...Object.values(components)
@@ -193,152 +348,6 @@ export const init = (extraRuleset, palette) => {
     .map(({ data }) => data)
 
   const virtualComponents = new Set(Object.values(components).filter(c => c.virtual).map(c => c.name))
-
-  const findColor = (color, dynamicVars) => {
-    if (typeof color !== 'string' || (!color.startsWith('--') && !color.startsWith('$'))) return color
-    let targetColor = null
-    if (color.startsWith('--')) {
-      const [variable, modifier] = color.split(/,/g).map(str => str.trim())
-      const variableSlot = variable.substring(2)
-      if (variableSlot === 'stack') {
-        const { r, g, b } = dynamicVars.stacked
-        targetColor = { r, g, b }
-      } else if (variableSlot.startsWith('parent')) {
-        if (variableSlot === 'parent') {
-          const { r, g, b } = dynamicVars.lowerLevelBackground
-          targetColor = { r, g, b }
-        } else {
-          const virtualSlot = variableSlot.replace(/^parent/, '')
-          targetColor = convert(dynamicVars.lowerLevelVirtualDirectivesRaw[virtualSlot]).rgb
-        }
-      } else {
-        // TODO add support for --current prefix
-        switch (variableSlot) {
-          case 'inheritedBackground':
-            targetColor = convert(dynamicVars.inheritedBackground).rgb
-            break
-          case 'background':
-            targetColor = convert(dynamicVars.background).rgb
-            break
-          default:
-            targetColor = convert(palette[variableSlot]).rgb
-        }
-      }
-
-      if (modifier) {
-        const effectiveBackground = dynamicVars.lowerLevelBackground ?? targetColor
-        const isLightOnDark = relativeLuminance(convert(effectiveBackground).rgb) < 0.5
-        const mod = isLightOnDark ? 1 : -1
-        targetColor = brightness(Number.parseFloat(modifier) * mod, targetColor).rgb
-      }
-    }
-
-    if (color.startsWith('$')) {
-      try {
-        const { funcName, argsString } = /\$(?<funcName>\w+)\((?<argsString>[a-zA-Z0-9-,.'"\s]*)\)/.exec(color).groups
-        const args = argsString.split(/,/g).map(a => a.trim())
-        switch (funcName) {
-          case 'alpha': {
-            if (args.length !== 2) {
-              throw new Error(`$alpha requires 2 arguments, ${args.length} were provided`)
-            }
-            const colorArg = convert(findColor(args[0], dynamicVars)).rgb
-            const amount = Number(args[1])
-            targetColor = { ...colorArg, a: amount }
-            break
-          }
-          case 'blend': {
-            if (args.length !== 3) {
-              throw new Error(`$blend requires 3 arguments, ${args.length} were provided`)
-            }
-            const backgroundArg = convert(findColor(args[2], dynamicVars)).rgb
-            const foregroundArg = convert(findColor(args[0], dynamicVars)).rgb
-            const amount = Number(args[1])
-            targetColor = alphaBlend(backgroundArg, amount, foregroundArg)
-            break
-          }
-          case 'mod': {
-            if (args.length !== 2) {
-              throw new Error(`$mod requires 2 arguments, ${args.length} were provided`)
-            }
-            const color = convert(findColor(args[0], dynamicVars)).rgb
-            const amount = Number(args[1])
-            const effectiveBackground = dynamicVars.lowerLevelBackground
-            const isLightOnDark = relativeLuminance(convert(effectiveBackground).rgb) < 0.5
-            const mod = isLightOnDark ? 1 : -1
-            targetColor = brightness(amount * mod, color).rgb
-            break
-          }
-        }
-      } catch (e) {
-        console.error('Failure executing color function', e)
-        targetColor = '#FF00FF'
-      }
-    }
-    // Color references other color
-    return targetColor
-  }
-
-  const cssColorString = (color, alpha) => rgba2css({ ...convert(color).rgb, a: alpha })
-
-  const getTextColorAlpha = (directives, intendedTextColor, dynamicVars) => {
-    const opacity = directives.textOpacity
-    const backgroundColor = convert(dynamicVars.lowerLevelBackground).rgb
-    const textColor = convert(findColor(intendedTextColor, dynamicVars)).rgb
-    if (opacity === null || opacity === undefined || opacity >= 1) {
-      return convert(textColor).hex
-    }
-    if (opacity === 0) {
-      return convert(backgroundColor).hex
-    }
-    const opacityMode = directives.textOpacityMode
-    switch (opacityMode) {
-      case 'fake':
-        return convert(alphaBlend(textColor, opacity, backgroundColor)).hex
-      case 'mixrgb':
-        return convert(mixrgb(backgroundColor, textColor)).hex
-      default:
-        return rgba2css({ a: opacity, ...textColor })
-    }
-  }
-
-  const getCssShadow = (input, usesDropShadow) => {
-    if (input.length === 0) {
-      return 'none'
-    }
-
-    return input
-      .filter(_ => usesDropShadow ? _.inset : _)
-      .map((shad) => [
-        shad.x,
-        shad.y,
-        shad.blur,
-        shad.spread
-      ].map(_ => _ + 'px ').concat([
-        cssColorString(findColor(shad.color), shad.alpha),
-        shad.inset ? 'inset' : ''
-      ]).join(' ')).join(', ')
-  }
-
-  const getCssShadowFilter = (input) => {
-    if (input.length === 0) {
-      return 'none'
-    }
-
-    return input
-    // drop-shadow doesn't support inset or spread
-      .filter((shad) => !shad.inset && Number(shad.spread) === 0)
-      .map((shad) => [
-        shad.x,
-        shad.y,
-        // drop-shadow's blur is twice as strong compared to box-shadow
-        shad.blur / 2
-      ].map(_ => _ + 'px').concat([
-        cssColorString(findColor(shad.color), shad.alpha)
-      ]).join(' '))
-      .map(_ => `drop-shadow(${_})`)
-      .join(' ')
-  }
 
   let counter = 0
   const promises = []
@@ -408,7 +417,7 @@ export const init = (extraRuleset, palette) => {
       const lowerLevelVirtualDirectives = computed[lowerLevelSelector]?.virtualDirectives
       const lowerLevelVirtualDirectivesRaw = computed[lowerLevelSelector]?.virtualDirectivesRaw
 
-      const dynamicVars = {
+      const dynamicVars = computed[selector] || {
         lowerLevelBackground,
         lowerLevelVirtualDirectives,
         lowerLevelVirtualDirectivesRaw
@@ -466,7 +475,7 @@ export const init = (extraRuleset, palette) => {
         dynamicVars.inheritedBackground = lowerLevelBackground
         dynamicVars.stacked = convert(stacked[lowerLevelSelector]).rgb
 
-        const intendedTextColor = convert(findColor(inheritedTextColor, dynamicVars)).rgb
+        const intendedTextColor = convert(findColor(inheritedTextColor, dynamicVars, palette)).rgb
         const textColor = newTextRule.directives.textAuto === 'no-auto'
           ? intendedTextColor
           : getTextColor(
@@ -500,6 +509,7 @@ export const init = (extraRuleset, palette) => {
         }
 
         addRule({
+          dynamicVars,
           selector: cssSelector,
           virtual: true,
           component: component.name,
@@ -532,7 +542,7 @@ export const init = (extraRuleset, palette) => {
 
           dynamicVars.inheritedBackground = inheritedBackground
 
-          const rgb = convert(findColor(computedDirectives.background, dynamicVars)).rgb
+          const rgb = convert(findColor(computedDirectives.background, dynamicVars, palette)).rgb
 
           if (!stacked[selector]) {
             let blend
@@ -545,9 +555,26 @@ export const init = (extraRuleset, palette) => {
               blend = alphaBlend(rgb, computedDirectives.opacity, lowerLevelStackedBackground)
             }
             stacked[selector] = blend
-            dynamicVars.stacked = blend
             computed[selector].background = { ...rgb, a: computedDirectives.opacity ?? 1 }
           }
+        }
+
+        if (computedDirectives.shadow) {
+          dynamicVars.shadow = (computedDirectives.shadow || []).map(shadow => {
+            let targetShadow
+            if (typeof shadow === 'string') {
+              if (shadow.startsWith('$')) {
+                targetShadow = process(shadow, shadowFunctions, findColor, dynamicVars, palette)
+              }
+            } else {
+              targetShadow = shadow
+            }
+
+            return {
+              ...targetShadow,
+              color: findColor(targetShadow.color, dynamicVars, palette)
+            }
+          })
         }
 
         if (!stacked[selector]) {
@@ -561,6 +588,7 @@ export const init = (extraRuleset, palette) => {
         dynamicVars.background = computed[selector].background
 
         addRule({
+          dynamicVars,
           selector: cssSelector,
           component: component.name,
           ...combination,
@@ -606,78 +634,6 @@ export const init = (extraRuleset, palette) => {
 
   return {
     lazy: lazyExec,
-    eager: eagerRules,
-    css: rules => rules.map(rule => {
-      let selector = rule.selector
-      if (!selector) {
-        selector = 'body'
-      }
-      const header = selector + ' {'
-      const footer = '}'
-
-      const virtualDirectives = Object.entries(rule.virtualDirectives || {}).map(([k, v]) => {
-        return '  ' + k + ': ' + v
-      }).join(';\n')
-
-      let directives
-      if (rule.component !== 'Root') {
-        directives = Object.entries(rule.directives).map(([k, v]) => {
-          const selector = ruleToSelector(rule, true)
-          switch (k) {
-            case 'roundness': {
-              return '  ' + [
-                '--roundness: ' + v + 'px'
-              ].join(';\n  ')
-            }
-            case 'shadow': {
-              return '  ' + [
-                '--shadow: ' + getCssShadow(v),
-                '--shadowFilter: ' + getCssShadowFilter(v),
-                '--shadowInset: ' + getCssShadow(v, true)
-              ].join(';\n  ')
-            }
-            case 'background': {
-              if (v === 'transparent') {
-                return [
-                  rule.directives.backgroundNoCssColor !== 'yes' ? ('background-color: ' + v) : '',
-                  '  --background: ' + v
-                ].filter(x => x).join(';\n')
-              }
-              const color = cssColorString(computed[selector].background, rule.directives.opacity)
-              return [
-                rule.directives.backgroundNoCssColor !== 'yes' ? ('background-color: ' + color) : '',
-                '  --background: ' + color
-              ].filter(x => x).join(';\n')
-            }
-            case 'textColor': {
-              if (rule.directives.textNoCssColor === 'yes') { return '' }
-              return 'color: ' + v
-            }
-            default:
-              if (k.startsWith('--')) {
-                const [type, value] = v.split('|').map(x => x.trim()) // woah, Extreme!
-                switch (type) {
-                  case 'color':
-                    return k + ': ' + rgba2css(findColor(value, computed[selector].dynamicVars))
-                  default:
-                    return ''
-                }
-              }
-              return ''
-          }
-        }).filter(x => x).map(x => '  ' + x).join(';\n')
-      } else {
-        directives = {}
-      }
-
-      return [
-        header,
-        directives + ';',
-        (!rule.virtual && rule.directives.textNoCssColor !== 'yes') ? '  color: var(--text);' : '',
-        '',
-        virtualDirectives,
-        footer
-      ].join('\n')
-    }).filter(x => x)
+    eager: eagerRules
   }
 }
