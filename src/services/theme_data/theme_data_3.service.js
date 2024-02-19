@@ -119,7 +119,8 @@ componentsContext.keys().forEach(key => {
 
 const ruleToSelector = genericRuleToSelector(components)
 
-export const init = (extraRuleset, palette) => {
+export const init = (extraRuleset) => {
+  const staticVars = {}
   const stacked = {}
   const computed = {}
 
@@ -287,7 +288,7 @@ export const init = (extraRuleset, palette) => {
         dynamicVars.inheritedBackground = lowerLevelBackground
         dynamicVars.stacked = convert(stacked[lowerLevelSelector]).rgb
 
-        const intendedTextColor = convert(findColor(inheritedTextColor, dynamicVars, palette)).rgb
+        const intendedTextColor = convert(findColor(inheritedTextColor, dynamicVars, staticVars)).rgb
         const textColor = newTextRule.directives.textAuto === 'no-auto'
           ? intendedTextColor
           : getTextColor(
@@ -354,7 +355,7 @@ export const init = (extraRuleset, palette) => {
 
           dynamicVars.inheritedBackground = inheritedBackground
 
-          const rgb = convert(findColor(computedDirectives.background, dynamicVars, palette)).rgb
+          const rgb = convert(findColor(computedDirectives.background, dynamicVars, staticVars)).rgb
 
           if (!stacked[selector]) {
             let blend
@@ -376,7 +377,7 @@ export const init = (extraRuleset, palette) => {
             let targetShadow
             if (typeof shadow === 'string') {
               if (shadow.startsWith('$')) {
-                targetShadow = process(shadow, shadowFunctions, findColor, dynamicVars, palette)
+                targetShadow = process(shadow, shadowFunctions, findColor, dynamicVars, staticVars)
               }
             } else {
               targetShadow = shadow
@@ -384,7 +385,7 @@ export const init = (extraRuleset, palette) => {
 
             return {
               ...targetShadow,
-              color: findColor(targetShadow.color, dynamicVars, palette)
+              color: findColor(targetShadow.color, dynamicVars, staticVars)
             }
           })
         }
@@ -404,8 +405,13 @@ export const init = (extraRuleset, palette) => {
         dynamicSlots.forEach(([k, v]) => {
           const [type, value] = v.split('|').map(x => x.trim()) // woah, Extreme!
           switch (type) {
-            case 'color':
-              dynamicVars[k] = findColor(value, dynamicVars, palette)
+            case 'color': {
+              const color = findColor(value, dynamicVars, staticVars)
+              dynamicVars[k] = color
+              if (component.name === 'Root') {
+                staticVars[k.substring(2)] = color
+              }
+            }
           }
         })
 
@@ -456,6 +462,7 @@ export const init = (extraRuleset, palette) => {
 
   return {
     lazy: lazyExec,
-    eager: eagerRules
+    eager: eagerRules,
+    staticVars
   }
 }

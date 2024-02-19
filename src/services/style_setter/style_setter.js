@@ -2,6 +2,7 @@ import { convert } from 'chromatism'
 import { rgb2hex, hex2rgb, rgba2css, getCssColor, relativeLuminance } from '../color_convert/color_convert.js'
 import { getColors, computeDynamicColor, getOpacitySlot } from '../theme_data/theme_data.service.js'
 import { init } from '../theme_data/theme_data_3.service.js'
+import { convertTheme2To3 } from '../theme_data/theme2_to_theme3.js'
 import { getCssRules } from '../theme_data/css_utils.js'
 import {
   sampleRules
@@ -10,10 +11,12 @@ import { defaultState } from '../../modules/config.js'
 
 export const applyTheme = (input) => {
   const t0 = performance.now()
-  const { rules, t3b } = generatePreset(input)
+  const { rules, theme } = generatePreset(input)
+  console.log(rules, theme)
   const t1 = performance.now()
   console.log('Themes 2 initialization took ' + (t1 - t0) + 'ms')
-  const themes3 = init(sampleRules, t3b)
+  const extraRules = convertTheme2To3(theme)
+  const themes3 = init([...sampleRules, ...extraRules])
   const t2 = performance.now()
   console.log('Themes 3 initialization took ' + (t2 - t1) + 'ms')
   const head = document.head
@@ -26,7 +29,7 @@ export const applyTheme = (input) => {
 
   styleSheet.toString()
   styleSheet.insertRule(`:root { ${rules.fonts} }`, 'index-max')
-  getCssRules(themes3.eager, t3b).forEach(rule => {
+  getCssRules(themes3.eager, themes3.staticVars).forEach(rule => {
     // Hack to support multiple selectors on same component
     if (rule.match(/::-webkit-scrollbar-button/)) {
       const parts = rule.split(/[{}]/g)
@@ -45,7 +48,7 @@ export const applyTheme = (input) => {
   })
   body.classList.remove('hidden')
   themes3.lazy.then(lazyRules => {
-    getCssRules(lazyRules, t3b).forEach(rule => {
+    getCssRules(lazyRules, themes3.staticVars).forEach(rule => {
       styleSheet.insertRule(rule, 'index-max')
     })
     const t3 = performance.now()
@@ -358,7 +361,7 @@ export const generateShadows = (input, colors) => {
   }
 }
 
-export const composePreset = (colors, radii, shadows, fonts, t3b) => {
+export const composePreset = (colors, radii, shadows, fonts) => {
   return {
     rules: {
       ...shadows.rules,
@@ -371,8 +374,7 @@ export const composePreset = (colors, radii, shadows, fonts, t3b) => {
       ...colors.theme,
       ...radii.theme,
       ...fonts.theme
-    },
-    t3b
+    }
   }
 }
 
@@ -382,8 +384,7 @@ export const generatePreset = (input) => {
     colors,
     generateRadii(input),
     generateShadows(input, colors.theme.colors, colors.mod),
-    generateFonts(input),
-    colors.theme.colors
+    generateFonts(input)
   )
 }
 
