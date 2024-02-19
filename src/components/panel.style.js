@@ -14,7 +14,8 @@ export default {
     'Post',
     'Notification',
     'Alert',
-    'UserCard'
+    'UserCard',
+    'Chat'
   ],
   defaultRules: [
     {

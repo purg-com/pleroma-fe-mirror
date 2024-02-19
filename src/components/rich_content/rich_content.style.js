@@ -9,7 +9,6 @@ export default {
   defaultRules: [
     {
       directives: {
-        background: '--bg',
         textNoCssColor: 'yes'
       }
     }

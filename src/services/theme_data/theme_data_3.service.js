@@ -17,7 +17,9 @@ const components = {
   Link: null,
   Icon: null,
   Border: null,
-  Panel: null
+  Panel: null,
+  Chat: null,
+  ChatMessage: null
 }
 
 // Loading all style.js[on] files dynamically
@@ -509,17 +511,11 @@ export const init = (extraRuleset, palette) => {
         })
       } else {
         computed[selector] = computed[selector] || {}
-        let addRuleNeeded = false
 
         // TODO: DEFAULT TEXT COLOR
         const lowerLevelStackedBackground = stacked[lowerLevelSelector] || convert('#FF00FF').rgb
 
-        if (computedDirectives.shadow != null || computedDirectives.roundness != null) {
-          addRuleNeeded = true
-        }
-
         if (computedDirectives.background) {
-          addRuleNeeded = true
           let inheritRule = null
           const variantRules = ruleset.filter(findRules({ component: component.name, variant: combination.variant, parent }))
           const lastVariantRule = variantRules[variantRules.length - 1]
@@ -564,15 +560,13 @@ export const init = (extraRuleset, palette) => {
         dynamicVars.stacked = lowerLevelStackedBackground
         dynamicVars.background = computed[selector].background
 
-        if (addRuleNeeded) {
-          addRule({
-            selector: cssSelector,
-            component: component.name,
-            ...combination,
-            parent,
-            directives: computedDirectives
-          })
-        }
+        addRule({
+          selector: cssSelector,
+          component: component.name,
+          ...combination,
+          parent,
+          directives: computedDirectives
+        })
       }
 
       innerComponents.forEach(innerComponent => {
@@ -645,15 +639,15 @@ export const init = (extraRuleset, palette) => {
             case 'background': {
               if (v === 'transparent') {
                 return [
-                  'background-color: ' + v,
+                  rule.directives.backgroundNoCssColor !== 'yes' ? ('background-color: ' + v) : '',
                   '  --background: ' + v
-                ].join(';\n')
+                ].filter(x => x).join(';\n')
               }
               const color = cssColorString(computed[selector].background, rule.directives.opacity)
               return [
-                'background-color: ' + color,
+                rule.directives.backgroundNoCssColor !== 'yes' ? ('background-color: ' + color) : '',
                 '  --background: ' + color
-              ].join(';\n')
+              ].filter(x => x).join(';\n')
             }
             case 'textColor': {
               if (rule.directives.textNoCssColor === 'yes') { return '' }

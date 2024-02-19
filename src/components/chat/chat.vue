@@ -26,7 +26,7 @@
           </div>
         </div>
         <div
-          class="message-list"
+          class="chat-message-list message-list"
           :style="{ height: scrollableContainerHeight }"
         >
           <template v-if="!errorLoadingChat">

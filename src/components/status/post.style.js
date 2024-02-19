@@ -14,11 +14,5 @@ export default {
     'Attachment',
     'PollGraph'
   ],
-  defaultRules: [
-    {
-      directives: {
-        background: '--bg'
-      }
-    }
-  ]
+  defaultRules: []
 }

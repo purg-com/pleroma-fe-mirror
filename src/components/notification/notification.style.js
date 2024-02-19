@@ -13,11 +13,5 @@ export default {
     'Avatar',
     'Attachment'
   ],
-  defaultRules: [
-    {
-      directives: {
-        background: '--bg'
-      }
-    }
-  ]
+  defaultRules: []
 }
