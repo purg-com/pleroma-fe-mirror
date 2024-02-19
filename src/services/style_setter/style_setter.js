@@ -4,9 +4,6 @@ import { getColors, computeDynamicColor, getOpacitySlot } from '../theme_data/th
 import { init } from '../theme_data/theme_data_3.service.js'
 import { convertTheme2To3 } from '../theme_data/theme2_to_theme3.js'
 import { getCssRules } from '../theme_data/css_utils.js'
-import {
-  sampleRules
-} from 'src/services/theme_data/pleromafe.t3.js'
 import { defaultState } from '../../modules/config.js'
 
 export const applyTheme = (input) => {
@@ -16,7 +13,8 @@ export const applyTheme = (input) => {
   const t1 = performance.now()
   console.log('Themes 2 initialization took ' + (t1 - t0) + 'ms')
   const extraRules = convertTheme2To3(theme)
-  const themes3 = init([...sampleRules, ...extraRules])
+  console.log(extraRules)
+  const themes3 = init(extraRules)
   const t2 = performance.now()
   console.log('Themes 3 initialization took ' + (t2 - t1) + 'ms')
   const head = document.head
