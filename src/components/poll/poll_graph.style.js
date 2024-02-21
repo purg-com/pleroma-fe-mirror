@@ -1,13 +1,11 @@
 export default {
   name: 'PollGraph',
-  selector: '.poll-graph',
-  validInnerComponents: [
-    'Text'
-  ],
+  selector: '.result-fill',
   defaultRules: [
     {
       directives: {
-        background: '--accent'
+        background: '--accent',
+        opacity: 0.5
       }
     }
   ]
