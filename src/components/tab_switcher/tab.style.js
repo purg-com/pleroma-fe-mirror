@@ -25,6 +25,13 @@ export default {
       }
     },
     {
+      state: ['hover', 'active'],
+      directives: {
+        shadow: ['--defaultButtonShadow', '--defaultButtonBevel'],
+        opacity: 0
+      }
+    },
+    {
       state: ['disabled'],
       directives: {
         background: '$blend(--inheritedBackground, 0.25, --parent)',
@@ -46,6 +53,26 @@ export default {
       directives: {
         textOpacity: 0.25,
         textOpacityMode: 'blend'
+      }
+    },
+    {
+      component: 'Icon',
+      parent: {
+        component: 'Tab',
+        state: ['active']
+      },
+      directives: {
+        textColor: '--text'
+      }
+    },
+    {
+      component: 'Icon',
+      parent: {
+        component: 'Tab',
+        state: ['active', 'hover']
+      },
+      directives: {
+        textColor: '--text'
       }
     }
   ]
