@@ -4,15 +4,7 @@ import {
   getContrastRatioLayers
 } from 'src/services/color_convert/color_convert.js'
 import {
-  DEFAULT_SHADOWS,
-  generateColors,
-  generateShadows,
-  generateRadii,
-  generateFonts,
-  composePreset,
-  getThemes,
-  shadows2to3,
-  colors2to3
+  getThemes
 } from 'src/services/style_setter/style_setter.js'
 import {
   newImporter,
@@ -25,7 +17,15 @@ import {
   CURRENT_VERSION,
   OPACITIES,
   getLayers,
-  getOpacitySlot
+  getOpacitySlot,
+  DEFAULT_SHADOWS,
+  generateColors,
+  generateShadows,
+  generateRadii,
+  generateFonts,
+  composePreset,
+  shadows2to3,
+  colors2to3
 } from 'src/services/theme_data/theme_data.service.js'
 import ColorInput from 'src/components/color_input/color_input.vue'
 import RangeInput from 'src/components/range_input/range_input.vue'

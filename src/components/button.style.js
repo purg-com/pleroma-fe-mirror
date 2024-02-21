@@ -1,23 +1,3 @@
-const buttonInsetFakeBorders = ['$borderSide(#FFFFFF, top, 0.2)', '$borderSide(#000000, bottom, 0.2)']
-const inputInsetFakeBorders = ['$borderSide(#FFFFFF, bottom, 0.2)', '$borderSide(#000000, top, 0.2)']
-const buttonOuterShadow = {
-  x: 0,
-  y: 0,
-  blur: 2,
-  spread: 0,
-  color: '#000000',
-  alpha: 1
-}
-
-const hoverGlow = {
-  x: 0,
-  y: 0,
-  blur: 4,
-  spread: 0,
-  color: '--text',
-  alpha: 1
-}
-
 export default {
   name: 'Button', // Name of the component
   selector: '.button-default', // CSS selector/prefix
@@ -50,51 +30,60 @@ export default {
   // Default rules, used as "default theme", essentially.
   defaultRules: [
     {
+      component: 'Root',
+      directives: {
+        '--defaultButtonHoverGlow': 'shadow | 0 0 4 --text',
+        '--defaultButtonShadow': 'shadow | 0 0 2 #000000',
+        '--defaultButtonBevel': 'shadow | $borderSide(#FFFFFF, top, 0.2) | $borderSide(#000000, bottom, 0.2)',
+        '--pressedButtonBevel': 'shadow | $borderSide(#FFFFFF, bottom, 0.2)| $borderSide(#000000, top, 0.2)'
+      }
+    },
+    {
       // component: 'Button', // no need to specify components every time unless you're specifying how other component should look
       // like within it
       directives: {
         background: '--fg',
-        shadow: [buttonOuterShadow, ...buttonInsetFakeBorders],
+        shadow: ['--defaultButtonShadow', '--defaultButtonBevel'],
         roundness: 3
       }
     },
     {
       state: ['hover'],
       directives: {
-        shadow: [hoverGlow, ...buttonInsetFakeBorders]
+        shadow: ['--defaultButtonHoverGlow', '--defaultButtonBevel']
       }
     },
     {
       state: ['pressed'],
       directives: {
-        shadow: [buttonOuterShadow, ...inputInsetFakeBorders]
+        shadow: ['--defaultButtonShadow', '--pressedButtonBevel']
       }
     },
     {
       state: ['hover', 'pressed'],
       directives: {
-        shadow: [hoverGlow, ...inputInsetFakeBorders]
+        shadow: ['--defaultButtonHoverGlow', '--pressedButtonBevel']
       }
     },
     {
       state: ['toggled'],
       directives: {
         background: '--inheritedBackground,-24.2',
-        shadow: [buttonOuterShadow, ...inputInsetFakeBorders]
+        shadow: ['--defaultButtonShadow', '--pressedButtonBevel']
       }
     },
     {
       state: ['toggled', 'hover'],
       directives: {
         background: '--inheritedBackground,-24.2',
-        shadow: [hoverGlow, ...inputInsetFakeBorders]
+        shadow: ['--defaultButtonHoverGlow', '--pressedButtonBevel']
       }
     },
     {
       state: ['disabled'],
       directives: {
         background: '$blend(--inheritedBackground, 0.25, --parent)',
-        shadow: [...buttonInsetFakeBorders]
+        shadow: ['--defaultButtonBevel']
       }
     },
     {

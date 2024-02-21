@@ -100,6 +100,8 @@ export const temporary = new Set([
 export const temporaryColors = {}
 
 export const convertTheme2To3 = (data) => {
+  data.colors.accent = data.colors.accent || data.colors.link
+  data.colors.link = data.colors.link || data.colors.accent
   const generateRoot = () => {
     const directives = {}
     basePaletteKeys.forEach(key => { directives['--' + key] = 'color | ' + data.colors[key] })
@@ -111,7 +113,8 @@ export const convertTheme2To3 = (data) => {
 
   const convertRadii = () => {
     const newRules = []
-    radiiKeys.forEach(key => {
+    Object.keys(data.radii).forEach(key => {
+      if (!radiiKeys.has(key) || data.radii[key] === undefined) return null
       const originalRadius = data.radii[key]
       const rule = {}
 
@@ -150,13 +153,17 @@ export const convertTheme2To3 = (data) => {
         roundness: originalRadius
       }
       newRules.push(rule)
+      if (rule.component === 'Button') {
+        newRules.push({ ...rule, component: 'ScrollbarElement' })
+      }
     })
     return newRules
   }
 
   const convertShadows = () => {
     const newRules = []
-    shadowsKeys.forEach(key => {
+    Object.keys(data.shadows).forEach(key => {
+      if (!shadowsKeys.has(key)) return
       const originalShadow = data.shadows[key]
       const rule = {}
 
@@ -205,6 +212,10 @@ export const convertTheme2To3 = (data) => {
       if (key === 'buttonPressed') {
         newRules.push({ ...rule, state: ['toggled'] })
       }
+
+      if (rule.component === 'Button') {
+        newRules.push({ ...rule, component: 'ScrollbarElement' })
+      }
     })
     return newRules
   }
@@ -234,10 +245,13 @@ export const convertTheme2To3 = (data) => {
       rule.component = 'ChatMessage'
     } else if (prefix === 'poll') {
       rule.component = 'PollGraph'
+    } else if (prefix === 'btn') {
+      rule.component = 'Button'
     } else {
       rule.component = prefix[0].toUpperCase() + prefix.slice(1).toLowerCase()
     }
     return keys.map((key) => {
+      if (!data.colors[key]) return null
       const leftoverKey = key.replace(prefix, '')
       const parts = (leftoverKey || 'Bg').match(/[A-Z][a-z]*/g)
       const last = parts.slice(-1)[0]
@@ -335,12 +349,17 @@ export const convertTheme2To3 = (data) => {
           newRule.variant = variantArray[0].toLowerCase()
         }
       }
-      console.log(key, newRule)
-      return newRule
+
+      if (newRule.component === 'Button') {
+        console.log([newRule, { ...newRule, component: 'ScrollbarElement' }])
+        return [newRule, { ...newRule, component: 'ScrollbarElement' }]
+      } else {
+        return [newRule]
+      }
     })
   })
 
-  const flatExtRules = extendedRules.filter(x => x).reduce((acc, x) => [...acc, ...x], []).filter(x => x)
+  const flatExtRules = extendedRules.filter(x => x).reduce((acc, x) => [...acc, ...x], []).filter(x => x).reduce((acc, x) => [...acc, ...x], [])
 
   return [generateRoot(), ...convertShadows(), ...convertRadii(), ...flatExtRules]
 }

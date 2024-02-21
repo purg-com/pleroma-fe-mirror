@@ -1,5 +1,3 @@
-const inputInsetFakeBorders = ['$borderSide(#FFFFFF, bottom, 0.2)', '$borderSide(#000000, top, 0.2)']
-
 const hoverGlow = {
   x: 0,
   y: 0,
@@ -26,6 +24,12 @@ export default {
   ],
   defaultRules: [
     {
+      component: 'Root',
+      directives: {
+        '--defaultInputBevel': 'shadow | $borderSide(#FFFFFF, bottom, 0.2)| $borderSide(#000000, top, 0.2)'
+      }
+    },
+    {
       variant: 'checkbox',
       directives: {
         roundness: 1
@@ -42,13 +46,13 @@ export default {
           spread: 0,
           color: '#000000',
           alpha: 1
-        }, ...inputInsetFakeBorders]
+        }, '--defaultInputBevel']
       }
     },
     {
       state: ['hover'],
       directives: {
-        shadow: [hoverGlow, ...inputInsetFakeBorders]
+        shadow: [hoverGlow, '--defaultInputBevel']
       }
     }
   ]

@@ -6,12 +6,22 @@ import { getCssRules } from '../theme_data/css_utils.js'
 import { defaultState } from '../../modules/config.js'
 
 export const applyTheme = (input) => {
-  const t0 = performance.now()
-  const { rules, theme } = generatePreset(input)
-  console.log(rules, theme)
+  const { version, theme: inputTheme } = input
+  let extraRules
+  let fonts
+  if (version === 2) {
+    const t0 = performance.now()
+    const { rules, theme } = generatePreset(inputTheme)
+    fonts = rules.fonts
+    const t1 = performance.now()
+    console.log('Themes 2 initialization took ' + (t1 - t0) + 'ms')
+    extraRules = convertTheme2To3(theme)
+  } else {
+    console.log(input)
+    extraRules = convertTheme2To3(input)
+  }
+
   const t1 = performance.now()
-  console.log('Themes 2 initialization took ' + (t1 - t0) + 'ms')
-  const extraRules = convertTheme2To3(theme)
   const themes3 = init(extraRules)
   const t2 = performance.now()
   console.log('Themes 3 initialization took ' + (t2 - t1) + 'ms')
@@ -24,7 +34,7 @@ export const applyTheme = (input) => {
   const styleSheet = styleEl.sheet
 
   styleSheet.toString()
-  styleSheet.insertRule(`:root { ${rules.fonts} }`, 'index-max')
+  styleSheet.insertRule(`:root { ${fonts} }`, 'index-max')
   getCssRules(themes3.eager, themes3.staticVars).forEach(rule => {
     // Hack to support multiple selectors on same component
     if (rule.match(/::-webkit-scrollbar-button/)) {
@@ -133,8 +143,8 @@ export const getPreset = (val) => {
         data.colors = { bg, fg, text, link, cRed, cBlue, cGreen, cOrange }
       }
 
-      return { theme: data, source: theme.source }
+      return { theme: data, source: theme.source, version: isV1 ? 1 : 2 }
     })
 }
 
-export const setPreset = (val) => getPreset(val).then(data => applyTheme(data.theme))
+export const setPreset = (val) => getPreset(val).then(data => applyTheme(data))

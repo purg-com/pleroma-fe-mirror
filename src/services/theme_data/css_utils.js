@@ -2,6 +2,26 @@ import { convert } from 'chromatism'
 
 import { rgba2css } from '../color_convert/color_convert.js'
 
+export const parseCssShadow = (text) => {
+  const dimensions = /(\d[a-z]*\s?){2,4}/.exec(text)?.[0]
+  const inset = /inset/.exec(text)?.[0]
+  const color = text.replace(dimensions, '').replace(inset, '')
+
+  const [x, y, blur = 0, spread = 0] = dimensions.split(/ /).filter(x => x).map(x => x.trim())
+  const isInset = inset?.trim() === 'inset'
+  console.log(color.trim())
+  const colorString = color.split(/ /).filter(x => x).map(x => x.trim())[0]
+
+  return {
+    x,
+    y,
+    blur,
+    spread,
+    inset: isInset,
+    color: colorString
+  }
+}
+
 export const getCssColorString = (color, alpha) => rgba2css({ ...convert(color).rgb, a: alpha })
 
 export const getCssShadow = (input, usesDropShadow) => {

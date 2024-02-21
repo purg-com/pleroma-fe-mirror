@@ -1,4 +1,5 @@
 import { convert, brightness } from 'chromatism'
+import { flattenDeep } from 'lodash'
 import {
   alphaBlend,
   getTextColor,
@@ -20,6 +21,7 @@ import {
   normalizeCombination,
   findRules
 } from './iss_utils.js'
+import { parseCssShadow } from './css_utils.js'
 
 const DEBUG = false
 
@@ -36,7 +38,32 @@ const components = {
   ChatMessage: null
 }
 
-const findColor = (color, dynamicVars, staticVars) => {
+const findShadow = (shadows, { dynamicVars, staticVars }) => {
+  return (shadows || []).map(shadow => {
+    let targetShadow
+    if (typeof shadow === 'string') {
+      if (shadow.startsWith('$')) {
+        targetShadow = process(shadow, shadowFunctions, { findColor, findShadow }, { dynamicVars, staticVars })
+      } else if (shadow.startsWith('--')) {
+        const [variable] = shadow.split(/,/g).map(str => str.trim()) // discarding modifier since it's not supported
+        const variableSlot = variable.substring(2)
+        return findShadow(staticVars[variableSlot], { dynamicVars, staticVars })
+      } else {
+        targetShadow = parseCssShadow(shadow)
+      }
+    } else {
+      targetShadow = shadow
+    }
+
+    const shadowArray = Array.isArray(targetShadow) ? targetShadow : [targetShadow]
+    return shadowArray.map(s => ({
+      ...s,
+      color: findColor(s.color, { dynamicVars, staticVars })
+    }))
+  })
+}
+
+const findColor = (color, { dynamicVars, staticVars }) => {
   if (typeof color !== 'string' || (!color.startsWith('--') && !color.startsWith('$'))) return color
   let targetColor = null
   if (color.startsWith('--')) {
@@ -76,7 +103,7 @@ const findColor = (color, dynamicVars, staticVars) => {
 
   if (color.startsWith('$')) {
     try {
-      targetColor = process(color, colorFunctions, findColor, dynamicVars, staticVars)
+      targetColor = process(color, colorFunctions, { findColor }, { dynamicVars, staticVars })
     } catch (e) {
       console.error('Failure executing color function', e)
       targetColor = '#FF00FF'
@@ -89,7 +116,7 @@ const findColor = (color, dynamicVars, staticVars) => {
 const getTextColorAlpha = (directives, intendedTextColor, dynamicVars, staticVars) => {
   const opacity = directives.textOpacity
   const backgroundColor = convert(dynamicVars.lowerLevelBackground).rgb
-  const textColor = convert(findColor(intendedTextColor, dynamicVars, staticVars)).rgb
+  const textColor = convert(findColor(intendedTextColor, { dynamicVars, staticVars })).rgb
   if (opacity === null || opacity === undefined || opacity >= 1) {
     return convert(textColor).hex
   }
@@ -288,7 +315,7 @@ export const init = (extraRuleset) => {
         dynamicVars.inheritedBackground = lowerLevelBackground
         dynamicVars.stacked = convert(stacked[lowerLevelSelector]).rgb
 
-        const intendedTextColor = convert(findColor(inheritedTextColor, dynamicVars, staticVars)).rgb
+        const intendedTextColor = convert(findColor(inheritedTextColor, { dynamicVars, staticVars })).rgb
         const textColor = newTextRule.directives.textAuto === 'no-auto'
           ? intendedTextColor
           : getTextColor(
@@ -355,7 +382,7 @@ export const init = (extraRuleset) => {
 
           dynamicVars.inheritedBackground = inheritedBackground
 
-          const rgb = convert(findColor(computedDirectives.background, dynamicVars, staticVars)).rgb
+          const rgb = convert(findColor(computedDirectives.background, { dynamicVars, staticVars })).rgb
 
           if (!stacked[selector]) {
             let blend
@@ -373,21 +400,7 @@ export const init = (extraRuleset) => {
         }
 
         if (computedDirectives.shadow) {
-          dynamicVars.shadow = (computedDirectives.shadow || []).map(shadow => {
-            let targetShadow
-            if (typeof shadow === 'string') {
-              if (shadow.startsWith('$')) {
-                targetShadow = process(shadow, shadowFunctions, findColor, dynamicVars, staticVars)
-              }
-            } else {
-              targetShadow = shadow
-            }
-
-            return {
-              ...targetShadow,
-              color: findColor(targetShadow.color, dynamicVars, staticVars)
-            }
-          })
+          dynamicVars.shadow = flattenDeep(findShadow(flattenDeep(computedDirectives.shadow), { dynamicVars, staticVars }))
         }
 
         if (!stacked[selector]) {
@@ -403,14 +416,23 @@ export const init = (extraRuleset) => {
         const dynamicSlots = Object.entries(computedDirectives).filter(([k, v]) => k.startsWith('--'))
 
         dynamicSlots.forEach(([k, v]) => {
-          const [type, value] = v.split('|').map(x => x.trim()) // woah, Extreme!
+          const [type, ...value] = v.split('|').map(x => x.trim()) // woah, Extreme!
           switch (type) {
             case 'color': {
-              const color = findColor(value, dynamicVars, staticVars)
+              const color = findColor(value[0], { dynamicVars, staticVars })
               dynamicVars[k] = color
               if (component.name === 'Root') {
                 staticVars[k.substring(2)] = color
               }
+              break
+            }
+            case 'shadow': {
+              const shadow = value
+              dynamicVars[k] = shadow
+              if (component.name === 'Root') {
+                staticVars[k.substring(2)] = shadow
+              }
+              break
             }
           }
         })
