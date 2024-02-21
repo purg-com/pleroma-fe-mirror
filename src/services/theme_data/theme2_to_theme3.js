@@ -199,6 +199,12 @@ export const convertTheme2To3 = (data) => {
         shadow: originalShadow
       }
       newRules.push(rule)
+      if (key === 'avatarStatus') {
+        newRules.push({ ...rule, parent: { component: 'Notification' } })
+      }
+      if (key === 'buttonPressed') {
+        newRules.push({ ...rule, state: ['toggled'] })
+      }
     })
     return newRules
   }
