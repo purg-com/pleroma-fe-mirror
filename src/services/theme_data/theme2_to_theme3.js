@@ -30,7 +30,7 @@ export const shadowsKeys = new Set([
 export const radiiKeys = new Set([
   'btn',
   'input',
-  // 'checkbox',
+  'checkbox',
   'panel',
   'avatar',
   'avatarAlt',
@@ -122,10 +122,10 @@ export const convertTheme2To3 = (data) => {
         case 'input':
           rule.component = 'Input'
           break
-        // TODO: missing feature?
-        // case 'checkbox':
-        //   rule.component = 'Input'
-        //   break
+        case 'checkbox':
+          rule.component = 'Input'
+          rule.variant = 'checkbox'
+          break
         case 'panel':
           rule.component = 'Panel'
           break

@@ -43,7 +43,7 @@
           <input
             v-if="poll.multiple"
             type="checkbox"
-            class="input poll-checkbox"
+            class="input -checkbox poll-checkbox"
             :disabled="loading"
             :value="index"
           >
@@ -52,7 +52,7 @@
             type="radio"
             :disabled="loading"
             :value="index"
-            class="input"
+            class="input -radio"
           >
           <label class="option-vote">
             <RichContent

@@ -12,7 +12,7 @@
       @change="$emit('update:modelValue', $event.target.checked)"
     >
     <i
-      class="input checkbox-indicator"
+      class="input -checkbox checkbox-indicator"
       :aria-hidden="true"
       @transitionend.capture="onTransitionEnd"
     />
@@ -82,8 +82,7 @@ export default {
     transition: color 200ms;
     width: 1.1em;
     height: 1.1em;
-    border-radius: $fallback--checkboxRadius;
-    border-radius: var(--checkboxRadius, $fallback--checkboxRadius);
+    border-radius: var(--roundness);
     box-shadow: var(--shadow);
     background-color: var(--background);
     vertical-align: top;

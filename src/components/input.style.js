@@ -12,6 +12,10 @@ const hoverGlow = {
 export default {
   name: 'Input',
   selector: '.input',
+  variant: {
+    checkbox: '.-checkbox',
+    radio: '.-radio'
+  },
   states: {
     disabled: ':disabled',
     hover: ':hover:not(:disabled)',
@@ -21,6 +25,12 @@ export default {
     'Text'
   ],
   defaultRules: [
+    {
+      variant: 'checkbox',
+      directives: {
+        roundness: 1
+      }
+    },
     {
       directives: {
         background: '--fg, -5',

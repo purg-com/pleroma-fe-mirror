@@ -14,7 +14,7 @@
       v-if="typeof fallback !== 'undefined'"
       :id="name + '-o'"
       :aria-labelledby="name + '-label'"
-      class="input opt visible-for-screenreader-only"
+      class="input -checkbox opt visible-for-screenreader-only"
       type="checkbox"
       :checked="present"
       @change="$emit('update:modelValue', !present ? fallback : undefined)"

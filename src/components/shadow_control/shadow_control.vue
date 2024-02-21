@@ -129,7 +129,7 @@
           v-model="selected.inset"
           :disabled="!present"
           name="inset"
-          class="input input-inset visible-for-screenreader-only"
+          class="input -checkbox input-inset visible-for-screenreader-only"
           type="checkbox"
         >
         <label
