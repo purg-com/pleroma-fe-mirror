@@ -36,6 +36,7 @@ export const defaultState = {
   hideMutedThreads: undefined, // instance default
   hideWordFilteredPosts: undefined, // instance default
   muteBotStatuses: undefined, // instance default
+  muteSensitiveStatuses: undefined, // instance default
   collapseMessageWithSubject: undefined, // instance default
   padEmoji: true,
   hideAttachments: false,
