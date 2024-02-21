@@ -5,7 +5,8 @@ export default {
     'Text',
     'Icon',
     'Link',
-    'Border'
+    'Border',
+    'ButtonUnstyled'
   ],
   variants: {
     normal: '.neutral',

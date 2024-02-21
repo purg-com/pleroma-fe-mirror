@@ -16,7 +16,8 @@ export default {
     'Alert',
     'UserCard',
     'Chat',
-    'Attachment'
+    'Attachment',
+    'Tab'
   ],
   defaultRules: [
     {

@@ -55,7 +55,7 @@ export const extendedBasePrefixes = [
 
   'panel',
   'topBar',
-  // 'tab', // TODO: not implemented yet
+  'tab',
   'btn',
   'input',
   'selectedMenu',
@@ -122,6 +122,9 @@ export const convertTheme2To3 = (data) => {
         case 'btn':
           rule.component = 'Button'
           break
+        case 'tab':
+          rule.component = 'Tab'
+          break
         case 'input':
           rule.component = 'Input'
           break
@@ -155,6 +158,7 @@ export const convertTheme2To3 = (data) => {
       newRules.push(rule)
       if (rule.component === 'Button') {
         newRules.push({ ...rule, component: 'ScrollbarElement' })
+        newRules.push({ ...rule, component: 'Tab' })
       }
     })
     return newRules
@@ -215,6 +219,7 @@ export const convertTheme2To3 = (data) => {
 
       if (rule.component === 'Button') {
         newRules.push({ ...rule, component: 'ScrollbarElement' })
+        newRules.push({ ...rule, component: 'Tab' })
       }
     })
     return newRules
@@ -351,8 +356,7 @@ export const convertTheme2To3 = (data) => {
       }
 
       if (newRule.component === 'Button') {
-        console.log([newRule, { ...newRule, component: 'ScrollbarElement' }])
-        return [newRule, { ...newRule, component: 'ScrollbarElement' }]
+        return [newRule, { ...newRule, component: 'Tab' }, { ...newRule, component: 'ScrollbarElement' }]
       } else {
         return [newRule]
       }

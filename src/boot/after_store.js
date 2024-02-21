@@ -359,7 +359,6 @@ const afterStoreSetup = async ({ store, i18n }) => {
   const { theme } = store.state.instance
   const customThemePresent = customThemeSource || customTheme
 
-  console.log({ ...customThemeSource }, { ...customTheme })
   if (customThemePresent) {
     if (customThemeSource && customThemeSource.themeEngineVersion === CURRENT_VERSION) {
       applyTheme(customThemeSource)

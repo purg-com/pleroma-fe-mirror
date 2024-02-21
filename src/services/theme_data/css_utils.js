@@ -9,7 +9,6 @@ export const parseCssShadow = (text) => {
 
   const [x, y, blur = 0, spread = 0] = dimensions.split(/ /).filter(x => x).map(x => x.trim())
   const isInset = inset?.trim() === 'inset'
-  console.log(color.trim())
   const colorString = color.split(/ /).filter(x => x).map(x => x.trim())[0]
 
   return {

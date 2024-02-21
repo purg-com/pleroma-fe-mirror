@@ -25,8 +25,7 @@
         content: "";
         flex: 1 1 auto;
         border-bottom: 1px solid;
-        border-bottom-color: $fallback--border;
-        border-bottom-color: var(--border, $fallback--border);
+        border-bottom-color: var(--border);
       }
 
       .tab-wrapper {
@@ -37,8 +36,7 @@
           right: 0;
           bottom: 0;
           border-bottom: 1px solid;
-          border-bottom-color: $fallback--border;
-          border-bottom-color: var(--border, $fallback--border);
+          border-bottom-color: var(--border);
         }
       }
 
@@ -173,6 +171,14 @@
   }
 
   .tab {
+    user-select: none;
+    color: var(--text);
+    border: none;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    font-size: 1em;
+    font-family: var(--interfaceFont, sans-serif);
+    border-radius: var(--roundness);
     position: relative;
     white-space: nowrap;
     padding: 6px 1em;

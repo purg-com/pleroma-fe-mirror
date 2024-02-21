@@ -3,8 +3,6 @@ export default {
   selector: '.button-unstyled',
   states: {
     disabled: ':disabled',
-    toggled: '.toggled',
-    pressed: ':active',
     hover: ':hover:not(:disabled)',
     focused: ':focus-within'
   },
