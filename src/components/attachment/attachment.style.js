@@ -3,7 +3,8 @@ export default {
   selector: '.Attachment',
   validInnerComponents: [
     'Border',
-    'ButtonUnstyled'
+    'ButtonUnstyled',
+    'Input'
   ],
   defaultRules: [
     {

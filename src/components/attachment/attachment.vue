@@ -38,7 +38,7 @@
         v-if="edit"
         v-model="localDescription"
         type="text"
-        class="description-field"
+        class="input description-field"
         :placeholder="$t('post_status.media_description')"
         @keydown.enter.prevent=""
       >
@@ -253,7 +253,7 @@
         v-if="edit"
         v-model="localDescription"
         type="text"
-        class="description-field"
+        class="input description-field"
         :placeholder="$t('post_status.media_description')"
         @keydown.enter.prevent=""
       >
