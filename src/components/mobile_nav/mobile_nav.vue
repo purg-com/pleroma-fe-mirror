@@ -44,12 +44,12 @@
     </nav>
     <aside
       v-if="currentUser"
-      class="panel mobile-notifications-drawer"
+      class="mobile-notifications-drawer mobile-drawer"
       :class="{ '-closed': !notificationsOpen }"
       @touchstart.stop="notificationsTouchStart"
       @touchmove.stop="notificationsTouchMove"
     >
-      <div class="mobile-notifications-header">
+      <div class="panel-heading mobile-notifications-header">
         <span class="title">
           {{ $t('notifications.notifications') }}
           <span

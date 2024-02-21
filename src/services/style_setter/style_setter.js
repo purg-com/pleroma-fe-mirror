@@ -6,12 +6,12 @@ import { getCssRules } from '../theme_data/css_utils.js'
 import { defaultState } from '../../modules/config.js'
 
 export const applyTheme = (input) => {
-  const { version, theme: inputTheme } = input
+  console.log({ ...input })
   let extraRules
   let fonts
-  if (version === 2) {
+  if (input.themeType !== 1) {
     const t0 = performance.now()
-    const { rules, theme } = generatePreset(inputTheme)
+    const { rules, theme } = generatePreset(input)
     fonts = rules.fonts
     const t1 = performance.now()
     console.log('Themes 2 initialization took ' + (t1 - t0) + 'ms')
@@ -127,7 +127,7 @@ export const getPreset = (val) => {
     .then((themes) => themes[val] ? themes[val] : themes['pleroma-dark'])
     .then((theme) => {
       const isV1 = Array.isArray(theme)
-      const data = isV1 ? {} : theme.theme
+      const data = isV1 ? { themeType: 1 } : theme.theme
 
       if (isV1) {
         const bg = hex2rgb(theme[1])
@@ -143,7 +143,7 @@ export const getPreset = (val) => {
         data.colors = { bg, fg, text, link, cRed, cBlue, cGreen, cOrange }
       }
 
-      return { theme: data, source: theme.source, version: isV1 ? 1 : 2 }
+      return { theme: data, source: theme.source }
     })
 }
 

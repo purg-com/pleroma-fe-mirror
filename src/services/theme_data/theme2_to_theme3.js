@@ -210,6 +210,9 @@ export const convertTheme2To3 = (data) => {
         shadow: originalShadow
       }
       newRules.push(rule)
+      if (key === 'topBar') {
+        newRules.push({ ...rule, component: 'PanelHeader', parent: { component: 'MobileDrawer' } })
+      }
       if (key === 'avatarStatus') {
         newRules.push({ ...rule, parent: { component: 'Notification' } })
       }
@@ -355,8 +358,12 @@ export const convertTheme2To3 = (data) => {
         }
       }
 
-      if (newRule.component === 'Button') {
+      if (newRule.component === 'Panel') {
+        return [newRule, { ...newRule, component: 'MobileDrawer' }]
+      } else if (newRule.component === 'Button') {
         return [newRule, { ...newRule, component: 'Tab' }, { ...newRule, component: 'ScrollbarElement' }]
+      } else if (newRule.component === 'TopBar') {
+        return [newRule, { ...newRule, parent: { component: 'MobileDrawer' }, component: 'PanelHeader' }]
       } else {
         return [newRule]
       }

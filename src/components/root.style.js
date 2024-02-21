@@ -7,6 +7,7 @@ export default {
     'Popover',
     'TopBar',
     'Scrollbar',
-    'ScrollbarElement'
+    'ScrollbarElement',
+    'MobileDrawer'
   ]
 }
