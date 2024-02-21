@@ -34,6 +34,11 @@
 .notification {
   box-sizing: border-box;
 
+  /* TODO cleanup this */
+  .Status {
+    flex: 1;
+  }
+
   &:hover .animated.Avatar {
     canvas {
       display: none;
@@ -54,6 +59,20 @@
     flex-wrap: nowrap;
     padding: 0.6em;
     min-width: 0;
+
+    .RichContent {
+      a {
+        --link: var(--linkFaint);
+      }
+
+      .greentext {
+        --funtextGreentext: var(--funtextGreentextFaint);
+      }
+
+      .cyantext {
+        --funtextCyantext: var(--funtextCyantextFaint);
+      }
+    }
 
     .avatar-container {
       width: 32px;
@@ -87,11 +106,6 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-  }
-
-  /* TODO cleanup this */
-  .Status {
-    flex: 1;
   }
 
   time {
