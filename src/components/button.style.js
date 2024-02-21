@@ -79,14 +79,14 @@ export default {
     {
       state: ['toggled'],
       directives: {
-        background: '--accent,-24.2',
+        background: '--inheritedBackground,-24.2',
         shadow: [buttonOuterShadow, ...inputInsetFakeBorders]
       }
     },
     {
       state: ['toggled', 'hover'],
       directives: {
-        background: '--accent,-24.2',
+        background: '--inheritedBackground,-24.2',
         shadow: [hoverGlow, ...inputInsetFakeBorders]
       }
     },
