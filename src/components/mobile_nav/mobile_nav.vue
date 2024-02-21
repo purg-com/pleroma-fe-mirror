@@ -172,13 +172,13 @@
     position: fixed;
     top: 0;
     left: 0;
-    box-shadow: 1px 1px 4px rgb(0 0 0 / 60%);
-    box-shadow: var(--panelShadow);
+    box-shadow: var(--shadow);
     transition-property: transform;
     transition-duration: 0.25s;
     transform: translateX(0);
     z-index: var(--ZI_navbar);
     -webkit-overflow-scrolling: touch;
+    background: var(--background);
 
     &.-closed {
       transform: translateX(100%);
