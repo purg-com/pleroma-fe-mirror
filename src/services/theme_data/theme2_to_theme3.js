@@ -193,7 +193,6 @@ export const convertTheme2To3 = (data) => {
         newRules.push({ ...rule, component: 'Tab' })
       }
     })
-    console.log(newRules)
     return newRules
   }
 
@@ -424,12 +423,12 @@ export const convertTheme2To3 = (data) => {
         case 'alert': {
           const hasPanel = variantArray.find(x => x === 'Panel')
           if (hasPanel) {
-            rule.parent = { component: 'PanelHeader' }
+            newRule.parent = { component: 'PanelHeader' }
             variantArray = variantArray.filter(x => x !== 'Panel')
           }
           const hasTop = variantArray.find(x => x === 'Top') // TopBar
           if (hasTop) {
-            rule.parent = { component: 'TopBar' }
+            newRule.parent = { component: 'TopBar' }
             variantArray = variantArray.filter(x => x !== 'Top' && x !== 'Bar')
           }
           break

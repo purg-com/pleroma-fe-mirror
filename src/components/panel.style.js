@@ -24,6 +24,7 @@ export default {
       directives: {
         background: '--bg',
         roundness: 3,
+        blur: '5px',
         shadow: [{
           x: 1,
           y: 1,

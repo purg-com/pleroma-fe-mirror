@@ -108,10 +108,21 @@ export const getCssRules = (rules) => rules.map(rule => {
             ].filter(x => x).join(';\n')
           }
           const color = getCssColorString(rule.dynamicVars.background, rule.directives.opacity)
-          return [
-            rule.directives.backgroundNoCssColor !== 'yes' ? ('background-color: ' + color) : '',
-            '  --background: ' + color
-          ].filter(x => x).join(';\n')
+          const cssDirectives = ['--background: ' + color]
+          if (rule.directives.backgroundNoCssColor !== 'yes') {
+            cssDirectives.push('background-color: ' + color)
+          }
+          return cssDirectives.filter(x => x).join(';\n')
+        }
+        case 'blur': {
+          const cssDirectives = []
+          if (rule.directives.opacity < 1) {
+            cssDirectives.push(`--backdrop-filter: blur(${v}) `)
+            if (rule.directives.backgroundNoCssColor !== 'yes') {
+              cssDirectives.push(`backdrop-filter: blur(${v}) `)
+            }
+          }
+          return cssDirectives.join(';\n')
         }
         case 'textColor': {
           if (rule.directives.textNoCssColor === 'yes') { return '' }
