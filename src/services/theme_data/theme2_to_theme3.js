@@ -1,3 +1,4 @@
+import { convert } from 'chromatism'
 import allKeys from './theme2_keys'
 
 // keys that are meant to be used globally, i.e. what's the rest of the theme is based upon.
@@ -125,7 +126,8 @@ export const convertTheme2To3 = (data) => {
   data.colors.link = data.colors.link || data.colors.accent
   const generateRoot = () => {
     const directives = {}
-    basePaletteKeys.forEach(key => { directives['--' + key] = 'color | ' + data.colors[key] })
+    console.log(data.colors)
+    basePaletteKeys.forEach(key => { directives['--' + key] = 'color | ' + convert(data.colors[key]).hex })
     return {
       component: 'Root',
       directives
