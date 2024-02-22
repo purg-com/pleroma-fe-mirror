@@ -8,12 +8,14 @@ export default {
     'TopBar',
     'Scrollbar',
     'ScrollbarElement',
-    'MobileDrawer'
+    'MobileDrawer',
+    'Button' // mobile post button
   ],
   defaultRules: [
     {
       directives: {
-        '--font': 'generic | sans-serif'
+        '--font': 'generic | sans-serif',
+        '--monoFont': 'generic | monospace'
       }
     }
   ]

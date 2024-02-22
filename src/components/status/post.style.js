@@ -1,6 +1,9 @@
 export default {
   name: 'Post',
   selector: '.Status',
+  states: {
+    selected: '.-focused'
+  },
   validInnerComponents: [
     'Text',
     'Link',
@@ -14,5 +17,19 @@ export default {
     'Attachment',
     'PollGraph'
   ],
-  defaultRules: []
+  defaultRules: [
+    {
+      directives: {
+        background: '--bg',
+        opacity: 0
+      }
+    },
+    {
+      state: ['selected'],
+      directives: {
+        background: '--inheritedBackground, 10',
+        opacity: 1
+      }
+    }
+  ]
 }
