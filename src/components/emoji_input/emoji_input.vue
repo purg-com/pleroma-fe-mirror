@@ -158,7 +158,7 @@
   }
 
   .hidden-overlay {
-    opacity: 1;
+    opacity: 0;
     pointer-events: none;
     position: absolute;
     top: 0;
