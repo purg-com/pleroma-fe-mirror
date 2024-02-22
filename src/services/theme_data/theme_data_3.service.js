@@ -411,6 +411,13 @@ export const init = (extraRuleset, ultimateBackgroundColor) => {
               }
               break
             }
+            case 'generic': {
+              dynamicVars[k] = value
+              if (component.name === 'Root') {
+                staticVars[k.substring(2)] = value
+              }
+              break
+            }
           }
         })
 
@@ -454,9 +461,9 @@ export const init = (extraRuleset, ultimateBackgroundColor) => {
   }
 
   processInnerComponent(components.Root, eagerRules)
-  console.log('TOTAL COMBOS: ' + counter)
+  console.debug('Eager combinations processed:' + counter)
   const lazyExec = Promise.all(promises).then(() => {
-    console.log('TOTAL COMBOS: ' + counter)
+    console.debug('Total combinations processed: ' + counter)
   }).then(() => lazyRules)
 
   return {

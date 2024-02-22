@@ -25,12 +25,11 @@
 
 .mfa-backup-codes {
   .warning {
-    color: $fallback--cOrange;
-    color: var(--cOrange, $fallback--cOrange);
+    color: var(--cOrange);
   }
 
   .backup-codes {
-    font-family: var(--postCodeFont, monospace);
+    font-family: var(--monoFont);
   }
 }
 </style>

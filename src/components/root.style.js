@@ -9,5 +9,12 @@ export default {
     'Scrollbar',
     'ScrollbarElement',
     'MobileDrawer'
+  ],
+  defaultRules: [
+    {
+      directives: {
+        '--font': 'generic | sans-serif'
+      }
+    }
   ]
 }

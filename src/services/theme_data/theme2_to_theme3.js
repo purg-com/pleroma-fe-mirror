@@ -14,6 +14,13 @@ export const basePaletteKeys = new Set([
   'cOrange'
 ])
 
+export const fontsKeys = new Set([
+  'interface',
+  'input',
+  'post',
+  'postCode'
+])
+
 export const opacityKeys = new Set([
   'alert',
   'alertPopup',
@@ -249,6 +256,40 @@ export const convertTheme2To3 = (data) => {
     return newRules
   }
 
+  const convertFonts = () => {
+    const newRules = []
+    Object.keys(data.fonts).forEach(key => {
+      if (!fontsKeys.has(key)) return
+      const originalFont = data.fonts[key].family
+      const rule = {}
+
+      switch (key) {
+        case 'interface':
+        case 'postCode':
+          rule.component = 'Root'
+          break
+        case 'input':
+          rule.component = 'Input'
+          break
+        case 'post':
+          rule.component = 'RichContent'
+          break
+      }
+      switch (key) {
+        case 'interface':
+        case 'input':
+        case 'post':
+          rule.directives = { '--font': 'generic | ' + originalFont }
+          break
+        case 'postCode':
+          rule.directives = { '--monoFont': 'generic | ' + originalFont }
+          newRules.push({ ...rule, component: 'RichContent' })
+          break
+      }
+      newRules.push(rule)
+    })
+    return newRules
+  }
   const convertShadows = () => {
     const newRules = []
     Object.keys(data.shadows).forEach(key => {
@@ -457,5 +498,5 @@ export const convertTheme2To3 = (data) => {
 
   const flatExtRules = extendedRules.filter(x => x).reduce((acc, x) => [...acc, ...x], []).filter(x => x).reduce((acc, x) => [...acc, ...x], [])
 
-  return [generateRoot(), ...convertShadows(), ...convertRadii(), ...convertOpacity(), ...flatExtRules]
+  return [generateRoot(), ...convertShadows(), ...convertRadii(), ...convertOpacity(), ...convertFonts(), ...flatExtRules]
 }

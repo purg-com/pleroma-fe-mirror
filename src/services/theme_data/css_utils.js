@@ -1,6 +1,6 @@
 import { convert } from 'chromatism'
 
-import { rgba2css } from '../color_convert/color_convert.js'
+import { hex2rgb, rgba2css } from '../color_convert/color_convert.js'
 
 // This changes what backgrounds are used to "stacked" solid colors so you can see
 // what theme engine "thinks" is actual background color is for purposes of text color
@@ -78,72 +78,79 @@ export const getCssRules = (rules) => rules.map(rule => {
     return '  ' + k + ': ' + v
   }).join(';\n')
 
-  let directives
-  if (rule.component !== 'Root') {
-    directives = Object.entries(rule.directives).map(([k, v]) => {
-      switch (k) {
-        case 'roundness': {
-          return '  ' + [
-            '--roundness: ' + v + 'px'
-          ].join(';\n  ')
-        }
-        case 'shadow': {
-          return '  ' + [
-            '--shadow: ' + getCssShadow(rule.dynamicVars.shadow),
-            '--shadowFilter: ' + getCssShadowFilter(rule.dynamicVars.shadow),
-            '--shadowInset: ' + getCssShadow(rule.dynamicVars.shadow, true)
-          ].join(';\n  ')
-        }
-        case 'background': {
-          if (DEBUG) {
-            return `
-              --background: ${getCssColorString(rule.dynamicVars.stacked)};
-              background-color: ${getCssColorString(rule.dynamicVars.stacked)};
-            `
-          }
-          if (v === 'transparent') {
-            return [
-              rule.directives.backgroundNoCssColor !== 'yes' ? ('background-color: ' + v) : '',
-              '  --background: ' + v
-            ].filter(x => x).join(';\n')
-          }
-          const color = getCssColorString(rule.dynamicVars.background, rule.directives.opacity)
-          const cssDirectives = ['--background: ' + color]
-          if (rule.directives.backgroundNoCssColor !== 'yes') {
-            cssDirectives.push('background-color: ' + color)
-          }
-          return cssDirectives.filter(x => x).join(';\n')
-        }
-        case 'blur': {
-          const cssDirectives = []
-          if (rule.directives.opacity < 1) {
-            cssDirectives.push(`--backdrop-filter: blur(${v}) `)
-            if (rule.directives.backgroundNoCssColor !== 'yes') {
-              cssDirectives.push(`backdrop-filter: blur(${v}) `)
-            }
-          }
-          return cssDirectives.join(';\n')
-        }
-        case 'textColor': {
-          if (rule.directives.textNoCssColor === 'yes') { return '' }
-          return 'color: ' + v
-        }
-        default:
-          if (k.startsWith('--')) {
-            const [type] = v.split('|').map(x => x.trim()) // woah, Extreme!
-            switch (type) {
-              case 'color':
-                return k + ': ' + rgba2css(rule.dynamicVars[k])
-              default:
-                return ''
-            }
-          }
-          return ''
+  const directives = Object.entries(rule.directives).map(([k, v]) => {
+    switch (k) {
+      case 'roundness': {
+        return '  ' + [
+          '--roundness: ' + v + 'px'
+        ].join(';\n  ')
       }
-    }).filter(x => x).map(x => '  ' + x).join(';\n')
-  } else {
-    directives = {}
-  }
+      case 'shadow': {
+        return '  ' + [
+          '--shadow: ' + getCssShadow(rule.dynamicVars.shadow),
+          '--shadowFilter: ' + getCssShadowFilter(rule.dynamicVars.shadow),
+          '--shadowInset: ' + getCssShadow(rule.dynamicVars.shadow, true)
+        ].join(';\n  ')
+      }
+      case 'background': {
+        if (DEBUG) {
+          return `
+            --background: ${getCssColorString(rule.dynamicVars.stacked)};
+            background-color: ${getCssColorString(rule.dynamicVars.stacked)};
+          `
+        }
+        if (v === 'transparent') {
+          if (rule.component === 'Root') return []
+          return [
+            rule.directives.backgroundNoCssColor !== 'yes' ? ('background-color: ' + v) : '',
+            '  --background: ' + v
+          ].filter(x => x).join(';\n')
+        }
+        const color = getCssColorString(rule.dynamicVars.background, rule.directives.opacity)
+        const cssDirectives = ['--background: ' + color]
+        if (rule.directives.backgroundNoCssColor !== 'yes') {
+          cssDirectives.push('background-color: ' + color)
+        }
+        return cssDirectives.filter(x => x).join(';\n')
+      }
+      case 'blur': {
+        const cssDirectives = []
+        if (rule.directives.opacity < 1) {
+          cssDirectives.push(`--backdrop-filter: blur(${v}) `)
+          if (rule.directives.backgroundNoCssColor !== 'yes') {
+            cssDirectives.push(`backdrop-filter: blur(${v}) `)
+          }
+        }
+        return cssDirectives.join(';\n')
+      }
+      case 'font': {
+        return 'font-family: ' + v
+      }
+      case 'textColor': {
+        if (rule.directives.textNoCssColor === 'yes') { return '' }
+        return 'color: ' + v
+      }
+      default:
+        if (k.startsWith('--')) {
+          const [type, value] = v.split('|').map(x => x.trim()) // woah, Extreme!
+          switch (type) {
+            case 'color': {
+              const color = rule.dynamicVars[k]
+              if (typeof color === 'string') {
+                return k + ': ' + rgba2css(hex2rgb(color))
+              } else {
+                return k + ': ' + rgba2css(color)
+              }
+            }
+            case 'generic':
+              return k + ': ' + value
+            default:
+              return ''
+          }
+        }
+        return ''
+    }
+  }).filter(x => x).map(x => '  ' + x).join(';\n')
 
   return [
     header,

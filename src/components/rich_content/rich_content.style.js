@@ -9,6 +9,8 @@ export default {
   defaultRules: [
     {
       directives: {
+        '--font': 'generic | inherit',
+        '--monoFont': 'generic | monospace',
         textNoCssColor: 'yes'
       }
     }

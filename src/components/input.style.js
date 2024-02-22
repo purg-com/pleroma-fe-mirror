@@ -37,6 +37,7 @@ export default {
     },
     {
       directives: {
+        '--font': 'generic | inherit',
         background: '--fg, -5',
         roundness: 3,
         shadow: [{

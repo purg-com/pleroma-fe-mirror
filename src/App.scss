@@ -22,7 +22,7 @@ html {
 
 body {
   font-family: sans-serif;
-  font-family: var(--interfaceFont, sans-serif);
+  font-family: var(--font);
   margin: 0;
   color: var(--text);
   -webkit-font-smoothing: antialiased;
@@ -130,12 +130,7 @@ i[class*="icon-"],
 
 nav {
   z-index: var(--ZI_navbar);
-  background-color: $fallback--fg;
-  background-color: var(--topBar, $fallback--fg);
-  color: $fallback--faint;
-  color: var(--faint, $fallback--faint);
-  box-shadow: 0 0 4px rgb(0 0 0 / 60%);
-  box-shadow: var(--topBarShadow);
+  box-shadow: var(--shadow);
   box-sizing: border-box;
   height: var(--navbar-height);
   position: fixed;
@@ -359,7 +354,7 @@ nav {
   box-shadow: var(--shadow);
   font-size: 1em;
   font-family: sans-serif;
-  font-family: var(--interfaceFont, sans-serif);
+  font-family: var(--font);
 
   &::-moz-focus-inner {
     border: none;
@@ -409,11 +404,8 @@ nav {
   color: inherit;
 
   &.-link {
-    color: var(--link);
-  }
-
-  &.-fullwidth {
-    width: 100%;
+    /* stylelint-disable-next-line declaration-no-important */
+    color: var(--link) !important;
   }
 }
 
@@ -437,8 +429,7 @@ textarea {
   border: none;
   border-radius: var(--roundness);
   box-shadow: var(--shadow);
-  font-family: sans-serif;
-  font-family: var(--inputFont, sans-serif);
+  font-family: var(--font);
   font-size: 1em;
   margin: 0;
   box-sizing: border-box;
@@ -466,9 +457,8 @@ textarea {
     display: none;
 
     &:checked + label::before {
-      box-shadow: 0 0 2px black inset, 0 0 0 4px $fallback--fg inset;
-      box-shadow: var(--inputShadow), 0 0 0 4px var(--fg, $fallback--fg) inset;
-      background-color: var(--accent, $fallback--link);
+      box-shadow: var(--shadow);
+      background-color: var(--background);
     }
 
     &:disabled {
@@ -523,11 +513,8 @@ textarea {
       width: 1.1em;
       height: 1.1em;
       border-radius: var(--roundness);
-      box-shadow: 0 0 2px black inset;
-      box-shadow: var(--inputShadow);
+      box-shadow: var(--shadow);
       margin-right: 0.5em;
-      background-color: $fallback--fg;
-      background-color: var(--input, $fallback--fg);
       vertical-align: top;
       text-align: center;
       line-height: 1.1;
@@ -551,7 +538,7 @@ textarea {
 
 option {
   color: var(--text);
-  background-color: var(--bg, $fallback--bg);
+  background-color: var(--background);
 }
 
 .hide-number-spinner {
@@ -667,8 +654,7 @@ option {
 
 .visibility-notice {
   padding: 0.5em;
-  border: 1px solid $fallback--faint;
-  border: 1px solid var(--faint, $fallback--faint);
+  border: 1px solid var(--textFaint);
   border-radius: var(--roundness);
 }
 

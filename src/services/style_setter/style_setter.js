@@ -6,25 +6,22 @@ import { getCssRules } from '../theme_data/css_utils.js'
 import { defaultState } from '../../modules/config.js'
 
 export const applyTheme = (input) => {
-  console.log({ ...input })
   let extraRules
-  let fonts
   if (input.themeType !== 1) {
     const t0 = performance.now()
-    const { rules, theme } = generatePreset(input)
-    fonts = rules.fonts
+    const { theme } = generatePreset(input)
     const t1 = performance.now()
-    console.log('Themes 2 initialization took ' + (t1 - t0) + 'ms')
+    console.debug('Themes 2 initialization took ' + (t1 - t0) + 'ms')
     extraRules = convertTheme2To3(theme)
   } else {
-    console.log(input)
+    console.debug(input)
     extraRules = convertTheme2To3(input)
   }
 
   const t1 = performance.now()
   const themes3 = init(extraRules, '#FFFFFF')
   const t2 = performance.now()
-  console.log('Themes 3 initialization took ' + (t2 - t1) + 'ms')
+  console.debug('Themes 3 (eager) initialization took ' + (t2 - t1) + 'ms')
   const head = document.head
   const body = document.body
   body.classList.add('hidden')
@@ -33,8 +30,6 @@ export const applyTheme = (input) => {
   head.appendChild(styleEl)
   const styleSheet = styleEl.sheet
 
-  styleSheet.toString()
-  styleSheet.insertRule(`:root { ${fonts} }`, 'index-max')
   getCssRules(themes3.eager, themes3.staticVars).forEach(rule => {
     // Hack to support multiple selectors on same component
     if (rule.match(/::-webkit-scrollbar-button/)) {
@@ -58,7 +53,7 @@ export const applyTheme = (input) => {
       styleSheet.insertRule(rule, 'index-max')
     })
     const t3 = performance.now()
-    console.log('Themes 3 finalization took ' + (t3 - t2) + 'ms')
+    console.debug('Themes 3 finalization (lazy) took ' + (t3 - t2) + 'ms')
   })
 }
 
