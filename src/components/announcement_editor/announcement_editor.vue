@@ -13,8 +13,8 @@
       <label for="announcement-start-time">{{ $t('announcements.start_time_prompt') }}</label>
       <input
         id="announcement-start-time"
-        class="input"
         v-model="announcement.startsAt"
+        class="input"
         :type="announcement.allDay ? 'date' : 'datetime-local'"
         :disabled="disabled"
       >
@@ -23,8 +23,8 @@
       <label for="announcement-end-time">{{ $t('announcements.end_time_prompt') }}</label>
       <input
         id="announcement-end-time"
-        class="input"
         v-model="announcement.endsAt"
+        class="input"
         :type="announcement.allDay ? 'date' : 'datetime-local'"
         :disabled="disabled"
       >

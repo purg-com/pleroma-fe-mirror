@@ -24,7 +24,10 @@
         </li>
       </ul>
       <div class="setting-list relative">
-        <PanelLoading class="overlay" v-if="working"/>
+        <PanelLoading
+          v-if="working"
+          class="overlay"
+        />
         <h3>{{ $t('admin_dash.frontend.available_frontends') }}</h3>
         <ul class="cards-list">
           <li

@@ -8,9 +8,9 @@
         />
       </div>
       <input
-        class="input"
         ref="search"
         v-model="query"
+        class="input"
         :placeholder="$t('lists.search')"
         @input="onInput"
       >

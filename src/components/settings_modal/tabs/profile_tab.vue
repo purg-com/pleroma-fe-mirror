@@ -193,8 +193,8 @@
       <div>
         <input
           type="file"
-          @change="uploadFile('banner', $event)"
           class="input"
+          @change="uploadFile('banner', $event)"
         >
       </div>
       <FAIcon
@@ -236,8 +236,8 @@
       <div>
         <input
           type="file"
-          @change="uploadFile('background', $event)"
           class="input"
+          @change="uploadFile('background', $event)"
         >
       </div>
       <FAIcon

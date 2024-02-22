@@ -4,7 +4,7 @@
       v-for="item in pinnedList"
       :key="item.name"
       class="button-unstyled pinned-item"
-      activeClass="toggled"
+      active-class="toggled"
       :to="getRouteTo(item)"
       :title="item.labelRaw || $t(item.label)"
     >

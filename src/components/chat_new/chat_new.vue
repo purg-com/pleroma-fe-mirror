@@ -24,9 +24,9 @@
         />
       </div>
       <input
-        class="input"
         ref="search"
         v-model="query"
+        class="input"
         placeholder="Search people"
         @input="onInput"
       >

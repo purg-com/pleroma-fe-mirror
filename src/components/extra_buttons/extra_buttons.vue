@@ -12,9 +12,9 @@
   >
     <template #content="{close}">
       <div
+        :id="`popup-menu-${randomSeed}`"
         class="dropdown-menu"
         role="menu"
-        :id="`popup-menu-${randomSeed}`"
       >
         <button
           v-if="canMute && !status.thread_muted"

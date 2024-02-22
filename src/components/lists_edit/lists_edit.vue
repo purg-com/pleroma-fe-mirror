@@ -33,10 +33,10 @@
         <label for="list-edit-title">{{ $t('lists.title') }}</label>
         {{ ' ' }}
         <input
-          class="input"
           id="list-edit-title"
           ref="title"
           v-model="titleDraft"
+          class="input"
         >
         <button
           v-if="id"
