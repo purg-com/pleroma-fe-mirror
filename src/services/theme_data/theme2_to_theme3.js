@@ -134,7 +134,7 @@ export const convertTheme2To3 = (data) => {
 
   const convertOpacity = () => {
     const newRules = []
-    Object.keys(data.opacity).forEach(key => {
+    Object.keys(data.opacity || {}).forEach(key => {
       if (!opacityKeys.has(key) || data.opacity[key] === undefined) return null
       const originalOpacity = data.opacity[key]
       const rule = {}
@@ -205,7 +205,7 @@ export const convertTheme2To3 = (data) => {
 
   const convertRadii = () => {
     const newRules = []
-    Object.keys(data.radii).forEach(key => {
+    Object.keys(data.radii || {}).forEach(key => {
       if (!radiiKeys.has(key) || data.radii[key] === undefined) return null
       const originalRadius = data.radii[key]
       const rule = {}
@@ -258,7 +258,7 @@ export const convertTheme2To3 = (data) => {
 
   const convertFonts = () => {
     const newRules = []
-    Object.keys(data.fonts).forEach(key => {
+    Object.keys(data.fonts || {}).forEach(key => {
       if (!fontsKeys.has(key)) return
       const originalFont = data.fonts[key].family
       const rule = {}
@@ -292,7 +292,7 @@ export const convertTheme2To3 = (data) => {
   }
   const convertShadows = () => {
     const newRules = []
-    Object.keys(data.shadows).forEach(key => {
+    Object.keys(data.shadows || {}).forEach(key => {
       if (!shadowsKeys.has(key)) return
       const originalShadow = data.shadows[key]
       const rule = {}
