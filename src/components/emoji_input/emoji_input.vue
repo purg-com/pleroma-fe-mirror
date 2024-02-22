@@ -113,6 +113,7 @@
 @import "../../variables";
 
 .input.emoji-input {
+  padding: 0;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -145,7 +146,6 @@
   textarea {
     flex: 1 0 auto;
     color: inherit;
-    padding: 0;
     // stylint-disable-next-line declaration-no-important
     background: none !important;
     box-shadow: none;
@@ -158,7 +158,7 @@
   }
 
   .hidden-overlay {
-    opacity: 0;
+    opacity: 1;
     pointer-events: none;
     position: absolute;
     top: 0;

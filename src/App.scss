@@ -531,7 +531,7 @@ textarea {
 }
 
 // Textareas should have stock line-height + vertical padding instead of huge line-height
-textarea {
+textarea.input {
   padding: var(--_padding);
   line-height: var(--post-line-height);
 }
