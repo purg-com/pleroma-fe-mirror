@@ -22,7 +22,7 @@ export const applyTheme = (input) => {
   }
 
   const t1 = performance.now()
-  const themes3 = init(extraRules)
+  const themes3 = init(extraRules, '#FFFFFF')
   const t2 = performance.now()
   console.log('Themes 3 initialization took ' + (t2 - t1) + 'ms')
   const head = document.head

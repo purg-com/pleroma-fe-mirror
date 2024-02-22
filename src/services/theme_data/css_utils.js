@@ -2,6 +2,11 @@ import { convert } from 'chromatism'
 
 import { rgba2css } from '../color_convert/color_convert.js'
 
+// This changes what backgrounds are used to "stacked" solid colors so you can see
+// what theme engine "thinks" is actual background color is for purposes of text color
+// generation and for when --stacked variable is used
+const DEBUG = false
+
 export const parseCssShadow = (text) => {
   const dimensions = /(\d[a-z]*\s?){2,4}/.exec(text)?.[0]
   const inset = /inset/.exec(text)?.[0]
@@ -21,7 +26,7 @@ export const parseCssShadow = (text) => {
   }
 }
 
-export const getCssColorString = (color, alpha) => rgba2css({ ...convert(color).rgb, a: alpha })
+export const getCssColorString = (color, alpha = 1) => rgba2css({ ...convert(color).rgb, a: alpha })
 
 export const getCssShadow = (input, usesDropShadow) => {
   if (input.length === 0) {
@@ -90,6 +95,12 @@ export const getCssRules = (rules) => rules.map(rule => {
           ].join(';\n  ')
         }
         case 'background': {
+          if (DEBUG) {
+            return `
+              --background: ${getCssColorString(rule.dynamicVars.stacked)};
+              background-color: ${getCssColorString(rule.dynamicVars.stacked)};
+            `
+          }
           if (v === 'transparent') {
             return [
               rule.directives.backgroundNoCssColor !== 'yes' ? ('background-color: ' + v) : '',

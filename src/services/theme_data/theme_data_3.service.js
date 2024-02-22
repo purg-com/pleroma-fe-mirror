@@ -23,8 +23,6 @@ import {
 } from './iss_utils.js'
 import { parseCssShadow } from './css_utils.js'
 
-const DEBUG = false
-
 // Ensuring the order of components
 const components = {
   Root: null,
@@ -146,7 +144,7 @@ componentsContext.keys().forEach(key => {
 
 const ruleToSelector = genericRuleToSelector(components)
 
-export const init = (extraRuleset) => {
+export const init = (extraRuleset, ultimateBackgroundColor) => {
   const staticVars = {}
   const stacked = {}
   const computed = {}
@@ -338,32 +336,11 @@ export const init = (extraRuleset) => {
         earlyLowerLevelRule.virtualDirectivesRaw = virtualDirectivesRaw
         computed[lowerLevelSelector].virtualDirectives = virtualDirectives
         computed[lowerLevelSelector].virtualDirectivesRaw = virtualDirectivesRaw
-
-        // Debug: lets you see what it think background color should be
-        if (!DEBUG) return
-
-        const directives = {
-          textColor,
-          background: convert(computed[lowerLevelSelector].background).hex,
-          ...inheritedTextOpacity
-        }
-
-        addRule({
-          dynamicVars,
-          selector: cssSelector,
-          virtual: true,
-          component: component.name,
-          parent,
-          ...combination,
-          directives,
-          virtualDirectives,
-          virtualDirectivesRaw
-        })
       } else {
         computed[selector] = computed[selector] || {}
 
         // TODO: DEFAULT TEXT COLOR
-        const lowerLevelStackedBackground = stacked[lowerLevelSelector] || convert('#FF00FF').rgb
+        const lowerLevelStackedBackground = stacked[lowerLevelSelector] || convert(ultimateBackgroundColor).rgb
 
         if (computedDirectives.background) {
           let inheritRule = null
@@ -386,7 +363,7 @@ export const init = (extraRuleset) => {
 
           if (!stacked[selector]) {
             let blend
-            const alpha = computedDirectives.opacity
+            const alpha = computedDirectives.opacity ?? 1
             if (alpha >= 1) {
               blend = rgb
             } else if (alpha <= 0) {
@@ -410,7 +387,7 @@ export const init = (extraRuleset) => {
           computed[selector].background = { ...lowerLevelStackedBackground, a: 0 }
         }
 
-        dynamicVars.stacked = lowerLevelStackedBackground
+        dynamicVars.stacked = stacked[selector]
         dynamicVars.background = computed[selector].background
 
         const dynamicSlots = Object.entries(computedDirectives).filter(([k, v]) => k.startsWith('--'))

@@ -14,6 +14,20 @@ export const basePaletteKeys = new Set([
   'cOrange'
 ])
 
+export const opacityKeys = new Set([
+  'alert',
+  'alertPopup',
+  'bg',
+  'border',
+  'btn',
+  'faint',
+  'input',
+  'panel',
+  'popover',
+  'profileTint',
+  'underlay'
+])
+
 export const shadowsKeys = new Set([
   'panel',
   'topBar',
@@ -109,6 +123,78 @@ export const convertTheme2To3 = (data) => {
       component: 'Root',
       directives
     }
+  }
+
+  const convertOpacity = () => {
+    const newRules = []
+    Object.keys(data.opacity).forEach(key => {
+      if (!opacityKeys.has(key) || data.opacity[key] === undefined) return null
+      const originalOpacity = data.opacity[key]
+      const rule = {}
+
+      switch (key) {
+        case 'alert':
+          rule.component = 'Alert'
+          break
+        case 'alertPopup':
+          rule.component = 'Alert'
+          rule.parent = { component: 'Popover' }
+          break
+        case 'bg':
+          rule.component = 'Panel'
+          break
+        case 'border':
+          rule.component = 'Border'
+          break
+        case 'btn':
+          rule.component = 'Button'
+          break
+        case 'faint':
+          rule.component = 'Text'
+          rule.state = ['faint']
+          break
+        case 'input':
+          rule.component = 'Input'
+          break
+        case 'panel':
+          rule.component = 'PanelHeader'
+          break
+        case 'popover':
+          rule.component = 'Popover'
+          break
+        case 'profileTint':
+          return null
+        case 'underlay':
+          rule.component = 'Underlay'
+          break
+      }
+
+      switch (key) {
+        case 'alert':
+        case 'alertPopup':
+        case 'bg':
+        case 'btn':
+        case 'input':
+        case 'panel':
+        case 'popover':
+        case 'underlay':
+          rule.directives = { opacity: originalOpacity }
+          break
+        case 'faint':
+        case 'border':
+          rule.directives = { textOpacity: originalOpacity }
+          break
+      }
+
+      newRules.push(rule)
+
+      if (rule.component === 'Button') {
+        newRules.push({ ...rule, component: 'ScrollbarElement' })
+        newRules.push({ ...rule, component: 'Tab' })
+      }
+    })
+    console.log(newRules)
+    return newRules
   }
 
   const convertRadii = () => {
@@ -372,5 +458,5 @@ export const convertTheme2To3 = (data) => {
 
   const flatExtRules = extendedRules.filter(x => x).reduce((acc, x) => [...acc, ...x], []).filter(x => x).reduce((acc, x) => [...acc, ...x], [])
 
-  return [generateRoot(), ...convertShadows(), ...convertRadii(), ...flatExtRules]
+  return [generateRoot(), ...convertShadows(), ...convertRadii(), ...convertOpacity(), ...flatExtRules]
 }
