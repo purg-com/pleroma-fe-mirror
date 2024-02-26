@@ -4,6 +4,7 @@ import { init } from '../theme_data/theme_data_3.service.js'
 import { convertTheme2To3 } from '../theme_data/theme2_to_theme3.js'
 import { getCssRules } from '../theme_data/css_utils.js'
 import { defaultState } from '../../modules/config.js'
+import { chunk } from 'lodash'
 
 export const applyTheme = async (input) => {
   let extraRules
@@ -43,15 +44,17 @@ export const applyTheme = async (input) => {
 
   body.classList.remove('hidden')
 
-  setTimeout(() => {
-    themes3.lazy().then(lazyRules => {
-      const t2 = performance.now()
-      getCssRules(lazyRules, themes3.staticVars).forEach(rule => {
-        styleSheet.insertRule(rule, 'index-max')
+  // Optimization - instead of processing all lazy rules in one go, process them in small chunks
+  // so that UI can do other things and be somewhat responsive while less important rules are being
+  // processed
+  chunk(themes3.lazy, 5).forEach(chunk => {
+    setTimeout(() => {
+      Promise.all(chunk.map(x => x())).then(result => {
+        getCssRules(result.filter(x => x), themes3.staticVars).forEach(rule => {
+          styleSheet.insertRule(rule, 'index-max')
+        })
       })
-      const t3 = performance.now()
-      console.debug('Themes 3 finalization (lazy) took ' + (t3 - t2) + 'ms')
-    })
+    }, 50)
   })
 
   return Promise.resolve()

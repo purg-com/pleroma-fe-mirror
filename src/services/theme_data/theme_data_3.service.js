@@ -148,10 +148,7 @@ export const init = (extraRuleset, ultimateBackgroundColor) => {
   const staticVars = {}
   const stacked = {}
   const computed = {}
-
-  const eagerRules = []
-  const lazyRules = []
-  const lazyPromises = []
+  const rules = []
 
   const rulesetUnsorted = [
     ...Object.values(components)
@@ -188,11 +185,7 @@ export const init = (extraRuleset, ultimateBackgroundColor) => {
 
   const virtualComponents = new Set(Object.values(components).filter(c => c.virtual).map(c => c.name))
 
-  const processCombination = (combination, rules) => {
-    const addRule = (rule) => {
-      rules.push(rule)
-    }
-
+  const processCombination = (combination) => {
     const selector = ruleToSelector(combination, true)
     const cssSelector = ruleToSelector(combination)
 
@@ -377,12 +370,15 @@ export const init = (extraRuleset, ultimateBackgroundColor) => {
         }
       })
 
-      addRule({
+      const rule = {
         dynamicVars,
         selector: cssSelector,
         ...combination,
         directives: computedDirectives
-      })
+      }
+
+      rules.push(rule)
+      return rule
     }
   }
 
@@ -449,22 +445,19 @@ export const init = (extraRuleset, ultimateBackgroundColor) => {
   const t1 = performance.now()
   console.debug('Tree tranveral took ' + (t1 - t0) + ' ms')
 
-  combinations.forEach((combination) => {
+  const result = combinations.map((combination) => {
     if (combination.lazy) {
-      lazyPromises.push(async () => processCombination(combination, lazyRules))
+      return async () => processCombination(combination)
     } else {
-      processCombination(combination, eagerRules)
+      return processCombination(combination)
     }
-  })
+  }).filter(x => x)
   const t2 = performance.now()
   console.debug('Eager processing took ' + (t2 - t1) + ' ms')
 
   return {
-    lazy: async () => {
-      await Promise.all(lazyPromises.map(x => x()))
-      return lazyRules
-    },
-    eager: eagerRules,
+    lazy: result.filter(x => typeof x === 'function'),
+    eager: result.filter(x => typeof x !== 'function'),
     staticVars
   }
 }
