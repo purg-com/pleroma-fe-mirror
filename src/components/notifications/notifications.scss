@@ -60,20 +60,6 @@
     padding: 0.6em;
     min-width: 0;
 
-    .RichContent {
-      a {
-        --link: var(--linkFaint);
-      }
-
-      .greentext {
-        --funtextGreentext: var(--funtextGreentextFaint);
-      }
-
-      .cyantext {
-        --funtextCyantext: var(--funtextCyantextFaint);
-      }
-    }
-
     .avatar-container {
       width: 32px;
       height: 32px;

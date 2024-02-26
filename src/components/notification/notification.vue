@@ -247,7 +247,6 @@
         />
         <template v-else>
           <StatusContent
-            :class="{ faint: !statusExpanded }"
             :compact="!statusExpanded"
             :status="notification.status"
           />

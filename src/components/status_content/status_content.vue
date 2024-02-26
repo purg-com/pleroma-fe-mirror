@@ -62,15 +62,5 @@
 .StatusContent {
   flex: 1;
   min-width: 0;
-
-  &.faint {
-    .greentext {
-      color: var(--funtextGreentextFaint);
-    }
-
-    .cyantext {
-      color: var(--funtextCyantextFaint);
-    }
-  }
 }
 </style>
