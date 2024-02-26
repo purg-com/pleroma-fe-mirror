@@ -148,7 +148,6 @@ export const init = (extraRuleset, ultimateBackgroundColor) => {
   const staticVars = {}
   const stacked = {}
   const computed = {}
-  const rules = []
 
   const rulesetUnsorted = [
     ...Object.values(components)
@@ -261,21 +260,24 @@ export const init = (extraRuleset, ultimateBackgroundColor) => {
           intendedTextColor,
           newTextRule.directives.textAuto === 'preserve'
         )
-
-      // Updating previously added rule
-      const earlyLowerLevelRules = rules.filter(findRules(combination.parent, true))
-      const earlyLowerLevelRule = earlyLowerLevelRules.slice(-1)[0]
-
-      const virtualDirectives = earlyLowerLevelRule.virtualDirectives || {}
-      const virtualDirectivesRaw = earlyLowerLevelRule.virtualDirectivesRaw || {}
+      const virtualDirectives = computed[lowerLevelSelector].virtualDirectives || {}
+      const virtualDirectivesRaw = computed[lowerLevelSelector].virtualDirectivesRaw || {}
 
       // Storing color data in lower layer to use as custom css properties
       virtualDirectives[virtualName] = getTextColorAlpha(newTextRule.directives, textColor, dynamicVars)
       virtualDirectivesRaw[virtualName] = textColor
-      earlyLowerLevelRule.virtualDirectives = virtualDirectives
-      earlyLowerLevelRule.virtualDirectivesRaw = virtualDirectivesRaw
+
       computed[lowerLevelSelector].virtualDirectives = virtualDirectives
       computed[lowerLevelSelector].virtualDirectivesRaw = virtualDirectivesRaw
+
+      return {
+        dynamicVars,
+        selector: cssSelector.split(/ /g).slice(0, -1).join(' '),
+        ...combination,
+        directives: {},
+        virtualDirectives,
+        virtualDirectivesRaw
+      }
     } else {
       computed[selector] = computed[selector] || {}
 
@@ -377,7 +379,6 @@ export const init = (extraRuleset, ultimateBackgroundColor) => {
         directives: computedDirectives
       }
 
-      rules.push(rule)
       return rule
     }
   }
