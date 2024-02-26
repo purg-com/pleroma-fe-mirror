@@ -620,21 +620,37 @@ option {
   overflow: hidden;
   text-overflow: ellipsis;
 
+  &.-dot,
+  &.-counter {
+    margin: 0;
+    position: absolute;
+  }
+
   &.-dot {
-    border-radius: 100%;
     min-height: 8px;
     max-height: 8px;
     min-width: 8px;
     max-width: 8px;
     padding: 0;
     line-height: 0;
-    margin: 0;
     font-size: 0;
-    position: absolute;
     left: calc(50% - 4px);
     top: calc(50% - 4px);
     margin-left: 6px;
     margin-top: -6px;
+  }
+
+  &.-counter {
+    border-radius: var(--roundness);
+    font-size: 0.75em;
+    line-height: 1;
+    text-align: right;
+    padding: 0.2em;
+    min-width: 0;
+    left: calc(50% - 0.5em);
+    top: calc(50% - 0.4em);
+    margin-left: 0.7em;
+    margin-top: -1em;
   }
 }
 

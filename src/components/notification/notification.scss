@@ -1,5 +1,3 @@
-@import "../../variables";
-
 // TODO Copypaste from Status, should unify it somehow
 .Notification {
   border-bottom: 1px solid;
@@ -70,28 +68,22 @@
   }
 
   &.-type--repeat .type-icon {
-    color: $fallback--cGreen;
-    color: var(--cGreen, $fallback--cGreen);
+    color: var(--cGreen);
   }
 
   &.-type--follow .type-icon {
-    color: $fallback--cBlue;
-    color: var(--cBlue, $fallback--cBlue);
+    color: var(--cBlue);
   }
 
   &.-type--follow-request .type-icon {
-    color: $fallback--cBlue;
-    color: var(--cBlue, $fallback--cBlue);
+    color: var(--cBlue);
   }
 
   &.-type--like .type-icon {
-    color: orange;
-    color: $fallback--cOrange;
-    color: var(--cOrange, $fallback--cOrange);
+    color: var(--cOrange);
   }
 
   &.-type--move .type-icon {
-    color: $fallback--cBlue;
-    color: var(--cBlue, $fallback--cBlue);
+    color: var(--cBlue);
   }
 }
