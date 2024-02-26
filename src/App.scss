@@ -376,6 +376,7 @@ nav {
   position: relative;
   border-bottom: 1px solid;
   border-color: var(--border);
+  width: 100%;
 
   &:first-child {
     border-top-right-radius: var(--roundness);
