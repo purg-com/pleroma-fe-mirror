@@ -15,7 +15,8 @@ export const applyTheme = async (input) => {
     extraRules = convertTheme2To3(theme)
   }
 
-  const themes3 = init(extraRules, '#FFFFFF')
+  // Assuming that "worst case scenario background" is panel background since it's the most likely one
+  const themes3 = init(extraRules, extraRules[0].directives['--bg'].split('|')[1].trim())
   const head = document.head
   const body = document.body
   body.classList.add('hidden')
@@ -54,7 +55,7 @@ export const applyTheme = async (input) => {
           styleSheet.insertRule(rule, 'index-max')
         })
       })
-    }, 50)
+    }, 200)
   })
 
   return Promise.resolve()
