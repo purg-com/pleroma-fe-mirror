@@ -270,7 +270,7 @@ const EmojiInput = {
       if (newValue) {
         this.$refs.suggestorPopover.showPopover()
       } else {
-        // this.$refs.suggestorPopover.hidePopover()
+        this.$refs.suggestorPopover.hidePopover()
       }
     },
     textAtCaret: async function (newWord) {
