@@ -450,7 +450,7 @@
           >
             <button
               v-if="showOtherRepliesAsButton && replies.length > 1"
-              class="button-unstyled -link faint"
+              class="button-unstyled -link"
               :title="$tc('status.ancestor_follow', replies.length - 1, { numReplies: replies.length - 1 })"
               @click.prevent="dive"
             >
