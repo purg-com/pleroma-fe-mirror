@@ -8,11 +8,11 @@ import { chunk } from 'lodash'
 
 export const applyTheme = async (input) => {
   let extraRules
-  if (input.themeType !== 1) {
+  if (input.themeFileVersion === 1) {
+    extraRules = convertTheme2To3(input)
+  } else {
     const { theme } = generatePreset(input)
     extraRules = convertTheme2To3(theme)
-  } else {
-    extraRules = convertTheme2To3(input)
   }
 
   const themes3 = init(extraRules, '#FFFFFF')
@@ -125,7 +125,7 @@ export const getPreset = (val) => {
     .then((themes) => themes[val] ? themes[val] : themes['pleroma-dark'])
     .then((theme) => {
       const isV1 = Array.isArray(theme)
-      const data = isV1 ? { themeType: 1 } : theme.theme
+      const data = isV1 ? {} : theme.theme
 
       if (isV1) {
         const bg = hex2rgb(theme[1])

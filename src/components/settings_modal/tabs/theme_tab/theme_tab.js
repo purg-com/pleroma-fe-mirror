@@ -514,6 +514,7 @@ export default {
       this.$store.dispatch('setOption', {
         name: 'customTheme',
         value: {
+          themeFileVersion: this.selectedVersion,
           themeEngineVersion: CURRENT_VERSION,
           ...this.previewTheme
         }
@@ -521,6 +522,7 @@ export default {
       this.$store.dispatch('setOption', {
         name: 'customThemeSource',
         value: {
+          themeFileVersion: this.selectedVersion,
           themeEngineVersion: CURRENT_VERSION,
           shadows: this.shadowsLocal,
           fonts: this.fontsLocal,

@@ -10,7 +10,7 @@
     >
       <component
         :is="routeTo ? 'a' : 'button'"
-        class="main-link button-unstyled"
+        class="main-link"
         :href="href"
         @click="navigate"
       >
@@ -84,11 +84,23 @@
   }
 
   .main-link {
+    background: none;
+    border: none;
+    outline: none;
+    display: inline;
+    text-align: initial;
+    font-size: 100%;
+    font-family: inherit;
+    line-height: unset;
+    cursor: pointer;
+    box-sizing: content-box;
+    color: var(--text);
     flex: 1;
     padding: 0 1em;
   }
 
   .menu-icon {
+    color: var(--icon);
     margin-right: 0.8em;
   }
 

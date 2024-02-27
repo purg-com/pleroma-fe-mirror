@@ -30,17 +30,44 @@ export default {
     {
       state: ['active'],
       directives: {
-        background: '$mod(--bg, 5)',
+        background: '$mod(--bg, 10)',
+        opacity: 1
+      }
+    },
+    {
+      state: ['active', 'hover'],
+      directives: {
+        background: '$mod(--bg, 15)',
         opacity: 1
       }
     },
     {
       component: 'Text',
-      variant: 'normal',
       parent: {
         component: 'MenuItem',
-        state: ['normal', 'hover'],
-        variant: 'normal'
+        state: ['hover']
+      },
+      directives: {
+        textColor: '--link',
+        textAuto: 'no-preserve'
+      }
+    },
+    {
+      component: 'Text',
+      parent: {
+        component: 'MenuItem',
+        state: ['active']
+      },
+      directives: {
+        textColor: '--link',
+        textAuto: 'no-preserve'
+      }
+    },
+    {
+      component: 'Icon',
+      parent: {
+        component: 'MenuItem',
+        state: ['active']
       },
       directives: {
         textColor: '--link',

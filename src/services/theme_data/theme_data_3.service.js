@@ -275,8 +275,12 @@ export const init = (extraRuleset, ultimateBackgroundColor) => {
         selector: cssSelector.split(/ /g).slice(0, -1).join(' '),
         ...combination,
         directives: {},
-        virtualDirectives,
-        virtualDirectivesRaw
+        virtualDirectives: {
+          [virtualName]: getTextColorAlpha(newTextRule.directives, textColor, dynamicVars)
+        },
+        virtualDirectivesRaw: {
+          [virtualName]: textColor
+        }
       }
     } else {
       computed[selector] = computed[selector] || {}
