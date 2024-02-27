@@ -185,23 +185,21 @@
     position: absolute;
   }
 
-  &-item {
+  &-item.menu-item {
     display: flex;
-    cursor: pointer;
-    padding: 0.2em 0.4em;
-    height: 32px;
+    padding-top: 0;
+    padding-bottom: 0;
 
     .image {
-      width: 32px;
-      height: 32px;
-      line-height: 32px;
+      width: calc(var(--__line-height) + var(--__vertical-gap) * 2);
+      height: calc(var(--__line-height) + var(--__vertical-gap) * 2);
+      line-height: var(--__line-height);
       text-align: center;
-      font-size: 32px;
-      margin-right: 4px;
+      margin-right: var(--__horizontal-gap);
 
       img {
-        width: 32px;
-        height: 32px;
+        width: calc(var(--__line-height) + var(--__vertical-gap) * 2);
+        height: calc(var(--__line-height) + var(--__vertical-gap) * 2);
         object-fit: contain;
       }
     }

@@ -94,26 +94,12 @@
   }
 
   .dropdown-item {
-    line-height: 21px;
-    overflow: hidden;
-    display: block;
-    padding: 0.5em 0.75em;
-    clear: both;
-    font-weight: 400;
-    text-align: inherit;
-    white-space: nowrap;
-    border: none;
-    border-radius: 0;
-    background-color: transparent;
-    box-shadow: none;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
+    border-bottom: none;
 
     &-icon {
       svg {
-        width: 22px;
-        margin-right: 0.75rem;
+        width: var(--__line-height);
+        margin-right: var(--__horizontal-gap);
       }
     }
 
@@ -127,15 +113,15 @@
     .menu-checkbox {
       display: inline-block;
       vertical-align: middle;
-      min-width: 22px;
-      max-width: 22px;
-      min-height: 22px;
-      max-height: 22px;
-      line-height: 22px;
+      min-width: calc(var(--__line-height) + 1px);
+      max-width: calc(var(--__line-height) + 1px);
+      min-height: calc(var(--__line-height) + 1px);
+      max-height: calc(var(--__line-height) + 1px);
+      line-height: var(--__line-height);
       text-align: center;
       border-radius: 0;
       box-shadow: var(--shadow);
-      margin-right: 0.75em;
+      margin-right: var(--__horizontal-gap);
 
       &.menu-checkbox-checked::after {
         font-size: 1.25em;

@@ -11,14 +11,14 @@
           <template v-if="relationship.following">
             <button
               v-if="relationship.showing_reblogs"
-              class="btn button-default dropdown-item"
+              class="dropdown-item menu-item"
               @click="hideRepeats"
             >
               {{ $t('user_card.hide_repeats') }}
             </button>
             <button
               v-if="!relationship.showing_reblogs"
-              class="btn button-default dropdown-item"
+              class="dropdown-item menu-item"
               @click="showRepeats"
             >
               {{ $t('user_card.show_repeats') }}
@@ -31,34 +31,34 @@
           <UserListMenu :user="user" />
           <button
             v-if="relationship.followed_by"
-            class="btn button-default btn-block dropdown-item"
+            class="dropdown-item menu-item"
             @click="removeUserFromFollowers"
           >
             {{ $t('user_card.remove_follower') }}
           </button>
           <button
             v-if="relationship.blocking"
-            class="btn button-default btn-block dropdown-item"
+            class="dropdown-item menu-item"
             @click="unblockUser"
           >
             {{ $t('user_card.unblock') }}
           </button>
           <button
             v-else
-            class="btn button-default btn-block dropdown-item"
+            class="dropdown-item menu-item"
             @click="blockUser"
           >
             {{ $t('user_card.block') }}
           </button>
           <button
-            class="btn button-default btn-block dropdown-item"
+            class="dropdown-item menu-item"
             @click="reportUser"
           >
             {{ $t('user_card.report') }}
           </button>
           <button
             v-if="pleromaChatMessagesAvailable"
-            class="btn button-default btn-block dropdown-item"
+            class="dropdown-item menu-item"
             @click="openChat"
           >
             {{ $t('user_card.message') }}

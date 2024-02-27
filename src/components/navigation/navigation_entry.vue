@@ -62,59 +62,53 @@
 <script src="./navigation_entry.js"></script>
 
 <style lang="scss">
-@import "../../variables";
+.NavigationEntry.menu-item {
+  --__line-height: 2.5em;
+  --__horizontal-gap: 0.5em;
+  --__vertical-gap: 0.4em;
 
-.NavigationEntry {
-  display: flex;
-  box-sizing: border-box;
-  align-items: baseline;
-  height: 3.5em;
-  line-height: 3.5em;
   padding: 0;
-  width: 100%;
-  color: $fallback--link;
-  color: var(--link, $fallback--link);
+  display: flex;
+  align-items: baseline;
 
   &[aria-expanded] {
-    padding-right: 1em;
-  }
-
-  .timelines-chevron {
-    margin-right: 0;
+    padding-right: var(--__horizontal-gap);
   }
 
   .main-link {
-    background: none;
-    border: none;
-    outline: none;
-    display: inline;
-    text-align: initial;
-    font-size: 100%;
-    font-family: inherit;
-    line-height: unset;
-    cursor: pointer;
-    box-sizing: content-box;
-    color: var(--text);
+    line-height: var(--__line-height);
+    box-sizing: border-box;
     flex: 1;
-    padding: 0 1em;
+    padding: var(--__vertical-gap) var(--__horizontal-gap);
   }
 
   .menu-icon {
-    color: var(--icon);
-    margin-right: 0.8em;
+    line-height: var(--__line-height);
+    padding: 0;
+    width: var(--__line-height);
+    margin-right: var(--__horizontal-gap);
+  }
+
+  .timelines-chevron {
+    line-height: var(--__line-height);
+    padding: 0;
+    width: var(--__line-height);
+    margin-right: 0;
   }
 
   .extra-button {
-    width: 3em;
+    line-height: var(--__line-height);
+    padding: 0;
+    width: var(--__line-height);
     text-align: center;
 
     &:last-child {
-      margin-right: -0.8em;
+      margin-right: calc(-1 * var(--__horizontal-gap));
     }
   }
 
   .badge {
-     margin: 0 0.8em;
+    margin: 0 var(--__horizontal-gap);
   }
 }
 </style>

@@ -12,13 +12,13 @@
         <div class="dropdown-menu">
           <span v-if="canGrantRole">
             <button
-              class="menu-item dropdown-item"
+              class="menu-item dropdown-item menu-item"
               @click="toggleRight(&quot;admin&quot;)"
             >
               {{ $t(!!user.rights.admin ? 'user_card.admin_menu.revoke_admin' : 'user_card.admin_menu.grant_admin') }}
             </button>
             <button
-              class="menu-item dropdown-item"
+              class="menu-item dropdown-item menu-item"
               @click="toggleRight(&quot;moderator&quot;)"
             >
               {{ $t(!!user.rights.moderator ? 'user_card.admin_menu.revoke_moderator' : 'user_card.admin_menu.grant_moderator') }}
@@ -31,14 +31,14 @@
           </span>
           <button
             v-if="canChangeActivationState"
-            class="menu-item dropdown-item"
+            class="menu-item dropdown-item menu-item"
             @click="toggleActivationStatus()"
           >
             {{ $t(!!user.deactivated ? 'user_card.admin_menu.activate_account' : 'user_card.admin_menu.deactivate_account') }}
           </button>
           <button
             v-if="canDeleteAccount"
-            class="menu-item dropdown-item"
+            class="menu-item dropdown-item menu-item"
             @click="deleteUserDialog(true)"
           >
             {{ $t('user_card.admin_menu.delete_account') }}
@@ -50,7 +50,7 @@
           />
           <span v-if="canUseTagPolicy">
             <button
-              class="menu-item dropdown-item"
+              class="menu-item dropdown-item menu-item"
               @click="toggleTag(tags.FORCE_NSFW)"
             >
               <span
@@ -60,7 +60,7 @@
               {{ $t('user_card.admin_menu.force_nsfw') }}
             </button>
             <button
-              class="menu-item dropdown-item"
+              class="menu-item dropdown-item menu-item"
               @click="toggleTag(tags.STRIP_MEDIA)"
             >
               <span
@@ -70,7 +70,7 @@
               {{ $t('user_card.admin_menu.strip_media') }}
             </button>
             <button
-              class="menu-item dropdown-item"
+              class="menu-item dropdown-item menu-item"
               @click="toggleTag(tags.FORCE_UNLISTED)"
             >
               <span
@@ -80,7 +80,7 @@
               {{ $t('user_card.admin_menu.force_unlisted') }}
             </button>
             <button
-              class="menu-item dropdown-item"
+              class="menu-item dropdown-item menu-item"
               @click="toggleTag(tags.SANDBOX)"
             >
               <span
@@ -91,7 +91,7 @@
             </button>
             <button
               v-if="user.is_local"
-              class="menu-item dropdown-item"
+              class="menu-item dropdown-item menu-item"
               @click="toggleTag(tags.DISABLE_REMOTE_SUBSCRIPTION)"
             >
               <span
@@ -102,7 +102,7 @@
             </button>
             <button
               v-if="user.is_local"
-              class="menu-item dropdown-item"
+              class="menu-item dropdown-item menu-item"
               @click="toggleTag(tags.DISABLE_ANY_SUBSCRIPTION)"
             >
               <span
@@ -113,7 +113,7 @@
             </button>
             <button
               v-if="user.is_local"
-              class="menu-item dropdown-item"
+              class="menu-item dropdown-item menu-item"
               @click="toggleTag(tags.QUARANTINE)"
             >
               <span
