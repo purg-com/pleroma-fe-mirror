@@ -155,7 +155,7 @@ export const getCssRules = (rules) => rules.map(rule => {
   return [
     header,
     directives + ';',
-    (rule.component === 'Text' && rule.directives.textNoCssColor !== 'yes') ? '  color: var(--text);' : '',
+    (rule.component === 'Text' && rule.state.indexOf('faint') < 0 && rule.directives.textNoCssColor !== 'yes') ? '  color: var(--text);' : '',
     '',
     virtualDirectives,
     footer

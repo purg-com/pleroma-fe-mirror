@@ -6,8 +6,7 @@ export default {
   // we are searching for underlay specifically or for whatever is laid on top of it.
   outOfTreeSelector: '.underlay',
   validInnerComponents: [
-    'Panel',
-    'Alert'
+    'Panel'
   ],
   defaultRules: [
     {

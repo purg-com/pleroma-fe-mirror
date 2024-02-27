@@ -9,6 +9,7 @@ export default {
     'Scrollbar',
     'ScrollbarElement',
     'MobileDrawer',
+    'Alert',
     'Button' // mobile post button
   ],
   defaultRules: [
