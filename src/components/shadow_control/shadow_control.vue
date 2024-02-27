@@ -219,8 +219,6 @@
 <script src="./shadow_control.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .shadow-control {
   display: flex;
   flex-wrap: wrap;
@@ -236,8 +234,6 @@
     flex: 0;
     display: flex;
     flex-wrap: wrap;
-
-    $side: 15em;
 
     input[type="number"] {
       width: 5em;
@@ -261,7 +257,7 @@
     .x-shift-control .wrap,
     input[type="range"] {
       margin: 0;
-      width: $side;
+      width: 15em;
       height: 2em;
     }
 
@@ -271,7 +267,7 @@
 
       .wrap {
         width: 2em;
-        height: $side;
+        height: 15em;
       }
 
       input[type="range"] {
@@ -298,8 +294,6 @@
       .preview-block {
         width: 33%;
         height: 33%;
-        background-color: $fallback--bg;
-        background-color: var(--bg, $fallback--bg);
         border-radius: var(--roundness);
       }
     }
