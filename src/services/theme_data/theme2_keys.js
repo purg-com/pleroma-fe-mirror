@@ -90,6 +90,7 @@ export default [
 
   // Top bar,
   'topBar',
+  'topBarText',
   'topBarLink',
 
   // Tabs,
