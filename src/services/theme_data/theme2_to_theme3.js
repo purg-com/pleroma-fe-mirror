@@ -346,6 +346,14 @@ export const convertTheme2To3 = (data) => {
       }
       if (key === 'buttonPressed') {
         newRules.push({ ...rule, state: ['toggled'] })
+        newRules.push({ ...rule, state: ['toggled', 'focus'] })
+        newRules.push({ ...rule, state: ['pressed', 'focus'] })
+      }
+      if (key === 'buttonHover') {
+        newRules.push({ ...rule, state: ['toggled', 'hover'] })
+        newRules.push({ ...rule, state: ['pressed', 'hover'] })
+        newRules.push({ ...rule, state: ['toggled', 'focus', 'hover'] })
+        newRules.push({ ...rule, state: ['pressed', 'focus', 'hover'] })
       }
 
       if (rule.component === 'Button') {
@@ -489,7 +497,21 @@ export const convertTheme2To3 = (data) => {
       if (newRule.component === 'Panel') {
         return [newRule, { ...newRule, component: 'MobileDrawer' }]
       } else if (newRule.component === 'Button') {
-        return [newRule, { ...newRule, component: 'Tab' }, { ...newRule, component: 'ScrollbarElement' }]
+        const rules = [
+          newRule,
+          { ...newRule, component: 'Tab' },
+          { ...newRule, component: 'ScrollbarElement' }
+        ]
+        console.log(newRule)
+        if (newRule.state?.indexOf('toggled') >= 0) {
+          rules.push({ ...newRule, state: [...newRule.state, 'focused'] })
+          rules.push({ ...newRule, state: [...newRule.state, 'hover'] })
+          rules.push({ ...newRule, state: [...newRule.state, 'hover', 'focused'] })
+        }
+        if (newRule.state?.indexOf('hover') >= 0) {
+          rules.push({ ...newRule, state: [...newRule.state, 'focused'] })
+        }
+        return rules
       } else if (newRule.component === 'TopBar') {
         return [newRule, { ...newRule, parent: { component: 'MobileDrawer' }, component: 'PanelHeader' }]
       } else {
