@@ -16,7 +16,9 @@ export default {
     {
       directives: {
         '--font': 'generic | sans-serif',
-        '--monoFont': 'generic | monospace'
+        '--monoFont': 'generic | monospace',
+        '--bg': 'color | #000000', // just to establish order
+        '--wallpaper': 'color | --bg, -2'
       }
     }
   ]

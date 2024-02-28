@@ -33,6 +33,8 @@ export const applyTheme = async (input) => {
         parts[0],
         ', ',
         parts[0].replace(/button/, 'thumb'),
+        ', ',
+        parts[0].replace(/scrollbar-button/, 'resizer'),
         ' {',
         parts[1],
         '}'

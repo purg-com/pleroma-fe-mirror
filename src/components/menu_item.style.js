@@ -7,7 +7,8 @@ export default {
     'Input',
     'Border',
     'ButtonUnstyled',
-    'Badge'
+    'Badge',
+    'Avatar'
   ],
   states: {
     hover: ':hover',

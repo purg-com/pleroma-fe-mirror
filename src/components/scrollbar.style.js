@@ -4,7 +4,7 @@ export default {
   defaultRules: [
     {
       directives: {
-        background: '--bg'
+        background: '--wallpaper'
       }
     }
   ]
