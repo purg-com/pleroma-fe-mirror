@@ -113,19 +113,19 @@
               <template v-if="!hideBio">
                 <span
                   v-if="user.deactivated"
-                  class="alert user-role"
+                  class="alert neutral user-role"
                 >
                   {{ $t('user_card.deactivated') }}
                 </span>
                 <span
                   v-if="!!visibleRole"
-                  class="alert user-role"
+                  class="alert neutral user-role"
                 >
                   {{ $t(`general.role.${visibleRole}`) }}
                 </span>
                 <span
                   v-if="user.bot"
-                  class="alert user-role"
+                  class="alert neutral user-role"
                 >
                   {{ $t('user_card.bot') }}
                 </span>

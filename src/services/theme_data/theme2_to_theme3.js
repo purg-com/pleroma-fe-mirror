@@ -200,6 +200,7 @@ export const convertTheme2To3 = (data) => {
       if (rule.component === 'Button') {
         newRules.push({ ...rule, component: 'ScrollbarElement' })
         newRules.push({ ...rule, component: 'Tab' })
+        newRules.push({ ...rule, component: 'Tab', state: ['active'], directives: { opacity: 0 } })
       }
     })
     return newRules

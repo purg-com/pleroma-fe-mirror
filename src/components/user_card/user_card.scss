@@ -62,11 +62,6 @@
     padding: 1em;
     margin: 0;
 
-    a {
-      color: $fallback--link;
-      color: var(--postLink, $fallback--link);
-    }
-
     img {
       object-fit: contain;
       vertical-align: middle;
@@ -76,36 +71,31 @@
   }
 
   &.-rounded-t {
-    border-top-left-radius: $fallback--panelRadius;
-    border-top-left-radius: var(--panelRadius, $fallback--panelRadius);
-    border-top-right-radius: $fallback--panelRadius;
-    border-top-right-radius: var(--panelRadius, $fallback--panelRadius);
+    border-top-left-radius: var(--roundness);
+    border-top-right-radius: var(--roundness);
 
-    --__roundnessTop: var(--panelRadius);
+    --__roundnessTop: var(--roundness);
     --__roundnessBottom: 0;
   }
 
   &.-rounded {
-    border-radius: $fallback--panelRadius;
-    border-radius: var(--panelRadius, $fallback--panelRadius);
+    border-radius: var(--roundness);
 
-    --__roundnessTop: var(--panelRadius);
-    --__roundnessBottom: var(--panelRadius);
+    --__roundnessTop: var(--roundness);
+    --__roundnessBottom: var(--roundness);
   }
 
   &.-popover {
-    border-radius: $fallback--tooltipRadius;
-    border-radius: var(--tooltipRadius, $fallback--tooltipRadius);
+    border-radius: var(--roundness);
 
-    --__roundnessTop: var(--tooltipRadius);
-    --__roundnessBottom: var(--tooltipRadius);
+    --__roundnessTop: var(--roundness);
+    --__roundnessBottom: var(--roundness);
   }
 
   &.-bordered {
     border-width: 1px;
     border-style: solid;
-    border-color: $fallback--border;
-    border-color: var(--border, $fallback--border);
+    border-color: var(--border);
   }
 }
 
@@ -176,8 +166,7 @@
     padding: 0.5em 0;
 
     &:not(:hover) .icon {
-      color: $fallback--lightText;
-      color: var(--lightText, $fallback--lightText);
+      color: var(--lightText);
     }
   }
 
@@ -191,6 +180,7 @@
     }
 
     .user-screen-name {
+      color: var(--text);
       min-width: 1px;
       flex: 0 1 auto;
       text-overflow: ellipsis;
@@ -202,16 +192,11 @@
       flex: 0 0 auto;
       margin-left: 1em;
       font-size: 0.7em;
-      color: $fallback--text;
-      color: var(--text, $fallback--text);
+      color: var(--text);
     }
 
     .user-role {
       flex: none;
-      color: $fallback--text;
-      color: var(--alertNeutralText, $fallback--text);
-      background-color: $fallback--fg;
-      background-color: var(--alertNeutral, $fallback--fg);
     }
   }
 

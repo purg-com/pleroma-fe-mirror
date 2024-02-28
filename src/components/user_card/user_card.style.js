@@ -15,6 +15,7 @@ export default {
     {
       directives: {
         background: '--bg',
+        opacity: 0,
         roundness: 3,
         shadow: [{
           x: 1,

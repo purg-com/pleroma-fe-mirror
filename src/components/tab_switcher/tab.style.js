@@ -3,7 +3,7 @@ export default {
   selector: '.tab', // CSS selector/prefix
   states: {
     active: '.active',
-    hover: ':hover:not(:disabled)',
+    hover: ':hover:not(.disabled)',
     disabled: '.disabled'
   },
   validInnerComponents: [
@@ -25,10 +25,15 @@ export default {
       }
     },
     {
+      state: ['active'],
+      directives: {
+        opacity: 0
+      }
+    },
+    {
       state: ['hover', 'active'],
       directives: {
-        shadow: ['--defaultButtonShadow', '--defaultButtonBevel'],
-        opacity: 0
+        shadow: ['--defaultButtonShadow', '--defaultButtonBevel']
       }
     },
     {
@@ -36,12 +41,6 @@ export default {
       directives: {
         background: '$blend(--inheritedBackground, 0.25, --parent)',
         shadow: ['--defaultButtonBevel']
-      }
-    },
-    {
-      state: ['active'],
-      directives: {
-        opacity: 0
       }
     },
     {
