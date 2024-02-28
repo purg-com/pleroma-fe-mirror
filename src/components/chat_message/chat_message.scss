@@ -1,5 +1,3 @@
-@import "../../variables";
-
 .chat-message-wrapper {
   &.hovered-message-chain {
     .animated.Avatar {
@@ -93,8 +91,7 @@
   .error {
     .status-content.media-body,
     .created-at {
-      color: $fallback--cRed;
-      color: var(--badgeNotification, $fallback--cRed);
+      color: var(--badgeNotification);
     }
   }
 
@@ -146,6 +143,5 @@
   margin: 1.4em 0;
   font-size: 0.9em;
   user-select: none;
-  color: $fallback--text;
-  color: var(--faintedText, $fallback--text);
+  color: var(--textFaint);
 }

@@ -10,6 +10,12 @@ export default {
   },
   defaultRules: [
     {
+      component: 'Root',
+      directives: {
+        '--badgeNotification': 'color | --cRed'
+      }
+    },
+    {
       directives: {
         background: '--cGreen'
       }
