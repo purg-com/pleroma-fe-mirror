@@ -86,15 +86,15 @@ body {
 
         &:increment {
           background-image:
-            linear-gradient(45deg, var(--text) 50%, transparent calc(50% + 1px)),
-            linear-gradient(-45deg, transparent 50%, var(--text) calc(50% + 1px));
+            linear-gradient(45deg, var(--text) 50%, transparent 51%),
+            linear-gradient(-45deg, transparent 50%, var(--text) 51%);
           background-position: top var(--___bgPadding) left 50%, right 50% bottom var(--___bgPadding);
         }
 
         &:decrement {
           background-image:
             linear-gradient(45deg, transparent 50%, var(--text) calc(50% + 1px)),
-            linear-gradient(-45deg, var(--text) 50%, transparent calc(50% + 1px));
+            linear-gradient(-45deg, var(--text) 50%, transparent 51%);
           background-position: bottom var(--___bgPadding) right 50%, left 50% top var(--___bgPadding);
         }
       }
@@ -104,15 +104,15 @@ body {
 
         &:increment {
           background-image:
-            linear-gradient(-45deg, transparent 50%, var(--text) calc(50% + 1px)),
-            linear-gradient(45deg, transparent 50%, var(--text) calc(50% + 1px));
+            linear-gradient(-45deg, transparent 50%, var(--text) 51%),
+            linear-gradient(45deg, transparent 50%, var(--text) 51%);
           background-position: right var(--___bgPadding) top 50%, left var(--___bgPadding) top 50%;
         }
 
         &:decrement {
           background-image:
-            linear-gradient(-45deg, var(--text) 50%, transparent calc(50% + 1px)),
-            linear-gradient(45deg, var(--text) 50%, transparent calc(50% + 1px));
+            linear-gradient(-45deg, var(--text) 50%, transparent 51%),
+            linear-gradient(45deg, var(--text) 50%, transparent 51%);
           background-position: left var(--___bgPadding) top 50%, right var(--___bgPadding) top 50%;
         }
       }
@@ -121,7 +121,7 @@ body {
   }
   // Body should have background to scrollbar otherwise it will use white (body color?)
   html {
-    scrollbar-color: var(--selectedMenu) var(--wallpaper);
+    scrollbar-color: var(--fg) var(--wallpaper);
     background: var(--wallpaper);
   }
 }

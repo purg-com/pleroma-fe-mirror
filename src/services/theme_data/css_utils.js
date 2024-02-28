@@ -69,7 +69,7 @@ export const getCssShadowFilter = (input) => {
 export const getCssRules = (rules) => rules.map(rule => {
   let selector = rule.selector
   if (!selector) {
-    selector = 'body'
+    selector = 'html'
   }
   const header = selector + ' {'
   const footer = '}'
