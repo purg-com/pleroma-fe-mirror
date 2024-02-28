@@ -14,7 +14,7 @@
           <div
             v-if="currentSaveStateNotice"
             class="alert"
-            :class="{ transparent: !currentSaveStateNotice.error, error: currentSaveStateNotice.error}"
+            :class="{ success: !currentSaveStateNotice.error, error: currentSaveStateNotice.error}"
             @click.prevent
           >
             {{ currentSaveStateNotice.error ? $t('settings.saving_err') : $t('settings.saving_ok') }}

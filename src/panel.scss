@@ -118,6 +118,10 @@
       padding-bottom: 0;
       align-self: stretch;
     }
+
+    > .alert {
+      line-height: calc(var(--__panel-heading-height-inner) - 2px);
+    }
   }
 }
 
