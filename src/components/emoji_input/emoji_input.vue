@@ -70,7 +70,7 @@
             :key="index"
             class="menu-item autocomplete-item"
             role="option"
-            :class="{ active: index === highlighted }"
+            :class="{ '-active': index === highlighted }"
             :aria-label="autoCompleteItemLabel(suggestion)"
             :aria-selected="index === highlighted"
             @click.stop.prevent="onClick($event, suggestion)"
