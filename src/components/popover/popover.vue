@@ -58,11 +58,11 @@
   &::after {
     content: "";
     position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 3;
+    top: -1px;
+    bottom: -1px;
+    left: -1px;
+    right: -1px;
+    z-index: -1px;
     box-shadow: var(--shadow);
     pointer-events: none;
   }
