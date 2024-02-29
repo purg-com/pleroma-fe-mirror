@@ -4,7 +4,8 @@ export default {
   states: {
     disabled: ':disabled',
     hover: ':hover:not(:disabled)',
-    focused: ':focus-within'
+    focused: ':focus-within',
+    toggled: '.toggled'
   },
   validInnerComponents: [
     'Text',
