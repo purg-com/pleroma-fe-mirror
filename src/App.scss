@@ -488,7 +488,8 @@ textarea {
 .input {
   &.unstyled {
     border-radius: 0;
-    background: none;
+    /* stylelint-disable-next-line declaration-no-important */
+    background: none !important;
     box-shadow: none;
     height: unset;
   }
@@ -528,6 +529,7 @@ textarea {
     &:checked + label::before {
       box-shadow: var(--shadow);
       background-color: var(--background);
+      color: var(--text);
     }
 
     &:disabled {
@@ -541,7 +543,7 @@ textarea {
     + label::before {
       flex-shrink: 0;
       display: inline-block;
-      content: "";
+      content: "•";
       transition: box-shadow 200ms;
       width: 1.1em;
       height: 1.1em;

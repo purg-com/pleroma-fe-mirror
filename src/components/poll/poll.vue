@@ -38,6 +38,7 @@
           :aria-labelledby="`option-vote-${randomSeed}-${index}`"
           :aria-checked="choices[index]"
           @click="activateOption(index)"
+          class="input unstyled"
         >
           <!-- TODO: USE CHECKBOX -->
           <input
