@@ -2,7 +2,7 @@
   <video
     class="video"
     preload="metadata"
-    :src="attachment.url + '#t=0.5'"
+    :src="attachment.url + '#t=0.00000000000001'"
     :loop="loopVideo"
     :controls="controls"
     :alt="attachment.description"
