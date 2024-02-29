@@ -17,7 +17,8 @@ export default {
     'UserCard',
     'Chat',
     'Attachment',
-    'Tab'
+    'Tab',
+    'ListItem'
   ],
   defaultRules: [
     {

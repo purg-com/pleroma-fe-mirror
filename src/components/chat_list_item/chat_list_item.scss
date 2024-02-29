@@ -1,8 +1,6 @@
 .chat-list-item {
   display: flex;
   flex-direction: row;
-  padding: 0.75em;
-  height: 5em;
   overflow: hidden;
   box-sizing: border-box;
   cursor: pointer;
@@ -12,7 +10,6 @@
   }
 
   &:hover {
-    background-color: var(--selectedPost, $fallback--lightBg);
     box-shadow: 0 0 3px 1px rgb(0 0 0 / 10%);
   }
 
@@ -29,7 +26,7 @@
 
   .heading {
     width: 100%;
-    display: inline-flex;
+    display: flex;
     justify-content: space-between;
     line-height: 1em;
   }
@@ -47,18 +44,17 @@
   }
 
   .chat-preview {
-    display: inline-flex;
+    display: flex;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     margin: 0.35em 0;
-    color: $fallback--text;
-    color: var(--faint, $fallback--text);
+    color: var(--faintText);
     width: 100%;
   }
 
   a {
-    color: var(--faintLink, $fallback--link);
+    color: var(--faintLink);
     text-decoration: none;
     pointer-events: none;
   }

@@ -12,7 +12,7 @@ export default {
   ],
   states: {
     hover: ':hover',
-    active: '.active'
+    active: '.-active'
   },
   defaultRules: [
     {

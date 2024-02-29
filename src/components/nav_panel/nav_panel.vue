@@ -37,8 +37,8 @@
         </NavigationEntry>
         <div
           v-show="showTimelines"
-          class="timelines-background"
-          :class="{ expanded: showTimelines }"
+          class="timelines-background menu-item-collapsible"
+          :class="{ '-expanded': showTimelines }"
         >
           <div class="timelines">
             <NavigationEntry
@@ -75,8 +75,8 @@
         </NavigationEntry>
         <div
           v-show="showLists"
-          class="timelines-background"
-          :class="{ expanded: showTimelines }"
+          class="timelines-background menu-item-collapsible"
+          :class="{ '-expanded': showLists }"
         >
           <ListsMenuContent
             :show-pin="editMode || forceEditMode"
@@ -130,11 +130,6 @@
 
   .timelines-background {
     padding: 0 0 0 0.6em;
-  }
-
-  .timelines-background.expanded + .NavigationEntry {
-    border-top: 1px solid;
-    border-color: var(--border);
   }
 
   .nav-panel-heading {

@@ -42,8 +42,6 @@
 <script src="./popover.js" />
 
 <style lang="scss">
-@import "../../variables";
-
 .popover-trigger-button {
   display: inline-block;
 }
@@ -89,12 +87,11 @@
     height: 0;
     margin: 0.5rem 0;
     overflow: hidden;
-    border-top: 1px solid $fallback--border;
-    border-top: 1px solid var(--border, $fallback--border);
+    border-top: 1px solid var(--border);
   }
 
   .dropdown-item {
-    border-bottom: none;
+    border: none;
 
     &-icon {
       svg {
