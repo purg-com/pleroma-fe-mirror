@@ -114,6 +114,7 @@ const EmojiPicker = {
       groupsScrolledClass: 'scrolled-top',
       keepOpen: false,
       customEmojiTimeout: null,
+      hideCustomEmojiInPicker: false,
       // Lazy-load only after the first time `showing` becomes true.
       contentLoaded: false,
       groupRefs: {},
@@ -286,7 +287,7 @@ const EmojiPicker = {
       return 0
     },
     allCustomGroups () {
-      if (this.hideCustomEmoji) {
+      if (this.hideCustomEmoji || this.hideCustomEmojiInPicker) {
         return {}
       }
       const emojis = this.$store.getters.groupedCustomEmojis

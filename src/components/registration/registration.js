@@ -83,6 +83,8 @@ const registration = {
       signedIn: (state) => !!state.users.currentUser,
       isPending: (state) => state.users.signUpPending,
       serverValidationErrors: (state) => state.users.signUpErrors,
+      signUpNotice: (state) => state.users.signUpNotice,
+      hasSignUpNotice: (state) => !!state.users.signUpNotice.message,
       termsOfService: (state) => state.instance.tos,
       accountActivationRequired: (state) => state.instance.accountActivationRequired,
       accountApprovalRequired: (state) => state.instance.accountApprovalRequired,
@@ -107,8 +109,12 @@ const registration = {
 
       if (!this.v$.$invalid) {
         try {
-          await this.signUp(this.user)
-          this.$router.push({ name: 'friends' })
+          const status = await this.signUp(this.user)
+          if (status === 'ok') {
+            this.$router.push({ name: 'friends' })
+          }
+          // If status is not 'ok' (i.e. it needs further actions to be done
+          // before you can login), display sign up notice, do not switch anywhere
         } catch (error) {
           console.warn('Registration failed: ', error)
           this.setCaptcha()

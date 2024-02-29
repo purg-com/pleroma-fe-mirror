@@ -18,9 +18,14 @@
       :class="{ '-compact': compact }"
     />
     <FAIcon
-      v-if="bot"
+      v-if="showActorTypeIndicator && user?.actor_type === 'Service'"
       icon="robot"
-      class="bot-indicator"
+      class="actor-type-indicator"
+    />
+    <FAIcon
+      v-if="showActorTypeIndicator && user?.actor_type === 'Group'"
+      icon="people-group"
+      class="actor-type-indicator"
     />
   </span>
 </template>
@@ -75,7 +80,7 @@
     height: 100%;
   }
 
-  .bot-indicator {
+  .actor-type-indicator {
     position: absolute;
     bottom: 0;
     right: 0;

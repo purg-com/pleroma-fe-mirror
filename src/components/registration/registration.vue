@@ -3,7 +3,10 @@
     <div class="panel-heading">
       {{ $t('registration.registration') }}
     </div>
-    <div class="panel-body">
+    <div
+      v-if="!hasSignUpNotice"
+      class="panel-body"
+    >
       <form
         class="registration-form"
         @submit.prevent="submit(user)"
@@ -307,6 +310,11 @@
         </div>
       </form>
     </div>
+    <div v-else>
+      <p class="registration-notice">
+        {{ signUpNotice.message }}
+      </p>
+    </div>
   </div>
 </template>
 
@@ -402,6 +410,10 @@ $validations-cRed: #f04124;
   .error {
     text-align: center;
   }
+}
+
+.registration-notice {
+  margin: 0.6em;
 }
 
 @media all and (max-width: 800px) {

@@ -109,7 +109,8 @@
     "mobile_notifications_close": "알림 닫기",
     "mobile_sidebar": "모바일 사이드바 토글",
     "announcements": "공지사항",
-    "search_close": "검색 바 닫기"
+    "search_close": "검색 바 닫기",
+    "mobile_notifications_mark_as_seen": "모두 읽음으로 표시"
   },
   "notifications": {
     "broken_favorite": "알 수 없는 게시물입니다, 검색합니다…",
@@ -125,7 +126,13 @@
     "error": "알림 불러오기 실패: {0}",
     "follow_request": "팔로우 요청",
     "submitted_report": "신고 내용을 전송함",
-    "poll_ended": "투표가 끝남"
+    "poll_ended": "투표가 끝남",
+    "unread_follow_requests": "{num}개의 새 팔로우 요청 | {num}개의 새 팔로우 요청",
+    "configuration_tip": "{theSettings}에서 어떻게 보이는지 바꿀 수 있습니다. {dismiss}",
+    "configuration_tip_settings": "설정",
+    "configuration_tip_dismiss": "다시 보지 않기",
+    "unread_announcements": "{num}개의 읽지 않은 공지사항 | {num}개의 읽지 않은 공지사항",
+    "unread_chats": "{num}개의 읽지 않은 채팅 | {num}개의 읽지 않은 채팅"
   },
   "post_status": {
     "new_status": "새 게시물 게시",
@@ -165,7 +172,9 @@
     "post": "게시",
     "direct_warning_to_first_only": "맨 앞에 멘션한 사용자들에게만 보여집니다.",
     "content_type_selection": "게시물 형태",
-    "scope_notice_dismiss": "알림 닫기"
+    "scope_notice_dismiss": "알림 닫기",
+    "reply_option": "이 게시물에 답글",
+    "quote_option": "이 게시물을 인용"
   },
   "registration": {
     "bio": "소개",

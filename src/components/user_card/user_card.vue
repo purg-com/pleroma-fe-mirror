@@ -124,10 +124,16 @@
                   {{ $t(`general.role.${visibleRole}`) }}
                 </span>
                 <span
-                  v-if="user.bot"
+                  v-if="user.actor_type === 'Service'"
                   class="alert neutral user-role"
                 >
                   {{ $t('user_card.bot') }}
+                </span>
+                <span
+                  v-if="user.actor_type === 'Group'"
+                  class="alert user-role"
+                >
+                  {{ $t('user_card.group') }}
                 </span>
               </template>
               <span v-if="user.locked">

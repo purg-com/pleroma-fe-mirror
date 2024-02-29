@@ -137,6 +137,7 @@ const defaultState = {
   suggestionsEnabled: false,
   suggestionsWeb: '',
   quotingAvailable: false,
+  groupActorAvailable: false,
 
   // Html stuff
   instanceSpecificPanelContent: '',

@@ -109,7 +109,7 @@
           :footer-slipgate="footerRef"
         />
         <Timeline
-          v-if="isUs"
+          v-if="favoritesTabVisible"
           key="favorites"
           :label="$t('user_card.favorites')"
           :disabled="!favorites.visibleStatuses.length"
@@ -117,6 +117,7 @@
           :title="$t('user_card.favorites')"
           timeline-name="favorites"
           :timeline="favorites"
+          :user-id="userId"
           :in-profile="true"
           :footer-slipgate="footerRef"
         />
