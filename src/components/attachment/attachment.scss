@@ -82,6 +82,13 @@
     }
   }
 
+  .video-container {
+    border: none;
+    outline: none;
+    color: inherit;
+    background: transparent;
+  }
+
   .audio-container {
     display: flex;
     align-items: flex-end;
