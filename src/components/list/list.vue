@@ -7,7 +7,7 @@
       v-for="item in items"
       :key="getKey(item)"
       class="list-item"
-      :class="getClass(item)"
+      :class="[getClass(item), nonInteractive ? '-non-interactive' : '']"
       role="listitem"
     >
       <slot
@@ -38,6 +38,10 @@ export default {
     getClass: {
       type: Function,
       default: item => ''
+    },
+    nonInteractive: {
+      type: Boolean,
+      default: false
     }
   }
 }

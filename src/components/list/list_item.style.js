@@ -3,7 +3,7 @@ export default {
   selector: '.list-item',
   states: {
     active: '.-active',
-    hover: ':hover'
+    hover: ':hover:not(.-non-interactive)'
   },
   validInnerComponents: [
     'Text',

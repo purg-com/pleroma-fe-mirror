@@ -29,11 +29,13 @@
         <div
           class="selectable-list-item-inner"
           :class="{ 'selectable-list-item-selected-inner': isSelected(item) }"
+          @click.stop="toggle(!isSelected(item), item)"
         >
           <div class="selectable-list-checkbox-wrapper">
             <Checkbox
               :model-value="isSelected(item)"
               @update:model-value="checked => toggle(checked, item)"
+              @click.stop
             />
           </div>
           <slot

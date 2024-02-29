@@ -75,7 +75,7 @@
           :label="$t('user_card.followees')"
           :disabled="!user.friends_count"
         >
-          <FriendList :user-id="userId">
+          <FriendList :user-id="userId" :non-interactive="true">
             <template #item="{item}">
               <FollowCard :user="item" />
             </template>
@@ -87,7 +87,7 @@
           :label="$t('user_card.followers')"
           :disabled="!user.followers_count"
         >
-          <FollowerList :user-id="userId">
+          <FollowerList :user-id="userId" :non-interactive="true">
             <template #item="{item}">
               <FollowCard
                 :user="item"

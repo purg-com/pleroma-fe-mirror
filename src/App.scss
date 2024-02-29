@@ -411,6 +411,10 @@ nav {
   --__horizontal-gap: 0.75em;
   --__vertical-gap: 0.5em;
 
+  &.-non-interactive {
+    cursor: auto;
+  }
+
   &.-active,
   &:hover {
     border-top-width: 1px;
