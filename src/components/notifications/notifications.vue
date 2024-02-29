@@ -85,7 +85,7 @@
           </div>
           <button
             v-else-if="!loading"
-            class="button-unstyled -link -fullwidth"
+            class="button-unstyled -link text-center"
             @click.prevent="fetchOlderNotifications()"
           >
             <div class="new-status-notification text-center">
