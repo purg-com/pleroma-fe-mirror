@@ -1,5 +1,6 @@
 import TabSwitcher from 'src/components/tab_switcher/tab_switcher.jsx'
 
+import DomainsTab from './admin_tabs/domains_tab.vue'
 import InstanceTab from './admin_tabs/instance_tab.vue'
 import LimitsTab from './admin_tabs/limits_tab.vue'
 import FrontendsTab from './admin_tabs/frontends_tab.vue'
@@ -13,7 +14,8 @@ import {
   faBell,
   faDownload,
   faEyeSlash,
-  faInfo
+  faInfo,
+  faGlobe
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -24,13 +26,15 @@ library.add(
   faBell,
   faDownload,
   faEyeSlash,
-  faInfo
+  faInfo,
+  faGlobe
 )
 
 const SettingsModalAdminContent = {
   components: {
     TabSwitcher,
 
+    DomainsTab,
     InstanceTab,
     LimitsTab,
     FrontendsTab
@@ -56,6 +60,9 @@ const SettingsModalAdminContent = {
     },
     noDb () {
       return this.$store.state.adminSettings.dbConfigEnabled === false
+    },
+    multitenancyAvailable () {
+      return this.$store.state.instance.multitenancyAvailable
     }
   },
   created () {

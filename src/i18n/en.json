@@ -309,6 +309,7 @@
   },
   "registration": {
     "bio_optional": "Bio (optional)",
+    "domain": "Domain",
     "email": "Email",
     "email_optional": "Email (optional)",
     "fullname": "Display name",
@@ -880,6 +881,7 @@
     "commit_all": "Save all",
     "tabs": {
       "nodb": "No DB Config",
+      "domains": "Domains",
       "instance": "Instance",
       "limits": "Limits",
       "frontends": "Front-ends"
@@ -935,6 +937,21 @@
       "available_frontends": "Available for install",
       "failure_installing_frontend": "Failed to install frontend {version}: {reason}",
       "success_installing_frontend": "Frontend {version} successfully installed"
+    },
+    "domains": {
+      "post_form_header": "Create domain",
+      "name_prompt": "Domain name",
+      "public_prompt": "Public",
+      "post_action": "Create",
+      "title": "Domain",
+      "public": "Public",
+      "private": "Private",
+      "post_error": "Error: {error}",
+      "resolve_error": "Failed to resolve domain name",
+      "close_error": "Close",
+      "last_checked_time_display": "Last checked {time}",
+      "switch_state_action": "Switch state",
+      "delete_action": "Delete"
     },
     "temp_overrides": {
       ":pleroma": {

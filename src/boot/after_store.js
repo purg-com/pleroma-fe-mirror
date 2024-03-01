@@ -63,6 +63,7 @@ const getInstanceConfig = async ({ store }) => {
       store.dispatch('setInstanceOption', { name: 'accountApprovalRequired', value: data.approval_required })
       store.dispatch('setInstanceOption', { name: 'birthdayRequired', value: !!data.pleroma.metadata.birthday_required })
       store.dispatch('setInstanceOption', { name: 'birthdayMinAge', value: data.pleroma.metadata.birthday_min_age || 0 })
+      store.dispatch('setInstanceOption', { name: 'domains', value: data.pleroma.metadata.multitenancy?.enabled ? data.pleroma.metadata.multitenancy.domains : undefined })
 
       if (vapidPublicKey) {
         store.dispatch('setInstanceOption', { name: 'vapidPublicKey', value: vapidPublicKey })
@@ -262,6 +263,7 @@ const getNodeInfo = async ({ store }) => {
       store.dispatch('setInstanceOption', { name: 'mailerEnabled', value: metadata.mailerEnabled })
       store.dispatch('setInstanceOption', { name: 'quotingAvailable', value: features.includes('quote_posting') })
       store.dispatch('setInstanceOption', { name: 'groupActorAvailable', value: features.includes('pleroma:group_actors') })
+      store.dispatch('setInstanceOption', { name: 'multitenancyAvailable', value: features.includes('multitenancy') })
 
       const uploadLimits = metadata.uploadLimits
       store.dispatch('setInstanceOption', { name: 'uploadlimit', value: parseInt(uploadLimits.general) })

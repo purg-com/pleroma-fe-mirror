@@ -2,6 +2,7 @@ import useVuelidate from '@vuelidate/core'
 import { required, requiredIf, sameAs } from '@vuelidate/validators'
 import { mapActions, mapState } from 'vuex'
 import InterfaceLanguageSwitcher from '../interface_language_switcher/interface_language_switcher.vue'
+import Select from '../select/select.vue'
 import localeService from '../../services/locale/locale.service.js'
 import { DAY } from 'src/services/date_utils/date_utils.js'
 
@@ -16,12 +17,14 @@ const registration = {
       confirm: '',
       birthday: '',
       reason: '',
-      language: ['']
+      language: [''],
+      domain: ''
     },
     captcha: {}
   }),
   components: {
-    InterfaceLanguageSwitcher
+    InterfaceLanguageSwitcher,
+    Select
   },
   validations () {
     return {
@@ -41,7 +44,8 @@ const registration = {
           }
         },
         reason: { required: requiredIf(() => this.accountApprovalRequired) },
-        language: {}
+        language: {},
+        domain: {}
       }
     }
   },
@@ -89,7 +93,8 @@ const registration = {
       accountActivationRequired: (state) => state.instance.accountActivationRequired,
       accountApprovalRequired: (state) => state.instance.accountApprovalRequired,
       birthdayRequired: (state) => state.instance.birthdayRequired,
-      birthdayMinAge: (state) => state.instance.birthdayMinAge
+      birthdayMinAge: (state) => state.instance.birthdayMinAge,
+      domains: (state) => state.instance.domains.filter(domain => domain.public)
     })
   },
   methods: {
@@ -97,6 +102,7 @@ const registration = {
     async submit () {
       this.user.nickname = this.user.username
       this.user.token = this.token
+      this.user.domain = this.user.domain || null
 
       this.user.captcha_solution = this.captcha.solution
       this.user.captcha_token = this.captcha.token

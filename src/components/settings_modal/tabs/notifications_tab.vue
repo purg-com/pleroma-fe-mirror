@@ -19,7 +19,10 @@
           </div>
         </li>
         <li>
-          <BooleanSetting path="unseenAtTop" expert="1">
+          <BooleanSetting
+            path="unseenAtTop"
+            expert="1"
+          >
             {{ $t('settings.notification_setting_unseen_at_top') }}
           </BooleanSetting>
         </li>
@@ -38,7 +41,9 @@
         </li>
         <li>
           <h3> {{ $t('settings.notification_visibility') }}</h3>
-          <p v-if="expertLevel > 0">{{ $t('settings.notification_setting_filters_chrome_push') }}</p>
+          <p v-if="expertLevel > 0">
+            {{ $t('settings.notification_setting_filters_chrome_push') }}
+          </p>
           <ul class="setting-list two-column">
             <li>
               <h4> {{ $t('settings.notification_visibility_mentions') }}</h4>

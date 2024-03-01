@@ -2,6 +2,7 @@ import { set, get, cloneDeep, differenceWith, isEqual, flatten } from 'lodash'
 
 export const defaultState = {
   frontends: [],
+  domains: [],
   loaded: false,
   needsReboot: null,
   config: null,
@@ -34,6 +35,9 @@ const adminSettingsStorage = {
         }
         return f
       })
+    },
+    setDomains (state, { domains }) {
+      state.domains = domains
     },
     updateAdminSettings (state, { config, modifiedPaths }) {
       state.loaded = true
@@ -83,6 +87,10 @@ const adminSettingsStorage = {
         rootState.api.backendInteractor.fetchInstanceConfigDescriptions()
           .then(backendDescriptions => dispatch('setInstanceAdminDescriptions', { backendDescriptions }))
       }
+    },
+    loadDomainsStuff ({ state, rootState, dispatch, commit }) {
+      rootState.api.backendInteractor.fetchDomains()
+        .then(domains => commit('setDomains', { domains }))
     },
     setInstanceAdminSettings ({ state, commit, dispatch }, { backendDbConfig }) {
       const config = state.config || {}
@@ -222,6 +230,18 @@ const adminSettingsStorage = {
       })
         .then(() => rootState.api.backendInteractor.fetchInstanceDBConfig())
         .then(backendDbConfig => dispatch('setInstanceAdminSettings', { backendDbConfig }))
+    },
+    createDomain ({ rootState, dispatch }, { domain, state }) {
+      return rootState.api.backendInteractor.createDomain({ domain, state })
+        .then(() => dispatch('loadDomainsStuff'))
+    },
+    editDomain ({ rootState, dispatch }, { id, domain, state }) {
+      return rootState.api.backendInteractor.editDomain({ id, domain, state })
+        .then(() => dispatch('loadDomainsStuff'))
+    },
+    deleteDomain ({ rootState, dispatch }, { id }) {
+      return rootState.api.backendInteractor.deleteDomain({ id })
+        .then(() => dispatch('loadDomainsStuff'))
     }
   }
 }
