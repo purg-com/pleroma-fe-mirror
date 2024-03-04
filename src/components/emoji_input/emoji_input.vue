@@ -200,6 +200,11 @@
         height: calc(var(--__line-height) + var(--__vertical-gap) * 2);
         object-fit: contain;
       }
+
+      span {
+        font-size: var(--__line-height);
+        line-height: var(--__line-height);
+      }
     }
 
     .label {
