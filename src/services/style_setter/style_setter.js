@@ -50,15 +50,25 @@ export const applyTheme = async (input) => {
   // Optimization - instead of processing all lazy rules in one go, process them in small chunks
   // so that UI can do other things and be somewhat responsive while less important rules are being
   // processed
-  chunk(themes3.lazy, 5).forEach(chunk => {
-    setTimeout(() => {
-      Promise.all(chunk.map(x => x())).then(result => {
-        getCssRules(result.filter(x => x), themes3.staticVars).forEach(rule => {
-          styleSheet.insertRule(rule, 'index-max')
-        })
+  let counter = 0
+  const chunks = chunk(themes3.lazy, 200)
+  // let t0 = performance.now()
+  const processChunk = () => {
+    const chunk = chunks[counter]
+    Promise.all(chunk.map(x => x())).then(result => {
+      getCssRules(result.filter(x => x), themes3.staticVars).forEach(rule => {
+        styleSheet.insertRule(rule, 'index-max')
       })
-    }, 200)
-  })
+      // const t1 = performance.now()
+      // console.debug('Chunk ' + counter + ' took ' + (t1 - t0) + 'ms')
+      // t0 = t1
+      counter += 1
+      if (counter < chunks.length) {
+        setTimeout(processChunk, 0)
+      }
+    })
+  }
+  setTimeout(processChunk, 0)
 
   return Promise.resolve()
 }
