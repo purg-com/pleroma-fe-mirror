@@ -3,6 +3,8 @@
 @import "./panel";
 
 :root {
+  --font-size: 14px;
+  --status-margin: 0.75em;
   --navbar-height: 3.5rem;
   --post-line-height: 1.4;
   // Z-Index stuff
@@ -15,7 +17,7 @@
 }
 
 html {
-  font-size: 14px;
+  font-size: var(--font-size);
   // overflow-x: clip causes my browser's tab to crash with SIGILL lul
 }
 
@@ -203,7 +205,6 @@ nav {
   --miniColumn: 25rem;
   --maxiColumn: 45rem;
   --columnGap: 1em;
-  --status-margin: 0.75em;
   --effectiveSidebarColumnWidth: minmax(var(--miniColumn), var(--sidebarColumnWidth, var(--miniColumn)));
   --effectiveNotifsColumnWidth: minmax(var(--miniColumn), var(--notifsColumnWidth, var(--miniColumn)));
   --effectiveContentColumnWidth: minmax(var(--miniColumn), var(--contentColumnWidth, var(--maxiColumn)));
