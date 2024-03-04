@@ -79,6 +79,7 @@
     margin: 2em 0;
   }
 
+  color: var(--text);
   border-style: solid;
   border-width: 1px;
   border-radius: var(--roundness);
