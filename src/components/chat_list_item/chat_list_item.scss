@@ -10,7 +10,7 @@
   }
 
   &:hover {
-    box-shadow: 0 0 3px 1px rgb(0 0 0 / 10%);
+    box-shadow: var(--shadow)
   }
 
   .chat-list-item-left {
@@ -49,12 +49,12 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     margin: 0.35em 0;
-    color: var(--faintText);
+    color: var(--textFaint);
     width: 100%;
   }
 
   a {
-    color: var(--faintLink);
+    color: var(--linkFaint);
     text-decoration: none;
     pointer-events: none;
   }

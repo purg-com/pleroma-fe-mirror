@@ -81,7 +81,7 @@
               class="faint"
               scope="global"
             >
-              <a style="color: var(--faintLink);">
+              <a style="color: var(--linkFaint);">
                 {{ $t('settings.style.preview.faint_link') }}
               </a>
             </i18n-t>
