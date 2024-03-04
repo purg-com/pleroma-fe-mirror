@@ -21,8 +21,6 @@
 </template>
 <script src="./mfa_backup_codes.js"></script>
 <style lang="scss">
-@import "../../../../variables";
-
 .mfa-backup-codes {
   .warning {
     color: var(--cOrange);

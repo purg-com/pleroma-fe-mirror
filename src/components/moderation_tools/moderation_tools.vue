@@ -166,8 +166,6 @@
 <script src="./moderation_tools.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .moderation-tools-popover {
   height: 100%;
 

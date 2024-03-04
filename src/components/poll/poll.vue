@@ -103,8 +103,6 @@
 <script src="./poll.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .poll {
   .votes {
     display: flex;
@@ -121,8 +119,7 @@
     display: flex;
     flex-direction: row;
     position: relative;
-    color: $fallback--lightText;
-    color: var(--lightText, $fallback--lightText);
+    color: var(--textLight);
   }
 
   .option-result-label {

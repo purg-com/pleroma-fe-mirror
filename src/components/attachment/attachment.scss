@@ -1,5 +1,3 @@
-@import "../../variables";
-
 .Attachment {
   display: inline-flex;
   flex-direction: column;
@@ -131,23 +129,12 @@
 
     .attachment-button {
       padding: 0;
-      border-radius: $fallback--tooltipRadius;
-      border-radius: var(--tooltipRadius, $fallback--tooltipRadius);
+      border-radius: var(--roundness);
       text-align: center;
       width: 2em;
       height: 2em;
       margin-left: 0.5em;
       font-size: 1.25em;
-      // TODO: theming? hard to theme with unknown background image color
-      background: rgb(230 230 230 / 70%);
-
-      .svg-inline--fa {
-        color: rgb(0 0 0 / 60%);
-      }
-
-      &:hover .svg-inline--fa {
-        color: rgb(0 0 0 / 90%);
-      }
     }
   }
 
@@ -222,8 +209,7 @@
 
   &.-placeholder {
     display: inline-block;
-    color: $fallback--link;
-    color: var(--postLink, $fallback--link);
+    color: var(--link);
     overflow: hidden;
     white-space: nowrap;
     height: auto;

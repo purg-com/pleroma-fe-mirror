@@ -1,5 +1,3 @@
-@import "../../variables";
-
 $emoji-picker-header-height: 36px;
 $emoji-picker-header-picture-width: 32px;
 $emoji-picker-header-picture-height: 32px;
@@ -72,8 +70,7 @@ $emoji-picker-emoji-size: 32px;
   .additional-tabs {
     display: flex;
     border-left: 1px solid;
-    border-left-color: $fallback--icon;
-    border-left-color: var(--icon, $fallback--icon);
+    border-left-color: var(--border);
     padding-left: 7px;
     flex: 0 0 auto;
   }

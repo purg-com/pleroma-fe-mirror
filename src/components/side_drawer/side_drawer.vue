@@ -283,8 +283,6 @@
 <script src="./side_drawer.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .side-drawer-container {
   position: fixed;
   z-index: var(--ZI_navbar);

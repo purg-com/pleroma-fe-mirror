@@ -40,8 +40,6 @@
 <script src="./status_popover.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 /* popover styles load on-demand, so we need to override */
 .status-popover.popover {
   font-size: 1rem;

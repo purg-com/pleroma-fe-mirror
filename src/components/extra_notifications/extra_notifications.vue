@@ -80,8 +80,6 @@
 <script src="./extra_notifications.js" />
 
 <style lang="scss">
-@import "../../variables";
-
 .ExtraNotifications {
   width: 100%;
   display: flex;
@@ -91,8 +89,7 @@
   .notification {
     width: 100%;
     border-bottom: 1px solid;
-    border-color: $fallback--border;
-    border-color: var(--border, $fallback--border);
+    border-color: var(--border);
     display: flex;
     flex-direction: column;
     align-items: stretch;

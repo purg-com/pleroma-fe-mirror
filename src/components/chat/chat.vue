@@ -95,6 +95,5 @@
 
 <script src="./chat.js"></script>
 <style lang="scss">
-@import "../../variables";
 @import "./chat";
 </style>

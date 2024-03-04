@@ -375,8 +375,6 @@
 <script src="./post_status_form.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .post-status-form {
   position: relative;
 
@@ -437,15 +435,12 @@
 
   .preview-error {
     font-style: italic;
-    color: $fallback--faint;
-    color: var(--faint, $fallback--faint);
+    color: var(--textFaint);
   }
 
   .preview-status {
-    border: 1px solid $fallback--border;
-    border: 1px solid var(--border, $fallback--border);
-    border-radius: $fallback--tooltipRadius;
-    border-radius: var(--tooltipRadius, $fallback--tooltipRadius);
+    border: 1px solid var(--border);
+    border-radius: var(--roundness);
     padding: 0.5em;
     margin: 0;
   }
@@ -456,8 +451,7 @@
 
   .text-format {
     .only-format {
-      color: $fallback--faint;
-      color: var(--faint, $fallback--faint);
+      color: var(--textFaint);
     }
   }
 
@@ -585,8 +579,7 @@
     margin: 0 0.5em;
 
     &.error {
-      color: $fallback--cRed;
-      color: var(--cRed, $fallback--cRed);
+      color: var(--cRed);
     }
   }
 
@@ -609,14 +602,10 @@
     align-items: center;
     justify-content: center;
     opacity: 0.6;
-    color: $fallback--text;
-    color: var(--text, $fallback--text);
-    background-color: $fallback--bg;
-    background-color: var(--bg, $fallback--bg);
-    border-radius: $fallback--tooltipRadius;
-    border-radius: var(--tooltipRadius, $fallback--tooltipRadius);
-    border: 2px dashed $fallback--text;
-    border: 2px dashed var(--text, $fallback--text);
+    color: var(--text);
+    background-color: var(--bg);
+    border-radius: var(--roundness);
+    border: 2px dashed var(--text);
   }
 }
 </style>

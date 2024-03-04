@@ -1,5 +1,3 @@
-@import "../../variables";
-
 .MentionLink {
   position: relative;
   white-space: normal;
@@ -13,7 +11,7 @@
   }
 
   .mention-avatar {
-    border-radius: var(--avatarAltRadius, $fallback--avatarAltRadius);
+    border-radius: var(--roundness);
     width: 1.5em;
     height: 1.5em;
     vertical-align: middle;
@@ -60,8 +58,8 @@
     }
 
     &.-has-selection {
-      color: var(--alertNeutralText, $fallback--text);
-      background-color: var(--alertNeutral, $fallback--fg);
+      color: var(--selectionText);
+      background-color: var(--selectionBackground);
     }
 
     .at {
@@ -101,7 +99,7 @@
   }
 
   .serverName.-faded {
-    color: var(--faintLink, $fallback--link);
+    color: var(--linkFaint);
   }
 }
 

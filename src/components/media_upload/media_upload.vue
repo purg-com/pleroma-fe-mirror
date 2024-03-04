@@ -36,8 +36,6 @@
 <script src="./media_upload.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .media-upload {
   .hidden-input-file {
     display: none;

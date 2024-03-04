@@ -25,8 +25,6 @@
 <script src="./autosuggest.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .autosuggest {
   position: relative;
 
@@ -41,11 +39,9 @@
     top: 100%;
     right: 0;
     max-height: 400px;
-    background-color: $fallback--bg;
-    background-color: var(--bg, $fallback--bg);
+    background-color: var(--bg);
     border-style: solid;
     border-width: 1px;
-    border-color: $fallback--border;
     border-color: var(--border);
     border-radius: var(--roundness);
     border-top-left-radius: 0;

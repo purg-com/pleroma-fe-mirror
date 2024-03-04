@@ -201,7 +201,6 @@
 <script src="./extra_buttons.js"></script>
 
 <style lang="scss">
-@import "../../variables";
 @import "../../mixins";
 
 .ExtraButtons {
@@ -211,8 +210,7 @@
     margin: -10px;
 
     &:hover .svg-inline--fa {
-      color: $fallback--text;
-      color: var(--text, $fallback--text);
+      color: var(--text);
     }
   }
 

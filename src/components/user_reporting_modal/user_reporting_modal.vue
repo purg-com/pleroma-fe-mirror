@@ -72,8 +72,6 @@
 <script src="./user_reporting_modal.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .user-reporting-panel {
   width: 90vw;
   max-width: 700px;
@@ -84,8 +82,7 @@
     display: flex;
     flex-direction: column-reverse;
     border-top: 1px solid;
-    border-color: $fallback--border;
-    border-color: var(--border, $fallback--border);
+    border-color: var(--border);
     overflow: hidden;
   }
 
@@ -155,8 +152,7 @@
       width: 50%;
       max-width: 320px;
       border-right: 1px solid;
-      border-color: $fallback--border;
-      border-color: var(--border, $fallback--border);
+      border-color: var(--border);
       padding: 1.1em;
 
       > div {

@@ -25,8 +25,6 @@
 <script src="./global_notice_list.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .global-notice-list {
   position: fixed;
   top: calc(var(--navbar-height) + 0.5em);

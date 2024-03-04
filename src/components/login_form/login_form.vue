@@ -93,8 +93,6 @@
 <script src="./login_form.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .login-form {
   display: flex;
   flex-direction: column;

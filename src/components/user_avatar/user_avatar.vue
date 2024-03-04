@@ -32,8 +32,6 @@
 
 <script src="./user_avatar.js"></script>
 <style lang="scss">
-@import "../../variables";
-
 .Avatar {
   --_avatarShadowBox: var(--shadow);
   --_avatarShadowFilter: var(--shadowFilter);

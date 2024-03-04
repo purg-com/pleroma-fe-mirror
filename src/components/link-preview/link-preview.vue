@@ -33,8 +33,6 @@
 <script src="./link-preview.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .link-preview-card {
   display: flex;
   flex-direction: row;
@@ -81,12 +79,9 @@
     margin: 2em 0;
   }
 
-  color: $fallback--text;
-  color: var(--text, $fallback--text);
   border-style: solid;
   border-width: 1px;
   border-radius: var(--roundness);
-  border-color: $fallback--border;
-  border-color: var(--border, $fallback--border);
+  border-color: var(--border);
 }
 </style>

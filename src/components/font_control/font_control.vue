@@ -53,8 +53,6 @@
 <script src="./font_control.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .font-control {
   input.custom-font {
     min-width: 10em;

@@ -28,8 +28,6 @@
 <script src="./navigation_pins.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .NavigationPins {
   display: flex;
   flex-wrap: wrap;

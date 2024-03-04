@@ -95,8 +95,6 @@
 <script src="./poll_form.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .poll-form {
   display: flex;
   flex-direction: column;

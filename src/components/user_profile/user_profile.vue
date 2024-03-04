@@ -153,8 +153,6 @@
 <script src="./user_profile.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .user-profile {
   flex: 2;
   flex-basis: 500px;

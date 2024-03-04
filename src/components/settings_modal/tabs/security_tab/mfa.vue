@@ -139,8 +139,6 @@
 
 <script src="./mfa.js"></script>
 <style lang="scss">
-@import "../../../../variables";
-
 .mfa-settings {
   .mfa-heading,
   .method-item {
@@ -151,8 +149,7 @@
   }
 
   .warning {
-    color: $fallback--cOrange;
-    color: var(--cOrange, $fallback--cOrange);
+    color: var(--cOrange);
   }
 
   .setup-otp {

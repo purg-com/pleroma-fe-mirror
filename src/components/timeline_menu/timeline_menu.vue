@@ -45,8 +45,6 @@
 <script src="./timeline_menu.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .timeline-menu-popover {
   min-width: 24rem;
   max-width: 100vw;

@@ -213,14 +213,12 @@
 <script src="./conversation.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .Conversation {
   z-index: 1;
 
   .conversation-dive-to-top-level-box {
-    padding: var(--status-margin, $status-margin);
-    border-bottom: 1px solid var(--border, $fallback--border);
+    padding: var(--status-margin);
+    border-bottom: 1px solid var(--border);
     border-radius: 0;
 
     /* Make the button stretch along the whole row */
@@ -230,20 +228,22 @@
   }
 
   .thread-ancestors {
-    margin-left: var(--status-margin, $status-margin);
-    border-left: 2px solid var(--border, $fallback--border);
+    margin-left: var(--status-margin);
+    border-left: 2px solid var(--border);
   }
 
-  .thread-ancestor.-faded .StatusContent {
-    --link: var(--faintLink);
-    --text: var(--faint);
-
-    color: var(--text);
+  .thread-ancestor.-faded .RichContent {
+    /* stylelint-disable declaration-no-important */
+    --text: var(--textFaint) !important;
+    --link: var(--linkFaint) !important;
+    --funtextGreentext: var(--funtextGreentextFaint) !important;
+    --funtextCyantext: var(--funtextCyantextFaint) !important;
+    /* stylelint-enable declaration-no-important */
   }
 
   .thread-ancestor-dive-box {
-    padding-left: var(--status-margin, $status-margin);
-    border-bottom: 1px solid var(--border, $fallback--border);
+    padding-left: var(--status-margin);
+    border-bottom: 1px solid var(--border);
     border-radius: 0;
 
     /* Make the button stretch along the whole row */
@@ -256,11 +256,11 @@
   }
 
   .thread-ancestor-dive-box-inner {
-    padding: var(--status-margin, $status-margin);
+    padding: var(--status-margin);
   }
 
   .conversation-status {
-    border-bottom: 1px solid var(--border, $fallback--border);
+    border-bottom: 1px solid var(--border);
     border-radius: 0;
   }
 
@@ -274,7 +274,7 @@
   }
 
   .thread-ancestors + .thread-tree > .conversation-status {
-    border-top: 1px solid var(--border, $fallback--border);
+    border-top: 1px solid var(--border);
   }
 
   /* expanded conversation in timeline */
@@ -288,7 +288,7 @@
 
   &.-expanded.status-fadein {
     background: var(--background);
-    padding: calc(var(--status-margin, $status-margin) / 2);
+    padding: calc(var(--status-margin) / 2);
   }
 }
 </style>

@@ -122,8 +122,6 @@
 <script src="./account_actions.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .AccountActions {
   .ellipsis-button {
     width: 2.5em;

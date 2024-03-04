@@ -28,8 +28,6 @@
 
 <script src="./lists_user_search.js"></script>
 <style lang="scss">
-@import "../../variables";
-
 .ListsUserSearch {
   .input-wrap {
     display: flex;

@@ -48,6 +48,5 @@
 <script src="./chat_list_item.js"></script>
 
 <style lang="scss">
-@import "../../variables";
 @import "./chat_list_item";
 </style>

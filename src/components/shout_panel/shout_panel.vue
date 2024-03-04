@@ -75,8 +75,6 @@
 <script src="./shout_panel.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .floating-shout {
   position: fixed;
   bottom: 0.5em;
@@ -97,8 +95,7 @@
     cursor: pointer;
 
     .icon {
-      color: $fallback--text;
-      color: var(--panelText, $fallback--text);
+      color: var(--text);
       margin-right: 0.5em;
     }
 

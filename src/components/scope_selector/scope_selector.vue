@@ -64,8 +64,6 @@
 <script src="./scope_selector.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .ScopeSelector {
   .scope {
     display: inline-block;

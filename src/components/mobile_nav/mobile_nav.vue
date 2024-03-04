@@ -123,8 +123,6 @@
 <script src="./mobile_nav.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .MobileNav {
   z-index: var(--ZI_navbar);
 
@@ -195,11 +193,7 @@
     height: 50px;
     line-height: 50px;
     position: absolute;
-    color: var(--topBarText);
-    background-color: $fallback--fg;
-    background-color: var(--topBar, $fallback--fg);
-    box-shadow: 0 0 4px rgb(0 0 0 / 60%);
-    box-shadow: var(--topBarShadow);
+    box-shadow: var(--shadow);
 
     .spacer {
       flex: 1;

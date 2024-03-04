@@ -110,8 +110,6 @@
 <script src="./emoji_input.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .input.emoji-input {
   padding: 0;
   display: flex;

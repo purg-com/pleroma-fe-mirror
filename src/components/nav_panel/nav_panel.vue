@@ -103,8 +103,6 @@
 <script src="./nav_panel.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .NavPanel {
   .panel {
     overflow: hidden;

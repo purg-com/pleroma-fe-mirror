@@ -13,8 +13,6 @@
 <script src="./mobile_post_status_button.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .MobilePostButton {
   &.button-default {
     width: 5em;
@@ -40,8 +38,7 @@
 
   svg {
     font-size: 1.5em;
-    color: $fallback--text;
-    color: var(--text, $fallback--text);
+    color: var(--text);
   }
 }
 
