@@ -58,7 +58,9 @@
     }
 
     &.-has-selection {
-      color: var(--selectionText);
+      --color: var(--selectionText);
+      --link: var(--selectionText);
+
       background-color: var(--selectionBackground);
     }
 
