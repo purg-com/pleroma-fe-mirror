@@ -126,7 +126,6 @@ export const convertTheme2To3 = (data) => {
   data.colors.link = data.colors.link || data.colors.accent
   const generateRoot = () => {
     const directives = {}
-    console.log(data.colors)
     basePaletteKeys.forEach(key => { directives['--' + key] = 'color | ' + convert(data.colors[key]).hex })
     return {
       component: 'Root',
@@ -506,7 +505,6 @@ export const convertTheme2To3 = (data) => {
           { ...newRule, component: 'Tab' },
           { ...newRule, component: 'ScrollbarElement' }
         ]
-        console.log(newRule)
         if (newRule.state?.indexOf('toggled') >= 0) {
           rules.push({ ...newRule, state: [...newRule.state, 'focused'] })
           rules.push({ ...newRule, state: [...newRule.state, 'hover'] })
@@ -516,6 +514,12 @@ export const convertTheme2To3 = (data) => {
           rules.push({ ...newRule, state: [...newRule.state, 'focused'] })
         }
         return rules
+      } else if (newRule.component === 'Badge') {
+        if (newRule.variant === 'notification') {
+          return [newRule, { component: 'Root', directives: { '--badgeNotification': 'color | ' + newRule.directives.background } }]
+        } else {
+          return [newRule]
+        }
       } else if (newRule.component === 'TopBar') {
         return [newRule, { ...newRule, parent: { component: 'MobileDrawer' }, component: 'PanelHeader' }]
       } else {
