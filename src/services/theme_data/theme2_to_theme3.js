@@ -202,6 +202,9 @@ export const convertTheme2To3 = (data) => {
         newRules.push({ ...rule, component: 'Tab' })
         newRules.push({ ...rule, component: 'Tab', state: ['active'], directives: { opacity: 0 } })
       }
+      if (rule.component === 'Panel') {
+        newRules.push({ ...rule, component: 'Post' })
+      }
     })
     return newRules
   }

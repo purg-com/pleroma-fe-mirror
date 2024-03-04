@@ -20,15 +20,13 @@ export default {
   defaultRules: [
     {
       directives: {
-        background: '--bg',
-        opacity: 0
+        background: '--bg'
       }
     },
     {
       state: ['selected'],
       directives: {
-        background: '--inheritedBackground, 10',
-        opacity: 1
+        background: '--inheritedBackground, 10'
       }
     }
   ]

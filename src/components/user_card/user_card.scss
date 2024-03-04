@@ -21,14 +21,6 @@
     position: relative;
   }
 
-  .panel-body {
-    word-wrap: break-word;
-    border-bottom-right-radius: inherit;
-    border-bottom-left-radius: inherit;
-    // create new stacking context
-    position: relative;
-  }
-
   .background-image {
     position: absolute;
     top: 0;

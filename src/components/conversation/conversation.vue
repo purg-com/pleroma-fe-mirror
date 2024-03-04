@@ -28,7 +28,10 @@
         class="rightside-button"
       />
     </div>
-    <div class="conversation-body panel-body">
+    <div
+      class="conversation-body"
+      :class="{ 'panel-body': isExpanded }"
+      >
       <div
         v-if="isTreeView"
         class="thread-body"
@@ -78,7 +81,7 @@
               :replies="getReplies(status.id)"
               :in-profile="inProfile"
               :profile-user-id="profileUserId"
-              class="conversation-status status-fadein panel-body"
+              class="conversation-status status-fadein"
 
               :simple-tree="treeViewIsSimple"
               :toggle-thread-display="toggleThreadDisplay"
@@ -183,7 +186,7 @@
             :replies="getReplies(status.id)"
             :in-profile="inProfile"
             :profile-user-id="profileUserId"
-            class="conversation-status status-fadein panel-body"
+            class="conversation-status status-fadein"
 
             :toggle-thread-display="toggleThreadDisplay"
             :thread-display-status="threadDisplayStatus"
@@ -284,7 +287,8 @@
   }
 
   &.-expanded.status-fadein {
-    margin: calc(var(--status-margin, $status-margin) / 2);
+    background: var(--background);
+    padding: calc(var(--status-margin, $status-margin) / 2);
   }
 }
 </style>

@@ -5,6 +5,11 @@
   word-wrap: break-word;
   word-break: break-word;
 
+  &.Status {
+    /* stylelint-disable-next-line declaration-no-important */
+    background-color: transparent !important;
+  }
+
   --emoji-size: 14px;
 
   &:hover {

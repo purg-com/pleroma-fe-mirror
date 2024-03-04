@@ -23,6 +23,7 @@ export default {
   defaultRules: [
     {
       directives: {
+        backgroundNoCssColor: 'yes',
         background: '--bg',
         roundness: 3,
         blur: '5px',

@@ -4,52 +4,54 @@
       v-if="user"
       class="user-profile panel panel-default"
     >
-      <UserCard
-        :user-id="userId"
-        :switcher="true"
-        :selected="timeline.viewing"
-        avatar-action="zoom"
-        rounded="top"
-        :has-note-editor="true"
-      />
-      <span
-        v-if="!!user.birthday"
-        class="user-birthday"
-      >
-        <FAIcon
-          class="fa-old-padding"
-          icon="birthday-cake"
+      <div class="panel-body">
+        <UserCard
+          :user-id="userId"
+          :switcher="true"
+          :selected="timeline.viewing"
+          avatar-action="zoom"
+          rounded="top"
+          :has-note-editor="true"
         />
-        {{ $t('user_card.birthday', { birthday: formattedBirthday }) }}
-      </span>
-      <div
-        v-if="user.fields_html && user.fields_html.length > 0"
-        class="user-profile-fields"
-      >
-        <dl
-          v-for="(field, index) in user.fields_html"
-          :key="index"
-          class="user-profile-field"
+        <span
+          v-if="!!user.birthday"
+          class="user-birthday"
         >
-          <dt
-            :title="user.fields_text[index].name"
-            class="user-profile-field-name"
+          <FAIcon
+            class="fa-old-padding"
+            icon="birthday-cake"
+          />
+          {{ $t('user_card.birthday', { birthday: formattedBirthday }) }}
+        </span>
+        <div
+          v-if="user.fields_html && user.fields_html.length > 0"
+          class="user-profile-fields"
+        >
+          <dl
+            v-for="(field, index) in user.fields_html"
+            :key="index"
+            class="user-profile-field"
           >
-            <RichContent
-              :html="field.name"
-              :emoji="user.emoji"
-            />
-          </dt>
-          <dd
-            :title="user.fields_text[index].value"
-            class="user-profile-field-value"
-          >
-            <RichContent
-              :html="field.value"
-              :emoji="user.emoji"
-            />
-          </dd>
-        </dl>
+            <dt
+              :title="user.fields_text[index].name"
+              class="user-profile-field-name"
+            >
+              <RichContent
+                :html="field.name"
+                :emoji="user.emoji"
+              />
+            </dt>
+            <dd
+              :title="user.fields_text[index].value"
+              class="user-profile-field-value"
+            >
+              <RichContent
+                :html="field.value"
+                :emoji="user.emoji"
+              />
+            </dd>
+          </dl>
+        </div>
       </div>
       <tab-switcher
         :active-tab="tab"
@@ -136,7 +138,7 @@
           {{ $t('settings.profile_tab') }}
         </div>
       </div>
-      <div class="panel-body">
+      <div>
         <span v-if="error">{{ error }}</span>
         <FAIcon
           v-else
@@ -159,6 +161,11 @@
 
   // No sticky header on user profile
   --currentPanelStack: 1;
+
+  .tab-switcher .tabs {
+    background: var(--__panel-background);
+    backdrop-filter: var(--__panel-backdrop-filter);
+  }
 
   .user-birthday {
     margin: 0 0.75em 0.5em;
@@ -228,4 +235,5 @@
     padding: 7em;
   }
 }
+
 </style>

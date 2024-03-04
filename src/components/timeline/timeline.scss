@@ -1,6 +1,10 @@
 @import "../../variables";
 
 .Timeline {
+  .timeline-body {
+    background: none;
+  }
+
   .alert-badge {
     font-size: 0.75em;
     line-height: 1;
