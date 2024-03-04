@@ -112,6 +112,10 @@
 
   .poll-option {
     margin: 0.75em 0.5em;
+
+    .input {
+      line-height: inherit;
+    }
   }
 
   .option-result {
