@@ -887,3 +887,8 @@ option {
   padding: 0;
   position: absolute;
 }
+
+*::selection {
+  color: var(--selectionText);
+  background-color: var(--selectionBackground);
+}

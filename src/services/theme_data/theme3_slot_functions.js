@@ -1,5 +1,5 @@
 import { convert, brightness } from 'chromatism'
-import { alphaBlend, relativeLuminance } from '../color_convert/color_convert.js'
+import { alphaBlend, getTextColor, relativeLuminance } from '../color_convert/color_convert.js'
 
 export const process = (text, functions, { findColor, findShadow }, { dynamicVars, staticVars }) => {
   const { funcName, argsString } = /\$(?<funcName>\w+)\((?<argsString>[#a-zA-Z0-9-,.'"\s]*)\)/.exec(text).groups
@@ -21,6 +21,17 @@ export const colorFunctions = {
       const colorArg = convert(findColor(color, { dynamicVars, staticVars })).rgb
       const amount = Number(amountArg)
       return { ...colorArg, a: amount }
+    }
+  },
+  textColor: {
+    argsNeeded: 2,
+    exec: (args, { findColor }, { dynamicVars, staticVars }) => {
+      const [backgroundArg, foregroundArg, preserve = 'preserve'] = args
+
+      const background = convert(findColor(backgroundArg, { dynamicVars, staticVars })).rgb
+      const foreground = convert(findColor(foregroundArg, { dynamicVars, staticVars })).rgb
+
+      return getTextColor(background, foreground, preserve === 'preserve')
     }
   },
   blend: {
