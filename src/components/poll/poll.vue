@@ -37,8 +37,8 @@
           :role="poll.multiple ? 'checkbox' : 'radio'"
           :aria-labelledby="`option-vote-${randomSeed}-${index}`"
           :aria-checked="choices[index]"
-          @click="activateOption(index)"
           class="input unstyled"
+          @click="activateOption(index)"
         >
           <!-- TODO: USE CHECKBOX -->
           <input

@@ -31,7 +31,7 @@
     <div
       class="conversation-body"
       :class="{ 'panel-body': isExpanded }"
-      >
+    >
       <div
         v-if="isTreeView"
         class="thread-body"
