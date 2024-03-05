@@ -60,6 +60,14 @@
     >
       <FrontendsTab />
     </div>
+
+    <div
+      :label="$t('admin_dash.tabs.emoji')"
+      icon="face-smile-beam"
+      data-tab-name="emoji"
+    >
+      <EmojiTab />
+    </div>
   </tab-switcher>
 </template>
 
