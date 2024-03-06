@@ -26,7 +26,7 @@ export const applyTheme = async (input) => {
   const styleSheet = styleEl.sheet
 
   getCssRules(themes3.eager, themes3.staticVars).forEach(rule => {
-    // Hack to support multiple selectors on same component
+    // Hacks to support multiple selectors on same component
     if (rule.match(/::-webkit-scrollbar-button/)) {
       const parts = rule.split(/[{}]/g)
       const newRule = [
@@ -57,7 +57,20 @@ export const applyTheme = async (input) => {
     const chunk = chunks[counter]
     Promise.all(chunk.map(x => x())).then(result => {
       getCssRules(result.filter(x => x), themes3.staticVars).forEach(rule => {
-        styleSheet.insertRule(rule, 'index-max')
+        if (rule.match(/\.modal-view/)) {
+          const parts = rule.split(/[{}]/g)
+          const newRule = [
+            parts[0],
+            ', ',
+            parts[0].replace(/\.modal-view/, '#modal'),
+            ' {',
+            parts[1],
+            '}'
+          ].join('')
+          styleSheet.insertRule(newRule, 'index-max')
+        } else {
+          styleSheet.insertRule(rule, 'index-max')
+        }
       })
       // const t1 = performance.now()
       // console.debug('Chunk ' + counter + ' took ' + (t1 - t0) + 'ms')

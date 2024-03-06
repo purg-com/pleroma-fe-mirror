@@ -1,7 +1,6 @@
 export default {
   name: 'MobileDrawer',
   selector: '.mobile-drawer',
-  lazy: true,
   validInnerComponents: [
     'Text',
     'Link',
