@@ -2,10 +2,10 @@ export default {
   name: 'ButtonUnstyled',
   selector: '.button-unstyled',
   states: {
+    toggled: '.toggled',
     disabled: ':disabled',
     hover: ':hover:not(:disabled)',
-    focused: ':focus-within',
-    toggled: '.toggled'
+    focused: ':focus-within'
   },
   validInnerComponents: [
     'Text',
@@ -41,6 +41,36 @@ export default {
       }
     },
     {
+      component: 'Icon',
+      parent: {
+        component: 'ButtonUnstyled',
+        state: ['toggled', 'hover']
+      },
+      directives: {
+        textColor: '--parent--text'
+      }
+    },
+    {
+      component: 'Icon',
+      parent: {
+        component: 'ButtonUnstyled',
+        state: ['toggled', 'focused']
+      },
+      directives: {
+        textColor: '--parent--text'
+      }
+    },
+    {
+      component: 'Icon',
+      parent: {
+        component: 'ButtonUnstyled',
+        state: ['toggled', 'focused', 'hover']
+      },
+      directives: {
+        textColor: '--parent--text'
+      }
+    },
+    {
       component: 'Text',
       parent: {
         component: 'ButtonUnstyled',
@@ -52,32 +82,10 @@ export default {
       }
     },
     {
-      component: 'Text',
-      parent: {
-        component: 'ButtonUnstyled',
-        state: ['disabled', 'hover']
-      },
-      directives: {
-        textOpacity: 0.25,
-        textOpacityMode: 'blend'
-      }
-    },
-    {
       component: 'Icon',
       parent: {
         component: 'ButtonUnstyled',
         state: ['disabled']
-      },
-      directives: {
-        textOpacity: 0.25,
-        textOpacityMode: 'blend'
-      }
-    },
-    {
-      component: 'Icon',
-      parent: {
-        component: 'ButtonUnstyled',
-        state: ['disabled', 'hover']
       },
       directives: {
         textOpacity: 0.25,
