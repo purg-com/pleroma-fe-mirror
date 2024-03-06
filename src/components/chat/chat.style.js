@@ -1,7 +1,6 @@
 export default {
   name: 'Chat',
   selector: '.chat-message-list',
-  lazy: true,
   validInnerComponents: [
     'Text',
     'Link',
@@ -10,5 +9,11 @@ export default {
     'ChatMessage'
   ],
   defaultRules: [
+    {
+      directives: {
+        background: '--bg',
+        blur: '5px'
+      }
+    }
   ]
 }

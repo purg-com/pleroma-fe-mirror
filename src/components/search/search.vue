@@ -1,11 +1,11 @@
 <template>
-  <div class="panel panel-default">
+  <div class="Search panel panel-default">
     <div class="panel-heading">
       <div class="title">
         {{ $t('nav.search') }}
       </div>
     </div>
-    <div class="search-input-container">
+    <div class="panel-body search-input-container">
       <input
         ref="searchInput"
         v-model="searchTerm"
@@ -23,7 +23,7 @@
     </div>
     <div
       v-if="loading && statusesOffset == 0"
-      class="text-center loading-icon"
+      class="panel-body text-center loading-icon"
     >
       <FAIcon
         icon="circle-notch"
@@ -152,6 +152,11 @@
   color: var(--faint);
   padding: 0.75rem;
   text-align: center;
+}
+
+.Search .tab-switcher .tabs {
+  background: var(--__panel-background);
+  backdrop-filter: var(--__panel-backdrop-filter);
 }
 
 @media all and (max-width: 800px) {

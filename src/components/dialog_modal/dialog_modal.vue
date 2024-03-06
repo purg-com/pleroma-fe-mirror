@@ -12,7 +12,7 @@
           <slot name="header" />
         </div>
       </div>
-      <div class="dialog-modal-content">
+      <div class="panel-body dialog-modal-content">
         <slot name="default" />
       </div>
       <div class="dialog-modal-footer user-interactions panel-footer">
