@@ -287,8 +287,23 @@
   }
 
   &.-expanded.status-fadein {
+    --___margin: calc(var(--status-margin) / 2);
+
     background: var(--background);
-    padding: calc(var(--status-margin) / 2);
+    margin: var(--___margin);
+
+    &::before {
+      z-index: -1;
+      content: "";
+      display: block;
+      position: absolute;
+      top: calc(var(--___margin) * -1);
+      bottom: calc(var(--___margin) * -1);
+      left: calc(var(--___margin) * -1);
+      right: calc(var(--___margin) * -1);
+      background: var(--background);
+      backdrop-filter: var(--__panel-backdrop-filter);
+    }
   }
 }
 </style>
