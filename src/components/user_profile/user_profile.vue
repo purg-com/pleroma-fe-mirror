@@ -74,6 +74,7 @@
         <div
           v-if="followsTabVisible"
           key="followees"
+          class="panel-body"
           :label="$t('user_card.followees')"
           :disabled="!user.friends_count"
         >
@@ -88,6 +89,7 @@
         </div>
         <div
           v-if="followersTabVisible"
+          class="panel-body"
           key="followers"
           :label="$t('user_card.followers')"
           :disabled="!user.followers_count"

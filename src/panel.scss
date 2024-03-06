@@ -37,7 +37,7 @@
   &:empty::before {
     content: "¯\\_(ツ)_/¯"; // Could use words but it'd require translations
     display: block;
-    margin: 1em;
+    padding: 1em;
     text-align: center;
   }
 

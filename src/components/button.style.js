@@ -68,14 +68,14 @@ export default {
     {
       state: ['toggled'],
       directives: {
-        background: '--inheritedBackground,-24.2',
+        background: '--inheritedBackground,-14.2',
         shadow: ['--defaultButtonShadow', '--pressedButtonBevel']
       }
     },
     {
       state: ['toggled', 'hover'],
       directives: {
-        background: '--inheritedBackground,-24.2',
+        background: '--inheritedBackground,-14.2',
         shadow: ['--defaultButtonHoverGlow', '--pressedButtonBevel']
       }
     },
