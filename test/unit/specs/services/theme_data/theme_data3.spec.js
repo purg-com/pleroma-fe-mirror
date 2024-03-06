@@ -1,11 +1,13 @@
 // import { topoSort } from 'src/services/theme_data/theme_data.service.js'
 import {
-  getAllPossibleCombinations,
+  getAllPossibleCombinations
+} from 'src/services/theme_data/iss_utils.js'
+import {
   init
 } from 'src/services/theme_data/theme_data_3.service.js'
 import {
-  sampleRules
-} from 'src/services/theme_data/pleromafe.t3.js'
+  basePaletteKeys
+} from 'src/services/theme_data/theme2_to_theme3.js'
 
 describe.only('Theme Data 3', () => {
   describe('getAllPossibleCombinations', () => {
@@ -16,10 +18,23 @@ describe.only('Theme Data 3', () => {
   })
 
   describe('init', () => {
-    it('test simple case', () => {
-      const out = init(sampleRules, palette)
-      // console.log(JSON.stringify(out, null, 2))
-      console.log('\n' + out.css.join('\n') + '\n')
+    it('Test initialization without anything', () => {
+      const out = init([], '#DEADAF')
+
+      expect(out).to.have.property('eager')
+      expect(out).to.have.property('lazy')
+      expect(out).to.have.property('staticVars')
+
+      expect(out.lazy).to.be.an('array')
+      expect(out.lazy).to.have.lengthOf.above(1)
+      expect(out.eager).to.be.an('array')
+      expect(out.eager).to.have.lengthOf.above(1)
+      expect(out.staticVars).to.be.an('object')
+
+      // check backwards compat/generic stuff
+      basePaletteKeys.forEach(key => {
+        expect(out.staticVars).to.have.property(key)
+      })
     })
   })
 })
