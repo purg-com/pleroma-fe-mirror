@@ -6,7 +6,7 @@
     <div class="setting-item">
       <h2>{{ $t('admin_dash.tabs.frontends') }}</h2>
       <p>{{ $t('admin_dash.frontend.wip_notice') }}</p>
-      <ul class="setting-list">
+      <ul class="setting-list" v-if="adminDraft">
         <li>
           <h3>{{ $t('admin_dash.frontend.default_frontend') }}</h3>
           <p>{{ $t('admin_dash.frontend.default_frontend_tip') }}</p>
@@ -23,6 +23,10 @@
           </ul>
         </li>
       </ul>
+      <div v-else class="setting-list">
+        {{ $t('admin_dash.frontend.default_frontend_unavail') }}
+      </div>
+
       <div class="setting-list relative">
         <PanelLoading
           v-if="working"
@@ -36,9 +40,9 @@
           >
             <strong>{{ frontend.name }}</strong>
             {{ ' ' }}
-            <span v-if="adminDraft[':pleroma'][':frontends'][':primary']?.name === frontend.name">
+            <span v-if="adminDraft && adminDraft[':pleroma'][':frontends'][':primary']?.name === frontend.name">
               <i18n-t
-                v-if="adminDraft[':pleroma'][':frontends'][':primary']?.ref === frontend.refs[0]"
+                v-if="adminDraft && adminDraft[':pleroma'][':frontends'][':primary']?.ref === frontend.refs[0]"
                 keypath="admin_dash.frontend.is_default"
               />
               <i18n-t
@@ -46,7 +50,7 @@
                 keypath="admin_dash.frontend.is_default_custom"
               >
                 <template #version>
-                  <code>{{ adminDraft[':pleroma'][':frontends'][':primary'].ref }}</code>
+                  <code>{{ adminDraft && adminDraft[':pleroma'][':frontends'][':primary'].ref }}</code>
                 </template>
               </i18n-t>
             </span>
@@ -137,7 +141,7 @@
                   class="button button-default btn"
                   type="button"
                   :disabled="
-                    adminDraft[':pleroma'][':frontends'][':primary']?.name === frontend.name &&
+                    !adminDraft || adminDraft[':pleroma'][':frontends'][':primary']?.name === frontend.name &&
                       adminDraft[':pleroma'][':frontends'][':primary']?.ref === frontend.refs[0]
                   "
                   @click="setDefault(frontend)"

@@ -195,7 +195,8 @@ export default {
       }
     },
     canHardReset () {
-      return this.realSource === 'admin' && this.$store.state.adminSettings.modifiedPaths.has(this.canonPath.join(' -> '))
+      return this.realSource === 'admin' && this.$store.state.adminSettings.modifiedPaths &&
+             this.$store.state.adminSettings.modifiedPaths.has(this.canonPath.join(' -> '))
     },
     matchesExpertLevel () {
       return (this.expert || 0) <= this.$store.state.config.expertLevel > 0

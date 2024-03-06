@@ -115,6 +115,15 @@ const PLEROMA_ADMIN_DESCRIPTIONS_URL = '/api/pleroma/admin/config/descriptions'
 const PLEROMA_ADMIN_FRONTENDS_URL = '/api/pleroma/admin/frontends'
 const PLEROMA_ADMIN_FRONTENDS_INSTALL_URL = '/api/pleroma/admin/frontends/install'
 
+const PLEROMA_EMOJI_RELOAD_URL = '/api/pleroma/admin/reload_emoji'
+const PLEROMA_EMOJI_IMPORT_FS_URL = '/api/pleroma/emoji/packs/import'
+const PLEROMA_EMOJI_PACKS_URL = (page, pageSize) => `/api/v1/pleroma/emoji/packs?page=${page}&page_size=${pageSize}`
+const PLEROMA_EMOJI_PACK_URL = (name) => `/api/v1/pleroma/emoji/pack?name=${name}`
+const PLEROMA_EMOJI_PACKS_DL_REMOTE_URL = '/api/v1/pleroma/emoji/packs/download'
+const PLEROMA_EMOJI_PACKS_LS_REMOTE_URL =
+  (url, page, pageSize) => `/api/v1/pleroma/emoji/packs/remote?url=${url}&page=${page}&page_size=${pageSize}`
+const PLEROMA_EMOJI_UPDATE_FILE_URL = (name) => `/api/v1/pleroma/emoji/packs/files?name=${name}`
+
 const oldfetch = window.fetch
 
 const fetch = (url, options) => {
@@ -1793,6 +1802,90 @@ const fetchScrobbles = ({ accountId, limit = 1 }) => {
     })
 }
 
+const deleteEmojiPack = ({ name }) => {
+  return fetch(PLEROMA_EMOJI_PACK_URL(name), { method: 'DELETE' })
+}
+
+const reloadEmoji = () => {
+  return fetch(PLEROMA_EMOJI_RELOAD_URL, { method: 'POST' })
+}
+
+const importEmojiFromFS = () => {
+  return fetch(PLEROMA_EMOJI_IMPORT_FS_URL)
+}
+
+const createEmojiPack = ({ name }) => {
+  return fetch(PLEROMA_EMOJI_PACK_URL(name), { method: 'POST' })
+}
+
+const listEmojiPacks = ({ page, pageSize }) => {
+  return fetch(PLEROMA_EMOJI_PACKS_URL(page, pageSize))
+}
+
+const listRemoteEmojiPacks = ({ instance, page, pageSize }) => {
+  if (!instance.startsWith('http')) {
+    instance = 'https://' + instance
+  }
+
+  return fetch(
+    PLEROMA_EMOJI_PACKS_LS_REMOTE_URL(instance, page, pageSize),
+    {
+      headers: { 'Content-Type': 'application/json' }
+    }
+  )
+}
+
+const downloadRemoteEmojiPack = ({ instance, packName, as }) => {
+  return fetch(
+    PLEROMA_EMOJI_PACKS_DL_REMOTE_URL,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        url: instance, name: packName, as
+      })
+    }
+  )
+}
+
+const saveEmojiPackMetadata = ({ name, newData }) => {
+  return fetch(
+    PLEROMA_EMOJI_PACK_URL(name),
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ metadata: newData })
+    }
+  )
+}
+
+const addNewEmojiFile = ({ packName, file, shortcode, filename }) => {
+  const data = new FormData()
+  if (filename.trim() !== '') { data.set('filename', filename) }
+  if (shortcode.trim() !== '') { data.set('shortcode', shortcode) }
+  data.set('file', file)
+
+  return fetch(
+    PLEROMA_EMOJI_UPDATE_FILE_URL(packName),
+    { method: 'POST', body: data }
+  )
+}
+
+const updateEmojiFile = ({ packName, shortcode, newShortcode, newFilename, force }) => {
+  return fetch(
+    PLEROMA_EMOJI_UPDATE_FILE_URL(packName),
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ shortcode, new_shortcode: newShortcode, new_filename: newFilename, force })
+    }
+  )
+}
+
+const deleteEmojiFile = ({ packName, shortcode }) => {
+  return fetch(`${PLEROMA_EMOJI_UPDATE_FILE_URL(packName)}&shortcode=${shortcode}`, { method: 'DELETE' })
+}
+
 const apiService = {
   verifyCredentials,
   fetchTimeline,
@@ -1912,7 +2005,18 @@ const apiService = {
   fetchInstanceConfigDescriptions,
   fetchAvailableFrontends,
   pushInstanceDBConfig,
-  installFrontend
+  installFrontend,
+  importEmojiFromFS,
+  reloadEmoji,
+  listEmojiPacks,
+  createEmojiPack,
+  deleteEmojiPack,
+  saveEmojiPackMetadata,
+  addNewEmojiFile,
+  updateEmojiFile,
+  deleteEmojiFile,
+  listRemoteEmojiPacks,
+  downloadRemoteEmojiPack
 }
 
 export default apiService
