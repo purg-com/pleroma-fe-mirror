@@ -89,8 +89,8 @@
         </div>
         <div
           v-if="followersTabVisible"
-          class="panel-body"
           key="followers"
+          class="panel-body"
           :label="$t('user_card.followers')"
           :disabled="!user.followers_count"
         >

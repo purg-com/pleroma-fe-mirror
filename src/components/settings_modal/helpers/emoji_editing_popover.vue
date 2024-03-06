@@ -1,10 +1,10 @@
 <template>
   <Popover
+    ref="emojiPopover"
     trigger="click"
     :placement="placement"
     bound-to-selector=".emoji-list"
     popover-class="emoji-tab-edit-popover popover-default"
-    ref="emojiPopover"
     :bound-to="{ x: 'container' }"
     :offset="{ y: 5 }"
     :disabled="disabled"
@@ -18,23 +18,34 @@
         {{ title }}
       </h3>
 
-      <StillImage class="emoji" v-if="emojiPreview" :src="emojiPreview" />
-      <div v-else class="emoji"></div>
+      <StillImage
+        v-if="emojiPreview"
+        class="emoji"
+        :src="emojiPreview"
+      />
+      <div
+        v-else
+        class="emoji"
+      />
 
-      <div class="emoji-tab-popover-input" v-if="newUpload">
+      <div
+        v-if="newUpload"
+        class="emoji-tab-popover-input"
+      >
         <input
           type="file"
           accept="image/*"
           class="emoji-tab-popover-file input"
-          @change="uploadFile = $event.target.files">
+          @change="uploadFile = $event.target.files"
+        >
       </div>
       <div>
         <div class="emoji-tab-popover-input">
           <label>
             {{ $t('admin_dash.emoji.shortcode') }}
             <input
-              class="emoji-data-input input"
               v-model="editedShortcode"
+              class="emoji-data-input input"
               :placeholder="$t('admin_dash.emoji.new_shortcode')"
             >
           </label>
@@ -45,8 +56,8 @@
             {{ $t('admin_dash.emoji.filename') }}
 
             <input
-              class="emoji-data-input input"
               v-model="editedFile"
+              class="emoji-data-input input"
               :placeholder="$t('admin_dash.emoji.new_filename')"
             >
           </label>
@@ -56,7 +67,8 @@
           class="button button-default btn"
           type="button"
           :disabled="newUpload ? uploadFile.length == 0 : !isEdited"
-          @click="newUpload ? uploadEmoji() : saveEditedEmoji()">
+          @click="newUpload ? uploadEmoji() : saveEditedEmoji()"
+        >
           {{ $t('admin_dash.emoji.save') }}
         </button>
 
@@ -64,13 +76,15 @@
           <button
             class="button button-default btn emoji-tab-popover-button"
             type="button"
-            @click="deleteModalVisible = true">
+            @click="deleteModalVisible = true"
+          >
             {{ $t('admin_dash.emoji.delete') }}
           </button>
           <button
             class="button button-default btn emoji-tab-popover-button"
             type="button"
-            @click="revertEmoji">
+            @click="revertEmoji"
+          >
             {{ $t('admin_dash.emoji.revert') }}
           </button>
           <ConfirmModal
@@ -79,7 +93,8 @@
             :cancel-text="$t('status.delete_confirm_cancel_button')"
             :confirm-text="$t('status.delete_confirm_accept_button')"
             @cancelled="deleteModalVisible = false"
-            @accepted="deleteEmoji" >
+            @accepted="deleteEmoji"
+          >
             {{ $t('admin_dash.emoji.delete_confirm', [shortcode]) }}
           </ConfirmModal>
         </template>
@@ -95,6 +110,30 @@ import StillImage from 'components/still-image/still-image.vue'
 
 export default {
   components: { Popover, ConfirmModal, StillImage },
+  inject: ['emojiAddr'],
+  props: {
+    placement: String,
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+
+    newUpload: Boolean,
+
+    title: String,
+    packName: String,
+    shortcode: {
+      type: String,
+      // Only exists when this is not a new upload
+      default: ''
+    },
+    file: {
+      type: String,
+      // Only exists when this is not a new upload
+      default: ''
+    }
+  },
+  emits: ['updatePackFiles', 'displayError'],
   data () {
     return {
       uploadFile: [],
@@ -117,7 +156,6 @@ export default {
       return !this.newUpload && (this.editedShortcode !== this.shortcode || this.editedFile !== this.file)
     }
   },
-  inject: ['emojiAddr'],
   methods: {
     saveEditedEmoji () {
       if (!this.isEdited) return
@@ -170,29 +208,6 @@ export default {
 
         this.$emit('updatePackFiles', resp)
       })
-    }
-  },
-  emits: ['updatePackFiles', 'displayError'],
-  props: {
-    placement: String,
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-
-    newUpload: Boolean,
-
-    title: String,
-    packName: String,
-    shortcode: {
-      type: String,
-      // Only exists when this is not a new upload
-      default: ''
-    },
-    file: {
-      type: String,
-      // Only exists when this is not a new upload
-      default: ''
     }
   }
 }

@@ -6,7 +6,10 @@
     <div class="setting-item">
       <h2>{{ $t('admin_dash.tabs.frontends') }}</h2>
       <p>{{ $t('admin_dash.frontend.wip_notice') }}</p>
-      <ul class="setting-list" v-if="adminDraft">
+      <ul
+        v-if="adminDraft"
+        class="setting-list"
+      >
         <li>
           <h3>{{ $t('admin_dash.frontend.default_frontend') }}</h3>
           <p>{{ $t('admin_dash.frontend.default_frontend_tip') }}</p>
@@ -23,7 +26,10 @@
           </ul>
         </li>
       </ul>
-      <div v-else class="setting-list">
+      <div
+        v-else
+        class="setting-list"
+      >
         {{ $t('admin_dash.frontend.default_frontend_unavail') }}
       </div>
 
