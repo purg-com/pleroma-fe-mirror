@@ -43,7 +43,11 @@
               <template #content>
                 <div class="emoji-tab-popover-input">
                   <h3>{{ $t('admin_dash.emoji.remote_pack_instance') }}</h3>
-                  <input v-model="remotePackInstance" :placeholder="$t('admin_dash.emoji.remote_pack_instance')">
+                  <input
+                    v-model="remotePackInstance"
+                    class="input"
+                    :placeholder="$t('admin_dash.emoji.remote_pack_instance')"
+                  >
                   <button
                     class="button button-default btn emoji-tab-popover-button"
                     type="button"
@@ -86,7 +90,11 @@
             <template #content>
               <div class="emoji-tab-popover-input">
                 <h3>{{ $t('admin_dash.emoji.new_pack_name') }}</h3>
-                <input v-model="newPackName" :placeholder="$t('admin_dash.emoji.new_pack_name')">
+                <input
+                  v-model="newPackName"
+                  :placeholder="$t('admin_dash.emoji.new_pack_name')"
+                  class="input"
+                >
                 <button
                   class="button button-default btn emoji-tab-popover-button"
                   type="button"
@@ -110,7 +118,8 @@
                 <textarea
                   v-model="packMeta.description"
                   :disabled="pack.remote !== undefined"
-                  class="bio resize-height" />
+                  class="bio resize-height input"
+                />
               </label>
             </li>
             <li>
@@ -119,7 +128,8 @@
                 <ModifiedIndicator :changed="metaEdited('homepage')" message-key="admin_dash.emoji.metadata_changed" />
 
               <input
-                class="emoji-info-input" v-model="packMeta.homepage"
+                class="emoji-info-input input"
+                v-model="packMeta.homepage"
                 :disabled="pack.remote !== undefined">
               </label>
             </li>
@@ -128,14 +138,22 @@
                 {{ $t('admin_dash.emoji.fallback_src') }}
                 <ModifiedIndicator :changed="metaEdited('fallback-src')" message-key="admin_dash.emoji.metadata_changed" />
 
-                <input class="emoji-info-input" v-model="packMeta['fallback-src']" :disabled="pack.remote !== undefined">
+                <input
+                  class="emoji-info-input input"
+                  v-model="packMeta['fallback-src']"
+                  :disabled="pack.remote !== undefined"
+                >
               </label>
             </li>
             <li>
               <label>
                 {{ $t('admin_dash.emoji.fallback_sha256') }}
 
-                <input :disabled="true" class="emoji-info-input" v-model="packMeta['fallback-src-sha256']">
+                <input
+                  :disabled="true"
+                  class="emoji-info-input input"
+                  v-model="packMeta['fallback-src-sha256']"
+                >
               </label>
             </li>
             <li>
@@ -202,9 +220,11 @@
                         <div class="emoji-tab-popover-input">
                           <label>
                             {{ $t('admin_dash.emoji.download_as_name') }}
-                            <input class="emoji-data-input"
+                            <input
+                              class="emoji-data-input input"
                               v-model="remotePackDownloadAs"
-                              :placeholder="$t('admin_dash.emoji.download_as_name_full')">
+                              :placeholder="$t('admin_dash.emoji.download_as_name_full')"
+                            >
                           </label>
 
                           <div v-if="downloadWillReplaceLocal" class="warning">

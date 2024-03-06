@@ -25,16 +25,18 @@
         <input
           type="file"
           accept="image/*"
-          class="emoji-tab-popover-file"
+          class="emoji-tab-popover-file input"
           @change="uploadFile = $event.target.files">
       </div>
       <div>
         <div class="emoji-tab-popover-input">
           <label>
             {{ $t('admin_dash.emoji.shortcode') }}
-            <input class="emoji-data-input"
+            <input
+              class="emoji-data-input input"
               v-model="editedShortcode"
-              :placeholder="$t('admin_dash.emoji.new_shortcode')">
+              :placeholder="$t('admin_dash.emoji.new_shortcode')"
+            >
           </label>
         </div>
 
@@ -42,9 +44,11 @@
           <label>
             {{ $t('admin_dash.emoji.filename') }}
 
-            <input class="emoji-data-input"
+            <input
+              class="emoji-data-input input"
               v-model="editedFile"
-              :placeholder="$t('admin_dash.emoji.new_filename')">
+              :placeholder="$t('admin_dash.emoji.new_filename')"
+            >
           </label>
         </div>
 
