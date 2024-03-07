@@ -189,7 +189,8 @@
     "mobile_notifications": "拍開通知（有無讀ê）",
     "mobile_notifications_close": "關掉通知",
     "announcements": "公告",
-    "search": "Tshuē"
+    "search": "Tshuē",
+    "mobile_notifications_mark_as_seen": "Lóng 標做有讀"
   },
   "notifications": {
     "broken_favorite": "狀態毋知影，leh tshiau-tshuē……",
