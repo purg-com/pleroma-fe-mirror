@@ -737,7 +737,8 @@
       "frontend_version": "Frontend verze"
     },
     "commit_value_tooltip": "Hodnota není uložena, stiskněte toto tlačítko pro potvrzení změn",
-    "hard_reset_value_tooltip": "Odstranit nastavení z úložiště a vynutit výchozí hodnotu"
+    "hard_reset_value_tooltip": "Odstranit nastavení z úložiště a vynutit výchozí hodnotu",
+    "accent": "Akcentní barva"
   },
   "time": {
     "day": "{0} day",
@@ -995,13 +996,57 @@
       "nodb": "Žádné nastavení v databázi",
       "frontends": "Frontendy",
       "instance": "Instance",
-      "limits": "Limity"
+      "limits": "Limity",
+      "emoji": "Emoji"
     },
     "nodb": {
-      "heading": "Nastavení v databázi je vypnuto"
+      "heading": "Nastavení v databázi je vypnuto",
+      "documentation": "dokumentace",
+      "text2": "Většina konfiguračních možností nebude dostupná."
     },
     "wip_notice": "Tento administrační panel je experimentální a v aktivní vývoji, {adminFeLink}.",
     "old_ui_link": "staré administrační rozhraní je dostupné zde",
-    "reset_all": "Resetovat vše"
+    "reset_all": "Resetovat vše",
+    "frontend": {
+      "failure_installing_frontend": "Nepodařilo se nainstalovat frontend {version}: {reason}",
+      "reinstall": "Přeinstalovat",
+      "available_frontends": "Dostupné k instalaci",
+      "is_default": "(Výchozí)",
+      "versions": "Dostupné verze",
+      "build_url": "URL sestavení",
+      "install": "Instalovat",
+      "install_version": "Instalovat verzi {version}",
+      "more_install_options": "Více instalačních možností",
+      "more_default_options": "Více výchozích nastavení pro možnosti",
+      "set_default": "Nastavit výchozí",
+      "default_frontend": "Výchozí front-end",
+      "set_default_version": "Nastavit verzi {version} jako výchozí",
+      "repository": "Odkaz k repozitáři",
+      "is_default_custom": "(Výchozí, verze: {version})"
+    },
+    "captcha": {
+      "native": "Nativní",
+      "kocaptcha": "KoCaptcha"
+    },
+    "instance": {
+      "instance": "Informace o instanci",
+      "captcha_header": "CAPTCHA",
+      "restrict": {
+        "activities": "Přístup k příspěvkům a aktivitám",
+        "timelines": "Přístup k časovým osám",
+        "profiles": "Přístup k uživatelským profilům",
+        "header": "Omezit přístup pro anonymní návštěvníky"
+      },
+      "registrations": "Registrace uživatelů",
+      "kocaptcha": "KoCaptcha nastavení"
+    },
+    "limits": {
+      "posts": "Limity příspěvků",
+      "uploads": "Limity příloh",
+      "users": "Limity uživatelských profilů",
+      "arbitrary_limits": "Libovolné limity",
+      "profile_fields": "Limity profilových polí",
+      "user_uploads": "Limity médií profilů"
+    }
   }
 }
