@@ -749,7 +749,7 @@
     "hours": "{0} hours",
     "hour_short": "{0}h",
     "hours_short": "{0}h",
-    "in_future": "in {0}",
+    "in_future": "za {0}",
     "in_past": "před {0}",
     "minute": "{0} minute",
     "minutes": "{0} minutes",
@@ -759,8 +759,8 @@
     "months": "{0} měs",
     "month_short": "{0} měs",
     "months_short": "{0} měs",
-    "now": "teď",
-    "now_short": "teď",
+    "now": "právě teď",
+    "now_short": "nyní",
     "second": "{0} second",
     "seconds": "{0} seconds",
     "second_short": "{0}s",
@@ -772,7 +772,23 @@
     "year": "{0} r",
     "years": "{0} l",
     "year_short": "{0}r",
-    "years_short": "{0}l"
+    "years_short": "{0}l",
+    "unit": {
+      "seconds_short": "{0}s",
+      "days": "{0} den | {0} dnů",
+      "days_short": "{0}d",
+      "hours": "{0} hodina | {0} hodin",
+      "hours_short": "{0}h",
+      "minutes": "{0} minuta | {0} minut",
+      "months": "{0} měsíc | {0} měsíců",
+      "months_short": "{0}mo",
+      "minutes_short": "{0}min",
+      "seconds": "{0} sekunda | {0} sekund",
+      "weeks": "{0} týden | {0} týdnů",
+      "weeks_short": "{0}w",
+      "years": "{0} rok | {0} roky",
+      "years_short": "{0}y"
+    }
   },
   "timeline": {
     "collapse": "Zabalit",
@@ -784,11 +800,60 @@
     "show_new": "Zobrazit nové",
     "up_to_date": "Aktuální",
     "no_more_statuses": "Žádné další příspěvky",
-    "no_statuses": "Žádné příspěvky"
+    "no_statuses": "Žádné příspěvky",
+    "socket_reconnected": "Navázáno spojení v reálném čase",
+    "error": "Chyba při načítání časové osy: {0}",
+    "reload": "Načíst znovu",
+    "socket_broke": "Spojení v reálném čase ztraceno: CloseEvent code {0}"
   },
   "status": {
     "reply_to": "Odpověď uživateli",
-    "replies_list": "Odpovědi:"
+    "replies_list": "Odpovědi:",
+    "many_attachments": "Příspěvek má {number} příloh(u)",
+    "collapse_attachments": "Sbalit přílohy",
+    "unpin": "Odepnout z profilu",
+    "thread_muted": "Vlákno ztlumeno",
+    "show_attachment_description": "Popis náhledu (otevřete přílohu pro celý popis)",
+    "move_down": "Posunout přílohu doprava",
+    "thread_show": "Zobrazit toto vlákno",
+    "pin": "Připnout na profil",
+    "mute_conversation": "Ztlumit konverzaci",
+    "thread_hide": "Skrýt toto vlákno",
+    "show_full_subject": "Zobrazit celý předmět",
+    "edited_at": "(naposledy upraveno {time})",
+    "repeat_confirm_accept_button": "Zopakovat",
+    "repeat_confirm_title": "Potvrzení zopakování",
+    "delete_error": "Chyba při mazání příspěvku: {0}",
+    "delete_confirm": "Opravdu chcete smazat tento příspěvek?",
+    "delete_confirm_title": "Potvrzení smazání",
+    "delete_confirm_accept_button": "Smazat",
+    "delete_confirm_cancel_button": "Ponechat",
+    "you": "(Vy)",
+    "hide_attachment": "Skrýt přílohu",
+    "remove_attachment": "Odstranit přílohu",
+    "attachment_stop_flash": "Zastavit Flash player",
+    "nsfw": "NSFW",
+    "repeat_confirm_cancel_button": "Neopakovat",
+    "favorites": "Oblíbené",
+    "repeats": "Opakovaní",
+    "repeat_confirm": "Opravdu chcete zopakovat tento příspěvek?",
+    "delete": "Smazat příspěvek",
+    "copy_link": "Kopírovat odkaz k příspěvku",
+    "external_source": "Externí zdroj",
+    "edit": "Upravit příspěvek",
+    "bookmark": "Přidat do záložek",
+    "unbookmark": "Odebrat ze záložek",
+    "mentions": "Zmínky",
+    "hide_full_subject": "Skrýt celý předmět",
+    "show_content": "Zobrazit obsah",
+    "hide_content": "Skrýt obsah",
+    "unmute_conversation": "Zrušit ztlumení konverzace",
+    "status_unavailable": "Příspěvek je nedostupný",
+    "status_deleted": "Tento příspěvek byl smazán",
+    "expand": "Rozbalit",
+    "show_all_attachments": "Zobrazit všechny přílohy",
+    "move_up": "Posunout přílohu doleva",
+    "open_gallery": "Otevřít galerii"
   },
   "user_card": {
     "approve": "Schválit",
@@ -1019,10 +1084,11 @@
       "more_install_options": "Více instalačních možností",
       "more_default_options": "Více výchozích nastavení pro možnosti",
       "set_default": "Nastavit výchozí",
-      "default_frontend": "Výchozí front-end",
+      "default_frontend": "Výchozí frontend",
       "set_default_version": "Nastavit verzi {version} jako výchozí",
       "repository": "Odkaz k repozitáři",
-      "is_default_custom": "(Výchozí, verze: {version})"
+      "is_default_custom": "(Výchozí, verze: {version})",
+      "success_installing_frontend": "Frontend {version} byl úspěšně nainstalován"
     },
     "captcha": {
       "native": "Nativní",
@@ -1047,6 +1113,69 @@
       "arbitrary_limits": "Libovolné limity",
       "profile_fields": "Limity profilových polí",
       "user_uploads": "Limity médií profilů"
+    },
+    "emoji": {
+      "global_actions": "Globální akce",
+      "reload": "Znovu načíst emoji",
+      "importFS": "Importovat emoji ze souborového systému",
+      "error": "Chyba: {0}",
+      "create_pack": "Vytvořit balíček",
+      "delete_pack": "Smazat balíček",
+      "new_pack_name": "Nový název balíčku",
+      "create": "Vytvořit",
+      "emoji_packs": "Emoji balíčky",
+      "remote_packs": "Vzdálené balíčky",
+      "do_list": "List",
+      "emoji_pack": "Emoji balíček",
+      "edit_pack": "Upravit balíček",
+      "description": "Popis",
+      "homepage": "Domovská stránka",
+      "fallback_src": "Záložní zdroj",
+      "fallback_sha256": "Záložní SHA256",
+      "share": "Sdílet",
+      "save": "Uložit",
+      "save_meta": "Uložit metadata",
+      "revert_meta": "Vrátit zpět metadata",
+      "delete": "Smazat",
+      "add_file": "Přidat soubor",
+      "adding_new": "Přidávání nových emoji",
+      "shortcode": "Zkratka",
+      "filename": "Jméno souboru",
+      "new_shortcode": "Zkrat, ponechte prázdné pro odvození",
+      "delete_confirm": "Opravdu chcete smazat {0}?",
+      "download_pack": "Stáhnout balíček",
+      "downloading_pack": "Stahování {0}",
+      "download": "Stáhnout",
+      "download_as_name": "Nové jméno",
+      "download_as_name_full": "Nové jméno, pro opakované použití ponechte prázdné",
+      "files": "Soubory",
+      "editing": "Upravování {0}",
+      "delete_title": "Smazat?",
+      "emoji_changed": "Neuložené změny emoji souborů, zkontrolujte zvýrazněné emoji",
+      "replace_warning": "Tímto se NAHRADÍ místní balíček se stejným jménem",
+      "metadata_changed": "Metadata jsou rozdílné od uložených",
+      "revert": "Vrátit zpět",
+      "new_filename": "Jméno souboru, ponechte prázdné pro odvození"
+    },
+    "temp_overrides": {
+      ":pleroma": {
+        ":instance": {
+          ":background_image": {
+            "label": "Obrázek na pozadí",
+            "description": "Obrázek na pozadí (především používáno PleromaFE)"
+          },
+          ":description_limit": {
+            "label": "Limit",
+            "description": "Limit počtu znaků pro popisy příloh"
+          },
+          ":public": {
+            "label": "Instance je veřejná"
+          },
+          ":limit_to_local_content": {
+            "label": "Limitovat vyhledávání pouze na místní obsah"
+          }
+        }
+      }
     }
   }
 }
