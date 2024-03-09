@@ -186,7 +186,6 @@
     "edit_pinned": "Edit pinned items",
     "edit_finish": "Done editing",
     "mobile_sidebar": "Toggle mobile sidebar",
-    "mobile_notifications": "Open notifications",
     "mobile_notifications": "Open notifications (there are unread ones)",
     "mobile_notifications_close": "Close notifications",
     "mobile_notifications_mark_as_seen": "Mark all as seen",
@@ -906,7 +905,7 @@
         "description": "Detailed setting for allowing/disallowing access to certain aspects of API. By default (indeterminate state) it will disallow if instance is not public, ticked checkbox means disallow access even if instance is public, unticked means allow access even if instance is private. Please note that unexpected behavior might happen if some settings are set, i.e. if profile access is disabled posts will show without profile information.",
         "timelines": "Timelines access",
         "profiles": "User profiles access",
-        "activities": "Statues/activities access"
+        "activities": "Statuses/activities access"
       }
     },
     "limits": {
