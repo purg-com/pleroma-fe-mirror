@@ -17,13 +17,11 @@ export const applyTheme = async (input) => {
 
   // Assuming that "worst case scenario background" is panel background since it's the most likely one
   const themes3 = init(extraRules, extraRules[0].directives['--bg'].split('|')[1].trim())
-  const head = document.head
   const body = document.body
-  body.classList.add('hidden')
 
-  const styleEl = document.createElement('style')
-  head.appendChild(styleEl)
-  const styleSheet = styleEl.sheet
+  const styleSheet = new CSSStyleSheet()
+  document.adoptedStyleSheets = [styleSheet]
+  body.classList.add('hidden')
 
   getCssRules(themes3.eager, themes3.staticVars).forEach(rule => {
     // Hacks to support multiple selectors on same component

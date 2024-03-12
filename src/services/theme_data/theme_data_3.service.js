@@ -448,7 +448,7 @@ export const init = (extraRuleset, ultimateBackgroundColor) => {
   const t0 = performance.now()
   const combinations = processInnerComponent(components.Root)
   const t1 = performance.now()
-  console.debug('Tree tranveral took ' + (t1 - t0) + ' ms')
+  console.debug('Tree traveral took ' + (t1 - t0) + ' ms')
 
   const result = combinations.map((combination) => {
     if (combination.lazy) {
