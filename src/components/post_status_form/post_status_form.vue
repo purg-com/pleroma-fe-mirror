@@ -39,6 +39,18 @@
           </a>
         </p>
         <p
+          v-else-if="!hideScopeNotice && newStatus.visibility === 'local'"
+          class="visibility-notice notice-dismissible"
+        >
+          <span>{{ $t('post_status.scope_notice.local') }}</span>
+          <a
+            class="fa-scale-110 fa-old-padding dismiss"
+            @click.prevent="dismissScopeNotice()"
+          >
+            <FAIcon icon="times" />
+          </a>
+        </p>
+        <p
           v-else-if="!hideScopeNotice && newStatus.visibility === 'unlisted'"
           class="visibility-notice notice-dismissible"
         >

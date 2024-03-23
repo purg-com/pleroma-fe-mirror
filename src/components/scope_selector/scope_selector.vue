@@ -46,6 +46,20 @@
     </button>
     {{ ' ' }}
     <button
+      v-if="showLocal"
+      class="button-unstyled scope"
+      :class="css.local"
+      :title="$t('post_status.scope.local')"
+      type="button"
+      @click="changeVis('local')"
+    >
+      <FAIcon
+        icon="map-marker-alt"
+        class="fa-scale-110 fa-old-padding"
+      />
+    </button>
+    {{ ' ' }}
+    <button
       v-if="showPublic"
       class="button-unstyled scope"
       :class="css.public"

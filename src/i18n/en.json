@@ -119,6 +119,7 @@
       "direct": "Direct",
       "private": "Followers-only",
       "public": "Public",
+      "local": "Local",
       "unlisted": "Unlisted"
     }
   },
@@ -296,6 +297,7 @@
     "media_description_error": "Failed to update media, try again",
     "scope_notice": {
       "public": "This post will be visible to everyone",
+      "local": "This post will be visible to everyone on this instance only",
       "private": "This post will be visible to your followers only",
       "unlisted": "This post will not be visible in Public Timeline and The Whole Known Network"
     },
@@ -304,6 +306,7 @@
       "direct": "Direct - post to mentioned users only",
       "private": "Followers-only - post to followers only",
       "public": "Public - post to public timelines",
+      "local": "Local - post to the public timeline of this instance only",
       "unlisted": "Unlisted - do not post to public timelines"
     }
   },

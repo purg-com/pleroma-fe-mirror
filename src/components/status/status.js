@@ -429,6 +429,8 @@ const Status = {
           return 'lock-open'
         case 'direct':
           return 'envelope'
+        case 'local':
+          return 'map-marker-alt'
         default:
           return 'globe'
       }
