@@ -31,36 +31,41 @@
             :style="{ 'width': `${percentageForOption(option.votes_count)}%` }"
           />
         </div>
-        <div
+        <template
           v-else
-          tabindex="0"
-          :role="poll.multiple ? 'checkbox' : 'radio'"
-          :aria-labelledby="`option-vote-${randomSeed}-${index}`"
-          :aria-checked="choices[index]"
-          @click="activateOption(index)"
         >
           <input
             v-if="poll.multiple"
+            :id="`option-vote-input-${randomSeed}-${index}`"
             type="checkbox"
-            class="poll-checkbox"
+            tabindex="0"
+            class="visible-for-screenreader-only"
             :disabled="loading"
             :value="index"
+            :checked="choices[index]"
+            @change="activateOption(index)"
           >
           <input
             v-else
+            :id="`option-vote-input-${randomSeed}-${index}`"
             type="radio"
+            class="visible-for-screenreader-only"
             :disabled="loading"
             :value="index"
+            :checked="choices[index]"
+            @change="activateOption(index)"
           >
-          <label class="option-vote">
+          <label
+            class="option-vote"
+            :for="`option-vote-input-${randomSeed}-${index}`"
+          >
             <RichContent
-              :id="`option-vote-${randomSeed}-${index}`"
               :html="option.title_html"
               :handle-links="false"
               :emoji="emoji"
             />
           </label>
-        </div>
+        </template>
       </div>
     </div>
     <div class="footer faint">
@@ -173,10 +178,6 @@
   .poll-vote-button {
     padding: 0 0.5em;
     margin-right: 0.5em;
-  }
-
-  .poll-checkbox {
-    display: none;
   }
 }
 </style>

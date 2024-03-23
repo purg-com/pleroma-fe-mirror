@@ -540,7 +540,9 @@ textarea,
   }
 
   &[type="radio"] {
-    display: none;
+    &:not(.visible-for-screenreader-only) {
+      display: none;
+    }
 
     &:checked + label::before {
       box-shadow: 0 0 2px black inset, 0 0 0 4px $fallback--fg inset;
@@ -597,6 +599,7 @@ textarea,
       flex-shrink: 0;
       display: inline-block;
       content: "✓";
+      content: "✓" / "";
       transition: color 200ms;
       width: 1.1em;
       height: 1.1em;
