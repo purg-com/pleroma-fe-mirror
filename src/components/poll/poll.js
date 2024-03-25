@@ -38,7 +38,7 @@ export default {
       return (this.poll && this.poll.options) || []
     },
     expiresAt () {
-      return (this.poll && this.poll.expires_at) || 0
+      return (this.poll && this.poll.expires_at) || null
     },
     expired () {
       return (this.poll && this.poll.expired) || false
