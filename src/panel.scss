@@ -154,8 +154,7 @@
   &::after {
     background-color: var(--background);
     z-index: -2;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+    border-radius: var(--roundness) var(--roundness) 0 0;
     box-shadow: var(--shadow);
   }
 
