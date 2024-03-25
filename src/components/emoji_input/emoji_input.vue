@@ -144,7 +144,7 @@
   textarea {
     flex: 1 0 auto;
     color: inherit;
-    // stylint-disable-next-line declaration-no-important
+    /* stylelint-disable-next-line declaration-no-important */
     background: none !important;
     box-shadow: none;
     border: none;
