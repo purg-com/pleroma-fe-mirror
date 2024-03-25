@@ -41,6 +41,7 @@ export const defaultState = {
   hideAttachments: false,
   hideAttachmentsInConv: false,
   hideScrobbles: false,
+  hideScrobblesAfter: '2d',
   maxThumbnails: 16,
   hideNsfw: true,
   preloadImage: true,

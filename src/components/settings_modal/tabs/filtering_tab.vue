@@ -96,6 +96,16 @@
             {{ $t('settings.hide_scrobbles') }}
           </BooleanSetting>
         </li>
+        <li>
+          <SizeSetting
+            key="hideScrobblesAfter"
+            path="hideScrobblesAfter"
+            :units="['m', 'h', 'd']"
+            expert="1"
+          >
+            {{ $t('settings.hide_scrobbles_after') }}
+          </SizeSetting>
+        </li>
       </ul>
     </div>
     <div
