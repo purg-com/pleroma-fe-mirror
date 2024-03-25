@@ -29,6 +29,37 @@ describe.only('Theme Data 3', () => {
         [1, 2, 3, 4]
       ])
     })
+
+    it('test massive 5 values case, using strings', () => {
+      const out = getAllPossibleCombinations(['a', 'b', 'c', 'd', 'e']).map(x => x.sort((a, b) => a - b))
+      expect(out).to.eql([
+        // 1
+        ['a'], ['b'], ['c'], ['d'], ['e'],
+        // 2
+        ['a', 'b'], ['a', 'c'], ['a', 'd'], ['a', 'e'],
+        ['b', 'c'], ['b', 'd'], ['b', 'e'],
+        ['c', 'd'], ['c', 'e'],
+        ['d', 'e'],
+        // 3
+        ['a', 'b', 'c'], ['a', 'b', 'd'], ['a', 'b', 'e'],
+        ['a', 'c', 'd'], ['a', 'c', 'e'],
+        ['a', 'd', 'e'],
+
+        ['b', 'c', 'd'], ['b', 'c', 'e'],
+        ['b', 'd', 'e'],
+
+        ['c', 'd', 'e'],
+        // 4
+        ['a', 'b', 'c', 'd'], ['a', 'b', 'c', 'e'],
+        ['a', 'b', 'd', 'e'],
+
+        ['a', 'c', 'd', 'e'],
+
+        ['b', 'c', 'd', 'e'],
+        // 5
+        ['a', 'b', 'c', 'd', 'e']
+      ])
+    })
   })
 
   describe('init', () => {
@@ -49,6 +80,63 @@ describe.only('Theme Data 3', () => {
       basePaletteKeys.forEach(key => {
         expect(out.staticVars).to.have.property(key)
       })
+    })
+
+    it('Test initialization with a basic palette', () => {
+      const out = init([{
+        component: 'Root',
+        directives: {
+          '--bg': 'color | #008080',
+          '--fg': 'color | #00C0A0'
+        }
+      }], '#DEADAF')
+
+      expect(out.staticVars).to.have.property('bg').equal('#008080')
+      expect(out.staticVars).to.have.property('fg').equal('#00C0A0')
+
+      const panelRule = out.eager.filter(x => {
+        if (x.component !== 'Panel') return false
+        return true
+      })[0]
+
+      expect(panelRule).to.have.nested.deep.property('dynamicVars.stacked', { r: 0, g: 128, b: 128 })
+    })
+
+    it('Test initialization with opacity', () => {
+      const out = init([{
+        component: 'Root',
+        directives: {
+          '--bg': 'color | #008080'
+        }
+      }, {
+        component: 'Panel',
+        directives: {
+          opacity: 0.5
+        }
+      }], '#DEADAF')
+
+      expect(out.staticVars).to.have.property('bg').equal('#008080')
+
+      const panelRule = out.eager.filter(x => {
+        if (x.component !== 'Panel') return false
+        return true
+      })[0]
+
+      expect(panelRule).to.have.nested.deep.property('dynamicVars.background', { r: 0, g: 128, b: 128, a: 0.5 })
+      expect(panelRule).to.have.nested.deep.property('dynamicVars.stacked')
+      // Somewhat incorrect since we don't do gamma correction
+      // real expectancy should be this:
+      /*
+
+      expect(panelRule).to.have.nested.deep.property('dynamicVars.stacked.r').that.is.closeTo(147.0, 0.01)
+      expect(panelRule).to.have.nested.deep.property('dynamicVars.stacked.g').that.is.closeTo(143.2, 0.01)
+      expect(panelRule).to.have.nested.deep.property('dynamicVars.stacked.b').that.is.closeTo(144.0, 0.01)
+
+      */
+
+      expect(panelRule).to.have.nested.deep.property('dynamicVars.stacked.r').that.is.closeTo(88.8, 0.01)
+      expect(panelRule).to.have.nested.deep.property('dynamicVars.stacked.g').that.is.closeTo(133.2, 0.01)
+      expect(panelRule).to.have.nested.deep.property('dynamicVars.stacked.b').that.is.closeTo(134, 0.01)
     })
   })
 })
