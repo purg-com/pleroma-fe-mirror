@@ -168,11 +168,6 @@
   // No sticky header on user profile
   --currentPanelStack: 1;
 
-  .tab-switcher .tabs {
-    background: var(--__panel-background);
-    backdrop-filter: var(--__panel-backdrop-filter);
-  }
-
   .user-birthday {
     margin: 0 0.75em 0.5em;
   }

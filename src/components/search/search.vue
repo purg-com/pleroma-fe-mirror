@@ -154,11 +154,6 @@
   text-align: center;
 }
 
-.Search .tab-switcher .tabs {
-  background: var(--__panel-background);
-  backdrop-filter: var(--__panel-backdrop-filter);
-}
-
 @media all and (max-width: 800px) {
   .search-nav-heading {
     .tab-switcher .tabs .tab-wrapper {

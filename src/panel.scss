@@ -3,6 +3,11 @@
   --__panel-background: var(--background);
   --__panel-backdrop-filter: var(--backdrop-filter);
 
+  .tab-switcher .tabs {
+    background: var(--__panel-background);
+    backdrop-filter: var(--__panel-backdrop-filter);
+  }
+
   position: relative;
   display: flex;
   flex-direction: column;
@@ -33,6 +38,11 @@
   padding: var(--panel-body-padding, 0);
   background: var(--background);
   backdrop-filter: var(--__panel-backdrop-filter);
+
+  .tab-switcher .tabs {
+    background: none;
+    backdrop-filter: none;
+  }
 
   &:empty::before {
     content: "¯\\_(ツ)_/¯"; // Could use words but it'd require translations
