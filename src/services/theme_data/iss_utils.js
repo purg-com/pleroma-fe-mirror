@@ -11,18 +11,28 @@ export const unroll = (item) => {
 }
 
 // This gives you an array of arrays of all possible unique (i.e. order-insensitive) combinations
+// Can only accept primitives. Duplicates are not supported and can cause unexpected behavior
 export const getAllPossibleCombinations = (array) => {
   const combos = [array.map(x => [x])]
   for (let comboSize = 2; comboSize <= array.length; comboSize++) {
     const previous = combos[combos.length - 1]
-    const selfSet = new Set()
     const newCombos = previous.map(self => {
+      const selfSet = new Set()
       self.forEach(x => selfSet.add(x))
       const nonSelf = array.filter(x => !selfSet.has(x))
       return nonSelf.map(x => [...self, x])
     })
     const flatCombos = newCombos.reduce((acc, x) => [...acc, ...x], [])
-    combos.push(flatCombos)
+    const uniqueComboStrings = new Set()
+    const uniqueCombos = flatCombos.map(x => x.toSorted()).filter(x => {
+      if (uniqueComboStrings.has(x.join())) {
+        return false
+      } else {
+        uniqueComboStrings.add(x.join())
+        return true
+      }
+    })
+    combos.push(uniqueCombos)
   }
   return combos.reduce((acc, x) => [...acc, ...x], [])
 }
@@ -31,7 +41,7 @@ export const getAllPossibleCombinations = (array) => {
 export const genericRuleToSelector = components => (rule, ignoreOutOfTreeSelector, isParent) => {
   if (!rule && !isParent) return null
   const component = components[rule.component]
-  const { states, variants, selector, outOfTreeSelector } = component
+  const { states = {}, variants = {}, selector, outOfTreeSelector } = component
 
   const applicableStates = ((rule.state || []).filter(x => x !== 'normal')).map(state => states[state])
 

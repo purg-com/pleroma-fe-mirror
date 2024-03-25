@@ -11,9 +11,23 @@ import {
 
 describe.only('Theme Data 3', () => {
   describe('getAllPossibleCombinations', () => {
-    it('test simple case', () => {
+    it('test simple 3 values case', () => {
       const out = getAllPossibleCombinations([1, 2, 3]).map(x => x.sort((a, b) => a - b))
-      expect(out).to.eql([[1], [2], [3], [1, 2], [1, 3], [2, 3], [1, 2, 3]])
+      expect(out).to.eql([
+        [1], [2], [3],
+        [1, 2], [1, 3], [2, 3],
+        [1, 2, 3]
+      ])
+    })
+
+    it('test simple 4 values case', () => {
+      const out = getAllPossibleCombinations([1, 2, 3, 4]).map(x => x.sort((a, b) => a - b))
+      expect(out).to.eql([
+        [1], [2], [3], [4],
+        [1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4],
+        [1, 2, 3], [1, 2, 4], [1, 3, 4], [2, 3, 4],
+        [1, 2, 3, 4]
+      ])
     })
   })
 
