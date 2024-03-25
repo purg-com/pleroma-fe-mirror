@@ -206,6 +206,7 @@
   </div>
   <div
     v-else
+    class="Conversation -hidden"
     :style="hiddenStyle"
   />
 </template>
@@ -215,6 +216,11 @@
 <style lang="scss">
 .Conversation {
   z-index: 1;
+
+  &.-hidden {
+    background: var(--__panel-background);
+    backdrop-filter: var(--__panel-backdrop-filter);
+  }
 
   .conversation-dive-to-top-level-box {
     padding: var(--status-margin);
