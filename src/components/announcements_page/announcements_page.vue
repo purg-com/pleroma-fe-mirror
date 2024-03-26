@@ -61,15 +61,13 @@
 <script src="./announcements_page.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .announcements-page {
   .post-form {
-    padding: var(--status-margin, $status-margin);
+    padding: var(--status-margin);
 
     .heading,
     .body {
-      margin-bottom: var(--status-margin, $status-margin);
+      margin-bottom: var(--status-margin);
     }
 
     .post-button {

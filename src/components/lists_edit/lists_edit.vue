@@ -36,6 +36,7 @@
           id="list-edit-title"
           ref="title"
           v-model="titleDraft"
+          class="input"
         >
         <button
           v-if="id"
@@ -164,8 +165,6 @@
 <script src="./lists_edit.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .ListEdit {
   --panel-body-padding: 0.5em;
 

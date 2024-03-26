@@ -1,10 +1,19 @@
-@import "../../variables";
-
 .RichContent {
+  font-family: var(--font);
+
+  &.-faint {
+    /* stylelint-disable declaration-no-important */
+    --text: var(--textFaint) !important;
+    --link: var(--linkFaint) !important;
+    --funtextGreentext: var(--funtextGreentextFaint) !important;
+    --funtextCyantext: var(--funtextCyantextFaint) !important;
+    /* stylelint-enable declaration-no-important */
+  }
+
   blockquote {
     margin: 0.2em 0 0.2em 0.2em;
     font-style: italic;
-    border-left: 0.2em solid var(--faint, $fallback--faint);
+    border-left: 0.2em solid var(--textFaint);
     padding-left: 1em;
   }
 
@@ -17,7 +26,7 @@
   kbd,
   var,
   pre {
-    font-family: var(--postCodeFont, monospace);
+    font-family: var(--monoFont);
   }
 
   p {
@@ -64,5 +73,13 @@
     max-height: 400px;
     vertical-align: middle;
     object-fit: contain;
+  }
+
+  .greentext {
+    color: var(--funtextGreentext);
+  }
+
+  .cyantext {
+    color: var(--funtextCyantext);
   }
 }

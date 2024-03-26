@@ -1,5 +1,3 @@
-@import "../../variables";
-
 $emoji-picker-header-height: 36px;
 $emoji-picker-header-picture-width: 32px;
 $emoji-picker-header-picture-height: 32px;
@@ -10,15 +8,6 @@ $emoji-picker-emoji-size: 32px;
   max-width: calc(100vw - 20px); // popover gives 10px margin from window edge
   display: flex;
   flex-direction: column;
-  background-color: $fallback--bg;
-  background-color: var(--popover, $fallback--bg);
-  color: $fallback--link;
-  color: var(--popoverText, $fallback--link);
-
-  --faint: var(--popoverFaintText, $fallback--faint);
-  --faintLink: var(--popoverFaintLink, $fallback--faint);
-  --lightText: var(--popoverLightText, $fallback--lightText);
-  --icon: var(--popoverIcon, $fallback--icon);
 
   &-header-image {
     display: inline-flex;
@@ -81,8 +70,7 @@ $emoji-picker-emoji-size: 32px;
   .additional-tabs {
     display: flex;
     border-left: 1px solid;
-    border-left-color: $fallback--icon;
-    border-left-color: var(--icon, $fallback--icon);
+    border-left-color: var(--border);
     padding-left: 7px;
     flex: 0 0 auto;
   }
@@ -109,13 +97,8 @@ $emoji-picker-emoji-size: 32px;
         pointer-events: none;
       }
 
-      &.active {
+      &.toggled {
         border-bottom: 4px solid;
-
-        svg {
-          color: $fallback--lightText;
-          color: var(--lightText, $fallback--lightText);
-        }
       }
     }
   }

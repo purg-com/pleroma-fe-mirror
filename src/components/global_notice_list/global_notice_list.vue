@@ -4,7 +4,7 @@
       v-for="(notice, index) in notices"
       :key="index"
       class="alert global-notice"
-      :class="{ ['global-' + notice.level]: true }"
+      :class="{ [notice.level]: true }"
     >
       <div class="notice-message">
         {{ $t(notice.messageKey, notice.messageArgs) }}
@@ -25,8 +25,6 @@
 <script src="./global_notice_list.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .global-notice-list {
   position: fixed;
   top: calc(var(--navbar-height) + 0.5em);
@@ -52,48 +50,8 @@
     }
   }
 
-  .global-error {
-    background-color: var(--alertPopupError, $fallback--cRed);
-    color: var(--alertPopupErrorText, $fallback--text);
-
-    .svg-inline--fa {
-      color: var(--alertPopupErrorText, $fallback--text);
-    }
-  }
-
-  .global-warning {
-    background-color: var(--alertPopupWarning, $fallback--cOrange);
-    color: var(--alertPopupWarningText, $fallback--text);
-
-    .svg-inline--fa {
-      color: var(--alertPopupWarningText, $fallback--text);
-    }
-  }
-
-  .global-success {
-    background-color: var(--alertPopupSuccess, $fallback--cGreen);
-    color: var(--alertPopupSuccessText, $fallback--text);
-
-    .svg-inline--fa {
-      color: var(--alertPopupSuccessText, $fallback--text);
-    }
-  }
-
-  .global-info {
-    background-color: var(--alertPopupNeutral, $fallback--fg);
-    color: var(--alertPopupNeutralText, $fallback--text);
-
-    .svg-inline--fa {
-      color: var(--alertPopupNeutralText, $fallback--text);
-    }
-  }
-
   .close-notice {
     padding-right: 0.2em;
-
-    .svg-inline--fa:hover {
-      opacity: 0.6;
-    }
   }
 }
 </style>

@@ -113,19 +113,19 @@
               <template v-if="!hideBio">
                 <span
                   v-if="user.deactivated"
-                  class="alert user-role"
+                  class="alert neutral user-role"
                 >
                   {{ $t('user_card.deactivated') }}
                 </span>
                 <span
                   v-if="!!visibleRole"
-                  class="alert user-role"
+                  class="alert neutral user-role"
                 >
                   {{ $t(`general.role.${visibleRole}`) }}
                 </span>
                 <span
                   v-if="user.actor_type === 'Service'"
-                  class="alert user-role"
+                  class="alert neutral user-role"
                 >
                   {{ $t('user_card.bot') }}
                 </span>
@@ -166,14 +166,14 @@
               v-if="userHighlightType !== 'disabled'"
               :id="'userHighlightColorTx'+user.id"
               v-model="userHighlightColor"
-              class="userHighlightText"
+              class="input userHighlightText"
               type="text"
             >
             <input
               v-if="userHighlightType !== 'disabled'"
               :id="'userHighlightColor'+user.id"
               v-model="userHighlightColor"
-              class="userHighlightCl"
+              class="input userHighlightCl"
               type="color"
             >
             {{ ' ' }}
@@ -282,10 +282,7 @@
         />
       </div>
     </div>
-    <div
-      v-if="!hideBio"
-      class="panel-body"
-    >
+    <div v-if="!hideBio">
       <div
         v-if="!mergedConfig.hideUserStats && switcher"
         class="user-counts"

@@ -25,7 +25,7 @@
                 id="sign-up-username"
                 v-model.trim="v$.user.username.$model"
                 :disabled="isPending"
-                class="form-control"
+                class="input form-control"
                 :aria-required="true"
                 :placeholder="$t('registration.username_placeholder')"
               >
@@ -53,7 +53,7 @@
                 id="sign-up-fullname"
                 v-model.trim="v$.user.fullname.$model"
                 :disabled="isPending"
-                class="form-control"
+                class="input form-control"
                 :aria-required="true"
                 :placeholder="$t('registration.fullname_placeholder')"
               >
@@ -81,7 +81,7 @@
                 id="email"
                 v-model="v$.user.email.$model"
                 :disabled="isPending"
-                class="form-control"
+                class="input form-control"
                 type="email"
                 :aria-required="accountActivationRequired"
               >
@@ -106,7 +106,7 @@
                 id="bio"
                 v-model="user.bio"
                 :disabled="isPending"
-                class="form-control"
+                class="input form-control"
                 :placeholder="bioPlaceholder"
               />
             </div>
@@ -123,7 +123,7 @@
                 id="sign-up-password"
                 v-model="user.password"
                 :disabled="isPending"
-                class="form-control"
+                class="input form-control"
                 type="password"
                 :aria-required="true"
               >
@@ -151,7 +151,7 @@
                 id="sign-up-password-confirmation"
                 v-model="user.confirm"
                 :disabled="isPending"
-                class="form-control"
+                class="input form-control"
                 type="password"
                 :aria-required="true"
               >
@@ -184,7 +184,7 @@
                 id="sign-up-birthday"
                 v-model="user.birthday"
                 :disabled="isPending"
-                class="form-control"
+                class="input form-control"
                 type="date"
                 :max="birthdayRequired ? birthdayMinAttr : undefined"
                 :aria-required="birthdayRequired"
@@ -229,7 +229,7 @@
                 id="reason"
                 v-model="user.reason"
                 :disabled="isPending"
-                class="form-control"
+                class="input form-control"
                 :placeholder="reasonPlaceholder"
               />
             </div>
@@ -256,7 +256,7 @@
                   id="captcha-answer"
                   v-model="captcha.solution"
                   :disabled="isPending"
-                  class="form-control"
+                  class="input form-control"
                   type="text"
                   autocomplete="off"
                   autocorrect="off"
@@ -275,7 +275,7 @@
                 id="token"
                 v-model="token"
                 disabled="true"
-                class="form-control"
+                class="input form-control"
                 type="text"
               >
             </div>
@@ -320,9 +320,6 @@
 
 <script src="./registration.js"></script>
 <style lang="scss">
-@import "../../variables";
-$validations-cRed: #f04124;
-
 .registration-form {
   display: flex;
   flex-direction: column;
@@ -369,8 +366,7 @@ $validations-cRed: #f04124;
   }
 
   .form-group--error .form--label {
-    color: $validations-cRed;
-    color: var(--cRed, $validations-cRed);
+    color: var(--cRed);
   }
 
   .form-error {

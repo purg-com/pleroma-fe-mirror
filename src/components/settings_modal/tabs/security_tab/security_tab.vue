@@ -8,6 +8,7 @@
           v-model="newEmail"
           type="email"
           autocomplete="email"
+          class="input"
         >
       </div>
       <div>
@@ -16,6 +17,7 @@
           v-model="changeEmailPassword"
           type="password"
           autocomplete="current-password"
+          class="input"
         >
       </div>
       <button
@@ -40,6 +42,7 @@
         <input
           v-model="changePasswordInputs[0]"
           type="password"
+          class="input"
         >
       </div>
       <div>
@@ -47,6 +50,7 @@
         <input
           v-model="changePasswordInputs[1]"
           type="password"
+          class="input"
         >
       </div>
       <div>
@@ -54,6 +58,7 @@
         <input
           v-model="changePasswordInputs[2]"
           type="password"
+          class="input"
         >
       </div>
       <button
@@ -155,6 +160,7 @@
         </i18n-t>
         <input
           v-model="addAliasTarget"
+          class="input"
         >
       </div>
       <button
@@ -187,6 +193,7 @@
         </i18n-t>
         <input
           v-model="moveAccountTarget"
+          class="input"
         >
       </div>
       <div>
@@ -195,6 +202,7 @@
           v-model="moveAccountPassword"
           type="password"
           autocomplete="current-password"
+          class="input"
         >
       </div>
       <button
@@ -222,6 +230,7 @@
         <input
           v-model="deleteAccountConfirmPasswordInput"
           type="password"
+          class="input"
         >
         <button
           class="btn button-default"

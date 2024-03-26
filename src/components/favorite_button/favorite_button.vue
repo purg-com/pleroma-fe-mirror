@@ -65,7 +65,6 @@
 <script src="./favorite_button.js"></script>
 
 <style lang="scss">
-@import "../../variables";
 @import "../../mixins";
 
 .FavoriteButton {
@@ -88,8 +87,7 @@
 
     &:hover .svg-inline--fa,
     &.-favorited .svg-inline--fa {
-      color: $fallback--cOrange;
-      color: var(--cOrange, $fallback--cOrange);
+      color: var(--cOrange);
     }
 
     @include unfocused-style {

@@ -1,5 +1,3 @@
-@import "../../variables";
-
 .color-input {
   display: inline-flex;
 
@@ -12,8 +10,6 @@
 
     input {
       background: none;
-      color: $fallback--lightText;
-      color: var(--inputText, $fallback--lightText);
       border: none;
       padding: 0;
       margin: 0;

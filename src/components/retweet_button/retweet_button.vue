@@ -84,7 +84,6 @@
 <script src="./retweet_button.js"></script>
 
 <style lang="scss">
-@import "../../variables";
 @import "../../mixins";
 
 .RetweetButton {
@@ -107,8 +106,7 @@
 
     &:hover .svg-inline--fa,
     &.-repeated .svg-inline--fa {
-      color: $fallback--cGreen;
-      color: var(--cGreen, $fallback--cGreen);
+      color: var(--cGreen);
     }
 
     @include unfocused-style {

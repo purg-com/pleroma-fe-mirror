@@ -17,7 +17,7 @@
       <Select
         :id="report-state"
         v-model="state"
-        class="form-control"
+        class="input form-control"
       >
         <option
           v-for="state in ['open', 'closed', 'resolved']"

@@ -24,8 +24,6 @@
 <script src="./user_popover.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 /* popover styles load on-demand, so we need to override */
 /* stylelint-disable block-no-empty */
 .user-popover.popover {

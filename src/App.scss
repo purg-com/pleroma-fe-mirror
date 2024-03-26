@@ -1,9 +1,10 @@
 // stylelint-disable rscss/class-format
 /* stylelint-disable no-descending-specificity */
-@import "./variables";
 @import "./panel";
 
 :root {
+  --font-size: 14px;
+  --status-margin: 0.75em;
   --navbar-height: 3.5rem;
   --post-line-height: 1.4;
   // Z-Index stuff
@@ -16,16 +17,15 @@
 }
 
 html {
-  font-size: 14px;
+  font-size: var(--font-size);
   // overflow-x: clip causes my browser's tab to crash with SIGILL lul
 }
 
 body {
   font-family: sans-serif;
-  font-family: var(--interfaceFont, sans-serif);
+  font-family: var(--font);
   margin: 0;
-  color: $fallback--text;
-  color: var(--text, $fallback--text);
+  color: var(--text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overscroll-behavior-y: none;
@@ -42,17 +42,35 @@ body {
 // have a cursor/pointer to operate them
 @media (any-pointer: fine) {
   * {
-    scrollbar-color: var(--btn) transparent;
+    scrollbar-color: var(--fg) transparent;
 
     &::-webkit-scrollbar {
       background: transparent;
     }
 
+    &::-webkit-scrollbar-corner {
+      background: transparent;
+    }
+
+    &::-webkit-resizer {
+      /* stylelint-disable-next-line declaration-no-important */
+      background-color: transparent !important;
+      background-image:
+        linear-gradient(
+          135deg,
+          transparent calc(50% - 1px),
+          var(--textFaint) 50%,
+          transparent calc(50% + 1px),
+          transparent calc(75% - 1px),
+          var(--textFaint) 75%,
+          transparent calc(75% + 1px),
+        );
+    }
+
     &::-webkit-scrollbar-button,
     &::-webkit-scrollbar-thumb {
-      background-color: var(--btn);
-      box-shadow: var(--buttonShadow);
-      border-radius: var(--btnRadius);
+      box-shadow: var(--shadow);
+      border-radius: var(--roundness);
     }
 
     // horizontal/vertical/increment/decrement are webkit-specific stuff
@@ -61,7 +79,7 @@ body {
     &::-webkit-scrollbar-button {
       --___bgPadding: 2px;
 
-      color: var(--btnText);
+      color: var(--text);
       background-repeat: no-repeat, no-repeat;
 
       &:horizontal {
@@ -69,15 +87,15 @@ body {
 
         &:increment {
           background-image:
-            linear-gradient(45deg, var(--btnText) 50%, transparent 51%),
-            linear-gradient(-45deg, transparent 50%, var(--btnText) 51%);
+            linear-gradient(45deg, var(--text) 50%, transparent 51%),
+            linear-gradient(-45deg, transparent 50%, var(--text) 51%);
           background-position: top var(--___bgPadding) left 50%, right 50% bottom var(--___bgPadding);
         }
 
         &:decrement {
           background-image:
-            linear-gradient(45deg, transparent 50%, var(--btnText) 51%),
-            linear-gradient(-45deg, var(--btnText) 50%, transparent 51%);
+            linear-gradient(45deg, transparent 50%, var(--text) calc(50% + 1px)),
+            linear-gradient(-45deg, var(--text) 50%, transparent 51%);
           background-position: bottom var(--___bgPadding) right 50%, left 50% top var(--___bgPadding);
         }
       }
@@ -87,15 +105,15 @@ body {
 
         &:increment {
           background-image:
-            linear-gradient(-45deg, transparent 50%, var(--btnText) 51%),
-            linear-gradient(45deg, transparent 50%, var(--btnText) 51%);
+            linear-gradient(-45deg, transparent 50%, var(--text) 51%),
+            linear-gradient(45deg, transparent 50%, var(--text) 51%);
           background-position: right var(--___bgPadding) top 50%, left var(--___bgPadding) top 50%;
         }
 
         &:decrement {
           background-image:
-            linear-gradient(-45deg, var(--btnText) 50%, transparent 51%),
-            linear-gradient(45deg, var(--btnText) 50%, transparent 51%);
+            linear-gradient(-45deg, var(--text) 50%, transparent 51%),
+            linear-gradient(45deg, var(--text) 50%, transparent 51%);
           background-position: left var(--___bgPadding) top 50%, right var(--___bgPadding) top 50%;
         }
       }
@@ -104,15 +122,14 @@ body {
   }
   // Body should have background to scrollbar otherwise it will use white (body color?)
   html {
-    scrollbar-color: var(--selectedMenu) var(--wallpaper);
+    scrollbar-color: var(--fg) var(--wallpaper);
     background: var(--wallpaper);
   }
 }
 
 a {
   text-decoration: none;
-  color: $fallback--link;
-  color: var(--link, $fallback--link);
+  color: var(--link);
 }
 
 h4 {
@@ -128,27 +145,12 @@ h4 {
 i[class*="icon-"],
 .svg-inline--fa,
 .iconLetter {
-  color: $fallback--icon;
-  color: var(--icon, $fallback--icon);
-}
-
-.button-unstyled:hover,
-a:hover {
-  > i[class*="icon-"],
-  > .svg-inline--fa,
-  > .iconLetter {
-    color: var(--text);
-  }
+  color: var(--icon);
 }
 
 nav {
   z-index: var(--ZI_navbar);
-  background-color: $fallback--fg;
-  background-color: var(--topBar, $fallback--fg);
-  color: $fallback--faint;
-  color: var(--faint, $fallback--faint);
-  box-shadow: 0 0 4px rgb(0 0 0 / 60%);
-  box-shadow: var(--topBarShadow);
+  box-shadow: var(--shadow);
   box-sizing: border-box;
   height: var(--navbar-height);
   position: fixed;
@@ -195,8 +197,7 @@ nav {
   grid-column: 1 / span 3;
   grid-row: 1 / 1;
   pointer-events: none;
-  background-color: rgb(0 0 0 / 15%);
-  background-color: var(--underlay, rgb(0 0 0 / 15%));
+  background-color: var(--underlay);
   z-index: -1000;
 }
 
@@ -204,7 +205,6 @@ nav {
   --miniColumn: 25rem;
   --maxiColumn: 45rem;
   --columnGap: 1em;
-  --status-margin: 0.75em;
   --effectiveSidebarColumnWidth: minmax(var(--miniColumn), var(--sidebarColumnWidth, var(--miniColumn)));
   --effectiveNotifsColumnWidth: minmax(var(--miniColumn), var(--notifsColumnWidth, var(--miniColumn)));
   --effectiveContentColumnWidth: minmax(var(--miniColumn), var(--contentColumnWidth, var(--maxiColumn)));
@@ -366,106 +366,110 @@ nav {
 
 .button-default {
   user-select: none;
-  color: $fallback--text;
-  color: var(--btnText, $fallback--text);
-  background-color: $fallback--fg;
-  background-color: var(--btn, $fallback--fg);
+  color: var(--text);
   border: none;
-  border-radius: $fallback--btnRadius;
-  border-radius: var(--btnRadius, $fallback--btnRadius);
+  border-radius: var(--roundness);
   cursor: pointer;
-  box-shadow: $fallback--buttonShadow;
-  box-shadow: var(--buttonShadow);
+  box-shadow: var(--shadow);
   font-size: 1em;
   font-family: sans-serif;
-  font-family: var(--interfaceFont, sans-serif);
-
-  &.-sublime {
-    background: transparent;
-  }
-
-  i[class*="icon-"],
-  .svg-inline--fa {
-    color: $fallback--text;
-    color: var(--btnText, $fallback--text);
-  }
+  font-family: var(--font);
 
   &::-moz-focus-inner {
     border: none;
   }
 
-  &:hover {
-    box-shadow: 0 0 4px rgb(255 255 255 / 30%);
-    box-shadow: var(--buttonHoverShadow);
-  }
-
-  &:active {
-    box-shadow:
-      0 0 4px 0 rgb(255 255 255 / 30%),
-      0 1px 0 0 rgb(0 0 0 / 20%) inset,
-      0 -1px 0 0 rgb(255 255 255 / 20%) inset;
-    box-shadow: var(--buttonPressedShadow);
-    color: $fallback--text;
-    color: var(--btnPressedText, $fallback--text);
-    background-color: $fallback--fg;
-    background-color: var(--btnPressed, $fallback--fg);
-
-    svg,
-    i {
-      color: $fallback--text;
-      color: var(--btnPressedText, $fallback--text);
-    }
-  }
-
   &:disabled {
     cursor: not-allowed;
-    color: $fallback--text;
-    color: var(--btnDisabledText, $fallback--text);
-    background-color: $fallback--fg;
-    background-color: var(--btnDisabled, $fallback--fg);
+  }
+}
 
-    svg,
-    i {
-      color: $fallback--text;
-      color: var(--btnDisabledText, $fallback--text);
-    }
+.menu-item,
+.list-item {
+  display: block;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  text-align: initial;
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: 400;
+  cursor: pointer;
+  color: inherit;
+  clear: both;
+  position: relative;
+  white-space: nowrap;
+  border-color: var(--border);
+  border-style: solid;
+  border-width: 0;
+  border-top-width: 1px;
+  width: 100%;
+  line-height: var(--__line-height);
+  padding: var(--__vertical-gap) var(--__horizontal-gap);
+
+  --__line-height: 1.5em;
+  --__horizontal-gap: 0.75em;
+  --__vertical-gap: 0.5em;
+
+  &.-non-interactive {
+    cursor: auto;
   }
 
-  &.toggled {
-    color: $fallback--text;
-    color: var(--btnToggledText, $fallback--text);
-    background-color: $fallback--fg;
-    background-color: var(--btnToggled, $fallback--fg);
-    box-shadow:
-      0 0 4px 0 rgb(255 255 255 / 30%),
-      0 1px 0 0 rgb(0 0 0 / 20%) inset,
-      0 -1px 0 0 rgb(255 255 255 / 20%) inset;
-    box-shadow: var(--buttonPressedShadow);
-
-    svg,
-    i {
-      color: $fallback--text;
-      color: var(--btnToggledText, $fallback--text);
-    }
+  &.-active,
+  &:hover {
+    border-top-width: 1px;
+    border-bottom-width: 1px;
   }
 
-  &.danger {
-    // TODO: add better color variable
-    color: $fallback--text;
-    color: var(--alertErrorPanelText, $fallback--text);
-    background-color: $fallback--alertError;
-    background-color: var(--alertError, $fallback--alertError);
+  &.-active + &,
+  &:hover + & {
+    border-top-width: 0;
+  }
+
+  &:hover + .menu-item-collapsible:not(.-expanded) + &,
+  &.-active + .menu-item-collapsible:not(.-expanded) + & {
+    border-top-width: 0;
+  }
+
+  &[aria-expanded="true"] {
+    border-bottom-width: 1px;
+  }
+
+  a,
+  button:not(.button-default) {
+    text-align: initial;
+    padding: 0;
+    background: none;
+    border: none;
+    outline: none;
+    display: inline;
+    font-size: 100%;
+    font-family: inherit;
+    line-height: unset;
+    color: var(--text);
+  }
+
+  &:first-child {
+    border-top-right-radius: var(--roundness);
+    border-top-left-radius: var(--roundness);
+    border-top-width: 0;
+  }
+
+  &:last-child {
+    border-bottom-right-radius: var(--roundness);
+    border-bottom-left-radius: var(--roundness);
+    border-bottom-width: 0;
   }
 }
 
 .button-unstyled {
-  background: none;
   border: none;
   outline: none;
   display: inline;
   text-align: initial;
   font-size: 100%;
   font-family: inherit;
+  box-shadow: var(--shadow);
   padding: 0;
   line-height: unset;
   cursor: pointer;
@@ -473,28 +477,23 @@ nav {
   color: inherit;
 
   &.-link {
-    color: $fallback--link;
-    color: var(--link, $fallback--link);
-  }
-
-  &.-fullwidth {
-    width: 100%;
-  }
-
-  &.-hover-highlight {
-    &:hover svg {
-      color: $fallback--lightText;
-      color: var(--lightText, $fallback--lightText);
-    }
+    /* stylelint-disable-next-line declaration-no-important */
+    color: var(--link) !important;
   }
 }
 
 input,
-textarea,
+textarea {
+  border: none;
+  display: inline-block;
+  outline: none;
+}
+
 .input {
   &.unstyled {
     border-radius: 0;
-    background: none;
+    /* stylelint-disable-next-line declaration-no-important */
+    background: none !important;
     box-shadow: none;
     height: unset;
   }
@@ -502,19 +501,9 @@ textarea,
   --_padding: 0.5em;
 
   border: none;
-  border-radius: $fallback--inputRadius;
-  border-radius: var(--inputRadius, $fallback--inputRadius);
-  box-shadow:
-    0 1px 0 0 rgb(0 0 0 / 20%) inset,
-    0 -1px 0 0 rgb(255 255 255 / 20%) inset,
-    0 0 2px 0 rgb(0 0 0 / 100%) inset;
-  box-shadow: var(--inputShadow);
-  background-color: $fallback--fg;
-  background-color: var(--input, $fallback--fg);
-  color: $fallback--lightText;
-  color: var(--inputText, $fallback--lightText);
-  font-family: sans-serif;
-  font-family: var(--inputFont, sans-serif);
+  border-radius: var(--roundness);
+  box-shadow: var(--shadow);
+  font-family: var(--font);
   font-size: 1em;
   margin: 0;
   box-sizing: border-box;
@@ -528,7 +517,6 @@ textarea,
   &[disabled="disabled"],
   &.disabled {
     cursor: not-allowed;
-    opacity: 0.5;
   }
 
   &[type="range"] {
@@ -543,9 +531,9 @@ textarea,
     display: none;
 
     &:checked + label::before {
-      box-shadow: 0 0 2px black inset, 0 0 0 4px $fallback--fg inset;
-      box-shadow: var(--inputShadow), 0 0 0 4px var(--fg, $fallback--fg) inset;
-      background-color: var(--accent, $fallback--link);
+      box-shadow: var(--shadow);
+      background-color: var(--background);
+      color: var(--text);
     }
 
     &:disabled {
@@ -559,16 +547,14 @@ textarea,
     + label::before {
       flex-shrink: 0;
       display: inline-block;
-      content: "";
+      content: "•";
       transition: box-shadow 200ms;
       width: 1.1em;
       height: 1.1em;
       border-radius: 100%; // Radio buttons should always be circle
-      box-shadow: 0 0 2px black inset;
-      box-shadow: var(--inputShadow);
+      background-color: var(--background);
+      box-shadow: var(--shadow);
       margin-right: 0.5em;
-      background-color: $fallback--fg;
-      background-color: var(--input, $fallback--fg);
       vertical-align: top;
       text-align: center;
       line-height: 1.1;
@@ -581,8 +567,9 @@ textarea,
 
   &[type="checkbox"] {
     &:checked + label::before {
-      color: $fallback--text;
-      color: var(--inputText, $fallback--text);
+      color: var(--text);
+      background-color: var(--background);
+      box-shadow: var(--shadow);
     }
 
     &:disabled {
@@ -600,13 +587,9 @@ textarea,
       transition: color 200ms;
       width: 1.1em;
       height: 1.1em;
-      border-radius: $fallback--checkboxRadius;
-      border-radius: var(--checkboxRadius, $fallback--checkboxRadius);
-      box-shadow: 0 0 2px black inset;
-      box-shadow: var(--inputShadow);
+      border-radius: var(--roundness);
+      box-shadow: var(--shadow);
       margin-right: 0.5em;
-      background-color: $fallback--fg;
-      background-color: var(--input, $fallback--fg);
       vertical-align: top;
       text-align: center;
       line-height: 1.1;
@@ -623,16 +606,14 @@ textarea,
 }
 
 // Textareas should have stock line-height + vertical padding instead of huge line-height
-textarea {
+textarea.input {
   padding: var(--_padding);
   line-height: var(--post-line-height);
 }
 
 option {
-  color: $fallback--text;
-  color: var(--text, $fallback--text);
-  background-color: $fallback--bg;
-  background-color: var(--bg, $fallback--bg);
+  color: var(--text);
+  background-color: var(--background);
 }
 
 .hide-number-spinner {
@@ -653,7 +634,7 @@ option {
 
   li {
     border: 1px solid var(--border);
-    border-radius: var(--inputRadius);
+    border-radius: var(--roundness);
     padding: 0.5em;
     margin: 0.25em;
   }
@@ -714,74 +695,58 @@ option {
   overflow: hidden;
   text-overflow: ellipsis;
 
-  &.badge-notification {
-    background-color: $fallback--cRed;
-    background-color: var(--badgeNotification, $fallback--cRed);
-    color: white;
-    color: var(--badgeNotificationText, white);
+  &.-dot,
+  &.-counter {
+    margin: 0;
+    position: absolute;
+  }
+
+  &.-dot {
+    min-height: 8px;
+    max-height: 8px;
+    min-width: 8px;
+    max-width: 8px;
+    padding: 0;
+    line-height: 0;
+    font-size: 0;
+    left: calc(50% - 4px);
+    top: calc(50% - 4px);
+    margin-left: 6px;
+    margin-top: -6px;
+  }
+
+  &.-counter {
+    border-radius: var(--roundness);
+    font-size: 0.75em;
+    line-height: 1;
+    text-align: right;
+    padding: 0.2em;
+    min-width: 0;
+    left: calc(50% - 0.5em);
+    top: calc(50% - 0.4em);
+    margin-left: 0.7em;
+    margin-top: -1em;
   }
 }
 
 .alert {
   margin: 0 0.35em;
   padding: 0 0.25em;
-  border-radius: $fallback--tooltipRadius;
-  border-radius: var(--tooltipRadius, $fallback--tooltipRadius);
-
-  &.error {
-    background-color: $fallback--alertError;
-    background-color: var(--alertError, $fallback--alertError);
-    color: $fallback--text;
-    color: var(--alertErrorText, $fallback--text);
-
-    .panel-heading & {
-      color: $fallback--text;
-      color: var(--alertErrorPanelText, $fallback--text);
-    }
-  }
-
-  &.warning {
-    background-color: $fallback--alertWarning;
-    background-color: var(--alertWarning, $fallback--alertWarning);
-    color: $fallback--text;
-    color: var(--alertWarningText, $fallback--text);
-
-    .panel-heading & {
-      color: $fallback--text;
-      color: var(--alertWarningPanelText, $fallback--text);
-    }
-  }
-
-  &.success {
-    background-color: var(--alertSuccess, $fallback--alertWarning);
-    color: var(--alertSuccessText, $fallback--text);
-
-    .panel-heading & {
-      color: var(--alertSuccessPanelText, $fallback--text);
-    }
-  }
+  border-radius: var(--roundness);
+  border: 1px solid var(--border);
 }
 
 .faint {
-  color: $fallback--faint;
-  color: var(--faint, $fallback--faint);
-}
+  --text: var(--textFaint);
+  --link: var(--linkFaint);
 
-.faint-link {
-  color: $fallback--faint;
-  color: var(--faint, $fallback--faint);
-
-  &:hover {
-    text-decoration: underline;
-  }
+  color: var(--text);
 }
 
 .visibility-notice {
   padding: 0.5em;
-  border: 1px solid $fallback--faint;
-  border: 1px solid var(--faint, $fallback--faint);
-  border-radius: $fallback--inputRadius;
-  border-radius: var(--inputRadius, $fallback--inputRadius);
+  border: 1px solid var(--textFaint);
+  border-radius: var(--roundness);
 }
 
 .notice-dismissible {
@@ -802,6 +767,10 @@ option {
   &.iconLetter {
     font-size: 1.1em;
   }
+
+  &.svg-inline--fa {
+    vertical-align: -0.15em;
+  }
 }
 
 .fa-old-padding {
@@ -814,6 +783,11 @@ option {
 
 .veryfaint {
   opacity: 0.25;
+}
+
+.timeago {
+  --link: var(--text);
+  --linkFaint: var(--textFaint);
 }
 
 .login-hint {
@@ -913,4 +887,9 @@ option {
   clip: rect(0 0 0 0);
   padding: 0;
   position: absolute;
+}
+
+*::selection {
+  color: var(--selectionText);
+  background-color: var(--selectionBackground);
 }

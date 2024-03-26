@@ -11,14 +11,14 @@
         <input
           v-model="selected.y"
           :disabled="!present"
-          class="input-number"
+          class="input input-number"
           type="number"
         >
         <div class="wrap">
           <input
             v-model="selected.y"
             :disabled="!present"
-            class="input-range"
+            class="input input-range"
             type="range"
             max="20"
             min="-20"
@@ -38,14 +38,14 @@
         <input
           v-model="selected.x"
           :disabled="!present"
-          class="input-number"
+          class="input input-number"
           type="number"
         >
         <div class="wrap">
           <input
             v-model="selected.x"
             :disabled="!present"
-            class="input-range"
+            class="input input-range"
             type="range"
             max="20"
             min="-20"
@@ -129,7 +129,7 @@
           v-model="selected.inset"
           :disabled="!present"
           name="inset"
-          class="input-inset visible-for-screenreader-only"
+          class="input -checkbox input-inset visible-for-screenreader-only"
           type="checkbox"
         >
         <label
@@ -153,7 +153,7 @@
           v-model="selected.blur"
           :disabled="!present"
           name="blur"
-          class="input-range"
+          class="input input-range"
           type="range"
           max="20"
           min="0"
@@ -161,7 +161,7 @@
         <input
           v-model="selected.blur"
           :disabled="!present"
-          class="input-number"
+          class="input input-number"
           type="number"
           min="0"
         >
@@ -181,7 +181,7 @@
           v-model="selected.spread"
           :disabled="!present"
           name="spread"
-          class="input-range"
+          class="input input-range"
           type="range"
           max="20"
           min="-20"
@@ -189,7 +189,7 @@
         <input
           v-model="selected.spread"
           :disabled="!present"
-          class="input-number"
+          class="input input-number"
           type="number"
         >
       </div>
@@ -219,8 +219,6 @@
 <script src="./shadow_control.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .shadow-control {
   display: flex;
   flex-wrap: wrap;
@@ -236,8 +234,6 @@
     flex: 0;
     display: flex;
     flex-wrap: wrap;
-
-    $side: 15em;
 
     input[type="number"] {
       width: 5em;
@@ -261,7 +257,7 @@
     .x-shift-control .wrap,
     input[type="range"] {
       margin: 0;
-      width: $side;
+      width: 15em;
       height: 2em;
     }
 
@@ -271,7 +267,7 @@
 
       .wrap {
         width: 2em;
-        height: $side;
+        height: 15em;
       }
 
       input[type="range"] {
@@ -293,16 +289,12 @@
         linear-gradient(-45deg, transparent 75%, #666 75%);
       background-size: 20px 20px;
       background-position: 0 0, 0 10px, 10px -10px, -10px 0;
-      border-radius: $fallback--inputRadius;
-      border-radius: var(--inputRadius, $fallback--inputRadius);
+      border-radius: var(--roundness);
 
       .preview-block {
         width: 33%;
         height: 33%;
-        background-color: $fallback--bg;
-        background-color: var(--bg, $fallback--bg);
-        border-radius: $fallback--panelRadius;
-        border-radius: var(--panelRadius, $fallback--panelRadius);
+        border-radius: var(--roundness);
       }
     }
   }
