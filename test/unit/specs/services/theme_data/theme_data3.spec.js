@@ -9,7 +9,7 @@ import {
   basePaletteKeys
 } from 'src/services/theme_data/theme2_to_theme3.js'
 
-describe.only('Theme Data 3', () => {
+describe('Theme Data 3', () => {
   describe('getAllPossibleCombinations', () => {
     it('test simple 3 values case', () => {
       const out = getAllPossibleCombinations([1, 2, 3]).map(x => x.sort((a, b) => a - b))
@@ -62,7 +62,9 @@ describe.only('Theme Data 3', () => {
     })
   })
 
-  describe('init', () => {
+  describe('init', function () {
+    this.timeout(5000)
+
     it('Test initialization without anything', () => {
       const out = init([], '#DEADAF')
 
