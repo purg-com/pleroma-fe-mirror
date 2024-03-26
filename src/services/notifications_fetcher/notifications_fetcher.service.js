@@ -9,6 +9,7 @@ const mastoApiNotificationTypes = [
   'reblog',
   'follow',
   'move',
+  'poll',
   'pleroma:emoji_reaction',
   'pleroma:report'
 ]
