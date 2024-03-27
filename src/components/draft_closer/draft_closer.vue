@@ -5,7 +5,7 @@
       v-body-scroll-lock="true"
       class="confirm-modal"
       :on-cancel="cancel"
-      >
+    >
       <template #header>
         <span>
           {{ $t('post_status.close_confirm_title') }}

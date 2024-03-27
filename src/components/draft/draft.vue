@@ -72,18 +72,14 @@
 <script src="./draft.js"></script>
 
 <style lang="scss">
-@import "src/variables";
-
 .Draft {
   margin: 1em;
 
   .status-content {
-    border: 1px solid $fallback--faint;
-    border-color: var(--faint, $fallback--faint);
-    border-radius: $fallback--inputRadius;
-    border-radius: var(--inputRadius, $fallback--inputRadius);
-    color: $fallback--text;
-    color: var(--text, $fallback--text);
+    border: 1px solid;
+    border-color: var(--faint);
+    border-radius: var(--inputRadius);
+    color: var(--text);
     padding: 0.5em;
     margin: 0.5em 0;
   }

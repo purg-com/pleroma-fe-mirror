@@ -749,9 +749,8 @@ option {
     margin-top: -1em;
   }
 
-  &.badge-neutral {
-    background-color: $fallback--cGreen;
-    background-color: var(--badgeNeutral, $fallback--cGreen);
+  &.-neutral {
+    background-color: var(--badgeNeutral);
     color: white;
     color: var(--badgeNeutralText, white);
   }
