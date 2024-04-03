@@ -19,6 +19,9 @@
 html {
   font-size: var(--font-size);
   // overflow-x: clip causes my browser's tab to crash with SIGILL lul
+
+  // Fallback for when stuff is loading
+  --background: var(--bg);
 }
 
 body {
@@ -370,6 +373,7 @@ nav {
   border: none;
   border-radius: var(--roundness);
   cursor: pointer;
+  background-color: var(--background);
   box-shadow: var(--shadow);
   font-size: 1em;
   font-family: sans-serif;
@@ -470,6 +474,7 @@ nav {
   font-size: 100%;
   font-family: inherit;
   box-shadow: var(--shadow);
+  background-color: transparent;
   padding: 0;
   line-height: unset;
   cursor: pointer;
@@ -502,6 +507,8 @@ textarea {
 
   border: none;
   border-radius: var(--roundness);
+  background-color: var(--background);
+  color: var(--text);
   box-shadow: var(--shadow);
   font-family: var(--font);
   font-size: 1em;
