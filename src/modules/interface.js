@@ -1,4 +1,5 @@
 const defaultState = {
+  themeApplied: false,
   settingsModalState: 'hidden',
   settingsModalLoadedUser: false,
   settingsModalLoadedAdmin: false,
@@ -34,6 +35,9 @@ const interfaceMod = {
       } else {
         state.settings.currentSaveStateNotice = { error: true, errorData: error }
       }
+    },
+    setThemeApplied (state) {
+      state.themeApplied = true
     },
     setNotificationPermission (state, permission) {
       state.notificationPermission = permission

@@ -2,6 +2,7 @@
   <div
     id="app-loaded"
     :style="bgStyle"
+    v-show="$store.state.interface.themeApplied"
   >
     <div
       id="app_bg_wrapper"

@@ -88,9 +88,6 @@ export const generateTheme = async (input, callbacks) => {
 }
 
 export const applyTheme = async (input) => {
-  const body = document.body
-  body.classList.add('hidden')
-
   const styleSheet = new CSSStyleSheet()
   document.adoptedStyleSheets = [styleSheet]
 
@@ -102,8 +99,6 @@ export const applyTheme = async (input) => {
       }
     }
   )
-
-  body.classList.remove('hidden')
 
   setTimeout(lazyProcessFunc, 0)
 
