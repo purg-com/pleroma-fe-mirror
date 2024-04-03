@@ -6,7 +6,13 @@ import { getCssRules } from '../theme_data/css_utils.js'
 import { defaultState } from '../../modules/config.js'
 import { chunk } from 'lodash'
 
-export const applyTheme = async (input) => {
+export const generateTheme = async (input, callbacks) => {
+  const {
+    onNewRule = (rule) => {},
+    onLazyFinished = () => {},
+    onEagerFinished = () => {}
+  } = callbacks
+
   let extraRules
   if (input.themeFileVersion === 1) {
     extraRules = convertTheme2To3(input)
@@ -17,11 +23,6 @@ export const applyTheme = async (input) => {
 
   // Assuming that "worst case scenario background" is panel background since it's the most likely one
   const themes3 = init(extraRules, extraRules[0].directives['--bg'].split('|')[1].trim())
-  const body = document.body
-
-  const styleSheet = new CSSStyleSheet()
-  document.adoptedStyleSheets = [styleSheet]
-  body.classList.add('hidden')
 
   getCssRules(themes3.eager, themes3.staticVars).forEach(rule => {
     // Hacks to support multiple selectors on same component
@@ -37,13 +38,12 @@ export const applyTheme = async (input) => {
         parts[1],
         '}'
       ].join('')
-      styleSheet.insertRule(newRule, 'index-max')
+      onNewRule(newRule)
     } else {
-      styleSheet.insertRule(rule, 'index-max')
+      onNewRule(rule)
     }
   })
-
-  body.classList.remove('hidden')
+  onEagerFinished()
 
   // Optimization - instead of processing all lazy rules in one go, process them in small chunks
   // so that UI can do other things and be somewhat responsive while less important rules are being
@@ -67,9 +67,9 @@ export const applyTheme = async (input) => {
             parts[1],
             '}'
           ].join('')
-          styleSheet.insertRule(newRule, 'index-max')
+          onNewRule(newRule)
         } else {
-          styleSheet.insertRule(rule, 'index-max')
+          onNewRule(rule)
         }
       })
       // const t1 = performance.now()
@@ -78,10 +78,34 @@ export const applyTheme = async (input) => {
       counter += 1
       if (counter < chunks.length) {
         setTimeout(processChunk, 0)
+      } else {
+        onLazyFinished()
       }
     })
   }
-  setTimeout(processChunk, 0)
+
+  return { lazyProcessFunc: processChunk }
+}
+
+export const applyTheme = async (input) => {
+  const body = document.body
+  body.classList.add('hidden')
+
+  const styleSheet = new CSSStyleSheet()
+  document.adoptedStyleSheets = [styleSheet]
+
+  const { lazyProcessFunc } = await generateTheme(
+    input,
+    {
+      onNewRule (rule) {
+        styleSheet.insertRule(rule, 'index-max')
+      }
+    }
+  )
+
+  body.classList.remove('hidden')
+
+  setTimeout(lazyProcessFunc, 0)
 
   return Promise.resolve()
 }
