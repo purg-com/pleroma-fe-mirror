@@ -5,7 +5,7 @@
   >
     <div class="panel panel-default">
       <div
-        class="panel-heading timeline-heading"
+        class="panel-heading"
         :class="{ 'shout-heading': floating }"
         @click.stop.prevent="togglePanel"
       >
@@ -18,7 +18,7 @@
           />
         </div>
       </div>
-      <div class="shout-window">
+      <div class="panel-body shout-window">
         <div
           v-for="message in messages"
           :key="message.id"
@@ -41,10 +41,10 @@
           </div>
         </div>
       </div>
-      <div class="shout-input">
+      <div class="panel-body shout-input">
         <textarea
           v-model="currentMessage"
-          class="shout-input-textarea"
+          class="shout-input-textarea input"
           rows="1"
           @keyup.enter="submit(currentMessage)"
         />

@@ -61,6 +61,8 @@ export const applyTheme = async (input) => {
             parts[0],
             ', ',
             parts[0].replace(/\.modal-view/, '#modal'),
+            ', ',
+            parts[0].replace(/\.modal-view/, '.shout-panel'),
             ' {',
             parts[1],
             '}'
