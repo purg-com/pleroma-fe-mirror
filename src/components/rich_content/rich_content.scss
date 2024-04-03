@@ -83,3 +83,8 @@
     color: var(--funtextCyantext);
   }
 }
+
+a .RichContent {
+  /* stylelint-disable-next-line declaration-no-important */
+  color: var(--link) !important;
+}
