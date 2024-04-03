@@ -8,7 +8,7 @@ import { chunk } from 'lodash'
 
 export const generateTheme = async (input, callbacks) => {
   const {
-    onNewRule = (rule) => {},
+    onNewRule = (rule, isLazy) => {},
     onLazyFinished = () => {},
     onEagerFinished = () => {}
   } = callbacks
@@ -38,9 +38,9 @@ export const generateTheme = async (input, callbacks) => {
         parts[1],
         '}'
       ].join('')
-      onNewRule(newRule)
+      onNewRule(newRule, false)
     } else {
-      onNewRule(rule)
+      onNewRule(rule, false)
     }
   })
   onEagerFinished()
@@ -67,9 +67,9 @@ export const generateTheme = async (input, callbacks) => {
             parts[1],
             '}'
           ].join('')
-          onNewRule(newRule)
+          onNewRule(newRule, true)
         } else {
-          onNewRule(rule)
+          onNewRule(rule, true)
         }
       })
       // const t1 = performance.now()
@@ -89,13 +89,23 @@ export const generateTheme = async (input, callbacks) => {
 
 export const applyTheme = async (input) => {
   const styleSheet = new CSSStyleSheet()
-  document.adoptedStyleSheets = [styleSheet]
+  const lazyStyleSheet = new CSSStyleSheet()
 
   const { lazyProcessFunc } = await generateTheme(
     input,
     {
-      onNewRule (rule) {
-        styleSheet.insertRule(rule, 'index-max')
+      onNewRule (rule, isLazy) {
+        if (isLazy) {
+          lazyStyleSheet.insertRule(rule, 'index-max')
+        } else {
+          styleSheet.insertRule(rule, 'index-max')
+        }
+      },
+      onEagerFinished () {
+        document.adoptedStyleSheets = [styleSheet]
+      },
+      onLazyFinished () {
+        document.adoptedStyleSheets = [styleSheet, lazyStyleSheet]
       }
     }
   )
