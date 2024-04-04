@@ -517,6 +517,8 @@ export const convertTheme2To3 = (data) => {
       } else if (newRule.component === 'Badge') {
         if (newRule.variant === 'notification') {
           return [newRule, { component: 'Root', directives: { '--badgeNotification': 'color | ' + newRule.directives.background } }]
+        } else if (newRule.variant === 'neutral') {
+          return [{ ...newRule, variant: 'normal' }]
         } else {
           return [newRule]
         }
