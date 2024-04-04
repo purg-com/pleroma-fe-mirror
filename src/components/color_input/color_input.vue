@@ -44,7 +44,7 @@
         class="invalidIndicator"
       />
       <label class="nativeColor">
-        <FAIcon icon="eye-dropper"/>
+        <FAIcon icon="eye-dropper" />
         <input
           :id="name"
           class="unstyled"
