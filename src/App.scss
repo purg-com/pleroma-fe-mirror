@@ -14,14 +14,14 @@
   --ZI_navbar_popovers: 7500;
   --ZI_navbar: 7000;
   --ZI_popovers: 6000;
+
+  // Fallback for when stuff is loading
+  --background: var(--bg);
 }
 
 html {
   font-size: var(--font-size);
   // overflow-x: clip causes my browser's tab to crash with SIGILL lul
-
-  // Fallback for when stuff is loading
-  --background: var(--bg);
 }
 
 body {
@@ -410,6 +410,7 @@ nav {
   width: 100%;
   line-height: var(--__line-height);
   padding: var(--__vertical-gap) var(--__horizontal-gap);
+  background: transparent;
 
   --__line-height: 1.5em;
   --__horizontal-gap: 0.75em;

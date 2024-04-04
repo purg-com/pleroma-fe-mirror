@@ -71,6 +71,7 @@
   border-color: var(--border);
   border-style: solid;
   border-width: 1px;
+  background-color: var(--background);
 }
 
 .dropdown-menu {
@@ -82,6 +83,7 @@
   max-width: 100vw;
   z-index: var(--ZI_popover_override, var(--ZI_popovers));
   white-space: nowrap;
+  background-color: var(--background);
 
   .dropdown-divider {
     height: 0;
