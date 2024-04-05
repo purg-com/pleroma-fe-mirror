@@ -90,7 +90,11 @@
     "heading": {
       "totp": "Authentification à double-facteur",
       "recovery": "Récupération de l'authentification à double-facteur"
-    }
+    },
+    "logout_confirm_title": "Confirmation de déconnexion",
+    "logout_confirm": "Souhaitez-vous vous déconnecter ?",
+    "logout_confirm_accept_button": "Déconnexion",
+    "logout_confirm_cancel_button": "Ne pas se déconnecter"
   },
   "media_modal": {
     "previous": "Précédent",
@@ -110,7 +114,7 @@
     "timeline": "Flux personnel",
     "twkn": "Réseau connu",
     "user_search": "Recherche de comptes",
-    "who_to_follow": "Suggestion de suivit",
+    "who_to_follow": "Suggestion de suivi",
     "preferences": "Préférences",
     "search": "Recherche",
     "administration": "Administration",
@@ -124,7 +128,10 @@
     "edit_pinned": "Éditer les éléments agrafés",
     "edit_finish": "Édition terminée",
     "mobile_sidebar": "(Dés)activer le panneau latéral",
-    "mobile_notifications_close": "Fermer les notifications"
+    "mobile_notifications_close": "Fermer les notifications",
+    "search_close": "Fermer la barre de recherche",
+    "announcements": "Annonces",
+    "mobile_notifications_mark_as_seen": "Marquer tout comme vu"
   },
   "notifications": {
     "broken_favorite": "Message inconnu, recherche en cours…",
@@ -140,7 +147,13 @@
     "follow_request": "veut vous suivre",
     "error": "Erreur de chargement des notifications : {0}",
     "poll_ended": "Sondage terminé",
-    "submitted_report": "Rapport envoyé"
+    "submitted_report": "Rapport envoyé",
+    "unread_announcements": "{num} annonce non lue | {num} annonces non lues",
+    "unread_chats": "{num} message non lu | {num} messages non lus",
+    "configuration_tip_settings": "les préférences",
+    "unread_follow_requests": "{num} nouvelle demande de suivi | {num} nouvelles demandes de suivi",
+    "configuration_tip": "Vous pouvez personnaliser ce qui est affiché ici dans {theSettings}. {dismiss}",
+    "configuration_tip_dismiss": "Ne plus montrer"
   },
   "interactions": {
     "favs_repeats": "Partages et favoris",
@@ -154,7 +167,7 @@
     "new_status": "Poster un nouveau statut",
     "account_not_locked_warning": "Votre compte n'est pas {0}. N'importe qui peut vous suivre pour voir vos billets en Abonné·e·s uniquement.",
     "account_not_locked_warning_link": "verrouillé",
-    "attachments_sensitive": "Marquer les pièce-jointes comme sensible",
+    "attachments_sensitive": "Marquer les pièces jointes comme sensible",
     "content_type": {
       "text/plain": "Texte brut",
       "text/html": "HTML",
@@ -183,9 +196,13 @@
     "preview": "Prévisualisation",
     "media_description": "Description de la pièce-jointe",
     "post": "Post",
-    "edit_status": "Éditer le status",
+    "edit_status": "Éditer le statut",
     "edit_remote_warning": "Des instances distantes pourraient ne pas supporter l'édition et seront incapables de recevoir la nouvelle version de votre post.",
-    "edit_unsupported_warning": "Pleroma ne supporte pas l'édition de mentions ni de sondages."
+    "edit_unsupported_warning": "Pleroma ne supporte pas l'édition de mentions ni de sondages.",
+    "reply_option": "Répondre à ce statut",
+    "quote_option": "Citer ce statut",
+    "scope_notice_dismiss": "Fermer ce message",
+    "content_type_selection": "Format du statut"
   },
   "registration": {
     "bio": "Biographie",
@@ -205,14 +222,18 @@
       "email_required": "ne peut pas être laissé vide",
       "password_required": "ne peut pas être laissé vide",
       "password_confirmation_required": "ne peut pas être laissé vide",
-      "password_confirmation_match": "doit être identique au mot de passe"
+      "password_confirmation_match": "doit être identique au mot de passe",
+      "birthday_min_age": "doit être le ou avant le {date}",
+      "birthday_required": "ne peut pas être vide"
     },
     "reason_placeholder": "Cette instance modère les inscriptions manuellement.\nExpliquer ce qui motive votre inscription à l'administration.",
     "reason": "Motivation d'inscription",
     "register": "Enregistrer",
     "email_language": "Dans quelle langue voulez-vous recevoir les emails du server ?",
     "bio_optional": "Biographie (optionnelle)",
-    "email_optional": "Courriel (optionnel)"
+    "email_optional": "Courriel (optionnel)",
+    "birthday": "Anniversaire :",
+    "birthday_optional": "Anniversaire (optionnel) :"
   },
   "selectable_list": {
     "select_all": "Tout selectionner"
@@ -684,7 +705,30 @@
     "use_websockets": "Utiliser les websockets (mises à jour en temps réel)",
     "user_popover_avatar_action_zoom": "Zoomer sur l'avatar",
     "user_popover_avatar_action_open": "Ouvrir le profil",
-    "conversation_display_tree_quick": "Vue arborescente"
+    "conversation_display_tree_quick": "Vue arborescente",
+    "emoji_reactions_scale": "Taille des réactions",
+    "backup_running": "Cette sauvegarde est en cours, {number} enregistrement effectué. | Cette sauvegarde est en cours, {number} enregistrements effectués.",
+    "backup_failed": "Cette sauvegarde a échoué.",
+    "autocomplete_select_first": "Sélectionner automatiquement la première occurrence lorsque les résultats de l'autocomplétion sont disponibles",
+    "confirm_dialogs_unfollow": "arrête de suivre un utilisateur",
+    "confirm_dialogs_repeat": "reposte un statut",
+    "actor_type": "Ce compte est :",
+    "actor_type_Person": "un utilisateur normal",
+    "actor_type_Service": "un robot",
+    "actor_type_Group": "un groupe",
+    "confirm_dialogs_logout": "à la déconnexion",
+    "confirm_dialogs_approve_follow": "accepte un nouvel abonné",
+    "confirm_dialogs_deny_follow": "refuse un nouvel abonné",
+    "confirm_dialogs_remove_follower": "supprime un abonné",
+    "actor_type_description": "En marquant votre compte comme un groupe, vous répétez automatiquement les statuts qui le mentionnent.",
+    "add_language": "Ajouter une langue de remplacement",
+    "remove_language": "Supprimer",
+    "primary_language": "Langue principale :",
+    "fallback_language": "Langue de remplacement {index} :",
+    "confirm_dialogs": "Demande de confirmation quand",
+    "confirm_dialogs_block": "bloque un utilisateur",
+    "confirm_dialogs_mute": "mute un utilisateur",
+    "confirm_dialogs_delete": "supprime un statut"
   },
   "timeline": {
     "collapse": "Fermer",
@@ -950,7 +994,9 @@
       "symbols": "Symboles",
       "travel-and-places": "Voyages & lieux"
     },
-    "regional_indicator": "Indicateur régional {letter}"
+    "regional_indicator": "Indicateur régional {letter}",
+    "unpacked": "Émojis non catégorisés",
+    "hide_custom_emoji": "Masquer les émojis personnalisés"
   },
   "remote_user_resolver": {
     "error": "Non trouvé.",
@@ -1012,7 +1058,7 @@
     "person_talking": "{count} personnes discutant",
     "hashtags": "Mot-dièses",
     "people_talking": "{count} personnes discutant",
-    "no_results": "Aucun résultats",
+    "no_results": "Aucun résultat",
     "no_more_results": "Pas de résultats supplémentaires",
     "load_more": "Charger plus de résultats"
   },
@@ -1097,5 +1143,26 @@
     "state_open": "Ouvert",
     "state_closed": "Fermé",
     "state_resolved": "Résolut"
+  },
+  "announcements": {
+    "page_header": "Annonces",
+    "title": "Annonce",
+    "mark_as_read_action": "Marquer comme lu",
+    "post_form_header": "Faire une annonce",
+    "post_placeholder": "Écrivez le contenu de l'annonce ici...",
+    "post_action": "Envoyer",
+    "post_error": "Erreur : {error}",
+    "close_error": "Fermer",
+    "delete_action": "Supprimer",
+    "start_time_prompt": "Heure de début : ",
+    "end_time_prompt": "Heure de fin : ",
+    "all_day_prompt": "L'événement dure toute la journée",
+    "inactive_message": "Cette annonce n'est pas active",
+    "published_time_display": "Publié le {time}",
+    "start_time_display": "Démarre à {time}",
+    "end_time_display": "Se termine à {time}",
+    "edit_action": "Modifier",
+    "submit_edit_action": "Envoyer",
+    "cancel_edit_action": "Annuler"
   }
 }
