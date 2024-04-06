@@ -81,7 +81,7 @@
               :replies="getReplies(status.id)"
               :in-profile="inProfile"
               :profile-user-id="profileUserId"
-              class="conversation-status status-fadein"
+              class="conversation-status status-fadein panel-body"
 
               :simple-tree="treeViewIsSimple"
               :toggle-thread-display="toggleThreadDisplay"
@@ -186,7 +186,7 @@
             :replies="getReplies(status.id)"
             :in-profile="inProfile"
             :profile-user-id="profileUserId"
-            class="conversation-status status-fadein"
+            class="conversation-status status-fadein panel-body"
 
             :toggle-thread-display="toggleThreadDisplay"
             :thread-display-status="threadDisplayStatus"

@@ -204,6 +204,11 @@
 
     --emoji-size: 1.7em;
 
+    .RichContent {
+      /* stylelint-disable-next-line declaration-no-important */
+      --link: var(--text) !important;
+    }
+
     .top-line,
     .bottom-line {
       display: flex;

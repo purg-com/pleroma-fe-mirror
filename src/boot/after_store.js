@@ -363,6 +363,7 @@ const afterStoreSetup = async ({ store, i18n }) => {
     } else {
       applyTheme(customTheme)
     }
+    store.commit('setThemeApplied')
   } else if (theme) {
     // do nothing, it will load asynchronously
   } else {

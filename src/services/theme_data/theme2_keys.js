@@ -158,11 +158,11 @@ export default [
   'alertPopupNeutral',
   'alertPopupNeutralText',
 
-  'badgeNotification',
-  'badgeNotificationText',
-
   'badgeNeutral',
   'badgeNeutralText',
+
+  'badgeNotification',
+  'badgeNotificationText',
 
   'chatBg',
 

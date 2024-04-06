@@ -386,6 +386,7 @@ const instance = {
           } else {
             applyTheme(themeData.theme)
           }
+          commit('setThemeApplied')
         })
     },
     fetchEmoji ({ dispatch, state }) {
