@@ -29,6 +29,23 @@
       />
     </div>
     <div
+      v-if="isPage && !status"
+      class="conversation-body"
+      :class="{ 'panel-body': isExpanded }"
+    >
+      <p v-if="!loadStatusError">
+        <FAIcon
+          spin
+          icon="circle-notch"
+        />
+        {{ $t('status.loading') }}
+      </p>
+      <p v-else>
+        {{ $t('status.load_error', { error: loadStatusError }) }}
+      </p>
+    </div>
+    <div
+      v-else
       class="conversation-body"
       :class="{ 'panel-body': isExpanded }"
     >
