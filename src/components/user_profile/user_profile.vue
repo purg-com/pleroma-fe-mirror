@@ -127,7 +127,7 @@
           :title="$t('user_card.favorites')"
           timeline-name="favorites"
           :timeline="favorites"
-          :user-id="userId"
+          :user-id="isUs ? undefined : userId"
           :in-profile="true"
           :footer-slipgate="footerRef"
         />
