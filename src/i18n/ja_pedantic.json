@@ -1243,7 +1243,8 @@
     "tabs": {
       "limits": "制限",
       "instance": "インスタンス",
-      "frontends": "フロントエンド"
+      "frontends": "フロントエンド",
+      "emoji": "絵文字"
     },
     "limits": {
       "arbitrary_limits": "変更可能な制限",
@@ -1252,6 +1253,27 @@
       "profile_fields": "追加情報欄の制限",
       "user_uploads": "プロフィール画像の制限",
       "users": "ユーザープロフィールの設定"
+    },
+    "emoji": {
+      "create_pack": "パックを作成",
+      "delete_pack": "パックを削除",
+      "create": "作成",
+      "emoji_packs": "絵文字パック",
+      "remote_packs": "リモートのパック",
+      "emoji_pack": "絵文字パック",
+      "edit_pack": "パックを編集",
+      "homepage": "ホームページ",
+      "save": "保存",
+      "save_meta": "メタデータを保存",
+      "shortcode": "ショートコード",
+      "filename": "ファイル名",
+      "delete_confirm": "{0}を削除してもよろしいですか？",
+      "download_pack": "パックをダウンロード",
+      "downloading_pack": "{0}をダウンロード中",
+      "download": "ダウンロード",
+      "editing": "{0}を編集中",
+      "error": "エラー: {0}",
+      "delete": "削除"
     }
   },
   "lists": {
