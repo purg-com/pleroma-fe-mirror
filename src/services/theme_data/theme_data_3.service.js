@@ -1,4 +1,5 @@
 import { convert, brightness } from 'chromatism'
+import sum from 'hash-sum'
 import { flattenDeep } from 'lodash'
 import {
   alphaBlend,
@@ -142,7 +143,11 @@ componentsContext.keys().forEach(key => {
   components[component.name] = component
 })
 
+const checksum = sum(components)
+
 const ruleToSelector = genericRuleToSelector(components)
+
+export const getChecksum = () => checksum
 
 export const init = (extraRuleset, ultimateBackgroundColor) => {
   const staticVars = {}
@@ -463,6 +468,7 @@ export const init = (extraRuleset, ultimateBackgroundColor) => {
   return {
     lazy: result.filter(x => typeof x === 'function'),
     eager: result.filter(x => typeof x !== 'function'),
-    staticVars
+    staticVars,
+    checksum
   }
 }

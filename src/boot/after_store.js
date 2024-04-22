@@ -14,7 +14,7 @@ import { windowWidth, windowHeight } from '../services/window_utils/window_utils
 import { getOrCreateApp, getClientToken } from '../services/new_api/oauth.js'
 import backendInteractorService from '../services/backend_interactor_service/backend_interactor_service.js'
 import { CURRENT_VERSION } from '../services/theme_data/theme_data.service.js'
-import { applyTheme, applyConfig } from '../services/style_setter/style_setter.js'
+import { applyTheme, applyConfig, tryLoadCache } from '../services/style_setter/style_setter.js'
 import FaviconService from '../services/favicon_service/favicon_service.js'
 import { initServiceWorker, updateFocus } from '../services/sw/sw.js'
 
@@ -353,21 +353,25 @@ const afterStoreSetup = async ({ store, i18n }) => {
 
   await setConfig({ store })
 
-  const { customTheme, customThemeSource } = store.state.config
+  const { customTheme, customThemeSource, forceThemeRecompilation } = store.state.config
   const { theme } = store.state.instance
   const customThemePresent = customThemeSource || customTheme
 
-  if (customThemePresent) {
-    if (customThemeSource && customThemeSource.themeEngineVersion === CURRENT_VERSION) {
-      applyTheme(customThemeSource)
-    } else {
-      applyTheme(customTheme)
-    }
+  if (!forceThemeRecompilation && tryLoadCache()) {
     store.commit('setThemeApplied')
-  } else if (theme) {
-    // do nothing, it will load asynchronously
   } else {
-    console.error('Failed to load any theme!')
+    if (customThemePresent) {
+      if (customThemeSource && customThemeSource.themeEngineVersion === CURRENT_VERSION) {
+        applyTheme(customThemeSource)
+      } else {
+        applyTheme(customTheme)
+      }
+      store.commit('setThemeApplied')
+    } else if (theme) {
+      // do nothing, it will load asynchronously
+    } else {
+      console.error('Failed to load any theme!')
+    }
   }
 
   applyConfig(store.state.config)

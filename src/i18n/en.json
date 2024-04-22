@@ -634,6 +634,7 @@
     "subject_line_email": "Like email: \"re: subject\"",
     "subject_line_mastodon": "Like mastodon: copy as is",
     "subject_line_noop": "Do not copy",
+    "force_theme_recompilation_debug": "Disable theme cahe, force recompile on each boot (DEBUG)",
     "conversation_display": "Conversation display style",
     "conversation_display_tree": "Tree-style",
     "conversation_display_tree_quick": "Tree view",
