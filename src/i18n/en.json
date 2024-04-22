@@ -1110,7 +1110,9 @@
     "hide_quote": "Hide the quoted status",
     "display_quote": "Display the quoted status",
     "invisible_quote": "Quoted status unavailable: {link}",
-    "more_actions": "More actions on this status"
+    "more_actions": "More actions on this status",
+    "loading": "Loading...",
+    "load_error": "Unable to load status: {error}"
   },
   "user_card": {
     "approve": "Approve",
