@@ -143,11 +143,11 @@ componentsContext.keys().forEach(key => {
   components[component.name] = component
 })
 
-const checksum = sum(components)
+const engineChecksum = sum(components)
 
 const ruleToSelector = genericRuleToSelector(components)
 
-export const getChecksum = () => checksum
+export const getEngineChecksum = () => engineChecksum
 
 export const init = (extraRuleset, ultimateBackgroundColor) => {
   const staticVars = {}
@@ -469,6 +469,6 @@ export const init = (extraRuleset, ultimateBackgroundColor) => {
     lazy: result.filter(x => typeof x === 'function'),
     eager: result.filter(x => typeof x !== 'function'),
     staticVars,
-    checksum
+    engineChecksum
   }
 }

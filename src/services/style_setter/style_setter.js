@@ -1,6 +1,6 @@
 import { hex2rgb } from '../color_convert/color_convert.js'
 import { generatePreset } from '../theme_data/theme_data.service.js'
-import { init, getChecksum } from '../theme_data/theme_data_3.service.js'
+import { init, getEngineChecksum } from '../theme_data/theme_data_3.service.js'
 import { convertTheme2To3 } from '../theme_data/theme2_to_theme3.js'
 import { getCssRules } from '../theme_data/css_utils.js'
 import { defaultState } from '../../modules/config.js'
@@ -97,7 +97,7 @@ export const tryLoadCache = () => {
     console.error('Failed to decode theme cache:', e)
     return false
   }
-  if (cache.checksum === getChecksum()) {
+  if (cache.engineChecksum === getEngineChecksum()) {
     const styleSheet = new CSSStyleSheet()
     const lazyStyleSheet = new CSSStyleSheet()
 
@@ -108,7 +108,7 @@ export const tryLoadCache = () => {
 
     return true
   } else {
-    console.warn('Checksum doesn\'t match, cache not usable, clearing')
+    console.warn('Engine checksum doesn\'t match, cache not usable, clearing')
     localStorage.removeItem('pleroma-fe-theme-cache')
   }
 }
@@ -136,7 +136,7 @@ export const applyTheme = async (input, onFinish = (data) => {}) => {
       },
       onLazyFinished () {
         document.adoptedStyleSheets = [styleSheet, lazyStyleSheet]
-        const cache = { checksum: getChecksum(), data: [styleArray, lazyStyleArray] }
+        const cache = { engineChecksum: getEngineChecksum(), data: [styleArray, lazyStyleArray] }
         onFinish(cache)
         localStorage.setItem('pleroma-fe-theme-cache', JSON.stringify(cache))
       }
