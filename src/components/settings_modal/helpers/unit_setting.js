@@ -17,6 +17,10 @@ export default {
     units: {
       type: Array,
       default: () => allCssUnits
+    },
+    unitSet: {
+      type: String,
+      default: 'none'
     }
   },
   computed: {
@@ -30,6 +34,10 @@ export default {
   },
   methods: {
     ...Setting.methods,
+    getUnitString (value) {
+      if (this.unitSet === 'none') return value
+      return this.$t(['settings', 'units', this.unitSet, value].join('.'))
+    },
     updateValue (e) {
       this.configSink(this.path, parseInt(e.target.value) + this.stateUnit)
     },

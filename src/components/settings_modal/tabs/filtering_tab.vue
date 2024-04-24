@@ -97,14 +97,15 @@
           </BooleanSetting>
         </li>
         <li>
-          <SizeSetting
+          <UnitSetting
             key="hideScrobblesAfter"
             path="hideScrobblesAfter"
             :units="['m', 'h', 'd']"
+            unitSet="time"
             expert="1"
           >
             {{ $t('settings.hide_scrobbles_after') }}
-          </SizeSetting>
+          </UnitSetting>
         </li>
       </ul>
     </div>

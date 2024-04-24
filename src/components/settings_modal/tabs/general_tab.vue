@@ -134,7 +134,7 @@
         <li v-if="expertLevel > 0">
           {{ $t('settings.column_sizes') }}
           <div class="column-settings">
-            <SizeSetting
+            <UnitSetting
               v-for="column in columns"
               :key="column"
               :path="column + 'ColumnWidth'"
@@ -142,7 +142,7 @@
               expert="1"
             >
               {{ $t('settings.column_sizes_' + column) }}
-            </SizeSetting>
+            </UnitSetting>
           </div>
         </li>
         <li class="select-multiple">

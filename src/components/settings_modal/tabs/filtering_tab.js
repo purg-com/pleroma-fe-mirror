@@ -1,7 +1,7 @@
 import { filter, trim, debounce } from 'lodash'
 import BooleanSetting from '../helpers/boolean_setting.vue'
 import ChoiceSetting from '../helpers/choice_setting.vue'
-import SizeSetting from '../helpers/size_setting.vue'
+import UnitSetting from '../helpers/unit_setting.vue'
 import IntegerSetting from '../helpers/integer_setting.vue'
 
 import SharedComputedObject from '../helpers/shared_computed_object.js'
@@ -20,7 +20,7 @@ const FilteringTab = {
   components: {
     BooleanSetting,
     ChoiceSetting,
-    SizeSetting,
+    UnitSetting,
     IntegerSetting
   },
   computed: {

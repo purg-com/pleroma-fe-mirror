@@ -1,10 +1,8 @@
-@import "src/variables";
-
 .settings_tab-switcher {
   height: 100%;
 
   .setting-item {
-    border-bottom: 2px solid var(--fg, $fallback--fg);
+    border-bottom: 2px solid var(--border);
     margin: 1em 1em 1.4em;
     padding-bottom: 1.4em;
 
@@ -33,10 +31,6 @@
       margin-bottom: 1em;
     }
 
-    select {
-      min-width: 10em;
-    }
-
     textarea {
       width: 100%;
       max-width: 100%;
@@ -45,8 +39,7 @@
 
     .unavailable,
     .unavailable svg {
-      color: var(--cRed, $fallback--cRed);
-      color: $fallback--cRed;
+      color: var(--cRed);
     }
   }
 }
