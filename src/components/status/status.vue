@@ -31,6 +31,12 @@
           />
         </small>
         <small
+          v-if="muteSensitiveStatuses && status.nsfw"
+          class="mute-thread"
+        >
+          {{ $t('status.sensitive_muted') }}
+        </small>
+        <small
           v-if="showReasonMutedThread"
           class="mute-thread"
         >

@@ -1075,6 +1075,7 @@
     "external_source": "External source",
     "thread_muted": "Thread muted",
     "thread_muted_and_words": ", has words:",
+    "sensitive_muted": "Muting sensitive content",
     "show_full_subject": "Show full subject",
     "hide_full_subject": "Hide full subject",
     "show_content": "Show content",
