@@ -71,6 +71,7 @@ const defaultState = {
   hideSitename: false,
   hideUserStats: false,
   muteBotStatuses: false,
+  muteSensitiveStatuses: false,
   modalOnRepeat: false,
   modalOnUnfollow: false,
   modalOnBlock: true,
@@ -386,6 +387,7 @@ const instance = {
           } else {
             applyTheme(themeData.theme)
           }
+          commit('setThemeApplied')
         })
     },
     fetchEmoji ({ dispatch, state }) {

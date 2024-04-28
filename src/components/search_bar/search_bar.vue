@@ -22,7 +22,7 @@
         id="search-bar-input"
         ref="searchInput"
         v-model="searchTerm"
-        class="search-bar-input"
+        class="input search-bar-input"
         :placeholder="$t('nav.search')"
         type="text"
         @keyup.enter="find(searchTerm)"
@@ -60,8 +60,6 @@
 <script src="./search_bar.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .SearchBar {
   display: inline-flex;
   align-items: baseline;
@@ -86,8 +84,7 @@
   }
 
   .cancel-icon {
-    color: $fallback--text;
-    color: var(--btnTopBarText, $fallback--text);
+    color: var(--text);
   }
 }
 

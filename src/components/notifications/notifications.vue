@@ -18,7 +18,7 @@
             {{ $t('notifications.notifications') }}
             <span
               v-if="unseenCountBadgeText"
-              class="badge badge-notification unseen-count"
+              class="badge -notification unseen-count"
             >{{ unseenCountBadgeText }}</span>
           </div>
           <div
@@ -85,7 +85,7 @@
           </div>
           <button
             v-else-if="!loading"
-            class="button-unstyled -link -fullwidth"
+            class="button-unstyled -link text-center"
             @click.prevent="fetchOlderNotifications()"
           >
             <div class="new-status-notification text-center">

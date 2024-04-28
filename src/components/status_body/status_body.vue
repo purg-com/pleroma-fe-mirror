@@ -11,6 +11,7 @@
       >
         <RichContent
           class="media-body summary"
+          :faint="compact"
           :html="status.summary_raw_html"
           :emoji="status.emojis"
         />
@@ -48,6 +49,7 @@
           :html="status.raw_html"
           :emoji="status.emojis"
           :handle-links="true"
+          :faint="compact"
           :greentext="mergedConfig.greentext"
           :attentions="status.attentions"
           @parseReady="onParseReady"

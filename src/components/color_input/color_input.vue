@@ -25,30 +25,51 @@
         :disabled="!present || disabled"
         @input="$emit('update:modelValue', $event.target.value)"
       >
-      <input
-        v-if="validColor"
-        :id="name"
-        class="nativeColor unstyled"
-        type="color"
-        :value="modelValue || fallback"
-        :disabled="!present || disabled"
-        @input="$emit('update:modelValue', $event.target.value)"
-      >
       <div
-        v-if="transparentColor"
+        v-if="validColor"
+        class="validIndicator"
+        :style="{backgroundColor: modelValue || fallback}"
+      />
+      <div
+        v-else-if="transparentColor"
         class="transparentIndicator"
       />
       <div
-        v-if="computedColor"
+        v-else-if="computedColor"
         class="computedIndicator"
         :style="{backgroundColor: fallback}"
       />
+      <div
+        v-else
+        class="invalidIndicator"
+      />
+      <label class="nativeColor">
+        <FAIcon icon="eye-dropper" />
+        <input
+          :id="name"
+          class="unstyled"
+          type="color"
+          :value="modelValue || fallback"
+          :disabled="!present || disabled"
+          @input="$emit('update:modelValue', $event.target.value)"
+        >
+      </label>
     </div>
   </div>
 </template>
 <script>
 import Checkbox from '../checkbox/checkbox.vue'
 import { hex2rgb } from '../../services/color_convert/color_convert.js'
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import {
+  faEyeDropper
+} from '@fortawesome/free-solid-svg-icons'
+
+library.add(
+  faEyeDropper
+)
+
 export default {
   components: {
     Checkbox
@@ -108,12 +129,3 @@ export default {
 }
 </script>
 <style lang="scss" src="./color_input.scss"></style>
-
-<style lang="scss">
-.color-control {
-  input.text-input {
-    max-width: 7em;
-    flex: 1;
-  }
-}
-</style>

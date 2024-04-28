@@ -41,7 +41,6 @@
 <script src="./react_button.js"></script>
 
 <style lang="scss">
-@import "../../variables";
 @import "../../mixins";
 
 .ReactButton {
@@ -58,7 +57,7 @@
     height: 1px;
     width: 100%;
     margin: 0.5em;
-    background-color: var(--border, $fallback--border);
+    background-color: var(--border);
   }
 
   .reaction-picker {
@@ -98,11 +97,6 @@
   .popover-trigger {
     padding: 10px;
     margin: -10px;
-
-    &:hover .svg-inline--fa {
-      color: $fallback--text;
-      color: var(--text, $fallback--text);
-    }
 
     @include unfocused-style {
       .focus-marker {

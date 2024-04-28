@@ -53,7 +53,7 @@
                 <template #content>
                   <div class="dropdown-menu">
                     <button
-                      class="button-default dropdown-item dropdown-item-icon"
+                      class="menu-item dropdown-item dropdown-item-icon"
                       @click="deleteMessage"
                     >
                       <FAIcon icon="times" /> {{ $t("chats.delete") }}

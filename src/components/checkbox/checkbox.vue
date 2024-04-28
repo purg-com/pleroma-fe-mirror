@@ -12,7 +12,7 @@
       @change="$emit('update:modelValue', $event.target.checked)"
     >
     <i
-      class="checkbox-indicator"
+      class="input -checkbox checkbox-indicator"
       :aria-hidden="true"
       @transitionend.capture="onTransitionEnd"
     />
@@ -54,7 +54,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../../variables";
 @import "../../mixins";
 
 .checkbox {
@@ -62,9 +61,15 @@ export default {
   display: inline-block;
   min-height: 1.2em;
 
-  &-indicator {
+  & > &-indicator {
+    /* Reset .input stuff */
+    padding: 0;
+    margin: 0;
     position: relative;
+    line-height: inherit;
+    display: inline;
     padding-left: 1.2em;
+    box-shadow: none;
   }
 
   &-indicator::before {
@@ -76,12 +81,9 @@ export default {
     transition: color 200ms;
     width: 1.1em;
     height: 1.1em;
-    border-radius: $fallback--checkboxRadius;
-    border-radius: var(--checkboxRadius, $fallback--checkboxRadius);
-    box-shadow: 0 0 2px black inset;
-    box-shadow: var(--inputShadow);
-    background-color: $fallback--fg;
-    background-color: var(--input, $fallback--fg);
+    border-radius: var(--roundness);
+    box-shadow: var(--shadow);
+    background-color: var(--background);
     vertical-align: top;
     text-align: center;
     line-height: 1.1em;
@@ -98,21 +100,18 @@ export default {
     }
 
     .label {
-      color: $fallback--faint;
-      color: var(--faint, $fallback--faint);
+      color: var(--text);
     }
   }
 
   input[type="checkbox"] {
     &:checked + .checkbox-indicator::before {
-      color: $fallback--text;
-      color: var(--inputText, $fallback--text);
+      color: var(--text);
     }
 
     &:indeterminate + .checkbox-indicator::before {
       content: "–";
-      color: $fallback--text;
-      color: var(--inputText, $fallback--text);
+      color: var(--text);
     }
   }
 

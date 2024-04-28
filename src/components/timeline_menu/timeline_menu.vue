@@ -45,8 +45,6 @@
 <script src="./timeline_menu.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .timeline-menu-popover {
   min-width: 24rem;
   max-width: 100vw;
@@ -59,65 +57,6 @@
     list-style: none;
     margin: 0;
     padding: 0;
-  }
-
-  a {
-    display: block;
-    padding: 0 0.65em;
-    height: 3.5em;
-    line-height: 3.5em;
-
-    &:hover {
-      background-color: $fallback--lightBg;
-      background-color: var(--selectedMenu, $fallback--lightBg);
-      color: $fallback--link;
-      color: var(--selectedMenuText, $fallback--link);
-
-      --faint: var(--selectedMenuFaintText, $fallback--faint);
-      --faintLink: var(--selectedMenuFaintLink, $fallback--faint);
-      --lightText: var(--selectedMenuLightText, $fallback--lightText);
-      --icon: var(--selectedMenuIcon, $fallback--icon);
-    }
-
-    &.router-link-active {
-      font-weight: bolder;
-      background-color: $fallback--lightBg;
-      background-color: var(--selectedMenu, $fallback--lightBg);
-      color: $fallback--text;
-      color: var(--selectedMenuText, $fallback--text);
-
-      --faint: var(--selectedMenuFaintText, $fallback--faint);
-      --faintLink: var(--selectedMenuFaintLink, $fallback--faint);
-      --lightText: var(--selectedMenuLightText, $fallback--lightText);
-      --icon: var(--selectedMenuIcon, $fallback--icon);
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-
-    svg {
-      margin-right: 0.4em;
-      margin-left: -0.2em;
-    }
-  }
-
-  li {
-    border-bottom: 1px solid;
-    border-color: $fallback--border;
-    border-color: var(--border, $fallback--border);
-    padding: 0;
-
-    &:last-child a {
-      border-bottom-right-radius: $fallback--panelRadius;
-      border-bottom-right-radius: var(--panelRadius, $fallback--panelRadius);
-      border-bottom-left-radius: $fallback--panelRadius;
-      border-bottom-left-radius: var(--panelRadius, $fallback--panelRadius);
-    }
-
-    &:last-child {
-      border: none;
-    }
   }
 }
 
@@ -159,8 +98,6 @@
   }
 
   &.open .timeline-menu-title svg {
-    color: $fallback--text;
-    color: var(--panelText, $fallback--text);
     transform: rotate(180deg);
   }
 

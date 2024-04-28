@@ -1,7 +1,7 @@
 import ColorInput from '../color_input/color_input.vue'
 import OpacityInput from '../opacity_input/opacity_input.vue'
 import Select from '../select/select.vue'
-import { getCssShadow } from '../../services/style_setter/style_setter.js'
+import { getCssShadow } from '../../services/theme_data/theme_data.service.js'
 import { hex2rgb } from '../../services/color_convert/color_convert.js'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {

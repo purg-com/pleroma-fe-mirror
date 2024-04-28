@@ -13,13 +13,15 @@
           <button
             class="button button-default btn"
             type="button"
-            @click="reloadEmoji">
+            @click="reloadEmoji"
+          >
             {{ $t('admin_dash.emoji.reload') }}
           </button>
           <button
             class="button button-default btn"
             type="button"
-            @click="importFromFS">
+            @click="importFromFS"
+          >
             {{ $t('admin_dash.emoji.importFS') }}
           </button>
         </li>
@@ -28,7 +30,8 @@
           <button
             class="button button-default btn"
             type="button"
-            @click="$refs.remotePackPopover.showPopover">
+            @click="$refs.remotePackPopover.showPopover"
+          >
             {{ $t('admin_dash.emoji.remote_packs') }}
 
             <Popover
@@ -43,11 +46,16 @@
               <template #content>
                 <div class="emoji-tab-popover-input">
                   <h3>{{ $t('admin_dash.emoji.remote_pack_instance') }}</h3>
-                  <input v-model="remotePackInstance" :placeholder="$t('admin_dash.emoji.remote_pack_instance')">
+                  <input
+                    v-model="remotePackInstance"
+                    class="input"
+                    :placeholder="$t('admin_dash.emoji.remote_pack_instance')"
+                  >
                   <button
                     class="button button-default btn emoji-tab-popover-button"
                     type="button"
-                    @click="listRemotePacks">
+                    @click="listRemotePacks"
+                  >
                     {{ $t('admin_dash.emoji.do_list') }}
                   </button>
                 </div>
@@ -61,9 +69,22 @@
         <li>
           <h4>{{ $t('admin_dash.emoji.edit_pack') }}</h4>
 
-          <Select class="form-control" v-model="packName">
-            <option value="" disabled hidden>{{ $t('admin_dash.emoji.emoji_pack') }}</option>
-            <option v-for="(pack, listPackName) in knownPacks" :label="listPackName" :key="listPackName">
+          <Select
+            v-model="packName"
+            class="form-control"
+          >
+            <option
+              value=""
+              disabled
+              hidden
+            >
+              {{ $t('admin_dash.emoji.emoji_pack') }}
+            </option>
+            <option
+              v-for="(pack, listPackName) in knownPacks"
+              :key="listPackName"
+              :label="listPackName"
+            >
               {{ listPackName }}
             </option>
           </Select>
@@ -71,7 +92,8 @@
           <button
             class="button button-default btn emoji-tab-popover-button"
             type="button"
-            @click="$refs.createPackPopover.showPopover">
+            @click="$refs.createPackPopover.showPopover"
+          >
             {{ $t('admin_dash.emoji.create_pack') }}
           </button>
           <Popover
@@ -86,11 +108,16 @@
             <template #content>
               <div class="emoji-tab-popover-input">
                 <h3>{{ $t('admin_dash.emoji.new_pack_name') }}</h3>
-                <input v-model="newPackName" :placeholder="$t('admin_dash.emoji.new_pack_name')">
+                <input
+                  v-model="newPackName"
+                  :placeholder="$t('admin_dash.emoji.new_pack_name')"
+                  class="input"
+                >
                 <button
                   class="button button-default btn emoji-tab-popover-button"
                   type="button"
-                  @click="createEmojiPack">
+                  @click="createEmojiPack"
+                >
                   {{ $t('admin_dash.emoji.create') }}
                 </button>
               </div>
@@ -105,67 +132,96 @@
             <li>
               <label>
                 {{ $t('admin_dash.emoji.description') }}
-                <ModifiedIndicator :changed="metaEdited('description')" message-key="admin_dash.emoji.metadata_changed" />
+                <ModifiedIndicator
+                  :changed="metaEdited('description')"
+                  message-key="admin_dash.emoji.metadata_changed"
+                />
 
                 <textarea
                   v-model="packMeta.description"
                   :disabled="pack.remote !== undefined"
-                  class="bio resize-height" />
+                  class="bio resize-height input"
+                />
               </label>
             </li>
             <li>
               <label>
                 {{ $t('admin_dash.emoji.homepage') }}
-                <ModifiedIndicator :changed="metaEdited('homepage')" message-key="admin_dash.emoji.metadata_changed" />
+                <ModifiedIndicator
+                  :changed="metaEdited('homepage')"
+                  message-key="admin_dash.emoji.metadata_changed"
+                />
 
-              <input
-                class="emoji-info-input" v-model="packMeta.homepage"
-                :disabled="pack.remote !== undefined">
+                <input
+                  v-model="packMeta.homepage"
+                  class="emoji-info-input input"
+                  :disabled="pack.remote !== undefined"
+                >
               </label>
             </li>
             <li>
               <label>
                 {{ $t('admin_dash.emoji.fallback_src') }}
-                <ModifiedIndicator :changed="metaEdited('fallback-src')" message-key="admin_dash.emoji.metadata_changed" />
+                <ModifiedIndicator
+                  :changed="metaEdited('fallback-src')"
+                  message-key="admin_dash.emoji.metadata_changed"
+                />
 
-                <input class="emoji-info-input" v-model="packMeta['fallback-src']" :disabled="pack.remote !== undefined">
+                <input
+                  v-model="packMeta['fallback-src']"
+                  class="emoji-info-input input"
+                  :disabled="pack.remote !== undefined"
+                >
               </label>
             </li>
             <li>
               <label>
                 {{ $t('admin_dash.emoji.fallback_sha256') }}
 
-                <input :disabled="true" class="emoji-info-input" v-model="packMeta['fallback-src-sha256']">
+                <input
+                  v-model="packMeta['fallback-src-sha256']"
+                  :disabled="true"
+                  class="emoji-info-input input"
+                >
               </label>
             </li>
             <li>
-              <Checkbox :disabled="pack.remote !== undefined" v-model="packMeta['share-files']">
+              <Checkbox
+                v-model="packMeta['share-files']"
+                :disabled="pack.remote !== undefined"
+              >
                 {{ $t('admin_dash.emoji.share') }}
               </Checkbox>
 
-              <ModifiedIndicator :changed="metaEdited('share-files')" message-key="admin_dash.emoji.metadata_changed" />
+              <ModifiedIndicator
+                :changed="metaEdited('share-files')"
+                message-key="admin_dash.emoji.metadata_changed"
+              />
             </li>
             <li class="btn-group">
               <button
+                v-if="pack.remote === undefined"
                 class="button button-default btn"
                 type="button"
-                v-if="pack.remote === undefined"
-                @click="savePackMetadata">
+                @click="savePackMetadata"
+              >
                 {{ $t('admin_dash.emoji.save_meta') }}
               </button>
               <button
+                v-if="pack.remote === undefined"
                 class="button button-default btn"
                 type="button"
-                v-if="pack.remote === undefined"
-                @click="savePackMetadata">
+                @click="savePackMetadata"
+              >
                 {{ $t('admin_dash.emoji.revert_meta') }}
               </button>
 
               <button
-                class="button button-default btn"
                 v-if="pack.remote === undefined"
+                class="button button-default btn"
                 type="button"
-                @click="deleteModalVisible = true">
+                @click="deleteModalVisible = true"
+              >
                 {{ $t('admin_dash.emoji.delete_pack') }}
 
                 <ConfirmModal
@@ -174,16 +230,18 @@
                   :cancel-text="$t('status.delete_confirm_cancel_button')"
                   :confirm-text="$t('status.delete_confirm_accept_button')"
                   @cancelled="deleteModalVisible = false"
-                  @accepted="deleteEmojiPack" >
+                  @accepted="deleteEmojiPack"
+                >
                   {{ $t('admin_dash.emoji.delete_confirm', [packName]) }}
                 </ConfirmModal>
               </button>
 
               <button
+                v-if="pack.remote !== undefined"
                 class="button button-default btn"
                 type="button"
-                v-if="pack.remote !== undefined"
-                @click="$refs.dlPackPopover.showPopover">
+                @click="$refs.dlPackPopover.showPopover"
+              >
                 {{ $t('admin_dash.emoji.download_pack') }}
 
                 <Popover
@@ -202,12 +260,17 @@
                         <div class="emoji-tab-popover-input">
                           <label>
                             {{ $t('admin_dash.emoji.download_as_name') }}
-                            <input class="emoji-data-input"
+                            <input
                               v-model="remotePackDownloadAs"
-                              :placeholder="$t('admin_dash.emoji.download_as_name_full')">
+                              class="emoji-data-input input"
+                              :placeholder="$t('admin_dash.emoji.download_as_name_full')"
+                            >
                           </label>
 
-                          <div v-if="downloadWillReplaceLocal" class="warning">
+                          <div
+                            v-if="downloadWillReplaceLocal"
+                            class="warning"
+                          >
                             <em>{{ $t('admin_dash.emoji.replace_warning') }}</em>
                           </div>
                         </div>
@@ -215,7 +278,8 @@
                         <button
                           class="button button-default btn"
                           type="button"
-                          @click="downloadRemotePack">
+                          @click="downloadRemotePack"
+                        >
                           {{ $t('admin_dash.emoji.download') }}
                         </button>
                       </div>
@@ -231,31 +295,47 @@
           <h4>
             {{ $t('admin_dash.emoji.files') }}
 
-            <ModifiedIndicator v-if="pack"
+            <ModifiedIndicator
+              v-if="pack"
               :changed="$refs.emojiPopovers && $refs.emojiPopovers.some(p => p.isEdited)"
-              message-key="admin_dash.emoji.emoji_changed"/>
+              message-key="admin_dash.emoji.emoji_changed"
+            />
           </h4>
 
-          <div class="emoji-list" v-if="pack">
+          <div
+            v-if="pack"
+            class="emoji-list"
+          >
             <EmojiEditingPopover
               v-if="pack.remote === undefined"
-              placement="bottom" new-upload
+              placement="bottom"
+              new-upload
               :title="$t('admin_dash.emoji.adding_new')"
-              :packName="packName"
-              @updatePackFiles="updatePackFiles" @displayError="displayError"
+              :pack-name="packName"
+              @updatePackFiles="updatePackFiles"
+              @displayError="displayError"
             >
               <template #trigger>
-                <FAIcon icon="plus" size="2x" :title="$t('admin_dash.emoji.add_file')" />
+                <FAIcon
+                  icon="plus"
+                  size="2x"
+                  :title="$t('admin_dash.emoji.add_file')"
+                />
               </template>
             </EmojiEditingPopover>
 
             <EmojiEditingPopover
-              placement="top" ref="emojiPopovers"
-              v-for="(file, shortcode) in pack.files" :key="shortcode"
+              v-for="(file, shortcode) in pack.files"
+              ref="emojiPopovers"
+              :key="shortcode"
+              placement="top"
               :title="$t('admin_dash.emoji.editing', [shortcode])"
               :disabled="pack.remote !== undefined"
-              :shortcode="shortcode" :file="file" :packName="packName"
-              @updatePackFiles="updatePackFiles" @displayError="displayError"
+              :shortcode="shortcode"
+              :file="file"
+              :pack-name="packName"
+              @updatePackFiles="updatePackFiles"
+              @displayError="displayError"
             >
               <template #trigger>
                 <StillImage
