@@ -238,6 +238,9 @@ const Status = {
     showActorTypeIndicator () {
       return !this.hideBotIndication
     },
+    sensitiveStatus () {
+      return this.status.nsfw
+    },
     mentionsLine () {
       if (!this.headTailLinks) return []
       const writtenSet = new Set(this.headTailLinks.writtenMentions.map(_ => _.url))
@@ -265,7 +268,9 @@ const Status = {
         // Wordfiltered
         this.muteWordHits.length > 0 ||
         // bot status
-        (this.muteBotStatuses && this.botStatus && !this.compact)
+        (this.muteBotStatuses && this.botStatus && !this.compact) ||
+        // sensitive status
+        (this.muteSensitiveStatuses && this.sensitiveStatus && !this.compact)
       return !this.unmuted && !this.shouldNotMute && reasonsToMute
     },
     userIsMuted () {
@@ -370,6 +375,9 @@ const Status = {
     },
     muteBotStatuses () {
       return this.mergedConfig.muteBotStatuses
+    },
+    muteSensitiveStatuses () {
+      return this.mergedConfig.muteSensitiveStatuses
     },
     hideBotIndication () {
       return this.mergedConfig.hideBotIndication

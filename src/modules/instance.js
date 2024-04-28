@@ -71,6 +71,7 @@ const defaultState = {
   hideSitename: false,
   hideUserStats: false,
   muteBotStatuses: false,
+  muteSensitiveStatuses: false,
   modalOnRepeat: false,
   modalOnUnfollow: false,
   modalOnBlock: true,

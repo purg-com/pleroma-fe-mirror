@@ -74,6 +74,18 @@
         <button
           class="menu-item dropdown-item"
           role="menuitemcheckbox"
+          :aria-checked="muteSensitiveStatuses"
+          @click="muteSensitiveStatuses = !muteSensitiveStatuses"
+        >
+          <span
+            class="input menu-checkbox"
+            :class="{ 'menu-checkbox-checked': muteSensitiveStatuses }"
+            :aria-hidden="true"
+          />{{ $t('settings.mute_sensitive_posts') }}
+        </button>
+        <button
+          class="menu-item dropdown-item"
+          role="menuitemcheckbox"
           :aria-checked="hideMedia"
           @click="hideMedia = !hideMedia"
         >
