@@ -421,6 +421,8 @@ const Status = {
       let multiplier = 60 * 1000 // minutes is smallest unit
       switch (unit) {
         case 'm':
+          break
+        case 'h':
           multiplier *= 60 // hour
           break
         case 'd':
