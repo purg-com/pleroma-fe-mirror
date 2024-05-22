@@ -373,6 +373,9 @@ const Status = {
     hidePostStats () {
       return this.mergedConfig.hidePostStats
     },
+    shouldDisplayFavsAndRepeats () {
+      return !this.hidePostStats && this.isFocused && (this.combinedFavsAndRepeatsUsers.length > 0 || this.statusFromGlobalRepository.quotes_count)
+    },
     muteBotStatuses () {
       return this.mergedConfig.muteBotStatuses
     },

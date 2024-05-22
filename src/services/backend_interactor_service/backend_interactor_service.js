@@ -5,8 +5,8 @@ import followRequestFetcher from '../../services/follow_request_fetcher/follow_r
 import listsFetcher from '../../services/lists_fetcher/lists_fetcher.service.js'
 
 const backendInteractorService = credentials => ({
-  startFetchingTimeline ({ timeline, store, userId = false, listId = false, tag }) {
-    return timelineFetcher.startFetching({ timeline, store, credentials, userId, listId, tag })
+  startFetchingTimeline ({ timeline, store, userId = false, listId = false, statusId = false, tag }) {
+    return timelineFetcher.startFetching({ timeline, store, credentials, userId, listId, statusId, tag })
   },
 
   fetchTimeline (args) {

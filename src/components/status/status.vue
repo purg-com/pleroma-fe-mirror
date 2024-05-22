@@ -484,7 +484,7 @@
 
           <transition name="fade">
             <div
-              v-if="!hidePostStats && isFocused && combinedFavsAndRepeatsUsers.length > 0"
+              v-if="shouldDisplayFavsAndRepeats"
               class="favs-repeated-users"
             >
               <div class="stats">
@@ -512,6 +512,19 @@
                     </div>
                   </div>
                 </UserListPopover>
+                <router-link
+                  v-if="statusFromGlobalRepository.quotes_count > 0"
+                  :to="{ name: 'quotes', params: { id: status.id } }"
+                >
+                  <div
+                    class="stat-count"
+                  >
+                    <a class="stat-title">{{ $t('status.quotes') }}</a>
+                    <div class="stat-number">
+                      {{ statusFromGlobalRepository.quotes_count }}
+                    </div>
+                  </div>
+                </router-link>
                 <div class="avatar-row">
                   <AvatarList :users="combinedFavsAndRepeatsUsers" />
                 </div>

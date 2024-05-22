@@ -331,6 +331,7 @@ export const parseStatus = (data) => {
       output.quote_id = pleroma.quote_id ? pleroma.quote_id : (output.quote ? output.quote.id : undefined)
       output.quote_url = pleroma.quote_url
       output.quote_visible = pleroma.quote_visible
+      output.quotes_count = pleroma.quotes_count
     } else {
       output.text = data.content
       output.summary = data.spoiler_text
