@@ -395,6 +395,14 @@
         "desc": "To enable two-factor authentication, enter the code from your two-factor app:"
       }
     },
+    "units": {
+      "time": {
+        "m": "minutes",
+        "s": "seconds",
+        "h": "hours",
+        "d": "days"
+      }
+    },
     "lists_navigation": "Show lists in navigation",
     "allow_following_move": "Allow auto-follow when following account moves",
     "attachmentRadius": "Attachments",
@@ -502,6 +510,7 @@
     "mute_bot_posts": "Mute bot posts",
     "hide_actor_type_indication": "Hide actor type (bots, groups, etc.) indication in posts",
     "hide_scrobbles": "Hide scrobbles",
+    "hide_scrobbles_after": "Hide scrobbles older than",
     "mute_sensitive_posts": "Mute sensitive posts",
     "hide_all_muted_posts": "Hide muted posts",
     "max_thumbnails": "Maximum amount of thumbnails per post (empty = no limit)",

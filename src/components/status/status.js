@@ -425,7 +425,27 @@ const Status = {
       return this.quotedStatus && this.displayQuote
     },
     scrobblePresent () {
-      return !this.mergedConfig.hideScrobbles && this.status.user.latestScrobble && this.status.user.latestScrobble.artist
+      if (this.mergedConfig.hideScrobbles) return false
+      if (!this.status.user.latestScrobble) return false
+      const value = this.mergedConfig.hideScrobblesAfter.match(/\d+/gs)[0]
+      const unit = this.mergedConfig.hideScrobblesAfter.match(/\D+/gs)[0]
+      let multiplier = 60 * 1000 // minutes is smallest unit
+      switch (unit) {
+        case 'm':
+          break
+        case 'h':
+          multiplier *= 60 // hour
+          break
+        case 'd':
+          multiplier *= 60 // hour
+          multiplier *= 24 // day
+          break
+      }
+      const maxAge = Number(value) * multiplier
+      const createdAt = Date.parse(this.status.user.latestScrobble.created_at)
+      const age = Date.now() - createdAt
+      if (age > maxAge) return false
+      return this.status.user.latestScrobble.artist
     },
     scrobble () {
       return this.status.user.latestScrobble
