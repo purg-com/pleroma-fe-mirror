@@ -1,6 +1,6 @@
 import { hex2rgb } from '../color_convert/color_convert.js'
 import { generatePreset } from '../theme_data/theme_data.service.js'
-import { init } from '../theme_data/theme_data_3.service.js'
+import { init, getEngineChecksum } from '../theme_data/theme_data_3.service.js'
 import { convertTheme2To3 } from '../theme_data/theme2_to_theme3.js'
 import { getCssRules } from '../theme_data/css_utils.js'
 import { defaultState } from '../../modules/config.js'
@@ -87,9 +87,37 @@ export const generateTheme = async (input, callbacks) => {
   return { lazyProcessFunc: processChunk }
 }
 
-export const applyTheme = async (input) => {
+export const tryLoadCache = () => {
+  const json = localStorage.getItem('pleroma-fe-theme-cache')
+  if (!json) return null
+  let cache
+  try {
+    cache = JSON.parse(json)
+  } catch (e) {
+    console.error('Failed to decode theme cache:', e)
+    return false
+  }
+  if (cache.engineChecksum === getEngineChecksum()) {
+    const styleSheet = new CSSStyleSheet()
+    const lazyStyleSheet = new CSSStyleSheet()
+
+    cache.data[0].forEach(rule => styleSheet.insertRule(rule, 'index-max'))
+    cache.data[1].forEach(rule => lazyStyleSheet.insertRule(rule, 'index-max'))
+
+    document.adoptedStyleSheets = [styleSheet, lazyStyleSheet]
+
+    return true
+  } else {
+    console.warn('Engine checksum doesn\'t match, cache not usable, clearing')
+    localStorage.removeItem('pleroma-fe-theme-cache')
+  }
+}
+
+export const applyTheme = async (input, onFinish = (data) => {}) => {
   const styleSheet = new CSSStyleSheet()
+  const styleArray = []
   const lazyStyleSheet = new CSSStyleSheet()
+  const lazyStyleArray = []
 
   const { lazyProcessFunc } = await generateTheme(
     input,
@@ -97,8 +125,10 @@ export const applyTheme = async (input) => {
       onNewRule (rule, isLazy) {
         if (isLazy) {
           lazyStyleSheet.insertRule(rule, 'index-max')
+          lazyStyleArray.push(rule)
         } else {
           styleSheet.insertRule(rule, 'index-max')
+          styleArray.push(rule)
         }
       },
       onEagerFinished () {
@@ -106,6 +136,9 @@ export const applyTheme = async (input) => {
       },
       onLazyFinished () {
         document.adoptedStyleSheets = [styleSheet, lazyStyleSheet]
+        const cache = { engineChecksum: getEngineChecksum(), data: [styleArray, lazyStyleArray] }
+        onFinish(cache)
+        localStorage.setItem('pleroma-fe-theme-cache', JSON.stringify(cache))
       }
     }
   )

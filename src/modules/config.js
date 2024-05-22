@@ -28,6 +28,7 @@ export const defaultState = {
   theme: undefined,
   customTheme: undefined,
   customThemeSource: undefined,
+  forceThemeRecompilation: false,
   hideISP: false,
   hideInstanceWallpaper: false,
   hideShoutbox: false,
