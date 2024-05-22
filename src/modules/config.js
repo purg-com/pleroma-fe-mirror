@@ -115,7 +115,8 @@ export const defaultState = {
   sidebarColumnWidth: '25rem',
   contentColumnWidth: '45rem',
   notifsColumnWidth: '25rem',
-  emojiReactionsScale: 1.0,
+  emojiReactionsScale: undefined,
+  textSize: undefined, // instance default
   navbarColumnStretch: false,
   greentext: undefined, // instance default
   useAtIcon: undefined, // instance default
@@ -173,6 +174,10 @@ const config = {
     }
   },
   mutations: {
+    setOptionTemporarily (state, { name, value }) {
+      set(state, name, value)
+      applyConfig(state)
+    },
     setOption (state, { name, value }) {
       set(state, name, value)
     },
@@ -203,6 +208,31 @@ const config = {
     setHighlight ({ commit, dispatch }, { user, color, type }) {
       commit('setHighlight', { user, color, type })
     },
+    setOptionTemporarily ({ commit, dispatch, state, rootState }, { name, value }) {
+      if (rootState.interface.temporaryChangesTimeoutId !== null) {
+        console.warn('Can\'t track more than one temporary change')
+        return
+      }
+      const oldValue = state[name]
+
+      commit('setOptionTemporarily', { name, value })
+
+      const confirm = () => {
+        dispatch('setOption', { name, value })
+        commit('clearTemporaryChanges')
+      }
+
+      const revert = () => {
+        commit('setOptionTemporarily', { name, value: oldValue })
+        commit('clearTemporaryChanges')
+      }
+
+      commit('setTemporaryChanges', {
+        timeoutId: setTimeout(revert, 10000),
+        confirm,
+        revert
+      })
+    },
     setOption ({ commit, dispatch, state }, { name, value }) {
       const exceptions = new Set([
         'useStreamingApi'
@@ -231,6 +261,7 @@ const config = {
           case 'sidebarColumnWidth':
           case 'contentColumnWidth':
           case 'notifsColumnWidth':
+          case 'textSize':
           case 'emojiReactionsScale':
             applyConfig(state)
             break

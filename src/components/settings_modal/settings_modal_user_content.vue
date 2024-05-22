@@ -22,6 +22,13 @@
       <ProfileTab />
     </div>
     <div
+      :label="$t('settings.appearance')"
+      icon="paint-brush"
+      data-tab-name="appearance"
+    >
+      <AppearanceTab />
+    </div>
+    <div
       v-if="isLoggedIn"
       :label="$t('settings.security_tab')"
       icon="lock"

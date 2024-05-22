@@ -148,8 +148,19 @@ export const applyTheme = async (input, onFinish = (data) => {}) => {
   return Promise.resolve()
 }
 
-const configColumns = ({ sidebarColumnWidth, contentColumnWidth, notifsColumnWidth, emojiReactionsScale }) =>
-  ({ sidebarColumnWidth, contentColumnWidth, notifsColumnWidth, emojiReactionsScale })
+const configColumns = ({
+  sidebarColumnWidth,
+  contentColumnWidth,
+  notifsColumnWidth,
+  emojiReactionsScale,
+  textSize
+}) => ({
+  sidebarColumnWidth,
+  contentColumnWidth,
+  notifsColumnWidth,
+  emojiReactionsScale,
+  textSize
+})
 
 const defaultConfigColumns = configColumns(defaultState)
 
@@ -175,6 +186,7 @@ export const applyConfig = (config) => {
 
   styleSheet.toString()
   styleSheet.insertRule(`:root { ${rules} }`, 'index-max')
+
   body.classList.remove('hidden')
 }
 

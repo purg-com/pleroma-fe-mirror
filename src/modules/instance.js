@@ -98,6 +98,8 @@ const defaultState = {
   sidebarRight: false,
   subjectLineBehavior: 'email',
   theme: 'pleroma-dark',
+  emojiReactionsScale: 1.0,
+  textSize: '14px',
   virtualScrolling: true,
   sensitiveByDefault: false,
   conversationDisplay: 'linear',

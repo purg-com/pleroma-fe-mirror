@@ -3,7 +3,7 @@
 @import "./panel";
 
 :root {
-  --font-size: 14px;
+  --fontSize: 14px;
   --status-margin: 0.75em;
   --navbar-height: 3.5rem;
   --post-line-height: 1.4;
@@ -20,7 +20,7 @@
 }
 
 html {
-  font-size: var(--font-size);
+  font-size: var(--textSize);
   // overflow-x: clip causes my browser's tab to crash with SIGILL lul
 }
 

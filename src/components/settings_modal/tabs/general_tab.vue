@@ -15,11 +15,6 @@
             {{ $t('settings.hide_isp') }}
           </BooleanSetting>
         </li>
-        <li v-if="instanceWallpaperUsed">
-          <BooleanSetting path="hideInstanceWallpaper">
-            {{ $t('settings.hide_wallpaper') }}
-          </BooleanSetting>
-        </li>
         <li>
           <BooleanSetting path="stopGifs">
             {{ $t('settings.stop_gifs') }}
@@ -100,16 +95,6 @@
         </li>
         <li>
           <h3>{{ $t('settings.columns') }}</h3>
-        </li>
-        <li>
-          <BooleanSetting path="disableStickyHeaders">
-            {{ $t('settings.disable_sticky_headers') }}
-          </BooleanSetting>
-        </li>
-        <li>
-          <BooleanSetting path="showScrollbars">
-            {{ $t('settings.show_scrollbars') }}
-          </BooleanSetting>
         </li>
         <li>
           <BooleanSetting path="sidebarRight">

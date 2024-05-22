@@ -48,6 +48,10 @@ export default {
     draftMode: {
       type: Boolean,
       default: undefined
+    },
+    timedApplyMode: {
+      type: Boolean,
+      default: false
     }
   },
   inject: {
@@ -161,7 +165,11 @@ export default {
         case 'admin':
           return (k, v) => this.$store.dispatch('pushAdminSetting', { path: k, value: v })
         default:
-          return (k, v) => this.$store.dispatch('setOption', { name: k, value: v })
+          if (this.timedApplyMode) {
+            return (k, v) => this.$store.dispatch('setOptionTemporarily', { name: k, value: v })
+          } else {
+            return (k, v) => this.$store.dispatch('setOption', { name: k, value: v })
+          }
       }
     },
     defaultState () {

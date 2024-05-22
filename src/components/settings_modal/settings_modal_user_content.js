@@ -7,6 +7,7 @@ import FilteringTab from './tabs/filtering_tab.vue'
 import SecurityTab from './tabs/security_tab/security_tab.vue'
 import ProfileTab from './tabs/profile_tab.vue'
 import GeneralTab from './tabs/general_tab.vue'
+import AppearanceTab from './tabs/appearance_tab.vue'
 import VersionTab from './tabs/version_tab.vue'
 import ThemeTab from './tabs/theme_tab/theme_tab.vue'
 
@@ -44,6 +45,7 @@ const SettingsModalContent = {
     SecurityTab,
     ProfileTab,
     GeneralTab,
+    AppearanceTab,
     VersionTab,
     ThemeTab
   },

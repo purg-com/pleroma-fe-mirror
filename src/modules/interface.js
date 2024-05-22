@@ -1,5 +1,8 @@
 const defaultState = {
   themeApplied: false,
+  temporaryChangesTimeoutId: null, // used for temporary options that revert after a timeout
+  temporaryChangesConfirm: () => {}, // used for applying temporary options
+  temporaryChangesRevert: () => {}, // used for reverting temporary options
   settingsModalState: 'hidden',
   settingsModalLoadedUser: false,
   settingsModalLoadedAdmin: false,
@@ -35,6 +38,17 @@ const interfaceMod = {
       } else {
         state.settings.currentSaveStateNotice = { error: true, errorData: error }
       }
+    },
+    setTemporaryChanges (state, { timeoutId, confirm, revert }) {
+      state.temporaryChangesTimeoutId = timeoutId
+      state.temporaryChangesConfirm = confirm
+      state.temporaryChangesRevert = revert
+    },
+    clearTemporaryChanges (state) {
+      clearTimeout(state.temporaryChangesTimeoutId)
+      state.temporaryChangesTimeoutId = null
+      state.temporaryChangesConfirm = () => {}
+      state.temporaryChangesRevert = () => {}
     },
     setThemeApplied (state) {
       state.themeApplied = true

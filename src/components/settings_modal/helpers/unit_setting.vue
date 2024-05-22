@@ -13,7 +13,7 @@
       :id="path"
       class="input number-input"
       type="number"
-      step="1"
+      step="step"
       :disabled="disabled"
       :min="min || 0"
       :value="stateValue"
