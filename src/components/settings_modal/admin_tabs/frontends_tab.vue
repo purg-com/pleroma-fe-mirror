@@ -6,7 +6,10 @@
     <div class="setting-item">
       <h2>{{ $t('admin_dash.tabs.frontends') }}</h2>
       <p>{{ $t('admin_dash.frontend.wip_notice') }}</p>
-      <ul class="setting-list" v-if="adminDraft">
+      <ul
+        v-if="adminDraft"
+        class="setting-list"
+      >
         <li>
           <h3>{{ $t('admin_dash.frontend.default_frontend') }}</h3>
           <p>{{ $t('admin_dash.frontend.default_frontend_tip') }}</p>
@@ -23,12 +26,18 @@
           </ul>
         </li>
       </ul>
-      <div v-else class="setting-list">
+      <div
+        v-else
+        class="setting-list"
+      >
         {{ $t('admin_dash.frontend.default_frontend_unavail') }}
       </div>
 
       <div class="setting-list relative">
-        <PanelLoading class="overlay" v-if="working"/>
+        <PanelLoading
+          v-if="working"
+          class="overlay"
+        />
         <h3>{{ $t('admin_dash.frontend.available_frontends') }}</h3>
         <ul class="cards-list">
           <li
@@ -107,7 +116,7 @@
                       <button
                         v-for="ref in frontend.refs"
                         :key="ref"
-                        class="button-default dropdown-item"
+                        class="menu-item dropdown-item"
                         @click.prevent="update(frontend, ref)"
                         @click="close"
                       >
@@ -164,7 +173,7 @@
                       <button
                         v-for="ref in frontend.installedRefs || frontend.refs"
                         :key="ref"
-                        class="button-default dropdown-item"
+                        class="menu-item dropdown-item"
                         @click.prevent="setDefault(frontend, ref)"
                         @click="close"
                       >

@@ -20,7 +20,7 @@
           />
           <div
             v-if="(unreadChatCount && !chatsPinned) || unreadAnnouncementCount"
-            class="alert-dot"
+            class="badge -dot -notification"
           />
         </button>
         <NavigationPins class="pins" />
@@ -37,24 +37,24 @@
           />
           <div
             v-if="unseenNotificationsCount"
-            class="alert-dot"
+            class="badge -dot -notification"
           />
         </button>
       </div>
     </nav>
     <aside
       v-if="currentUser"
-      class="mobile-notifications-drawer"
+      class="mobile-notifications-drawer mobile-drawer"
       :class="{ '-closed': !notificationsOpen }"
       @touchstart.stop="notificationsTouchStart"
       @touchmove.stop="notificationsTouchMove"
     >
-      <div class="mobile-notifications-header">
+      <div class="panel-heading mobile-notifications-header">
         <span class="title">
           {{ $t('notifications.notifications') }}
           <span
             v-if="unseenCountBadgeText"
-            class="badge badge-notification unseen-count"
+            class="badge -notification unseen-count"
           >{{ unseenCountBadgeText }}</span>
         </span>
         <span class="spacer" />
@@ -123,8 +123,6 @@
 <script src="./mobile_nav.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .MobileNav {
   z-index: var(--ZI_navbar);
 
@@ -137,7 +135,7 @@
     box-sizing: border-box;
 
     a {
-      color: var(--topBarLink, $fallback--link);
+      color: var(--link);
     }
   }
 
@@ -165,19 +163,6 @@
     display: flex;
   }
 
-  .alert-dot {
-    border-radius: 100%;
-    height: 8px;
-    width: 8px;
-    position: absolute;
-    left: calc(50% - 4px);
-    top: calc(50% - 4px);
-    margin-left: 6px;
-    margin-top: -6px;
-    background-color: $fallback--cRed;
-    background-color: var(--badgeNotification, $fallback--cRed);
-  }
-
   .mobile-notifications-drawer {
     width: 100%;
     height: 100vh;
@@ -185,13 +170,13 @@
     position: fixed;
     top: 0;
     left: 0;
-    box-shadow: 1px 1px 4px rgb(0 0 0 / 60%);
-    box-shadow: var(--panelShadow);
+    box-shadow: var(--shadow);
     transition-property: transform;
     transition-duration: 0.25s;
     transform: translateX(0);
     z-index: var(--ZI_navbar);
     -webkit-overflow-scrolling: touch;
+    background: var(--background);
 
     &.-closed {
       transform: translateX(100%);
@@ -208,11 +193,7 @@
     height: 50px;
     line-height: 50px;
     position: absolute;
-    color: var(--topBarText);
-    background-color: $fallback--fg;
-    background-color: var(--topBar, $fallback--fg);
-    box-shadow: 0 0 4px rgb(0 0 0 / 60%);
-    box-shadow: var(--topBarShadow);
+    box-shadow: var(--shadow);
 
     .spacer {
       flex: 1;
@@ -238,10 +219,6 @@
     height: calc(100vh - var(--navbar-height));
     overflow-x: hidden;
     overflow-y: scroll;
-    color: $fallback--text;
-    color: var(--text, $fallback--text);
-    background-color: $fallback--bg;
-    background-color: var(--bg, $fallback--bg);
 
     .notifications {
       padding: 0;

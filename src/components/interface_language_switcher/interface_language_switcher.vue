@@ -104,8 +104,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../../variables";
-
 .interface-language-switcher {
   .language-select {
     margin-right: 1em;

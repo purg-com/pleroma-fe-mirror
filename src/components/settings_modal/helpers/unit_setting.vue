@@ -11,7 +11,7 @@
     </label>
     <input
       :id="path"
-      class="number-input"
+      class="input number-input"
       type="number"
       step="1"
       :disabled="disabled"

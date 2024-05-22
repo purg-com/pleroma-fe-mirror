@@ -18,7 +18,7 @@
     />
     <input
       :id="name"
-      class="input-number"
+      class="input input-number"
       type="number"
       :value="modelValue || fallback"
       :disabled="!present || disabled"

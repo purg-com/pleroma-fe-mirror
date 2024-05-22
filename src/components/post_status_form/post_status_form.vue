@@ -161,7 +161,7 @@
           v-model="newStatus.spoilerText"
           enable-emoji-picker
           :suggest="emojiSuggestor"
-          class="form-control"
+          class="input form-control"
         >
           <template #default="inputProps">
             <input
@@ -171,7 +171,7 @@
               :disabled="posting && !optimisticPosting"
               v-bind="propsToNative(inputProps)"
               size="1"
-              class="form-post-subject"
+              class="input form-post-subject"
             >
           </template>
         </EmojiInput>
@@ -180,7 +180,7 @@
           v-model="newStatus.status"
           :suggest="emojiUserSuggestor"
           :placement="emojiPickerPlacement"
-          class="form-control main-input"
+          class="input form-control main-input"
           enable-emoji-picker
           hide-emoji-button
           :newline-on-ctrl-enter="submitOnEnter"
@@ -198,7 +198,7 @@
               rows="1"
               cols="1"
               :disabled="posting && !optimisticPosting"
-              class="form-post-body"
+              class="input form-post-body"
               :class="{ 'scrollable-form': !!maxHeight }"
               v-bind="propsToNative(inputProps)"
               @keydown.exact.enter="submitOnEnter && postStatus($event, newStatus)"
@@ -237,7 +237,7 @@
             <Select
               id="post-content-type"
               v-model="newStatus.contentType"
-              class="form-control"
+              class="input form-control"
               :attrs="{ 'aria-label': $t('post_status.content_type_selection') }"
             >
               <option
@@ -375,8 +375,6 @@
 <script src="./post_status_form.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .post-status-form {
   position: relative;
 
@@ -437,15 +435,12 @@
 
   .preview-error {
     font-style: italic;
-    color: $fallback--faint;
-    color: var(--faint, $fallback--faint);
+    color: var(--textFaint);
   }
 
   .preview-status {
-    border: 1px solid $fallback--border;
-    border: 1px solid var(--border, $fallback--border);
-    border-radius: $fallback--tooltipRadius;
-    border-radius: var(--tooltipRadius, $fallback--tooltipRadius);
+    border: 1px solid var(--border);
+    border-radius: var(--roundness);
     padding: 0.5em;
     margin: 0;
   }
@@ -456,8 +451,7 @@
 
   .text-format {
     .only-format {
-      color: $fallback--faint;
-      color: var(--faint, $fallback--faint);
+      color: var(--textFaint);
     }
   }
 
@@ -503,31 +497,6 @@
     padding: 0 0.1em;
     display: flex;
     align-items: center;
-
-    &.selected,
-    &:hover {
-      // needs to be specific to override icon default color
-      svg,
-      i,
-      label {
-        color: $fallback--lightText;
-        color: var(--lightText, $fallback--lightText);
-      }
-    }
-
-    &.disabled {
-      svg,
-      i {
-        cursor: not-allowed;
-        color: $fallback--icon;
-        color: var(--btnDisabledText, $fallback--icon);
-
-        &:hover {
-          color: $fallback--icon;
-          color: var(--btnDisabledText, $fallback--icon);
-        }
-      }
-    }
   }
 
   .error {
@@ -580,7 +549,7 @@
     line-height: 1.85;
   }
 
-  .form-post-body {
+  .input.form-post-body {
     // TODO: make a resizable textarea component?
     box-sizing: content-box; // needed for easier computation of dynamic size
     overflow: hidden;
@@ -591,6 +560,7 @@
     height: calc(var(--post-line-height) * 1em);
     min-height: calc(var(--post-line-height) * 1em);
     resize: none;
+    background: transparent;
 
     &.scrollable-form {
       overflow-y: auto;
@@ -609,8 +579,7 @@
     margin: 0 0.5em;
 
     &.error {
-      color: $fallback--cRed;
-      color: var(--cRed, $fallback--cRed);
+      color: var(--cRed);
     }
   }
 
@@ -633,14 +602,10 @@
     align-items: center;
     justify-content: center;
     opacity: 0.6;
-    color: $fallback--text;
-    color: var(--text, $fallback--text);
-    background-color: $fallback--bg;
-    background-color: var(--bg, $fallback--bg);
-    border-radius: $fallback--tooltipRadius;
-    border-radius: var(--tooltipRadius, $fallback--tooltipRadius);
-    border: 2px dashed $fallback--text;
-    border: 2px dashed var(--text, $fallback--text);
+    color: var(--text);
+    background-color: var(--bg);
+    border-radius: var(--roundness);
+    border: 2px dashed var(--text);
   }
 }
 </style>

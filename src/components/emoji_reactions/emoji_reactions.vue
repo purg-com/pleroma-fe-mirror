@@ -72,7 +72,6 @@
 
 <script src="./emoji_reactions.js"></script>
 <style lang="scss">
-@import "../../variables";
 @import "../../mixins";
 
 .EmojiReactions {
@@ -92,7 +91,6 @@
       padding: 0;
 
       .emoji-reaction-count-button {
-        background-color: var(--btn);
         margin: 0;
         height: 100%;
         border-top-left-radius: 0;
@@ -102,11 +100,9 @@
         display: inline-flex;
         justify-content: center;
         align-items: center;
-        color: $fallback--text;
-        color: var(--btnText, $fallback--text);
 
         &.-picked-reaction {
-          border: 1px solid var(--accent, $fallback--link);
+          border: 1px solid var(--accent);
           margin-right: -1px;
         }
       }
@@ -149,18 +145,16 @@
     }
 
     .svg-inline--fa {
-      color: $fallback--text;
-      color: var(--btnText, $fallback--text);
+      color: var(--text);
     }
 
     &.-picked-reaction {
-      border: 1px solid var(--accent, $fallback--link);
+      border: 1px solid var(--accent);
       margin-left: -1px; // offset the border, can't use inset shadows either
       margin-right: -1px;
 
       .svg-inline--fa {
-        color: $fallback--link;
-        color: var(--accent, $fallback--link);
+        color: var(--accent);
       }
     }
 
@@ -176,8 +170,7 @@
 
     @include focused-style {
       .svg-inline--fa {
-        color: $fallback--link;
-        color: var(--accent, $fallback--link);
+        color: var(--accent);
       }
 
       .focus-marker {

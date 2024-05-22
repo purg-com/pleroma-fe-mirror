@@ -328,17 +328,14 @@ const setConfig = async ({ store }) => {
 }
 
 const checkOAuthToken = async ({ store }) => {
-  // eslint-disable-next-line no-async-promise-executor
-  return new Promise(async (resolve, reject) => {
-    if (store.getters.getUserToken()) {
-      try {
-        await store.dispatch('loginUser', store.getters.getUserToken())
-      } catch (e) {
-        console.error(e)
-      }
+  if (store.getters.getUserToken()) {
+    try {
+      await store.dispatch('loginUser', store.getters.getUserToken())
+    } catch (e) {
+      console.error(e)
     }
-    resolve()
-  })
+  }
+  return Promise.resolve()
 }
 
 const afterStoreSetup = async ({ store, i18n }) => {
@@ -366,6 +363,7 @@ const afterStoreSetup = async ({ store, i18n }) => {
     } else {
       applyTheme(customTheme)
     }
+    store.commit('setThemeApplied')
   } else if (theme) {
     // do nothing, it will load asynchronously
   } else {

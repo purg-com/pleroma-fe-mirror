@@ -45,6 +45,29 @@
           </BooleanSetting>
         </li>
         <li>
+          <BooleanSetting path="muteSensitiveStatuses">
+            {{ $t('settings.mute_sensitive_posts') }}
+          </BooleanSetting>
+        </li>
+        <li>
+          <BooleanSetting path="hideMutedFederationRestrictions">
+            {{ $t('settings.hide_muted_federation_restrictions') }}
+          </BooleanSetting>
+          <ul
+            class="setting-list suboptions"
+            :class="[{disabled: !streaming}]"
+          >
+            <li
+              v-for="item in muteFederationRestrictionsLevels"
+              :key="'mute_' + item + '_federation_restriction'"
+            >
+              <BooleanSetting :path="'muteFederationRestrictions.' + item">
+                {{ $t('settings.mute_' + item + '_federation_restriction') }}
+              </BooleanSetting>
+            </li>
+          </ul>
+        </li>
+        <li>
           <BooleanSetting path="hidePostStats">
             {{ $t('settings.hide_post_stats') }}
           </BooleanSetting>
@@ -67,7 +90,7 @@
           <textarea
             id="muteWords"
             v-model="muteWordsString"
-            class="resize-height"
+            class="input resize-height"
           />
           <div>{{ $t('settings.filtering_explanation') }}</div>
         </li>

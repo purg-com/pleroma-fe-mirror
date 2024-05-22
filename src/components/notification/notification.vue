@@ -155,7 +155,7 @@
             <router-link
               v-if="notification.status"
               :to="{ name: 'conversation', params: { id: notification.status.id } }"
-              class="timeago-link faint-link"
+              class="timeago-link faint"
             >
               <Timeago
                 :time="notification.created_at"
@@ -247,7 +247,6 @@
         />
         <template v-else>
           <StatusContent
-            :class="{ faint: !statusExpanded }"
             :compact="!statusExpanded"
             :status="notification.status"
           />

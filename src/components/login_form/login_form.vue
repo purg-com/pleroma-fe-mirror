@@ -18,7 +18,7 @@
               id="username"
               v-model="user.username"
               :disabled="loggingIn"
-              class="form-control"
+              class="input form-control"
               :placeholder="$t('login.placeholder')"
             >
           </div>
@@ -29,7 +29,7 @@
               ref="passwordInput"
               v-model="user.password"
               :disabled="loggingIn"
-              class="form-control"
+              class="input form-control"
               type="password"
             >
           </div>
@@ -93,8 +93,6 @@
 <script src="./login_form.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .login-form {
   display: flex;
   flex-direction: column;

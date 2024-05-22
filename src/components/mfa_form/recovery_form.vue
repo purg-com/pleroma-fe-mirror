@@ -16,7 +16,7 @@
           <input
             id="code"
             v-model="code"
-            class="form-control"
+            class="input form-control"
           >
         </div>
 

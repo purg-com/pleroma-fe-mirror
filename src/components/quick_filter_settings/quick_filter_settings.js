@@ -63,6 +63,13 @@ const QuickFilterSettings = {
         const value = !this.muteBotStatuses
         this.$store.dispatch('setOption', { name: 'muteBotStatuses', value })
       }
+    },
+    muteSensitiveStatuses: {
+      get () { return this.mergedConfig.muteSensitiveStatuses },
+      set () {
+        const value = !this.muteSensitiveStatuses
+        this.$store.dispatch('setOption', { name: 'muteSensitiveStatuses', value })
+      }
     }
   }
 }

@@ -31,6 +31,12 @@
           />
         </small>
         <small
+          v-if="muteSensitiveStatuses && status.nsfw"
+          class="mute-thread"
+        >
+          {{ $t('status.sensitive_muted') }}
+        </small>
+        <small
           v-if="showReasonMutedThread"
           class="mute-thread"
         >
@@ -180,7 +186,7 @@
 
               <span class="heading-right">
                 <router-link
-                  class="timeago faint-link"
+                  class="timeago faint"
                   :to="{ name: 'conversation', params: { id: status.id } }"
                 >
                   <Timeago
@@ -450,7 +456,7 @@
           >
             <button
               v-if="showOtherRepliesAsButton && replies.length > 1"
-              class="button-unstyled -link faint"
+              class="button-unstyled -link"
               :title="$tc('status.ancestor_follow', replies.length - 1, { numReplies: replies.length - 1 })"
               @click.prevent="dive"
             >

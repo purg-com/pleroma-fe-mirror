@@ -5,7 +5,7 @@
       <div class="panel-heading">
         <div class="title">
           {{ $t('settings.style.preview.header') }}
-          <span class="badge badge-notification">
+          <span class="badge -notification">
             99
           </span>
         </div>
@@ -81,7 +81,7 @@
               class="faint"
               scope="global"
             >
-              <a style="color: var(--faintLink);">
+              <a style="color: var(--linkFaint);">
                 {{ $t('settings.style.preview.faint_link') }}
               </a>
             </i18n-t>
@@ -95,6 +95,7 @@
         <input
           :value="$t('settings.style.preview.input')"
           type="text"
+          class="input"
         >
 
         <div class="actions">
@@ -103,6 +104,7 @@
               id="preview_checkbox"
               checked="very yes"
               type="checkbox"
+              class="input"
             >
             <label for="preview_checkbox">{{ $t('settings.style.preview.checkbox') }}</label>
           </span>

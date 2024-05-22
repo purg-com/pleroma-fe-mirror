@@ -14,7 +14,7 @@
       v-if="typeof fallback !== 'undefined'"
       :id="name + '-o'"
       :aria-labelledby="name + '-label'"
-      class="opt exlcude-disabled visible-for-screenreader-only"
+      class="input -checkbox opt exlcude-disabled visible-for-screenreader-only"
       type="checkbox"
       :checked="present"
       @change="$emit('update:modelValue', typeof modelValue === 'undefined' ? fallback : undefined)"
@@ -44,7 +44,7 @@
       v-if="isCustom"
       :id="name"
       v-model="family"
-      class="custom-font"
+      class="input custom-font"
       type="text"
     >
   </div>
@@ -53,8 +53,6 @@
 <script src="./font_control.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .font-control {
   input.custom-font {
     min-width: 10em;

@@ -1,5 +1,3 @@
-@import "src/variables";
-
 .theme-tab {
   padding-bottom: 2em;
 
@@ -162,8 +160,7 @@
   .preview-container {
     border-top: 1px dashed;
     border-bottom: 1px dashed;
-    border-color: $fallback--border;
-    border-color: var(--border, $fallback--border);
+    border-color: var(--border);
     margin: 1em 0;
     padding: 1em;
     background-color: var(--wallpaper);
@@ -227,8 +224,6 @@
         min-width: 20px;
         min-height: 20px;
         line-height: 20px;
-        border-radius: $fallback--avatarAltRadius;
-        border-radius: var(--avatarAltRadius, $fallback--avatarAltRadius);
       }
 
       .avatar {
@@ -254,8 +249,7 @@
       .separator {
         margin: 1em;
         border-bottom: 1px solid;
-        border-color: $fallback--border;
-        border-color: var(--border, $fallback--border);
+        border-color: var(--border);
       }
 
       .btn {
@@ -296,7 +290,7 @@
     border: 0;
     box-shadow: none;
     background: transparent;
-    color: var(--faint, $fallback--faint);
+    color: var(--textFaint);
     align-self: stretch;
   }
 

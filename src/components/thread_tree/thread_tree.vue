@@ -119,15 +119,13 @@
 <script src="./thread_tree.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .thread-tree-replies {
-  margin-left: var(--status-margin, $status-margin);
-  border-left: 2px solid var(--border, $fallback--border);
+  margin-left: var(--status-margin);
+  border-left: 2px solid var(--border);
 }
 
 .thread-tree-replies-hidden {
-  padding: var(--status-margin, $status-margin);
+  padding: var(--status-margin);
 
   /* Make the button stretch along the whole row */
   display: flex;

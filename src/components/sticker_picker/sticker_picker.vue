@@ -32,8 +32,6 @@
 <script src="./sticker_picker.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .sticker-picker {
   width: 100%;
 
@@ -56,7 +54,7 @@
           height: 100%;
 
           &:hover {
-            filter: drop-shadow(0 0 5px var(--accent, $fallback--link));
+            filter: drop-shadow(0 0 5px var(--accent));
           }
         }
       }

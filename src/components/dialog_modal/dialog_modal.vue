@@ -12,7 +12,7 @@
           <slot name="header" />
         </div>
       </div>
-      <div class="dialog-modal-content">
+      <div class="panel-body dialog-modal-content">
         <slot name="default" />
       </div>
       <div class="dialog-modal-footer user-interactions panel-footer">
@@ -25,8 +25,6 @@
 <script src="./dialog_modal.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 // TODO: unify with other modals.
 .dark-overlay {
   &::before {
@@ -54,8 +52,6 @@
   z-index: 2001;
   cursor: default;
   display: block;
-  background-color: $fallback--bg;
-  background-color: var(--bg, $fallback--bg);
 
   .dialog-modal-heading {
     .title {
@@ -66,18 +62,13 @@
   .dialog-modal-content {
     margin: 0;
     padding: 1rem;
-    background-color: $fallback--bg;
-    background-color: var(--bg, $fallback--bg);
     white-space: normal;
   }
 
   .dialog-modal-footer {
     margin: 0;
     padding: 0.5em;
-    background-color: $fallback--bg;
-    background-color: var(--bg, $fallback--bg);
-    border-top: 1px solid $fallback--border;
-    border-top: 1px solid var(--border, $fallback--border);
+    border-top: 1px solid var(--border);
     display: flex;
     justify-content: flex-end;
 
