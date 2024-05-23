@@ -43,6 +43,8 @@ lint:
 
 test:
   stage: test
+  tags:
+    - amd64
   variables:
     APT_CACHE_DIR: apt-cache
   script:
@@ -54,6 +56,8 @@ test:
 
 build:
   stage: build
+  tags:
+    - amd64
   script:
     - yarn
     - npm run build
