@@ -1247,7 +1247,7 @@
       "emoji": "絵文字"
     },
     "limits": {
-      "arbitrary_limits": "変更可能な制限",
+      "arbitrary_limits": "任意の制限",
       "posts": "投稿の制限",
       "uploads": "ファイルの制限",
       "profile_fields": "追加情報欄の制限",
