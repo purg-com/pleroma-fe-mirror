@@ -33,7 +33,7 @@ const Notifications = {
     // Disables panel styles, unread mark, potentially other notification-related actions
     // meant for "Interactions" timeline
     minimalMode: Boolean,
-    // Custom filter mode, an array of strings, possible values 'mention', 'repeat', 'like', 'follow', used to override global filter for use in "Interactions" timeline
+    // Custom filter mode, an array of strings, possible values 'mention', 'status', 'repeat', 'like', 'follow', used to override global filter for use in "Interactions" timeline
     filterMode: Array,
     // Do not show extra notifications
     noExtra: {

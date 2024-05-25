@@ -60,6 +60,7 @@ export const defaultState = {
   notificationVisibility: {
     follows: true,
     mentions: true,
+    statuses: true,
     likes: true,
     repeats: true,
     moves: true,
@@ -72,6 +73,7 @@ export const defaultState = {
   notificationNative: {
     follows: true,
     mentions: true,
+    statuses: true,
     likes: false,
     repeats: false,
     moves: false,

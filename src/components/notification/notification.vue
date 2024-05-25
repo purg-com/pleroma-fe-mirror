@@ -1,6 +1,6 @@
 <template>
   <article
-    v-if="notification.type === 'mention'"
+    v-if="notification.type === 'mention' || notification.type === 'status'"
   >
     <Status
       class="Notification"

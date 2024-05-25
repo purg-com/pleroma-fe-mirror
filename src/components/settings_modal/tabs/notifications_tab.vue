@@ -61,6 +61,21 @@
               </ul>
             </li>
             <li>
+              <h4> {{ $t('settings.notification_visibility_statuses') }}</h4>
+              <ul class="setting-list">
+                <li>
+                  <BooleanSetting path="notificationVisibility.statuses">
+                    {{ $t('settings.notification_visibility_in_column') }}
+                  </BooleanSetting>
+                </li>
+                <li>
+                  <BooleanSetting path="notificationNative.statuses">
+                    {{ $t('settings.notification_visibility_native_notifications') }}
+                  </BooleanSetting>
+                </li>
+              </ul>
+            </li>
+            <li>
               <h4> {{ $t('settings.notification_visibility_likes') }}</h4>
               <ul class="setting-list">
                 <li>

@@ -212,7 +212,8 @@
     "unread_follow_requests": "{num} new follow request | {num} new follow requests",
     "configuration_tip": "You can customize what to display here in {theSettings}. {dismiss}",
     "configuration_tip_settings": "the settings",
-    "configuration_tip_dismiss": "Do not show again"
+    "configuration_tip_dismiss": "Do not show again",
+    "subscribed_status": "posted"
   },
   "polls": {
     "add_poll": "Add poll",
@@ -588,6 +589,7 @@
     "notification_visibility_moves": "User Migrates",
     "notification_visibility_emoji_reactions": "Reactions",
     "notification_visibility_polls": "Ends of polls you voted in",
+    "notification_visibility_statuses": "Subscriptions",
     "notification_show_extra": "Show extra notifications in the notifications column",
     "notification_extra_chats": "Show unread chats",
     "notification_extra_announcements": "Show unread announcements",
