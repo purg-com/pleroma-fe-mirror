@@ -25,7 +25,7 @@ function getWindowClients () {
 }
 
 const setSettings = async () => {
-  const vuexState = await localForage.getItem('vuex-lz')
+  const vuexState = await storage.getItem('vuex-lz')
   const locale = vuexState.config.interfaceLanguage || 'en'
   i18n.locale = locale
   const notificationsNativeArray = Object.entries(vuexState.config.notificationNative)
