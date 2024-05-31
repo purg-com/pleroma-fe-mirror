@@ -1,6 +1,6 @@
 import { convert, brightness } from 'chromatism'
 import sum from 'hash-sum'
-import { flattenDeep } from 'lodash'
+import { flattenDeep, sortBy } from 'lodash'
 import {
   alphaBlend,
   getTextColor,
@@ -226,7 +226,7 @@ export const init = (extraRuleset, ultimateBackgroundColor) => {
         combination.variant === 'normal'
           ? ''
           : combination.variant[0].toUpperCase() + combination.variant.slice(1).toLowerCase(),
-        ...combination.state.filter(x => x !== 'normal').toSorted().map(state => state[0].toUpperCase() + state.slice(1).toLowerCase())
+        ...sortBy(combination.state.filter(x => x !== 'normal')).map(state => state[0].toUpperCase() + state.slice(1).toLowerCase())
       ].join('')
 
       let inheritedTextColor = computedDirectives.textColor

@@ -6,6 +6,45 @@ import { getCssRules } from '../theme_data/css_utils.js'
 import { defaultState } from '../../modules/config.js'
 import { chunk } from 'lodash'
 
+// On platforms where this is not supported, it will return undefined
+// Otherwise it will return an array
+const supportsAdoptedStyleSheets = !!document.adoptedStyleSheets
+
+const createStyleSheet = (id) => {
+  if (supportsAdoptedStyleSheets) {
+    return {
+      el: null,
+      sheet: new CSSStyleSheet(),
+      rules: []
+    }
+  }
+
+  const el = document.getElementById(id)
+  // Clear all rules in it
+  for (let i = el.sheet.cssRules.length - 1; i >= 0; --i) {
+    el.sheet.deleteRule(i)
+  }
+
+  return {
+    el,
+    sheet: el.sheet,
+    rules: []
+  }
+}
+
+const EAGER_STYLE_ID = 'pleroma-eager-styles'
+const LAZY_STYLE_ID = 'pleroma-lazy-styles'
+
+const adoptStyleSheets = (styles) => {
+  if (supportsAdoptedStyleSheets) {
+    document.adoptedStyleSheets = styles.map(s => s.sheet)
+  }
+  // Some older browsers do not support document.adoptedStyleSheets.
+  // In this case, we use the <style> elements.
+  // Since the <style> elements we need are already in the DOM, there
+  // is nothing to do here.
+}
+
 export const generateTheme = async (input, callbacks) => {
   const {
     onNewRule = (rule, isLazy) => {},
@@ -98,13 +137,13 @@ export const tryLoadCache = () => {
     return false
   }
   if (cache.engineChecksum === getEngineChecksum()) {
-    const styleSheet = new CSSStyleSheet()
-    const lazyStyleSheet = new CSSStyleSheet()
+    const eagerStyles = createStyleSheet(EAGER_STYLE_ID)
+    const lazyStyles = createStyleSheet(LAZY_STYLE_ID)
 
-    cache.data[0].forEach(rule => styleSheet.insertRule(rule, 'index-max'))
-    cache.data[1].forEach(rule => lazyStyleSheet.insertRule(rule, 'index-max'))
+    cache.data[0].forEach(rule => eagerStyles.sheet.insertRule(rule, 'index-max'))
+    cache.data[1].forEach(rule => lazyStyles.sheet.insertRule(rule, 'index-max'))
 
-    document.adoptedStyleSheets = [styleSheet, lazyStyleSheet]
+    adoptStyleSheets([eagerStyles, lazyStyles])
 
     return true
   } else {
@@ -114,29 +153,27 @@ export const tryLoadCache = () => {
 }
 
 export const applyTheme = async (input, onFinish = (data) => {}) => {
-  const styleSheet = new CSSStyleSheet()
-  const styleArray = []
-  const lazyStyleSheet = new CSSStyleSheet()
-  const lazyStyleArray = []
+  const eagerStyles = createStyleSheet(EAGER_STYLE_ID)
+  const lazyStyles = createStyleSheet(LAZY_STYLE_ID)
 
   const { lazyProcessFunc } = await generateTheme(
     input,
     {
       onNewRule (rule, isLazy) {
         if (isLazy) {
-          lazyStyleSheet.insertRule(rule, 'index-max')
-          lazyStyleArray.push(rule)
+          lazyStyles.sheet.insertRule(rule, 'index-max')
+          lazyStyles.rules.push(rule)
         } else {
-          styleSheet.insertRule(rule, 'index-max')
-          styleArray.push(rule)
+          eagerStyles.sheet.insertRule(rule, 'index-max')
+          eagerStyles.rules.push(rule)
         }
       },
       onEagerFinished () {
-        document.adoptedStyleSheets = [styleSheet]
+        adoptStyleSheets([eagerStyles])
       },
       onLazyFinished () {
-        document.adoptedStyleSheets = [styleSheet, lazyStyleSheet]
-        const cache = { engineChecksum: getEngineChecksum(), data: [styleArray, lazyStyleArray] }
+        adoptStyleSheets([eagerStyles, lazyStyles])
+        const cache = { engineChecksum: getEngineChecksum(), data: [eagerStyles.rules, lazyStyles.rules] }
         onFinish(cache)
         localStorage.setItem('pleroma-fe-theme-cache', JSON.stringify(cache))
       }
