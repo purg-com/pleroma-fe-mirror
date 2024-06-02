@@ -265,7 +265,8 @@
     "emoji_reactions": "Emoji Reactions",
     "reports": "Reports",
     "moves": "User migrates",
-    "load_older": "Load older interactions"
+    "load_older": "Load older interactions",
+    "statuses": "Subscriptions"
   },
   "post_status": {
     "edit_status": "Edit status",
