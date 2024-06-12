@@ -382,6 +382,10 @@
     "text_size": "Text and interface size",
     "text_size_tip": "Use {0} for absolute values, {1} will scale with browser default text size.",
     "text_size_tip2": "Values other than {0} might break some things and themes",
+    "emoji_size": "Emoji size",
+    "navbar_size": "Top bar size",
+    "panel_header_size": "Panel header size",
+    "visual_tweaks": "Minor visual tweaks",
     "mfa": {
       "otp": "OTP",
       "setup_otp": "Setup OTP",

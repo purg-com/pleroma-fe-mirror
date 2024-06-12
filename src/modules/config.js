@@ -117,6 +117,8 @@ export const defaultState = {
   notifsColumnWidth: '25rem',
   emojiReactionsScale: undefined,
   textSize: undefined, // instance default
+  emojiSize: undefined, // instance default
+  navbarSize: undefined, // instance default
   navbarColumnStretch: false,
   greentext: undefined, // instance default
   useAtIcon: undefined, // instance default
@@ -262,6 +264,9 @@ const config = {
           case 'contentColumnWidth':
           case 'notifsColumnWidth':
           case 'textSize':
+          case 'navbarSize':
+          case 'panelHeaderSize':
+          case 'emojiSize':
           case 'emojiReactionsScale':
             applyConfig(state)
             break

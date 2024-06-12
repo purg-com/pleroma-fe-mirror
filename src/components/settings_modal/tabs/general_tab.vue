@@ -93,43 +93,6 @@
             {{ $t('settings.hide_shoutbox') }}
           </BooleanSetting>
         </li>
-        <li>
-          <h3>{{ $t('settings.columns') }}</h3>
-        </li>
-        <li>
-          <BooleanSetting path="sidebarRight">
-            {{ $t('settings.right_sidebar') }}
-          </BooleanSetting>
-        </li>
-        <li>
-          <BooleanSetting path="navbarColumnStretch">
-            {{ $t('settings.navbar_column_stretch') }}
-          </BooleanSetting>
-        </li>
-        <li>
-          <ChoiceSetting
-            v-if="user"
-            id="thirdColumnMode"
-            path="thirdColumnMode"
-            :options="thirdColumnModeOptions"
-          >
-            {{ $t('settings.third_column_mode') }}
-          </ChoiceSetting>
-        </li>
-        <li v-if="expertLevel > 0">
-          {{ $t('settings.column_sizes') }}
-          <div class="column-settings">
-            <UnitSetting
-              v-for="column in columns"
-              :key="column"
-              :path="column + 'ColumnWidth'"
-              :units="horizontalUnits"
-              expert="1"
-            >
-              {{ $t('settings.column_sizes_' + column) }}
-            </UnitSetting>
-          </div>
-        </li>
         <li class="select-multiple">
           <span class="label">{{ $t('settings.confirm_dialogs') }}</span>
           <ul class="option-list">
@@ -261,15 +224,6 @@
           >
             {{ $t('settings.no_rich_text_description') }}
           </BooleanSetting>
-        </li>
-        <li>
-          <FloatSetting
-            v-if="user"
-            path="emojiReactionsScale"
-            expert="1"
-          >
-            {{ $t('settings.emoji_reactions_scale') }}
-          </FloatSetting>
         </li>
         <h3>{{ $t('settings.attachments') }}</h3>
         <li>
@@ -513,17 +467,3 @@
 </template>
 
 <script src="./general_tab.js"></script>
-
-<style lang="scss">
-.column-settings {
-  display: flex;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-}
-
-.column-settings .size-label {
-  display: block;
-  margin-bottom: 0.5em;
-  margin-top: 0.5em;
-}
-</style>

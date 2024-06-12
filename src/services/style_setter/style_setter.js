@@ -148,26 +148,34 @@ export const applyTheme = async (input, onFinish = (data) => {}) => {
   return Promise.resolve()
 }
 
-const configColumns = ({
+const extractStyleConfig = ({
   sidebarColumnWidth,
   contentColumnWidth,
   notifsColumnWidth,
   emojiReactionsScale,
+  roundnessOverride,
+  emojiSize,
+  navbarSize,
+  panelHeaderSize,
   textSize
 }) => ({
   sidebarColumnWidth,
   contentColumnWidth,
   notifsColumnWidth,
   emojiReactionsScale,
+  roundnessOverride,
+  emojiSize,
+  navbarSize,
+  panelHeaderSize,
   textSize
 })
 
-const defaultConfigColumns = configColumns(defaultState)
+const defaultStyleConfig = extractStyleConfig(defaultState)
 
-export const applyConfig = (config) => {
-  const columns = configColumns(config)
+export const applyConfig = (input) => {
+  const config = extractStyleConfig(input)
 
-  if (columns === defaultConfigColumns) {
+  if (config === defaultStyleConfig) {
     return
   }
 
@@ -176,7 +184,7 @@ export const applyConfig = (config) => {
   body.classList.add('hidden')
 
   const rules = Object
-    .entries(columns)
+    .entries(config)
     .filter(([k, v]) => v)
     .map(([k, v]) => `--${k}: ${v}`).join(';')
 

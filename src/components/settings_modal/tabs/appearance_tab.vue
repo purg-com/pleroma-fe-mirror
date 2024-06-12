@@ -1,23 +1,8 @@
 <template>
   <div :label="$t('settings.general')">
     <div class="setting-item">
-      <h2>{{ $t('settings.interface') }}</h2>
+      <h2>{{ $t('settings.scale_and_layout') }}</h2>
       <ul class="setting-list">
-        <li v-if="instanceWallpaperUsed">
-          <BooleanSetting path="hideInstanceWallpaper">
-            {{ $t('settings.hide_wallpaper') }}
-          </BooleanSetting>
-        </li>
-        <li>
-          <BooleanSetting path="disableStickyHeaders">
-            {{ $t('settings.disable_sticky_headers') }}
-          </BooleanSetting>
-        </li>
-        <li>
-          <BooleanSetting path="showScrollbars">
-            {{ $t('settings.show_scrollbars') }}
-          </BooleanSetting>
-        </li>
         <li>
           <UnitSetting
             path="textSize"
@@ -48,6 +33,105 @@
               </i18n-t>
             </small>
           </div>
+        </li>
+        <li>
+          <UnitSetting
+            path="emojiSize"
+            step="0.1"
+            :units="['px', 'rem']"
+            :reset-default="{ 'px': 32, 'rem': 2.2 }"
+          >
+            {{ $t('settings.emoji_size') }}
+          </UnitSetting>
+          <ul
+            class="setting-list suboptions"
+          >
+            <li>
+              <FloatSetting
+                v-if="user"
+                path="emojiReactionsScale"
+                expert="1"
+              >
+                {{ $t('settings.emoji_reactions_scale') }}
+              </FloatSetting>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <UnitSetting
+            path="navbarSize"
+            step="0.1"
+            :units="['px', 'rem']"
+            :reset-default="{ 'px': 64, 'rem': 3.5 }"
+          >
+            {{ $t('settings.navbar_size') }}
+          </UnitSetting>
+        </li>
+        <h3>{{ $t('settings.columns') }}</h3>
+        <li>
+          <UnitSetting
+            path="panelHeaderSize"
+            step="0.1"
+            :units="['px', 'rem']"
+            :reset-default="{ 'px': 64, 'rem': 3.2 }"
+            timed-apply-mode
+          >
+            {{ $t('settings.panel_header_size') }}
+          </UnitSetting>
+        </li>
+        <li>
+          <BooleanSetting path="sidebarRight">
+            {{ $t('settings.right_sidebar') }}
+          </BooleanSetting>
+        </li>
+        <li>
+          <BooleanSetting path="navbarColumnStretch">
+            {{ $t('settings.navbar_column_stretch') }}
+          </BooleanSetting>
+        </li>
+        <li>
+          <ChoiceSetting
+            v-if="user"
+            id="thirdColumnMode"
+            path="thirdColumnMode"
+            :options="thirdColumnModeOptions"
+          >
+            {{ $t('settings.third_column_mode') }}
+          </ChoiceSetting>
+        </li>
+        <li v-if="expertLevel > 0">
+          {{ $t('settings.column_sizes') }}
+          <div class="column-settings">
+            <UnitSetting
+              v-for="column in columns"
+              :key="column"
+              :path="column + 'ColumnWidth'"
+              :units="horizontalUnits"
+              expert="1"
+            >
+              {{ $t('settings.column_sizes_' + column) }}
+            </UnitSetting>
+          </div>
+        </li>
+        <li>
+          <BooleanSetting path="disableStickyHeaders">
+            {{ $t('settings.disable_sticky_headers') }}
+          </BooleanSetting>
+        </li>
+        <li>
+          <BooleanSetting path="showScrollbars">
+            {{ $t('settings.show_scrollbars') }}
+          </BooleanSetting>
+        </li>
+      </ul>
+    </div>
+    <div class="setting-item">
+      <h2>{{ $t('settings.visual_tweaks') }}</h2>
+      <ul class="setting-list">
+        <li v-if="instanceWallpaperUsed">
+          <BooleanSetting path="hideInstanceWallpaper">
+            {{ $t('settings.hide_wallpaper') }}
+          </BooleanSetting>
         </li>
       </ul>
     </div>

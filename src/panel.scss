@@ -60,9 +60,9 @@
 
 .panel-heading,
 .panel-footer {
-  --panel-heading-height-padding: 0.6em;
-  --__panel-heading-gap: 0.5em;
-  --__panel-heading-height: 3.2em;
+  --panel-heading-height-padding: calc(var(--panelHeaderSize) * 0.15);
+  --__panel-heading-gap: calc(var(--panelHeaderSize) * 0.1);
+  --__panel-heading-height: var(--panelHeaderSize, 3.2em);
   --__panel-heading-height-inner: calc(var(--__panel-heading-height) - 2 * var(--panel-heading-height-padding, 0));
 
   backdrop-filter: var(--__panel-backdrop-filter);

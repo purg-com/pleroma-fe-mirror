@@ -79,7 +79,7 @@
   margin-top: 0.25em;
   flex-wrap: wrap;
 
-  --emoji-size: calc(1.25em * var(--emojiReactionsScale, 1));
+  --emoji-size: calc(var(--emojiSize, 1.25em) * var(--emojiReactionsScale, 1));
 
   .emoji-reaction-container {
     display: flex;
