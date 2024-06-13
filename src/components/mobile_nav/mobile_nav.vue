@@ -129,7 +129,7 @@
   .mobile-nav {
     display: grid;
     line-height: var(--navbar-height);
-    grid-template-rows: 1fr;
+    grid-template-rows: var(--navbar-height);
     grid-template-columns: 2fr auto;
     width: 100%;
     box-sizing: border-box;
