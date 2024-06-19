@@ -62,7 +62,7 @@
             path="navbarSize"
             step="0.1"
             :units="['px', 'rem']"
-            :reset-default="{ 'px': 64, 'rem': 3.5 }"
+            :reset-default="{ 'px': 55, 'rem': 3.5 }"
           >
             {{ $t('settings.navbar_size') }}
           </UnitSetting>
@@ -73,7 +73,7 @@
             path="panelHeaderSize"
             step="0.1"
             :units="['px', 'rem']"
-            :reset-default="{ 'px': 64, 'rem': 3.2 }"
+            :reset-default="{ 'px': 52, 'rem': 3.2 }"
             timed-apply-mode
           >
             {{ $t('settings.panel_header_size') }}
