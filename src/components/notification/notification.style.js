@@ -11,7 +11,8 @@ export default {
     'RichContent',
     'Input',
     'Avatar',
-    'Attachment'
+    'Attachment',
+    'PollGraph'
   ],
   defaultRules: []
 }
