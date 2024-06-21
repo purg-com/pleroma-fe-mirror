@@ -386,6 +386,12 @@
     "navbar_size": "Top bar size",
     "panel_header_size": "Panel header size",
     "visual_tweaks": "Minor visual tweaks",
+    "force_interface_roundness": "Override interface roundness/sharpness",
+    "forced_roundness_mode_disabled": "Use theme defaults",
+    "forced_roundness_mode_sharp": "Force sharp edges",
+    "forced_roundness_mode_nonsharp": "Force not-so-sharp (1px roundness) edges",
+    "forced_roundness_mode_round": "Force round edges",
+    "scale_and_layout": "Interface scale and layout",
     "mfa": {
       "otp": "OTP",
       "setup_otp": "Setup OTP",

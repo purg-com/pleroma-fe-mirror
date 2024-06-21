@@ -22,6 +22,11 @@ const AppearanceTab = {
         key: mode,
         value: mode,
         label: this.$t(`settings.third_column_mode_${mode}`)
+      })),
+      forcedRoundnessOptions: ['disabled', 'sharp', 'nonsharp', 'round'].map((mode, i) => ({
+        key: mode,
+        value: i - 1,
+        label: this.$t(`settings.forced_roundness_mode_${mode}`)
       }))
     }
   },

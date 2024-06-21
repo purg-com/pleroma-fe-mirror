@@ -103,6 +103,7 @@ const defaultState = {
   emojiSize: '2.2rem',
   navbarSize: '3.5rem',
   panelHeaderSize: '3.2rem',
+  forcedRoundness: -1,
   virtualScrolling: true,
   sensitiveByDefault: false,
   conversationDisplay: 'linear',

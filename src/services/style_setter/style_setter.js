@@ -153,22 +153,41 @@ const extractStyleConfig = ({
   contentColumnWidth,
   notifsColumnWidth,
   emojiReactionsScale,
-  roundnessOverride,
   emojiSize,
   navbarSize,
   panelHeaderSize,
-  textSize
-}) => ({
-  sidebarColumnWidth,
-  contentColumnWidth,
-  notifsColumnWidth,
-  emojiReactionsScale,
-  roundnessOverride,
-  emojiSize,
-  navbarSize,
-  panelHeaderSize,
-  textSize
-})
+  textSize,
+  forcedRoundness
+}) => {
+  const result = {
+    sidebarColumnWidth,
+    contentColumnWidth,
+    notifsColumnWidth,
+    emojiReactionsScale,
+    emojiSize,
+    navbarSize,
+    panelHeaderSize,
+    textSize
+  }
+
+  console.log(forcedRoundness)
+  switch (forcedRoundness) {
+    case 'disable':
+      break
+    case '0':
+      result.forcedRoundness = '0'
+      break
+    case '1':
+      result.forcedRoundness = '1px'
+      break
+    case '2':
+      result.forcedRoundness = '0.4rem'
+      break
+    default:
+  }
+
+  return result
+}
 
 const defaultStyleConfig = extractStyleConfig(defaultState)
 
@@ -196,6 +215,12 @@ export const applyConfig = (input) => {
 
   styleSheet.toString()
   styleSheet.insertRule(`:root { ${rules} }`, 'index-max')
+
+  if (Object.prototype.hasOwnProperty.call(config, 'forcedRoundness')) {
+    styleSheet.insertRule(` * {
+        --roundness: var(--forcedRoundness) !important;
+    }`, 'index-max')
+  }
 
   body.classList.remove('hidden')
 }

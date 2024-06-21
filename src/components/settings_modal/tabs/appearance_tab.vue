@@ -128,6 +128,15 @@
     <div class="setting-item">
       <h2>{{ $t('settings.visual_tweaks') }}</h2>
       <ul class="setting-list">
+        <li>
+          <ChoiceSetting
+            id="forcedRoundness"
+            path="forcedRoundness"
+            :options="forcedRoundnessOptions"
+          >
+            {{ $t('settings.force_interface_roundness') }}
+          </ChoiceSetting>
+        </li>
         <li v-if="instanceWallpaperUsed">
           <BooleanSetting path="hideInstanceWallpaper">
             {{ $t('settings.hide_wallpaper') }}

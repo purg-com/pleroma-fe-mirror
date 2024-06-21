@@ -119,6 +119,8 @@ export const defaultState = {
   textSize: undefined, // instance default
   emojiSize: undefined, // instance default
   navbarSize: undefined, // instance default
+  panelHeaderSize: undefined, // instance default
+  forcedRoundness: undefined, // instance default
   navbarColumnStretch: false,
   greentext: undefined, // instance default
   useAtIcon: undefined, // instance default
@@ -266,6 +268,7 @@ const config = {
           case 'textSize':
           case 'navbarSize':
           case 'panelHeaderSize':
+          case 'forcedRoundness':
           case 'emojiSize':
           case 'emojiReactionsScale':
             applyConfig(state)
