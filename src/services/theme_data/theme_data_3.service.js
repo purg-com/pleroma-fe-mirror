@@ -156,7 +156,7 @@ export const init = (extraRuleset, ultimateBackgroundColor, debug) => {
 
   const rulesetUnsorted = [
     ...Object.values(components)
-      .map(c => (c.defaultRules || []).map(r => ({ component: c.name, ...r })))
+      .map(c => (c.defaultRules || []).map(r => ({ component: c.name, ...r, source: 'Built-in' })))
       .reduce((acc, arr) => [...acc, ...arr], []),
     ...extraRuleset
   ].map(rule => {
