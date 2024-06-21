@@ -188,7 +188,9 @@ export const applyConfig = (input) => {
     .filter(([k, v]) => v)
     .map(([k, v]) => `--${k}: ${v}`).join(';')
 
+  document.getElementById('style-config')?.remove()
   const styleEl = document.createElement('style')
+  styleEl.id = 'style-config'
   head.appendChild(styleEl)
   const styleSheet = styleEl.sheet
 
