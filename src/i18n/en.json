@@ -391,6 +391,7 @@
     "forced_roundness_mode_sharp": "Force sharp edges",
     "forced_roundness_mode_nonsharp": "Force not-so-sharp (1px roundness) edges",
     "forced_roundness_mode_round": "Force round edges",
+    "theme_debug": "Show what background theme engine assumes when dealing with transparancy (DEBUG)",
     "scale_and_layout": "Interface scale and layout",
     "mfa": {
       "otp": "OTP",

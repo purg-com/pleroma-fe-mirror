@@ -353,18 +353,20 @@ const afterStoreSetup = async ({ store, i18n }) => {
 
   await setConfig({ store })
 
-  const { customTheme, customThemeSource, forceThemeRecompilation } = store.state.config
+  const { customTheme, customThemeSource, forceThemeRecompilation, themeDebug } = store.state.config
   const { theme } = store.state.instance
   const customThemePresent = customThemeSource || customTheme
 
-  if (!forceThemeRecompilation && tryLoadCache()) {
+  console.log('DEBUG INITIAL', themeDebug, forceThemeRecompilation)
+
+  if (!forceThemeRecompilation && !themeDebug && tryLoadCache()) {
     store.commit('setThemeApplied')
   } else {
     if (customThemePresent) {
       if (customThemeSource && customThemeSource.themeEngineVersion === CURRENT_VERSION) {
-        applyTheme(customThemeSource)
+        applyTheme(customThemeSource, () => {}, themeDebug)
       } else {
-        applyTheme(customTheme)
+        applyTheme(customTheme, () => {}, themeDebug)
       }
       store.commit('setThemeApplied')
     } else if (theme) {

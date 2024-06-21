@@ -6,7 +6,7 @@ import { getCssRules } from '../theme_data/css_utils.js'
 import { defaultState } from '../../modules/config.js'
 import { chunk } from 'lodash'
 
-export const generateTheme = async (input, callbacks) => {
+export const generateTheme = async (input, callbacks, debug) => {
   const {
     onNewRule = (rule, isLazy) => {},
     onLazyFinished = () => {},
@@ -22,9 +22,11 @@ export const generateTheme = async (input, callbacks) => {
   }
 
   // Assuming that "worst case scenario background" is panel background since it's the most likely one
-  const themes3 = init(extraRules, extraRules[0].directives['--bg'].split('|')[1].trim())
+  const themes3 = init(extraRules, extraRules[0].directives['--bg'].split('|')[1].trim(), debug)
 
-  getCssRules(themes3.eager, themes3.staticVars).forEach(rule => {
+  console.log('DEBUG 2 IS', debug)
+
+  getCssRules(themes3.eager, debug).forEach(rule => {
     // Hacks to support multiple selectors on same component
     if (rule.match(/::-webkit-scrollbar-button/)) {
       const parts = rule.split(/[{}]/g)
@@ -54,7 +56,7 @@ export const generateTheme = async (input, callbacks) => {
   const processChunk = () => {
     const chunk = chunks[counter]
     Promise.all(chunk.map(x => x())).then(result => {
-      getCssRules(result.filter(x => x), themes3.staticVars).forEach(rule => {
+      getCssRules(result.filter(x => x), debug).forEach(rule => {
         if (rule.match(/\.modal-view/)) {
           const parts = rule.split(/[{}]/g)
           const newRule = [
@@ -113,11 +115,13 @@ export const tryLoadCache = () => {
   }
 }
 
-export const applyTheme = async (input, onFinish = (data) => {}) => {
+export const applyTheme = async (input, onFinish = (data) => {}, debug) => {
   const styleSheet = new CSSStyleSheet()
   const styleArray = []
   const lazyStyleSheet = new CSSStyleSheet()
   const lazyStyleArray = []
+
+  console.log('DEBUG IS', debug)
 
   const { lazyProcessFunc } = await generateTheme(
     input,
@@ -140,7 +144,8 @@ export const applyTheme = async (input, onFinish = (data) => {}) => {
         onFinish(cache)
         localStorage.setItem('pleroma-fe-theme-cache', JSON.stringify(cache))
       }
-    }
+    },
+    debug
   )
 
   setTimeout(lazyProcessFunc, 0)

@@ -147,6 +147,7 @@ export const defaultState = {
   maxDepthInThread: undefined, // instance default
   autocompleteSelect: undefined, // instance default
   closingDrawerMarksAsSeen: undefined, // instance default
+  themeDebug: false,
   unseenAtTop: undefined, // instance default
   ignoreInactionableSeen: undefined // instance default
 }
@@ -274,9 +275,16 @@ const config = {
             applyConfig(state)
             break
           case 'customTheme':
-          case 'customThemeSource':
-            applyTheme(value)
+          case 'customThemeSource': {
+            const { themeDebug } = state
+            applyTheme(value, () => {}, themeDebug)
             break
+          }
+          case 'themeDebug': {
+            const { customTheme, customThemeSource } = state
+            applyTheme(customTheme || customThemeSource, () => {}, value)
+            break
+          }
           case 'interfaceLanguage':
             messages.setLanguage(this.getters.i18n, value)
             dispatch('loadUnicodeEmojiData', value)

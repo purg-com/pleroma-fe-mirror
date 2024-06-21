@@ -149,7 +149,7 @@ const ruleToSelector = genericRuleToSelector(components)
 
 export const getEngineChecksum = () => engineChecksum
 
-export const init = (extraRuleset, ultimateBackgroundColor) => {
+export const init = (extraRuleset, ultimateBackgroundColor, debug) => {
   const staticVars = {}
   const stacked = {}
   const computed = {}

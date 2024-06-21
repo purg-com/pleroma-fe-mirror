@@ -142,6 +142,22 @@
             {{ $t('settings.hide_wallpaper') }}
           </BooleanSetting>
         </li>
+        <li>
+          <BooleanSetting
+            path="forceThemeRecompilation"
+            :expert="1"
+          >
+            {{ $t('settings.force_theme_recompilation_debug') }}
+          </BooleanSetting>
+        </li>
+        <li>
+          <BooleanSetting
+            path="themeDebug"
+            :expert="1"
+          >
+            {{ $t('settings.theme_debug') }}
+          </BooleanSetting>
+        </li>
       </ul>
     </div>
   </div>

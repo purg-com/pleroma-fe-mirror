@@ -149,14 +149,6 @@
       <h2>{{ $t('settings.post_look_feel') }}</h2>
       <ul class="setting-list">
         <li>
-          <BooleanSetting
-            path="forceThemeRecompilation"
-            :expert="1"
-          >
-            {{ $t('settings.force_theme_recompilation_debug') }}
-          </BooleanSetting>
-        </li>
-        <li>
           <ChoiceSetting
             id="conversationDisplay"
             path="conversationDisplay"

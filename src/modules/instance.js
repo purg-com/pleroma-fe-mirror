@@ -383,16 +383,16 @@ const instance = {
         .then(themeData => {
           commit('setInstanceOption', { name: 'themeData', value: themeData })
           // No need to apply theme if there's user theme already
-          const { customTheme } = rootState.config
+          const { customTheme, themeDebug } = rootState.config
           const { themeApplied } = rootState.interface
           if (customTheme || themeApplied) return
 
           // New theme presets don't have 'theme' property, they use 'source'
           const themeSource = themeData.source
           if (!themeData.theme || (themeSource && themeSource.themeEngineVersion === CURRENT_VERSION)) {
-            applyTheme(themeSource)
+            applyTheme(themeSource, null, themeDebug)
           } else {
-            applyTheme(themeData.theme)
+            applyTheme(themeData.theme, null, themeDebug)
           }
           commit('setThemeApplied')
         })
