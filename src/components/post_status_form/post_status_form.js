@@ -87,7 +87,8 @@ const PostStatusForm = {
     'fileLimit',
     'submitOnEnter',
     'emojiPickerPlacement',
-    'optimisticPosting'
+    'optimisticPosting',
+    'profileMention'
   ],
   emits: [
     'posted',
@@ -125,7 +126,7 @@ const PostStatusForm = {
 
     const { scopeCopy } = this.$store.getters.mergedConfig
 
-    if (this.replyTo) {
+    if (this.replyTo || this.profileMention) {
       const currentUser = this.$store.state.users.currentUser
       statusText = buildMentionsString({ user: this.repliedUser, attentions: this.attentions }, currentUser)
     }

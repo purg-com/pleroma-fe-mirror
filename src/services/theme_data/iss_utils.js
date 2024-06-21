@@ -1,3 +1,5 @@
+import { sortBy } from 'lodash'
+
 // "Unrolls" a tree structure of item: { parent: { ...item2, parent: { ...item3, parent: {...} } }}
 // into an array [item2, item3] for iterating
 export const unroll = (item) => {
@@ -24,7 +26,7 @@ export const getAllPossibleCombinations = (array) => {
     })
     const flatCombos = newCombos.reduce((acc, x) => [...acc, ...x], [])
     const uniqueComboStrings = new Set()
-    const uniqueCombos = flatCombos.map(x => x.toSorted()).filter(x => {
+    const uniqueCombos = flatCombos.map(sortBy).filter(x => {
       if (uniqueComboStrings.has(x.join())) {
         return false
       } else {
@@ -64,7 +66,7 @@ export const genericRuleToSelector = components => (rule, ignoreOutOfTreeSelecto
   }
 
   const selectors = [realSelector, applicableVariant, ...applicableStates]
-    .toSorted((a, b) => {
+    .sort((a, b) => {
       if (a.startsWith(':')) return 1
       if (/^[a-z]/.exec(a)) return -1
       else return 0
