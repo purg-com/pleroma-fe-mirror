@@ -1,4 +1,6 @@
 .emoji-picker {
+  --__emoji-picker-header: 2.2em;
+
   width: 25em;
   max-width: calc(100vw - 20px); // popover gives 10px margin from window edge
   display: flex;
@@ -8,17 +10,19 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: var(--emoji-size);
-    max-width: var(--emoji-size);
-    height: var(--emoji-size);
-    max-height: var(--emoji-size);
+    width: var(--__emoji-picker-header);
+    max-width: var(--__emoji-picker-header);
+    height: var(--__emoji-picker-header);
+    max-height: var(--__emoji-picker-header);
 
     .still-image {
-      max-width: 100%;
-      max-height: 100%;
-      height: 100%;
-      width: 100%;
+      width: var(--__emoji-picker-header);
+      max-width: var(--__emoji-picker-header);
+      height: var(--__emoji-picker-header);
+      max-height: var(--__emoji-picker-header);
       object-fit: contain;
+
+      --_still_image-label-scale: 0.5;
     }
   }
 
@@ -45,7 +49,7 @@
 
   .heading {
     display: flex;
-    padding: 10px 0.5em 0.3em;
+    padding: 0.7em 0.5em 0;
   }
 
   .content {
@@ -60,6 +64,7 @@
     display: flex;
     flex-flow: row nowrap;
     overflow-x: auto;
+    overflow-y: hidden;
   }
 
   .additional-tabs {
@@ -75,17 +80,21 @@
     flex-basis: auto;
     display: flex;
     align-content: center;
+    scrollbar-width: thin;
 
     &-item {
       padding: 0 0.5em;
       cursor: pointer;
-      font-size: 1.85em;
-      width: var(--emoji-size);
-      max-width: var(--emoji-size);
-      height: var(--emoji-size);
-      max-height: var(--emoji-size);
+      width: var(--__emoji-picker-header);
+      max-width: var(--__emoji-picker-header);
+      height: var(--__emoji-picker-header);
+      max-height: var(--__emoji-picker-header);
       display: flex;
       align-items: center;
+
+      .svg-inline--fa {
+        font-size: 1.85em;
+      }
 
       &.disabled {
         opacity: 0.5;
@@ -188,8 +197,12 @@
 
       .emoji-picker-emoji.-custom {
         object-fit: contain;
-        max-width: 100%;
-        max-height: 100%;
+        width: var(--emoji-size);
+        max-width: var(--emoji-size);
+        height: var(--emoji-size);
+        max-height: var(--emoji-size);
+
+        --_still_image-label-scale: 0.5;
       }
 
       .emoji-picker-emoji.-unicode {
