@@ -106,9 +106,6 @@ const EmojiPicker = {
     }
   },
   inject: ['popoversZLayer'],
-  mounted () {
-    this.updateEmojiSize()
-  },
   data () {
     return {
       keyword: '',
@@ -138,7 +135,7 @@ const EmojiPicker = {
       const css = window.getComputedStyle(this.$refs.popover.$el)
       const emojiSize = css.getPropertyValue('--emojiSize')
       const emojiSizeUnit = emojiSize.replace(/[0-9,.]+/, '')
-      const emojiSizeValue = emojiSize.replace(/[^0-9,.]+/, '')
+      const emojiSizeValue = Number(emojiSize.replace(/[^0-9,.]+/, ''))
       const fontSize = css.getPropertyValue('font-size').replace(/[^0-9,.]+/, '')
 
       let emojiSizeReal
@@ -245,6 +242,7 @@ const EmojiPicker = {
     },
     onShowing () {
       const oldContentLoaded = this.contentLoaded
+      this.updateEmojiSize()
       this.recalculateItemPerRow()
       this.$nextTick(() => {
         this.$refs.search.focus()
@@ -287,7 +285,7 @@ const EmojiPicker = {
   },
   computed: {
     minItemSize () {
-      return this.emojiHeight
+      return this.emojiSize
     },
     // used to watch it
     fontSize () {
@@ -299,15 +297,12 @@ const EmojiPicker = {
     emojiHeight () {
       return this.emojiSize
     },
-    emojiWidth () {
-      return this.emojiSize
-    },
     itemPerRow () {
       console.log(
-        this.emojiWidth,
+        this.emojiSize,
         this.width
       )
-      return this.width ? Math.floor(this.width / this.emojiWidth) : 6
+      return this.width ? Math.floor(this.width / this.emojiSize) : 6
     },
     activeGroupView () {
       return this.showingStickers ? '' : this.activeGroup
