@@ -108,7 +108,6 @@ const interfaceMod = {
       state.lastTimeline = value
     },
     setFontsList (state, value) {
-      console.log(value)
       state.localFonts = new Set(value.map(font => font.family))
     }
   },
@@ -184,10 +183,16 @@ const interfaceMod = {
         commit('setLayoutType', wideLayout ? 'wide' : normalOrMobile)
       }
     },
-    queryLocalFonts ({ commit, dispatch }) {
+    queryLocalFonts ({ commit, dispatch, state }) {
+      if (state.localFonts !== null) return
+      commit('setFontsList', [])
+      if (!state.browserSupport.localFonts) {
+        return
+      }
       window
         .queryLocalFonts()
         .then((fonts) => {
+          console.log(fonts)
           commit('setFontsList', fonts)
         })
         .catch((e) => {

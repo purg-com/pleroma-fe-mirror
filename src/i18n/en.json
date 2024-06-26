@@ -748,17 +748,21 @@
       "themes3": {
         "define": "Override",
         "font": {
-          "local": "Local font (must be installed on computer)",
-          "serif": "Serif (browser default)",
-          "sans-serif": "Sans-serif (browser default)",
-          "monospace": "Monospace (browser default)",
-          "inherit": "Same as parent component",
-          "invalid_custom_reserved": "Empty or reserved font name, it will not be saved as custom font - use dropdown instead",
+          "group-builtin": "Browser default fonts",
+          "builtin" : {
+            "serif": "Serif",
+            "sans-serif": "Sans-serif",
+            "monospace": "Monospace",
+            "inherit": "Unchanged"
+          },
+          "group-local": "Locally installed fonts",
+          "local-unavailable1": "List of locally installed fonts unavailalbe",
+          "local-unavailable2": "Use manual entry to specify custom font",
           "font_list_unavailable": "Couldn't get locally installed fonts: {error}",
           "lookup_local_fonts": "Load list of fonts installed on this computer",
           "enter_manually": "Enter font name family manually",
-          "entry": "Font's {fontFamily}",
-          "select": "Select local font"
+          "entry": "Enter {fontFamily}",
+          "select": "Select font"
         }
       },
       "switcher": {

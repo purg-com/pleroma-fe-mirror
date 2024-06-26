@@ -10,42 +10,18 @@
     >
       {{ label }}
     </label>
-    <p>
-      <Select
-        :id="name + '-font-switcher'"
-        v-model="preset"
-        :disabled="!present"
-        class="font-switcher"
-      >
-        <option
-          v-for="option in availableOptions"
-          :key="option"
-          :value="option"
-        >
-          {{ $t('settings.style.themes3.font.' + option) }}
-        </option>
-      </Select>
-      {{ ' ' }}
-      <Checkbox
-        v-if="typeof fallback !== 'undefined'"
-        :id="name + '-o'"
-        :modelValue="present"
-        @change="$emit('update:modelValue', typeof modelValue === 'undefined' ? fallback : undefined)"
-      >
-        {{ $t('settings.style.themes3.define') }}
-      </Checkbox>
-    </p>
-    <p v-if="isCustom">
+    {{ ' ' }}
+    <Checkbox
+      v-if="typeof fallback !== 'undefined'"
+      :id="name + '-o'"
+      :modelValue="present"
+      @change="$emit('update:modelValue', typeof modelValue === 'undefined' ? fallback : undefined)"
+    >
+      {{ $t('settings.style.themes3.define') }}
+    </Checkbox>
+    <p v-if="modelValue?.family">
       <label
-        v-if="fontsList !== null && !manualEntry"
-        :id="name + '-label'"
-        :for="preset === 'custom' ? name : name + '-font-switcher'"
-        class="label"
-      >
-        {{ $t('settings.style.themes3.font.select') }}
-      </label>
-      <label
-        v-else
+        v-if="manualEntry"
         :id="name + '-label'"
         :for="preset === 'custom' ? name : name + '-font-switcher'"
         class="label"
@@ -59,12 +35,22 @@
           </template>
         </i18n-t>
       </label>
+      <label
+        v-else
+        :id="name + '-label'"
+        :for="preset === 'custom' ? name : name + '-font-switcher'"
+        class="label"
+      >
+        {{ $t('settings.style.themes3.font.select') }}
+      </label>
       {{ ' ' }}
-      <span class="btn-group">
+      <span
+        v-if="manualEntry"
+        class="btn-group"
+      >
         <button
-          v-if="fontsListCapable && (fontsList === null || manualEntry)"
           class="btn button-default"
-          @click="lookupLocalFonts"
+          @click="toggleManualEntry"
           :title="$t('settings.style.themes3.font.lookup_local_fonts')"
         >
           <FAIcon
@@ -72,17 +58,19 @@
             icon="font"
           />
         </button>
-          <input
-            v-if="fontsLists === null || manualEntry"
-            :id="name"
-            v-model="familyCustom"
-            class="input custom-font"
-            type="text"
-          >
+        <input
+          :id="name"
+          :model-value="modelValue.family"
+          class="input custom-font"
+          type="text"
+          @update:modelValue="$emit('update:modelValue', { ...(modelValue || {}), family: $event.target.value })"
+        >
       </span>
-      <span class="btn-group">
+      <span
+        v-else
+        class="btn-group"
+      >
         <button
-          v-if="fontsList !== null && !manualEntry"
           class="btn button-default"
           @click="toggleManualEntry"
           :title="$t('settings.style.themes3.font.enter_manually')"
@@ -93,39 +81,48 @@
           />
         </button>
         <Select
-          v-if="fontsList !== null && !manualEntry"
           :id="name + '-local-font-switcher'"
-          v-model="familyCustom"
+          :model-value="modelValue.family"
           class="custom-font"
+          @update:modelValue="$emit('update:modelValue', { ...(modelValue || {}), family: $event.target.value })"
         >
-          <option
-            v-for="option in fontsList.values()"
-            :key="option"
-            :value="option"
-            :style="{ fontFamily: option }"
+          <optgroup
+            :label="$t('settings.style.themes3.font.group-builtin')"
           >
-            {{ option }}
-          </option>
+            <option
+              v-for="option in availableOptions"
+              :key="option"
+              :value="option"
+              :style="{ fontFamily: option === 'inherit' ? null : option }"
+            >
+              {{ $t('settings.style.themes3.font.builtin.' + option) }}
+            </option>
+          </optgroup>
+          <optgroup
+            v-if="localFontsSize > 0"
+            :label="$t('settings.style.themes3.font.group-local')"
+          >
+            <option
+              v-for="option in localFontsList"
+              :key="option"
+              :value="option"
+              :style="{ fontFamily: option }"
+            >
+              {{ option }}
+            </option>
+          </optgroup>
+          <optgroup
+            v-else
+            :label="$t('settings.style.themes3.font.group-local')"
+          >
+            <option disabled>
+              {{ $t('settings.style.themes3.font.local-unavailable1') }}
+            </option>
+            <option disabled>
+              {{ $t('settings.style.themes3.font.local-unavailable2') }}
+            </option>
+          </optgroup>
         </Select>
-      </span>
-      <span
-        v-if="invalidCustom"
-        class="InvalidIndicator"
-      >
-        <Popover
-          trigger="hover"
-          :trigger-attrs="{ 'aria-label': $t('settings.style.themes3.font.invalid_custom_reserved') }"
-        >
-          <template #trigger>
-            &nbsp;
-            <FAIcon icon="exclamation-triangle" />
-          </template>
-          <template #content>
-            <div class="invalid-tooltip">
-              {{ $t('settings.style.themes3.font.invalid_custom_reserved') }}
-            </div>
-          </template>
-        </Popover>
       </span>
     </p>
   </div>

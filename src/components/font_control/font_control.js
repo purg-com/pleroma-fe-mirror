@@ -1,4 +1,3 @@
-import { set, clone } from 'lodash'
 import Select from '../select/select.vue'
 import Checkbox from 'src/components/checkbox/checkbox.vue'
 import Popover from 'src/components/popover/popover.vue'
@@ -16,8 +15,6 @@ library.add(
   faFont
 )
 
-const PRESET_FONTS = new Set(['serif', 'sans-serif', 'monospace', 'inherit'])
-
 export default {
   components: {
     Select,
@@ -27,94 +24,36 @@ export default {
   props: [
     'name', 'label', 'modelValue', 'fallback', 'options', 'no-inherit'
   ],
+  mounted () {
+    this.$store.dispatch('queryLocalFonts')
+  },
   emits: ['update:modelValue'],
   data () {
     return {
       manualEntry: true,
-      localValue: clone(this.modelValue),
-      familyCustomLocal: null,
       availableOptions: [
         this.noInherit ? '' : 'inherit',
         'serif',
         'sans-serif',
         'monospace',
-        'local',
         ...(this.options || [])
       ].filter(_ => _)
     }
   },
-  beforeUpdate () {
-    this.localValue = clone(this.modelValue)
-    if (this.familyCustomLocal === null && !this.isInvalidFamily(this.modelValue?.family)) {
-      this.familyCustomLocal = this.modelValue?.family
-    }
-  },
   methods: {
-    lookupLocalFonts () {
-      if (!this.fontsList) {
-        this.$store.dispatch('queryLocalFonts')
-      }
-      this.toggleManualEntry()
-    },
-    isInvalidFamily (value) {
-      return PRESET_FONTS.has(value) || (value === '')
-    },
     toggleManualEntry () {
       this.manualEntry = !this.manualEntry
     }
   },
   computed: {
     present () {
-      return typeof this.localValue !== 'undefined'
+      return typeof this.modelValue !== 'undefined'
     },
-    defaultValue () {
-      return this.localValue || this.fallback || {}
+    localFontsList () {
+      return this.$store.state.interface.localFonts?.values()
     },
-    fontsListCapable () {
-      return this.$store.state.interface.browserSupport.localFonts
-    },
-    fontsList () {
-      return this.$store.state.interface.localFonts
-    },
-    family: {
-      get () {
-        return this.defaultValue.family
-      },
-      set (v) {
-        this.familyCustomLocal = ''
-        set(this.localValue, 'family', v)
-        this.$emit('update:modelValue', this.localValue)
-      }
-    },
-    familyCustom: {
-      get () {
-        return this.familyCustomLocal
-      },
-      set (v) {
-        this.familyCustomLocal = v
-        if (!this.isInvalidFamily(v)) {
-          set(this.localValue, 'family', v)
-          this.$emit('update:modelValue', this.localValue)
-        }
-      }
-    },
-    invalidCustom () {
-      return this.isInvalidFamily(this.familyCustomLocal)
-    },
-    isCustom () {
-      return !PRESET_FONTS.has(this.defaultValue.family)
-    },
-    preset: {
-      get () {
-        if (PRESET_FONTS.has(this.family)) {
-          return this.family
-        } else {
-          return 'local'
-        }
-      },
-      set (v) {
-        this.family = v === 'local' ? '' : v
-      }
+    localFontsSize () {
+      return this.$store.state.interface.localFonts?.size
     }
   }
 }
