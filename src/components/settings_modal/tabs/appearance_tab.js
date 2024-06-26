@@ -4,6 +4,8 @@ import IntegerSetting from '../helpers/integer_setting.vue'
 import FloatSetting from '../helpers/float_setting.vue'
 import UnitSetting, { defaultHorizontalUnits } from '../helpers/unit_setting.vue'
 
+import FontControl from 'src/components/font_control/font_control.vue'
+
 import SharedComputedObject from '../helpers/shared_computed_object.js'
 import ProfileSettingIndicator from '../helpers/profile_setting_indicator.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -36,11 +38,15 @@ const AppearanceTab = {
     IntegerSetting,
     FloatSetting,
     UnitSetting,
-    ProfileSettingIndicator
+    ProfileSettingIndicator,
+    FontControl
   },
   computed: {
     horizontalUnits () {
       return defaultHorizontalUnits
+    },
+    fontsOverride () {
+      return this.$store.getters.mergedConfig.fontsOverride
     },
     columns () {
       const mode = this.$store.getters.mergedConfig.thirdColumnMode

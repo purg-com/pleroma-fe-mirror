@@ -30,7 +30,7 @@ export default {
   emits: ['update:modelValue'],
   data () {
     return {
-      manualEntry: true,
+      manualEntry: false,
       availableOptions: [
         this.noInherit ? '' : 'inherit',
         'serif',

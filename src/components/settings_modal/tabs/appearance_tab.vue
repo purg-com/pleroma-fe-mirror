@@ -35,6 +35,51 @@
           </div>
         </li>
         <li>
+          <h3>{{ $t('settings.style.interface_font_user_override') }}</h3>
+          <ul class="setting-list">
+            <li>
+              <FontControl
+                :model-value="fontsOverride.interface"
+                name="ui"
+                :label="$t('settings.style.fonts.components.interface')"
+                :fallback="{ family: 'sans-serif' }"
+                no-inherit="1"
+                @update:modelValue="v => $store.dispatch('setOption', { name: 'fontsOverride', value: { ...fontsOverride, interface: v } })"
+              />
+            </li>
+            <li>
+              <FontControl
+                v-if="expertLevel > 0"
+                :model-value="fontsOverride.input"
+                name="input"
+                :fallback="{ family: 'inherit' }"
+                :label="$t('settings.style.fonts.components.input')"
+                @update:modelValue="v => $store.dispatch('setOption', { name: 'fontsOverride', value: { ...fontsOverride, input: v } })"
+              />
+            </li>
+            <li>
+              <FontControl
+                v-if="expertLevel > 0"
+                :model-value="fontsOverride.post"
+                name="post"
+                :fallback="{ family: 'inherit' }"
+                :label="$t('settings.style.fonts.components.post')"
+                @update:modelValue="v => $store.dispatch('setOption', { name: 'fontsOverride', value: { ...fontsOverride, post: v } })"
+              />
+            </li>
+            <li>
+              <FontControl
+                v-if="expertLevel > 0"
+                :model-value="fontsOverride.postCode"
+                name="postCode"
+                :fallback="{ family: 'monospace' }"
+                :label="$t('settings.style.fonts.components.postCode')"
+                @update:modelValue="v => $store.dispatch('setOption', { name: 'fontsOverride', value: { ...fontsOverride, postCode: v } })"
+              />
+            </li>
+          </ul>
+        </li>
+        <li>
           <UnitSetting
             path="emojiSize"
             step="0.1"

@@ -121,6 +121,7 @@ export const defaultState = {
   navbarSize: undefined, // instance default
   panelHeaderSize: undefined, // instance default
   forcedRoundness: undefined, // instance default
+  fontsOverride: undefined, // instance default
   navbarColumnStretch: false,
   greentext: undefined, // instance default
   useAtIcon: undefined, // instance default
@@ -184,6 +185,7 @@ const config = {
       applyConfig(state)
     },
     setOption (state, { name, value }) {
+      console.log('SET OPTION', state, name, value)
       set(state, name, value)
     },
     setHighlight (state, { user, color, type }) {

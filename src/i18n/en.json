@@ -765,6 +765,7 @@
           "select": "Select font"
         }
       },
+      "interface_font_user_override": "Override theme/browser font used",
       "switcher": {
         "keep_color": "Keep colors",
         "keep_shadows": "Keep shadows",

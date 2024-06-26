@@ -104,6 +104,7 @@ const defaultState = {
   navbarSize: '3.5rem',
   panelHeaderSize: '3.2rem',
   forcedRoundness: -1,
+  fontsOverride: {},
   virtualScrolling: true,
   sensitiveByDefault: false,
   conversationDisplay: 'linear',
