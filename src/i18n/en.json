@@ -746,14 +746,19 @@
     "more_settings": "More settings",
     "style": {
       "themes3": {
-        "define": "Include in theme",
+        "define": "Override",
         "font": {
           "local": "Local font (must be installed on computer)",
           "serif": "Serif (browser default)",
           "sans-serif": "Sans-serif (browser default)",
           "monospace": "Monospace (browser default)",
           "inherit": "Same as parent component",
-          "invalid_custom_reserved": "This is a reserved font name, it will not be saved as custom font - use dropdown instead"
+          "invalid_custom_reserved": "Empty or reserved font name, it will not be saved as custom font - use dropdown instead",
+          "font_list_unavailable": "Couldn't get locally installed fonts: {error}",
+          "lookup_local_fonts": "Load list of fonts installed on this computer",
+          "enter_manually": "Enter font name family manually",
+          "entry": "Font's {fontFamily}",
+          "select": "Select local font"
         }
       },
       "switcher": {

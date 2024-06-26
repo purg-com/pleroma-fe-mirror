@@ -375,7 +375,6 @@ nav {
   user-select: none;
   color: var(--text);
   border: none;
-  border-radius: var(--roundness);
   cursor: pointer;
   background-color: var(--background);
   box-shadow: var(--shadow);
@@ -511,7 +510,6 @@ textarea {
   --_padding: 0.5em;
 
   border: none;
-  border-radius: var(--roundness);
   background-color: var(--background);
   color: var(--text);
   box-shadow: var(--shadow);
@@ -617,6 +615,17 @@ textarea {
   }
 }
 
+.input,
+.button-default {
+  --_roundness-left: var(--roundness);
+  --_roundness-right: var(--roundness);
+
+  border-top-left-radius: var(--_roundness-left);
+  border-bottom-left-radius: var(--_roundness-left);
+  border-top-right-radius: var(--_roundness-right);
+  border-bottom-right-radius: var(--_roundness-right);
+}
+
 // Textareas should have stock line-height + vertical padding instead of huge line-height
 textarea.input {
   padding: var(--_padding);
@@ -662,22 +671,20 @@ option {
   display: inline-flex;
   vertical-align: middle;
 
-  button,
-  .button-dropdown {
+  > * {
+    --_roundness-left: 0;
+    --_roundness-right: 0;
+
     position: relative;
     flex: 1 1 auto;
+  }
 
-    &:not(:last-child),
-    &:not(:last-child) .button-default {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
+  > *:first-child {
+    --_roundness-left: var(--roundness);
+  }
 
-    &:not(:first-child),
-    &:not(:first-child) .button-default {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-    }
+  > *:last-child {
+    --_roundness-right: var(--roundness);
   }
 }
 

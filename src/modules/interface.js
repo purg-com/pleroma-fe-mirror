@@ -1,4 +1,5 @@
 const defaultState = {
+  localFonts: null,
   themeApplied: false,
   temporaryChangesTimeoutId: null, // used for temporary options that revert after a timeout
   temporaryChangesConfirm: () => {}, // used for applying temporary options
@@ -17,7 +18,8 @@ const defaultState = {
     cssFilter: window.CSS && window.CSS.supports && (
       window.CSS.supports('filter', 'drop-shadow(0 0)') ||
       window.CSS.supports('-webkit-filter', 'drop-shadow(0 0)')
-    )
+    ),
+    localFonts: typeof window.queryLocalFonts === 'function'
   },
   layoutType: 'normal',
   globalNotices: [],
@@ -104,6 +106,10 @@ const interfaceMod = {
     },
     setLastTimeline (state, value) {
       state.lastTimeline = value
+    },
+    setFontsList (state, value) {
+      console.log(value)
+      state.localFonts = new Set(value.map(font => font.family))
     }
   },
   actions: {
@@ -177,6 +183,22 @@ const interfaceMod = {
         const wideLayout = width >= 1300
         commit('setLayoutType', wideLayout ? 'wide' : normalOrMobile)
       }
+    },
+    queryLocalFonts ({ commit, dispatch }) {
+      window
+        .queryLocalFonts()
+        .then((fonts) => {
+          commit('setFontsList', fonts)
+        })
+        .catch((e) => {
+          dispatch('pushGlobalNotice', {
+            messageKey: 'settings.style.themes3.font.font_list_unavailable',
+            messageArgs: {
+              error: e
+            },
+            level: 'error'
+          })
+        })
     },
     setLastTimeline ({ commit }, value) {
       commit('setLastTimeline', value)
