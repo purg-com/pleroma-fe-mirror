@@ -1,6 +1,6 @@
 <template>
   <div
-    class="font-control style-control"
+    class="font-control"
     :class="{ custom: isCustom }"
   >
     <label
@@ -10,43 +10,59 @@
     >
       {{ label }}
     </label>
-    <input
+    {{ ' ' }}
+    <Checkbox
       v-if="typeof fallback !== 'undefined'"
       :id="name + '-o'"
-      :aria-labelledby="name + '-label'"
-      class="input -checkbox opt exlcude-disabled visible-for-screenreader-only"
-      type="checkbox"
-      :checked="present"
+      :modelValue="present"
       @change="$emit('update:modelValue', typeof modelValue === 'undefined' ? fallback : undefined)"
     >
-    <label
-      v-if="typeof fallback !== 'undefined'"
-      class="opt-l"
-      :for="name + '-o'"
-      :aria-hidden="true"
-    />
-    {{ ' ' }}
-    <Select
-      :id="name + '-font-switcher'"
-      v-model="preset"
-      :disabled="!present"
-      class="font-switcher"
-    >
-      <option
-        v-for="option in availableOptions"
-        :key="option"
-        :value="option"
+      {{ $t('settings.style.themes3.define') }}
+    </Checkbox>
+    <p>
+      <Select
+        :id="name + '-font-switcher'"
+        v-model="preset"
+        :disabled="!present"
+        class="font-switcher"
       >
-        {{ option === 'custom' ? $t('settings.style.fonts.custom') : option }}
-      </option>
-    </Select>
-    <input
-      v-if="isCustom"
-      :id="name"
-      v-model="family"
-      class="input custom-font"
-      type="text"
-    >
+        <option
+          v-for="option in availableOptions"
+          :key="option"
+          :value="option"
+        >
+          {{ $t('settings.style.themes3.font.' + option) }}
+        </option>
+      </Select>
+    </p>
+    <p>
+      <input
+        v-if="isCustom"
+        :id="name"
+        v-model="familyCustom"
+        class="input custom-font"
+        type="text"
+      >
+      <span
+        v-if="invalidCustom"
+        class="InvalidIndicator"
+      >
+        <Popover
+          trigger="hover"
+          :trigger-attrs="{ 'aria-label': $t('settings.style.themes3.font.invalid_custom_reserved') }"
+        >
+          <template #trigger>
+            &nbsp;
+            <FAIcon icon="exclamation-triangle" />
+          </template>
+          <template #content>
+            <div class="invalid-tooltip">
+              {{ $t('settings.style.themes3.font.invalid_custom_reserved') }}
+            </div>
+          </template>
+        </Popover>
+      </span>
+    </p>
   </div>
 </template>
 
@@ -55,20 +71,13 @@
 <style lang="scss">
 .font-control {
   input.custom-font {
-    min-width: 10em;
+    min-width: 12em;
   }
+}
 
-  &.custom {
-    /* TODO Should make proper joiners... */
-    .font-switcher {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-
-    .custom-font {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-    }
-  }
+.invalid-tooltip {
+  margin: 0.5em 1em;
+  min-width: 10em;
+  text-align: center;
 }
 </style>
