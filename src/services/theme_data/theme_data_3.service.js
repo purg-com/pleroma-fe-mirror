@@ -149,7 +149,13 @@ const ruleToSelector = genericRuleToSelector(components)
 
 export const getEngineChecksum = () => engineChecksum
 
-export const init = (extraRuleset, ultimateBackgroundColor, debug) => {
+export const init = ({
+  extraRuleset,
+  ultimateBackgroundColor,
+  debug = false,
+  liteMode = false,
+  rootComponentName = 'Root'
+}) => {
   const staticVars = {}
   const stacked = {}
   const computed = {}
@@ -451,7 +457,7 @@ export const init = (extraRuleset, ultimateBackgroundColor, debug) => {
   }
 
   const t0 = performance.now()
-  const combinations = processInnerComponent(components.Root)
+  const combinations = processInnerComponent(components[rootComponentName] ?? components.Root)
   const t1 = performance.now()
   console.debug('Tree traveral took ' + (t1 - t0) + ' ms')
 

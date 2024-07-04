@@ -1,7 +1,8 @@
 import {
   rgb2hex,
   hex2rgb,
-  getContrastRatioLayers
+  getContrastRatioLayers,
+  relativeLuminance
 } from 'src/services/color_convert/color_convert.js'
 import {
   getThemes
@@ -23,10 +24,14 @@ import {
   generateShadows,
   generateRadii,
   generateFonts,
-  composePreset,
   shadows2to3,
   colors2to3
 } from 'src/services/theme_data/theme_data.service.js'
+
+import { convertTheme2To3 } from 'src/services/theme_data/theme2_to_theme3.js'
+import { init } from 'src/services/theme_data/theme_data_3.service.js'
+import { getCssRules } from 'src/services/theme_data/css_utils.js'
+
 import ColorInput from 'src/components/color_input/color_input.vue'
 import RangeInput from 'src/components/range_input/range_input.vue'
 import OpacityInput from 'src/components/opacity_input/opacity_input.vue'
@@ -62,6 +67,7 @@ const colorConvert = (color) => {
 export default {
   data () {
     return {
+      themeV3Preview: [],
       themeImporter: newImporter({
         validator: this.importValidator,
         onImport: this.onImport,
@@ -78,10 +84,7 @@ export default {
       tempImportFile: undefined,
       engineVersion: 0,
 
-      previewShadows: {},
-      previewColors: {},
-      previewRadii: {},
-      previewFonts: {},
+      previewTheme: {},
 
       shadowsInvalid: true,
       colorsInvalid: true,
@@ -232,13 +235,6 @@ export default {
         chatMessage: this.chatMessageRadiusLocal
       }
     },
-    preview () {
-      return composePreset(this.previewColors, this.previewRadii, this.previewShadows, this.previewFonts)
-    },
-    previewTheme () {
-      if (!this.preview.theme.colors) return { colors: {}, opacity: {}, radii: {}, shadows: {}, fonts: {} }
-      return this.preview.theme
-    },
     // This needs optimization maybe
     previewContrast () {
       try {
@@ -305,14 +301,6 @@ export default {
         console.warn('Failure computing contrasts', e)
         return {}
       }
-    },
-    previewRules () {
-      if (!this.preview.rules) return ''
-      return [
-        ...Object.values(this.preview.rules),
-        'color: var(--text)',
-        'font-family: var(--interfaceFont, sans-serif)'
-      ].join(';')
     },
     shadowsAvailable () {
       return Object.keys(DEFAULT_SHADOWS).sort()
@@ -532,16 +520,24 @@ export default {
         }
       })
     },
-    updatePreviewColorsAndShadows () {
-      this.previewColors = generateColors({
+    updatePreviewColors () {
+      const result = generateColors({
         opacity: this.currentOpacity,
         colors: this.currentColors
       })
-      this.previewShadows = generateShadows(
-        { shadows: this.shadowsLocal, opacity: this.previewTheme.opacity, themeEngineVersion: this.engineVersion },
-        this.previewColors.theme.colors,
-        this.previewColors.mod
-      )
+      this.previewTheme.colors = result.theme.colors
+      this.previewTheme.opacity = result.theme.opacity
+    },
+    updatePreviewShadows () {
+      this.previewTheme.shadows = generateShadows(
+        {
+          shadows: this.shadowsLocal,
+          opacity: this.previewTheme.opacity,
+          themeEngineVersion: this.engineVersion
+        },
+        this.previewTheme.colors,
+        relativeLuminance(this.previewTheme.colors.bg) < 0.5 ? 1 : -1
+      ).theme.shadows
     },
     importTheme () { this.themeImporter.importData() },
     exportTheme () { this.themeExporter.exportData() },
@@ -692,6 +688,8 @@ export default {
         } else {
           this.shadowsLocal = shadows
         }
+        this.updatePreviewColors()
+        this.updatePreviewShadows()
         this.shadowSelected = this.shadowsAvailable[0]
       }
 
@@ -699,12 +697,32 @@ export default {
         this.clearFonts()
         this.fontsLocal = fonts
       }
+    },
+    updateTheme3Preview () {
+      console.log(this.previewTheme)
+      const theme2 = convertTheme2To3(this.previewTheme)
+      const theme3 = init({
+        extraRuleset: theme2,
+        ultimateBackgroundColor: '#000000',
+        liteMode: true
+      })
+      this.themeV3Preview = getCssRules(theme3.eager)
+        .map(x => {
+          if (x.startsWith('html')) {
+            return x.replace('html', '#theme-preview')
+          } else if (x.startsWith('#content')) {
+            return x.replace('#content', '#theme-preview')
+          } else {
+            return '#theme-preview > ' + x
+          }
+        })
+        .join('\n')
     }
   },
   watch: {
     currentRadii () {
       try {
-        this.previewRadii = generateRadii({ radii: this.currentRadii })
+        this.previewTheme.radii = generateRadii({ radii: this.currentRadii }).theme
         this.radiiInvalid = false
       } catch (e) {
         this.radiiInvalid = true
@@ -713,9 +731,8 @@ export default {
     },
     shadowsLocal: {
       handler () {
-        if (Object.getOwnPropertyNames(this.previewColors).length === 1) return
         try {
-          this.updatePreviewColorsAndShadows()
+          this.updatePreviewShadows()
           this.shadowsInvalid = false
         } catch (e) {
           this.shadowsInvalid = true
@@ -727,7 +744,7 @@ export default {
     fontsLocal: {
       handler () {
         try {
-          this.previewFonts = generateFonts({ fonts: this.fontsLocal })
+          this.previewTheme.fonts = generateFonts({ fonts: this.fontsLocal }).theme
           this.fontsInvalid = false
         } catch (e) {
           this.fontsInvalid = true
@@ -738,18 +755,16 @@ export default {
     },
     currentColors () {
       try {
-        this.updatePreviewColorsAndShadows()
+        this.updatePreviewColors()
         this.colorsInvalid = false
-        this.shadowsInvalid = false
       } catch (e) {
         this.colorsInvalid = true
-        this.shadowsInvalid = true
         console.warn(e)
       }
     },
     currentOpacity () {
       try {
-        this.updatePreviewColorsAndShadows()
+        this.updatePreviewColors()
       } catch (e) {
         console.warn(e)
       }

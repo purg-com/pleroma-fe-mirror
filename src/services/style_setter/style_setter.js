@@ -61,7 +61,11 @@ export const generateTheme = async (input, callbacks, debug) => {
   }
 
   // Assuming that "worst case scenario background" is panel background since it's the most likely one
-  const themes3 = init(extraRules, extraRules[0].directives['--bg'].split('|')[1].trim(), debug)
+  const themes3 = init({
+    extraRules,
+    ultimateBackgroundColor: extraRules[0].directives['--bg'].split('|')[1].trim(),
+    debug
+  })
 
   console.log('DEBUG 2 IS', debug)
 
