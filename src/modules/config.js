@@ -1,10 +1,21 @@
 import Cookies from 'js-cookie'
-import { setPreset, applyTheme, applyConfig } from '../services/style_setter/style_setter.js'
+import { applyConfig } from '../services/style_setter/style_setter.js'
 import messages from '../i18n/messages'
 import { set } from 'lodash'
 import localeService from '../services/locale/locale.service.js'
 
 const BACKEND_LANGUAGE_COOKIE_NAME = 'userLanguage'
+const APPEARANCE_SETTINGS_KEYS = new Set([
+  'sidebarColumnWidth',
+  'contentColumnWidth',
+  'notifsColumnWidth',
+  'textSize',
+  'navbarSize',
+  'panelHeaderSize',
+  'forcedRoundness',
+  'emojiSize',
+  'emojiReactionsScale'
+])
 
 const browserLocale = (window.navigator.language || 'en').split('-')[0]
 
@@ -80,6 +91,11 @@ export const defaultState = {
     reports: true,
     chatMention: true,
     polls: true
+  },
+  palette: null,
+  theme3hacks: {
+    underlay: 'none',
+    badgeColor: null
   },
   webPushNotifications: false,
   webPushAlwaysShowNotifications: false,
@@ -185,7 +201,6 @@ const config = {
       applyConfig(state)
     },
     setOption (state, { name, value }) {
-      console.log('SET OPTION', state, name, value)
       set(state, name, value)
     },
     setHighlight (state, { user, color, type }) {
@@ -261,30 +276,23 @@ const config = {
         }
       } else {
         commit('setOption', { name, value })
+        if (
+          name.startsWith('theme3hacks') ||
+            APPEARANCE_SETTINGS_KEYS.has(name)
+        ) {
+          applyConfig(state)
+        }
         switch (name) {
           case 'theme':
-            setPreset(value)
-            break
-          case 'sidebarColumnWidth':
-          case 'contentColumnWidth':
-          case 'notifsColumnWidth':
-          case 'textSize':
-          case 'navbarSize':
-          case 'panelHeaderSize':
-          case 'forcedRoundness':
-          case 'emojiSize':
-          case 'emojiReactionsScale':
-            applyConfig(state)
+            dispatch('setTheme', { themeName: value, recompile: true })
             break
           case 'customTheme':
           case 'customThemeSource': {
-            const { themeDebug } = state
-            applyTheme(value, () => {}, themeDebug)
+            if (!value.ignore) dispatch('setTheme', { themeData: value })
             break
           }
           case 'themeDebug': {
-            const { customTheme, customThemeSource } = state
-            applyTheme(customTheme || customThemeSource, () => {}, value)
+            dispatch('setTheme', { recompile: true })
             break
           }
           case 'interfaceLanguage':

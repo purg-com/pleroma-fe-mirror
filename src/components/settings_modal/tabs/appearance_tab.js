@@ -29,6 +29,11 @@ const AppearanceTab = {
         key: mode,
         value: i - 1,
         label: this.$t(`settings.forced_roundness_mode_${mode}`)
+      })),
+      underlayOverrideModes: ['none', 'opaque', 'transparent'].map((mode, i) => ({
+        key: mode,
+        value: mode,
+        label: this.$t(`settings.underlay_override_mode_${mode}`)
       }))
     }
   },

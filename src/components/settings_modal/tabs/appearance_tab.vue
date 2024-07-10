@@ -182,6 +182,15 @@
             {{ $t('settings.force_interface_roundness') }}
           </ChoiceSetting>
         </li>
+        <li>
+          <ChoiceSetting
+            id="underlayOverride"
+            path="theme3hacks.underlay"
+            :options="underlayOverrideModes"
+          >
+            {{ $t('settings.underlay_overrides') }}
+          </ChoiceSetting>
+        </li>
         <li v-if="instanceWallpaperUsed">
           <BooleanSetting path="hideInstanceWallpaper">
             {{ $t('settings.hide_wallpaper') }}

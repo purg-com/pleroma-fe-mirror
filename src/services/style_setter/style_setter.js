@@ -1,7 +1,5 @@
 import { hex2rgb } from '../color_convert/color_convert.js'
-import { generatePreset } from '../theme_data/theme_data.service.js'
 import { init, getEngineChecksum } from '../theme_data/theme_data_3.service.js'
-import { convertTheme2To3 } from '../theme_data/theme2_to_theme3.js'
 import { getCssRules } from '../theme_data/css_utils.js'
 import { defaultState } from '../../modules/config.js'
 import { chunk } from 'lodash'
@@ -45,29 +43,19 @@ const adoptStyleSheets = (styles) => {
   // is nothing to do here.
 }
 
-export const generateTheme = async (input, callbacks, debug) => {
+export const generateTheme = async (inputRuleset, callbacks, debug) => {
   const {
     onNewRule = (rule, isLazy) => {},
     onLazyFinished = () => {},
     onEagerFinished = () => {}
   } = callbacks
 
-  let extraRules
-  if (input.themeFileVersion === 1) {
-    extraRules = convertTheme2To3(input)
-  } else {
-    const { theme } = generatePreset(input)
-    extraRules = convertTheme2To3(theme)
-  }
-
   // Assuming that "worst case scenario background" is panel background since it's the most likely one
   const themes3 = init({
-    extraRules,
-    ultimateBackgroundColor: extraRules[0].directives['--bg'].split('|')[1].trim(),
+    inputRuleset,
+    ultimateBackgroundColor: inputRuleset[0].directives['--bg'].split('|')[1].trim(),
     debug
   })
-
-  console.log('DEBUG 2 IS', debug)
 
   getCssRules(themes3.eager, debug).forEach(rule => {
     // Hacks to support multiple selectors on same component
@@ -162,8 +150,6 @@ export const applyTheme = async (input, onFinish = (data) => {}, debug) => {
   const eagerStyles = createStyleSheet(EAGER_STYLE_ID)
   const lazyStyles = createStyleSheet(LAZY_STYLE_ID)
 
-  console.log('DEBUG IS', debug)
-
   const { lazyProcessFunc } = await generateTheme(
     input,
     {
@@ -216,7 +202,6 @@ const extractStyleConfig = ({
     textSize
   }
 
-  console.log(forcedRoundness)
   switch (forcedRoundness) {
     case 'disable':
       break
@@ -325,5 +310,3 @@ export const getPreset = (val) => {
       return { theme: data, source: theme.source }
     })
 }
-
-export const setPreset = (val) => getPreset(val).then(data => applyTheme(data))

@@ -502,6 +502,7 @@ export default {
       this.$store.dispatch('setOption', {
         name: 'customTheme',
         value: {
+          ignore: true,
           themeFileVersion: this.selectedVersion,
           themeEngineVersion: CURRENT_VERSION,
           ...this.previewTheme
@@ -699,13 +700,13 @@ export default {
       }
     },
     updateTheme3Preview () {
-      console.log(this.previewTheme)
       const theme2 = convertTheme2To3(this.previewTheme)
       const theme3 = init({
-        extraRuleset: theme2,
+        inputRuleset: theme2,
         ultimateBackgroundColor: '#000000',
         liteMode: true
       })
+
       this.themeV3Preview = getCssRules(theme3.eager)
         .map(x => {
           if (x.startsWith('html')) {
@@ -722,7 +723,7 @@ export default {
   watch: {
     currentRadii () {
       try {
-        this.previewTheme.radii = generateRadii({ radii: this.currentRadii }).theme
+        this.previewTheme.radii = generateRadii({ radii: this.currentRadii }).theme.radii
         this.radiiInvalid = false
       } catch (e) {
         this.radiiInvalid = true
@@ -744,7 +745,7 @@ export default {
     fontsLocal: {
       handler () {
         try {
-          this.previewTheme.fonts = generateFonts({ fonts: this.fontsLocal }).theme
+          this.previewTheme.fonts = generateFonts({ fonts: this.fontsLocal }).theme.fonts
           this.fontsInvalid = false
         } catch (e) {
           this.fontsInvalid = true

@@ -150,12 +150,13 @@ const ruleToSelector = genericRuleToSelector(components)
 export const getEngineChecksum = () => engineChecksum
 
 export const init = ({
-  extraRuleset,
+  inputRuleset,
   ultimateBackgroundColor,
   debug = false,
   liteMode = false,
   rootComponentName = 'Root'
 }) => {
+  if (!inputRuleset) throw new Error('Ruleset is null or undefined!')
   const staticVars = {}
   const stacked = {}
   const computed = {}
@@ -164,7 +165,7 @@ export const init = ({
     ...Object.values(components)
       .map(c => (c.defaultRules || []).map(r => ({ component: c.name, ...r, source: 'Built-in' })))
       .reduce((acc, arr) => [...acc, ...arr], []),
-    ...extraRuleset
+    ...inputRuleset
   ].map(rule => {
     normalizeCombination(rule)
     let currentParent = rule.parent
