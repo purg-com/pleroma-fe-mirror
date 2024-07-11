@@ -1,6 +1,3 @@
-import { getPreset, applyTheme, tryLoadCache } from '../services/style_setter/style_setter.js'
-import { CURRENT_VERSION, generatePreset } from 'src/services/theme_data/theme_data.service.js'
-import { convertTheme2To3 } from 'src/services/theme_data/theme2_to_theme3.js'
 import apiService from '../services/api/api.service.js'
 import { instanceDefaultProperties } from './config.js'
 import { langCodeToCldrName, ensureFinalFallback } from '../i18n/languages.js'
@@ -374,88 +371,6 @@ const instance = {
         console.warn("Can't load custom emojis")
         console.warn(e)
       }
-    },
-
-    setTheme ({ commit, state, rootState }, { themeName, themeData, recompile } = {}) {
-      // const {
-      //   themeApplied
-      // } = rootState.interface
-      const {
-        theme: instanceThemeName
-      } = state
-
-      const {
-        customTheme: userThemeSnapshot,
-        customThemeSource: userThemeSource,
-        forceThemeRecompilation,
-        themeDebug
-      } = rootState.config
-
-      const forceRecompile = forceThemeRecompilation || recompile
-
-      // If we're not not forced to recompile try using
-      // cache (tryLoadCache return true if load successful)
-      if (!forceRecompile && !themeDebug && tryLoadCache()) {
-        commit('setThemeApplied')
-      }
-
-      const normalizeThemeData = (themeData) => {
-        console.log('NORMAL', themeData)
-        if (themeData.themeFileVerison === 1) {
-          return generatePreset(themeData).theme
-        }
-        // New theme presets don't have 'theme' property, they use 'source'
-        const themeSource = themeData.source
-
-        let out // shout, shout let it all out
-        if (!themeData.theme || (themeSource && themeSource.themeEngineVersion === CURRENT_VERSION)) {
-          out = themeSource || themeData
-        } else {
-          out = themeData.theme
-        }
-
-        // generatePreset here basically creates/updates "snapshot",
-        // while also fixing the 2.2 -> 2.3 colors/shadows/etc
-        return generatePreset(out).theme
-      }
-
-      let promise = null
-
-      if (themeName) {
-        // commit('setInstanceOption', { name: 'theme', value: themeName })
-        promise = getPreset(themeName)
-          .then(themeData => {
-            // commit('setInstanceOption', { name: 'themeData', value: themeData })
-            return normalizeThemeData(themeData)
-          })
-      } else if (themeData) {
-        promise = Promise.resolve(normalizeThemeData(themeData))
-      } else {
-        if (userThemeSource || userThemeSnapshot) {
-          if (userThemeSource && userThemeSource.themeEngineVersion === CURRENT_VERSION) {
-            promise = Promise.resolve(normalizeThemeData(userThemeSource))
-          } else {
-            promise = Promise.resolve(normalizeThemeData(userThemeSnapshot))
-          }
-        } else if (instanceThemeName) {
-          promise = getPreset(themeName).then(themeData => normalizeThemeData(themeData))
-        }
-      }
-
-      promise
-        .then(realThemeData => {
-          console.log('FR FR 1', realThemeData)
-          const ruleset = convertTheme2To3(realThemeData)
-          console.log('FR FR 2', ruleset)
-
-          applyTheme(
-            ruleset,
-            () => commit('setThemeApplied'),
-            themeDebug
-          )
-        })
-
-      return promise
     },
     fetchEmoji ({ dispatch, state }) {
       if (!state.customEmojiFetched) {
