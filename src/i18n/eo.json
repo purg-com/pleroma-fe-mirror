@@ -121,7 +121,9 @@
     "mobile_notifications_close": "Fermi sciigojn",
     "announcements": "Anoncoj",
     "search_close": "Fermi serĉujon",
-    "mobile_sidebar": "(Mal)ŝalti flankan breton por telefonoj"
+    "mobile_sidebar": "(Mal)ŝalti flankan breton por telefonoj",
+    "mobile_notifications_mark_as_seen": "Marki ĉion vidita",
+    "quotes": "Citoj"
   },
   "notifications": {
     "broken_favorite": "Nekonata afiŝo, serĉante ĝin…",
@@ -137,7 +139,13 @@
     "follow_request": "volas vin aboni",
     "error": "Eraris akirado de sciigoj: {0}",
     "submitted_report": "sendis raporton",
-    "poll_ended": "enketo finiĝis"
+    "poll_ended": "enketo finiĝis",
+    "unread_chats": "{num} nelegita babilo | {num} nelegitaj babiloj",
+    "unread_follow_requests": "{num} nova abonpeto | {num} novaj abonpetoj",
+    "configuration_tip": "Vi povas ŝanĝi, kio montriĝos ĉi tie en {theSettings}. {dismiss}",
+    "configuration_tip_settings": "la agordoj",
+    "unread_announcements": "{num} nelegita anonco | {num} nelegitaj anoncoj",
+    "configuration_tip_dismiss": "Ne remontri plu"
   },
   "post_status": {
     "new_status": "Afiŝi",
@@ -701,7 +709,42 @@
     "confirm_dialogs_approve_follow": "aprobo de abonanto",
     "confirm_dialogs_deny_follow": "malaprobo de abonanto",
     "confirm_dialogs_remove_follower": "forigo de abonanto",
-    "tree_fade_ancestors": "Montri responditojn de la nuna afiŝo per teksto malvigla"
+    "tree_fade_ancestors": "Montri responditojn de la nuna afiŝo per teksto malvigla",
+    "units": {
+      "time": {
+        "m": "minutoj",
+        "s": "sekundoj",
+        "h": "horoj",
+        "d": "tagoj"
+      }
+    },
+    "url": "URL",
+    "emoji_reactions_scale": "Grandeco de reagoj",
+    "actor_type_Person": "ordinara uzanto",
+    "actor_type": "Ĉi tiu konto estas:",
+    "actor_type_description": "Se vi markos vian konton grupo, ĝi memage ripetos afiŝojn, kiuj mencios ĝin.",
+    "actor_type_Service": "roboto",
+    "actor_type_Group": "grupo",
+    "hide_actor_type_indication": "Kaŝi specon de aganto (roboto, grupo, ktp.) en afiŝoj",
+    "commit_value_tooltip": "Valoro ne estas konservita; premu ĉi tiun butonon por konfirmi viajn ŝanĝojn",
+    "add_language": "Aldoni rezervan lingvon",
+    "commit_value": "Konservi",
+    "force_theme_recompilation_debug": "Malŝalti haŭtan kaŝmemoron, devigi retradukon post ĉiu enlego (POR ERARSERĈADO)",
+    "fallback_language": "Rezerva lingvo {index}:",
+    "notification_extra_follow_requests": "Montri novajn abonpetojn",
+    "notification_extra_tip": "Montri agordan konsileton por ekstraj sciigoj",
+    "notification_show_extra": "Montri ekstrajn sciigojn en la sciiga kolumno",
+    "notification_extra_chats": "Montri nelegitajn babilojn",
+    "notification_extra_announcements": "Montri nelegitajn anoncojn",
+    "notification_setting_annoyance": "Ĝeno",
+    "mute_sensitive_posts": "Silentigi konsternajn afiŝojn",
+    "preview": "Antaŭrigardo",
+    "notification_visibility_native_notifications": "Montri indiĝenan sciigon",
+    "notification_visibility_follow_requests": "Abonpetoj",
+    "notification_visibility_reports": "Raportoj",
+    "notification_setting_ignore_inactionable_seen": "Malatenti legitecon de nereageblaj sciigoj (ŝatoj, ripetoj, ktp.)",
+    "notification_setting_ignore_inactionable_seen_tip": "Ĉi tio ne markos la sciigojn legitaj, kaj vi ankoraŭ ricevos labortablajn sciigojn pri ili, se vi elektis ricevi tiujn",
+    "notification_setting_unseen_at_top": "Montri nelegitajn sciigojn super aliaj"
   },
   "timeline": {
     "collapse": "Maletendi",
@@ -876,7 +919,8 @@
       "travel-and-places": "Vojaĝoj kaj lokoj"
     },
     "regional_indicator": "Regiona marko {letter}",
-    "unpacked": "Malpakitaj bildosignoj"
+    "unpacked": "Malpakitaj bildosignoj",
+    "hide_custom_emoji": "Kaŝi proprajn bildosignojn"
   },
   "polls": {
     "not_enough_options": "Tro malmultaj unikaj elektebloj en la enketo",
@@ -1191,5 +1235,79 @@
     "cancel_edit_action": "Nuligi",
     "inactive_message": "Ĉi tiu anonco estas neaktiva",
     "post_form_header": "Afiŝi anoncon"
+  },
+  "admin_dash": {
+    "frontend": {
+      "default_frontend": "Implicita fasado",
+      "install": "Instali",
+      "versions": "Disponeblaj versioj",
+      "install_version": "Instali version {version}",
+      "more_install_options": "Pli da elektebloj je instalo",
+      "more_default_options": "Pli da elektebloj je implicitaj agordoj",
+      "set_default": "Agordi implicita",
+      "reinstall": "Reinstali",
+      "default_frontend_tip": "Implicita fasado montriĝos al ĉiuj uzantoj. Ankoraŭ ne ekzistas maniero, kiel uzanto povas elekti propran fasadon. Se vi ŝaltos ion alian, ol [PleromaFE], vi verŝajne devos uzadi la malnovan kaj erareman [AdminFE] por agordi la nodon, ĝis ni anstataŭigos ĝin.",
+      "repository": "Ligilo al deponejo",
+      "is_default": "(Implicita)",
+      "is_default_custom": "(Implicita, versio: {version})",
+      "set_default_version": "Agordi version {version} implicita"
+    },
+    "emoji": {
+      "download_as_name_full": "Nova nomo; lasu malplena por reuzi",
+      "download_as_name": "Nova nomo",
+      "reload": "Re-enlegi bildosignojn",
+      "importFS": "Enporti bildosignojn de dosiersistemo",
+      "error": "Eraro: {0}",
+      "create": "Krei",
+      "do_list": "Listo",
+      "delete": "Forigi",
+      "add_file": "Aldoni dosieron",
+      "filename": "Dosiernomo",
+      "files": "Dosieroj",
+      "save_meta": "Konservi pridatumojn",
+      "description": "Priskribo",
+      "homepage": "Hejmpaĝo",
+      "save": "Konservi"
+    },
+    "tabs": {
+      "emoji": "Bildosignoj",
+      "frontends": "Fasadoj",
+      "instance": "Nodo",
+      "limits": "Limoj"
+    },
+    "instance": {
+      "registrations": "Registriĝoj de uzantoj",
+      "instance": "Informoj pri nodo",
+      "restrict": {
+        "profiles": "Aliro al profiloj de uzantoj",
+        "header": "Limigi aliron por sennomaj vizitantoj",
+        "timelines": "Aliro al historioj"
+      },
+      "access": "Aliro al nodo"
+    },
+    "limits": {
+      "users": "Limoj de profiloj de uzantoj",
+      "profile_fields": "Limoj de kampoj de profiloj",
+      "user_uploads": "Limoj de vidaŭdaĵoj de profiloj",
+      "posts": "Limoj de afiŝoj",
+      "uploads": "Limoj de kunsendaĵoj",
+      "arbitrary_limits": "Arbitraj limoj"
+    },
+    "nodb": {
+      "documentation": "dokumentaĵo"
+    },
+    "window_title": "Administrado",
+    "wip_notice": "Ĉi tiu administra fasado estas eksperimenta kaj ankoraŭ prilaborata, {adminFeLink}.",
+    "old_ui_link": "malnova administra fasado disponeblas tie ĉi",
+    "temp_overrides": {
+      ":pleroma": {
+        ":instance": {
+          ":public": {
+            "label": "Nodo estas publika"
+          }
+        }
+      }
+    },
+    "commit_all": "Konservi ĉion"
   }
 }
