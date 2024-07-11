@@ -255,10 +255,8 @@ const interfaceMod = {
       let promise = null
 
       if (themeName) {
-        // commit('setInstanceOption', { name: 'theme', value: themeName })
         promise = getPreset(themeName)
           .then(themeData => {
-            // commit('setInstanceOption', { name: 'themeData', value: themeData })
             return normalizeThemeData(themeData)
           })
       } else if (themeData) {

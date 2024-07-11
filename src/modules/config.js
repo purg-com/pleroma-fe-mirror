@@ -255,6 +255,11 @@ const config = {
         revert
       })
     },
+    setThemeV2 ({ commit, dispatch }, { customTheme, customThemeSource }) {
+      commit('setOption', { name: 'customTheme', value: customTheme })
+      commit('setOption', { name: 'customThemeSource', value: customThemeSource })
+      dispatch('setTheme', { themeData: customThemeSource, recompile: true })
+    },
     setOption ({ commit, dispatch, state }, { name, value }) {
       const exceptions = new Set([
         'useStreamingApi'
@@ -272,6 +277,7 @@ const config = {
               dispatch('disableMastoSockets')
               dispatch('setOption', { name: 'useStreamingApi', value: false })
             })
+            break
           }
         }
       } else {
@@ -286,11 +292,6 @@ const config = {
           case 'theme':
             dispatch('setTheme', { themeName: value, recompile: true })
             break
-          case 'customTheme':
-          case 'customThemeSource': {
-            if (!value.ignore) dispatch('setTheme', { themeData: value })
-            break
-          }
           case 'themeDebug': {
             dispatch('setTheme', { recompile: true })
             break

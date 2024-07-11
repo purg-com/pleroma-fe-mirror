@@ -499,18 +499,14 @@ export default {
       }
     },
     setCustomTheme () {
-      this.$store.dispatch('setOption', {
-        name: 'customTheme',
-        value: {
+      this.$store.dispatch('setThemeV2', {
+        customTheme: {
           ignore: true,
           themeFileVersion: this.selectedVersion,
           themeEngineVersion: CURRENT_VERSION,
           ...this.previewTheme
-        }
-      })
-      this.$store.dispatch('setOption', {
-        name: 'customThemeSource',
-        value: {
+        },
+        customThemeSource: {
           themeFileVersion: this.selectedVersion,
           themeEngineVersion: CURRENT_VERSION,
           shadows: this.shadowsLocal,
