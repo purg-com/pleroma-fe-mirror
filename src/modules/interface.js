@@ -213,9 +213,6 @@ const interfaceMod = {
       commit('setLastTimeline', value)
     },
     setTheme ({ commit, rootState }, { themeName, themeData, recompile } = {}) {
-      // const {
-      //   themeApplied
-      // } = rootState.interface
       const {
         theme: instanceThemeName
       } = rootState.instance
