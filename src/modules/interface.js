@@ -230,6 +230,7 @@ const interfaceMod = {
       // cache (tryLoadCache return true if load successful)
       if (!forceRecompile && !themeDebug && tryLoadCache()) {
         commit('setThemeApplied')
+        return
       }
 
       const normalizeThemeData = (themeData) => {
