@@ -401,9 +401,9 @@
     "profile_tab": "プロフィール",
     "radii_help": "インターフェースの角丸を設定する (ピクセル単位)",
     "replies_in_timeline": "タイムライン上の返信",
-    "reply_visibility_all": "すべての返信を表示",
-    "reply_visibility_following": "自分、もしくはフォローしているユーザー宛ての返信のみを表示",
-    "reply_visibility_self": "自分に宛てられた返信のみを表示",
+    "reply_visibility_all": "すべての返信を表示する",
+    "reply_visibility_following": "自分、もしくはフォローしているユーザー宛ての返信のみを表示する",
+    "reply_visibility_self": "自分に宛てられた返信のみを表示する",
     "autohide_floating_post_button": "投稿ボタンを自動的に隠す (モバイル)",
     "saving_err": "設定を保存できませんでした",
     "saving_ok": "設定を保存しました",
@@ -416,7 +416,7 @@
     "set_new_profile_background": "プロフィールの背景を設定する",
     "set_new_profile_banner": "プロフィールのバナーを設定する",
     "settings": "設定",
-    "subject_input_always_show": "注釈欄をいつでも表示する",
+    "subject_input_always_show": "注釈欄を常に表示する",
     "subject_line_behavior": "返信するとき、返信先の注釈をコピーする",
     "subject_line_email": "メール風: \"re: 注釈\"",
     "subject_line_mastodon": "Mastodon風: そのままコピー",
@@ -539,7 +539,7 @@
         "filter_hint": {
           "always_drop_shadow": "ブラウザーがサポートしていれば、常に {0} が使われます。",
           "drop_shadow_syntax": "{0} は、{1} パラメーターと {2} キーワードをサポートしていません。",
-          "avatar_inset": "内側の影と外側の影を同時に使うと、透明なアバターの表示が乱れます。",
+          "avatar_inset": "内側の影と外側の影を同時に使うと、透明なアイコンの表示がおかしくなることがあります。",
           "spread_zero": "広がりが 0 よりも大きな影は、0 と同じです",
           "inset_classic": "内側の影は {0} を使います"
         },
@@ -547,8 +547,8 @@
           "panel": "パネル",
           "panelHeader": "パネルヘッダー",
           "topBar": "トップバー",
-          "avatar": "ユーザーアバター (プロフィール)",
-          "avatarStatus": "ユーザーアバター (投稿)",
+          "avatar": "ユーザーアイコン (プロフィール)",
+          "avatarStatus": "ユーザーアイコン (投稿)",
           "popup": "ポップアップとツールチップ",
           "button": "ボタン",
           "buttonHover": "ボタン (ホバー)",
@@ -620,7 +620,7 @@
     },
     "accent": "アクセント",
     "mutes_imported": "ミュートがインポートされました。処理には時間がかかる場合があります。",
-    "emoji_reactions_on_timeline": "絵文字リアクションをタイムラインに表示",
+    "emoji_reactions_on_timeline": "絵文字リアクションをタイムラインに表示する",
     "domain_mutes": "ドメイン",
     "mutes_and_blocks": "ミュートとブロック",
     "chatMessageRadius": "チャットメッセージ",
@@ -635,7 +635,7 @@
     "mute_export": "ミュートのエクスポート",
     "allow_following_move": "フォローしているアカウントが引っ越したとき、引っ越し先を自動でフォローする",
     "setting_changed": "デフォルトから変更された設定",
-    "greentext": ">記号から始まる行を「リピート」の色で表示 (Meme Arrows)",
+    "greentext": "Meme arrows",
     "sensitive_by_default": "デフォルトで投稿を閲覧注意として設定",
     "more_settings": "その他の設定",
     "reply_visibility_self_short": "自分宛ての返信のみ表示",
@@ -657,8 +657,8 @@
     },
     "save": "変更を保存",
     "hide_shoutbox": "Shoutboxを表示しない",
-    "always_show_post_button": "投稿ボタンを常に表示",
-    "right_sidebar": "サイドバーを右に表示",
+    "always_show_post_button": "投稿ボタンを常に表示する",
+    "right_sidebar": "サイドバーを右側に表示する",
     "email_language": "このサーバーから受け取るメールの言語",
     "confirm_dialogs": "以下のとき確認ダイアログを表示する:",
     "confirm_dialogs_repeat": "ステータスをリピートするとき",
@@ -697,7 +697,7 @@
     "mention_link_bolden_you": "自分宛てのメンションを強調表示する",
     "user_popover_avatar_action": "ユーザーカード内のユーザーアイコンをクリックした際の挙動",
     "user_popover_avatar_overlay": "ユーザーカードをユーザーアイコンに被せて表示する",
-    "show_yous": "自分宛てのメンションの横に「(あなた)」を表示",
+    "show_yous": "自分宛てのメンションの横に「(あなた)」と表示する",
     "preview": "プレビュー",
     "url": "URL",
     "conversation_display": "スレッドの表示形式",
@@ -791,7 +791,18 @@
     "notification_setting_ignore_inactionable_seen_tip": "この設定は通知を自動的に既読にするわけではなく、この設定を有効にしてもプッシュ通知などは届きます",
     "notification_setting_ignore_inactionable_seen": "お気に入りやリピートの通知など、アクション不可な通知を未読として扱わない",
     "notification_extra_tip": "通知カラムをカスマイズするためのヒントを表示する",
-    "use_at_icon": "メンションリンク内の{'@'}記号を画像にする"
+    "use_at_icon": "メンションリンク内の{'@'}記号を画像にする",
+    "mute_sensitive_posts": "閲覧注意な投稿をミュートする",
+    "units": {
+      "time": {
+        "m": "分",
+        "s": "秒",
+        "h": "時間",
+        "d": "日"
+      }
+    },
+    "hide_scrobbles_after": "これより古いScrobbleを表示しない:",
+    "force_theme_recompilation_debug": "テーマのキャッシュを無効化し、起動の度にコンパイルし直す (デバッグ用)"
   },
   "time": {
     "day": "{0}日",
@@ -868,7 +879,7 @@
     "pin": "プロフィールにピン留め",
     "unpin": "プロフィールのピン留めを外す",
     "pinned": "ピン留め",
-    "delete_confirm": "本当にこの削除しますか？",
+    "delete_confirm": "本当に削除しますか？",
     "reply_to": "返信先:",
     "replies_list": "返信:",
     "mute_conversation": "スレッドをミュート",
@@ -928,7 +939,9 @@
     "thread_hide": "このスレッドをたたむ",
     "thread_show": "このスレッドを開く",
     "open_gallery": "メディアビューアで開く",
-    "status_history": "編集履歴"
+    "status_history": "編集履歴",
+    "sensitive_muted": "閲覧注意な投稿のためミュートされています",
+    "load_error": "投稿の読み込みに失敗しました: {error}"
   },
   "user_card": {
     "approve": "承認",
@@ -987,7 +1000,7 @@
     "show_repeats": "リピートを見る",
     "hide_repeats": "リピートを隠す",
     "message": "メッセージ",
-    "hidden": "隠す",
+    "hidden": "非公開",
     "bot": "bot",
     "highlight": {
       "solid": "背景を単色にする",
@@ -1247,7 +1260,7 @@
       "emoji": "絵文字"
     },
     "limits": {
-      "arbitrary_limits": "変更可能な制限",
+      "arbitrary_limits": "任意の制限",
       "posts": "投稿の制限",
       "uploads": "ファイルの制限",
       "profile_fields": "追加情報欄の制限",
@@ -1273,7 +1286,24 @@
       "download": "ダウンロード",
       "editing": "{0}を編集中",
       "error": "エラー: {0}",
-      "delete": "削除"
+      "delete": "削除",
+      "global_actions": "グローバルアクション",
+      "reload": "絵文字を再読み込み",
+      "new_pack_name": "新規パック名",
+      "fallback_sha256": "代替ソースのSHA256ハッシュ",
+      "description": "説明",
+      "fallback_src": "代替ソース",
+      "share": "共有",
+      "add_file": "ファイルを追加",
+      "adding_new": "新規絵文字を追加",
+      "revert_meta": "メタデータを元に戻す",
+      "revert": "元に戻す",
+      "new_shortcode": "ショートコード (任意)",
+      "new_filename": "ファイル名 (任意)",
+      "files": "ファイル",
+      "delete_title": "削除しますか？",
+      "metadata_changed": "変更されたメタデータ",
+      "emoji_changed": "保存されていない変更点があります。ハイライトされた絵文字を確認してください"
     }
   },
   "lists": {
