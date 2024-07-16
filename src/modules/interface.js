@@ -221,7 +221,8 @@ const interfaceMod = {
         customTheme: userThemeSnapshot,
         customThemeSource: userThemeSource,
         forceThemeRecompilation,
-        themeDebug
+        themeDebug,
+        theme3hacks
       } = rootState.config
 
       const forceRecompile = forceThemeRecompilation || recompile
@@ -275,7 +276,36 @@ const interfaceMod = {
 
       promise
         .then(realThemeData => {
-          const ruleset = convertTheme2To3(realThemeData)
+          const theme2ruleset = convertTheme2To3(realThemeData)
+          const hacks = []
+
+          Object.entries(theme3hacks).forEach(([key, value]) => {
+            switch (key) {
+              case 'underlay': {
+                if (value !== 'none') {
+                  const newRule = {
+                    component: 'Underlay',
+                    directives: {}
+                  }
+                  if (value === 'opaque') {
+                    newRule.directives.opacity = 1
+                    newRule.directives.background = '--wallpaper'
+                  }
+                  if (value === 'transparent') {
+                    newRule.directives.opacity = 0
+                  }
+                  console.log('NEW RULE', newRule)
+                  hacks.push(newRule)
+                }
+                break
+              }
+            }
+          })
+
+          const ruleset = [
+            ...theme2ruleset,
+            ...hacks
+          ]
 
           applyTheme(
             ruleset,

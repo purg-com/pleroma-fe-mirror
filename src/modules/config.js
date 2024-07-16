@@ -282,11 +282,11 @@ const config = {
         }
       } else {
         commit('setOption', { name, value })
-        if (
-          name.startsWith('theme3hacks') ||
-            APPEARANCE_SETTINGS_KEYS.has(name)
-        ) {
+        if (APPEARANCE_SETTINGS_KEYS.has(name)) {
           applyConfig(state)
+        }
+        if (name.startsWith('theme3hacks')) {
+          dispatch('setTheme', { recompile: true })
         }
         switch (name) {
           case 'theme':

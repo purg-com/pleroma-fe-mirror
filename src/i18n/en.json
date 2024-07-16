@@ -386,11 +386,6 @@
     "navbar_size": "Top bar size",
     "panel_header_size": "Panel header size",
     "visual_tweaks": "Minor visual tweaks",
-    "force_interface_roundness": "Override interface roundness/sharpness",
-    "forced_roundness_mode_disabled": "Use theme defaults",
-    "forced_roundness_mode_sharp": "Force sharp edges",
-    "forced_roundness_mode_nonsharp": "Force not-so-sharp (1px roundness) edges",
-    "forced_roundness_mode_round": "Force round edges",
     "theme_debug": "Show what background theme engine assumes when dealing with transparancy (DEBUG)",
     "scale_and_layout": "Interface scale and layout",
     "mfa": {
@@ -749,6 +744,17 @@
       "update_preview": "Update preview",
       "themes3": {
         "define": "Override",
+        "hacks": {
+          "underlay_overrides": "Change underlay",
+          "underlay_override_mode_none": "Theme default",
+          "underlay_override_mode_opaque": "Replace with solid color",
+          "underlay_override_mode_transparent": "Remove entirely (might break some themes)",
+          "force_interface_roundness": "Override interface roundness/sharpness",
+          "forced_roundness_mode_disabled": "Use theme defaults",
+          "forced_roundness_mode_sharp": "Force sharp edges",
+          "forced_roundness_mode_nonsharp": "Force not-so-sharp (1px roundness) edges",
+          "forced_roundness_mode_round": "Force round edges"
+        },
         "font": {
           "group-builtin": "Browser default fonts",
           "builtin" : {

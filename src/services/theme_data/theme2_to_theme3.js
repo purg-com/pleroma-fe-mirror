@@ -12,7 +12,9 @@ export const basePaletteKeys = new Set([
   'cBlue',
   'cRed',
   'cGreen',
-  'cOrange'
+  'cOrange',
+
+  'wallpaper'
 ])
 
 export const fontsKeys = new Set([

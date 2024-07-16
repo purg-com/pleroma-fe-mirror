@@ -179,7 +179,7 @@
             path="forcedRoundness"
             :options="forcedRoundnessOptions"
           >
-            {{ $t('settings.force_interface_roundness') }}
+            {{ $t('settings.style.themes3.hacks.force_interface_roundness') }}
           </ChoiceSetting>
         </li>
         <li>
@@ -188,7 +188,7 @@
             path="theme3hacks.underlay"
             :options="underlayOverrideModes"
           >
-            {{ $t('settings.underlay_overrides') }}
+            {{ $t('settings.style.themes3.hacks.underlay_overrides') }}
           </ChoiceSetting>
         </li>
         <li v-if="instanceWallpaperUsed">
