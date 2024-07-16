@@ -671,7 +671,8 @@ option {
   display: inline-flex;
   vertical-align: middle;
 
-  > * {
+  > *,
+  > * .button-default {
     --_roundness-left: 0;
     --_roundness-right: 0;
 
@@ -679,11 +680,13 @@ option {
     flex: 1 1 auto;
   }
 
-  > *:first-child {
+  > *:first-child,
+  > *:first-child .button-default {
     --_roundness-left: var(--roundness);
   }
 
-  > *:last-child {
+  > *:last-child,
+  > *:last-child .button-default {
     --_roundness-right: var(--roundness);
   }
 }
