@@ -42,6 +42,7 @@ const defaultState = {
   registrationOpen: true,
   server: 'http://localhost:4040/',
   textlimit: 5000,
+  themeData: undefined, // used for theme editor v2
   vapidPublicKey: undefined,
 
   // Stuff from static/config.json

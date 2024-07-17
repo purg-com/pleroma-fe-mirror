@@ -230,13 +230,6 @@ const interfaceMod = {
 
       const forceRecompile = forceThemeRecompilation || recompile
 
-      // If we're not not forced to recompile try using
-      // cache (tryLoadCache return true if load successful)
-      if (!forceRecompile && !themeDebug && tryLoadCache()) {
-        commit('setThemeApplied')
-        return
-      }
-
       let promise = null
 
       if (themeData) {
@@ -250,9 +243,23 @@ const interfaceMod = {
           promise = Promise.resolve(normalizeThemeData(userThemeSnapshot))
         }
       } else if (actualThemeName && actualThemeName !== 'custom') {
-        promise = getPreset(actualThemeName).then(themeData => normalizeThemeData(themeData))
+        promise = getPreset(actualThemeName).then(themeData => {
+          const realThemeData = normalizeThemeData(themeData)
+          if (actualThemeName === instanceThemeName) {
+            // This sole line is the reason why this whole block is above the recompilation check
+            commit('setInstanceOption', { name: 'themeData', value: { theme: realThemeData } })
+          }
+          return realThemeData
+        })
       } else {
         throw new Error('Cannot load any theme!')
+      }
+
+      // If we're not not forced to recompile try using
+      // cache (tryLoadCache return true if load successful)
+      if (!forceRecompile && !themeDebug && tryLoadCache()) {
+        commit('setThemeApplied')
+        return
       }
 
       promise
