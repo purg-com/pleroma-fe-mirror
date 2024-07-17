@@ -2,18 +2,26 @@
   <div :label="$t('settings.general')">
     <div class="setting-item">
       <h2>{{ $t('settings.theme') }}</h2>
-      <ul class="theme-list">
-        <li
+      <ul
+        class="input theme-list"
+        ref="themeList"
+      >
+        <button
           v-for="style in availableStyles"
-          :key="style.name || style[0]"
-          class="theme-preview"
+          :data-theme-key="style.key"
+          :key="style.key"
+          class="button-default theme-preview"
         >
-          <h6>{{ style[0] || style.name }}</h6>
           <!-- eslint-disable vue/no-v-text-v-html-on-component -->
-          <component :is="'style'" v-html="previewTheme(style)"/>
+          <component
+            :is="'style'"
+            v-if="style.ready || noIntersectionObserver"
+            v-html="previewTheme(style.key, style.data)"
+          />
           <!-- eslint-enable vue/no-v-text-v-html-on-component -->
-          <preview :id="'theme-preview-' + (style[0] || style.name).replace(/ /g,'_')"/>
-        </li>
+          <preview :class="{ placeholder: ready }" :id="'theme-preview-' + style.key"/>
+          <h4 class="theme-name">{{ style.name }}</h4>
+        </button>
       </ul>
     </div>
     <div class="setting-item">
@@ -252,13 +260,28 @@
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-}
+  margin: 0 -0.5em;
+  height: 15em;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
 
-.theme-preview {
-  width: 10rem;
+  .theme-preview {
+    width: 21rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0.5em;
 
-  .preview-container {
-    zoom: 0.33;
+    &.placeholder {
+      opacity: 0.2;
+    }
+
+    .preview-container {
+      zoom: 0.5;
+      border: none;
+      border-radius: var(--roundness);
+    }
   }
 }
 </style>

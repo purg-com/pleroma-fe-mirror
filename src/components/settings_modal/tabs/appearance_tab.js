@@ -35,6 +35,7 @@ const AppearanceTab = {
   data () {
     return {
       availableStyles: [],
+      intersectionObserver: null,
       thirdColumnModeOptions: ['none', 'notifications', 'postform'].map(mode => ({
         key: mode,
         value: mode,
@@ -62,9 +63,7 @@ const AppearanceTab = {
     FontControl,
     Preview
   },
-  created () {
-    const self = this
-
+  mounted () {
     getThemes()
       .then((promises) => {
         return Promise.all(
@@ -74,19 +73,48 @@ const AppearanceTab = {
       })
       .then(themes => themes.reduce((acc, [k, v]) => {
         if (v) {
-          return {
+          return [
             ...acc,
-            [k]: v
-          }
+            {
+              name: v.name || v[0],
+              key: k,
+              data: v
+            }
+          ]
         } else {
           return acc
         }
-      }, {}))
+      }, []))
       .then((themesComplete) => {
-        self.availableStyles = themesComplete
+        this.availableStyles = themesComplete
       })
+
+    if (window.IntersectionObserver) {
+      this.intersectionObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(({ target, isIntersecting }) => {
+          if (!isIntersecting) return
+          const theme = this.availableStyles.find(x => x.key === target.dataset.themeKey)
+          this.$nextTick(() => {
+            theme.ready = true
+          })
+          observer.unobserve(target)
+        })
+      }, {
+        root: this.$refs.themeList
+      })
+    }
+  },
+  updated () {
+    this.$nextTick(() => {
+      this.$refs.themeList.querySelectorAll('.theme-preview').forEach(node => {
+        this.intersectionObserver.observe(node)
+      })
+    })
   },
   computed: {
+    noIntersectionObserver () {
+      return !window.IntersectionObserver
+    },
     horizontalUnits () {
       return defaultHorizontalUnits
     },
@@ -119,7 +147,12 @@ const AppearanceTab = {
     ...SharedComputedObject()
   },
   methods: {
-    previewTheme (input) {
+    isThemeActive (key, name) {
+      console.log(this.$store.getters.mergedConfig)
+      const { customTheme, themeName, customThemeSource } = this.$store.getters.mergedConfig
+      console.log(customTheme, customThemeSource, themeName)
+    },
+    previewTheme (key, input) {
       const style = normalizeThemeData(input)
       const x = 2
       if (x === 1) return
@@ -128,12 +161,13 @@ const AppearanceTab = {
         inputRuleset: theme2,
         ultimateBackgroundColor: '#000000',
         liteMode: true,
+        debug: true,
         onlyNormalState: true
       })
 
       return getScopedVersion(
         getCssRules(theme3.eager),
-        '#theme-preview-' + (input.name || input[0]).replace(/ /g, '_')
+        '#theme-preview-' + key
       ).join('\n')
     }
   }
