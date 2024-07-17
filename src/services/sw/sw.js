@@ -36,9 +36,9 @@ function subscribePush (registration, isEnabled, vapidPublicKey) {
 
 function unsubscribePush (registration) {
   return registration.pushManager.getSubscription()
-    .then((subscribtion) => {
-      if (subscribtion === null) { return }
-      return subscribtion.unsubscribe()
+    .then((subscription) => {
+      if (subscription === null) { return }
+      return subscription.unsubscribe()
     })
 }
 
