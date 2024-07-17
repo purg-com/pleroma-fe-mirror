@@ -99,15 +99,9 @@
         >
 
         <div class="actions">
-          <span class="checkbox">
-            <input
-              id="preview_checkbox"
-              checked="very yes"
-              type="checkbox"
-              class="input"
-            >
-            <label for="preview_checkbox">{{ $t('settings.style.preview.checkbox') }}</label>
-          </span>
+          <Checkbox>
+            {{ $t('settings.style.preview.checkbox') }}
+          </Checkbox>
           <button class="btn button-default">
             {{ $t('settings.style.preview.button') }}
           </button>
@@ -118,6 +112,7 @@
 </template>
 
 <script>
+import Checkbox from 'src/components/checkbox/checkbox.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faTimes,
@@ -133,7 +128,11 @@ library.add(
   faReply
 )
 
-export default {}
+export default {
+  components: {
+    Checkbox
+  }
+}
 </script>
 
 <style lang="scss">
@@ -224,8 +223,6 @@ export default {}
       align-items: baseline;
 
       .checkbox {
-        display: inline-flex;
-        align-items: baseline;
         margin-right: 1em;
         flex: 1;
       }
