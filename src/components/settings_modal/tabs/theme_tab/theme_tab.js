@@ -606,7 +606,7 @@ export default {
     normalizeLocalState (theme, version = 0, source, forceSource = false) {
       let input
       if (typeof source !== 'undefined') {
-        if (forceSource || source.themeEngineVersion === CURRENT_VERSION) {
+        if (forceSource || source?.themeEngineVersion === CURRENT_VERSION) {
           input = source
           version = source.themeEngineVersion
         } else {

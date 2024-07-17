@@ -3,14 +3,24 @@
     <div class="setting-item">
       <h2>{{ $t('settings.theme') }}</h2>
       <ul
-        class="input theme-list"
+        class="theme-list"
         ref="themeList"
       >
+        <button
+          v-if="isCustomThemeUsed"
+          disabled
+          class="button-default theme-preview"
+        >
+          <preview />
+          <h4 class="theme-name">{{ $t('settings.style.custom_theme_used') }}</h4>
+        </button>
         <button
           v-for="style in availableStyles"
           :data-theme-key="style.key"
           :key="style.key"
           class="button-default theme-preview"
+          :class="{ toggled: isThemeActive(style.key) }"
+          @click="setTheme(style.key)"
         >
           <!-- eslint-disable vue/no-v-text-v-html-on-component -->
           <component
@@ -260,14 +270,17 @@
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  margin: 0 -0.5em;
-  height: 15em;
+  margin: -0.5em 0;
+  height: 25em;
   overflow-x: hidden;
   overflow-y: auto;
   scrollbar-gutter: stable;
+  border-radius: var(--roundness);
+  border: 1px solid var(--border);
+  padding: 0;
 
   .theme-preview {
-    width: 21rem;
+    width: 19rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -278,9 +291,11 @@
     }
 
     .preview-container {
+      pointer-events: none;
       zoom: 0.5;
       border: none;
       border-radius: var(--roundness);
+      text-align: left;
     }
   }
 }

@@ -212,18 +212,21 @@ const interfaceMod = {
     setLastTimeline ({ commit }, value) {
       commit('setLastTimeline', value)
     },
-    setTheme ({ commit, rootState }, { themeName, themeData, recompile } = {}) {
+    setTheme ({ commit, rootState }, { themeName, themeData, recompile, saveData } = {}) {
       const {
         theme: instanceThemeName
       } = rootState.instance
 
       const {
+        theme: userThemeName,
         customTheme: userThemeSnapshot,
         customThemeSource: userThemeSource,
         forceThemeRecompilation,
         themeDebug,
         theme3hacks
       } = rootState.config
+
+      const actualThemeName = userThemeName || instanceThemeName
 
       const forceRecompile = forceThemeRecompilation || recompile
 
@@ -236,28 +239,31 @@ const interfaceMod = {
 
       let promise = null
 
-      if (themeName) {
-        promise = getPreset(themeName)
-          .then(themeData => {
-            return normalizeThemeData(themeData)
-          })
-      } else if (themeData) {
+      if (themeData) {
         promise = Promise.resolve(normalizeThemeData(themeData))
-      } else {
-        if (userThemeSource || userThemeSnapshot) {
-          if (userThemeSource && userThemeSource.themeEngineVersion === CURRENT_VERSION) {
-            promise = Promise.resolve(normalizeThemeData(userThemeSource))
-          } else {
-            promise = Promise.resolve(normalizeThemeData(userThemeSnapshot))
-          }
-        } else if (instanceThemeName) {
-          promise = getPreset(themeName).then(themeData => normalizeThemeData(themeData))
+      } else if (themeName) {
+        promise = getPreset(themeName).then(themeData => normalizeThemeData(themeData))
+      } else if (userThemeSource || userThemeSnapshot) {
+        if (userThemeSource && userThemeSource.themeEngineVersion === CURRENT_VERSION) {
+          promise = Promise.resolve(normalizeThemeData(userThemeSource))
+        } else {
+          promise = Promise.resolve(normalizeThemeData(userThemeSnapshot))
         }
+      } else if (actualThemeName && actualThemeName !== 'custom') {
+        promise = getPreset(actualThemeName).then(themeData => normalizeThemeData(themeData))
+      } else {
+        throw new Error('Cannot load any theme!')
       }
 
       promise
         .then(realThemeData => {
           const theme2ruleset = convertTheme2To3(realThemeData)
+
+          if (saveData) {
+            commit('setOption', { name: 'theme', value: themeName || actualThemeName })
+            commit('setOption', { name: 'customTheme', value: realThemeData })
+            commit('setOption', { name: 'customThemeSource', value: realThemeData })
+          }
           const hacks = []
 
           Object.entries(theme3hacks).forEach(([key, value]) => {

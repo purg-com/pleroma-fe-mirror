@@ -95,7 +95,7 @@ const AppearanceTab = {
           if (!isIntersecting) return
           const theme = this.availableStyles.find(x => x.key === target.dataset.themeKey)
           this.$nextTick(() => {
-            theme.ready = true
+            if (theme) theme.ready = true
           })
           observer.unobserve(target)
         })
@@ -144,13 +144,20 @@ const AppearanceTab = {
         this.$store.dispatch('setOption', { name: 'interfaceLanguage', value: val })
       }
     },
+    isCustomThemeUsed () {
+      const { theme } = this.mergedConfig
+      return theme === 'custom' || theme === null
+    },
     ...SharedComputedObject()
   },
   methods: {
-    isThemeActive (key, name) {
-      console.log(this.$store.getters.mergedConfig)
-      const { customTheme, themeName, customThemeSource } = this.$store.getters.mergedConfig
-      console.log(customTheme, customThemeSource, themeName)
+    isThemeActive (key) {
+      const { theme } = this.mergedConfig
+      console.log(key, theme)
+      return key === theme
+    },
+    setTheme (name) {
+      this.$store.dispatch('setTheme', { themeName: name, saveData: true, recompile: true })
     },
     previewTheme (key, input) {
       const style = normalizeThemeData(input)

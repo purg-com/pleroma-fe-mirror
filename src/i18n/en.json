@@ -740,6 +740,7 @@
     "enable_web_push_always_show_tip": "Some browsers (Chromium, Chrome) require that push messages always result in a notification, otherwise generic 'Website was updated in background' is shown, enable this to prevent this notification from showing, as Chrome seem to hide push notifications if tab is in focus. Can result in showing duplicate notifications on other browsers.",
     "more_settings": "More settings",
     "style": {
+      "custom_theme_used": "(Custom theme)",
       "themes2_outdated": "Editor for Themes V2 is no longer supported and presented here for sake of legacy.",
       "update_preview": "Update preview",
       "themes3": {

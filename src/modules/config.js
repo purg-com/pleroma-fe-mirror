@@ -35,11 +35,26 @@ export const multiChoiceProperties = [
 
 export const defaultState = {
   expertLevel: 0, // used to track which settings to show and hide
-  colors: {},
-  theme: undefined,
-  customTheme: undefined,
-  customThemeSource: undefined,
-  forceThemeRecompilation: false,
+
+  // Theme  stuff
+  theme: undefined, // Very old theme store, stores preset name, still in use
+
+  // V1
+  colors: {}, // VERY old theme store, just colors of V1, probably not even used anymore
+
+  // V2
+  customTheme: undefined, // "snapshot", previously was used as actual theme store for V2 so it's still used in case of PleromaFE downgrade event.
+  customThemeSource: undefined, // "source", stores original theme data
+
+  // V3
+  themeDebug: false, // debug mode that uses computed backgrounds instead of real ones to debug contrast functions
+  forceThemeRecompilation: false, //  flag that forces recompilation on boot even if cache exists
+  palette: null, // not used yet, will be used for V3
+  theme3hacks: { // Hacks, user overrides that are independent of theme used
+    underlay: 'none',
+    badgeColor: null
+  },
+
   hideISP: false,
   hideInstanceWallpaper: false,
   hideShoutbox: false,
@@ -91,11 +106,6 @@ export const defaultState = {
     reports: true,
     chatMention: true,
     polls: true
-  },
-  palette: null,
-  theme3hacks: {
-    underlay: 'none',
-    badgeColor: null
   },
   webPushNotifications: false,
   webPushAlwaysShowNotifications: false,
@@ -164,7 +174,6 @@ export const defaultState = {
   maxDepthInThread: undefined, // instance default
   autocompleteSelect: undefined, // instance default
   closingDrawerMarksAsSeen: undefined, // instance default
-  themeDebug: false,
   unseenAtTop: undefined, // instance default
   ignoreInactionableSeen: undefined // instance default
 }
@@ -256,6 +265,7 @@ const config = {
       })
     },
     setThemeV2 ({ commit, dispatch }, { customTheme, customThemeSource }) {
+      commit('setOption', { name: 'theme', value: 'custom' })
       commit('setOption', { name: 'customTheme', value: customTheme })
       commit('setOption', { name: 'customThemeSource', value: customThemeSource })
       dispatch('setTheme', { themeData: customThemeSource, recompile: true })
@@ -290,7 +300,8 @@ const config = {
         }
         switch (name) {
           case 'theme':
-            dispatch('setTheme', { themeName: value, recompile: true })
+            if (value === 'custom') break
+            dispatch('setTheme', { themeName: value, recompile: true, saveData: true })
             break
           case 'themeDebug': {
             dispatch('setTheme', { recompile: true })
