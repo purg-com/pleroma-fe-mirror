@@ -30,7 +30,10 @@ import {
 
 import { convertTheme2To3 } from 'src/services/theme_data/theme2_to_theme3.js'
 import { init } from 'src/services/theme_data/theme_data_3.service.js'
-import { getCssRules } from 'src/services/theme_data/css_utils.js'
+import {
+  getCssRules,
+  getScopedVersion
+} from 'src/services/theme_data/css_utils.js'
 
 import ColorInput from 'src/components/color_input/color_input.vue'
 import RangeInput from 'src/components/range_input/range_input.vue'
@@ -703,17 +706,10 @@ export default {
         liteMode: true
       })
 
-      this.themeV3Preview = getCssRules(theme3.eager)
-        .map(x => {
-          if (x.startsWith('html')) {
-            return x.replace('html', '#theme-preview')
-          } else if (x.startsWith('#content')) {
-            return x.replace('#content', '#theme-preview')
-          } else {
-            return '#theme-preview > ' + x
-          }
-        })
-        .join('\n')
+      this.themeV3Preview = getScopedVersion(
+        getCssRules(theme3.eager),
+        '#theme-preview'
+      ).join('\n')
     }
   },
   watch: {

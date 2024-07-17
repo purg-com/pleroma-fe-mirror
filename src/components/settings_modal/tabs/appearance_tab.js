@@ -6,12 +6,26 @@ import UnitSetting, { defaultHorizontalUnits } from '../helpers/unit_setting.vue
 
 import FontControl from 'src/components/font_control/font_control.vue'
 
+import { normalizeThemeData } from 'src/modules/interface'
+
+import {
+  getThemes
+} from 'src/services/style_setter/style_setter.js'
+import { convertTheme2To3 } from 'src/services/theme_data/theme2_to_theme3.js'
+import { init } from 'src/services/theme_data/theme_data_3.service.js'
+import {
+  getCssRules,
+  getScopedVersion
+} from 'src/services/theme_data/css_utils.js'
+
 import SharedComputedObject from '../helpers/shared_computed_object.js'
 import ProfileSettingIndicator from '../helpers/profile_setting_indicator.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faGlobe
 } from '@fortawesome/free-solid-svg-icons'
+
+import Preview from './theme_tab/preview.vue'
 
 library.add(
   faGlobe
@@ -20,6 +34,7 @@ library.add(
 const AppearanceTab = {
   data () {
     return {
+      availableStyles: [],
       thirdColumnModeOptions: ['none', 'notifications', 'postform'].map(mode => ({
         key: mode,
         value: mode,
@@ -44,7 +59,32 @@ const AppearanceTab = {
     FloatSetting,
     UnitSetting,
     ProfileSettingIndicator,
-    FontControl
+    FontControl,
+    Preview
+  },
+  created () {
+    const self = this
+
+    getThemes()
+      .then((promises) => {
+        return Promise.all(
+          Object.entries(promises)
+            .map(([k, v]) => v.then(res => [k, res]))
+        )
+      })
+      .then(themes => themes.reduce((acc, [k, v]) => {
+        if (v) {
+          return {
+            ...acc,
+            [k]: v
+          }
+        } else {
+          return acc
+        }
+      }, {}))
+      .then((themesComplete) => {
+        self.availableStyles = themesComplete
+      })
   },
   computed: {
     horizontalUnits () {
@@ -77,6 +117,25 @@ const AppearanceTab = {
       }
     },
     ...SharedComputedObject()
+  },
+  methods: {
+    previewTheme (input) {
+      const style = normalizeThemeData(input)
+      const x = 2
+      if (x === 1) return
+      const theme2 = convertTheme2To3(style)
+      const theme3 = init({
+        inputRuleset: theme2,
+        ultimateBackgroundColor: '#000000',
+        liteMode: true,
+        onlyNormalState: true
+      })
+
+      return getScopedVersion(
+        getCssRules(theme3.eager),
+        '#theme-preview-' + (input.name || input[0]).replace(/ /g, '_')
+      ).join('\n')
+    }
   }
 }
 

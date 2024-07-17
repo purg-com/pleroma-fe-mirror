@@ -1,6 +1,22 @@
 <template>
   <div :label="$t('settings.general')">
     <div class="setting-item">
+      <h2>{{ $t('settings.theme') }}</h2>
+      <ul class="theme-list">
+        <li
+          v-for="style in availableStyles"
+          :key="style.name || style[0]"
+          class="theme-preview"
+        >
+          <h6>{{ style[0] || style.name }}</h6>
+          <!-- eslint-disable vue/no-v-text-v-html-on-component -->
+          <component :is="'style'" v-html="previewTheme(style)"/>
+          <!-- eslint-enable vue/no-v-text-v-html-on-component -->
+          <preview :id="'theme-preview-' + (style[0] || style.name).replace(/ /g,'_')"/>
+        </li>
+      </ul>
+    </div>
+    <div class="setting-item">
       <h2>{{ $t('settings.scale_and_layout') }}</h2>
       <ul class="setting-list">
         <li>
@@ -230,5 +246,19 @@
   display: block;
   margin-bottom: 0.5em;
   margin-top: 0.5em;
+}
+
+.theme-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.theme-preview {
+  width: 10rem;
+
+  .preview-container {
+    zoom: 0.33;
+  }
 }
 </style>

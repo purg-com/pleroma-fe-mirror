@@ -17,6 +17,15 @@ export default {
     'Attachment',
     'PollGraph'
   ],
+  validInnerComponentsLite: [
+    'Text',
+    'Link',
+    'Icon',
+    'Border',
+    'ButtonUnstyled',
+    'RichContent',
+    'Avatar'
+  ],
   defaultRules: [
     {
       directives: {

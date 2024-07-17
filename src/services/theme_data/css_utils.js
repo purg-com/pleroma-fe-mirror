@@ -159,3 +159,15 @@ export const getCssRules = (rules, debug) => rules.map(rule => {
     footer
   ].join('\n')
 }).filter(x => x)
+
+export const getScopedVersion = (rules, newScope) => {
+  return rules.map(x => {
+    if (x.startsWith('html')) {
+      return x.replace('html', newScope)
+    } else if (x.startsWith('#content')) {
+      return x.replace('#content', newScope)
+    } else {
+      return newScope + ' > ' + x
+    }
+  })
+}

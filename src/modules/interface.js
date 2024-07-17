@@ -234,25 +234,6 @@ const interfaceMod = {
         return
       }
 
-      const normalizeThemeData = (themeData) => {
-        if (themeData.themeFileVerison === 1) {
-          return generatePreset(themeData).theme
-        }
-        // New theme presets don't have 'theme' property, they use 'source'
-        const themeSource = themeData.source
-
-        let out // shout, shout let it all out
-        if (!themeData.theme || (themeSource && themeSource.themeEngineVersion === CURRENT_VERSION)) {
-          out = themeSource || themeData
-        } else {
-          out = themeData.theme
-        }
-
-        // generatePreset here basically creates/updates "snapshot",
-        // while also fixing the 2.2 -> 2.3 colors/shadows/etc
-        return generatePreset(out).theme
-      }
-
       let promise = null
 
       if (themeName) {
@@ -320,3 +301,38 @@ const interfaceMod = {
 }
 
 export default interfaceMod
+
+export const normalizeThemeData = (input) => {
+  let themeData = input
+
+  if (Array.isArray(themeData)) {
+    themeData = { colors: {} }
+    themeData.colors.bg = input[1]
+    themeData.colors.fg = input[2]
+    themeData.colors.text = input[3]
+    themeData.colors.link = input[4]
+    themeData.colors.cRed = input[5]
+    themeData.colors.cGreen = input[6]
+    themeData.colors.cBlue = input[7]
+    themeData.colors.cOrange = input[8]
+    return generatePreset(themeData).theme
+  }
+
+  if (themeData.themeFileVerison === 1) {
+    return generatePreset(themeData).theme
+  }
+
+  // New theme presets don't have 'theme' property, they use 'source'
+  const themeSource = themeData.source
+
+  let out // shout, shout let it all out
+  if (!themeData.theme || (themeSource && themeSource.themeEngineVersion === CURRENT_VERSION)) {
+    out = themeSource || themeData
+  } else {
+    out = themeData.theme
+  }
+
+  // generatePreset here basically creates/updates "snapshot",
+  // while also fixing the 2.2 -> 2.3 colors/shadows/etc
+  return generatePreset(out).theme
+}
