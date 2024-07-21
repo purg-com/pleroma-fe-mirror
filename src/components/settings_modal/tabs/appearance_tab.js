@@ -151,9 +151,21 @@ const AppearanceTab = {
     ...SharedComputedObject()
   },
   methods: {
+    updateFont (key, value) {
+      console.log(key, value)
+      this.$store.dispatch('setOption', {
+        name: 'theme3hacks',
+        value: {
+          ...this.mergedConfig.theme3hacks,
+          fonts: {
+            ...this.mergedConfig.theme3hacks.fonts,
+            [key]: value
+          }
+        }
+      })
+    },
     isThemeActive (key) {
       const { theme } = this.mergedConfig
-      console.log(key, theme)
       return key === theme
     },
     setTheme (name) {

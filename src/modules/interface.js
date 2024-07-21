@@ -274,6 +274,46 @@ const interfaceMod = {
 
           Object.entries(theme3hacks).forEach(([key, value]) => {
             switch (key) {
+              case 'fonts': {
+                Object.entries(theme3hacks.fonts).forEach(([fontKey, font]) => {
+                  if (!font?.family) return
+                  switch (fontKey) {
+                    case 'interface':
+                      hacks.push({
+                        component: 'Root',
+                        directives: {
+                          '--font': 'generic | ' + font.family
+                        }
+                      })
+                      break
+                    case 'input':
+                      hacks.push({
+                        component: 'Input',
+                        directives: {
+                          '--font': 'generic | ' + font.family
+                        }
+                      })
+                      break
+                    case 'post':
+                      hacks.push({
+                        component: 'RichContent',
+                        directives: {
+                          '--font': 'generic | ' + font.family
+                        }
+                      })
+                      break
+                    case 'monospace':
+                      hacks.push({
+                        component: 'Root',
+                        directives: {
+                          '--monoFont': 'generic | ' + font.family
+                        }
+                      })
+                      break
+                  }
+                })
+                break
+              }
               case 'underlay': {
                 if (value !== 'none') {
                   const newRule = {

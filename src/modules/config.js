@@ -52,7 +52,13 @@ export const defaultState = {
   palette: null, // not used yet, will be used for V3
   theme3hacks: { // Hacks, user overrides that are independent of theme used
     underlay: 'none',
-    badgeColor: null
+    badgeColor: null,
+    fonts: {
+      interface: undefined,
+      input: undefined,
+      post: undefined,
+      monospace: undefined
+    }
   },
 
   hideISP: false,
@@ -147,7 +153,6 @@ export const defaultState = {
   navbarSize: undefined, // instance default
   panelHeaderSize: undefined, // instance default
   forcedRoundness: undefined, // instance default
-  fontsOverride: undefined, // instance default
   navbarColumnStretch: false,
   greentext: undefined, // instance default
   useAtIcon: undefined, // instance default
