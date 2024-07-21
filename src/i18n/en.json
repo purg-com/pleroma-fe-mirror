@@ -898,7 +898,7 @@
           "interface": "Interface",
           "input": "Input fields",
           "post": "Post text",
-          "postCode": "Monospaced text in a post (rich text)"
+          "monospace": "Monospaced text"
         },
         "family": "Font name",
         "size": "Size (in px)",
