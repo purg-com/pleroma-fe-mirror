@@ -23,7 +23,7 @@
     </div>
     <div
       :label="$t('settings.appearance')"
-      icon="paint-brush"
+      icon="window-restore"
       data-tab-name="appearance"
     >
       <AppearanceTab />

@@ -20,7 +20,8 @@ import {
   faBell,
   faDownload,
   faEyeSlash,
-  faInfo
+  faInfo,
+  faWindowRestore
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -31,7 +32,8 @@ library.add(
   faBell,
   faDownload,
   faEyeSlash,
-  faInfo
+  faInfo,
+  faWindowRestore
 )
 
 const SettingsModalContent = {
