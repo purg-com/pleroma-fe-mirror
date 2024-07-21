@@ -117,7 +117,6 @@ export const topoSort = (
       // Put it into the output list
       output.push(node)
     } else if (grays.has(node)) {
-      console.debug('Cyclic depenency in topoSort, ignoring')
       output.push(node)
     } else if (blacks.has(node)) {
       // do nothing
