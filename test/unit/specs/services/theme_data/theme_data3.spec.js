@@ -66,7 +66,7 @@ describe('Theme Data 3', () => {
     this.timeout(5000)
 
     it('Test initialization without anything', () => {
-      const out = init({ ruleset: [], ultimateBackgroundColor: '#DEADAF' })
+      const out = init({ inputRuleset: [], ultimateBackgroundColor: '#DEADAF' })
 
       expect(out).to.have.property('eager')
       expect(out).to.have.property('lazy')
@@ -86,7 +86,7 @@ describe('Theme Data 3', () => {
 
     it('Test initialization with a basic palette', () => {
       const out = init({
-        ruleset: [{
+        inputRuleset: [{
           component: 'Root',
           directives: {
             '--bg': 'color | #008080',
@@ -109,7 +109,7 @@ describe('Theme Data 3', () => {
 
     it('Test initialization with opacity', () => {
       const out = init({
-        ruleset: [{
+        inputRuleset: [{
           component: 'Root',
           directives: {
             '--bg': 'color | #008080'
