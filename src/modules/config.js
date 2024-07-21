@@ -49,10 +49,8 @@ export const defaultState = {
   // V3
   themeDebug: false, // debug mode that uses computed backgrounds instead of real ones to debug contrast functions
   forceThemeRecompilation: false, //  flag that forces recompilation on boot even if cache exists
-  palette: null, // not used yet, will be used for V3
   theme3hacks: { // Hacks, user overrides that are independent of theme used
     underlay: 'none',
-    badgeColor: null,
     fonts: {
       interface: undefined,
       input: undefined,
