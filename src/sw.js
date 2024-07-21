@@ -38,6 +38,8 @@ const setSettings = async () => {
         switch (k) {
           case 'mentions':
             return 'mention'
+          case 'statuses':
+            return 'status'
           case 'likes':
             return 'like'
           case 'repeats':

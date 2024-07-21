@@ -45,6 +45,15 @@
         </button>
         <button
           class="menu-item dropdown-item"
+          @click="toggleNotificationFilter('statuses')"
+        >
+          <span
+            class="input menu-checkbox"
+            :class="{ 'menu-checkbox-checked': filters.statuses }"
+          />{{ $t('settings.notification_visibility_statuses') }}
+        </button>
+        <button
+          class="menu-item dropdown-item"
           @click="toggleNotificationFilter('emojiReactions')"
         >
           <span

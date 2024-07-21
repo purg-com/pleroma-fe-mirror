@@ -18,6 +18,7 @@ export const visibleTypes = store => {
   return ([
     notificationVisibility.likes && 'like',
     notificationVisibility.mentions && 'mention',
+    notificationVisibility.statuses && 'status',
     notificationVisibility.repeats && 'repeat',
     notificationVisibility.follows && 'follow',
     notificationVisibility.followRequest && 'follow_request',
@@ -28,7 +29,7 @@ export const visibleTypes = store => {
   ].filter(_ => _))
 }
 
-const statusNotifications = new Set(['like', 'mention', 'repeat', 'pleroma:emoji_reaction', 'poll'])
+const statusNotifications = new Set(['like', 'mention', 'status', 'repeat', 'pleroma:emoji_reaction', 'poll'])
 
 export const isStatusNotification = (type) => statusNotifications.has(type)
 
@@ -117,6 +118,9 @@ export const prepareNotificationObject = (notification, i18n) => {
   switch (notification.type) {
     case 'like':
       i18nString = 'favorited_you'
+      break
+    case 'status':
+      i18nString = 'subscribed_status'
       break
     case 'repeat':
       i18nString = 'repeated_you'
