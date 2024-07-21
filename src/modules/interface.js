@@ -196,7 +196,6 @@ const interfaceMod = {
       window
         .queryLocalFonts()
         .then((fonts) => {
-          console.log(fonts)
           commit('setFontsList', fonts)
         })
         .catch((e) => {
@@ -288,7 +287,6 @@ const interfaceMod = {
                   if (value === 'transparent') {
                     newRule.directives.opacity = 0
                   }
-                  console.log('NEW RULE', newRule)
                   hacks.push(newRule)
                 }
                 break
