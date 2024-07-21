@@ -112,7 +112,8 @@ const interfaceMod = {
       state.lastTimeline = value
     },
     setFontsList (state, value) {
-      state.localFonts = new Set(value.map(font => font.family))
+      // Set is used here so that we filter out duplicate fonts (possibly same font but with different weight)
+      state.localFonts = [...(new Set(value.map(font => font.family))).values()]
     }
   },
   actions: {

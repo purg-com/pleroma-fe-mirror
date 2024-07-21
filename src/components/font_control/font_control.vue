@@ -82,7 +82,7 @@
         </button>
         <Select
           :id="name + '-local-font-switcher'"
-          :model-value="modelValue.family"
+          :model-value="modelValue?.family"
           class="custom-font"
           @update:modelValue="v => $emit('update:modelValue', { ...(modelValue || {}), family: v })"
         >

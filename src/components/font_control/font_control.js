@@ -50,10 +50,11 @@ export default {
       return typeof this.modelValue !== 'undefined'
     },
     localFontsList () {
-      return this.$store.state.interface.localFonts?.values()
+      console.log('FONTLIST', this.$store.state.interface.localFonts?.values())
+      return this.$store.state.interface.localFonts
     },
     localFontsSize () {
-      return this.$store.state.interface.localFonts?.size
+      return this.$store.state.interface.localFonts?.length
     }
   }
 }
