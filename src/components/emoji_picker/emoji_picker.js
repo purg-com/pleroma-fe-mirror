@@ -298,10 +298,6 @@ const EmojiPicker = {
       return this.emojiSize
     },
     itemPerRow () {
-      console.log(
-        this.emojiSize,
-        this.width
-      )
       return this.width ? Math.floor(this.width / this.emojiSize) : 6
     },
     activeGroupView () {
