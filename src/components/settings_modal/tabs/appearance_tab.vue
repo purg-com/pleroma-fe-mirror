@@ -280,6 +280,7 @@
   padding: 0;
 
   .theme-preview {
+    font-size: 1rem; // fix for firefox
     width: 19rem;
     display: flex;
     flex-direction: column;
