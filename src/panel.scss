@@ -61,7 +61,7 @@
 .panel-heading,
 .panel-footer {
   --panel-heading-height-padding: calc(var(--panelHeaderSize, 3.2rem) * 0.2);
-  --__panel-heading-gap: calc(var(--panelHeaderSize) * 0.1);
+  --__panel-heading-gap: calc(var(--panelHeaderSize) * 0.1564);
   --__panel-heading-height: var(--panelHeaderSize, 3.2em);
   --__panel-heading-height-inner: calc(var(--__panel-heading-height) - 2 * var(--panel-heading-height-padding, 0));
 
