@@ -1,6 +1,6 @@
 <template>
   <div class="theme-tab">
-    <div class="alert warning">
+    <div class="alert warning deprecation-warning">
       {{ $t("settings.style.themes2_outdated") }}
     </div>
     <div class="presets-container">

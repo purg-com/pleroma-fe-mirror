@@ -1,5 +1,5 @@
 <template>
-  <div :label="$t('settings.general')">
+  <div class="appearance-tab" :label="$t('settings.general')">
     <div class="setting-item">
       <h2>{{ $t('settings.theme') }}</h2>
       <ul
@@ -33,6 +33,9 @@
           <h4 class="theme-name">{{ style.name }}</h4>
         </button>
       </ul>
+    </div>
+    <div class="alert neutral theme-notice">
+      {{ $t("settings.style.appearance_tab_note") }}
     </div>
     <div class="setting-item">
       <h2>{{ $t('settings.scale_and_layout') }}</h2>
@@ -254,49 +257,56 @@
 <script src="./appearance_tab.js"></script>
 
 <style lang="scss">
-.column-settings {
-  display: flex;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-}
+.appearance-tab {
+  .theme-notice {
+    padding: 0.5em;
+    margin: 1em;
+  }
 
-.column-settings .size-label {
-  display: block;
-  margin-bottom: 0.5em;
-  margin-top: 0.5em;
-}
-
-.theme-list {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  margin: -0.5em 0;
-  height: 25em;
-  overflow-x: hidden;
-  overflow-y: auto;
-  scrollbar-gutter: stable;
-  border-radius: var(--roundness);
-  border: 1px solid var(--border);
-  padding: 0;
-
-  .theme-preview {
-    font-size: 1rem; // fix for firefox
-    width: 19rem;
+  .column-settings {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0.5em;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+  }
 
-    &.placeholder {
-      opacity: 0.2;
-    }
+  .column-settings .size-label {
+    display: block;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+  }
 
-    .preview-container {
-      pointer-events: none;
-      zoom: 0.5;
-      border: none;
-      border-radius: var(--roundness);
-      text-align: left;
+  .theme-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    margin: -0.5em 0;
+    height: 25em;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+    border-radius: var(--roundness);
+    border: 1px solid var(--border);
+    padding: 0;
+
+    .theme-preview {
+      font-size: 1rem; // fix for firefox
+      width: 19rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0.5em;
+
+      &.placeholder {
+        opacity: 0.2;
+      }
+
+      .preview-container {
+        pointer-events: none;
+        zoom: 0.5;
+        border: none;
+        border-radius: var(--roundness);
+        text-align: left;
+      }
     }
   }
 }

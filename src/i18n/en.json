@@ -741,7 +741,8 @@
     "more_settings": "More settings",
     "style": {
       "custom_theme_used": "(Custom theme)",
-      "themes2_outdated": "Editor for Themes V2 is no longer supported and presented here for sake of legacy.",
+      "themes2_outdated": "Editor for Themes V2 is being phased out and will eventually be replaced with a new one that takes advantage of new Themes V3 engine. It should still work but experience might be degraded and inconsistent.",
+      "appearance_tab_note": "Changes on this tab do not affect the theme used",
       "update_preview": "Update preview",
       "themes3": {
         "define": "Override",

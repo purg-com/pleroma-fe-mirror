@@ -9,6 +9,7 @@
     >
       <slot />
     </label>
+    {{ ' ' }}
     <input
       :id="path"
       class="input number-input"
