@@ -12,7 +12,9 @@ export const basePaletteKeys = new Set([
   'cBlue',
   'cRed',
   'cGreen',
-  'cOrange'
+  'cOrange',
+
+  'wallpaper'
 ])
 
 export const fontsKeys = new Set([
@@ -138,7 +140,7 @@ export const convertTheme2To3 = (data) => {
     Object.keys(data.opacity || {}).forEach(key => {
       if (!opacityKeys.has(key) || data.opacity[key] === undefined) return null
       const originalOpacity = data.opacity[key]
-      const rule = {}
+      const rule = { source: '2to3' }
 
       switch (key) {
         case 'alert':
@@ -213,7 +215,7 @@ export const convertTheme2To3 = (data) => {
     Object.keys(data.radii || {}).forEach(key => {
       if (!radiiKeys.has(key) || data.radii[key] === undefined) return null
       const originalRadius = data.radii[key]
-      const rule = {}
+      const rule = { source: '2to3' }
 
       switch (key) {
         case 'btn':
@@ -265,8 +267,9 @@ export const convertTheme2To3 = (data) => {
     const newRules = []
     Object.keys(data.fonts || {}).forEach(key => {
       if (!fontsKeys.has(key)) return
+      if (!data.fonts[key]) return
       const originalFont = data.fonts[key].family
-      const rule = {}
+      const rule = { source: '2to3' }
 
       switch (key) {
         case 'interface':
@@ -300,7 +303,7 @@ export const convertTheme2To3 = (data) => {
     Object.keys(data.shadows || {}).forEach(key => {
       if (!shadowsKeys.has(key)) return
       const originalShadow = data.shadows[key]
-      const rule = {}
+      const rule = { source: '2to3' }
 
       switch (key) {
         case 'panel':
@@ -369,7 +372,7 @@ export const convertTheme2To3 = (data) => {
 
   const extendedRules = Object.entries(extendedBaseKeys).map(([prefix, keys]) => {
     if (nonComponentPrefixes.has(prefix)) return null
-    const rule = {}
+    const rule = { source: '2to3' }
     if (prefix === 'alertPopup') {
       rule.component = 'Alert'
       rule.parent = { component: 'Popover' }
@@ -402,7 +405,7 @@ export const convertTheme2To3 = (data) => {
       const leftoverKey = key.replace(prefix, '')
       const parts = (leftoverKey || 'Bg').match(/[A-Z][a-z]*/g)
       const last = parts.slice(-1)[0]
-      let newRule = { directives: {} }
+      let newRule = { source: '2to3', directives: {} }
       let variantArray = []
 
       switch (last) {
@@ -462,12 +465,12 @@ export const convertTheme2To3 = (data) => {
 
       if (prefix === 'popover' && variantArray[0] === 'Post') {
         newRule.component = 'Post'
-        newRule.parent = { component: 'Popover' }
+        newRule.parent = { source: '2to3hack', component: 'Popover' }
         variantArray = variantArray.filter(x => x !== 'Post')
       }
 
       if (prefix === 'selectedMenu' && variantArray[0] === 'Popover') {
-        newRule.parent = { component: 'Popover' }
+        newRule.parent = { source: '2to3hack', component: 'Popover' }
         variantArray = variantArray.filter(x => x !== 'Popover')
       }
 
@@ -477,12 +480,12 @@ export const convertTheme2To3 = (data) => {
         case 'alert': {
           const hasPanel = variantArray.find(x => x === 'Panel')
           if (hasPanel) {
-            newRule.parent = { component: 'PanelHeader' }
+            newRule.parent = { source: '2to3hack', component: 'PanelHeader', parent: newRule.parent }
             variantArray = variantArray.filter(x => x !== 'Panel')
           }
           const hasTop = variantArray.find(x => x === 'Top') // TopBar
           if (hasTop) {
-            newRule.parent = { component: 'TopBar' }
+            newRule.parent = { source: '2to3hack', component: 'TopBar', parent: newRule.parent }
             variantArray = variantArray.filter(x => x !== 'Top' && x !== 'Bar')
           }
           break

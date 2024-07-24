@@ -147,6 +147,18 @@
         </span>
       </div>
     </div>
+    <teleport to="#modal">
+      <ConfirmModal
+        v-if="$store.state.interface.temporaryChangesTimeoutId"
+        :title="$t('settings.confirm_new_setting')"
+        :cancel-text="$t('settings.revert')"
+        :confirm-text="$t('settings.confirm')"
+        @cancelled="$store.state.interface.temporaryChangesRevert"
+        @accepted="$store.state.interface.temporaryChangesConfirm"
+      >
+        {{ $t('settings.confirm_new_question') }}
+      </ConfirmModal>
+    </teleport>
   </Modal>
 </template>
 

@@ -49,6 +49,7 @@
     }
 
     &.toggled {
+      margin-bottom: -4px;
       border-bottom: 4px solid;
     }
   }

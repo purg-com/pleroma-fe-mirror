@@ -1,5 +1,3 @@
-import { getPreset, applyTheme } from '../services/style_setter/style_setter.js'
-import { CURRENT_VERSION } from '../services/theme_data/theme_data.service.js'
 import apiService from '../services/api/api.service.js'
 import { instanceDefaultProperties } from './config.js'
 import { langCodeToCldrName, ensureFinalFallback } from '../i18n/languages.js'
@@ -44,7 +42,7 @@ const defaultState = {
   registrationOpen: true,
   server: 'http://localhost:4040/',
   textlimit: 5000,
-  themeData: undefined,
+  themeData: undefined, // used for theme editor v2
   vapidPublicKey: undefined,
 
   // Stuff from static/config.json
@@ -98,6 +96,13 @@ const defaultState = {
   sidebarRight: false,
   subjectLineBehavior: 'email',
   theme: 'pleroma-dark',
+  emojiReactionsScale: 0.5,
+  textSize: '14px',
+  emojiSize: '2.2rem',
+  navbarSize: '3.5rem',
+  panelHeaderSize: '3.2rem',
+  forcedRoundness: -1,
+  fontsOverride: {},
   virtualScrolling: true,
   sensitiveByDefault: false,
   conversationDisplay: 'linear',
@@ -279,9 +284,6 @@ const instance = {
             dispatch('initializeSocket')
           }
           break
-        case 'theme':
-          dispatch('setTheme', value)
-          break
       }
     },
     async getStaticEmoji ({ commit }) {
@@ -369,27 +371,6 @@ const instance = {
         console.warn("Can't load custom emojis")
         console.warn(e)
       }
-    },
-
-    setTheme ({ commit, rootState }, themeName) {
-      commit('setInstanceOption', { name: 'theme', value: themeName })
-      getPreset(themeName)
-        .then(themeData => {
-          commit('setInstanceOption', { name: 'themeData', value: themeData })
-          // No need to apply theme if there's user theme already
-          const { customTheme } = rootState.config
-          const { themeApplied } = rootState.interface
-          if (customTheme || themeApplied) return
-
-          // New theme presets don't have 'theme' property, they use 'source'
-          const themeSource = themeData.source
-          if (!themeData.theme || (themeSource && themeSource.themeEngineVersion === CURRENT_VERSION)) {
-            applyTheme(themeSource)
-          } else {
-            applyTheme(themeData.theme)
-          }
-          commit('setThemeApplied')
-        })
     },
     fetchEmoji ({ dispatch, state }) {
       if (!state.customEmojiFetched) {

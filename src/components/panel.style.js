@@ -20,6 +20,16 @@ export default {
     'Tab',
     'ListItem'
   ],
+  validInnerComponentsLite: [
+    'Text',
+    'Link',
+    'Icon',
+    'Border',
+    'Button',
+    'Input',
+    'PanelHeader',
+    'Alert'
+  ],
   defaultRules: [
     {
       directives: {

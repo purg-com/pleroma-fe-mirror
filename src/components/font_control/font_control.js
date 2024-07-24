@@ -1,63 +1,59 @@
-import { set } from 'lodash'
 import Select from '../select/select.vue'
+import Checkbox from 'src/components/checkbox/checkbox.vue'
+import Popover from 'src/components/popover/popover.vue'
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import {
+  faExclamationTriangle,
+  faKeyboard,
+  faFont
+} from '@fortawesome/free-solid-svg-icons'
+
+library.add(
+  faExclamationTriangle,
+  faKeyboard,
+  faFont
+)
 
 export default {
   components: {
-    Select
+    Select,
+    Checkbox,
+    Popover
   },
   props: [
     'name', 'label', 'modelValue', 'fallback', 'options', 'no-inherit'
   ],
+  mounted () {
+    this.$store.dispatch('queryLocalFonts')
+  },
   emits: ['update:modelValue'],
   data () {
     return {
-      lValue: this.modelValue,
+      manualEntry: false,
       availableOptions: [
         this.noInherit ? '' : 'inherit',
-        'custom',
-        ...(this.options || []),
         'serif',
+        'sans-serif',
         'monospace',
-        'sans-serif'
+        ...(this.options || [])
       ].filter(_ => _)
     }
   },
-  beforeUpdate () {
-    this.lValue = this.modelValue
+  methods: {
+    toggleManualEntry () {
+      this.manualEntry = !this.manualEntry
+    }
   },
   computed: {
     present () {
-      return typeof this.lValue !== 'undefined'
+      return typeof this.modelValue !== 'undefined'
     },
-    dValue () {
-      return this.lValue || this.fallback || {}
+    localFontsList () {
+      return this.$store.state.interface.localFonts
     },
-    family: {
-      get () {
-        return this.dValue.family
-      },
-      set (v) {
-        set(this.lValue, 'family', v)
-        this.$emit('update:modelValue', this.lValue)
-      }
-    },
-    isCustom () {
-      return this.preset === 'custom'
-    },
-    preset: {
-      get () {
-        if (this.family === 'serif' ||
-            this.family === 'sans-serif' ||
-            this.family === 'monospace' ||
-            this.family === 'inherit') {
-          return this.family
-        } else {
-          return 'custom'
-        }
-      },
-      set (v) {
-        this.family = v === 'custom' ? '' : v
-      }
+    localFontsSize () {
+      return this.$store.state.interface.localFonts?.length
     }
   }
 }

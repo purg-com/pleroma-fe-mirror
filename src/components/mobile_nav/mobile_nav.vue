@@ -129,7 +129,7 @@
   .mobile-nav {
     display: grid;
     line-height: var(--navbar-height);
-    grid-template-rows: 50px;
+    grid-template-rows: var(--navbar-height);
     grid-template-columns: 2fr auto;
     width: 100%;
     box-sizing: border-box;
@@ -190,8 +190,8 @@
     justify-content: space-between;
     z-index: calc(var(--ZI_navbar) + 100);
     width: 100%;
-    height: 50px;
-    line-height: 50px;
+    height: 3.5em;
+    line-height: 3.5em;
     position: absolute;
     box-shadow: var(--shadow);
 
@@ -214,7 +214,7 @@
   }
 
   .mobile-notifications {
-    margin-top: 50px;
+    margin-top: 3.5em;
     width: 100vw;
     height: calc(100vh - var(--navbar-height));
     overflow-x: hidden;
