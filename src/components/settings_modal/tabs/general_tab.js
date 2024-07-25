@@ -75,6 +75,12 @@ const GeneralTab = {
         label: this.$t(`post_status.content_type["${format}"]`)
       }))
     },
+    language: {
+      get: function () { return this.$store.getters.mergedConfig.interfaceLanguage },
+      set: function (val) {
+        this.$store.dispatch('setOption', { name: 'interfaceLanguage', value: val })
+      }
+    },
     ...SharedComputedObject()
   },
   methods: {

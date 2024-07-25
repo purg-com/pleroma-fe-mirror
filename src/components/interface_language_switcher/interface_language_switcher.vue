@@ -78,7 +78,6 @@ export default {
       },
       set: function (val) {
         this.setLanguage(val)
-        this.$emit('update:modelValue', val)
       }
     }
   },
