@@ -4,6 +4,7 @@ import AsyncComponentError from 'src/components/async_component_error/async_comp
 import getResettableAsyncComponent from 'src/services/resettable_async_component.js'
 import Popover from '../popover/popover.vue'
 import Checkbox from 'src/components/checkbox/checkbox.vue'
+import ConfirmModal from 'src/components/confirm_modal/confirm_modal.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { cloneDeep, isEqual } from 'lodash'
 import {
@@ -53,6 +54,7 @@ const SettingsModal = {
     Modal,
     Popover,
     Checkbox,
+    ConfirmModal,
     SettingsModalUserContent: getResettableAsyncComponent(
       () => import('./settings_modal_user_content.vue'),
       {
@@ -165,6 +167,7 @@ const SettingsModal = {
   },
   computed: {
     currentSaveStateNotice () {
+      console.log(this.$store.state.interface.settings.currentSaveStateNotice)
       return this.$store.state.interface.settings.currentSaveStateNotice
     },
     modalActivated () {

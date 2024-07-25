@@ -14,12 +14,34 @@
       <GeneralTab />
     </div>
     <div
+      :label="$t('settings.appearance')"
+      icon="window-restore"
+      data-tab-name="appearance"
+    >
+      <AppearanceTab />
+    </div>
+    <div
+      :label="$t('settings.theme')"
+      icon="paint-brush"
+      data-tab-name="theme"
+    >
+      <ThemeTab />
+    </div>
+    <div
       v-if="isLoggedIn"
       :label="$t('settings.profile_tab')"
       icon="user"
       data-tab-name="profile"
     >
       <ProfileTab />
+    </div>
+    <div
+      v-if="isLoggedIn"
+      :label="$t('settings.notifications')"
+      icon="bell"
+      data-tab-name="notifications"
+    >
+      <NotificationsTab />
     </div>
     <div
       v-if="isLoggedIn"
@@ -37,19 +59,13 @@
       <FilteringTab />
     </div>
     <div
-      :label="$t('settings.theme')"
-      icon="paint-brush"
-      data-tab-name="theme"
-    >
-      <ThemeTab />
-    </div>
-    <div
       v-if="isLoggedIn"
-      :label="$t('settings.notifications')"
-      icon="bell"
-      data-tab-name="notifications"
+      :label="$t('settings.mutes_and_blocks')"
+      :fullHeight="true"
+      icon="eye-slash"
+      data-tab-name="mutesAndBlocks"
     >
-      <NotificationsTab />
+      <MutesAndBlocksTab />
     </div>
     <div
       v-if="isLoggedIn"
@@ -58,15 +74,6 @@
       data-tab-name="dataImportExport"
     >
       <DataImportExportTab />
-    </div>
-    <div
-      v-if="isLoggedIn"
-      :label="$t('settings.mutes_and_blocks')"
-      :fullHeight="true"
-      icon="eye-slash"
-      data-tab-name="mutesAndBlocks"
-    >
-      <MutesAndBlocksTab />
     </div>
     <div
       :label="$t('settings.version.title')"

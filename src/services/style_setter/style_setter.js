@@ -1,7 +1,5 @@
 import { hex2rgb } from '../color_convert/color_convert.js'
-import { generatePreset } from '../theme_data/theme_data.service.js'
 import { init, getEngineChecksum } from '../theme_data/theme_data_3.service.js'
-import { convertTheme2To3 } from '../theme_data/theme2_to_theme3.js'
 import { getCssRules } from '../theme_data/css_utils.js'
 import { defaultState } from '../../modules/config.js'
 import { chunk } from 'lodash'
@@ -45,25 +43,21 @@ const adoptStyleSheets = (styles) => {
   // is nothing to do here.
 }
 
-export const generateTheme = async (input, callbacks) => {
+export const generateTheme = async (inputRuleset, callbacks, debug) => {
   const {
     onNewRule = (rule, isLazy) => {},
     onLazyFinished = () => {},
     onEagerFinished = () => {}
   } = callbacks
 
-  let extraRules
-  if (input.themeFileVersion === 1) {
-    extraRules = convertTheme2To3(input)
-  } else {
-    const { theme } = generatePreset(input)
-    extraRules = convertTheme2To3(theme)
-  }
-
   // Assuming that "worst case scenario background" is panel background since it's the most likely one
-  const themes3 = init(extraRules, extraRules[0].directives['--bg'].split('|')[1].trim())
+  const themes3 = init({
+    inputRuleset,
+    ultimateBackgroundColor: inputRuleset[0].directives['--bg'].split('|')[1].trim(),
+    debug
+  })
 
-  getCssRules(themes3.eager, themes3.staticVars).forEach(rule => {
+  getCssRules(themes3.eager, debug).forEach(rule => {
     // Hacks to support multiple selectors on same component
     if (rule.match(/::-webkit-scrollbar-button/)) {
       const parts = rule.split(/[{}]/g)
@@ -93,7 +87,7 @@ export const generateTheme = async (input, callbacks) => {
   const processChunk = () => {
     const chunk = chunks[counter]
     Promise.all(chunk.map(x => x())).then(result => {
-      getCssRules(result.filter(x => x), themes3.staticVars).forEach(rule => {
+      getCssRules(result.filter(x => x), debug).forEach(rule => {
         if (rule.match(/\.modal-view/)) {
           const parts = rule.split(/[{}]/g)
           const newRule = [
@@ -152,7 +146,7 @@ export const tryLoadCache = () => {
   }
 }
 
-export const applyTheme = async (input, onFinish = (data) => {}) => {
+export const applyTheme = async (input, onFinish = (data) => {}, debug) => {
   const eagerStyles = createStyleSheet(EAGER_STYLE_ID)
   const lazyStyles = createStyleSheet(LAZY_STYLE_ID)
 
@@ -177,7 +171,8 @@ export const applyTheme = async (input, onFinish = (data) => {}) => {
         onFinish(cache)
         localStorage.setItem('pleroma-fe-theme-cache', JSON.stringify(cache))
       }
-    }
+    },
+    debug
   )
 
   setTimeout(lazyProcessFunc, 0)
@@ -185,15 +180,52 @@ export const applyTheme = async (input, onFinish = (data) => {}) => {
   return Promise.resolve()
 }
 
-const configColumns = ({ sidebarColumnWidth, contentColumnWidth, notifsColumnWidth, emojiReactionsScale }) =>
-  ({ sidebarColumnWidth, contentColumnWidth, notifsColumnWidth, emojiReactionsScale })
+const extractStyleConfig = ({
+  sidebarColumnWidth,
+  contentColumnWidth,
+  notifsColumnWidth,
+  emojiReactionsScale,
+  emojiSize,
+  navbarSize,
+  panelHeaderSize,
+  textSize,
+  forcedRoundness
+}) => {
+  const result = {
+    sidebarColumnWidth,
+    contentColumnWidth,
+    notifsColumnWidth,
+    emojiReactionsScale,
+    emojiSize,
+    navbarSize,
+    panelHeaderSize,
+    textSize
+  }
 
-const defaultConfigColumns = configColumns(defaultState)
+  switch (forcedRoundness) {
+    case 'disable':
+      break
+    case '0':
+      result.forcedRoundness = '0'
+      break
+    case '1':
+      result.forcedRoundness = '1px'
+      break
+    case '2':
+      result.forcedRoundness = '0.4rem'
+      break
+    default:
+  }
 
-export const applyConfig = (config) => {
-  const columns = configColumns(config)
+  return result
+}
 
-  if (columns === defaultConfigColumns) {
+const defaultStyleConfig = extractStyleConfig(defaultState)
+
+export const applyConfig = (input) => {
+  const config = extractStyleConfig(input)
+
+  if (config === defaultStyleConfig) {
     return
   }
 
@@ -202,16 +234,25 @@ export const applyConfig = (config) => {
   body.classList.add('hidden')
 
   const rules = Object
-    .entries(columns)
+    .entries(config)
     .filter(([k, v]) => v)
     .map(([k, v]) => `--${k}: ${v}`).join(';')
 
+  document.getElementById('style-config')?.remove()
   const styleEl = document.createElement('style')
+  styleEl.id = 'style-config'
   head.appendChild(styleEl)
   const styleSheet = styleEl.sheet
 
   styleSheet.toString()
   styleSheet.insertRule(`:root { ${rules} }`, 'index-max')
+
+  if (Object.prototype.hasOwnProperty.call(config, 'forcedRoundness')) {
+    styleSheet.insertRule(` * {
+        --roundness: var(--forcedRoundness) !important;
+    }`, 'index-max')
+  }
+
   body.classList.remove('hidden')
 }
 
@@ -269,5 +310,3 @@ export const getPreset = (val) => {
       return { theme: data, source: theme.source }
     })
 }
-
-export const setPreset = (val) => getPreset(val).then(data => applyTheme(data))

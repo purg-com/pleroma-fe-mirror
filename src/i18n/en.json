@@ -376,6 +376,20 @@
     "enter_current_password_to_confirm": "Enter your current password to confirm your identity",
     "post_look_feel": "Posts Look & Feel",
     "mention_links": "Mention links",
+    "appearance": "Appearance",
+    "confirm_new_setting": "Confirm new setting?",
+    "confirm_new_question": "Does this look ok? Setting will be reverted in 10 seconds.",
+    "revert": "Revert",
+    "confirm": "Confirm",
+    "text_size": "Text and interface size",
+    "text_size_tip": "Use {0} for absolute values, {1} will scale with browser default text size.",
+    "text_size_tip2": "Values other than {0} might break some things and themes",
+    "emoji_size": "Emoji size",
+    "navbar_size": "Top bar size",
+    "panel_header_size": "Panel header size",
+    "visual_tweaks": "Minor visual tweaks",
+    "theme_debug": "Show what background theme engine assumes when dealing with transparancy (DEBUG)",
+    "scale_and_layout": "Interface scale and layout",
     "mfa": {
       "otp": "OTP",
       "setup_otp": "Setup OTP",
@@ -729,6 +743,42 @@
     "enable_web_push_always_show_tip": "Some browsers (Chromium, Chrome) require that push messages always result in a notification, otherwise generic 'Website was updated in background' is shown, enable this to prevent this notification from showing, as Chrome seem to hide push notifications if tab is in focus. Can result in showing duplicate notifications on other browsers.",
     "more_settings": "More settings",
     "style": {
+      "custom_theme_used": "(Custom theme)",
+      "themes2_outdated": "Editor for Themes V2 is being phased out and will eventually be replaced with a new one that takes advantage of new Themes V3 engine. It should still work but experience might be degraded and inconsistent.",
+      "appearance_tab_note": "Changes on this tab do not affect the theme used, so exported theme will be different from what seen in the UI",
+      "update_preview": "Update preview",
+      "themes3": {
+        "define": "Override",
+        "hacks": {
+          "underlay_overrides": "Change underlay",
+          "underlay_override_mode_none": "Theme default",
+          "underlay_override_mode_opaque": "Replace with solid color",
+          "underlay_override_mode_transparent": "Remove entirely (might break some themes)",
+          "force_interface_roundness": "Override interface roundness/sharpness",
+          "forced_roundness_mode_disabled": "Use theme defaults",
+          "forced_roundness_mode_sharp": "Force sharp edges",
+          "forced_roundness_mode_nonsharp": "Force not-so-sharp (1px roundness) edges",
+          "forced_roundness_mode_round": "Force round edges"
+        },
+        "font": {
+          "group-builtin": "Browser default fonts",
+          "builtin" : {
+            "serif": "Serif",
+            "sans-serif": "Sans-serif",
+            "monospace": "Monospace",
+            "inherit": "Unchanged"
+          },
+          "group-local": "Locally installed fonts",
+          "local-unavailable1": "List of locally installed fonts unavailalbe",
+          "local-unavailable2": "Use manual entry to specify custom font",
+          "font_list_unavailable": "Couldn't get locally installed fonts: {error}",
+          "lookup_local_fonts": "Load list of fonts installed on this computer",
+          "enter_manually": "Enter font name family manually",
+          "entry": "Enter {fontFamily}",
+          "select": "Select font"
+        }
+      },
+      "interface_font_user_override": "Override theme/browser font used",
       "switcher": {
         "keep_color": "Keep colors",
         "keep_shadows": "Keep shadows",
@@ -852,7 +902,7 @@
           "interface": "Interface",
           "input": "Input fields",
           "post": "Post text",
-          "postCode": "Monospaced text in a post (rich text)"
+          "monospace": "Monospaced text"
         },
         "family": "Font name",
         "size": "Size (in px)",

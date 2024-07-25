@@ -7,6 +7,7 @@ import FilteringTab from './tabs/filtering_tab.vue'
 import SecurityTab from './tabs/security_tab/security_tab.vue'
 import ProfileTab from './tabs/profile_tab.vue'
 import GeneralTab from './tabs/general_tab.vue'
+import AppearanceTab from './tabs/appearance_tab.vue'
 import VersionTab from './tabs/version_tab.vue'
 import ThemeTab from './tabs/theme_tab/theme_tab.vue'
 
@@ -19,7 +20,8 @@ import {
   faBell,
   faDownload,
   faEyeSlash,
-  faInfo
+  faInfo,
+  faWindowRestore
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -30,7 +32,8 @@ library.add(
   faBell,
   faDownload,
   faEyeSlash,
-  faInfo
+  faInfo,
+  faWindowRestore
 )
 
 const SettingsModalContent = {
@@ -44,6 +47,7 @@ const SettingsModalContent = {
     SecurityTab,
     ProfileTab,
     GeneralTab,
+    AppearanceTab,
     VersionTab,
     ThemeTab
   },

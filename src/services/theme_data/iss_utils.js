@@ -39,7 +39,23 @@ export const getAllPossibleCombinations = (array) => {
   return combos.reduce((acc, x) => [...acc, ...x], [])
 }
 
-// Converts rule, parents and their criteria into a CSS (or path if ignoreOutOfTreeSelector == true) selector
+/**
+ * Converts rule, parents and their criteria into a CSS (or path if ignoreOutOfTreeSelector == true)
+ * selector.
+ *
+ * "path" here refers to "fake" selector that cannot be actually used in UI but is used for internal
+ * purposes
+ *
+ * @param {Object} components - object containing all components definitions
+ *
+ * @returns {Function}
+ * @param {Object} rule - rule in question to convert to CSS selector
+ * @param {boolean} ignoreOutOfTreeSelector - wthether to ignore aformentioned field in
+ *   component definition and use selector
+ * @param {boolean} isParent - (mostly) internal argument used when recursing
+ *
+ * @returns {String} CSS selector (or path)
+ */
 export const genericRuleToSelector = components => (rule, ignoreOutOfTreeSelector, isParent) => {
   if (!rule && !isParent) return null
   const component = components[rule.component]
@@ -79,6 +95,17 @@ export const genericRuleToSelector = components => (rule, ignoreOutOfTreeSelecto
   return selectors.trim()
 }
 
+/**
+ * Check if combination matches
+ *
+ * @param {Object} criteria - criteria to match against
+ * @param {Object} subject - rule/combination to check match
+ * @param {boolean} strict - strict checking:
+ *   By default every variant and state inherits from "normal" state/variant
+ *   so when checking if combination matches, it WILL match against "normal"
+ *   state/variant. In strict mode inheritance is ignored an "normal" does
+ *   not match
+ */
 export const combinationsMatch = (criteria, subject, strict) => {
   if (criteria.component !== subject.component) return false
 
@@ -101,6 +128,15 @@ export const combinationsMatch = (criteria, subject, strict) => {
   return true
 }
 
+/**
+ * Search for rule that matches `criteria` in set of rules
+ * meant to be used in a ruleset.filter() function
+ *
+ * @param {Object} criteria - criteria to search for
+ * @param {boolean} strict - whether search strictly or not (see combinationsMatch)
+ *
+ * @return function that returns true/false if subject matches
+ */
 export const findRules = (criteria, strict) => subject => {
   // If we searching for "general" rules - ignore "specific" ones
   if (criteria.parent === null && !!subject.parent) return false
@@ -125,6 +161,7 @@ export const findRules = (criteria, strict) => subject => {
   return true
 }
 
+// Pre-fills 'normal' state/variant if missing
 export const normalizeCombination = rule => {
   rule.variant = rule.variant ?? 'normal'
   rule.state = [...new Set(['normal', ...(rule.state || [])])]

@@ -21,15 +21,23 @@ export default {
     unitSet: {
       type: String,
       default: 'none'
+    },
+    step: {
+      type: Number,
+      default: 1
+    },
+    resetDefault: {
+      type: Object,
+      default: null
     }
   },
   computed: {
     ...Setting.computed,
     stateUnit () {
-      return this.state.replace(/\d+/, '')
+      return typeof this.state === 'string' ? this.state.replace(/[0-9,.]+/, '') : ''
     },
     stateValue () {
-      return this.state.replace(/\D+/, '')
+      return typeof this.state === 'string' ? this.state.replace(/[^0-9,.]+/, '') : ''
     }
   },
   methods: {
@@ -39,10 +47,18 @@ export default {
       return this.$t(['settings', 'units', this.unitSet, value].join('.'))
     },
     updateValue (e) {
-      this.configSink(this.path, parseInt(e.target.value) + this.stateUnit)
+      this.configSink(this.path, parseFloat(e.target.value) + this.stateUnit)
     },
     updateUnit (e) {
-      this.configSink(this.path, this.stateValue + e.target.value)
+      let value = this.stateValue
+      const newUnit = e.target.value
+      if (this.resetDefault) {
+        const replaceValue = this.resetDefault[newUnit]
+        if (replaceValue != null) {
+          value = replaceValue
+        }
+      }
+      this.configSink(this.path, value + newUnit)
     }
   }
 }

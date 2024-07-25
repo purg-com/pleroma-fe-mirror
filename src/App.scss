@@ -4,7 +4,8 @@
 
 :root {
   --status-margin: 0.75em;
-  --navbar-height: 3.5rem;
+  --navbar-height: var(--navbarSize, 3.5rem);
+  --panel-header-height: var(--panelHeaderSize, 3.2rem);
   --post-line-height: 1.4;
   // Z-Index stuff
   --ZI_media_modal: 9000;
@@ -19,7 +20,9 @@
 }
 
 html {
-  font-size: var(--font-size, 14px);
+  font-size: var(--textSize, 14px);
+  --navbar-height: var(--navbarSize, 3.5rem);
+  --emoji-size: var(--emojiSize, 32px);
   // overflow-x: clip causes my browser's tab to crash with SIGILL lul
 }
 
@@ -155,6 +158,7 @@ nav {
   box-shadow: var(--shadow);
   box-sizing: border-box;
   height: var(--navbar-height);
+  font-size: calc(var(--navbar-height) / 3.5);
   position: fixed;
 }
 
@@ -206,7 +210,7 @@ nav {
 .app-layout {
   --miniColumn: 25rem;
   --maxiColumn: 45rem;
-  --columnGap: 1em;
+  --columnGap: 1rem;
   --effectiveSidebarColumnWidth: minmax(var(--miniColumn), var(--sidebarColumnWidth, var(--miniColumn)));
   --effectiveNotifsColumnWidth: minmax(var(--miniColumn), var(--notifsColumnWidth, var(--miniColumn)));
   --effectiveContentColumnWidth: minmax(var(--miniColumn), var(--contentColumnWidth, var(--maxiColumn)));
@@ -370,7 +374,6 @@ nav {
   user-select: none;
   color: var(--text);
   border: none;
-  border-radius: var(--roundness);
   cursor: pointer;
   background-color: var(--background);
   box-shadow: var(--shadow);
@@ -506,7 +509,6 @@ textarea {
   --_padding: 0.5em;
 
   border: none;
-  border-radius: var(--roundness);
   background-color: var(--background);
   color: var(--text);
   box-shadow: var(--shadow);
@@ -612,6 +614,17 @@ textarea {
   }
 }
 
+.input,
+.button-default {
+  --_roundness-left: var(--roundness);
+  --_roundness-right: var(--roundness);
+
+  border-top-left-radius: var(--_roundness-left);
+  border-bottom-left-radius: var(--_roundness-left);
+  border-top-right-radius: var(--_roundness-right);
+  border-bottom-right-radius: var(--_roundness-right);
+}
+
 // Textareas should have stock line-height + vertical padding instead of huge line-height
 textarea.input {
   padding: var(--_padding);
@@ -657,22 +670,23 @@ option {
   display: inline-flex;
   vertical-align: middle;
 
-  button,
-  .button-dropdown {
+  > *,
+  > * .button-default {
+    --_roundness-left: 0;
+    --_roundness-right: 0;
+
     position: relative;
     flex: 1 1 auto;
+  }
 
-    &:not(:last-child),
-    &:not(:last-child) .button-default {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
+  > *:first-child,
+  > *:first-child .button-default {
+    --_roundness-left: var(--roundness);
+  }
 
-    &:not(:first-child),
-    &:not(:first-child) .button-default {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-    }
+  > *:last-child,
+  > *:last-child .button-default {
+    --_roundness-right: var(--roundness);
   }
 }
 

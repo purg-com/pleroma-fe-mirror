@@ -12,6 +12,11 @@ export default {
     'Alert',
     'Button' // mobile post button
   ],
+  validInnerComponentsLite: [
+    'Underlay',
+    'Scrollbar',
+    'ScrollbarElement'
+  ],
   defaultRules: [
     {
       directives: {

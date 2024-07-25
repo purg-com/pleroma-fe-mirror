@@ -149,16 +149,42 @@ const ruleToSelector = genericRuleToSelector(components)
 
 export const getEngineChecksum = () => engineChecksum
 
-export const init = (extraRuleset, ultimateBackgroundColor) => {
+/**
+ * Initializes and compiles the theme according to the ruleset
+ *
+ * @param {Object[]} inputRuleset - set of rules to compile theme against. Acts as an override to
+ *   component default rulesets
+ * @param {string} ultimateBackgroundColor - Color that will be the "final" background for
+ *   calculating contrast ratios and making text automatically accessible. Really used for cases when
+ *   stuff is transparent.
+ * @param {boolean} debug - print out debug information in console, mostly just performance stuff
+ * @param {boolean} liteMode - use validInnerComponentsLite instead of validInnerComponents, meant to
+ *   generatate theme previews and such that need to be compiled faster and don't require a lot of other
+ *   components present in "normal" mode
+ * @param {boolean} onlyNormalState - only use components 'normal' states, meant for generating theme
+ *   previews since states are the biggest factor for compilation time and are completely unnecessary
+ *   when previewing multiple themes at same time
+ * @param {string} rootComponentName - [UNTESTED] which component to start from, meant for previewing a
+ *   part of the theme (i.e. just the button) for themes 3 editor.
+ */
+export const init = ({
+  inputRuleset,
+  ultimateBackgroundColor,
+  debug = false,
+  liteMode = false,
+  onlyNormalState = false,
+  rootComponentName = 'Root'
+}) => {
+  if (!inputRuleset) throw new Error('Ruleset is null or undefined!')
   const staticVars = {}
   const stacked = {}
   const computed = {}
 
   const rulesetUnsorted = [
     ...Object.values(components)
-      .map(c => (c.defaultRules || []).map(r => ({ component: c.name, ...r })))
+      .map(c => (c.defaultRules || []).map(r => ({ component: c.name, ...r, source: 'Built-in' })))
       .reduce((acc, arr) => [...acc, ...arr], []),
-    ...extraRuleset
+    ...inputRuleset
   ].map(rule => {
     normalizeCombination(rule)
     let currentParent = rule.parent
@@ -395,10 +421,15 @@ export const init = (extraRuleset, ultimateBackgroundColor) => {
   const processInnerComponent = (component, parent) => {
     const combinations = []
     const {
-      validInnerComponents = [],
       states: originalStates = {},
       variants: originalVariants = {}
     } = component
+
+    const validInnerComponents = (
+      liteMode
+        ? (component.validInnerComponentsLite || component.validInnerComponents)
+        : component.validInnerComponents
+    ) || []
 
     // Normalizing states and variants to always include "normal"
     const states = { normal: '', ...originalStates }
@@ -411,22 +442,26 @@ export const init = (extraRuleset, ultimateBackgroundColor) => {
 
     // Optimization: we only really need combinations without "normal" because all states implicitly have it
     const permutationStateKeys = Object.keys(states).filter(s => s !== 'normal')
-    const stateCombinations = [
-      ['normal'],
-      ...getAllPossibleCombinations(permutationStateKeys)
-        .map(combination => ['normal', ...combination])
-        .filter(combo => {
-          // Optimization: filter out some hard-coded combinations that don't make sense
-          if (combo.indexOf('disabled') >= 0) {
-            return !(
-              combo.indexOf('hover') >= 0 ||
-                combo.indexOf('focused') >= 0 ||
-                combo.indexOf('pressed') >= 0
-            )
-          }
-          return true
-        })
-    ]
+    const stateCombinations = onlyNormalState
+      ? [
+          ['normal']
+        ]
+      : [
+          ['normal'],
+          ...getAllPossibleCombinations(permutationStateKeys)
+            .map(combination => ['normal', ...combination])
+            .filter(combo => {
+              // Optimization: filter out some hard-coded combinations that don't make sense
+              if (combo.indexOf('disabled') >= 0) {
+                return !(
+                  combo.indexOf('hover') >= 0 ||
+                    combo.indexOf('focused') >= 0 ||
+                    combo.indexOf('pressed') >= 0
+                )
+              }
+              return true
+            })
+        ]
 
     const stateVariantCombination = Object.keys(variants).map(variant => {
       return stateCombinations.map(state => ({ variant, state }))
@@ -451,9 +486,11 @@ export const init = (extraRuleset, ultimateBackgroundColor) => {
   }
 
   const t0 = performance.now()
-  const combinations = processInnerComponent(components.Root)
+  const combinations = processInnerComponent(components[rootComponentName] ?? components.Root)
   const t1 = performance.now()
-  console.debug('Tree traveral took ' + (t1 - t0) + ' ms')
+  if (debug) {
+    console.debug('Tree traveral took ' + (t1 - t0) + ' ms')
+  }
 
   const result = combinations.map((combination) => {
     if (combination.lazy) {
@@ -463,7 +500,9 @@ export const init = (extraRuleset, ultimateBackgroundColor) => {
     }
   }).filter(x => x)
   const t2 = performance.now()
-  console.debug('Eager processing took ' + (t2 - t1) + ' ms')
+  if (debug) {
+    console.debug('Eager processing took ' + (t2 - t1) + ' ms')
+  }
 
   return {
     lazy: result.filter(x => typeof x === 'function'),

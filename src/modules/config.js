@@ -1,10 +1,21 @@
 import Cookies from 'js-cookie'
-import { setPreset, applyTheme, applyConfig } from '../services/style_setter/style_setter.js'
+import { applyConfig } from '../services/style_setter/style_setter.js'
 import messages from '../i18n/messages'
 import { set } from 'lodash'
 import localeService from '../services/locale/locale.service.js'
 
 const BACKEND_LANGUAGE_COOKIE_NAME = 'userLanguage'
+const APPEARANCE_SETTINGS_KEYS = new Set([
+  'sidebarColumnWidth',
+  'contentColumnWidth',
+  'notifsColumnWidth',
+  'textSize',
+  'navbarSize',
+  'panelHeaderSize',
+  'forcedRoundness',
+  'emojiSize',
+  'emojiReactionsScale'
+])
 
 const browserLocale = (window.navigator.language || 'en').split('-')[0]
 
@@ -24,11 +35,30 @@ export const multiChoiceProperties = [
 
 export const defaultState = {
   expertLevel: 0, // used to track which settings to show and hide
-  colors: {},
-  theme: undefined,
-  customTheme: undefined,
-  customThemeSource: undefined,
-  forceThemeRecompilation: false,
+
+  // Theme  stuff
+  theme: undefined, // Very old theme store, stores preset name, still in use
+
+  // V1
+  colors: {}, // VERY old theme store, just colors of V1, probably not even used anymore
+
+  // V2
+  customTheme: undefined, // "snapshot", previously was used as actual theme store for V2 so it's still used in case of PleromaFE downgrade event.
+  customThemeSource: undefined, // "source", stores original theme data
+
+  // V3
+  themeDebug: false, // debug mode that uses computed backgrounds instead of real ones to debug contrast functions
+  forceThemeRecompilation: false, //  flag that forces recompilation on boot even if cache exists
+  theme3hacks: { // Hacks, user overrides that are independent of theme used
+    underlay: 'none',
+    fonts: {
+      interface: undefined,
+      input: undefined,
+      post: undefined,
+      monospace: undefined
+    }
+  },
+
   hideISP: false,
   hideInstanceWallpaper: false,
   hideShoutbox: false,
@@ -117,7 +147,12 @@ export const defaultState = {
   sidebarColumnWidth: '25rem',
   contentColumnWidth: '45rem',
   notifsColumnWidth: '25rem',
-  emojiReactionsScale: 1.0,
+  emojiReactionsScale: undefined,
+  textSize: undefined, // instance default
+  emojiSize: undefined, // instance default
+  navbarSize: undefined, // instance default
+  panelHeaderSize: undefined, // instance default
+  forcedRoundness: undefined, // instance default
   navbarColumnStretch: false,
   greentext: undefined, // instance default
   useAtIcon: undefined, // instance default
@@ -175,6 +210,10 @@ const config = {
     }
   },
   mutations: {
+    setOptionTemporarily (state, { name, value }) {
+      set(state, name, value)
+      applyConfig(state)
+    },
     setOption (state, { name, value }) {
       set(state, name, value)
     },
@@ -205,6 +244,37 @@ const config = {
     setHighlight ({ commit, dispatch }, { user, color, type }) {
       commit('setHighlight', { user, color, type })
     },
+    setOptionTemporarily ({ commit, dispatch, state, rootState }, { name, value }) {
+      if (rootState.interface.temporaryChangesTimeoutId !== null) {
+        console.warn('Can\'t track more than one temporary change')
+        return
+      }
+      const oldValue = state[name]
+
+      commit('setOptionTemporarily', { name, value })
+
+      const confirm = () => {
+        dispatch('setOption', { name, value })
+        commit('clearTemporaryChanges')
+      }
+
+      const revert = () => {
+        commit('setOptionTemporarily', { name, value: oldValue })
+        commit('clearTemporaryChanges')
+      }
+
+      commit('setTemporaryChanges', {
+        timeoutId: setTimeout(revert, 10000),
+        confirm,
+        revert
+      })
+    },
+    setThemeV2 ({ commit, dispatch }, { customTheme, customThemeSource }) {
+      commit('setOption', { name: 'theme', value: 'custom' })
+      commit('setOption', { name: 'customTheme', value: customTheme })
+      commit('setOption', { name: 'customThemeSource', value: customThemeSource })
+      dispatch('setTheme', { themeData: customThemeSource, recompile: true })
+    },
     setOption ({ commit, dispatch, state }, { name, value }) {
       const exceptions = new Set([
         'useStreamingApi'
@@ -222,24 +292,26 @@ const config = {
               dispatch('disableMastoSockets')
               dispatch('setOption', { name: 'useStreamingApi', value: false })
             })
+            break
           }
         }
       } else {
         commit('setOption', { name, value })
+        if (APPEARANCE_SETTINGS_KEYS.has(name)) {
+          applyConfig(state)
+        }
+        if (name.startsWith('theme3hacks')) {
+          dispatch('setTheme', { recompile: true })
+        }
         switch (name) {
           case 'theme':
-            setPreset(value)
+            if (value === 'custom') break
+            dispatch('setTheme', { themeName: value, recompile: true, saveData: true })
             break
-          case 'sidebarColumnWidth':
-          case 'contentColumnWidth':
-          case 'notifsColumnWidth':
-          case 'emojiReactionsScale':
-            applyConfig(state)
+          case 'themeDebug': {
+            dispatch('setTheme', { recompile: true })
             break
-          case 'customTheme':
-          case 'customThemeSource':
-            applyTheme(value)
-            break
+          }
           case 'interfaceLanguage':
             messages.setLanguage(this.getters.i18n, value)
             dispatch('loadUnicodeEmojiData', value)
