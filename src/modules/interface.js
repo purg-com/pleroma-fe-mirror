@@ -237,11 +237,11 @@ const interfaceMod = {
       } else if (themeName) {
         promise = getPreset(themeName).then(themeData => normalizeThemeData(themeData))
       } else if (userThemeSource || userThemeSnapshot) {
-        if (userThemeSource && userThemeSource.themeEngineVersion === CURRENT_VERSION) {
-          promise = Promise.resolve(normalizeThemeData(userThemeSource))
-        } else {
-          promise = Promise.resolve(normalizeThemeData(userThemeSnapshot))
-        }
+        promise = Promise.resolve(normalizeThemeData({
+          _pleroma_theme_version: 2,
+          theme: userThemeSnapshot,
+          source: userThemeSource
+        }))
       } else if (actualThemeName && actualThemeName !== 'custom') {
         promise = getPreset(actualThemeName).then(themeData => {
           const realThemeData = normalizeThemeData(themeData)
@@ -355,10 +355,8 @@ const interfaceMod = {
 export default interfaceMod
 
 export const normalizeThemeData = (input) => {
-  let themeData = input
-
-  if (Array.isArray(themeData)) {
-    themeData = { colors: {} }
+  if (Array.isArray(input)) {
+    const themeData = { colors: {} }
     themeData.colors.bg = input[1]
     themeData.colors.fg = input[2]
     themeData.colors.text = input[3]
@@ -370,18 +368,32 @@ export const normalizeThemeData = (input) => {
     return generatePreset(themeData).theme
   }
 
-  if (themeData.themeFileVerison === 1) {
-    return generatePreset(themeData).theme
-  }
+  let themeData, themeSource
 
+  if (input.themeFileVerison === 1) {
+    // this might not be even used at all, some leftover of unimplemented code in V2 editor
+    return generatePreset(input).theme
+  } else if (
+    Object.prototype.hasOwnProperty.call(input, '_pleroma_theme_version') ||
+      Object.prototype.hasOwnProperty.call(input, 'source') ||
+      Object.prototype.hasOwnProperty.call(input, 'theme')
+  ) {
+    // We got passed a full theme file
+    themeData = input.theme
+    themeSource = input.source
+  } else if (Object.prototype.hasOwnProperty.call(input, 'themeEngineVersion')) {
+    // We got passed a source/snapshot
+    themeData = input
+    themeSource = input
+  }
   // New theme presets don't have 'theme' property, they use 'source'
-  const themeSource = themeData.source
 
   let out // shout, shout let it all out
-  if (!themeData.theme || (themeSource && themeSource.themeEngineVersion === CURRENT_VERSION)) {
-    out = themeSource || themeData
+  if (themeSource && themeSource.themeEngineVersion === CURRENT_VERSION) {
+    // There are some themes in wild that have completely broken source
+    out = { ...(themeData || {}), ...themeSource }
   } else {
-    out = themeData.theme
+    out = themeData
   }
 
   // generatePreset here basically creates/updates "snapshot",
