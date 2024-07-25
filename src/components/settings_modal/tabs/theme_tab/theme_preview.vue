@@ -1,5 +1,5 @@
 <template>
-  <div class="preview-container">
+  <div class="theme-preview-container">
     <div class="underlay underlay-preview" />
     <div class="panel dummy">
       <div class="panel-heading">
@@ -136,7 +136,7 @@ export default {
 </script>
 
 <style lang="scss">
-.preview-container {
+.theme-preview-container {
   position: relative;
   border-top: 1px dashed;
   border-bottom: 1px dashed;
@@ -238,13 +238,13 @@ export default {
       min-width: 3em;
     }
   }
-}
 
-.underlay-preview {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 10px;
-  right: 10px;
+  .underlay-preview {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 10px;
+    right: 10px;
+  }
 }
  </style>

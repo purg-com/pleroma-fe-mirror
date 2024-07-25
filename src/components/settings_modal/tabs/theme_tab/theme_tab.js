@@ -45,7 +45,7 @@ import TabSwitcher from 'src/components/tab_switcher/tab_switcher.jsx'
 import Checkbox from 'src/components/checkbox/checkbox.vue'
 import Select from 'src/components/select/select.vue'
 
-import Preview from './preview.vue'
+import Preview from './theme_preview.vue'
 
 // List of color values used in v1
 const v1OnlyNames = [
