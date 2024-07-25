@@ -25,7 +25,7 @@ import {
   faGlobe
 } from '@fortawesome/free-solid-svg-icons'
 
-import Preview from './theme_tab/preview.vue'
+import Preview from './theme_tab/theme_preview.vue'
 
 library.add(
   faGlobe
