@@ -4,8 +4,6 @@
 
 :root {
   --status-margin: 0.75em;
-  --navbar-height: var(--navbarSize, 3.5rem);
-  --panel-header-height: var(--panelHeaderSize, 3.2rem);
   --post-line-height: 1.4;
   // Z-Index stuff
   --ZI_media_modal: 9000;
@@ -21,8 +19,10 @@
 
 html {
   font-size: var(--textSize, 14px);
+
   --navbar-height: var(--navbarSize, 3.5rem);
   --emoji-size: var(--emojiSize, 32px);
+  --panel-header-height: var(--panelHeaderSize, 3.2rem);
   // overflow-x: clip causes my browser's tab to crash with SIGILL lul
 }
 
