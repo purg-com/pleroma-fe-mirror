@@ -300,7 +300,7 @@
         opacity: 0.2;
       }
 
-      .preview-container {
+      .theme-preview-container {
         pointer-events: none;
         zoom: 0.5;
         border: none;
