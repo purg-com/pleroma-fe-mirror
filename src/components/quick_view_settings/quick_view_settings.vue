@@ -12,13 +12,13 @@
       >
         <div role="group">
           <button
-            class="button-default dropdown-item"
+            class="menu-item dropdown-item"
             :aria-checked="conversationDisplay === 'tree'"
             role="menuitemradio"
             @click="conversationDisplay = 'tree'"
           >
             <span
-              class="menu-checkbox -radio"
+              class="input menu-checkbox -radio"
               :aria-hidden="true"
               :class="{ 'menu-checkbox-checked': conversationDisplay === 'tree' }"
             /><FAIcon
@@ -27,13 +27,13 @@
             /> {{ $t('settings.conversation_display_tree_quick') }}
           </button>
           <button
-            class="button-default dropdown-item"
+            class="menu-item dropdown-item"
             :aria-checked="conversationDisplay === 'linear'"
             role="menuitemradio"
             @click="conversationDisplay = 'linear'"
           >
             <span
-              class="menu-checkbox -radio"
+              class="input menu-checkbox -radio"
               :class="{ 'menu-checkbox-checked': conversationDisplay === 'linear' }"
               :aria-hidden="true"
             /><FAIcon
@@ -47,45 +47,45 @@
           class="dropdown-divider"
         />
         <button
-          class="button-default dropdown-item"
+          class="menu-item dropdown-item"
           role="menuitemcheckbox"
           :aria-checked="showUserAvatars"
           @click="showUserAvatars = !showUserAvatars"
         >
           <span
-            class="menu-checkbox"
+            class="input menu-checkbox"
             :class="{ 'menu-checkbox-checked': showUserAvatars }"
             :aria-hidden="true"
           />{{ $t('settings.mention_link_show_avatar_quick') }}
         </button>
         <button
           v-if="!conversation"
-          class="button-default dropdown-item"
+          class="menu-item dropdown-item"
           role="menuitemcheckbox"
           :aria-checked="autoUpdate"
           @click="autoUpdate = !autoUpdate"
         >
           <span
-            class="menu-checkbox"
+            class="input menu-checkbox"
             :class="{ 'menu-checkbox-checked': autoUpdate }"
             :aria-hidden="true"
           />{{ $t('settings.auto_update') }}
         </button>
         <button
           v-if="!conversation"
-          class="button-default dropdown-item"
+          class="menu-item dropdown-item"
           role="menuitemcheckbox"
           :aria-checked="collapseWithSubjects"
           @click="collapseWithSubjects = !collapseWithSubjects"
         >
           <span
-            class="menu-checkbox"
+            class="input menu-checkbox"
             :class="{ 'menu-checkbox-checked': collapseWithSubjects }"
             :aria-hidden="true"
           />{{ $t('settings.collapse_subject') }}
         </button>
         <button
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
           role="menuitem"
           @click="openTab('general')"
         >

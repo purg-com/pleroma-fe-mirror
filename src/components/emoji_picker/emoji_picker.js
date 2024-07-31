@@ -114,11 +114,13 @@ const EmojiPicker = {
       groupsScrolledClass: 'scrolled-top',
       keepOpen: false,
       customEmojiTimeout: null,
+      hideCustomEmojiInPicker: false,
       // Lazy-load only after the first time `showing` becomes true.
       contentLoaded: false,
       groupRefs: {},
       emojiRefs: {},
       filteredEmojiGroups: [],
+      emojiSize: 0,
       width: 0
     }
   },
@@ -129,6 +131,23 @@ const EmojiPicker = {
     Popover
   },
   methods: {
+    updateEmojiSize () {
+      const css = window.getComputedStyle(this.$refs.popover.$el)
+      const emojiSize = css.getPropertyValue('--emojiSize')
+      const emojiSizeUnit = emojiSize.replace(/[0-9,.]+/, '')
+      const emojiSizeValue = Number(emojiSize.replace(/[^0-9,.]+/, ''))
+      const fontSize = css.getPropertyValue('font-size').replace(/[^0-9,.]+/, '')
+
+      let emojiSizeReal
+      if (emojiSizeUnit.endsWith('em')) {
+        emojiSizeReal = emojiSizeValue * fontSize
+      } else {
+        emojiSizeReal = emojiSizeValue
+      }
+
+      const fullEmojiSize = emojiSizeReal + (2 * 0.2 * fontSize)
+      this.emojiSize = fullEmojiSize
+    },
     showPicker () {
       this.$refs.popover.showPopover()
       this.onShowing()
@@ -223,6 +242,7 @@ const EmojiPicker = {
     },
     onShowing () {
       const oldContentLoaded = this.contentLoaded
+      this.updateEmojiSize()
       this.recalculateItemPerRow()
       this.$nextTick(() => {
         this.$refs.search.focus()
@@ -265,16 +285,20 @@ const EmojiPicker = {
   },
   computed: {
     minItemSize () {
-      return this.emojiHeight
+      return this.emojiSize
+    },
+    // used to watch it
+    fontSize () {
+      this.$nextTick(() => {
+        this.updateEmojiSize()
+      })
+      return this.$store.getters.mergedConfig.fontSize
     },
     emojiHeight () {
-      return 32 + 4
-    },
-    emojiWidth () {
-      return 32 + 4
+      return this.emojiSize
     },
     itemPerRow () {
-      return this.width ? Math.floor(this.width / this.emojiWidth - 1) : 6
+      return this.width ? Math.floor(this.width / this.emojiSize) : 6
     },
     activeGroupView () {
       return this.showingStickers ? '' : this.activeGroup
@@ -286,7 +310,7 @@ const EmojiPicker = {
       return 0
     },
     allCustomGroups () {
-      if (this.hideCustomEmoji) {
+      if (this.hideCustomEmoji || this.hideCustomEmojiInPicker) {
         return {}
       }
       const emojis = this.$store.getters.groupedCustomEmojis

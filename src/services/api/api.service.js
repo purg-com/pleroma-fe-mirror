@@ -107,11 +107,23 @@ const PLEROMA_ANNOUNCEMENTS_URL = '/api/v1/pleroma/admin/announcements'
 const PLEROMA_POST_ANNOUNCEMENT_URL = '/api/v1/pleroma/admin/announcements'
 const PLEROMA_EDIT_ANNOUNCEMENT_URL = id => `/api/v1/pleroma/admin/announcements/${id}`
 const PLEROMA_DELETE_ANNOUNCEMENT_URL = id => `/api/v1/pleroma/admin/announcements/${id}`
+const PLEROMA_SCROBBLES_URL = id => `/api/v1/pleroma/accounts/${id}/scrobbles`
+const PLEROMA_STATUS_QUOTES_URL = id => `/api/v1/pleroma/statuses/${id}/quotes`
+const PLEROMA_USER_FAVORITES_TIMELINE_URL = id => `/api/v1/pleroma/accounts/${id}/favourites`
 
 const PLEROMA_ADMIN_CONFIG_URL = '/api/pleroma/admin/config'
 const PLEROMA_ADMIN_DESCRIPTIONS_URL = '/api/pleroma/admin/config/descriptions'
 const PLEROMA_ADMIN_FRONTENDS_URL = '/api/pleroma/admin/frontends'
 const PLEROMA_ADMIN_FRONTENDS_INSTALL_URL = '/api/pleroma/admin/frontends/install'
+
+const PLEROMA_EMOJI_RELOAD_URL = '/api/pleroma/admin/reload_emoji'
+const PLEROMA_EMOJI_IMPORT_FS_URL = '/api/pleroma/emoji/packs/import'
+const PLEROMA_EMOJI_PACKS_URL = (page, pageSize) => `/api/v1/pleroma/emoji/packs?page=${page}&page_size=${pageSize}`
+const PLEROMA_EMOJI_PACK_URL = (name) => `/api/v1/pleroma/emoji/pack?name=${name}`
+const PLEROMA_EMOJI_PACKS_DL_REMOTE_URL = '/api/v1/pleroma/emoji/packs/download'
+const PLEROMA_EMOJI_PACKS_LS_REMOTE_URL =
+  (url, page, pageSize) => `/api/v1/pleroma/emoji/packs/remote?url=${url}&page=${page}&page_size=${pageSize}`
+const PLEROMA_EMOJI_UPDATE_FILE_URL = (name) => `/api/v1/pleroma/emoji/packs/files?name=${name}`
 
 const oldfetch = window.fetch
 
@@ -670,9 +682,11 @@ const fetchTimeline = ({
   timeline,
   credentials,
   since = false,
+  minId = false,
   until = false,
   userId = false,
   listId = false,
+  statusId = false,
   tag = false,
   withMuted = false,
   replyVisibility = 'all',
@@ -688,13 +702,19 @@ const fetchTimeline = ({
     media: MASTODON_USER_TIMELINE_URL,
     list: MASTODON_LIST_TIMELINE_URL,
     favorites: MASTODON_USER_FAVORITES_TIMELINE_URL,
+    publicFavorites: PLEROMA_USER_FAVORITES_TIMELINE_URL,
     tag: MASTODON_TAG_TIMELINE_URL,
-    bookmarks: MASTODON_BOOKMARK_TIMELINE_URL
+    bookmarks: MASTODON_BOOKMARK_TIMELINE_URL,
+    quotes: PLEROMA_STATUS_QUOTES_URL
   }
   const isNotifications = timeline === 'notifications'
   const params = []
 
   let url = timelineUrls[timeline]
+
+  if (timeline === 'favorites' && userId) {
+    url = timelineUrls.publicFavorites(userId)
+  }
 
   if (timeline === 'user' || timeline === 'media') {
     url = url(userId)
@@ -704,6 +724,13 @@ const fetchTimeline = ({
     url = url(listId)
   }
 
+  if (timeline === 'quotes') {
+    url = url(statusId)
+  }
+
+  if (minId) {
+    params.push(['min_id', minId])
+  }
   if (since) {
     params.push(['since_id', since])
   }
@@ -1765,6 +1792,107 @@ const installFrontend = ({ credentials, payload }) => {
     })
 }
 
+const fetchScrobbles = ({ accountId, limit = 1 }) => {
+  let url = PLEROMA_SCROBBLES_URL(accountId)
+  const params = [['limit', limit]]
+  const queryString = map(params, (param) => `${param[0]}=${param[1]}`).join('&')
+  url += `?${queryString}`
+  return fetch(url, {})
+    .then((response) => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        return {
+          error: response
+        }
+      }
+    })
+}
+
+const deleteEmojiPack = ({ name }) => {
+  return fetch(PLEROMA_EMOJI_PACK_URL(name), { method: 'DELETE' })
+}
+
+const reloadEmoji = () => {
+  return fetch(PLEROMA_EMOJI_RELOAD_URL, { method: 'POST' })
+}
+
+const importEmojiFromFS = () => {
+  return fetch(PLEROMA_EMOJI_IMPORT_FS_URL)
+}
+
+const createEmojiPack = ({ name }) => {
+  return fetch(PLEROMA_EMOJI_PACK_URL(name), { method: 'POST' })
+}
+
+const listEmojiPacks = ({ page, pageSize }) => {
+  return fetch(PLEROMA_EMOJI_PACKS_URL(page, pageSize))
+}
+
+const listRemoteEmojiPacks = ({ instance, page, pageSize }) => {
+  if (!instance.startsWith('http')) {
+    instance = 'https://' + instance
+  }
+
+  return fetch(
+    PLEROMA_EMOJI_PACKS_LS_REMOTE_URL(instance, page, pageSize),
+    {
+      headers: { 'Content-Type': 'application/json' }
+    }
+  )
+}
+
+const downloadRemoteEmojiPack = ({ instance, packName, as }) => {
+  return fetch(
+    PLEROMA_EMOJI_PACKS_DL_REMOTE_URL,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        url: instance, name: packName, as
+      })
+    }
+  )
+}
+
+const saveEmojiPackMetadata = ({ name, newData }) => {
+  return fetch(
+    PLEROMA_EMOJI_PACK_URL(name),
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ metadata: newData })
+    }
+  )
+}
+
+const addNewEmojiFile = ({ packName, file, shortcode, filename }) => {
+  const data = new FormData()
+  if (filename.trim() !== '') { data.set('filename', filename) }
+  if (shortcode.trim() !== '') { data.set('shortcode', shortcode) }
+  data.set('file', file)
+
+  return fetch(
+    PLEROMA_EMOJI_UPDATE_FILE_URL(packName),
+    { method: 'POST', body: data }
+  )
+}
+
+const updateEmojiFile = ({ packName, shortcode, newShortcode, newFilename, force }) => {
+  return fetch(
+    PLEROMA_EMOJI_UPDATE_FILE_URL(packName),
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ shortcode, new_shortcode: newShortcode, new_filename: newFilename, force })
+    }
+  )
+}
+
+const deleteEmojiFile = ({ packName, shortcode }) => {
+  return fetch(`${PLEROMA_EMOJI_UPDATE_FILE_URL(packName)}&shortcode=${shortcode}`, { method: 'DELETE' })
+}
+
 const apiService = {
   verifyCredentials,
   fetchTimeline,
@@ -1878,12 +2006,24 @@ const apiService = {
   postAnnouncement,
   editAnnouncement,
   deleteAnnouncement,
+  fetchScrobbles,
   adminFetchAnnouncements,
   fetchInstanceDBConfig,
   fetchInstanceConfigDescriptions,
   fetchAvailableFrontends,
   pushInstanceDBConfig,
-  installFrontend
+  installFrontend,
+  importEmojiFromFS,
+  reloadEmoji,
+  listEmojiPacks,
+  createEmojiPack,
+  deleteEmojiPack,
+  saveEmojiPackMetadata,
+  addNewEmojiFile,
+  updateEmojiFile,
+  deleteEmojiFile,
+  listRemoteEmojiPacks,
+  downloadRemoteEmojiPack
 }
 
 export default apiService

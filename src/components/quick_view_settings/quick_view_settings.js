@@ -52,7 +52,6 @@ const QuickViewSettings = {
       get () { return this.mergedConfig.mentionLinkShowAvatar },
       set () {
         const value = !this.showUserAvatars
-        console.log(value)
         this.$store.dispatch('setOption', { name: 'mentionLinkShowAvatar', value })
       }
     },
@@ -61,6 +60,13 @@ const QuickViewSettings = {
       set () {
         const value = !this.muteBotStatuses
         this.$store.dispatch('setOption', { name: 'muteBotStatuses', value })
+      }
+    },
+    muteSensitiveStatuses: {
+      get () { return this.mergedConfig.muteSensitiveStatuses },
+      set () {
+        const value = !this.muteSensitiveStatuses
+        this.$store.dispatch('setOption', { name: 'muteSensitiveStatuses', value })
       }
     }
   }

@@ -12,7 +12,7 @@
           <input
             id="username"
             v-model="newName"
-            class="name-changer"
+            class="input name-changer"
             v-bind="propsToNative(inputProps)"
           >
         </template>
@@ -26,7 +26,7 @@
         <template #default="inputProps">
           <textarea
             v-model="newBio"
-            class="bio resize-height"
+            class="input bio resize-height"
             v-bind="propsToNative(inputProps)"
           />
         </template>
@@ -47,7 +47,7 @@
           id="birthday"
           v-model="newBirthday"
           type="date"
-          class="birthday-input"
+          class="input birthday-input"
         >
         <Checkbox v-model="showBirthday">
           {{ $t('settings.birthday.show_birthday') }}
@@ -71,6 +71,7 @@
                 v-model="newFields[i].name"
                 :placeholder="$t('settings.profile_fields.name')"
                 v-bind="propsToNative(inputProps)"
+                class="input"
               >
             </template>
           </EmojiInput>
@@ -85,6 +86,7 @@
                 v-model="newFields[i].value"
                 :placeholder="$t('settings.profile_fields.value')"
                 v-bind="propsToNative(inputProps)"
+                class="input"
               >
             </template>
           </EmojiInput>
@@ -109,10 +111,24 @@
         </button>
       </div>
       <p>
-        <Checkbox v-model="bot">
-          {{ $t('settings.bot') }}
-        </Checkbox>
+        <label>
+          {{ $t('settings.actor_type') }}
+          <Select v-model="actorType">
+            <option
+              v-for="option in availableActorTypes"
+              :key="option"
+              :value="option"
+            >
+              {{ $t('settings.actor_type_' + option) }}
+            </option>
+          </Select>
+        </label>
       </p>
+      <div v-if="groupActorAvailable">
+        <small>
+          {{ $t('settings.actor_type_description') }}
+        </small>
+      </div>
       <p>
         <interface-language-switcher
           :prompt-text="$t('settings.email_language')"
@@ -191,6 +207,7 @@
       <div>
         <input
           type="file"
+          class="input"
           @change="uploadFile('banner', $event)"
         >
       </div>
@@ -233,6 +250,7 @@
       <div>
         <input
           type="file"
+          class="input"
           @change="uploadFile('background', $event)"
         >
       </div>

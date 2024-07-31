@@ -31,6 +31,12 @@
           />
         </small>
         <small
+          v-if="muteSensitiveStatuses && status.nsfw"
+          class="mute-thread"
+        >
+          {{ $t('status.sensitive_muted') }}
+        </small>
+        <small
           v-if="showReasonMutedThread"
           class="mute-thread"
         >
@@ -79,7 +85,7 @@
         <UserAvatar
           v-if="retweet"
           class="left-side repeater-avatar"
-          :bot="rtBotIndicator"
+          :show-actor-type-indicator="showActorTypeIndicator"
           :better-shadow="betterShadow"
           :user="statusoid.user"
         />
@@ -133,7 +139,7 @@
             >
               <UserAvatar
                 class="post-avatar"
-                :bot="botIndicator"
+                :show-actor-type-indicator="showActorTypeIndicator"
                 :compact="compact"
                 :better-shadow="betterShadow"
                 :user="status.user"
@@ -180,7 +186,7 @@
 
               <span class="heading-right">
                 <router-link
-                  class="timeago faint-link"
+                  class="timeago faint"
                   :to="{ name: 'conversation', params: { id: status.id } }"
                 >
                   <Timeago
@@ -247,6 +253,47 @@
                     :icon="'angle-double-right'"
                   />
                 </button>
+              </span>
+            </div>
+            <div
+              v-if="scrobblePresent"
+              class="status-rich-presence"
+            >
+              <a
+                v-if="scrobble.externalLink"
+                :href="scrobble.externalLink"
+                target="_blank"
+              >
+                {{ scrobble.artist }} — {{ scrobble.title }}
+                <FAIcon
+                  class="fa-scale-110 fa-old-padding"
+                  icon="play"
+                />
+                <span class="status-rich-presence-time">
+                  <Timeago
+                    template-key="time.in_past"
+                    :time="scrobble.created_at"
+                    :auto-update="60"
+                  />
+                </span>
+              </a>
+              <span v-if="!scrobble.externalLink">
+                <FAIcon
+                  class="fa-scale-110 fa-old-padding"
+                  icon="music"
+                />
+                {{ scrobble.artist }} — {{ scrobble.title }}
+                <FAIcon
+                  class="fa-scale-110 fa-old-padding"
+                  icon="play"
+                />
+                <span class="status-rich-presence-time">
+                  <Timeago
+                    template-key="time.in_past"
+                    :time="scrobble.created_at"
+                    :auto-update="60"
+                  />
+                </span>
               </span>
             </div>
             <div
@@ -409,7 +456,7 @@
           >
             <button
               v-if="showOtherRepliesAsButton && replies.length > 1"
-              class="button-unstyled -link faint"
+              class="button-unstyled -link"
               :title="$tc('status.ancestor_follow', replies.length - 1, { numReplies: replies.length - 1 })"
               @click.prevent="dive"
             >
@@ -437,7 +484,7 @@
 
           <transition name="fade">
             <div
-              v-if="!hidePostStats && isFocused && combinedFavsAndRepeatsUsers.length > 0"
+              v-if="shouldDisplayFavsAndRepeats"
               class="favs-repeated-users"
             >
               <div class="stats">
@@ -465,6 +512,19 @@
                     </div>
                   </div>
                 </UserListPopover>
+                <router-link
+                  v-if="statusFromGlobalRepository.quotes_count > 0"
+                  :to="{ name: 'quotes', params: { id: status.id } }"
+                >
+                  <div
+                    class="stat-count"
+                  >
+                    <a class="stat-title">{{ $t('status.quotes') }}</a>
+                    <div class="stat-number">
+                      {{ statusFromGlobalRepository.quotes_count }}
+                    </div>
+                  </div>
+                </router-link>
                 <div class="avatar-row">
                   <AvatarList :users="combinedFavsAndRepeatsUsers" />
                 </div>
@@ -490,14 +550,17 @@
               :visibility="status.visibility"
               :logged-in="loggedIn"
               :status="status"
+              @click="$emit('interacted')"
             />
             <favorite-button
               :logged-in="loggedIn"
               :status="status"
+              @click="$emit('interacted')"
             />
             <ReactButton
               v-if="loggedIn"
               :status="status"
+              @click="$emit('interacted')"
             />
             <extra-buttons
               :status="status"
@@ -515,7 +578,7 @@
           <UserAvatar
             class="post-avatar"
             :compact="compact"
-            :bot="botIndicator"
+            :show-actor-type-indicator="showActorTypeIndicator"
           />
         </div>
         <div class="right-side">

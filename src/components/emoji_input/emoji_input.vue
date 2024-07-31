@@ -1,7 +1,7 @@
 <template>
   <div
     ref="root"
-    class="emoji-input"
+    class="input emoji-input"
     :class="{ 'with-picker': !hideEmojiButton }"
   >
     <slot
@@ -68,9 +68,9 @@
             v-for="(suggestion, index) in suggestions"
             :id="suggestionItemId(index)"
             :key="index"
-            class="autocomplete-item"
+            class="menu-item autocomplete-item"
             role="option"
-            :class="{ highlighted: index === highlighted }"
+            :class="{ '-active': index === highlighted }"
             :aria-label="autoCompleteItemLabel(suggestion)"
             :aria-selected="index === highlighted"
             @click.stop.prevent="onClick($event, suggestion)"
@@ -110,9 +110,8 @@
 <script src="./emoji_input.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
-.emoji-input {
+.input.emoji-input {
+  padding: 0;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -127,8 +126,7 @@
     line-height: 24px;
 
     &:hover i {
-      color: $fallback--text;
-      color: var(--text, $fallback--text);
+      color: var(--text);
     }
   }
 
@@ -145,6 +143,12 @@
   input,
   textarea {
     flex: 1 0 auto;
+    color: inherit;
+    /* stylelint-disable-next-line declaration-no-important */
+    background: none !important;
+    box-shadow: none;
+    border: none;
+    outline: none;
   }
 
   &.with-picker input {
@@ -179,25 +183,27 @@
     position: absolute;
   }
 
-  &-item {
+  &-item.menu-item {
     display: flex;
-    cursor: pointer;
-    padding: 0.2em 0.4em;
-    border-bottom: 1px solid rgb(0 0 0 / 40%);
-    height: 32px;
+    padding-top: 0;
+    padding-bottom: 0;
 
     .image {
-      width: 32px;
-      height: 32px;
-      line-height: 32px;
+      width: calc(var(--__line-height) + var(--__vertical-gap) * 2);
+      height: calc(var(--__line-height) + var(--__vertical-gap) * 2);
+      line-height: var(--__line-height);
       text-align: center;
-      font-size: 32px;
-      margin-right: 4px;
+      margin-right: var(--__horizontal-gap);
 
       img {
-        width: 32px;
-        height: 32px;
+        width: calc(var(--__line-height) + var(--__vertical-gap) * 2);
+        height: calc(var(--__line-height) + var(--__vertical-gap) * 2);
         object-fit: contain;
+      }
+
+      span {
+        font-size: var(--__line-height);
+        line-height: var(--__line-height);
       }
     }
 
@@ -215,17 +221,6 @@
         font-size: 9px;
         line-height: 9px;
       }
-    }
-
-    &.highlighted {
-      background-color: $fallback--fg;
-      background-color: var(--selectedMenuPopover, $fallback--fg);
-      color: var(--selectedMenuPopoverText, $fallback--text);
-
-      --faint: var(--selectedMenuPopoverFaintText, $fallback--faint);
-      --faintLink: var(--selectedMenuPopoverFaintLink, $fallback--faint);
-      --lightText: var(--selectedMenuPopoverLightText, $fallback--lightText);
-      --icon: var(--selectedMenuPopoverIcon, $fallback--icon);
     }
   }
 }

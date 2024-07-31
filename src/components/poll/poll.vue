@@ -37,12 +37,14 @@
           :role="poll.multiple ? 'checkbox' : 'radio'"
           :aria-labelledby="`option-vote-${randomSeed}-${index}`"
           :aria-checked="choices[index]"
+          class="input unstyled"
           @click="activateOption(index)"
         >
+          <!-- TODO: USE CHECKBOX -->
           <input
             v-if="poll.multiple"
             type="checkbox"
-            class="poll-checkbox"
+            class="input -checkbox poll-checkbox"
             :disabled="loading"
             :value="index"
           >
@@ -51,6 +53,7 @@
             type="radio"
             :disabled="loading"
             :value="index"
+            class="input -radio"
           >
           <label class="option-vote">
             <RichContent
@@ -75,13 +78,16 @@
       </button>
       <div class="total">
         <template v-if="typeof poll.voters_count === 'number'">
-          {{ $tc("polls.people_voted_count", poll.voters_count, { count: poll.voters_count }) }}&nbsp;·&nbsp;
+          {{ $tc("polls.people_voted_count", poll.voters_count, { count: poll.voters_count }) }}
         </template>
         <template v-else>
-          {{ $tc("polls.votes_count", poll.votes_count, { count: poll.votes_count }) }}&nbsp;·&nbsp;
+          {{ $tc("polls.votes_count", poll.votes_count, { count: poll.votes_count }) }}
         </template>
+        <span v-if="expiresAt !== null">
+          &nbsp;·&nbsp;
+        </span>
       </div>
-      <span>
+      <span v-if="expiresAt !== null">
         <i18n-t
           scope="global"
           :keypath="expired ? 'polls.expired' : 'polls.expires_in'"
@@ -100,8 +106,6 @@
 <script src="./poll.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .poll {
   .votes {
     display: flex;
@@ -111,6 +115,10 @@
 
   .poll-option {
     margin: 0.75em 0.5em;
+
+    .input {
+      line-height: inherit;
+    }
   }
 
   .option-result {
@@ -118,8 +126,7 @@
     display: flex;
     flex-direction: row;
     position: relative;
-    color: $fallback--lightText;
-    color: var(--lightText, $fallback--lightText);
+    color: var(--textLight);
   }
 
   .option-result-label {
@@ -138,12 +145,7 @@
   .result-fill {
     height: 100%;
     position: absolute;
-    color: $fallback--text;
-    color: var(--pollText, $fallback--text);
-    background-color: $fallback--lightBg;
-    background-color: var(--poll, $fallback--lightBg);
-    border-radius: $fallback--panelRadius;
-    border-radius: var(--panelRadius, $fallback--panelRadius);
+    border-radius: var(--roundness);
     top: 0;
     left: 0;
     transition: width 0.5s;

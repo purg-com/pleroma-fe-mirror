@@ -14,7 +14,7 @@
           <div
             v-if="currentSaveStateNotice"
             class="alert"
-            :class="{ transparent: !currentSaveStateNotice.error, error: currentSaveStateNotice.error}"
+            :class="{ success: !currentSaveStateNotice.error, error: currentSaveStateNotice.error}"
             @click.prevent
           >
             {{ currentSaveStateNotice.error ? $t('settings.saving_err') : $t('settings.saving_ok') }}
@@ -70,7 +70,7 @@
           <template #content="{close}">
             <div class="dropdown-menu">
               <button
-                class="button-default dropdown-item dropdown-item-icon"
+                class="menu-item dropdown-item dropdown-item-icon"
                 @click.prevent="backup"
                 @click="close"
               >
@@ -80,7 +80,7 @@
                 /><span>{{ $t("settings.file_export_import.backup_settings") }}</span>
               </button>
               <button
-                class="button-default dropdown-item dropdown-item-icon"
+                class="menu-item dropdown-item dropdown-item-icon"
                 @click.prevent="backupWithTheme"
                 @click="close"
               >
@@ -90,7 +90,7 @@
                 /><span>{{ $t("settings.file_export_import.backup_settings_theme") }}</span>
               </button>
               <button
-                class="button-default dropdown-item dropdown-item-icon"
+                class="menu-item dropdown-item dropdown-item-icon"
                 @click.prevent="restore"
                 @click="close"
               >
@@ -147,6 +147,18 @@
         </span>
       </div>
     </div>
+    <teleport to="#modal">
+      <ConfirmModal
+        v-if="$store.state.interface.temporaryChangesTimeoutId"
+        :title="$t('settings.confirm_new_setting')"
+        :cancel-text="$t('settings.revert')"
+        :confirm-text="$t('settings.confirm')"
+        @cancelled="$store.state.interface.temporaryChangesRevert"
+        @accepted="$store.state.interface.temporaryChangesConfirm"
+      >
+        {{ $t('settings.confirm_new_question') }}
+      </ConfirmModal>
+    </teleport>
   </Modal>
 </template>
 

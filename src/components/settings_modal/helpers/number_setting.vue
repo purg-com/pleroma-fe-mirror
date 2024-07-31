@@ -15,9 +15,10 @@
       </template>
       <slot v-else />
     </label>
+    {{ ' ' }}
     <input
       :id="path"
-      class="number-input"
+      class="input number-input"
       type="number"
       :step="step || 1"
       :disabled="shouldBeDisabled"

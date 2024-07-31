@@ -1,11 +1,12 @@
 <template>
   <article
-    v-if="notification.type === 'mention'"
+    v-if="notification.type === 'mention' || notification.type === 'status'"
   >
     <Status
       class="Notification"
       :compact="true"
       :statusoid="notification.status"
+      @interacted="interacted"
     />
   </article>
   <article v-else>
@@ -154,7 +155,7 @@
             <router-link
               v-if="notification.status"
               :to="{ name: 'conversation', params: { id: notification.status.id } }"
-              class="timeago-link faint-link"
+              class="timeago-link faint"
             >
               <Timeago
                 :time="notification.created_at"
@@ -246,9 +247,8 @@
         />
         <template v-else>
           <StatusContent
-            :class="{ faint: !statusExpanded }"
             :compact="!statusExpanded"
-            :status="notification.action"
+            :status="notification.status"
           />
         </template>
       </div>

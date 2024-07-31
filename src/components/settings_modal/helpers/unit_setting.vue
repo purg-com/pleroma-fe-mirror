@@ -1,7 +1,7 @@
 <template>
   <span
     v-if="matchesExpertLevel"
-    class="SizeSetting"
+    class="UnitSetting"
   >
     <label
       :for="path"
@@ -9,11 +9,12 @@
     >
       <slot />
     </label>
+    {{ ' ' }}
     <input
       :id="path"
-      class="number-input"
+      class="input number-input"
       type="number"
-      step="1"
+      :step="step"
       :disabled="disabled"
       :min="min || 0"
       :value="stateValue"
@@ -23,7 +24,7 @@
       :id="path"
       :model-value="stateUnit"
       :disabled="disabled"
-      class="css-unit-input"
+      class="unit-input unstyled"
       @change="updateUnit"
     >
       <option
@@ -31,7 +32,7 @@
         :key="option"
         :value="option"
       >
-        {{ option }}
+        {{ getUnitString(option) }}
       </option>
     </Select>
     {{ ' ' }}
@@ -42,20 +43,19 @@
   </span>
 </template>
 
-<script src="./size_setting.js"></script>
+<script src="./unit_setting.js"></script>
 
 <style lang="scss">
-.SizeSetting {
+.UnitSetting {
   .number-input {
     max-width: 6.5em;
+    text-align: right;
   }
 
-  .css-unit-input,
-  .css-unit-input select {
-    margin-left: 0.5em;
-    width: 4em;
-    max-width: 4em;
+  .unit-input,
+  .unit-input select {
     min-width: 4em;
+    width: auto;
   }
 }
 

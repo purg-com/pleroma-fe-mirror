@@ -79,6 +79,12 @@ export default {
       required: false,
       type: Boolean,
       default: false
+    },
+    // Faint style (for notifs)
+    faint: {
+      required: false,
+      type: Boolean,
+      default: false
     }
   },
   // NEVER EVER TOUCH DATA INSIDE RENDER
@@ -277,7 +283,7 @@ export default {
     // DO NOT USE SLOTS they cause a re-render feedback loop here.
     // slots updated -> rerender -> emit -> update up the tree -> rerender -> ...
     // at least until vue3?
-    const result = <span class="RichContent">
+    const result = <span class={['RichContent', this.faint ? '-faint' : '']}>
       { pass2 }
     </span>
 

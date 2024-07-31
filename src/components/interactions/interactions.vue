@@ -10,8 +10,12 @@
       :on-switch="onModeSwitch"
     >
       <span
-        key="mentions"
+        key="statuses"
         :label="$t('nav.mentions')"
+      />
+      <span
+        key="statuses"
+        :label="$t('interactions.statuses')"
       />
       <span
         key="likes+repeats"
@@ -39,6 +43,7 @@
     <Notifications
       ref="notifications"
       :no-heading="true"
+      :no-extra="true"
       :minimal-mode="true"
       :filter-mode="filterMode"
     />

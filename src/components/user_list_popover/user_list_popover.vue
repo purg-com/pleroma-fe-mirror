@@ -48,8 +48,6 @@
 <script src="./user_list_popover.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .user-list-popover {
   padding: 0.5em;
 

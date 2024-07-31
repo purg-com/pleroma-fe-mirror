@@ -1,35 +1,231 @@
-import { convert } from 'chromatism'
-import { rgb2hex, hex2rgb, rgba2css, getCssColor, relativeLuminance } from '../color_convert/color_convert.js'
-import { getColors, computeDynamicColor, getOpacitySlot } from '../theme_data/theme_data.service.js'
+import { hex2rgb } from '../color_convert/color_convert.js'
+import { init, getEngineChecksum } from '../theme_data/theme_data_3.service.js'
+import { getCssRules } from '../theme_data/css_utils.js'
 import { defaultState } from '../../modules/config.js'
+import { chunk } from 'lodash'
 
-export const applyTheme = (input) => {
-  const { rules } = generatePreset(input)
-  const head = document.head
-  const body = document.body
-  body.classList.add('hidden')
+// On platforms where this is not supported, it will return undefined
+// Otherwise it will return an array
+const supportsAdoptedStyleSheets = !!document.adoptedStyleSheets
 
-  const styleEl = document.createElement('style')
-  head.appendChild(styleEl)
-  const styleSheet = styleEl.sheet
+const createStyleSheet = (id) => {
+  if (supportsAdoptedStyleSheets) {
+    return {
+      el: null,
+      sheet: new CSSStyleSheet(),
+      rules: []
+    }
+  }
 
-  styleSheet.toString()
-  styleSheet.insertRule(`:root { ${rules.radii} }`, 'index-max')
-  styleSheet.insertRule(`:root { ${rules.colors} }`, 'index-max')
-  styleSheet.insertRule(`:root { ${rules.shadows} }`, 'index-max')
-  styleSheet.insertRule(`:root { ${rules.fonts} }`, 'index-max')
-  body.classList.remove('hidden')
+  const el = document.getElementById(id)
+  // Clear all rules in it
+  for (let i = el.sheet.cssRules.length - 1; i >= 0; --i) {
+    el.sheet.deleteRule(i)
+  }
+
+  return {
+    el,
+    sheet: el.sheet,
+    rules: []
+  }
 }
 
-const configColumns = ({ sidebarColumnWidth, contentColumnWidth, notifsColumnWidth, emojiReactionsScale }) =>
-  ({ sidebarColumnWidth, contentColumnWidth, notifsColumnWidth, emojiReactionsScale })
+const EAGER_STYLE_ID = 'pleroma-eager-styles'
+const LAZY_STYLE_ID = 'pleroma-lazy-styles'
 
-const defaultConfigColumns = configColumns(defaultState)
+const adoptStyleSheets = (styles) => {
+  if (supportsAdoptedStyleSheets) {
+    document.adoptedStyleSheets = styles.map(s => s.sheet)
+  }
+  // Some older browsers do not support document.adoptedStyleSheets.
+  // In this case, we use the <style> elements.
+  // Since the <style> elements we need are already in the DOM, there
+  // is nothing to do here.
+}
 
-export const applyConfig = (config) => {
-  const columns = configColumns(config)
+export const generateTheme = async (inputRuleset, callbacks, debug) => {
+  const {
+    onNewRule = (rule, isLazy) => {},
+    onLazyFinished = () => {},
+    onEagerFinished = () => {}
+  } = callbacks
 
-  if (columns === defaultConfigColumns) {
+  // Assuming that "worst case scenario background" is panel background since it's the most likely one
+  const themes3 = init({
+    inputRuleset,
+    ultimateBackgroundColor: inputRuleset[0].directives['--bg'].split('|')[1].trim(),
+    debug
+  })
+
+  getCssRules(themes3.eager, debug).forEach(rule => {
+    // Hacks to support multiple selectors on same component
+    if (rule.match(/::-webkit-scrollbar-button/)) {
+      const parts = rule.split(/[{}]/g)
+      const newRule = [
+        parts[0],
+        ', ',
+        parts[0].replace(/button/, 'thumb'),
+        ', ',
+        parts[0].replace(/scrollbar-button/, 'resizer'),
+        ' {',
+        parts[1],
+        '}'
+      ].join('')
+      onNewRule(newRule, false)
+    } else {
+      onNewRule(rule, false)
+    }
+  })
+  onEagerFinished()
+
+  // Optimization - instead of processing all lazy rules in one go, process them in small chunks
+  // so that UI can do other things and be somewhat responsive while less important rules are being
+  // processed
+  let counter = 0
+  const chunks = chunk(themes3.lazy, 200)
+  // let t0 = performance.now()
+  const processChunk = () => {
+    const chunk = chunks[counter]
+    Promise.all(chunk.map(x => x())).then(result => {
+      getCssRules(result.filter(x => x), debug).forEach(rule => {
+        if (rule.match(/\.modal-view/)) {
+          const parts = rule.split(/[{}]/g)
+          const newRule = [
+            parts[0],
+            ', ',
+            parts[0].replace(/\.modal-view/, '#modal'),
+            ', ',
+            parts[0].replace(/\.modal-view/, '.shout-panel'),
+            ' {',
+            parts[1],
+            '}'
+          ].join('')
+          onNewRule(newRule, true)
+        } else {
+          onNewRule(rule, true)
+        }
+      })
+      // const t1 = performance.now()
+      // console.debug('Chunk ' + counter + ' took ' + (t1 - t0) + 'ms')
+      // t0 = t1
+      counter += 1
+      if (counter < chunks.length) {
+        setTimeout(processChunk, 0)
+      } else {
+        onLazyFinished()
+      }
+    })
+  }
+
+  return { lazyProcessFunc: processChunk }
+}
+
+export const tryLoadCache = () => {
+  const json = localStorage.getItem('pleroma-fe-theme-cache')
+  if (!json) return null
+  let cache
+  try {
+    cache = JSON.parse(json)
+  } catch (e) {
+    console.error('Failed to decode theme cache:', e)
+    return false
+  }
+  if (cache.engineChecksum === getEngineChecksum()) {
+    const eagerStyles = createStyleSheet(EAGER_STYLE_ID)
+    const lazyStyles = createStyleSheet(LAZY_STYLE_ID)
+
+    cache.data[0].forEach(rule => eagerStyles.sheet.insertRule(rule, 'index-max'))
+    cache.data[1].forEach(rule => lazyStyles.sheet.insertRule(rule, 'index-max'))
+
+    adoptStyleSheets([eagerStyles, lazyStyles])
+
+    return true
+  } else {
+    console.warn('Engine checksum doesn\'t match, cache not usable, clearing')
+    localStorage.removeItem('pleroma-fe-theme-cache')
+  }
+}
+
+export const applyTheme = async (input, onFinish = (data) => {}, debug) => {
+  const eagerStyles = createStyleSheet(EAGER_STYLE_ID)
+  const lazyStyles = createStyleSheet(LAZY_STYLE_ID)
+
+  const { lazyProcessFunc } = await generateTheme(
+    input,
+    {
+      onNewRule (rule, isLazy) {
+        if (isLazy) {
+          lazyStyles.sheet.insertRule(rule, 'index-max')
+          lazyStyles.rules.push(rule)
+        } else {
+          eagerStyles.sheet.insertRule(rule, 'index-max')
+          eagerStyles.rules.push(rule)
+        }
+      },
+      onEagerFinished () {
+        adoptStyleSheets([eagerStyles])
+      },
+      onLazyFinished () {
+        adoptStyleSheets([eagerStyles, lazyStyles])
+        const cache = { engineChecksum: getEngineChecksum(), data: [eagerStyles.rules, lazyStyles.rules] }
+        onFinish(cache)
+        localStorage.setItem('pleroma-fe-theme-cache', JSON.stringify(cache))
+      }
+    },
+    debug
+  )
+
+  setTimeout(lazyProcessFunc, 0)
+
+  return Promise.resolve()
+}
+
+const extractStyleConfig = ({
+  sidebarColumnWidth,
+  contentColumnWidth,
+  notifsColumnWidth,
+  emojiReactionsScale,
+  emojiSize,
+  navbarSize,
+  panelHeaderSize,
+  textSize,
+  forcedRoundness
+}) => {
+  const result = {
+    sidebarColumnWidth,
+    contentColumnWidth,
+    notifsColumnWidth,
+    emojiReactionsScale,
+    emojiSize,
+    navbarSize,
+    panelHeaderSize,
+    textSize
+  }
+
+  switch (forcedRoundness) {
+    case 'disable':
+      break
+    case '0':
+      result.forcedRoundness = '0'
+      break
+    case '1':
+      result.forcedRoundness = '1px'
+      break
+    case '2':
+      result.forcedRoundness = '0.4rem'
+      break
+    default:
+  }
+
+  return result
+}
+
+const defaultStyleConfig = extractStyleConfig(defaultState)
+
+export const applyConfig = (input) => {
+  const config = extractStyleConfig(input)
+
+  if (config === defaultStyleConfig) {
     return
   }
 
@@ -38,319 +234,26 @@ export const applyConfig = (config) => {
   body.classList.add('hidden')
 
   const rules = Object
-    .entries(columns)
+    .entries(config)
     .filter(([k, v]) => v)
     .map(([k, v]) => `--${k}: ${v}`).join(';')
 
+  document.getElementById('style-config')?.remove()
   const styleEl = document.createElement('style')
+  styleEl.id = 'style-config'
   head.appendChild(styleEl)
   const styleSheet = styleEl.sheet
 
   styleSheet.toString()
   styleSheet.insertRule(`:root { ${rules} }`, 'index-max')
+
+  if (Object.prototype.hasOwnProperty.call(config, 'forcedRoundness')) {
+    styleSheet.insertRule(` * {
+        --roundness: var(--forcedRoundness) !important;
+    }`, 'index-max')
+  }
+
   body.classList.remove('hidden')
-}
-
-export const getCssShadow = (input, usesDropShadow) => {
-  if (input.length === 0) {
-    return 'none'
-  }
-
-  return input
-    .filter(_ => usesDropShadow ? _.inset : _)
-    .map((shad) => [
-      shad.x,
-      shad.y,
-      shad.blur,
-      shad.spread
-    ].map(_ => _ + 'px').concat([
-      getCssColor(shad.color, shad.alpha),
-      shad.inset ? 'inset' : ''
-    ]).join(' ')).join(', ')
-}
-
-const getCssShadowFilter = (input) => {
-  if (input.length === 0) {
-    return 'none'
-  }
-
-  return input
-  // drop-shadow doesn't support inset or spread
-    .filter((shad) => !shad.inset && Number(shad.spread) === 0)
-    .map((shad) => [
-      shad.x,
-      shad.y,
-      // drop-shadow's blur is twice as strong compared to box-shadow
-      shad.blur / 2
-    ].map(_ => _ + 'px').concat([
-      getCssColor(shad.color, shad.alpha)
-    ]).join(' '))
-    .map(_ => `drop-shadow(${_})`)
-    .join(' ')
-}
-
-export const generateColors = (themeData) => {
-  const sourceColors = !themeData.themeEngineVersion
-    ? colors2to3(themeData.colors || themeData)
-    : themeData.colors || themeData
-
-  const { colors, opacity } = getColors(sourceColors, themeData.opacity || {})
-
-  const htmlColors = Object.entries(colors)
-    .reduce((acc, [k, v]) => {
-      if (!v) return acc
-      acc.solid[k] = rgb2hex(v)
-      acc.complete[k] = typeof v.a === 'undefined' ? rgb2hex(v) : rgba2css(v)
-      return acc
-    }, { complete: {}, solid: {} })
-  return {
-    rules: {
-      colors: Object.entries(htmlColors.complete)
-        .filter(([k, v]) => v)
-        .map(([k, v]) => `--${k}: ${v}`)
-        .join(';')
-    },
-    theme: {
-      colors: htmlColors.solid,
-      opacity
-    }
-  }
-}
-
-export const generateRadii = (input) => {
-  let inputRadii = input.radii || {}
-  // v1 -> v2
-  if (typeof input.btnRadius !== 'undefined') {
-    inputRadii = Object
-      .entries(input)
-      .filter(([k, v]) => k.endsWith('Radius'))
-      .reduce((acc, e) => { acc[e[0].split('Radius')[0]] = e[1]; return acc }, {})
-  }
-  const radii = Object.entries(inputRadii).filter(([k, v]) => v).reduce((acc, [k, v]) => {
-    acc[k] = v
-    return acc
-  }, {
-    btn: 4,
-    input: 4,
-    checkbox: 2,
-    panel: 10,
-    avatar: 5,
-    avatarAlt: 50,
-    tooltip: 2,
-    attachment: 5,
-    chatMessage: inputRadii.panel
-  })
-
-  return {
-    rules: {
-      radii: Object.entries(radii).filter(([k, v]) => v).map(([k, v]) => `--${k}Radius: ${v}px`).join(';')
-    },
-    theme: {
-      radii
-    }
-  }
-}
-
-export const generateFonts = (input) => {
-  const fonts = Object.entries(input.fonts || {}).filter(([k, v]) => v).reduce((acc, [k, v]) => {
-    acc[k] = Object.entries(v).filter(([k, v]) => v).reduce((acc, [k, v]) => {
-      acc[k] = v
-      return acc
-    }, acc[k])
-    return acc
-  }, {
-    interface: {
-      family: 'sans-serif'
-    },
-    input: {
-      family: 'inherit'
-    },
-    post: {
-      family: 'inherit'
-    },
-    postCode: {
-      family: 'monospace'
-    }
-  })
-
-  return {
-    rules: {
-      fonts: Object
-        .entries(fonts)
-        .filter(([k, v]) => v)
-        .map(([k, v]) => `--${k}Font: ${v.family}`).join(';')
-    },
-    theme: {
-      fonts
-    }
-  }
-}
-
-const border = (top, shadow) => ({
-  x: 0,
-  y: top ? 1 : -1,
-  blur: 0,
-  spread: 0,
-  color: shadow ? '#000000' : '#FFFFFF',
-  alpha: 0.2,
-  inset: true
-})
-const buttonInsetFakeBorders = [border(true, false), border(false, true)]
-const inputInsetFakeBorders = [border(true, true), border(false, false)]
-const hoverGlow = {
-  x: 0,
-  y: 0,
-  blur: 4,
-  spread: 0,
-  color: '--faint',
-  alpha: 1
-}
-
-export const DEFAULT_SHADOWS = {
-  panel: [{
-    x: 1,
-    y: 1,
-    blur: 4,
-    spread: 0,
-    color: '#000000',
-    alpha: 0.6
-  }],
-  topBar: [{
-    x: 0,
-    y: 0,
-    blur: 4,
-    spread: 0,
-    color: '#000000',
-    alpha: 0.6
-  }],
-  popup: [{
-    x: 2,
-    y: 2,
-    blur: 3,
-    spread: 0,
-    color: '#000000',
-    alpha: 0.5
-  }],
-  avatar: [{
-    x: 0,
-    y: 1,
-    blur: 8,
-    spread: 0,
-    color: '#000000',
-    alpha: 0.7
-  }],
-  avatarStatus: [],
-  panelHeader: [],
-  button: [{
-    x: 0,
-    y: 0,
-    blur: 2,
-    spread: 0,
-    color: '#000000',
-    alpha: 1
-  }, ...buttonInsetFakeBorders],
-  buttonHover: [hoverGlow, ...buttonInsetFakeBorders],
-  buttonPressed: [hoverGlow, ...inputInsetFakeBorders],
-  input: [...inputInsetFakeBorders, {
-    x: 0,
-    y: 0,
-    blur: 2,
-    inset: true,
-    spread: 0,
-    color: '#000000',
-    alpha: 1
-  }]
-}
-export const generateShadows = (input, colors) => {
-  // TODO this is a small hack for `mod` to work with shadows
-  // this is used to get the "context" of shadow, i.e. for `mod` properly depend on background color of element
-  const hackContextDict = {
-    button: 'btn',
-    panel: 'bg',
-    top: 'topBar',
-    popup: 'popover',
-    avatar: 'bg',
-    panelHeader: 'panel',
-    input: 'input'
-  }
-
-  const cleanInputShadows = Object.fromEntries(
-    Object.entries(input.shadows || {})
-      .map(([name, shadowSlot]) => [
-        name,
-        // defaulting color to black to avoid potential problems
-        shadowSlot.map(shadowDef => ({ color: '#000000', ...shadowDef }))
-      ])
-  )
-  const inputShadows = cleanInputShadows && !input.themeEngineVersion
-    ? shadows2to3(cleanInputShadows, input.opacity)
-    : cleanInputShadows || {}
-  const shadows = Object.entries({
-    ...DEFAULT_SHADOWS,
-    ...inputShadows
-  }).reduce((shadowsAcc, [slotName, shadowDefs]) => {
-    const slotFirstWord = slotName.replace(/[A-Z].*$/, '')
-    const colorSlotName = hackContextDict[slotFirstWord]
-    const isLightOnDark = relativeLuminance(convert(colors[colorSlotName]).rgb) < 0.5
-    const mod = isLightOnDark ? 1 : -1
-    const newShadow = shadowDefs.reduce((shadowAcc, def) => [
-      ...shadowAcc,
-      {
-        ...def,
-        color: rgb2hex(computeDynamicColor(
-          def.color,
-          (variableSlot) => convert(colors[variableSlot]).rgb,
-          mod
-        ))
-      }
-    ], [])
-    return { ...shadowsAcc, [slotName]: newShadow }
-  }, {})
-
-  return {
-    rules: {
-      shadows: Object
-        .entries(shadows)
-      // TODO for v2.2: if shadow doesn't have non-inset shadows with spread > 0 - optionally
-      // convert all non-inset shadows into filter: drop-shadow() to boost performance
-        .map(([k, v]) => [
-          `--${k}Shadow: ${getCssShadow(v)}`,
-          `--${k}ShadowFilter: ${getCssShadowFilter(v)}`,
-          `--${k}ShadowInset: ${getCssShadow(v, true)}`
-        ].join(';'))
-        .join(';')
-    },
-    theme: {
-      shadows
-    }
-  }
-}
-
-export const composePreset = (colors, radii, shadows, fonts) => {
-  return {
-    rules: {
-      ...shadows.rules,
-      ...colors.rules,
-      ...radii.rules,
-      ...fonts.rules
-    },
-    theme: {
-      ...shadows.theme,
-      ...colors.theme,
-      ...radii.theme,
-      ...fonts.theme
-    }
-  }
-}
-
-export const generatePreset = (input) => {
-  const colors = generateColors(input)
-  return composePreset(
-    colors,
-    generateRadii(input),
-    generateShadows(input, colors.theme.colors, colors.mod),
-    generateFonts(input)
-  )
 }
 
 export const getThemes = () => {
@@ -382,47 +285,6 @@ export const getThemes = () => {
         }, {})
     })
 }
-export const colors2to3 = (colors) => {
-  return Object.entries(colors).reduce((acc, [slotName, color]) => {
-    const btnPositions = ['', 'Panel', 'TopBar']
-    switch (slotName) {
-      case 'lightBg':
-        return { ...acc, highlight: color }
-      case 'btnText':
-        return {
-          ...acc,
-          ...btnPositions
-            .reduce(
-              (statePositionAcc, position) =>
-                ({ ...statePositionAcc, ['btn' + position + 'Text']: color })
-              , {}
-            )
-        }
-      default:
-        return { ...acc, [slotName]: color }
-    }
-  }, {})
-}
-
-/**
- * This handles compatibility issues when importing v2 theme's shadows to current format
- *
- * Back in v2 shadows allowed you to use dynamic colors however those used pure CSS3 variables
- */
-export const shadows2to3 = (shadows, opacity) => {
-  return Object.entries(shadows).reduce((shadowsAcc, [slotName, shadowDefs]) => {
-    const isDynamic = ({ color = '#000000' }) => color.startsWith('--')
-    const getOpacity = ({ color }) => opacity[getOpacitySlot(color.substring(2).split(',')[0])]
-    const newShadow = shadowDefs.reduce((shadowAcc, def) => [
-      ...shadowAcc,
-      {
-        ...def,
-        alpha: isDynamic(def) ? getOpacity(def) || 1 : def.alpha
-      }
-    ], [])
-    return { ...shadowsAcc, [slotName]: newShadow }
-  }, {})
-}
 
 export const getPreset = (val) => {
   return getThemes()
@@ -448,5 +310,3 @@ export const getPreset = (val) => {
       return { theme: data, source: theme.source }
     })
 }
-
-export const setPreset = (val) => getPreset(val).then(data => applyTheme(data.theme))

@@ -22,8 +22,6 @@
 <script src="./select.js"> </script>
 
 <style lang="scss">
-@import "../../variables";
-
 /* TODO fix order of styles */
 label.Select {
   padding: 0;
@@ -32,12 +30,10 @@ label.Select {
     appearance: none;
     background: transparent;
     border: none;
-    color: $fallback--text;
-    color: var(--inputText, --text, $fallback--text);
+    color: var(--text);
     margin: 0;
     padding: 0 2em 0 0.2em;
-    font-family: sans-serif;
-    font-family: var(--inputFont, sans-serif);
+    font-family: var(--font);
     font-size: 1em;
     width: 100%;
     z-index: 1;
@@ -52,8 +48,7 @@ label.Select {
     right: 5px;
     height: 100%;
     width: 0.875em;
-    color: $fallback--text;
-    color: var(--inputText, $fallback--text);
+    font-family: var(--font);
     line-height: 2;
     z-index: 0;
     pointer-events: none;

@@ -22,13 +22,13 @@
       />
       </span><button
         v-if="!expanded"
-        class="button-unstyled showMoreLess"
+        class="button-unstyled -link showMoreLess"
         @click="toggleShowMore"
       >
         {{ $t('status.plus_more', { number: extraMentions.length }) }}
       </button><button
         v-if="expanded"
-        class="button-unstyled showMoreLess"
+        class="button-unstyled -link showMoreLess"
         @click="toggleShowMore"
       >
         {{ $t('general.show_less') }}

@@ -13,9 +13,9 @@ import VBodyScrollLock from 'src/directives/body_scroll_lock'
 import { windowWidth, windowHeight } from '../services/window_utils/window_utils'
 import { getOrCreateApp, getClientToken } from '../services/new_api/oauth.js'
 import backendInteractorService from '../services/backend_interactor_service/backend_interactor_service.js'
-import { CURRENT_VERSION } from '../services/theme_data/theme_data.service.js'
-import { applyTheme, applyConfig } from '../services/style_setter/style_setter.js'
+import { applyConfig } from '../services/style_setter/style_setter.js'
 import FaviconService from '../services/favicon_service/favicon_service.js'
+import { initServiceWorker, updateFocus } from '../services/sw/sw.js'
 
 let staticInitialResults = null
 
@@ -159,8 +159,6 @@ const setSettings = async ({ apiConfig, staticConfig, store }) => {
   copyInstanceOption('showFeaturesPanel')
   copyInstanceOption('hideSitename')
   copyInstanceOption('sidebarRight')
-
-  return store.dispatch('setTheme', config.theme)
 }
 
 const getTOS = async ({ store }) => {
@@ -260,6 +258,7 @@ const getNodeInfo = async ({ store }) => {
       store.dispatch('setInstanceOption', { name: 'pollLimits', value: metadata.pollLimits })
       store.dispatch('setInstanceOption', { name: 'mailerEnabled', value: metadata.mailerEnabled })
       store.dispatch('setInstanceOption', { name: 'quotingAvailable', value: features.includes('quote_posting') })
+      store.dispatch('setInstanceOption', { name: 'groupActorAvailable', value: features.includes('pleroma:group_actors') })
 
       const uploadLimits = metadata.uploadLimits
       store.dispatch('setInstanceOption', { name: 'uploadlimit', value: parseInt(uploadLimits.general) })
@@ -326,17 +325,14 @@ const setConfig = async ({ store }) => {
 }
 
 const checkOAuthToken = async ({ store }) => {
-  // eslint-disable-next-line no-async-promise-executor
-  return new Promise(async (resolve, reject) => {
-    if (store.getters.getUserToken()) {
-      try {
-        await store.dispatch('loginUser', store.getters.getUserToken())
-      } catch (e) {
-        console.error(e)
-      }
+  if (store.getters.getUserToken()) {
+    try {
+      await store.dispatch('loginUser', store.getters.getUserToken())
+    } catch (e) {
+      console.error(e)
     }
-    resolve()
-  })
+  }
+  return Promise.resolve()
 }
 
 const afterStoreSetup = async ({ store, i18n }) => {
@@ -344,28 +340,16 @@ const afterStoreSetup = async ({ store, i18n }) => {
   store.dispatch('setLayoutHeight', windowHeight())
 
   FaviconService.initFaviconService()
+  initServiceWorker(store)
+
+  window.addEventListener('focus', () => updateFocus())
 
   const overrides = window.___pleromafe_dev_overrides || {}
   const server = (typeof overrides.target !== 'undefined') ? overrides.target : window.location.origin
   store.dispatch('setInstanceOption', { name: 'server', value: server })
 
   await setConfig({ store })
-
-  const { customTheme, customThemeSource } = store.state.config
-  const { theme } = store.state.instance
-  const customThemePresent = customThemeSource || customTheme
-
-  if (customThemePresent) {
-    if (customThemeSource && customThemeSource.themeEngineVersion === CURRENT_VERSION) {
-      applyTheme(customThemeSource)
-    } else {
-      applyTheme(customTheme)
-    }
-  } else if (theme) {
-    // do nothing, it will load asynchronously
-  } else {
-    console.error('Failed to load any theme!')
-  }
+  await store.dispatch('setTheme')
 
   applyConfig(store.state.config)
 

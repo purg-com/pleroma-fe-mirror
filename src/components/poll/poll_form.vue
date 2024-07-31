@@ -13,7 +13,7 @@
           :id="`poll-${index}`"
           v-model="options[index]"
           size="1"
-          class="poll-option-input"
+          class="input poll-option-input"
           type="text"
           :placeholder="$t('polls.option')"
           :maxlength="maxLength"
@@ -67,7 +67,7 @@
         <input
           v-model="expiryAmount"
           type="number"
-          class="expiry-amount hide-number-spinner"
+          class="input expiry-amount hide-number-spinner"
           :min="minExpirationInCurrentUnit"
           :max="maxExpirationInCurrentUnit"
           @change="expiryAmountChange"
@@ -95,8 +95,6 @@
 <script src="./poll_form.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .poll-form {
   display: flex;
   flex-direction: column;

@@ -1,18 +1,11 @@
 import {
   rgb2hex,
   hex2rgb,
-  getContrastRatioLayers
+  getContrastRatioLayers,
+  relativeLuminance
 } from 'src/services/color_convert/color_convert.js'
 import {
-  DEFAULT_SHADOWS,
-  generateColors,
-  generateShadows,
-  generateRadii,
-  generateFonts,
-  composePreset,
-  getThemes,
-  shadows2to3,
-  colors2to3
+  getThemes
 } from 'src/services/style_setter/style_setter.js'
 import {
   newImporter,
@@ -25,8 +18,23 @@ import {
   CURRENT_VERSION,
   OPACITIES,
   getLayers,
-  getOpacitySlot
+  getOpacitySlot,
+  DEFAULT_SHADOWS,
+  generateColors,
+  generateShadows,
+  generateRadii,
+  generateFonts,
+  shadows2to3,
+  colors2to3
 } from 'src/services/theme_data/theme_data.service.js'
+
+import { convertTheme2To3 } from 'src/services/theme_data/theme2_to_theme3.js'
+import { init } from 'src/services/theme_data/theme_data_3.service.js'
+import {
+  getCssRules,
+  getScopedVersion
+} from 'src/services/theme_data/css_utils.js'
+
 import ColorInput from 'src/components/color_input/color_input.vue'
 import RangeInput from 'src/components/range_input/range_input.vue'
 import OpacityInput from 'src/components/opacity_input/opacity_input.vue'
@@ -37,7 +45,7 @@ import TabSwitcher from 'src/components/tab_switcher/tab_switcher.jsx'
 import Checkbox from 'src/components/checkbox/checkbox.vue'
 import Select from 'src/components/select/select.vue'
 
-import Preview from './preview.vue'
+import Preview from './theme_preview.vue'
 
 // List of color values used in v1
 const v1OnlyNames = [
@@ -62,6 +70,7 @@ const colorConvert = (color) => {
 export default {
   data () {
     return {
+      themeV3Preview: [],
       themeImporter: newImporter({
         validator: this.importValidator,
         onImport: this.onImport,
@@ -78,10 +87,7 @@ export default {
       tempImportFile: undefined,
       engineVersion: 0,
 
-      previewShadows: {},
-      previewColors: {},
-      previewRadii: {},
-      previewFonts: {},
+      previewTheme: {},
 
       shadowsInvalid: true,
       colorsInvalid: true,
@@ -232,13 +238,6 @@ export default {
         chatMessage: this.chatMessageRadiusLocal
       }
     },
-    preview () {
-      return composePreset(this.previewColors, this.previewRadii, this.previewShadows, this.previewFonts)
-    },
-    previewTheme () {
-      if (!this.preview.theme.colors) return { colors: {}, opacity: {}, radii: {}, shadows: {}, fonts: {} }
-      return this.preview.theme
-    },
     // This needs optimization maybe
     previewContrast () {
       try {
@@ -305,14 +304,6 @@ export default {
         console.warn('Failure computing contrasts', e)
         return {}
       }
-    },
-    previewRules () {
-      if (!this.preview.rules) return ''
-      return [
-        ...Object.values(this.preview.rules),
-        'color: var(--text)',
-        'font-family: var(--interfaceFont, sans-serif)'
-      ].join(';')
     },
     shadowsAvailable () {
       return Object.keys(DEFAULT_SHADOWS).sort()
@@ -511,16 +502,15 @@ export default {
       }
     },
     setCustomTheme () {
-      this.$store.dispatch('setOption', {
-        name: 'customTheme',
-        value: {
+      this.$store.dispatch('setThemeV2', {
+        customTheme: {
+          ignore: true,
+          themeFileVersion: this.selectedVersion,
           themeEngineVersion: CURRENT_VERSION,
           ...this.previewTheme
-        }
-      })
-      this.$store.dispatch('setOption', {
-        name: 'customThemeSource',
-        value: {
+        },
+        customThemeSource: {
+          themeFileVersion: this.selectedVersion,
           themeEngineVersion: CURRENT_VERSION,
           shadows: this.shadowsLocal,
           fonts: this.fontsLocal,
@@ -530,16 +520,24 @@ export default {
         }
       })
     },
-    updatePreviewColorsAndShadows () {
-      this.previewColors = generateColors({
+    updatePreviewColors () {
+      const result = generateColors({
         opacity: this.currentOpacity,
         colors: this.currentColors
       })
-      this.previewShadows = generateShadows(
-        { shadows: this.shadowsLocal, opacity: this.previewTheme.opacity, themeEngineVersion: this.engineVersion },
-        this.previewColors.theme.colors,
-        this.previewColors.mod
-      )
+      this.previewTheme.colors = result.theme.colors
+      this.previewTheme.opacity = result.theme.opacity
+    },
+    updatePreviewShadows () {
+      this.previewTheme.shadows = generateShadows(
+        {
+          shadows: this.shadowsLocal,
+          opacity: this.previewTheme.opacity,
+          themeEngineVersion: this.engineVersion
+        },
+        this.previewTheme.colors,
+        relativeLuminance(this.previewTheme.colors.bg) < 0.5 ? 1 : -1
+      ).theme.shadows
     },
     importTheme () { this.themeImporter.importData() },
     exportTheme () { this.themeExporter.exportData() },
@@ -608,7 +606,7 @@ export default {
     normalizeLocalState (theme, version = 0, source, forceSource = false) {
       let input
       if (typeof source !== 'undefined') {
-        if (forceSource || source.themeEngineVersion === CURRENT_VERSION) {
+        if (forceSource || source?.themeEngineVersion === CURRENT_VERSION) {
           input = source
           version = source.themeEngineVersion
         } else {
@@ -690,6 +688,8 @@ export default {
         } else {
           this.shadowsLocal = shadows
         }
+        this.updatePreviewColors()
+        this.updatePreviewShadows()
         this.shadowSelected = this.shadowsAvailable[0]
       }
 
@@ -697,12 +697,25 @@ export default {
         this.clearFonts()
         this.fontsLocal = fonts
       }
+    },
+    updateTheme3Preview () {
+      const theme2 = convertTheme2To3(this.previewTheme)
+      const theme3 = init({
+        inputRuleset: theme2,
+        ultimateBackgroundColor: '#000000',
+        liteMode: true
+      })
+
+      this.themeV3Preview = getScopedVersion(
+        getCssRules(theme3.eager),
+        '#theme-preview'
+      ).join('\n')
     }
   },
   watch: {
     currentRadii () {
       try {
-        this.previewRadii = generateRadii({ radii: this.currentRadii })
+        this.previewTheme.radii = generateRadii({ radii: this.currentRadii }).theme.radii
         this.radiiInvalid = false
       } catch (e) {
         this.radiiInvalid = true
@@ -711,9 +724,8 @@ export default {
     },
     shadowsLocal: {
       handler () {
-        if (Object.getOwnPropertyNames(this.previewColors).length === 1) return
         try {
-          this.updatePreviewColorsAndShadows()
+          this.updatePreviewShadows()
           this.shadowsInvalid = false
         } catch (e) {
           this.shadowsInvalid = true
@@ -725,7 +737,7 @@ export default {
     fontsLocal: {
       handler () {
         try {
-          this.previewFonts = generateFonts({ fonts: this.fontsLocal })
+          this.previewTheme.fonts = generateFonts({ fonts: this.fontsLocal }).theme.fonts
           this.fontsInvalid = false
         } catch (e) {
           this.fontsInvalid = true
@@ -736,18 +748,16 @@ export default {
     },
     currentColors () {
       try {
-        this.updatePreviewColorsAndShadows()
+        this.updatePreviewColors()
         this.colorsInvalid = false
-        this.shadowsInvalid = false
       } catch (e) {
         this.colorsInvalid = true
-        this.shadowsInvalid = true
         console.warn(e)
       }
     },
     currentOpacity () {
       try {
-        this.updatePreviewColorsAndShadows()
+        this.updatePreviewColors()
       } catch (e) {
         console.warn(e)
       }
@@ -755,7 +765,6 @@ export default {
     selected () {
       this.selectedTheme = Object.entries(this.availableStyles).find(([k, s]) => {
         if (Array.isArray(s)) {
-          console.log(s[0] === this.selected, this.selected)
           return s[0] === this.selected
         } else {
           return s.name === this.selected

@@ -26,8 +26,6 @@
 <script src="./chat_title.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .chat-title {
   display: flex;
   overflow: hidden;
@@ -54,8 +52,7 @@
     margin-right: 0.5em;
     height: 1.5em;
     width: 1.5em;
-    border-radius: $fallback--avatarAltRadius;
-    border-radius: var(--avatarAltRadius, $fallback--avatarAltRadius);
+    border-radius: var(--roundness);
 
     &.animated::before {
       display: none;

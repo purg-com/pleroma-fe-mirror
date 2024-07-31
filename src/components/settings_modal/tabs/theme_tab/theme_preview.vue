@@ -1,11 +1,11 @@
 <template>
-  <div class="preview-container">
+  <div class="theme-preview-container">
     <div class="underlay underlay-preview" />
     <div class="panel dummy">
       <div class="panel-heading">
         <div class="title">
           {{ $t('settings.style.preview.header') }}
-          <span class="badge badge-notification">
+          <span class="badge -notification">
             99
           </span>
         </div>
@@ -81,7 +81,7 @@
               class="faint"
               scope="global"
             >
-              <a style="color: var(--faintLink);">
+              <a style="color: var(--linkFaint);">
                 {{ $t('settings.style.preview.faint_link') }}
               </a>
             </i18n-t>
@@ -95,17 +95,13 @@
         <input
           :value="$t('settings.style.preview.input')"
           type="text"
+          class="input"
         >
 
         <div class="actions">
-          <span class="checkbox">
-            <input
-              id="preview_checkbox"
-              checked="very yes"
-              type="checkbox"
-            >
-            <label for="preview_checkbox">{{ $t('settings.style.preview.checkbox') }}</label>
-          </span>
+          <Checkbox>
+            {{ $t('settings.style.preview.checkbox') }}
+          </Checkbox>
           <button class="btn button-default">
             {{ $t('settings.style.preview.button') }}
           </button>
@@ -116,6 +112,7 @@
 </template>
 
 <script>
+import Checkbox from 'src/components/checkbox/checkbox.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faTimes,
@@ -131,19 +128,123 @@ library.add(
   faReply
 )
 
-export default {}
+export default {
+  components: {
+    Checkbox
+  }
+}
 </script>
 
 <style lang="scss">
-.preview-container {
+.theme-preview-container {
   position: relative;
-}
+  border-top: 1px dashed;
+  border-bottom: 1px dashed;
+  border-color: var(--border);
+  margin: 1em 0;
+  padding: 1em;
+  background-color: var(--wallpaper);
+  background-image: var(--body-background-image);
+  background-size: cover;
+  background-position: 50% 50%;
 
-.underlay-preview {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 10px;
-  right: 10px;
+  .theme-preview-content {
+    padding: 20px;
+  }
+
+  .dummy {
+    .post {
+      font-family: var(--postFont);
+      display: flex;
+
+      .content {
+        flex: 1;
+
+        h4 {
+          margin-bottom: 0.25em;
+        }
+
+        .icons {
+          margin-top: 0.5em;
+          display: flex;
+
+          i {
+            margin-right: 1em;
+          }
+        }
+      }
+    }
+
+    .after-post {
+      margin-top: 1em;
+      display: flex;
+      align-items: center;
+    }
+
+    .avatar,
+    .avatar-alt {
+      background:
+        linear-gradient(
+          135deg,
+          #b8e1fc 0%,
+          #a9d2f3 10%,
+          #90bae4 25%,
+          #90bcea 37%,
+          #90bff0 50%,
+          #6ba8e5 51%,
+          #a2daf5 83%,
+          #bdf3fd 100%
+        );
+      color: black;
+      font-family: sans-serif;
+      text-align: center;
+      margin-right: 1em;
+    }
+
+    .avatar-alt {
+      flex: 0 auto;
+      margin-left: 28px;
+      font-size: 12px;
+      min-width: 20px;
+      min-height: 20px;
+      line-height: 20px;
+    }
+
+    .avatar {
+      flex: 0 auto;
+      width: 48px;
+      height: 48px;
+      font-size: 14px;
+      line-height: 48px;
+    }
+
+    .actions {
+      display: flex;
+      align-items: baseline;
+
+      .checkbox {
+        margin-right: 1em;
+        flex: 1;
+      }
+    }
+
+    .separator {
+      margin: 1em;
+      border-bottom: 1px solid;
+      border-color: var(--border);
+    }
+
+    .btn {
+      min-width: 3em;
+    }
+  }
+
+  .underlay-preview {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 10px;
+    right: 10px;
+  }
 }
-</style>
+ </style>

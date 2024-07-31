@@ -39,7 +39,8 @@ import {
   faThumbtack,
   faChevronUp,
   faChevronDown,
-  faAngleDoubleRight
+  faAngleDoubleRight,
+  faPlay
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -59,7 +60,8 @@ library.add(
   faThumbtack,
   faChevronUp,
   faChevronDown,
-  faAngleDoubleRight
+  faAngleDoubleRight,
+  faPlay
 )
 
 const camelCase = name => name.charAt(0).toUpperCase() + name.slice(1)
@@ -152,6 +154,7 @@ const Status = {
     'controlledSetMediaPlaying',
     'dive'
   ],
+  emits: ['interacted'],
   data () {
     return {
       uncontrolledReplying: false,
@@ -229,17 +232,14 @@ const Status = {
     muteWordHits () {
       return muteWordHits(this.status, this.muteWords)
     },
-    rtBotStatus () {
-      return this.statusoid.user.bot
-    },
     botStatus () {
-      return this.status.user.bot
+      return this.status.user.actor_type === 'Service'
     },
-    botIndicator () {
-      return this.botStatus && !this.hideBotIndication
+    showActorTypeIndicator () {
+      return !this.hideBotIndication
     },
-    rtBotIndicator () {
-      return this.rtBotStatus && !this.hideBotIndication
+    sensitiveStatus () {
+      return this.status.nsfw
     },
     mentionsLine () {
       if (!this.headTailLinks) return []
@@ -268,7 +268,9 @@ const Status = {
         // Wordfiltered
         this.muteWordHits.length > 0 ||
         // bot status
-        (this.muteBotStatuses && this.botStatus && !this.compact)
+        (this.muteBotStatuses && this.botStatus && !this.compact) ||
+        // sensitive status
+        (this.muteSensitiveStatuses && this.sensitiveStatus && !this.compact)
       return !this.unmuted && !this.shouldNotMute && reasonsToMute
     },
     userIsMuted () {
@@ -371,8 +373,14 @@ const Status = {
     hidePostStats () {
       return this.mergedConfig.hidePostStats
     },
+    shouldDisplayFavsAndRepeats () {
+      return !this.hidePostStats && this.isFocused && (this.combinedFavsAndRepeatsUsers.length > 0 || this.statusFromGlobalRepository.quotes_count)
+    },
     muteBotStatuses () {
       return this.mergedConfig.muteBotStatuses
+    },
+    muteSensitiveStatuses () {
+      return this.mergedConfig.muteSensitiveStatuses
     },
     hideBotIndication () {
       return this.mergedConfig.hideBotIndication
@@ -415,6 +423,32 @@ const Status = {
     },
     shouldDisplayQuote () {
       return this.quotedStatus && this.displayQuote
+    },
+    scrobblePresent () {
+      if (this.mergedConfig.hideScrobbles) return false
+      if (!this.status.user.latestScrobble) return false
+      const value = this.mergedConfig.hideScrobblesAfter.match(/\d+/gs)[0]
+      const unit = this.mergedConfig.hideScrobblesAfter.match(/\D+/gs)[0]
+      let multiplier = 60 * 1000 // minutes is smallest unit
+      switch (unit) {
+        case 'm':
+          break
+        case 'h':
+          multiplier *= 60 // hour
+          break
+        case 'd':
+          multiplier *= 60 // hour
+          multiplier *= 24 // day
+          break
+      }
+      const maxAge = Number(value) * multiplier
+      const createdAt = Date.parse(this.status.user.latestScrobble.created_at)
+      const age = Date.now() - createdAt
+      if (age > maxAge) return false
+      return this.status.user.latestScrobble.artist
+    },
+    scrobble () {
+      return this.status.user.latestScrobble
     }
   },
   methods: {
@@ -434,9 +468,11 @@ const Status = {
       this.error = error
     },
     clearError () {
+      this.$emit('interacted')
       this.error = undefined
     },
     toggleReplying () {
+      this.$emit('interacted')
       controlledOrUncontrolledToggle(this, 'replying')
     },
     gotoOriginal (id) {

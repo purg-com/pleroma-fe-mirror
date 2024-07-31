@@ -3,6 +3,7 @@ import TabSwitcher from 'src/components/tab_switcher/tab_switcher.jsx'
 
 const tabModeDict = {
   mentions: ['mention'],
+  statuses: ['status'],
   'likes+repeats': ['repeat', 'like'],
   follows: ['follow'],
   reactions: ['pleroma:emoji_reaction'],

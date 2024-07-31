@@ -47,7 +47,6 @@
   display: flex;
   flex: 1 0;
   margin: 0;
-  padding: 0.6em 1em;
 
   --emoji-size: 14px;
 

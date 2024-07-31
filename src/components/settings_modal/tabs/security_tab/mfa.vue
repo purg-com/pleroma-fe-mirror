@@ -99,12 +99,14 @@
                 <input
                   v-model="otpConfirmToken"
                   type="text"
+                  class="input"
                 >
 
                 <p>{{ $t('settings.enter_current_password_to_confirm') }}:</p>
                 <input
                   v-model="currentPassword"
                   type="password"
+                  class="input"
                 >
                 <div class="confirm-otp-actions">
                   <button
@@ -137,8 +139,6 @@
 
 <script src="./mfa.js"></script>
 <style lang="scss">
-@import "../../../../variables";
-
 .mfa-settings {
   .mfa-heading,
   .method-item {
@@ -149,8 +149,7 @@
   }
 
   .warning {
-    color: $fallback--cOrange;
-    color: var(--cOrange, $fallback--cOrange);
+    color: var(--cOrange);
   }
 
   .setup-otp {

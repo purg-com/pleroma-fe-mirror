@@ -1,0 +1,59 @@
+.emoji-tab {
+  .btn-group .btn:not(:first-child) {
+    margin-left: 0.5em;
+  }
+
+  .pack-info-wrapper {
+    margin-top: 1em;
+  }
+
+  .emoji-info-input {
+    width: 100%;
+  }
+
+  .emoji-data-input {
+    width: 40%;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+  }
+
+  .emoji {
+    width: 32px;
+    height: 32px;
+  }
+
+  .emoji-unsaved {
+    box-shadow: 0 3px 5px var(--cBlue);
+  }
+
+  .emoji-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em 1em;
+  }
+}
+
+.emoji-tab-popover-button:not(:first-child) {
+  margin-left: 0.5em;
+}
+
+.emoji-tab-popover-input {
+  margin-bottom: 0.5em;
+
+  label {
+    display: block;
+    margin-bottom: 0.5em;
+  }
+
+  input {
+    width: 20em;
+  }
+
+  .emoji-tab-popover-file {
+    padding-top: 3px;
+  }
+
+  .warning {
+    color: var(--cOrange);
+  }
+}

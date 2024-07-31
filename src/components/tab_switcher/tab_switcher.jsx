@@ -97,7 +97,7 @@ export default {
       .map((slot, index) => {
         const props = slot.props
         if (!props) return
-        const classesTab = ['tab', 'button-default']
+        const classesTab = ['tab']
         const classesWrapper = ['tab-wrapper']
         if (this.activeIndex === index) {
           classesTab.push('active')
