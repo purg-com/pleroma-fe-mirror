@@ -565,7 +565,8 @@
           "interface": "インターフェース",
           "input": "入力欄",
           "post": "投稿",
-          "postCode": "等幅 (投稿がリッチテキストであるとき)"
+          "postCode": "等幅 (投稿がリッチテキストであるとき)",
+          "monospace": "等幅テキスト"
         },
         "family": "フォント名",
         "size": "大きさ (px)",
@@ -585,7 +586,43 @@
         "header_faint": "エラーではありません",
         "checkbox": "利用規約を読みました",
         "link": "ハイパーリンク"
-      }
+      },
+      "themes2_outdated": "V2テーマのエディタは徐々に廃止され、最終的には新しいV3テーマのものに置き換えられる予定です。現状はまだ動作するはずですが、正しく動作する保証はありません。",
+      "themes3": {
+        "font": {
+          "group-local": "端末上にインストールされたフォント",
+          "local-unavailable2": "フォント名を直接指定してください",
+          "lookup_local_fonts": "端末上のフォントの一覧から選ぶ",
+          "group-builtin": "ブラウザのデフォルトフォント",
+          "builtin": {
+            "serif": "明朝体 (Serif)",
+            "sans-serif": "ゴシック体 (Sans-serif)",
+            "monospace": "等幅 (Monospace)",
+            "inherit": "変更しない"
+          },
+          "local-unavailable1": "端末上のフォントの一覧が取得できません",
+          "font_list_unavailable": "端末上のフォントの一覧が取得できません: {error}",
+          "enter_manually": "フォント名を直接入力する",
+          "entry": "{fontFamily}を入力",
+          "select": "フォントを選択"
+        },
+        "hacks": {
+          "underlay_overrides": "背景表示",
+          "underlay_override_mode_none": "テーマのデフォルトを使用する",
+          "underlay_override_mode_opaque": "単色に置き換える",
+          "underlay_override_mode_transparent": "非表示にする (テーマによっては表示が壊れる可能性があります)",
+          "force_interface_roundness": "インターフェースの角丸設定",
+          "forced_roundness_mode_disabled": "テーマのデフォルトを使用する",
+          "forced_roundness_mode_sharp": "角ばったデザインを強制する",
+          "forced_roundness_mode_nonsharp": "若干の角丸(1px分丸める)デザインを強制する",
+          "forced_roundness_mode_round": "角丸デザインを強制する"
+        },
+        "define": "上書き"
+      },
+      "custom_theme_used": "(カスタムテーマ)",
+      "appearance_tab_note": "以下の設定はテーマには反映されないため、エクスポートしたテーマの見た目は今見えているものと異なる可能性があります",
+      "update_preview": "プレビューを更新",
+      "interface_font_user_override": "フォント設定の上書き"
     },
     "version": {
       "title": "バージョン",
@@ -802,7 +839,19 @@
       }
     },
     "hide_scrobbles_after": "これより古いScrobbleを表示しない:",
-    "force_theme_recompilation_debug": "テーマのキャッシュを無効化し、起動の度にコンパイルし直す (デバッグ用)"
+    "force_theme_recompilation_debug": "テーマのキャッシュを無効化し、起動の度にコンパイルし直す (デバッグ用)",
+    "scale_and_layout": "インターフェースの表示サイズとレイアウト",
+    "appearance": "見た目",
+    "confirm_new_setting": "設定を適用しますか？",
+    "confirm_new_question": "これで問題ありませんか？10秒間操作がない場合、元の設定に戻ります。",
+    "revert": "元に戻す",
+    "confirm": "適用",
+    "text_size": "フォントサイズ",
+    "text_size_tip2": "{0}以外に設定すると見た目が壊れてしまう場合があります",
+    "emoji_size": "絵文字のサイズ",
+    "navbar_size": "トップバーのサイズ",
+    "panel_header_size": "パネルヘッダーのサイズ",
+    "notification_visibility_statuses": "購読"
   },
   "time": {
     "day": "{0}日",
@@ -941,7 +990,9 @@
     "open_gallery": "メディアビューアで開く",
     "status_history": "編集履歴",
     "sensitive_muted": "閲覧注意な投稿のためミュートされています",
-    "load_error": "投稿の読み込みに失敗しました: {error}"
+    "load_error": "投稿の読み込みに失敗しました: {error}",
+    "loading": "読み込み中…",
+    "quotes": "引用"
   },
   "user_card": {
     "approve": "承認",
