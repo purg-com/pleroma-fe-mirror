@@ -208,7 +208,7 @@
             />
             <template v-if="relationship.following">
               <ProgressButton
-                v-if="!relationship.subscribing"
+                v-if="!relationship.notifying"
                 class="btn button-default"
                 :click="subscribeUser"
                 :title="$t('user_card.subscribe')"

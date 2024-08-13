@@ -452,11 +452,11 @@ const users = {
       commit('clearFollowers', userId)
     },
     subscribeUser ({ rootState, commit }, id) {
-      return rootState.api.backendInteractor.subscribeUser({ id })
+      return rootState.api.backendInteractor.followUser({ id, notify: true })
         .then((relationship) => commit('updateUserRelationship', [relationship]))
     },
     unsubscribeUser ({ rootState, commit }, id) {
-      return rootState.api.backendInteractor.unsubscribeUser({ id })
+      return rootState.api.backendInteractor.followUser({ id, notify: false })
         .then((relationship) => commit('updateUserRelationship', [relationship]))
     },
     toggleActivationStatus ({ rootState, commit }, { user }) {
