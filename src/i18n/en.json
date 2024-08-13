@@ -229,7 +229,9 @@
     "expiry": "Poll age",
     "expires_in": "Poll ends in {0}",
     "expired": "Poll ended {0} ago",
-    "not_enough_options": "Too few unique options in poll"
+    "not_enough_options": "Too few unique options in poll",
+    "non_anonymous": "Public poll",
+    "non_anonymous_title": "Other instances may display the options you voted for"
   },
   "emoji": {
     "stickers": "Stickers",
