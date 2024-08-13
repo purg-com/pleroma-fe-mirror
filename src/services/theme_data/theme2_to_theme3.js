@@ -351,6 +351,7 @@ export const convertTheme2To3 = (data) => {
         newRules.push({ ...rule, parent: { component: 'Notification' } })
       }
       if (key === 'buttonPressed') {
+        console.log(key)
         newRules.push({ ...rule, state: ['toggled'] })
         newRules.push({ ...rule, state: ['toggled', 'focus'] })
         newRules.push({ ...rule, state: ['pressed', 'focus'] })
@@ -418,7 +419,6 @@ export const convertTheme2To3 = (data) => {
         case 'Border':
           newRule.parent = rule
           newRule.directives.textColor = data.colors[key]
-          newRule.directives.textAuto = 'no-auto'
           variantArray = parts.slice(0, -1)
           break
         default:
