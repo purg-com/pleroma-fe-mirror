@@ -4,6 +4,12 @@
     backdrop-filter: none;
   }
 
+  /* This is to fix the occasional gaps/weird lines in timeline */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+  }
+
   .alert-badge {
     font-size: 0.75em;
     line-height: 1;
