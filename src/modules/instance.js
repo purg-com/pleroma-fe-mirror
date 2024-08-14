@@ -374,8 +374,6 @@ const instance = {
             // should have been "pack" field, that would be more useful
           }).sort(byPackThenByName)
           commit('setInstanceOption', { name: 'customEmoji', value: emoji })
-          state.standardEmojiGroupList = null
-          state.standardEmojiList = null
         } else {
           throw (res)
         }
