@@ -3,8 +3,7 @@
     v-if="!hideStatus"
     ref="root"
     class="Status"
-    :class="[{ '-focused': isFocused }, { '-conversation': inlineExpanded }, userClass, { highlighted: userStyle, '-repeat': retweet && !inConversation }]"
-    :style="[ userStyle ]"
+    :class="[{ '-focused': isFocused }, { '-conversation': inlineExpanded }]"
   >
     <div
       v-if="error"
@@ -121,6 +120,8 @@
 
       <div
         v-if="!deleted"
+        :class="[userClass, { highlighted: userStyle, '-repeat': retweet && !inConversation }]"
+        :style="[ userStyle ]"
         class="status-container"
         :data-tags="tags"
       >
