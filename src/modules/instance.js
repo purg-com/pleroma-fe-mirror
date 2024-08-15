@@ -250,21 +250,15 @@ const instance = {
         }, {})
     },
     standardEmojiList (state) {
-      if (!state.standardEmojiList) {
-        state.standardEmojiList = SORTED_EMOJI_GROUP_IDS
-          .map(groupId => (state.emoji[groupId] || []).map(k => injectAnnotations(k, state.unicodeEmojiAnnotations)))
-          .reduce((a, b) => a.concat(b), [])
-      }
-      return state.standardEmojiList
+      return SORTED_EMOJI_GROUP_IDS
+        .map(groupId => (state.emoji[groupId] || []).map(k => injectAnnotations(k, state.unicodeEmojiAnnotations)))
+        .reduce((a, b) => a.concat(b), [])
     },
     standardEmojiGroupList (state) {
-      if (!state.standardEmojiGroupList) {
-        state.standardEmojiGroupList = SORTED_EMOJI_GROUP_IDS.map(groupId => ({
-          id: groupId,
-          emojis: (state.emoji[groupId] || []).map(k => injectAnnotations(k, state.unicodeEmojiAnnotations))
-        }))
-      }
-      return state.standardEmojiGroupList
+      return SORTED_EMOJI_GROUP_IDS.map(groupId => ({
+        id: groupId,
+        emojis: (state.emoji[groupId] || []).map(k => injectAnnotations(k, state.unicodeEmojiAnnotations))
+      }))
     },
     instanceDomain (state) {
       return new URL(state.server).hostname
