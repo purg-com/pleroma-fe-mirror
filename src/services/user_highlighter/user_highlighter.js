@@ -27,7 +27,11 @@ const highlightStyle = (prefs) => {
     }
   } else if (type === 'solid') {
     return {
-      backgroundColor: tintColor2,
+      backgroundImage: [
+        'repeating-linear-gradient(90deg,',
+        `${tintColor} ,`,
+        `${tintColor} 20px`
+      ].join(' '),
       ...customProps
     }
   } else if (type === 'side') {
