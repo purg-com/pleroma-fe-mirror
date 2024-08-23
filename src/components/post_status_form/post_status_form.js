@@ -354,10 +354,20 @@ const PostStatusForm = {
       handler () {
         this.statusChanged()
       }
+    },
+    savable (val) {
+      // https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event#usage_notes
+      // MDN says we'd better add the beforeunload event listener only when needed, and remove it when it's no longer needed
+      if (val) {
+        this.addBeforeUnloadListener()
+      } else {
+        this.removeBeforeUnloadListener()
+      }
     }
   },
   beforeUnmount () {
     this.maybeAutoSaveDraft()
+    this.removeBeforeUnloadListener()
   },
   methods: {
     statusChanged () {
@@ -785,6 +795,17 @@ const PostStatusForm = {
       this.abandonDraft().then(() => {
         this.$emit('can-close')
       })
+    },
+    addBeforeUnloadListener () {
+      this._beforeUnloadListener ||= () => {
+        this.saveDraft()
+      }
+      window.addEventListener('beforeunload', this._beforeUnloadListener)
+    },
+    removeBeforeUnloadListener () {
+      if (this._beforeUnloadListener) {
+        window.removeEventListener('beforeunload', this._beforeUnloadListener)
+      }
     }
   }
 }
