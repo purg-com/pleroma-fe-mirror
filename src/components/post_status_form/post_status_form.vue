@@ -298,13 +298,13 @@
           </button>
         </div>
         <span
-          v-if="shouldAutoSaveDraft"
+          v-if="!disableDraft && shouldAutoSaveDraft"
           class="auto-save-status"
         >
           {{ autoSaveState }}
         </span>
         <button
-          v-else
+          v-else-if="!disableDraft"
           class="btn button-default"
           @click="saveDraft"
         >

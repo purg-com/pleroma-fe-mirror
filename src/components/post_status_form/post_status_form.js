@@ -93,6 +93,7 @@ const PostStatusForm = {
     'disableSensitivityCheckbox',
     'disableSubmit',
     'disablePreview',
+    'disableDraft',
     'placeholder',
     'maxHeight',
     'postHandler',
@@ -146,7 +147,7 @@ const PostStatusForm = {
     const [statusType, refId] = typeAndRefId({ replyTo: this.replyTo, profileMention: this.profileMention, statusId: this.statusId })
 
     // If we are starting a new post, do not associate it with old drafts
-    let statusParams = (this.draftId || statusType !== 'new') ? this.getDraft(statusType, refId) : null
+    let statusParams = !this.disableDraft && (this.draftId || statusType !== 'new') ? this.getDraft(statusType, refId) : null
 
     if (!statusParams) {
       if (statusType === 'reply' || statusType === 'mention') {
@@ -725,7 +726,8 @@ const PostStatusForm = {
       return propsToNative(props)
     },
     saveDraft () {
-      if (!this.saveInhibited &&
+      if (!this.disableDraft &&
+          !this.saveInhibited &&
           (this.newStatus.status ||
            this.newStatus.files?.length ||
            this.newStatus.hasPoll
