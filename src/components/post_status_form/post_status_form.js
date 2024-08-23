@@ -144,7 +144,7 @@ const PostStatusForm = {
 
     const { scopeCopy } = this.$store.getters.mergedConfig
 
-    const [statusType, refId] = typeAndRefId({ replyTo: this.replyTo, profileMention: this.profileMention, statusId: this.statusId })
+    const [statusType, refId] = typeAndRefId({ replyTo: this.replyTo, profileMention: this.profileMention && this.repliedUser?.id, statusId: this.statusId })
 
     // If we are starting a new post, do not associate it with old drafts
     let statusParams = !this.disableDraft && (this.draftId || statusType !== 'new') ? this.getDraft(statusType, refId) : null
