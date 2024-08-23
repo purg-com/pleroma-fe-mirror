@@ -727,18 +727,24 @@ const PostStatusForm = {
     },
     saveDraft () {
       if (!this.disableDraft &&
-          !this.saveInhibited &&
-          (this.newStatus.status ||
-           this.newStatus.files?.length ||
-           this.newStatus.hasPoll
-          )) {
-        return this.$store.dispatch('addOrSaveDraft', { draft: this.newStatus })
-          .then(id => {
-            if (this.newStatus.id !== id) {
-              this.newStatus.id = id
-            }
-            this.savable = false
-          })
+          !this.saveInhibited) {
+        if (this.newStatus.status ||
+            this.newStatus.files?.length ||
+            this.newStatus.hasPoll) {
+          return this.$store.dispatch('addOrSaveDraft', { draft: this.newStatus })
+            .then(id => {
+              if (this.newStatus.id !== id) {
+                this.newStatus.id = id
+              }
+              this.savable = false
+            })
+        } else if (this.newStatus.id) {
+          // There is a draft, but there is nothing in it, clear it
+          return this.abandonDraft()
+            .then(() => {
+              this.savable = false
+            })
+        }
       }
       return Promise.resolve()
     },
