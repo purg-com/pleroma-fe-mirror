@@ -475,7 +475,8 @@
           "interface": "Fasado",
           "input": "Enigaj kampoj",
           "post": "Teksto de afiŝo",
-          "postCode": "Egallarĝa teksto en afiŝo (riĉteksto)"
+          "postCode": "Egallarĝa teksto en afiŝo (riĉteksto)",
+          "monospace": "Egallarĝa teksto"
         },
         "family": "Nomo de tiparo",
         "size": "Grando (en bilderoj)",
@@ -495,6 +496,27 @@
         "header_faint": "Tio estas en ordo",
         "checkbox": "Mi legetis la kondiĉojn de uzado",
         "link": "bela eta ligil’"
+      },
+      "custom_theme_used": "(Propra haŭto)",
+      "themes3": {
+        "hacks": {
+          "underlay_override_mode_transparent": "Tute forigi (povus rompi iujn haŭtojn)",
+          "forced_roundness_mode_disabled": "Uzi implicitajn valorojn de haŭto",
+          "forced_roundness_mode_sharp": "Devigi akrajn randojn",
+          "forced_roundness_mode_nonsharp": "Devigi ne tiom akrajn randojn (rondigo je 1 bildero)",
+          "forced_roundness_mode_round": "Devigi rondajn randojn"
+        },
+        "font": {
+          "builtin": {
+            "serif": "Kalkana",
+            "sans-serif": "Senkalkana",
+            "monospace": "Egallarĝa",
+            "inherit": "Senŝanĝe"
+          },
+          "group-local": "Loke instalitaj signoformoj",
+          "local-unavailable1": "Listo de loke instalitaj signoformoj ne estas disponebla",
+          "font_list_unavailable": "Ne povis akiri loke instalitajn signoformojn: {error}"
+        }
       }
     },
     "discoverable": "Permesi trovon de ĉi tiu konto en serĉrezultoj kaj aliaj servoj",
@@ -744,7 +766,15 @@
     "notification_visibility_reports": "Raportoj",
     "notification_setting_ignore_inactionable_seen": "Malatenti legitecon de nereageblaj sciigoj (ŝatoj, ripetoj, ktp.)",
     "notification_setting_ignore_inactionable_seen_tip": "Ĉi tio ne markos la sciigojn legitaj, kaj vi ankoraŭ ricevos labortablajn sciigojn pri ili, se vi elektis ricevi tiujn",
-    "notification_setting_unseen_at_top": "Montri nelegitajn sciigojn super aliaj"
+    "notification_setting_unseen_at_top": "Montri nelegitajn sciigojn super aliaj",
+    "appearance": "Aspekto",
+    "confirm_new_setting": "Ĉu konfirmi novan agordon?",
+    "confirm_new_question": "Ĉu tio ĉi aspektas ĝuste? La ŝanĝo malfariĝos post 10 sekundoj.",
+    "revert": "Malfari",
+    "confirm": "Konfirmi",
+    "text_size": "Grandeco de teksto kaj fasado",
+    "emoji_size": "Grandeco de bildosignoj",
+    "navbar_size": "Grandeco de supra breto"
   },
   "timeline": {
     "collapse": "Maletendi",
@@ -999,7 +1029,8 @@
     "follows": "Novaj abonoj",
     "favs_repeats": "Ripetoj kaj ŝatoj",
     "emoji_reactions": "Bildosignaj reagoj",
-    "reports": "Raportoj"
+    "reports": "Raportoj",
+    "statuses": "Abonoj"
   },
   "errors": {
     "storage_unavailable": "Pleroma ne povis aliri deponejon de la foliumilo. Via saluto kaj viaj lokaj agordoj ne estos konservitaj, kaj vi eble renkontos neatenditajn problemojn. Provu permesi kuketojn."
@@ -1065,7 +1096,13 @@
     "repeat_confirm_title": "Konfirmo de ripeto",
     "repeat_confirm_accept_button": "Ripeti",
     "repeat_confirm_cancel_button": "Ne ripeti",
-    "delete_confirm_cancel_button": "Ne forigi"
+    "delete_confirm_cancel_button": "Ne forigi",
+    "delete_error": "Eraris forigo de afiŝo: {0}",
+    "hide_quote": "Kaŝi la cititan afiŝon",
+    "display_quote": "Montri la cititan afiŝon",
+    "reaction_count_label": "{num} persono reagis | {num} personoj reagis",
+    "invisible_quote": "Citita afiŝo ne disponeblas: {link}",
+    "quotes": "Citaĵoj"
   },
   "time": {
     "years_short": "{0}j",
@@ -1267,7 +1304,9 @@
       "save_meta": "Konservi pridatumojn",
       "description": "Priskribo",
       "homepage": "Hejmpaĝo",
-      "save": "Konservi"
+      "save": "Konservi",
+      "revert": "Malfari",
+      "share": "Kunhavigi"
     },
     "tabs": {
       "emoji": "Bildosignoj",
@@ -1283,7 +1322,8 @@
         "header": "Limigi aliron por sennomaj vizitantoj",
         "timelines": "Aliro al historioj"
       },
-      "access": "Aliro al nodo"
+      "access": "Aliro al nodo",
+      "kocaptcha": "Agordo de KoCaptcha"
     },
     "limits": {
       "users": "Limoj de profiloj de uzantoj",
@@ -1304,10 +1344,21 @@
         ":instance": {
           ":public": {
             "label": "Nodo estas publika"
+          },
+          ":background_image": {
+            "label": "Fonbildo",
+            "description": "Fonbildo (uzota ĉefe de PleromaFE)"
+          },
+          ":description_limit": {
+            "description": "Limo de signoj por priskriboj de kunsendaĵoj",
+            "label": "Limo"
           }
         }
       }
     },
-    "commit_all": "Konservi ĉion"
+    "commit_all": "Konservi ĉion",
+    "captcha": {
+      "kocaptcha": "KoCaptcha"
+    }
   }
 }
