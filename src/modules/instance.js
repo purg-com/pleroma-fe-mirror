@@ -145,10 +145,6 @@ const defaultState = {
   quotingAvailable: false,
   groupActorAvailable: false,
 
-  // Emoji stuff
-  standardEmojiList: null,
-  standardEmojiGroupList: null,
-
   // Html stuff
   instanceSpecificPanelContent: '',
   tos: '',
