@@ -26,7 +26,7 @@
   }
 
   .conversation-heading {
-    top: calc(var(--__panel-heading-height) * var(--currentPanelStack, 2));
+    top: calc(var(--__panel-heading-height) * var(--currentPanelStack, 1) + var(--navbar-height));
     z-index: 2;
   }
 
