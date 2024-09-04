@@ -3,6 +3,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 2.7.1
+Bugfix release. Added small optimizations to emoji picker that should make it a bit more responsive, however it needs rather large change to make it more performant which might come in a major release.
+
+### Fixed
+- Instance default theme not respected
+- Nested panel header having wrong sticky position if navbar height != panel header height
+- Toggled buttons having bad contrast (when using v2 theme)
+
+### Changed
+- Simplify the OAuth client_name to 'PleromaFE'
+- Small optimizations to emoji picker
+
+
 ## 2.7.0
 
 ### Known issues

@@ -150,7 +150,9 @@ const EmojiPicker = {
     },
     showPicker () {
       this.$refs.popover.showPopover()
-      this.onShowing()
+      this.$nextTick(() => {
+        this.onShowing()
+      })
     },
     hidePicker () {
       this.$refs.popover.hidePopover()
