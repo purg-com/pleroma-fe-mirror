@@ -122,6 +122,7 @@ const setSettings = async ({ apiConfig, staticConfig, store }) => {
     store.dispatch('setInstanceOption', { name, value: config[name] })
   }
 
+  copyInstanceOption('theme')
   copyInstanceOption('nsfwCensorImage')
   copyInstanceOption('background')
   copyInstanceOption('hidePostStats')

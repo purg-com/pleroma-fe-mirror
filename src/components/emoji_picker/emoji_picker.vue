@@ -89,6 +89,7 @@
             class="emoji-groups"
             :class="groupsScrolledClass"
             :min-item-size="minItemSize"
+            :buffer="minItemSize"
             :items="emojiItems"
             :emit-update="true"
             @update="onScroll"
