@@ -418,7 +418,6 @@ export const convertTheme2To3 = (data) => {
         case 'Border':
           newRule.parent = rule
           newRule.directives.textColor = data.colors[key]
-          newRule.directives.textAuto = 'no-auto'
           variantArray = parts.slice(0, -1)
           break
         default:
