@@ -3,6 +3,7 @@ import ISO6391 from 'iso-639-1'
 import _ from 'lodash'
 
 const specialLanguageCodes = {
+  pdc: 'en',
   ja_easy: 'ja',
   zh_Hant: 'zh-HANT',
   zh: 'zh-Hans'
@@ -18,6 +19,7 @@ const internalToBackendLocaleMulti = codes => {
 
 const getLanguageName = (code) => {
   const specialLanguageNames = {
+    pdc: 'Pennsylvania Dutch',
     ja_easy: 'やさしいにほんご',
     'nan-TW': '臺語（閩南語）',
     zh: '简体中文',
