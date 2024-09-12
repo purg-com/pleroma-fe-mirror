@@ -96,6 +96,17 @@ export default {
         textOpacity: 0.25,
         textOpacityMode: 'blend'
       }
+    },
+    {
+      component: 'Icon',
+      parent: {
+        component: 'Button',
+        state: ['disabled']
+      },
+      directives: {
+        textOpacity: 0.25,
+        textOpacityMode: 'blend'
+      }
     }
   ]
 }
