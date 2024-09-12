@@ -314,7 +314,18 @@ export default {
       },
       set (val) {
         if (val) {
-          this.shadowsLocal[this.shadowSelected] = this.currentShadowFallback.map(_ => Object.assign({}, _))
+          this.shadowsLocal[this.shadowSelected] = (this.currentShadowFallback || [])
+            .map(s => ({
+              name: null,
+              x: 0,
+              y: 0,
+              blur: 0,
+              spread: 0,
+              inset: false,
+              color: '#000000',
+              alpha: 1,
+              ...s
+            }))
         } else {
           delete this.shadowsLocal[this.shadowSelected]
         }
@@ -328,6 +339,7 @@ export default {
         return this.shadowsLocal[this.shadowSelected]
       },
       set (v) {
+        console.log('TT', v)
         this.shadowsLocal[this.shadowSelected] = v
       }
     },

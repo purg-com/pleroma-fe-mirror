@@ -937,24 +937,14 @@
               </Select>
             </div>
             <div class="override">
-              <label
-                for="override"
-                class="label"
-              >
-                {{ $t('settings.style.shadows.override') }}
-              </label>
-              {{ ' ' }}
-              <input
+              <Checkbox
                 id="override"
                 v-model="currentShadowOverriden"
                 name="override"
                 class="input-override"
-                type="checkbox"
               >
-              <label
-                class="checkbox-label"
-                for="override"
-              />
+                {{ $t('settings.style.shadows.override') }}
+              </Checkbox>
             </div>
             <button
               class="btn button-default"
@@ -965,38 +955,10 @@
           </div>
           <ShadowControl
             v-model="currentShadow"
-            :ready="!!currentShadowFallback"
+            :separate-inset="shadowSelected === 'avatar' || shadowSelected === 'avatarStatus'"
             :fallback="currentShadowFallback"
           />
-          <div v-if="shadowSelected === 'avatar' || shadowSelected === 'avatarStatus'">
-            <i18n-t
-              scope="global"
-              keypath="settings.style.shadows.filter_hint.always_drop_shadow"
-              tag="p"
-            >
-              <code>filter: drop-shadow()</code>
-            </i18n-t>
-            <p>{{ $t('settings.style.shadows.filter_hint.avatar_inset') }}</p>
-            <i18n-t
-              scope="global"
-              keypath="settings.style.shadows.filter_hint.drop_shadow_syntax"
-              tag="p"
-            >
-              <code>drop-shadow</code>
-              <code>spread-radius</code>
-              <code>inset</code>
-            </i18n-t>
-            <i18n-t
-              scope="global"
-              keypath="settings.style.shadows.filter_hint.inset_classic"
-              tag="p"
-            >
-              <code>box-shadow</code>
-            </i18n-t>
-            <p>{{ $t('settings.style.shadows.filter_hint.spread_zero') }}</p>
-          </div>
         </div>
-
         <div
           :label="$t('settings.style.fonts._tab_label')"
           class="fonts-container"

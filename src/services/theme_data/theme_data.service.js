@@ -452,7 +452,7 @@ export const getCssShadow = (input, usesDropShadow) => {
     ]).join(' ')).join(', ')
 }
 
-const getCssShadowFilter = (input) => {
+export const getCssShadowFilter = (input) => {
   if (input.length === 0) {
     return 'none'
   }

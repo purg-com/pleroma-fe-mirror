@@ -11,20 +11,22 @@
         {{ $t('settings.style.shadows.offset') }}
       </label>
       <input
-        v-model="selected.y"
+        :value="selected?.y"
         :disabled="!present"
         :class="{ disabled: !present }"
         class="input input-number y-shift-number"
         type="number"
+        @input="e => updateProperty('y', e.target.value)"
       >
       <input
-        v-model="selected.y"
+        :value="selected?.y"
         :disabled="!present"
         :class="{ disabled: !present }"
         class="input input-range y-shift-slider"
         type="range"
         max="20"
         min="-20"
+        @input="e => updateProperty('y', e.target.value)"
       >
       <div
         class="preview-window"
@@ -36,20 +38,22 @@
         />
       </div>
       <input
-        v-model="selected.x"
+        :value="selected?.x"
         :disabled="!present"
         :class="{ disabled: !present }"
         class="input input-number x-shift-number"
         type="number"
+        @input="e => updateProperty('x', e.target.value)"
       >
       <input
-        v-model="selected.x"
+        :value="selected?.x"
         :disabled="!present"
         :class="{ disabled: !present }"
         class="input input-range x-shift-slider"
         type="range"
         max="20"
         min="-20"
+        @input="e => updateProperty('x', e.target.value)"
       >
       <Checkbox
         id="inset"
@@ -67,7 +71,7 @@
         v-model="selectedId"
         class="shadow-list"
         size="10"
-        :disabled="!ready || usingFallback"
+        :disabled="shadowsAreNull"
       >
         <option
           v-for="(shadow, index) in cValue"
@@ -75,28 +79,26 @@
           :value="index"
           :class="{ '-active': index === Number(selectedId) }"
         >
-          {{ shadow.name ?? $t('settings.style.shadows.shadow_id', { value: index }) }}
+          {{ shadow?.name ?? $t('settings.style.shadows.shadow_id', { value: index }) }}
         </option>
       </Select>
       <div
-        :disabled="usingFallback"
         class="id-control arrange-buttons"
       >
         <button
           class="btn button-default"
-          :disabled="!ready || !present"
-          :class="{ disabled: !present }"
-          @click="del"
+          :disabled="shadowsAreNull"
+          @click="add"
         >
           <FAIcon
             fixed-width
-            icon="times"
+            icon="plus"
           />
         </button>
         <button
           class="btn button-default"
           :disabled="!moveUpValid"
-          :class="{ disabled: !present }"
+          :class="{ disabled: !moveUpValid }"
           @click="moveUp"
         >
           <FAIcon
@@ -107,6 +109,7 @@
         <button
           class="btn button-default"
           :disabled="!moveDnValid"
+          :class="{ disabled: !moveDnValid }"
           @click="moveDn"
         >
           <FAIcon
@@ -116,12 +119,13 @@
         </button>
         <button
           class="btn button-default"
-          :disabled="usingFallback || !present"
-          @click="add"
+          :disabled="!present"
+          :class="{ disabled: !present }"
+          @click="del"
         >
           <FAIcon
             fixed-width
-            icon="plus"
+            icon="times"
           />
         </button>
       </div>
@@ -141,11 +145,12 @@
         </label>
         <input
           id="name"
-          v-model="selected.name"
+          :value="selected?.name"
           :disabled="!present"
           :class="{ disabled: !present }"
           name="name"
           class="input input-string"
+          @input="e => updateProperty('name', e.target.value)"
         >
       </div>
       <div
@@ -154,10 +159,11 @@
       >
         <Checkbox
           id="inset"
-          v-model="selected.inset"
+          :value="selected?.inset"
           :disabled="!present"
           name="inset"
           class="input-inset input-boolean"
+          @input="e => updateProperty('inset', e.target.value)"
         >
           <template #before>
             {{ $t('settings.style.shadows.inset') }}
@@ -178,7 +184,7 @@
         </label>
         <input
           id="blur"
-          v-model="selected.blur"
+          :value="selected?.blur"
           :disabled="!present"
           :class="{ disabled: !present }"
           name="blur"
@@ -186,14 +192,16 @@
           type="range"
           max="20"
           min="0"
+          @input="e => updateProperty('blur', e.target.value)"
         >
         <input
-          v-model="selected.blur"
+          :value="selected?.blur"
           :disabled="!present"
           :class="{ disabled: !present }"
           class="input input-number"
           type="number"
           min="0"
+          @input="e => updateProperty('blur', e.target.value)"
         >
       </div>
       <div
@@ -210,7 +218,7 @@
         </label>
         <input
           id="spread"
-          v-model="selected.spread"
+          :value="selected?.spread"
           :disabled="!present"
           :class="{ disabled: !present }"
           name="spread"
@@ -218,26 +226,30 @@
           type="range"
           max="20"
           min="-20"
+          @input="e => updateProperty('spread', e.target.value)"
         >
         <input
-          v-model="selected.spread"
+          :value="selected?.spread"
           :disabled="!present"
           :class="{ disabled: !present }"
           class="input input-number"
           type="number"
+          @input="e => updateProperty('spread', e.target.value)"
         >
       </div>
       <ColorInput
-        v-model="selected.color"
+        :modelValue="selected?.color"
         :disabled="!present"
         :label="$t('settings.style.common.color')"
-        :fallback="currentFallback.color"
+        :fallback="currentFallback?.color"
         :show-optional-tickbox="false"
         name="shadow"
+        @update:modelValue="e => updateProperty('color', e.target.value)"
       />
       <OpacityInput
-        v-model="selected.alpha"
+        :modelValue="selected?.alpha"
         :disabled="!present"
+        @update:modelValue="e => updateProperty('alpha', e.target.value)"
       />
       <i18n-t
         scope="global"
@@ -247,6 +259,49 @@
       >
         <code>--variable,mod</code>
       </i18n-t>
+      <Popover
+        trigger="hover"
+        v-if="separateInset"
+      >
+        <template #trigger>
+          <div
+            class="inset-alert alert warning"
+          >
+            <FAIcon icon="exclamation-triangle" />
+            &nbsp;
+            {{ $t('settings.style.shadows.filter_hint.avatar_inset_short') }}
+          </div>
+        </template>
+        <template #content>
+          <div class="inset-tooltip">
+            <i18n-t
+              scope="global"
+              keypath="settings.style.shadows.filter_hint.always_drop_shadow"
+              tag="p"
+            >
+              <code>filter: drop-shadow()</code>
+            </i18n-t>
+            <p>{{ $t('settings.style.shadows.filter_hint.avatar_inset') }}</p>
+            <i18n-t
+              scope="global"
+              keypath="settings.style.shadows.filter_hint.drop_shadow_syntax"
+              tag="p"
+            >
+              <code>drop-shadow</code>
+              <code>spread-radius</code>
+              <code>inset</code>
+            </i18n-t>
+            <i18n-t
+              scope="global"
+              keypath="settings.style.shadows.filter_hint.inset_classic"
+              tag="p"
+            >
+              <code>box-shadow</code>
+            </i18n-t>
+            <p>{{ $t('settings.style.shadows.filter_hint.spread_zero') }}</p>
+          </div>
+        </template>
+      </Popover>
     </div>
   </div>
 </template>
