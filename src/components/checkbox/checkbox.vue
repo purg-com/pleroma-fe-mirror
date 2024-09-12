@@ -8,7 +8,7 @@
       class="label -before"
       :class="{ faint: disabled }"
     >
-      <slot name="before"/>
+      <slot name="before" />
     </span>
     <input
       type="checkbox"

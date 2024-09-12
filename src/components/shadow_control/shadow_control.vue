@@ -60,21 +60,20 @@
       >
         {{ $t('settings.style.shadows.light_grid') }}
       </Checkbox>
-
     </div>
     <div class="shadow-switcher">
       <Select
-        class="shadow-list"
         id="shadow-list"
         v-model="selectedId"
+        class="shadow-list"
         size="10"
         :disabled="!ready || usingFallback"
       >
         <option
           v-for="(shadow, index) in cValue"
+          :key="index"
           :value="index"
           :class="{ '-active': index === Number(selectedId) }"
-          :key="index"
         >
           {{ shadow.name ?? $t('settings.style.shadows.shadow_id', { value: index }) }}
         </option>

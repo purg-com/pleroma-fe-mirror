@@ -20,7 +20,7 @@
     <div
       class="input color-input-field"
       :class="{ disabled: !present || disabled }"
-      >
+    >
       <input
         :id="name + '-t'"
         class="textColor unstyled"
