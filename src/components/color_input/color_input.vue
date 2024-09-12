@@ -6,6 +6,7 @@
     <label
       :for="name"
       class="label"
+      :class="{ faint: !present || disabled }"
     >
       {{ label }}
     </label>
@@ -16,10 +17,14 @@
       class="opt"
       @update:modelValue="$emit('update:modelValue', typeof modelValue === 'undefined' ? fallback : undefined)"
     />
-    <div class="input color-input-field">
+    <div
+      class="input color-input-field"
+      :class="{ disabled: !present || disabled }"
+      >
       <input
         :id="name + '-t'"
         class="textColor unstyled"
+        :class="{ disabled: !present || disabled }"
         type="text"
         :value="modelValue || fallback"
         :disabled="!present || disabled"
@@ -51,6 +56,7 @@
           type="color"
           :value="modelValue || fallback"
           :disabled="!present || disabled"
+          :class="{ disabled: !present || disabled }"
           @input="$emit('update:modelValue', $event.target.value)"
         >
       </label>

@@ -1,6 +1,7 @@
 import ColorInput from '../color_input/color_input.vue'
 import OpacityInput from '../opacity_input/opacity_input.vue'
 import Select from '../select/select.vue'
+import Checkbox from '../checkbox/checkbox.vue'
 import { getCssShadow } from '../../services/theme_data/theme_data.service.js'
 import { hex2rgb } from '../../services/color_convert/color_convert.js'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -40,6 +41,7 @@ export default {
   emits: ['update:modelValue'],
   data () {
     return {
+      lightGrid: false,
       selectedId: 0,
       // TODO there are some bugs regarding display of array (it's not getting updated when deleting for some reason)
       cValue: (this.modelValue || this.fallback || []).map(toModel)
@@ -48,7 +50,8 @@ export default {
   components: {
     ColorInput,
     OpacityInput,
-    Select
+    Select,
+    Checkbox
   },
   methods: {
     add () {

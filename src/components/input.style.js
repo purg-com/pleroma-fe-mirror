@@ -60,7 +60,7 @@ export default {
     {
       state: ['disabled'],
       directives: {
-        background: '$blend(--inheritedBackground, 0.25, --parent)'
+        background: '--parent'
       }
     },
     {
