@@ -395,6 +395,14 @@
           </BooleanSetting>
         </li>
         <li>
+          <BooleanSetting
+            path="languageCopy"
+            expert="1"
+          >
+            {{ $t('settings.language_copy') }}
+          </BooleanSetting>
+        </li>
+        <li>
           <ChoiceSetting
             id="subjectLineBehavior"
             path="subjectLineBehavior"

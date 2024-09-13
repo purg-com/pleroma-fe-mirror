@@ -119,6 +119,7 @@ const defaultState = {
   closingDrawerMarksAsSeen: true,
   unseenAtTop: false,
   ignoreInactionableSeen: false,
+  languageCopy: false,
 
   // Nasty stuff
   customEmoji: [],

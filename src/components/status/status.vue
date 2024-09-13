@@ -604,6 +604,7 @@
           :replied-user="status.user"
           :copy-message-scope="status.visibility"
           :subject="replySubject"
+          :language="replyLanguage"
           @posted="toggleReplying"
         />
       </div>

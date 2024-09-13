@@ -856,6 +856,7 @@ const postStatus = ({
   inReplyToStatusId,
   quoteId,
   contentType,
+  language,
   preview,
   idempotencyKey
 }) => {
@@ -868,6 +869,7 @@ const postStatus = ({
   if (visibility) form.append('visibility', visibility)
   if (sensitive) form.append('sensitive', sensitive)
   if (contentType) form.append('content_type', contentType)
+  if (language) form.append('language', language)
   mediaIds.forEach(val => {
     form.append('media_ids[]', val)
   })
@@ -918,7 +920,8 @@ const editStatus = ({
   sensitive,
   poll,
   mediaIds = [],
-  contentType
+  contentType,
+  language
 }) => {
   const form = new FormData()
   const pollOptions = poll.options || []
@@ -927,6 +930,7 @@ const editStatus = ({
   if (spoilerText) form.append('spoiler_text', spoilerText)
   if (sensitive) form.append('sensitive', sensitive)
   if (contentType) form.append('content_type', contentType)
+  if (language) form.append('language', language)
   mediaIds.forEach(val => {
     form.append('media_ids[]', val)
   })

@@ -230,6 +230,30 @@
             :on-scope-change="changeVis"
           />
 
+          <div>
+            <Select
+              id="post.language"
+              v-model="newStatus.language"
+              class="input form-control"
+              :attrs="{ 'aria-label': $t('post_status.language_selection') }"
+            >
+              <option
+                value=""
+                disabled
+                hidden
+              >
+                {{ $t('post_status.language_placeholder') }}
+              </option>
+              <option
+                v-for="lang in languages"
+                :key="lang.code"
+                :value="lang.code"
+              >
+                {{ lang.name }}
+              </option>
+            </Select>
+          </div>
+
           <div
             v-if="postFormats.length > 1"
             class="text-format"
@@ -249,6 +273,7 @@
               </option>
             </Select>
           </div>
+
           <div
             v-if="postFormats.length === 1 && postFormats[0] !== 'text/plain'"
             class="text-format"

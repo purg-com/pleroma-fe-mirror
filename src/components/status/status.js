@@ -337,6 +337,13 @@ const Status = {
     isReply () {
       return !!(this.status.in_reply_to_status_id && this.status.in_reply_to_user_id)
     },
+    replyLanguage () {
+      if (this.status.language && this.mergedConfig.languageCopy) {
+        return this.status.language
+      } else {
+        return undefined
+      }
+    },
     replyToName () {
       if (this.status.in_reply_to_screen_name) {
         return this.status.in_reply_to_screen_name

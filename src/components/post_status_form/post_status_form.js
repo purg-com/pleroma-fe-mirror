@@ -15,6 +15,7 @@ import suggestor from '../emoji_input/suggestor.js'
 import { mapGetters, mapState } from 'vuex'
 import Checkbox from '../checkbox/checkbox.vue'
 import Select from '../select/select.vue'
+import localeService from '../../services/locale/locale.service.js'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -70,6 +71,7 @@ const PostStatusForm = {
     'attentions',
     'copyMessageScope',
     'subject',
+    'language',
     'disableSubject',
     'disableScopeSelector',
     'disableVisibilitySelector',
@@ -145,7 +147,8 @@ const PostStatusForm = {
       poll: {},
       mediaDescriptions: {},
       visibility: scope,
-      contentType
+      contentType,
+      language: this.language
     }
 
     if (this.statusId) {
@@ -159,7 +162,8 @@ const PostStatusForm = {
         mediaDescriptions: this.statusMediaDescriptions || {},
         visibility: this.statusScope || scope,
         contentType: statusContentType,
-        quoting: false
+        quoting: false,
+        language: this.language
       }
     }
 
@@ -293,6 +297,9 @@ const PostStatusForm = {
 
       return false
     },
+    languages () {
+      return localeService.languages
+    },
     ...mapGetters(['mergedConfig']),
     ...mapState({
       mobileLayout: state => state.interface.mobileLayout
@@ -321,7 +328,8 @@ const PostStatusForm = {
         contentType: newStatus.contentType,
         poll: {},
         mediaDescriptions: {},
-        quoting: false
+        quoting: false,
+        language: newStatus.language
       }
       this.pollFormVisible = false
       this.$refs.mediaUpload && this.$refs.mediaUpload.clearFile()
@@ -381,7 +389,8 @@ const PostStatusForm = {
         [replyOrQuoteAttr]: this.replyTo,
         contentType: newStatus.contentType,
         poll,
-        idempotencyKey: this.idempotencyKey
+        idempotencyKey: this.idempotencyKey,
+        language: newStatus.language
       }
 
       const postHandler = this.postHandler ? this.postHandler : statusPoster.postStatus
@@ -414,6 +423,7 @@ const PostStatusForm = {
         store: this.$store,
         [replyOrQuoteAttr]: this.replyTo,
         contentType: newStatus.contentType,
+        language: newStatus.language,
         poll: {},
         preview: true
       }).then((data) => {
