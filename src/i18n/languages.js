@@ -22,6 +22,7 @@ const languages = [
   'nl',
   'oc',
   'pl',
+  'pdc',
   'pt',
   'ro',
   'ru',
