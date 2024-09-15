@@ -352,10 +352,12 @@ const afterStoreSetup = async ({ store, i18n }) => {
   await setConfig({ store })
   await store.dispatch('setTheme')
 
-  applyConfig(store.state.config)
+  document.querySelector('#status').textContent = i18n.global.t('splash.theme')
+  applyConfig(store.state.config, i18n.global)
 
   // Now we can try getting the server settings and logging in
   // Most of these are preloaded into the index.html so blocking is minimized
+  document.querySelector('#status').textContent = i18n.global.t('splash.instance')
   await Promise.all([
     checkOAuthToken({ store }),
     getInstancePanel({ store }),
@@ -395,9 +397,9 @@ const afterStoreSetup = async ({ store, i18n }) => {
 
   // remove after vue 3.3
   app.config.unwrapInjectedRef = true
+  document.querySelector('#status').textContent = i18n.global.t('splash.almost')
 
   app.mount('#app')
-
   return app
 }
 

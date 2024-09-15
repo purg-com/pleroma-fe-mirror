@@ -8,9 +8,99 @@
     <style id="pleroma-lazy-styles" type="text/css"></style>
     <!--server-generated-meta-->
   </head>
-  <body class="hidden">
+  <body style="margin: 0; padding: 0">
     <noscript>To use Pleroma, please enable JavaScript.</noscript>
-    <div id="app"></div>
+    <!-- putting styles here to avoid having to wait for styles to load up -->
+    <div id="splash" style="
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      background: #0f161e;
+      font-family: sans-serif;
+      color: #b9b9ba;
+      position: absolute;
+      "
+    >
+      <img
+        style="
+          width: 30vh";
+          margin-top: 1vh;
+          margin-bottom: 0.5vh;
+        "
+        src="/static/pleromatan_apology_fox.png"
+      />
+      <div
+        id="throbber"
+        style='
+          --logoChunkSize: 2vh;
+          display: grid;
+          margin-top: 2.5vh;
+          margin-bottom: 0.5vh;
+          width: 30vw;
+          grid-template-rows: repeat(8, var(--logoChunkSize));
+          grid-template-columns: repeat(5, var(--logoChunkSize));
+          grid-template-areas: "P P . L L"
+                               "P P . L L"
+                               "P P . L L"
+                               "P P . L L"
+                               "P P . . ."
+                               "P P . . ."
+                               "P P . E E"
+                               "P P . E E";
+          width: auto;
+        '
+      >
+        <div
+          style="
+            background-color: #e2b188;
+            grid-area: P;
+            border-top-left-radius:  calc(var(--logoChunkSize) / 2);
+            box-shadow: 0.1vh 0.1vh 1vh 0 #e2b188;
+          "
+        >
+        </div>
+        <div
+          style="
+            width: 100%;
+            height: 100%;
+            background-color: #e2b188;
+            grid-area: L;
+            border-bottom-right-radius: calc(var(--logoChunkSize) / 2);
+            box-shadow: 0.1vh 0.1vh 1vh 0 #e2b188;
+          "
+        >
+        </div>
+        <div
+          style="
+            width: 100%;
+            height: 100%;
+            background-color: #e2b188;
+            grid-area: E;
+            border-bottom-right-radius: calc(var(--logoChunkSize) / 2);
+            box-shadow: 0.1vh 0.1vh 1vh 0 #e2b188;
+          "
+        >
+        </div>
+      </div>
+      <div
+        id="status"
+        class="css-ok"
+        style="
+        margin-top: 3.5vh;
+        height: 4vh;
+        line-height: 4vh;
+        font-size: 4vh;
+        width: 100%;
+        text-align: center;
+        "
+      >
+        <span class="initial-text">(｡>﹏<)</span>
+      </div>
+    </div>
+    <div id="app" class="hidden"></div>
     <div id="modal"></div>
     <!-- built files will be auto injected -->
     <div id="popovers" />

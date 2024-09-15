@@ -914,3 +914,103 @@ option {
   color: var(--selectionText);
   background-color: var(--selectionBackground);
 }
+
+#splash {
+  pointer-events: none;
+  transition: opacity 2s;
+  opacity: 1;
+  z-index: 9999999999999999999999999999;
+
+  &.hidden {
+    opacity: 0;
+  }
+
+  #status {
+    &.css-ok {
+      &::before {
+        display: inline-block;
+        content: "CSS OK";
+      }
+    }
+
+    .initial-text {
+      display: none;
+    }
+  }
+
+  #throbber {
+    animation-duration: 2s;
+    animation-name: bounce;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+    transform-origin: bottom center;
+
+    @keyframes bounce {
+      0% {
+        scale: 1 1;
+        translate: 0 0;
+        animation-timing-function: ease-out;
+      }
+
+      10% {
+        scale: 1.2 0.8;
+        translate: 0 0;
+        animation-timing-function: ease-out;
+      }
+
+      30% {
+        scale: 0.9 1.1;
+        translate: 0 -40%;
+        animation-timing-function: ease-in;
+      }
+
+      40% {
+        scale: 1.1 0.9;
+        translate: 0 -50%;
+        animation-timing-function: ease-in;
+      }
+
+      45% {
+        scale: 0.9 1.1;
+        translate: 0 -45%;
+        animation-timing-function: ease-in;
+      }
+
+      50% {
+        scale: 1.05 0.95;
+        translate: 0 -40%;
+        animation-timing-function: ease-in;
+      }
+
+      55% {
+        scale: 0.985 1.025;
+        translate: 0 -35%;
+        animation-timing-function: ease-in;
+      }
+
+      60% {
+        scale: 1.0125 0.9985;
+        translate: 0 -30%;
+        animation-timing-function: ease-in;
+      }
+
+      80% {
+        scale: 1.0063 0.9938;
+        translate: 0 -10%;
+        animation-timing-function: ease-in-ou;
+      }
+
+      90% {
+        scale: 1.2 0.8;
+        translate: 0 0;
+        animation-timing-function: ease-out;
+      }
+
+      100% {
+        scale: 1 1;
+        translate: 0 0;
+        animation-timing-function: ease-out;
+      }
+    }
+  }
+}

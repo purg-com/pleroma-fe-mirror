@@ -44,6 +44,13 @@ export default {
   data: () => ({
     mobileActivePanel: 'timeline'
   }),
+  watch: {
+    themeApplied (value) {
+      document.querySelector('#app').classList.remove('hidden')
+      document.querySelector('#splash').className = 'hidden'
+      document.querySelector('#status').textContent = this.$t('splash.fun_' + Math.ceil(Math.random() * 4))
+    }
+  },
   created () {
     // Load the locale from the storage
     const val = this.$store.getters.mergedConfig.interfaceLanguage
@@ -54,6 +61,9 @@ export default {
     window.removeEventListener('resize', this.updateMobileState)
   },
   computed: {
+    themeApplied () {
+      return this.$store.state.interface.themeApplied
+    },
     classes () {
       return [
         {

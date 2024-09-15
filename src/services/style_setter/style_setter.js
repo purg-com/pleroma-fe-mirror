@@ -169,7 +169,16 @@ export const applyTheme = async (input, onFinish = (data) => {}, debug) => {
         adoptStyleSheets([eagerStyles, lazyStyles])
         const cache = { engineChecksum: getEngineChecksum(), data: [eagerStyles.rules, lazyStyles.rules] }
         onFinish(cache)
-        localStorage.setItem('pleroma-fe-theme-cache', JSON.stringify(cache))
+        try {
+          localStorage.setItem('pleroma-fe-theme-cache', JSON.stringify(cache))
+        } catch (e) {
+          localStorage.removeItem('pleroma-fe-theme-cache')
+          try {
+            localStorage.setItem('pleroma-fe-theme-cache', JSON.stringify(cache))
+          } catch (e) {
+            console.warn('cannot save cache!', e)
+          }
+        }
       }
     },
     debug
@@ -222,7 +231,7 @@ const extractStyleConfig = ({
 
 const defaultStyleConfig = extractStyleConfig(defaultState)
 
-export const applyConfig = (input) => {
+export const applyConfig = (input, i18n) => {
   const config = extractStyleConfig(input)
 
   if (config === defaultStyleConfig) {
@@ -230,8 +239,6 @@ export const applyConfig = (input) => {
   }
 
   const head = document.head
-  const body = document.body
-  body.classList.add('hidden')
 
   const rules = Object
     .entries(config)
@@ -252,8 +259,6 @@ export const applyConfig = (input) => {
         --roundness: var(--forcedRoundness) !important;
     }`, 'index-max')
   }
-
-  body.classList.remove('hidden')
 }
 
 export const getThemes = () => {

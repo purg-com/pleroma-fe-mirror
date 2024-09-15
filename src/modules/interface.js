@@ -56,9 +56,6 @@ const interfaceMod = {
       state.temporaryChangesConfirm = () => {}
       state.temporaryChangesRevert = () => {}
     },
-    setThemeApplied (state) {
-      state.themeApplied = true
-    },
     setNotificationPermission (state, permission) {
       state.notificationPermission = permission
     },
@@ -119,6 +116,9 @@ const interfaceMod = {
   actions: {
     setPageTitle ({ rootState }, option = '') {
       document.title = `${option} ${rootState.instance.name}`
+    },
+    setThemeApplied ({ state, rootGetters }) {
+      state.themeApplied = true
     },
     settingsSaved ({ commit, dispatch }, { success, error }) {
       commit('settingsSaved', { success, error })
@@ -212,7 +212,7 @@ const interfaceMod = {
     setLastTimeline ({ commit }, value) {
       commit('setLastTimeline', value)
     },
-    setTheme ({ commit, rootState }, { themeName, themeData, recompile, saveData } = {}) {
+    setTheme ({ dispatch, commit, rootState }, { themeName, themeData, recompile, saveData } = {}) {
       const {
         theme: instanceThemeName
       } = rootState.instance
@@ -258,7 +258,7 @@ const interfaceMod = {
       // If we're not not forced to recompile try using
       // cache (tryLoadCache return true if load successful)
       if (!forceRecompile && !themeDebug && tryLoadCache()) {
-        commit('setThemeApplied')
+        dispatch('setThemeApplied')
         return
       }
 
@@ -342,7 +342,7 @@ const interfaceMod = {
 
           applyTheme(
             ruleset,
-            () => commit('setThemeApplied'),
+            () => dispatch('setThemeApplied'),
             themeDebug
           )
         })

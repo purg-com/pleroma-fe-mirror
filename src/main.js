@@ -67,6 +67,8 @@ const persistedStateOptions = {
     console.error(e)
     storageError = true
   }
+  document.querySelector('#status').removeAttribute('class')
+  document.querySelector('#status').textContent = i18n.global.t('splash.loading')
   const store = createStore({
     modules: {
       i18n: {
