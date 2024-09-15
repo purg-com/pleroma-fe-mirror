@@ -56,7 +56,7 @@
         @input="e => updateProperty('x', e.target.value)"
       >
       <Checkbox
-        id="inset"
+        id="lightGrid"
         v-model="lightGrid"
         :disabled="!present"
         name="lightGrid"
@@ -83,7 +83,7 @@
         </option>
       </Select>
       <div
-        class="id-control arrange-buttons"
+        class="id-control btn-group arrange-buttons"
       >
         <button
           class="btn button-default"
@@ -132,12 +132,11 @@
     </div>
     <div class="shadow-tweak">
       <div
-        :disabled="!present"
         :class="{ disabled: !present }"
         class="name-control style-control"
       >
         <label
-          for="spread"
+          for="name"
           class="label"
           :class="{ faint: !present }"
         >
@@ -163,7 +162,7 @@
           :disabled="!present"
           name="inset"
           class="input-inset input-boolean"
-          @input="e => updateProperty('inset', e.target.value)"
+          @input="e => updateProperty('inset', e.target.checked)"
         >
           <template #before>
             {{ $t('settings.style.shadows.inset') }}
@@ -176,7 +175,7 @@
         class="blur-control style-control"
       >
         <label
-          for="spread"
+          for="blur"
           class="label"
           :class="{ faint: !present }"
         >
@@ -205,22 +204,21 @@
         >
       </div>
       <div
-        :disabled="!present"
         class="spread-control style-control"
-        :class="{ disabled: !present }"
+        :class="{ disabled: !present || (separateInset && !selected?.inset) }"
       >
         <label
           for="spread"
           class="label"
-          :class="{ faint: !present }"
+          :class="{ faint: !present || (separateInset && !selected?.inset) }"
         >
           {{ $t('settings.style.shadows.spread') }}
         </label>
         <input
           id="spread"
           :value="selected?.spread"
-          :disabled="!present"
-          :class="{ disabled: !present }"
+          :disabled="!present || (separateInset && !selected?.inset)"
+          :class="{ disabled: !present || (separateInset && !selected?.inset) }"
           name="spread"
           class="input input-range"
           type="range"
@@ -230,26 +228,26 @@
         >
         <input
           :value="selected?.spread"
-          :disabled="!present"
-          :class="{ disabled: !present }"
+          :disabled="{ disabled: !present || (separateInset && !selected?.inset) }"
+          :class="{ disabled: !present || (separateInset && !selected?.inset) }"
           class="input input-number"
           type="number"
           @input="e => updateProperty('spread', e.target.value)"
         >
       </div>
       <ColorInput
-        :modelValue="selected?.color"
+        :model-value="selected?.color"
         :disabled="!present"
         :label="$t('settings.style.common.color')"
         :fallback="currentFallback?.color"
         :show-optional-tickbox="false"
         name="shadow"
-        @update:modelValue="e => updateProperty('color', e.target.value)"
+        @update:modelValue="e => updateProperty('color', e)"
       />
       <OpacityInput
-        :modelValue="selected?.alpha"
+        :model-value="selected?.alpha"
         :disabled="!present"
-        @update:modelValue="e => updateProperty('alpha', e.target.value)"
+        @update:modelValue="e => updateProperty('alpha', e)"
       />
       <i18n-t
         scope="global"
@@ -260,8 +258,8 @@
         <code>--variable,mod</code>
       </i18n-t>
       <Popover
-        trigger="hover"
         v-if="separateInset"
+        trigger="hover"
       >
         <template #trigger>
           <div

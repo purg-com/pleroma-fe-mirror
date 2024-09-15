@@ -27,11 +27,6 @@
 label.Select {
   padding: 0;
 
-  &.disabled,
-  &:disabled {
-    background-color: var(--background);
-  }
-
   select {
     appearance: none;
     background: transparent;
@@ -52,11 +47,27 @@ label.Select {
       padding: 0.2em;
 
       option {
-        background: transparent;
+        background-color: transparent;
 
         &.-active {
           color: var(--selectionText);
           background-color: var(--selectionBackground);
+        }
+      }
+    }
+  }
+
+  &.disabled,
+  &:disabled {
+    background-color: var(--background);
+    opacity: 1; /* override browser */
+
+    select {
+      &[multiple],
+      &[size] {
+        option.-active {
+          color: var(--text);
+          background: transparent;
         }
       }
     }

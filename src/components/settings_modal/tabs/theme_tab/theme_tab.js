@@ -339,7 +339,6 @@ export default {
         return this.shadowsLocal[this.shadowSelected]
       },
       set (v) {
-        console.log('TT', v)
         this.shadowsLocal[this.shadowSelected] = v
       }
     },

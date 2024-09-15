@@ -15,7 +15,7 @@
       :model-value="present"
       :disabled="disabled"
       class="opt"
-      @update:modelValue="$emit('update:modelValue', typeof modelValue === 'undefined' ? fallback : undefined)"
+      @update:modelValue="update(typeof modelValue === 'undefined' ? fallback : undefined)"
     />
     <div
       class="input color-input-field"
@@ -28,7 +28,7 @@
         type="text"
         :value="modelValue || fallback"
         :disabled="!present || disabled"
-        @input="$emit('update:modelValue', $event.target.value)"
+        @input="updateValue($event.target.value)"
       >
       <div
         v-if="validColor"
@@ -57,7 +57,7 @@
           :value="modelValue || fallback"
           :disabled="!present || disabled"
           :class="{ disabled: !present || disabled }"
-          @input="$emit('update:modelValue', $event.target.value)"
+          @input="updateValue($event.target.value)"
         >
       </label>
     </div>
@@ -66,6 +66,7 @@
 <script>
 import Checkbox from '../checkbox/checkbox.vue'
 import { hex2rgb } from '../../services/color_convert/color_convert.js'
+import { throttle } from 'lodash'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -131,6 +132,11 @@ export default {
     computedColor () {
       return this.modelValue && this.modelValue.startsWith('--')
     }
+  },
+  methods: {
+    updateValue: throttle(function (value) {
+      this.$emit('update:modelValue', value)
+    }, 100)
   }
 }
 </script>
