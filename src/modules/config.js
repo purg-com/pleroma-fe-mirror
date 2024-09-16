@@ -180,7 +180,8 @@ export const defaultState = {
   autocompleteSelect: undefined, // instance default
   closingDrawerMarksAsSeen: undefined, // instance default
   unseenAtTop: undefined, // instance default
-  ignoreInactionableSeen: undefined // instance default
+  ignoreInactionableSeen: undefined, // instance default
+  languageCopy: undefined // instance default
 }
 
 // caching the instance default properties

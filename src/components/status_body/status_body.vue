@@ -52,6 +52,7 @@
           :faint="compact"
           :greentext="mergedConfig.greentext"
           :attentions="status.attentions"
+          :lang="status.language"
           @parseReady="onParseReady"
         />
 

@@ -85,6 +85,12 @@ export default {
       required: false,
       type: Boolean,
       default: false
+    },
+    // Post language
+    lang: {
+      required: false,
+      type: String,
+      default: undefined
     }
   },
   // NEVER EVER TOUCH DATA INSIDE RENDER
@@ -283,7 +289,7 @@ export default {
     // DO NOT USE SLOTS they cause a re-render feedback loop here.
     // slots updated -> rerender -> emit -> update up the tree -> rerender -> ...
     // at least until vue3?
-    const result = <span class={['RichContent', this.faint ? '-faint' : '']}>
+    const result = <span class={['RichContent', this.faint ? '-faint' : '']} lang={this.lang}>
       { pass2 }
     </span>
 

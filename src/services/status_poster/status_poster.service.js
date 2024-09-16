@@ -12,6 +12,7 @@ const postStatus = ({
   inReplyToStatusId = undefined,
   quoteId = undefined,
   contentType = 'text/plain',
+  language = undefined,
   preview = false,
   idempotencyKey = ''
 }) => {
@@ -27,6 +28,7 @@ const postStatus = ({
     inReplyToStatusId,
     quoteId,
     contentType,
+    language,
     poll,
     preview,
     idempotencyKey

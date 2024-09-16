@@ -290,6 +290,8 @@
     "direct_warning_to_first_only": "This post will only be visible to the mentioned users at the beginning of the message.",
     "edit_remote_warning": "Other remote instances may not support editing and unable to receive the latest version of your post.",
     "edit_unsupported_warning": "Pleroma does not support editing mentions or polls.",
+    "language_placeholder": "Select language",
+    "language_selection": "Language",
     "posting": "Posting",
     "post": "Post",
     "preview": "Preview",
@@ -934,7 +936,8 @@
     "reset_value": "Reset",
     "reset_value_tooltip": "Reset draft",
     "hard_reset_value": "Hard reset",
-    "hard_reset_value_tooltip": "Remove setting from storage, forcing use of default value"
+    "hard_reset_value_tooltip": "Remove setting from storage, forcing use of default value",
+    "language_copy": "Copy language when replying"
   },
   "admin_dash": {
     "window_title": "Administration",

@@ -43,7 +43,7 @@ const EditStatusModal = {
     }
   },
   methods: {
-    doEditStatus ({ status, spoilerText, sensitive, media, contentType, poll }) {
+    doEditStatus ({ status, spoilerText, sensitive, media, contentType, poll, language }) {
       const params = {
         store: this.$store,
         statusId: this.$store.state.editStatus.params.statusId,
@@ -52,7 +52,8 @@ const EditStatusModal = {
         sensitive,
         poll,
         media,
-        contentType
+        contentType,
+        language
       }
 
       return statusPosterService.editStatus(params)

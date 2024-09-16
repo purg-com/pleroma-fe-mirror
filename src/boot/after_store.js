@@ -160,6 +160,7 @@ const setSettings = async ({ apiConfig, staticConfig, store }) => {
   copyInstanceOption('showFeaturesPanel')
   copyInstanceOption('hideSitename')
   copyInstanceOption('sidebarRight')
+  copyInstanceOption('languageCopy')
 }
 
 const getTOS = async ({ store }) => {
