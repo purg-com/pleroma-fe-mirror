@@ -47,7 +47,7 @@ export default {
   watch: {
     themeApplied (value) {
       document.querySelector('#app').classList.remove('hidden')
-      document.querySelector('#splash').className = 'hidden'
+      document.querySelector('#splash').classList.add('hidden')
       document.querySelector('#status').textContent = this.$t('splash.fun_' + Math.ceil(Math.random() * 4))
     }
   },
