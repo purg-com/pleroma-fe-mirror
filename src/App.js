@@ -46,11 +46,7 @@ export default {
   }),
   watch: {
     themeApplied (value) {
-      this.$nextTick(() => {
-        document.querySelector('#app').classList.remove('hidden')
-        document.querySelector('#splash').classList.add('hidden')
-        document.querySelector('#status').textContent = this.$t('splash.fun_' + Math.ceil(Math.random() * 4))
-      })
+      this.removeSplash()
     }
   },
   created () {
@@ -58,6 +54,11 @@ export default {
     const val = this.$store.getters.mergedConfig.interfaceLanguage
     this.$store.dispatch('setOption', { name: 'interfaceLanguage', value: val })
     window.addEventListener('resize', this.updateMobileState)
+  },
+  mounted () {
+    if (this.$store.state.interface.themeApplied) {
+      this.removeSplash()
+    }
   },
   unmounted () {
     window.removeEventListener('resize', this.updateMobileState)
@@ -142,6 +143,11 @@ export default {
     updateMobileState () {
       this.$store.dispatch('setLayoutWidth', windowWidth())
       this.$store.dispatch('setLayoutHeight', windowHeight())
+    },
+    removeSplash () {
+      document.querySelector('#status').textContent = this.$t('splash.fun_' + Math.ceil(Math.random() * 4))
+      document.querySelector('#splash').classList.add('hidden')
+      document.querySelector('#app').classList.remove('hidden')
     }
   }
 }
