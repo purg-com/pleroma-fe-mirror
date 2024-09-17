@@ -349,7 +349,7 @@ const afterStoreSetup = async ({ store, i18n }) => {
   await setConfig({ store })
   document.querySelector('#status').textContent = i18n.global.t('splash.theme')
   try {
-    await store.dispatch('setTheme').catch((e) => { console.log(e) })
+    await store.dispatch('setTheme').catch((e) => { console.error('Error setting theme', e) })
   } catch (e) {
     return Promise.reject(e)
   }
