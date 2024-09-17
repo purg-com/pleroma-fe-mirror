@@ -244,7 +244,7 @@ const interfaceMod = {
           source: userThemeSource
         })
       } else if (actualThemeName && actualThemeName !== 'custom') {
-        const themeData = actualThemeName
+        const themeData = getPreset(actualThemeName)
         const realThemeData = normalizeThemeData(themeData)
         if (actualThemeName === instanceThemeName) {
           // This sole line is the reason why this whole block is above the recompilation check
@@ -258,8 +258,7 @@ const interfaceMod = {
       // If we're not not forced to recompile try using
       // cache (tryLoadCache return true if load successful)
       if (!forceRecompile && !themeDebug && tryLoadCache()) {
-        dispatch('setThemeApplied')
-        return Promise.resolve()
+        return dispatch('setThemeApplied')
       }
 
       const realThemeData = result
