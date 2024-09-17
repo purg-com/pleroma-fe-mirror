@@ -29,6 +29,13 @@
        font-size: calc(1vw + 1vh + 1vmin);
      }
 
+     #splash-credit {
+       position: absolute;
+       font-size: 14px;
+       bottom: 0;
+       right: 0;
+     }
+
      #splash-container {
        align-items: center;
      }
@@ -98,6 +105,12 @@
        width: 100%;
        text-align: center;
      }
+
+     @media (prefers-reduced-motion) {
+       #throbber {
+         animation: none;
+       }
+     }
     </style>
     <style id="pleroma-eager-styles" type="text/css"></style>
     <style id="pleroma-lazy-styles" type="text/css"></style>
@@ -107,6 +120,9 @@
     <noscript>To use Pleroma, please enable JavaScript.</noscript>
     <!-- putting styles here to avoid having to wait for styles to load up -->
     <div id="splash">
+      <div id="splash-credit">
+        Art by pipivovott
+      </div>
       <div id="splash-container">
         <div id="mascot-container">
           <div id="throbber">

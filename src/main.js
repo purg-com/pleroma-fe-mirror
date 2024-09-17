@@ -80,6 +80,7 @@ const persistedStateOptions = {
     }
     document.querySelector('#status').removeAttribute('class')
     document.querySelector('#status').textContent = i18n.global.t('splash.loading')
+    document.querySelector('#splash-credit').textContent = i18n.global.t('update.art_by', { linkToArtist: 'pipivovott' })
     const store = createStore({
       modules: {
         i18n: {
