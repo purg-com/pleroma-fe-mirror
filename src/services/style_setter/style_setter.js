@@ -43,16 +43,16 @@ const adoptStyleSheets = (styles) => {
   // is nothing to do here.
 }
 
-export const generateTheme = async (inputRuleset, callbacks, debug) => {
+export const generateTheme = (inputRuleset, callbacks, debug) => {
   const {
     onNewRule = (rule, isLazy) => {},
     onLazyFinished = () => {},
     onEagerFinished = () => {}
   } = callbacks
 
-  // Assuming that "worst case scenario background" is panel background since it's the most likely one
   const themes3 = init({
     inputRuleset,
+    // Assuming that "worst case scenario background" is panel background since it's the most likely one
     ultimateBackgroundColor: inputRuleset[0].directives['--bg'].split('|')[1].trim(),
     debug
   })
@@ -146,11 +146,11 @@ export const tryLoadCache = () => {
   }
 }
 
-export const applyTheme = async (input, onFinish = (data) => {}, debug) => {
+export const applyTheme = (input, onFinish = (data) => {}, debug) => {
   const eagerStyles = createStyleSheet(EAGER_STYLE_ID)
   const lazyStyles = createStyleSheet(LAZY_STYLE_ID)
 
-  const { lazyProcessFunc } = await generateTheme(
+  const { lazyProcessFunc } = generateTheme(
     input,
     {
       onNewRule (rule, isLazy) {
@@ -185,8 +185,6 @@ export const applyTheme = async (input, onFinish = (data) => {}, debug) => {
   )
 
   setTimeout(lazyProcessFunc, 0)
-
-  return Promise.resolve()
 }
 
 const extractStyleConfig = ({

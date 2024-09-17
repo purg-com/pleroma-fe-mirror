@@ -919,7 +919,6 @@ option {
   pointer-events: none;
   transition: opacity 2s;
   opacity: 1;
-  z-index: 9999999999999999999999999999;
 
   &.hidden {
     opacity: 0;
@@ -938,12 +937,79 @@ option {
     }
   }
 
+  #mascot-container {
+    perspective: 60em;
+    perspective-origin: 0 -15em;
+    transform-style: preserve-3d;
+  }
+
   #throbber {
-    animation-duration: 2s;
+    animation-duration: 3s;
     animation-name: bounce;
     animation-iteration-count: infinite;
     animation-direction: normal;
     transform-origin: bottom center;
+
+    --defaultY: 0;
+
+    &.dead {
+      animation-name: dead;
+      animation-duration: 3s;
+      // animation-iteration-count: 1;
+      animation-iteration-count: 1;
+      transform: rotateX(90deg) rotateY(0) rotateZ(-45deg);
+    }
+
+    @keyframes dead {
+      0% {
+        transform: rotateX(0) rotateY(0) rotateZ(0);
+      }
+
+      5% {
+        transform: rotateX(0) rotateY(0) rotateZ(1deg);
+      }
+
+      10% {
+        transform: rotateX(0) rotateY(0) rotateZ(-2deg);
+      }
+
+      15% {
+        transform: rotateX(0) rotateY(0) rotateZ(3deg);
+      }
+
+      20% {
+        transform: rotateX(0) rotateY(0) rotateZ(0);
+      }
+
+      25% {
+        transform: rotateX(0) rotateY(0) rotateZ(0);
+      }
+
+      30% {
+        transform: rotateX(10deg) rotateY(0) rotateZ(0);
+      }
+
+      35% {
+        transform: rotateX(-10deg) rotateY(0) rotateZ(0);
+      }
+
+      40% {
+        transform: rotateX(10deg) rotateY(0) rotateZ(0);
+      }
+
+      45% {
+        transform: rotateX(-10deg) rotateY(0) rotateZ(0);
+      }
+
+      50% {
+        transform: rotateX(10deg) rotateY(0) rotateZ(0);
+      }
+
+      100% {
+        transform: rotateX(90deg) rotateY(0) rotateZ(-45deg);
+        transition-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06); /* easeInQuint */
+      }
+    }
 
     @keyframes bounce {
       0% {
@@ -955,24 +1021,28 @@ option {
       10% {
         scale: 1.2 0.8;
         translate: 0 0;
+        transform: rotateZ(var(--defaultZ));
         animation-timing-function: ease-out;
       }
 
       30% {
         scale: 0.9 1.1;
         translate: 0 -40%;
+        transform: rotateZ(var(--defaultZ));
         animation-timing-function: ease-in;
       }
 
       40% {
         scale: 1.1 0.9;
         translate: 0 -50%;
+        transform: rotateZ(var(--defaultZ));
         animation-timing-function: ease-in;
       }
 
       45% {
         scale: 0.9 1.1;
         translate: 0 -45%;
+        transform: rotateZ(var(--defaultZ));
         animation-timing-function: ease-in;
       }
 
@@ -985,30 +1055,35 @@ option {
       55% {
         scale: 0.985 1.025;
         translate: 0 -35%;
+        transform: rotateZ(var(--defaultZ));
         animation-timing-function: ease-in;
       }
 
       60% {
         scale: 1.0125 0.9985;
         translate: 0 -30%;
+        transform: rotateZ(var(--defaultZ));
         animation-timing-function: ease-in;
       }
 
       80% {
         scale: 1.0063 0.9938;
         translate: 0 -10%;
+        transform: rotateZ(var(--defaultZ));
         animation-timing-function: ease-in-ou;
       }
 
       90% {
         scale: 1.2 0.8;
         translate: 0 0;
+        transform: rotateZ(var(--defaultZ));
         animation-timing-function: ease-out;
       }
 
       100% {
         scale: 1 1;
         translate: 0 0;
+        transform: rotateZ(var(--defaultZ));
         animation-timing-function: ease-out;
       }
     }

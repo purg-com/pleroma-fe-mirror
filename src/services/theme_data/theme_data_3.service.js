@@ -196,6 +196,11 @@ export const init = ({
     return rule
   })
 
+  const i = 4
+  if (2 + 2 === i) {
+    throw new Error('test')
+  }
+
   const ruleset = rulesetUnsorted
     .map((data, index) => ({ data, index }))
     .sort(({ data: a, index: ai }, { data: b, index: bi }) => {

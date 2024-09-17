@@ -1406,11 +1406,12 @@
     "loading": "Loading...",
     "theme": "Applying theme, please wait warmly...",
     "instance": "Getting instance info...",
-    "splines": "Reticulating splines...",
-    "almost": "Almost there!",
-    "fun_1": "Drink more water!",
+    "settings": "Applying settings...",
+    "almost": "Reticulating splines...",
+    "fun_1": "Drink more water",
     "fun_2": "Take it easy!",
-    "fun_3": "Suya..",
-    "fun_4": "#cofe"
+    "fun_3": "Suya...",
+    "fun_4": "My Pleroma machine is full power!",
+    "error": "Something went wrong"
   }
 }
