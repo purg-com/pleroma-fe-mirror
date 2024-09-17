@@ -56,6 +56,9 @@ const interfaceMod = {
       state.temporaryChangesConfirm = () => {}
       state.temporaryChangesRevert = () => {}
     },
+    setThemeApplied (state) {
+      state.themeApplied = true
+    },
     setNotificationPermission (state, permission) {
       state.notificationPermission = permission
     },
@@ -116,9 +119,6 @@ const interfaceMod = {
   actions: {
     setPageTitle ({ rootState }, option = '') {
       document.title = `${option} ${rootState.instance.name}`
-    },
-    setThemeApplied ({ state, rootGetters }) {
-      state.themeApplied = true
     },
     settingsSaved ({ commit, dispatch }, { success, error }) {
       commit('settingsSaved', { success, error })
@@ -212,7 +212,7 @@ const interfaceMod = {
     setLastTimeline ({ commit }, value) {
       commit('setLastTimeline', value)
     },
-    setTheme ({ dispatch, commit, rootState }, { themeName, themeData, recompile, saveData } = {}) {
+    setTheme ({ commit, rootState }, { themeName, themeData, recompile, saveData } = {}) {
       const {
         theme: instanceThemeName
       } = rootState.instance
@@ -230,27 +230,27 @@ const interfaceMod = {
 
       const forceRecompile = forceThemeRecompilation || recompile
 
-      let result = null
+      let promise = null
 
       if (themeData) {
-        result = normalizeThemeData(themeData)
+        promise = Promise.resolve(normalizeThemeData(themeData))
       } else if (themeName) {
-        result = normalizeThemeData(getPreset(themeName))
-          .then(themeData => normalizeThemeData(themeData))
+        promise = getPreset(themeName).then(themeData => normalizeThemeData(themeData))
       } else if (userThemeSource || userThemeSnapshot) {
-        result = normalizeThemeData({
+        promise = Promise.resolve(normalizeThemeData({
           _pleroma_theme_version: 2,
           theme: userThemeSnapshot,
           source: userThemeSource
-        })
+        }))
       } else if (actualThemeName && actualThemeName !== 'custom') {
-        const themeData = getPreset(actualThemeName)
-        const realThemeData = normalizeThemeData(themeData)
-        if (actualThemeName === instanceThemeName) {
-          // This sole line is the reason why this whole block is above the recompilation check
-          commit('setInstanceOption', { name: 'themeData', value: { theme: realThemeData } })
-        }
-        result = realThemeData
+        promise = getPreset(actualThemeName).then(themeData => {
+          const realThemeData = normalizeThemeData(themeData)
+          if (actualThemeName === instanceThemeName) {
+            // This sole line is the reason why this whole block is above the recompilation check
+            commit('setInstanceOption', { name: 'themeData', value: { theme: realThemeData } })
+          }
+          return realThemeData
+        })
       } else {
         throw new Error('Cannot load any theme!')
       }
@@ -258,91 +258,96 @@ const interfaceMod = {
       // If we're not not forced to recompile try using
       // cache (tryLoadCache return true if load successful)
       if (!forceRecompile && !themeDebug && tryLoadCache()) {
-        return dispatch('setThemeApplied')
+        commit('setThemeApplied')
+        return
       }
 
-      const realThemeData = result
-      const theme2ruleset = convertTheme2To3(realThemeData)
+      promise
+        .then(realThemeData => {
+          const theme2ruleset = convertTheme2To3(realThemeData)
 
-      if (saveData) {
-        commit('setOption', { name: 'theme', value: themeName || actualThemeName })
-        commit('setOption', { name: 'customTheme', value: realThemeData })
-        commit('setOption', { name: 'customThemeSource', value: realThemeData })
-      }
-      const hacks = []
-
-      Object.entries(theme3hacks).forEach(([key, value]) => {
-        switch (key) {
-          case 'fonts': {
-            Object.entries(theme3hacks.fonts).forEach(([fontKey, font]) => {
-              if (!font?.family) return
-              switch (fontKey) {
-                case 'interface':
-                  hacks.push({
-                    component: 'Root',
-                    directives: {
-                      '--font': 'generic | ' + font.family
-                    }
-                  })
-                  break
-                case 'input':
-                  hacks.push({
-                    component: 'Input',
-                    directives: {
-                      '--font': 'generic | ' + font.family
-                    }
-                  })
-                  break
-                case 'post':
-                  hacks.push({
-                    component: 'RichContent',
-                    directives: {
-                      '--font': 'generic | ' + font.family
-                    }
-                  })
-                  break
-                case 'monospace':
-                  hacks.push({
-                    component: 'Root',
-                    directives: {
-                      '--monoFont': 'generic | ' + font.family
-                    }
-                  })
-                  break
-              }
-            })
-            break
+          if (saveData) {
+            commit('setOption', { name: 'theme', value: themeName || actualThemeName })
+            commit('setOption', { name: 'customTheme', value: realThemeData })
+            commit('setOption', { name: 'customThemeSource', value: realThemeData })
           }
-          case 'underlay': {
-            if (value !== 'none') {
-              const newRule = {
-                component: 'Underlay',
-                directives: {}
+          const hacks = []
+
+          Object.entries(theme3hacks).forEach(([key, value]) => {
+            switch (key) {
+              case 'fonts': {
+                Object.entries(theme3hacks.fonts).forEach(([fontKey, font]) => {
+                  if (!font?.family) return
+                  switch (fontKey) {
+                    case 'interface':
+                      hacks.push({
+                        component: 'Root',
+                        directives: {
+                          '--font': 'generic | ' + font.family
+                        }
+                      })
+                      break
+                    case 'input':
+                      hacks.push({
+                        component: 'Input',
+                        directives: {
+                          '--font': 'generic | ' + font.family
+                        }
+                      })
+                      break
+                    case 'post':
+                      hacks.push({
+                        component: 'RichContent',
+                        directives: {
+                          '--font': 'generic | ' + font.family
+                        }
+                      })
+                      break
+                    case 'monospace':
+                      hacks.push({
+                        component: 'Root',
+                        directives: {
+                          '--monoFont': 'generic | ' + font.family
+                        }
+                      })
+                      break
+                  }
+                })
+                break
               }
-              if (value === 'opaque') {
-                newRule.directives.opacity = 1
-                newRule.directives.background = '--wallpaper'
+              case 'underlay': {
+                if (value !== 'none') {
+                  const newRule = {
+                    component: 'Underlay',
+                    directives: {}
+                  }
+                  if (value === 'opaque') {
+                    newRule.directives.opacity = 1
+                    newRule.directives.background = '--wallpaper'
+                  }
+                  if (value === 'transparent') {
+                    newRule.directives.opacity = 0
+                  }
+                  hacks.push(newRule)
+                }
+                break
               }
-              if (value === 'transparent') {
-                newRule.directives.opacity = 0
-              }
-              hacks.push(newRule)
             }
-            break
-          }
-        }
-      })
+          })
 
-      const ruleset = [
-        ...theme2ruleset,
-        ...hacks
-      ]
+          const ruleset = [
+            ...theme2ruleset,
+            ...hacks
+          ]
 
-      applyTheme(
-        ruleset,
-        () => dispatch('setThemeApplied'),
-        themeDebug
-      )
+          applyTheme(
+            ruleset,
+            () => commit('setThemeApplied'),
+            themeDebug
+          )
+        })
+
+      return promise
     }
   }
 }
