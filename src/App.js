@@ -146,7 +146,11 @@ export default {
     },
     removeSplash () {
       document.querySelector('#status').textContent = this.$t('splash.fun_' + Math.ceil(Math.random() * 4))
-      document.querySelector('#splash').classList.add('hidden')
+      const splashscreenRoot = document.querySelector('#splash')
+      splashscreenRoot.addEventListener('transitionend', () => {
+        splashscreenRoot.remove()
+      })
+      splashscreenRoot.classList.add('hidden')
       document.querySelector('#app').classList.remove('hidden')
     }
   }
