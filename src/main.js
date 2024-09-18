@@ -48,16 +48,6 @@ const i18n = createI18n({
 
 messages.setLanguage(i18n.global, currentLocale)
 
-const splashError = (i18n, e) => {
-  document.querySelector('#mascot').src = (Math.floor(Math.random() * 2) > 0)
-    ? '/static/pleromatan_orz_fox.png'
-    : '/static/pleromatan_orz.png'
-  document.querySelector('#mascot').classList.add('orz')
-  document.querySelector('#throbber').classList.add('dead')
-  document.querySelector('#status').textContent = i18n.global.t('splash.error')
-  console.error('PleromaFE failed to initialize: ', e)
-}
-
 const persistedStateOptions = {
   paths: [
     'serverSideStorage.cache',
@@ -68,6 +58,18 @@ const persistedStateOptions = {
 };
 
 (async () => {
+  const isFox = Math.floor(Math.random() * 2) > 0 ? '_fox' : ''
+
+  const splashError = (i18n, e) => {
+    const throbber = document.querySelector('#throbber')
+    throbber.addEventListener('animationend', () => {
+      document.querySelector('#mascot').src = `/static/pleromatan_orz${isFox}.png`
+    })
+    throbber.classList.add('dead')
+    document.querySelector('#status').textContent = i18n.global.t('splash.error')
+    console.error('PleromaFE failed to initialize: ', e)
+  }
+
   try {
     let storageError
     const plugins = [pushNotifications]
@@ -78,6 +80,7 @@ const persistedStateOptions = {
       console.error('Storage error', e)
       storageError = e
     }
+    document.querySelector('#mascot').src = `/static/pleromatan_apology${isFox}.png`
     document.querySelector('#status').removeAttribute('class')
     document.querySelector('#status').textContent = i18n.global.t('splash.loading')
     document.querySelector('#splash-credit').textContent = i18n.global.t('update.art_by', { linkToArtist: 'pipivovott' })

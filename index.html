@@ -29,10 +29,8 @@
      #splash-credit {
        position: absolute;
        font-size: 14px;
-       bottom: 0;
-       right: 0;
-       margin-right: 8px
-       margin-bottom: 8px
+       bottom: 16px;
+       right: 16px;
      }
 
      #splash-container {
@@ -43,30 +41,25 @@
        display: flex;
        align-items: flex-end;
        justify-content: center;
+       perspective: 60em;
+       perspective-origin: 0 -15em;
+       transform-style: preserve-3d;
      }
 
-     #mascot:not(.orz) {
-       margin-bottom: 2em
-       object-position: 2.5em 0;
-     }
-
-     #mascot-temp.orz {
-       margin-bottom: 2em
-       object-position: 2.5em 0;
-     }
-
-     #mascot,
-     #mascot-temp {
+     #mascot {
        width: calc(10em * var(--scale));
-       height: calc(8em * var(--scale));
+       height: calc(10em * var(--scale));
        object-fit: contain;
        object-position: bottom;
+       transform: translateZ(-2em);
      }
 
      #throbber {
        display: grid;
        width: calc(5em * 0.5 * var(--scale));
        height: calc(8em * 0.5 * var(--scale));
+       margin-left: 5.1em;
+       z-index: 2;
        grid-template-rows: repeat(8, 1fr);
        grid-template-columns: repeat(5, 1fr);
        grid-template-areas: "P P . L L"
@@ -100,6 +93,7 @@
      }
 
      #status {
+       margin-top: 0.5em;
        line-height: 2;
        width: 100%;
        text-align: center;
@@ -107,7 +101,7 @@
 
      @media (prefers-reduced-motion) {
        #throbber {
-         animation: none;
+         animation: none !important;
        }
      }
     </style>
@@ -132,7 +126,7 @@
             <div class="chunk" id="chunk-E">
             </div>
           </div>
-          <img id="mascot" src="/static/pleromatan_apology_fox.png">
+          <img id="mascot" src="/static/pleromatan_apology.png">
         </div>
         <div id="status" class="css-ok">
           <!-- (｡>﹏<) -->

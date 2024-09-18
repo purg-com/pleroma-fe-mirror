@@ -954,8 +954,7 @@ option {
 
     &.dead {
       animation-name: dead;
-      animation-duration: 3s;
-      // animation-iteration-count: 1;
+      animation-duration: 2s;
       animation-iteration-count: 1;
       transform: rotateX(90deg) rotateY(0) rotateZ(-45deg);
     }
