@@ -937,20 +937,12 @@ option {
     }
   }
 
-  #mascot-container {
-    perspective: 60em;
-    perspective-origin: 0 -15em;
-    transform-style: preserve-3d;
-  }
-
   #throbber {
     animation-duration: 3s;
     animation-name: bounce;
     animation-iteration-count: infinite;
     animation-direction: normal;
     transform-origin: bottom center;
-
-    --defaultY: 0;
 
     &.dead {
       animation-name: dead;
