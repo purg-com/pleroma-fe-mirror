@@ -519,17 +519,6 @@ export const init = ({
     }
   })
 
-  const serializedData = serialize(eager)
-  const file = new File(serializedData, 'ruleset.piss')
-  const blobUrl = URL.createObjectURL(file)
-  const a = document.createElement('a')
-  a.href = blobUrl
-  a.download = 'ruleset.piss'
-  document.body.appendChild(a)
-  a.dispatchEvent(new MouseEvent('click'))
-  URL.revokeObjectURL(blobUrl)
-  document.body.removeChild(a)
-
   return {
     lazy,
     eager,
