@@ -23,6 +23,9 @@ import {
   findRules
 } from './iss_utils.js'
 import { parseCssShadow } from './css_utils.js'
+import {
+  serialize
+} from './iss_serializer.js'
 
 // Ensuring the order of components
 const components = {
@@ -504,9 +507,32 @@ export const init = ({
     console.debug('Eager processing took ' + (t2 - t1) + ' ms')
   }
 
+  // optimization to traverse big-ass array only once instead of twice
+  const eager = []
+  const lazy = []
+
+  result.forEach(x => {
+    if (typeof x === 'function') {
+      lazy.push(x)
+    } else {
+      eager.push(x)
+    }
+  })
+
+  const serializedData = serialize(eager)
+  const file = new File(serializedData, 'ruleset.piss')
+  const blobUrl = URL.createObjectURL(file)
+  const a = document.createElement('a')
+  a.href = blobUrl
+  a.download = 'ruleset.piss'
+  document.body.appendChild(a)
+  a.dispatchEvent(new MouseEvent('click'))
+  URL.revokeObjectURL(blobUrl)
+  document.body.removeChild(a)
+
   return {
-    lazy: result.filter(x => typeof x === 'function'),
-    eager: result.filter(x => typeof x !== 'function'),
+    lazy,
+    eager,
     staticVars,
     engineChecksum
   }
