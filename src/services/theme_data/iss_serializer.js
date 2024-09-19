@@ -1,6 +1,12 @@
 import { unroll } from './iss_utils.js'
 
-const serializeShadow = s => `{${s.inset ? 'inset ' : ''}${s.x} ${s.y} ${s.blur} ${s.spread} ${s.color} / ${s.alpha}}`
+const serializeShadow = s => {
+  if (typeof s === 'object') {
+    return `{${s.inset ? 'inset ' : ''}${s.x} ${s.y} ${s.blur} ${s.spread} ${s.color} / ${s.alpha}}`
+  } else {
+    return s
+  }
+}
 
 export const serialize = (ruleset) => {
   return ruleset.map((rule) => {
@@ -8,8 +14,8 @@ export const serialize = (ruleset) => {
 
     const header = unroll(rule).reverse().map(rule => {
       const { component } = rule
-      const newVariant = rule.variant === 'normal' ? '' : ('.' + rule.variant)
-      const newState = rule.state.filter(st => st !== 'normal')
+      const newVariant = (rule.variant == null || rule.variant === 'normal') ? '' : ('.' + rule.variant)
+      const newState = (rule.state || []).filter(st => st !== 'normal')
 
       return `${component}${newVariant}${newState.map(st => ':' + st).join('')}`
     }).join(' ')
@@ -19,9 +25,9 @@ export const serialize = (ruleset) => {
         const [valType, newValue] = value.split('|') // only first one! intentional!
         switch (valType) {
           case 'shadow':
-            return `  ${directive}: ${newValue.map(serializeShadow).join(', ')}`
+            return `  ${directive}: ${valType.trim()} | ${newValue.map(serializeShadow).map(s => s.trim()).join(', ')}`
           default:
-            return `  ${directive}: ${newValue}`
+            return `  ${directive}: ${valType.trim()} | ${newValue.trim()}`
         }
       } else {
         switch (directive) {

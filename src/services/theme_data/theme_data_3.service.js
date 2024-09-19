@@ -23,9 +23,6 @@ import {
   findRules
 } from './iss_utils.js'
 import { parseCssShadow } from './css_utils.js'
-import {
-  serialize
-} from './iss_serializer.js'
 
 // Ensuring the order of components
 const components = {
