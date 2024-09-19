@@ -125,7 +125,6 @@ export const deserialize = (input) => {
 
       output.directives = Object.fromEntries(content.map(d => {
         const [property, value] = d.split(':')
-        console.log(property, value)
         let realValue = value.trim()
         if (property === 'shadow') {
           realValue = parseShadow(value.split(',').map(v => v.trim()))

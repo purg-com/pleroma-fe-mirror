@@ -4,12 +4,12 @@ import Button from 'src/components/button.style.js'
 
 describe.only('ISS (de)serialization', () => {
   describe('ISS deserialization', () => {
-    it('Output should = input', () => {
+    it('Output should equal input', () => {
       const normalized = Button.defaultRules.map(x => ({ component: 'Button', ...x }))
       const serialized = serialize(normalized)
       const deserialized = deserialize(serialized)
-      // deserialized.toString()
 
+      // for some reason comparing objects directly fails the assert
       expect(JSON.stringify(deserialized)).to.equal(JSON.stringify(normalized))
     })
   })
