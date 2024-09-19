@@ -65,6 +65,19 @@ build:
     paths:
     - dist/
 
+build_admin:
+  stage: build
+  tags:
+    - amd64
+  variables:
+    ADMINFE_BUILD: yes
+  script:
+    - yarn
+    - npm run build
+  artifacts:
+    paths:
+    - dist/
+
 docs-deploy:
   stage: deploy
   image: alpine:latest
