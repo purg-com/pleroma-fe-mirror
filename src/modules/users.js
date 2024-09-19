@@ -589,7 +589,7 @@ const users = {
           store.commit('clearServerSideStorage')
         })
     },
-    loginUser (store, accessToken) {
+    loginUser (store, { accessToken, adminMode }) {
       return new Promise((resolve, reject) => {
         const commit = store.commit
         const dispatch = store.dispatch
@@ -604,7 +604,8 @@ const users = {
               user.muteIds = []
               user.domainMutes = []
               commit('setCurrentUser', user)
-              commit('setServerSideStorage', user)
+              console.log(user)
+              if (!adminMode) commit('setServerSideStorage', user)
               commit('addNewUsers', [user])
 
               dispatch('fetchEmoji')
@@ -614,7 +615,7 @@ const users = {
 
               // Set our new backend interactor
               commit('setBackendInteractor', backendInteractorService(accessToken))
-              dispatch('pushServerSideStorage')
+              if (!adminMode) dispatch('pushServerSideStorage')
 
               if (user.token) {
                 dispatch('setWsToken', user.token)
@@ -634,34 +635,36 @@ const users = {
                 dispatch('startFetchingChats')
               }
 
-              dispatch('startFetchingLists')
+              if (!adminMode) dispatch('startFetchingLists')
 
               if (user.locked) {
                 dispatch('startFetchingFollowRequests')
               }
 
-              if (store.getters.mergedConfig.useStreamingApi) {
-                dispatch('fetchTimeline', { timeline: 'friends', since: null })
-                dispatch('fetchNotifications', { since: null })
-                dispatch('enableMastoSockets', true).catch((error) => {
-                  console.error('Failed initializing MastoAPI Streaming socket', error)
-                }).then(() => {
-                  dispatch('fetchChats', { latest: true })
-                  setTimeout(() => dispatch('setNotificationsSilence', false), 10000)
-                })
-              } else {
-                startPolling()
+              if (!adminMode) {
+                if (store.getters.mergedConfig.useStreamingApi) {
+                  dispatch('fetchTimeline', { timeline: 'friends', since: null })
+                  dispatch('fetchNotifications', { since: null })
+                  dispatch('enableMastoSockets', true).catch((error) => {
+                    console.error('Failed initializing MastoAPI Streaming socket', error)
+                  }).then(() => {
+                    dispatch('fetchChats', { latest: true })
+                    setTimeout(() => dispatch('setNotificationsSilence', false), 10000)
+                  })
+                } else {
+                  startPolling()
+                }
+
+                // Get user mutes
+                dispatch('fetchMutes')
+
+                dispatch('setLayoutWidth', windowWidth())
+                dispatch('setLayoutHeight', windowHeight())
+
+                // Fetch our friends
+                store.rootState.api.backendInteractor.fetchFriends({ id: user.id })
+                  .then((friends) => commit('addNewUsers', friends))
               }
-
-              // Get user mutes
-              dispatch('fetchMutes')
-
-              dispatch('setLayoutWidth', windowWidth())
-              dispatch('setLayoutHeight', windowHeight())
-
-              // Fetch our friends
-              store.rootState.api.backendInteractor.fetchFriends({ id: user.id })
-                .then((friends) => commit('addNewUsers', friends))
             } else {
               const response = data.error
               // Authentication failed
