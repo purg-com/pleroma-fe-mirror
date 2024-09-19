@@ -2,7 +2,7 @@ import { deserialize } from 'src/services/theme_data/iss_deserializer.js'
 import { serialize } from 'src/services/theme_data/iss_serializer.js'
 import Button from 'src/components/button.style.js'
 
-describe.only('ISS (de)serialization', () => {
+describe('ISS (de)serialization', () => {
   describe('ISS deserialization', () => {
     it('Output should equal input', () => {
       const normalized = Button.defaultRules.map(x => ({ component: 'Button', ...x }))
