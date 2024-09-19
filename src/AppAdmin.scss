@@ -1,0 +1,70 @@
+:root {
+  --accent: #e2b188;
+  --badgeNotification: #e15932;
+  --bg: #405f81;
+  --cBlue: #81beea;
+  --cGreen: #5dc94a;
+  --cOrange: #ffc459;
+  --cRed: #d31014;
+  --fg: #151e2b;
+  --font: sans-serif;
+  --link: #e2b188;
+  --monoFont: monospace;
+  --selectionBackground: var(--accent);
+  --text: #fff;
+  --wallpaper: #2e435c;
+  --border: #405f81;
+  --textFaint: #8ca7c6;
+}
+
+body {
+  overflow-y: hidden;
+}
+
+#app-loaded {
+  height: 100vh;
+  width: 100vw;
+
+  .tab,
+  .button-default,
+  *::-webkit-scrollbar-button,
+  *::-webkit-scrollbar-thumb {
+    --shadow:
+      0 0 0 1px rgba(255 255 255 / 15%) inset,
+      1px 1px 1px 0 rgba(0 0 0 / 30%),
+      -1px -1px 1px 0 rgba(255 255 255 / 30%);
+
+    &:hover {
+      --shadow:
+        0 0 0 1px var(--accent) inset,
+        1px 1px 1px 0 rgba(0 0 0 / 30%),
+        -1px -1px 1px 0 rgba(255 255 255 / 30%);
+    }
+
+    &:active {
+      --shadow:
+        0 0 0 1px var(--accent) inset,
+        -1px -1px 1px 0 rgba(0 0 0 / 30%),
+        1px 1px 1px 0 rgba(255 255 255 / 30%);
+    }
+  }
+
+  .input {
+    --shadow:
+      0 0 0 1px rgba(255 255 255 / 15%) inset,
+      -1px -1px 1px 0 rgba(0 0 0 / 30%),
+      1px 1px 1px 0 rgba(255 255 255 / 30%);
+
+    &:hover,
+    &:focus {
+      --shadow:
+        0 0 0 1px var(--accent) inset,
+        -1px -1px 1px 0 rgba(0 0 0 / 30%),
+        1px 1px 1px 0 rgba(255 255 255 / 30%);
+    }
+  }
+
+  .content.scrollable-tabs > div {
+    height: 100vh;
+  }
+}
