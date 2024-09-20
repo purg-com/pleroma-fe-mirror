@@ -26,7 +26,7 @@ export default {
     {
       component: 'Root',
       directives: {
-        '--defaultInputBevel': 'shadow | $borderSide(#FFFFFF, bottom, 0.2)| $borderSide(#000000, top, 0.2)'
+        '--defaultInputBevel': 'shadow | $borderSide(#FFFFFF, bottom, 0.2), $borderSide(#000000, top, 0.2)'
       }
     },
     {

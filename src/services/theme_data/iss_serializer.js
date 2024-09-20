@@ -2,7 +2,7 @@ import { unroll } from './iss_utils.js'
 
 const serializeShadow = s => {
   if (typeof s === 'object') {
-    return `{${s.inset ? 'inset ' : ''}${s.x} ${s.y} ${s.blur} ${s.spread} ${s.color} / ${s.alpha}}`
+    return `${s.inset ? 'inset ' : ''}${s.x} ${s.y} ${s.blur} ${s.spread} ${s.color} / ${s.alpha}`
   } else {
     return s
   }

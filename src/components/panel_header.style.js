@@ -17,7 +17,6 @@ export default {
       directives: {
         backgroundNoCssColor: 'yes',
         background: '--fg',
-        shadow: []
       }
     }
   ]

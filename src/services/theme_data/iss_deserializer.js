@@ -6,13 +6,13 @@ const parseShadow = string => {
     // inset keyword (optional)
     '^(?:(inset)\\s+)?',
     // x
-    '(?:([0-9]+(?:\\.[0-9]+)?)\\s+)',
+    '(?:(-?[0-9]+(?:\\.[0-9]+)?)\\s+)',
     // y
-    '(?:([0-9]+(?:\\.[0-9]+)?)\\s+)',
+    '(?:(-?[0-9]+(?:\\.[0-9]+)?)\\s+)',
     // blur (optional)
-    '(?:([0-9]+(?:\\.[0-9]+)?)\\s+)?',
+    '(?:(-?[0-9]+(?:\\.[0-9]+)?)\\s+)?',
     // spread (optional)
-    '(?:([0-9]+(?:\\.[0-9]+)?)\\s+)?',
+    '(?:(-?[0-9]+(?:\\.[0-9]+)?)\\s+)?',
     // either hex, variable or function
     '(#[0-9a-f]{6}|--[a-z\\-_]+|\\$[a-z\\-()_]+)',
     // opacity (optional)
@@ -23,7 +23,18 @@ const parseShadow = string => {
   if (result == null) {
     return string
   } else {
-    return Object.fromEntries(modes.map((mode, i) => [mode, result[i]]))
+    const numeric = new Set(['x', 'y', 'blur', 'spread', 'alpha'])
+    const { x, y, blur, spread, alpha, inset, color } = Object.fromEntries(modes.map((mode, i) => {
+      if (numeric.has(mode)) {
+        return [mode, Number(result[i])]
+      } else if (mode === 'inset') {
+        return [mode, !!result[i]]
+      } else {
+        return [mode, result[i]]
+      }
+    }).filter(([k, v]) => v !== false).slice(1))
+
+    return { x, y, blur, spread, color, alpha, inset }
   }
 }
 // this works nearly the same as HTML tree converter
@@ -127,7 +138,7 @@ export const deserialize = (input) => {
         const [property, value] = d.split(':')
         let realValue = value.trim()
         if (property === 'shadow') {
-          realValue = parseShadow(value.split(',').map(v => v.trim()))
+          realValue = value.split(',').map(v => parseShadow(v.trim()))
         } if (!Number.isNaN(Number(value))) {
           realValue = Number(value)
         }
