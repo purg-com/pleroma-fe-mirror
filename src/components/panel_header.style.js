@@ -16,7 +16,7 @@ export default {
       component: 'PanelHeader',
       directives: {
         backgroundNoCssColor: 'yes',
-        background: '--fg',
+        background: '--fg'
       }
     }
   ]
