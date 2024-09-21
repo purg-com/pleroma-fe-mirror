@@ -16,8 +16,7 @@ export default {
     {
       directives: {
         background: '#ffffff',
-        opacity: 0,
-        shadow: []
+        opacity: 0
       }
     },
     {

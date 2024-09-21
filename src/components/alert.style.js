@@ -27,7 +27,9 @@ export default {
         component: 'Alert'
       },
       component: 'Border',
-      textColor: '--parent'
+      directives: {
+        textColor: '--parent'
+      }
     },
     {
       variant: 'error',
