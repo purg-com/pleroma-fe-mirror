@@ -1,6 +1,6 @@
 import Gallery from 'src/components/gallery/gallery.vue'
 
-describe.only('Gallery', () => {
+describe('Gallery', () => {
   let local
 
   it('attachments is falsey', () => {
