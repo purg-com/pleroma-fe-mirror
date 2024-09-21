@@ -15,7 +15,6 @@ const Announcement = {
       currentUser: state => state.users.currentUser
     }),
     domainState () {
-      console.log(this.domain)
       return this.domain.public
     },
     domainName () {
