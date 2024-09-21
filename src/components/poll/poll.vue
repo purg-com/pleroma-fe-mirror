@@ -76,6 +76,13 @@
       >
         {{ $t('polls.vote') }}
       </button>
+      <span
+        v-if="poll.pleroma?.non_anonymous"
+        :title="$t('polls.non_anonymous_title')"
+      >
+        {{ $t('polls.non_anonymous') }}
+        &nbsp;·&nbsp;
+      </span>
       <div class="total">
         <template v-if="typeof poll.voters_count === 'number'">
           {{ $tc("polls.people_voted_count", poll.voters_count, { count: poll.voters_count }) }}
