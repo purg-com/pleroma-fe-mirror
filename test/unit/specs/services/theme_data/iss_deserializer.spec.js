@@ -19,7 +19,7 @@ describe('ISS (de)serialization', () => {
   /*
   // Debug snippet
   const onlyComponent = componentsContext('./components/panel_header.style.js').default
-  it(`(De)serialization of component ${onlyComponent.name} works`, () => {
+  it.only(`(De)serialization of component ${onlyComponent.name} works`, () => {
     const normalized = onlyComponent.defaultRules.map(x => ({ component: onlyComponent.name, ...x }))
     console.log('BEGIN INPUT ================')
     console.log(normalized)
@@ -36,5 +36,5 @@ describe('ISS (de)serialization', () => {
     // for some reason comparing objects directly fails the assert
     expect(JSON.stringify(deserialized, null, 2)).to.equal(JSON.stringify(normalized, null, 2))
   })
-  */
+  /* */
 })

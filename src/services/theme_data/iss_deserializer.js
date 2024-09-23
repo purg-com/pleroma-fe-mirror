@@ -138,7 +138,11 @@ export const deserialize = (input) => {
         const [property, value] = d.split(':')
         let realValue = value.trim()
         if (property === 'shadow') {
-          realValue = value.split(',').map(v => parseShadow(v.trim()))
+          if (realValue === 'none') {
+            realValue = []
+          } else {
+            realValue = value.split(',').map(v => parseShadow(v.trim()))
+          }
         } if (!Number.isNaN(Number(value))) {
           realValue = Number(value)
         }
