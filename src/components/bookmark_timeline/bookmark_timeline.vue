@@ -3,6 +3,7 @@
     :title="$t('nav.bookmarks')"
     :timeline="timeline"
     :timeline-name="'bookmarks'"
+    :bookmark-folder-id="bookmarkFolderId"
   />
 </template>
 

@@ -579,6 +579,7 @@ const users = {
           store.commit('setBackendInteractor', backendInteractorService(store.getters.getToken()))
           store.dispatch('stopFetchingNotifications')
           store.dispatch('stopFetchingLists')
+          store.dispatch('stopFetchingBookmarkFolders')
           store.dispatch('stopFetchingFollowRequests')
           store.commit('clearNotifications')
           store.commit('resetStatuses')
@@ -635,6 +636,7 @@ const users = {
               }
 
               dispatch('startFetchingLists')
+              dispatch('startFetchingBookmarkFolders')
 
               if (user.locked) {
                 dispatch('startFetchingFollowRequests')
