@@ -835,11 +835,14 @@ const unretweet = ({ id, credentials }) => {
     .then((data) => parseStatus(data))
 }
 
-const bookmarkStatus = ({ id, credentials }) => {
+const bookmarkStatus = ({ id, credentials, ...options }) => {
   return promisedRequest({
     url: MASTODON_BOOKMARK_STATUS_URL(id),
     headers: authHeaders(credentials),
-    method: 'POST'
+    method: 'POST',
+    payload: {
+      folder_id: options.folder_id
+    }
   })
 }
 

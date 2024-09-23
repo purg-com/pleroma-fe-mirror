@@ -332,6 +332,7 @@ export const parseStatus = (data) => {
       output.quote_url = pleroma.quote_url
       output.quote_visible = pleroma.quote_visible
       output.quotes_count = pleroma.quotes_count
+      output.bookmark_folder_id = pleroma.bookmark_folder
     } else {
       output.text = data.content
       output.summary = data.spoiler_text

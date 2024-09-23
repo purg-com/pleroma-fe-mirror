@@ -1409,6 +1409,7 @@
     "tooltip": "This domain contains non-ascii characters."
   },
   "bookmark_folders": {
-    "new": "New Folder"
+    "new": "New Folder",
+    "select_folder": "Select bookmark folder"
   }
 }
