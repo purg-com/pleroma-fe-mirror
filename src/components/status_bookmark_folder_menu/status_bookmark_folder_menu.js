@@ -2,7 +2,6 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { mapState } from 'vuex'
 
-import DialogModal from '../dialog_modal/dialog_modal.vue'
 import Popover from '../popover/popover.vue'
 
 library.add(faChevronRight)
@@ -15,7 +14,6 @@ const StatusBookmarkFolderMenu = {
     return {}
   },
   components: {
-    DialogModal,
     Popover
   },
   computed: {
