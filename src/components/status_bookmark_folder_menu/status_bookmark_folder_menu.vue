@@ -22,9 +22,11 @@
         </div>
       </template>
       <template #trigger>
-        <button class="menu-item dropdown-item -has-submenu">
-          {{ $t('bookmark_folders.select_folder') }}
+        <button class="menu-item dropdown-item dropdown-item-icon -has-submenu">
           <FAIcon
+            fixed-width
+            icon="folder"
+          />{{ $t('bookmark_folders.select_folder') }}<FAIcon
             class="chevron-icon"
             size="lg"
             icon="chevron-right"
