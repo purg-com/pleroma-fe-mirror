@@ -182,7 +182,7 @@ export const init = ({
 
   const rulesetUnsorted = [
     ...Object.values(components)
-      .map(c => (c.defaultRules || []).map(r => ({ component: c.name, ...r, source: 'Built-in' })))
+      .map(c => (c.defaultRules || []).map(r => ({ source: 'Built-in', component: c.name, ...r })))
       .reduce((acc, arr) => [...acc, ...arr], []),
     ...inputRuleset
   ].map(rule => {
@@ -198,18 +198,33 @@ export const init = ({
 
   const ruleset = rulesetUnsorted
     .map((data, index) => ({ data, index }))
-    .sort(({ data: a, index: ai }, { data: b, index: bi }) => {
+    .toSorted(({ data: a, index: ai }, { data: b, index: bi }) => {
       const parentsA = unroll(a).length
       const parentsB = unroll(b).length
 
-      if (parentsA === parentsB) {
-        if (a.component === 'Text') return -1
-        if (b.component === 'Text') return 1
+      let aScore = 0
+      let bScore = 0
+
+      aScore += parentsA * 1000
+      bScore += parentsB * 1000
+
+      aScore += a.variant !== 'normal' ? 100 : 0
+      bScore += b.variant !== 'normal' ? 100 : 0
+
+      aScore += a.state.filter(x => x !== 'normal').length * 1000
+      bScore += b.state.filter(x => x !== 'normal').length * 1000
+
+      aScore += a.component === 'Text' ? 1 : 0
+      bScore += b.component === 'Text' ? 1 : 0
+
+      // Debug
+      a.specifityScore = aScore
+      b.specifityScore = bScore
+
+      if (aScore === bScore) {
         return ai - bi
       }
-      if (parentsA === 0 && parentsB !== 0) return -1
-      if (parentsB === 0 && parentsA !== 0) return 1
-      return parentsA - parentsB
+      return aScore - bScore
     })
     .map(({ data }) => data)
 
@@ -235,7 +250,10 @@ export const init = ({
 
     // Inheriting all of the applicable rules
     const existingRules = ruleset.filter(findRules(combination))
-    const computedDirectives = existingRules.map(r => r.directives).reduce((acc, directives) => ({ ...acc, ...directives }), {})
+    const computedDirectives =
+          existingRules
+            .map(r => r.directives)
+            .reduce((acc, directives) => ({ ...acc, ...directives }), {})
     const computedRule = {
       ...combination,
       directives: computedDirectives

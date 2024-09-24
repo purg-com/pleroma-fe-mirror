@@ -6,6 +6,7 @@
     <label
       :for="name"
       class="label"
+      :class="{ faint: !present || disabled }"
     >
       {{ label }}
     </label>
@@ -14,16 +15,20 @@
       :model-value="present"
       :disabled="disabled"
       class="opt"
-      @update:modelValue="$emit('update:modelValue', typeof modelValue === 'undefined' ? fallback : undefined)"
+      @update:modelValue="update(typeof modelValue === 'undefined' ? fallback : undefined)"
     />
-    <div class="input color-input-field">
+    <div
+      class="input color-input-field"
+      :class="{ disabled: !present || disabled }"
+    >
       <input
         :id="name + '-t'"
         class="textColor unstyled"
+        :class="{ disabled: !present || disabled }"
         type="text"
         :value="modelValue || fallback"
         :disabled="!present || disabled"
-        @input="$emit('update:modelValue', $event.target.value)"
+        @input="updateValue($event.target.value)"
       >
       <div
         v-if="validColor"
@@ -51,7 +56,8 @@
           type="color"
           :value="modelValue || fallback"
           :disabled="!present || disabled"
-          @input="$emit('update:modelValue', $event.target.value)"
+          :class="{ disabled: !present || disabled }"
+          @input="updateValue($event.target.value)"
         >
       </label>
     </div>
@@ -60,6 +66,7 @@
 <script>
 import Checkbox from '../checkbox/checkbox.vue'
 import { hex2rgb } from '../../services/color_convert/color_convert.js'
+import { throttle } from 'lodash'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -125,6 +132,11 @@ export default {
     computedColor () {
       return this.modelValue && this.modelValue.startsWith('--')
     }
+  },
+  methods: {
+    updateValue: throttle(function (value) {
+      this.$emit('update:modelValue', value)
+    }, 100)
   }
 }
 </script>
