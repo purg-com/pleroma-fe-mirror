@@ -172,11 +172,13 @@ export const init = ({
   ultimateBackgroundColor,
   debug = false,
   liteMode = false,
+  editMode = false,
   onlyNormalState = false,
-  rootComponentName = 'Root'
+  rootComponentName = 'Root',
+  initialStaticVars = {}
 }) => {
   if (!inputRuleset) throw new Error('Ruleset is null or undefined!')
-  const staticVars = {}
+  const staticVars = { ...initialStaticVars }
   const stacked = {}
   const computed = {}
 
@@ -402,7 +404,7 @@ export const init = ({
           case 'color': {
             const color = findColor(value[0], { dynamicVars, staticVars })
             dynamicVars[k] = color
-            if (combination.component === 'Root') {
+            if (combination.component === rootComponentName) {
               staticVars[k.substring(2)] = color
             }
             break
@@ -410,14 +412,14 @@ export const init = ({
           case 'shadow': {
             const shadow = value
             dynamicVars[k] = shadow
-            if (combination.component === 'Root') {
+            if (combination.component === rootComponentName) {
               staticVars[k.substring(2)] = shadow
             }
             break
           }
           case 'generic': {
             dynamicVars[k] = value
-            if (combination.component === 'Root') {
+            if (combination.component === rootComponentName) {
               staticVars[k.substring(2)] = value
             }
             break
@@ -443,11 +445,15 @@ export const init = ({
       variants: originalVariants = {}
     } = component
 
-    const validInnerComponents = (
-      liteMode
-        ? (component.validInnerComponentsLite || component.validInnerComponents)
-        : component.validInnerComponents
-    ) || []
+    let validInnerComponents
+    if (editMode) {
+      const temp = (component.validInnerComponentsLite || component.validInnerComponents || [])
+      validInnerComponents = temp.filter(c => virtualComponents.has(c))
+    } else if (editMode) {
+      validInnerComponents = (component.validInnerComponentsLite || component.validInnerComponents || [])
+    } else {
+      validInnerComponents = component.validInnerComponents || []
+    }
 
     // Normalizing states and variants to always include "normal"
     const states = { normal: '', ...originalStates }

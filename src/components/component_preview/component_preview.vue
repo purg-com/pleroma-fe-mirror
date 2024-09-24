@@ -33,8 +33,11 @@
   >
     <div
       class="preview-block"
+      :class="previewClass"
       :style="previewStyle"
-    />
+    >
+      TEST
+    </div>
   </div>
   <input
     v-show="shadowControl"
@@ -59,7 +62,6 @@
   <Checkbox
     id="lightGrid"
     v-model="lightGrid"
-    :disabled="shadow == null"
     name="lightGrid"
     class="input-light-grid"
   >
@@ -163,6 +165,9 @@
     }
 
     .preview-block {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       width: 33%;
       height: 33%;
       border-radius: var(--roundness);

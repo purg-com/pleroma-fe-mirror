@@ -40,11 +40,37 @@
 
   .component-editor {
     display: grid;
-    grid-template-columns: 10em, 1fr, 2fr;
-    grid-template-rows: auto 1fr;
+    grid-template-columns: 10em 2fr 3fr;
+    grid-template-rows: auto auto 1fr;
+    grid-gap: 0.5em;
     grid-template-areas:
-      "variant" "preview" "controls",
-      "state"   "preview" "controls";
+      "component-label component ."
+      "variant         preview settings"
+      "state           preview settings";
+
+    .compopnent-selector {
+      grid-area: component;
+      align-self: center;
+    }
+
+    .component-selector-label {
+      grid-area: component-label;
+      align-self: center;
+      text-align: right;
+      font-weight: bold;
+    }
+
+    .state-selector,
+    .variant-selector {
+      display: grid;
+      grid-template-rows: auto auto;
+      grid-auto-flow: rows;
+      grid-gap: 0.5em;
+
+      > label {
+        font-weight: bold;
+      }
+    }
 
     .state-selector {
       grid-area: state;
@@ -52,8 +78,23 @@
 
     .variant-selector {
       grid-area: variant;
-      display: flex;
-      flex-direction: column;
+    }
+
+    .state-selector-list {
+      display: grid;
+      list-style: none;
+      grid-template-rows: auto;
+      grid-gap: 0.5em;
+      padding: 0;
+      margin: 0;
+    }
+
+    .preview-container {
+      grid-area: preview;
+    }
+
+    .component-settings {
+      grid-area: settings;
     }
   }
 }

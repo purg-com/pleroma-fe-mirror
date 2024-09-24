@@ -1,49 +1,4 @@
-<script setup>
-import { ref, computed } from 'vue'
-
-import Select from 'src/components/select/select.vue'
-import Checkbox from 'src/components/checkbox/checkbox.vue'
-import StringSetting from '../../helpers/string_setting.vue'
-// import Preview from '../theme_tab/theme_preview.vue'
-
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faFloppyDisk, faFolderOpen, faFile } from '@fortawesome/free-solid-svg-icons'
-
-library.add(
-  faFile,
-  faFloppyDisk,
-  faFolderOpen
-)
-
-const name = ref('')
-const author = ref('')
-const license = ref('')
-const website = ref('')
-
-// Getting existing components
-const componentsContext = require.context('src', true, /\.style.js(on)?$/)
-const componentKeys = componentsContext.keys()
-
-const componentsMap = new Map(
-  componentKeys
-    .map(
-      key => [key, componentsContext(key).default]
-    )
-)
-// const componentValues = componentsMap.values()
-
-// Initializing selected component and its computed descendants
-const selectedComponentKey = ref(componentKeys[0])
-const selectedComponentValue = computed(() => componentsMap.get(selectedComponentKey.value))
-
-// const selectedComponentName = computed(() => selectedComponent.value.name)
-const selectedComponentVariants = computed(() => {
-  return new Set([...(Object.keys(selectedComponentValue.value.variants || {})), 'normal'])
-})
-const selectedComponentStates = computed(() => {
-  return new Set([...(Object.keys(selectedComponentValue.value.states || {})), 'normal'])
-})
-
+<script src="./style_tab.js">
 </script>
 
 <template>
@@ -53,21 +8,21 @@ const selectedComponentStates = computed(() => {
       <button
         class="btn button-default"
         @click="clearTheme"
-        >
+      >
         <FAIcon icon="file" />
         {{ $t('settings.style.themes3.editor.new_style') }}
       </button>
       <button
         class="btn button-default"
         @click="importStyle"
-        >
+      >
         <FAIcon icon="folder-open" />
         {{ $t('settings.style.themes3.editor.load_style') }}
       </button>
       <button
         class="btn button-default"
         @click="exportTheme"
-        >
+      >
         <FAIcon icon="floppy-disk" />
         {{ $t('settings.style.themes3.editor.save_style') }}
       </button>
@@ -96,40 +51,91 @@ const selectedComponentStates = computed(() => {
         </li>
       </ul>
     </div>
-    <div class="setting-item">
-      <Select v-model="selectedComponentKey">
+    <div class="setting-item component-editor">
+      <label
+        for="component-selector"
+        class="component-selector-label"
+      >
+        {{ $t('settings.style.themes3.editor.component_selector') }}
+        {{ ' ' }}
+      </label>
+      <Select
+        v-model="selectedComponentKey"
+        id="component-selector"
+        class="component-selector"
+      >
         <option
           v-for="key in componentKeys"
           :key="'component-' + key"
           :value="key"
         >
-          {{ componentsMap.get(key).name }}
+          {{ fallbackI18n($t(getFriendlyNamePath(componentsMap.get(key).name)), componentsMap.get(key).name) }}
         </option>
       </Select>
-      <div class="component-editor">
+        <label
+          for="component-selector"
+          class="component-selector-label"
+        >
+          {{ $t('settings.style.themes3.editor.component_selector') }}
+        </label>
+      <div class="variant-selector">
+        <label for="variant-selector">
+          {{ $t('settings.style.themes3.editor.variant_selector') }}
+        </label>
         <Select
-          v-model="selectedComponentVariant"
-          class="variant-selector"
+          v-if="selectedComponentVariants.size > 1"
+          v-model="selectedVariant"
         >
           <option
             v-for="variant in selectedComponentVariants"
+            :value="variant"
             :key="'component-variant-' + variant"
           >
-            {{ variant }}
+            {{ fallbackI18n($t(getVariantPath(selectedComponentName, variant)), variant)  }}
           </option>
         </Select>
-        <ul class="state-selector">
+        <p v-else>
+          {{ $t('settings.style.themes3.editor.only_variant') }}
+        </p>
+      </div>
+      <div class="state-selector">
+        <label for="variant-selector">
+          {{ $t('settings.style.themes3.editor.states_selector') }}
+        </label>
+        <ul
+          v-if="selectedComponentStates.size > 0"
+          class="state-selector-list"
+        >
           <li
             v-for="state in selectedComponentStates"
             :key="'component-variant-' + state"
           >
             <Checkbox
-              v-model="selectedComponentStates"
+              :value="selectedStates.has(state)"
+              @update:modelValue="(v) => updateSelectedStates(state, v)"
             >
-                {{ state }}
+              {{ fallbackI18n($t(getStatePath(selectedComponentName, state)), state)  }}
             </Checkbox>
           </li>
         </ul>
+        <p v-else>
+          {{ $t('settings.style.themes3.editor.only_state') }}
+        </p>
+      </div>
+      <div class="preview-container">
+        <!-- eslint-disable vue/no-v-html vue/no-v-text-v-html-on-component -->
+        <component
+          :is="'style'"
+          v-html="previewCss"
+        />
+        <!-- eslint-enable vue/no-v-html vue/no-v-text-v-html-on-component -->
+        <ComponentPreview
+          class="component-preview"
+          :previewClass="previewClass"
+          @update:shadow="({ axis, value }) => updateProperty(axis, value)"
+        />
+      </div>
+      <div class="component-setting">
       </div>
     </div>
   </div>

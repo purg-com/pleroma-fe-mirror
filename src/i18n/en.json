@@ -761,7 +761,43 @@
           "style_name": "Stylesheet name",
           "style_author": "Made by",
           "style_license": "License",
-          "style_website": "Website"
+          "style_website": "Website",
+          "component_selector": "Component",
+          "variant_selector": "Variant",
+          "states_selector": "States",
+          "only_variant": "Component doesn't have any variants",
+          "only_state": "Component only has default state",
+          "components": {
+            "normal": {
+              "normal": "Normal state",
+              "variant": "Default variant"
+            },
+            "Button": {
+              "friendlyName": "Button",
+              "variants": {
+                "danger": "Dangerous"
+              },
+              "states": {
+                "toggled": "Toggled",
+                "pressed": "Pressed",
+                "hover": "Hovered",
+                "focused": "Has focus",
+                "disabled": "Disabled"
+              }
+            },
+            "Input": {
+              "friendlyName": "Input fields",
+              "variants": {
+                "checkbox": "Checkbox",
+                "radio": "Radio"
+              },
+              "states": {
+                "hover": "Hovered",
+                "focus": "Focused",
+                "disabled": "Disabled"
+              }
+            }
+          }
         },
         "hacks": {
           "underlay_overrides": "Change underlay",
