@@ -19,7 +19,7 @@ var now = Date.now()
 
 module.exports = {
   entry: {
-    app: './src/main.js'
+    app: process.env.ADMINFE_BUILD ? './src/admin_main.js' : './src/main.js'
   },
   output: {
     path: config.build.assetsRoot,

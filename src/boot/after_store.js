@@ -223,7 +223,7 @@ const getStickers = async ({ store }) => {
   }
 }
 
-const getAppSecret = async ({ store }) => {
+export const getAppSecret = async ({ store }) => {
   const { state, commit } = store
   const { oauth, instance } = state
   return getOrCreateApp({ ...oauth, instance: instance.server, commit })
@@ -316,7 +316,7 @@ const getNodeInfo = async ({ store }) => {
   }
 }
 
-const setConfig = async ({ store }) => {
+export const setConfig = async ({ store }) => {
   // apiConfig, staticConfig
   const configInfos = await Promise.all([getBackendProvidedConfig({ store }), getStaticConfig()])
   const apiConfig = configInfos[0]
@@ -325,10 +325,10 @@ const setConfig = async ({ store }) => {
   await setSettings({ store, apiConfig, staticConfig }).then(getAppSecret({ store }))
 }
 
-const checkOAuthToken = async ({ store }) => {
+export const checkOAuthToken = async ({ store }, adminMode) => {
   if (store.getters.getUserToken()) {
     try {
-      await store.dispatch('loginUser', store.getters.getUserToken())
+      await store.dispatch('loginUser', { accessToken: store.getters.getUserToken(), adminMode })
     } catch (e) {
       console.error(e)
     }
