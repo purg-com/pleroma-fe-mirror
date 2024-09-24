@@ -167,6 +167,8 @@
       height: 33%;
       border-radius: var(--roundness);
       background: var(--background);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
     }
   }
 }
@@ -182,6 +184,11 @@ export default {
     'previewStyle',
     'disabled'
   ],
+  data () {
+    return {
+      lightGrid: false
+    }
+  },
   emits: ['update:shadow'],
   components: {
     Checkbox
