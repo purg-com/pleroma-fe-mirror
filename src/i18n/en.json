@@ -753,6 +753,16 @@
       "update_preview": "Update preview",
       "themes3": {
         "define": "Override",
+        "editor": {
+          "title": "Style",
+          "new_style": "New",
+          "load_style": "Open",
+          "save_style": "Save",
+          "style_name": "Stylesheet name",
+          "style_author": "Made by",
+          "style_license": "License",
+          "style_website": "Website"
+        },
         "hacks": {
           "underlay_overrides": "Change underlay",
           "underlay_override_mode_none": "Theme default",

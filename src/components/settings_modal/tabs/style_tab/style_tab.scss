@@ -1,0 +1,59 @@
+.StyleTab {
+  .setting-item {
+    padding-bottom: 0;
+
+    .btn {
+      padding: 0 0.5em;
+    }
+
+    &:not(:first-child) {
+      margin-top: 0.5em;
+    }
+
+    &:not(:last-child) {
+      margin-bottom: 0.5em;
+    }
+
+    &.heading {
+      display: grid;
+      align-items: baseline;
+      grid-template-columns: 1fr auto auto auto;
+      grid-gap: 0.5em;
+
+      h2 {
+        flex: 1 0 auto;
+      }
+    }
+
+    &.metadata {
+      display: flex;
+
+      .setting-item {
+        flex: 2 0 auto;
+      }
+
+      li {
+        text-align: right;
+      }
+    }
+  }
+
+  .component-editor {
+    display: grid;
+    grid-template-columns: 10em, 1fr, 2fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "variant" "preview" "controls",
+      "state"   "preview" "controls";
+
+    .state-selector {
+      grid-area: state;
+    }
+
+    .variant-selector {
+      grid-area: variant;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}

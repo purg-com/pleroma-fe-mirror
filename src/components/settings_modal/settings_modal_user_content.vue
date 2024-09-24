@@ -21,6 +21,13 @@
       <AppearanceTab />
     </div>
     <div
+      :label="$t('settings.style.themes3.editor.title')"
+      icon="palette"
+      data-tab-name="style"
+    >
+      <StyleTab />
+    </div>
+    <div
       :label="$t('settings.theme')"
       icon="paint-brush"
       data-tab-name="theme"

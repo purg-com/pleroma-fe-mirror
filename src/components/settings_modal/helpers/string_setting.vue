@@ -15,6 +15,7 @@
       </template>
       <slot v-else />
     </label>
+    {{ ' ' }}
     <input
       :id="path"
       class="input string-input"
