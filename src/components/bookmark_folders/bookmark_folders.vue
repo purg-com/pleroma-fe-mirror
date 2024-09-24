@@ -5,7 +5,7 @@
         {{ $t('nav.bookmark_folders') }}
       </div>
       <router-link
-        :to="{ name: 'bookmark-folders' /* 'new' */ }"
+        :to="{ name: 'bookmark-folder-new' }"
         class="button-default btn new-folder-button"
       >
         {{ $t("bookmark_folders.new") }}

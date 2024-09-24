@@ -137,5 +137,10 @@
       font-size: 1.5rem;
     }
   }
+
+  img.iconEmoji {
+    padding: 0.25rem;
+    box-sizing: border-box;
+  }
 }
 </style>

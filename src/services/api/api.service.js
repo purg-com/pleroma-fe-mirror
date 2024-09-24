@@ -1927,9 +1927,9 @@ const updateBookmarkFolder = ({ folderId, name, emoji, credentials }) => {
 
   return fetch(url, {
     headers,
-    method: 'PUT',
+    method: 'PATCH',
     body: JSON.stringify({ name, emoji })
-  })
+  }).then((data) => data.json())
 }
 
 const deleteBookmarkFolder = ({ folderId, credentials }) => {

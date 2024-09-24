@@ -10,7 +10,12 @@ library.add(
 const BookmarkFolderCard = {
   props: [
     'folder'
-  ]
+  ],
+  computed: {
+    firstLetter () {
+      return this.folder.name[0]
+    }
+  }
 }
 
 export default BookmarkFolderCard
