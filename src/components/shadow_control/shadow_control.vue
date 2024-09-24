@@ -3,68 +3,13 @@
     class="label shadow-control"
     :class="{ disabled: !present }"
   >
-    <div class="shadow-preview">
-      <label
-        class="header"
-        :class="{ faint: !present }"
-      >
-        {{ $t('settings.style.shadows.offset') }}
-      </label>
-      <input
-        :value="selected?.y"
-        :disabled="!present"
-        :class="{ disabled: !present }"
-        class="input input-number y-shift-number"
-        type="number"
-        @input="e => updateProperty('y', e.target.value)"
-      >
-      <input
-        :value="selected?.y"
-        :disabled="!present"
-        :class="{ disabled: !present }"
-        class="input input-range y-shift-slider"
-        type="range"
-        max="20"
-        min="-20"
-        @input="e => updateProperty('y', e.target.value)"
-      >
-      <div
-        class="preview-window"
-        :class="{ disabled: !present, '-light-grid': lightGrid }"
-      >
-        <div
-          class="preview-block"
-          :style="style"
-        />
-      </div>
-      <input
-        :value="selected?.x"
-        :disabled="!present"
-        :class="{ disabled: !present }"
-        class="input input-number x-shift-number"
-        type="number"
-        @input="e => updateProperty('x', e.target.value)"
-      >
-      <input
-        :value="selected?.x"
-        :disabled="!present"
-        :class="{ disabled: !present }"
-        class="input input-range x-shift-slider"
-        type="range"
-        max="20"
-        min="-20"
-        @input="e => updateProperty('x', e.target.value)"
-      >
-      <Checkbox
-        id="lightGrid"
-        v-model="lightGrid"
-        :disabled="!present"
-        name="lightGrid"
-        class="input-light-grid"
-      >
-        {{ $t('settings.style.shadows.light_grid') }}
-      </Checkbox>
-    </div>
+    <ComponentPreview
+      class="shadow-preview"
+      :shadow-control="true"
+      :shadow="selected"
+      :preview-style="style"
+      :disabled="!present"
+    />
     <div class="shadow-switcher">
       <Select
         id="shadow-list"
