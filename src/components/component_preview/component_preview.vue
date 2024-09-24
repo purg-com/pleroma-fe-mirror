@@ -187,8 +187,8 @@ export default {
     Checkbox
   },
   methods: {
-    update (axis, value) {
-      this.$emit('update:shadow', { ...this.shadowControl, [axis]: value })
+    updateProperty (axis, value) {
+      this.$emit('update:shadow', { axis, value })
     }
   }
 }

@@ -9,6 +9,7 @@
       :shadow="selected"
       :preview-style="style"
       :disabled="!present"
+      @update:shadow="({ axis, value }) => updateProperty(axis, value)"
     />
     <div class="shadow-switcher">
       <Select
