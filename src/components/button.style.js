@@ -22,6 +22,10 @@ export default {
     // Overall the compuation difficulty is N*((1/6)M^3+M) where M is number of distinct states and N is number of variants.
     // This (currently) is further multipled by number of places where component can exist.
   },
+  editor: {
+    aspect: '6:1',
+    border: 0
+  },
   // This lists all other components that can possibly exist within one. Recursion is currently not supported (and probably won't be supported ever).
   validInnerComponents: [
     'Text',

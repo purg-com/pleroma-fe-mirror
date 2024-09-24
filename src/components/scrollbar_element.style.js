@@ -31,6 +31,7 @@ const hoverGlow = {
 export default {
   name: 'ScrollbarElement',
   selector: '::-webkit-scrollbar-button',
+  notEditable: true, // for now
   states: {
     pressed: ':active',
     hover: ':hover:not(:disabled)',

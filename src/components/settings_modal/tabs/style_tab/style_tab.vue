@@ -132,6 +132,7 @@
         <ComponentPreview
           class="component-preview"
           :previewClass="previewClass"
+          :previewStyle="editorHintStyle"
           @update:shadow="({ axis, value }) => updateProperty(axis, value)"
         />
       </div>

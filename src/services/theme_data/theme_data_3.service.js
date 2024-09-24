@@ -231,6 +231,7 @@ export const init = ({
     .map(({ data }) => data)
 
   const virtualComponents = new Set(Object.values(components).filter(c => c.virtual).map(c => c.name))
+  const nonEditableComponents = new Set(Object.values(components).filter(c => c.notEditable).map(c => c.name))
 
   const processCombination = (combination) => {
     const selector = ruleToSelector(combination, true)
@@ -240,7 +241,11 @@ export const init = ({
     const soloSelector = selector.split(/ /g).slice(-1)[0]
 
     const lowerLevelSelector = parentSelector
-    const lowerLevelBackground = computed[lowerLevelSelector]?.background
+    let lowerLevelBackground = computed[lowerLevelSelector]?.background
+    if (editMode && !lowerLevelBackground) {
+      // FIXME hack for editor until it supports handling component backgrounds
+      lowerLevelBackground = '#00FFFF'
+    }
     const lowerLevelVirtualDirectives = computed[lowerLevelSelector]?.virtualDirectives
     const lowerLevelVirtualDirectivesRaw = computed[lowerLevelSelector]?.virtualDirectivesRaw
 
@@ -448,8 +453,8 @@ export const init = ({
     let validInnerComponents
     if (editMode) {
       const temp = (component.validInnerComponentsLite || component.validInnerComponents || [])
-      validInnerComponents = temp.filter(c => virtualComponents.has(c))
-    } else if (editMode) {
+      validInnerComponents = temp.filter(c => virtualComponents.has(c) && !nonEditableComponents.has(c))
+    } else if (liteMode) {
       validInnerComponents = (component.validInnerComponentsLite || component.validInnerComponents || [])
     } else {
       validInnerComponents = component.validInnerComponents || []

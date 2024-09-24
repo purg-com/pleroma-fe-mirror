@@ -769,8 +769,16 @@
           "only_state": "Component only has default state",
           "components": {
             "normal": {
-              "normal": "Normal state",
-              "variant": "Default variant"
+              "state": "Normal",
+              "variant": "Default"
+            },
+            "Alert": {
+              "friendlyName": "Alert",
+              "variants": {
+                "error": "Error",
+                "warning": "Warning",
+                "success": "Success"
+              }
             },
             "Button": {
               "friendlyName": "Button",

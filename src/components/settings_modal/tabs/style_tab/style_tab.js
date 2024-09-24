@@ -67,7 +67,7 @@ export default {
       componentKeysRaw
         .map(
           key => [key, componentsContext(key).default]
-        ).filter(([key, component]) => !component.virtual)
+        ).filter(([key, component]) => !component.virtual && !component.notEditable)
     )
     const componentKeys = [...componentsMap.keys()]
 
@@ -108,20 +108,37 @@ export default {
     const previewRules = reactive([])
     const previewClass = computed(() => {
       const selectors = []
-      selectors.push(selectedComponentValue.value.variants[selectedVariant.value])
+      if (!!selectedComponentValue.value.variants?.normal || selectedVariant.value !== 'normal') {
+        selectors.push(selectedComponentValue.value.variants[selectedVariant.value])
+      }
       if (selectedStates.size > 0) {
         selectedStates.forEach(state => {
           const original = selectedComponentValue.value.states[state]
           selectors.push(simulatePseudoSelectors(original))
         })
       }
-      console.log(selectors)
       return selectors.map(x => x.substring(1)).join('')
     })
 
+    const editorHintStyle = computed(() => {
+      const editorHint = selectedComponentValue.value.editor
+      const styles = []
+      if (editorHint && Object.keys(editorHint).length > 0) {
+        console.log('EH', editorHint)
+        if (editorHint.aspect != null) {
+          styles.push(`aspect-ratio: ${editorHint.aspect} !important;`)
+        }
+        if (editorHint.border != null) {
+          styles.push(`border-width: ${editorHint.border}px !important;`)
+        }
+      }
+      console.log('EH', styles)
+      return styles.join('; ')
+    })
+
     const previewCss = computed(() => {
-      console.log(previewRules)
-      const scoped = getCssRules(previewRules).map(simulatePseudoSelectors)
+      const scoped = getCssRules(previewRules)
+        .map(simulatePseudoSelectors)
       return scoped.join('\n')
     })
 
@@ -170,6 +187,7 @@ export default {
       getFriendlyNamePath,
       getStatePath,
       getVariantPath,
+      editorHintStyle,
       previewCss,
       previewClass,
       fallbackI18n (translated, fallback) {
