@@ -3,6 +3,7 @@ import OpacityInput from 'src/components/opacity_input/opacity_input.vue'
 import Select from 'src/components/select/select.vue'
 import Checkbox from 'src/components/checkbox/checkbox.vue'
 import Popover from 'src/components/popover/popover.vue'
+import ComponentPreview from 'src/components/component_preview/component_preview.vue'
 import { getCssShadow, getCssShadowFilter } from '../../services/theme_data/theme_data.service.js'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { throttle } from 'lodash'
@@ -49,7 +50,8 @@ export default {
     OpacityInput,
     Select,
     Checkbox,
-    Popover
+    Popover,
+    ComponentPreview
   },
   beforeUpdate () {
     this.cValue = (this.modelValue ?? this.fallback ?? []).map(toModel)
@@ -81,7 +83,6 @@ export default {
       return this.modelValue == null
     },
     style () {
-      console.log(this.separateInset)
       if (this.separateInset) {
         return {
           filter: getCssShadowFilter(this.cValue),
