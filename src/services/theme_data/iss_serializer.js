@@ -32,7 +32,11 @@ export const serialize = (ruleset) => {
       } else {
         switch (directive) {
           case 'shadow':
-            return `  ${directive}: ${value.map(serializeShadow).join(', ')}`
+            if (value.length > 0) {
+              return `  ${directive}: ${value.map(serializeShadow).join(', ')}`
+            } else {
+              return `  ${directive}: none`
+            }
           default:
             return `  ${directive}: ${value}`
         }
