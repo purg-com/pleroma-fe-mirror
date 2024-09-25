@@ -180,7 +180,7 @@ const EmojiPicker = {
       if (!this.keepOpen) {
         this.$refs.popover.hidePopover()
       }
-      this.$emit('emoji', { insertion: value, keepOpen: this.keepOpen })
+      this.$emit('emoji', { insertion: value, insertionUrl: emoji.imageUrl, keepOpen: this.keepOpen })
     },
     onScroll (startIndex, endIndex, visibleStartIndex, visibleEndIndex) {
       const target = this.$refs['emoji-groups'].$el

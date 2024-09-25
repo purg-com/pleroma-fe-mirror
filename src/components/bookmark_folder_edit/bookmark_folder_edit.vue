@@ -30,21 +30,44 @@
     </div>
     <div class="panel-body">
       <div class="input-wrap">
+        <label for="folder-edit-title">{{ $t('bookmark_folders.emoji') }}</label>
+        <button
+          class="input input-emoji"
+          :title="$t('bookmark_folder.emoji_pick')"
+          @click="showEmojiPicker"
+        >
+          <img
+            v-if="emojiUrlDraft"
+            class="iconEmoji iconEmoji-image"
+            :src="emojiUrlDraft"
+            :alt="emojiDraft"
+            :title="emojiDraft"
+          >
+          <span
+            v-else-if="emojiDraft"
+            class="iconEmoji"
+          >
+            <span>
+              {{ emojiDraft }}
+            </span>
+          </span>
+        </button>
+        <EmojiPicker
+          ref="picker"
+          class="emoji-picker-panel"
+          @emoji="selectEmoji"
+          @show="onShowPicker"
+          @close="onClosePicker"
+        />
+      </div>
+      <div class="input-wrap">
         <label for="folder-edit-title">{{ $t('bookmark_folders.name') }}</label>
-        {{ ' ' }}
         <input
           id="folder-edit-title"
           ref="name"
           v-model="nameDraft"
           class="input"
         >
-        <button
-          v-if="id"
-          class="btn button-default follow-button"
-          @click="updateFolder"
-        >
-          {{ $t('bookmark_folders.update_folder') }}
-        </button>
       </div>
     </div>
     <div class="panel-footer">
@@ -78,6 +101,16 @@
           {{ $t('general.no') }}
         </button>
       </template>
+      <div
+        v-if="id && !reallyDelete"
+      >
+        <button
+          class="btn button-default follow-button"
+          @click="updateFolder"
+        >
+          {{ $t('bookmark_folders.update_folder') }}
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -98,8 +131,48 @@
 
   .panel-body {
     display: flex;
+    gap: 0.5em;
+  }
+
+  .emoji-picker-panel {
+    position: absolute;
+    z-index: 20;
+    margin-top: 2px;
+
+    &.hide {
+      display: none;
+    }
+  }
+
+  .input-emoji {
+    height: 2.5em;
+    width: 2.5em;
+    padding: 0;
+
+    .iconEmoji {
+      display: inline-block;
+      text-align: center;
+      object-fit: contain;
+      vertical-align: middle;
+      height: 2.5em;
+      width: 2.5em;
+
+      > span {
+        font-size: 1.5rem;
+        line-height: 2.5rem;
+      }
+    }
+
+    img.iconEmoji {
+      padding: 0.25em;
+      box-sizing: border-box;
+    }
+  }
+
+  .input-wrap {
+    display: flex;
     flex-direction: column;
-    overflow: hidden;
+    gap: 0.5em;
   }
 
   .go-back-button {

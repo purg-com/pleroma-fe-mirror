@@ -8,14 +8,14 @@ export const mutations = {
   setBookmarkFolders (state, value) {
     state.allFolders = value
   },
-  setBookmarkFolder (state, { id, name, emoji, emojiUrl }) {
+  setBookmarkFolder (state, { id, name, emoji, emoji_url: emojiUrl }) {
     const entry = find(state.allFolders, { id })
     if (!entry) {
-      state.allFolders.push({ id, name, emoji, emojiUrl })
+      state.allFolders.push({ id, name, emoji, emoji_url: emojiUrl })
     } else {
       entry.name = name
       entry.emoji = emoji
-      entry.emojiUrl = emojiUrl
+      entry.emoji_url = emojiUrl
     }
   },
   deleteBookmarkFolder (state, { folderId }) {

@@ -1409,15 +1409,16 @@
     "tooltip": "This domain contains non-ascii characters."
   },
   "bookmark_folders": {
-    "create": "Create folder",
+    "select_folder": "Select bookmark folder",
     "creating_folder": "Creating bookmark folder",
-    "delete": "Delete folder",
     "editing_folder": "Editing folder {folderName}",
-    "error": "Error manipulating bookmark folders: {0}",
+    "emoji": "Emoji",
     "name": "Folder name",
     "new": "New Folder",
+    "create": "Create folder",
+    "delete": "Delete folder",
+    "update_folder": "Save changes",
     "really_delete": "Do you really want to delete the folder?",
-    "select_folder": "Select bookmark folder",
-    "update_folder": "Save changes"
+    "error": "Error manipulating bookmark folders: {0}"
   }
 }

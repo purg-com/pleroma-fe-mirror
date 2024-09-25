@@ -1,3 +1,4 @@
+import EmojiPicker from '../emoji_picker/emoji_picker.vue'
 import apiService from '../../services/api/api.service'
 
 const BookmarkFolderEdit = {
@@ -9,8 +10,12 @@ const BookmarkFolderEdit = {
       emojiUrl: null,
       emojiDraft: '',
       emojiUrlDraft: null,
+      emojiPickerExpanded: false,
       reallyDelete: false
     }
+  },
+  components: {
+    EmojiPicker
   },
   created () {
     if (!this.id) return
@@ -31,20 +36,30 @@ const BookmarkFolderEdit = {
     }
   },
   methods: {
+    selectEmoji (event) {
+      this.emojiDraft = event.insertion
+      this.emojiUrlDraft = event.insertionUrl
+    },
+    showEmojiPicker () {
+      if (!this.emojiPickerExpanded) {
+        this.$refs.picker.showPicker()
+      }
+    },
+    onShowPicker () {
+      this.emojiPickerExpanded = true
+    },
+    onClosePicker () {
+      this.emojiPickerExpanded = false
+    },
     updateFolder () {
       this.$store.dispatch('setBookmarkFolder', { folderId: this.id, name: this.nameDraft, emoji: this.emojiDraft })
-        .then((folder) => {
-          this.nameDraft = this.name = folder.name
-          this.emojiDraft = this.emoji = folder.emoji
-          this.emojiUrlDraft = this.emojiUrl = folder.emoji_url
+        .then(() => {
+          this.$router.push({ name: 'bookmark-folders' })
         })
     },
     createFolder () {
       this.$store.dispatch('createBookmarkFolder', { name: this.nameDraft, emoji: this.emojiDraft })
-        .then((folder) => {
-          return folder.id
-        })
-        .then((folderId) => {
+        .then(() => {
           this.$router.push({ name: 'bookmark-folders' })
         })
         .catch((e) => {
