@@ -1,9 +1,10 @@
 <template>
   <div
     class="label shadow-control"
-    :class="{ disabled: !present }"
+    :class="{ disabled: !present, '-no-preview': noPreview }"
   >
     <ComponentPreview
+      v-if="!noPreview"
       class="shadow-preview"
       :shadow-control="true"
       :shadow="selected"

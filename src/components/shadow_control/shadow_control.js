@@ -34,12 +34,11 @@ const toModel = (object = {}) => ({
 
 export default {
   props: [
-    'modelValue', 'fallback', 'separateInset'
+    'modelValue', 'fallback', 'separateInset', 'noPreview'
   ],
   emits: ['update:modelValue'],
   data () {
     return {
-      lightGrid: false,
       selectedId: 0,
       // TODO there are some bugs regarding display of array (it's not getting updated when deleting for some reason)
       cValue: (this.modelValue ?? this.fallback ?? []).map(toModel)
