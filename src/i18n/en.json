@@ -767,6 +767,8 @@
           "states_selector": "States",
           "only_variant": "Component doesn't have any variants",
           "only_state": "Component only has default state",
+          "main_tab": "Main",
+          "shadows_tab": "Shadows",
           "components": {
             "normal": {
               "state": "Normal",

@@ -83,44 +83,44 @@
           {{ $t('settings.style.themes3.editor.variant_selector') }}
         </label>
         <Select
-          v-if="selectedComponentVariants.size > 1"
+          v-if="selectedComponentVariantsAll.length > 1"
           v-model="selectedVariant"
         >
           <option
-            v-for="variant in selectedComponentVariants"
+            v-for="variant in selectedComponentVariantsAll"
             :value="variant"
             :key="'component-variant-' + variant"
           >
             {{ fallbackI18n($t(getVariantPath(selectedComponentName, variant)), variant)  }}
           </option>
         </Select>
-        <p v-else>
+        <div v-else>
           {{ $t('settings.style.themes3.editor.only_variant') }}
-        </p>
+        </div>
       </div>
       <div class="state-selector">
         <label for="variant-selector">
           {{ $t('settings.style.themes3.editor.states_selector') }}
         </label>
         <ul
-          v-if="selectedComponentStates.size > 0"
+          v-if="selectedComponentStates.length > 0"
           class="state-selector-list"
-        >
+          >
           <li
             v-for="state in selectedComponentStates"
             :key="'component-variant-' + state"
-          >
+            >
             <Checkbox
               :value="selectedStates.has(state)"
-              @update:modelValue="(v) => updateSelectedStates(state, v)"
-            >
+                @update:modelValue="(v) => updateSelectedStates(state, v)"
+              >
               {{ fallbackI18n($t(getStatePath(selectedComponentName, state)), state)  }}
             </Checkbox>
           </li>
         </ul>
-        <p v-else>
+        <div v-else>
           {{ $t('settings.style.themes3.editor.only_state') }}
-        </p>
+        </div>
       </div>
       <div class="preview-container">
         <!-- eslint-disable vue/no-v-html vue/no-v-text-v-html-on-component -->
@@ -136,8 +136,31 @@
           @update:shadow="({ axis, value }) => updateProperty(axis, value)"
         />
       </div>
-      <div class="component-setting">
-      </div>
+      <tab-switcher
+        ref="tabSwitcher"
+        class="component-settings"
+        :on-switch="onTabSwitch"
+      >
+        <div
+          class="editor-tab"
+          :label="$t('settings.style.themes3.editor.main_tab')"
+          :data-tab-name="main"
+        >
+          lol
+        </div>
+        <div
+          class="editor-tab"
+          :label="$t('settings.style.themes3.editor.shadows_tab')"
+          :data-tab-name="shadow"
+        >
+          <ShadowControl
+            v-model="editedShadow"
+            :no-preview="true"
+            :separate-inset="shadowSelected === 'avatar' || shadowSelected === 'avatarStatus'"
+            :fallback="currentShadowFallback"
+          />
+        </div>
+      </tab-switcher>
     </div>
   </div>
 </template>

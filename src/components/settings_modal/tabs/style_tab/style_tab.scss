@@ -1,4 +1,48 @@
 .StyleTab {
+  .style-control {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    margin-bottom: 0.5em;
+
+    .label {
+      margin-right: 1em;
+      flex: 1 1 10em;
+      line-height: 2;
+    }
+
+    .opt {
+      margin: 0.5em;
+    }
+
+    .color-input {
+      flex: 0 0 0;
+    }
+
+    input,
+    select {
+      min-width: 3em;
+      margin: 0;
+      flex: 0;
+
+      &[type="number"] {
+        min-width: 5em;
+      }
+
+      &[type="range"] {
+        flex: 1;
+        min-width: 2em;
+        align-self: center;
+        margin: 0 0.5em;
+      }
+
+      &[type="checkbox"] + i {
+        height: 1.1em;
+        align-self: center;
+      }
+    }
+  }
+
   .setting-item {
     padding-bottom: 0;
 
@@ -74,6 +118,8 @@
 
     .state-selector {
       grid-area: state;
+      align-content: flex-start;
+      align-items: flex-start;
     }
 
     .variant-selector {
@@ -95,6 +141,13 @@
 
     .component-settings {
       grid-area: settings;
+    }
+
+    .editor-tab {
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 0.5em;
     }
   }
 }
