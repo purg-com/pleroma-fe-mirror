@@ -522,9 +522,21 @@ export const init = ({
     console.debug('Eager processing took ' + (t2 - t1) + ' ms')
   }
 
+  // optimization to traverse big-ass array only once instead of twice
+  const eager = []
+  const lazy = []
+
+  result.forEach(x => {
+    if (typeof x === 'function') {
+      lazy.push(x)
+    } else {
+      eager.push(x)
+    }
+  })
+
   return {
-    lazy: result.filter(x => typeof x === 'function'),
-    eager: result.filter(x => typeof x !== 'function'),
+    lazy,
+    eager,
     staticVars,
     engineChecksum
   }

@@ -19,7 +19,7 @@ const internalToBackendLocaleMulti = codes => {
 
 const getLanguageName = (code) => {
   const specialLanguageNames = {
-    pdc: 'Pennsylvania Dutch',
+    pdc: 'Pennsilfaanisch-Deitsch',
     ja_easy: 'やさしいにほんご',
     'nan-TW': '臺語（閩南語）',
     zh: '简体中文',

@@ -119,6 +119,8 @@ const defaultState = {
   closingDrawerMarksAsSeen: true,
   unseenAtTop: false,
   ignoreInactionableSeen: false,
+  useAbsoluteTimeFormat: false,
+  absoluteTimeFormatMinAge: '0d',
 
   // Nasty stuff
   customEmoji: [],

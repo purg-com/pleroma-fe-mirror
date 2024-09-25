@@ -229,7 +229,9 @@
     "expiry": "Poll age",
     "expires_in": "Poll ends in {0}",
     "expired": "Poll ended {0} ago",
-    "not_enough_options": "Too few unique options in poll"
+    "not_enough_options": "Too few unique options in poll",
+    "non_anonymous": "Public poll",
+    "non_anonymous_title": "Other instances may display the options you voted for"
   },
   "emoji": {
     "stickers": "Stickers",
@@ -506,6 +508,8 @@
     "autocomplete_select_first": "Automatically select the first candidate when autocomplete results are available",
     "emoji_reactions_on_timeline": "Show emoji reactions on timeline",
     "emoji_reactions_scale": "Reactions scale factor",
+    "absolute_time_format": "Use absolute time format",
+    "absolute_time_format_min_age": "Only use for time older than this amount of time",
     "export_theme": "Save preset",
     "filtering": "Filtering",
     "wordfilter": "Wordfilter",

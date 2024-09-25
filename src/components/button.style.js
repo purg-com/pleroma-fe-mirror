@@ -34,8 +34,8 @@ export default {
       directives: {
         '--defaultButtonHoverGlow': 'shadow | 0 0 4 --text',
         '--defaultButtonShadow': 'shadow | 0 0 2 #000000',
-        '--defaultButtonBevel': 'shadow | $borderSide(#FFFFFF, top, 0.2) | $borderSide(#000000, bottom, 0.2)',
-        '--pressedButtonBevel': 'shadow | $borderSide(#FFFFFF, bottom, 0.2)| $borderSide(#000000, top, 0.2)'
+        '--defaultButtonBevel': 'shadow | $borderSide(#FFFFFF, top, 0.2), $borderSide(#000000, bottom, 0.2)',
+        '--pressedButtonBevel': 'shadow | $borderSide(#FFFFFF, bottom, 0.2), $borderSide(#000000, top, 0.2)'
       }
     },
     {

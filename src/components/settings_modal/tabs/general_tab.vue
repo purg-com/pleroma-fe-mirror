@@ -217,6 +217,29 @@
             {{ $t('settings.no_rich_text_description') }}
           </BooleanSetting>
         </li>
+        <li>
+          <BooleanSetting
+            path="useAbsoluteTimeFormat"
+            expert="1"
+          >
+            {{ $t('settings.absolute_time_format') }}
+          </BooleanSetting>
+        </li>
+        <ul
+          class="setting-list suboptions"
+          v-if="mergedConfig.useAbsoluteTimeFormat"
+        >
+          <li>
+            <UnitSetting
+              path="absoluteTimeFormatMinAge"
+              unit-set="time"
+              :units="['s', 'm', 'h', 'd']"
+              :min="0"
+            >
+              {{ $t('settings.absolute_time_format_min_age') }}
+            </UnitSetting>
+          </li>
+        </ul>
         <h3>{{ $t('settings.attachments') }}</h3>
         <li>
           <BooleanSetting

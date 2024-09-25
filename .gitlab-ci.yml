@@ -45,6 +45,7 @@ test:
   stage: test
   tags:
     - amd64
+    - himem
   variables:
     APT_CACHE_DIR: apt-cache
   script:
@@ -58,6 +59,7 @@ build:
   stage: build
   tags:
     - amd64
+    - himem
   script:
     - yarn
     - npm run build
