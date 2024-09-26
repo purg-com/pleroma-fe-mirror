@@ -6,8 +6,8 @@
     margin-bottom: 0.5em;
 
     .label {
-      margin-right: 1em;
-      flex: 1 1 10em;
+      margin-right: 0.5em;
+      flex: 1 1 0;
       line-height: 2;
     }
 
@@ -26,14 +26,18 @@
       flex: 0;
 
       &[type="number"] {
-        min-width: 5em;
+        min-width: 9em;
+
+        &.-small {
+          min-width: 5em;
+        }
       }
 
       &[type="range"] {
         flex: 1;
-        min-width: 2em;
+        min-width: 9em;
         align-self: center;
-        margin: 0 0.5em;
+        margin: 0 0.25em;
       }
 
       &[type="checkbox"] + i {
@@ -84,42 +88,38 @@
 
   .component-editor {
     display: grid;
-    grid-template-columns: 10em 2fr 3fr;
+    grid-template-columns: 4fr 3fr 5fr;
     grid-template-rows: auto auto 1fr;
     grid-gap: 0.5em;
     grid-template-areas:
-      "component-label component ."
-      "variant         preview settings"
-      "state           preview settings";
+      "component    component  variant"
+      "state        state      state"
+      "preview      settings    settings";
 
-    .compopnent-selector {
+    .component-selector {
       grid-area: component;
       align-self: center;
     }
 
-    .component-selector-label {
-      grid-area: component-label;
-      align-self: center;
-      text-align: right;
-      font-weight: bold;
-    }
-
+    .component-selector,
     .state-selector,
     .variant-selector {
       display: grid;
-      grid-template-rows: auto auto;
-      grid-auto-flow: rows;
+      grid-template-columns: 1fr minmax(1fr, 10em);
+      grid-template-rows: auto;
+      grid-auto-flow: column;
       grid-gap: 0.5em;
+      align-items: baseline;
 
-      > label {
+      > label:not(.Select) {
         font-weight: bold;
+        justify-self: right;
       }
     }
 
     .state-selector {
       grid-area: state;
-      align-content: flex-start;
-      align-items: flex-start;
+      grid-template-columns: minmax(min-content, 7em) 1fr;
     }
 
     .variant-selector {
@@ -129,13 +129,19 @@
     .state-selector-list {
       display: grid;
       list-style: none;
-      grid-template-rows: auto;
+      grid-auto-flow: dense;
+      grid-template-columns: repeat(5, minmax(min-content, 1fr));
+      grid-auto-rows: 1fr;
       grid-gap: 0.5em;
       padding: 0;
       margin: 0;
     }
 
     .preview-container {
+      --border: none;
+      --shadow: none;
+      --roundness: none;
+
       grid-area: preview;
     }
 
@@ -144,10 +150,21 @@
     }
 
     .editor-tab {
+      display: grid;
+      grid-template-columns: 1fr 2em;
+      grid-column-gap: 0.5em;
+      align-items: center;
+      grid-auto-rows: min-content;
+      grid-auto-flow: dense;
       border-left: 1px solid var(--border);
       border-right: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
       padding: 0.5em;
+    }
+
+    .shadow-tab {
+      grid-template-columns: 1fr;
+      justify-items: center;
     }
   }
 }

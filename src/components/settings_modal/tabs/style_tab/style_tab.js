@@ -1,11 +1,15 @@
 import { ref, reactive, computed, watch } from 'vue'
+import { get } from 'lodash'
 
 import Select from 'src/components/select/select.vue'
 import Checkbox from 'src/components/checkbox/checkbox.vue'
 import ComponentPreview from 'src/components/component_preview/component_preview.vue'
 import StringSetting from '../../helpers/string_setting.vue'
 import ShadowControl from 'src/components/shadow_control/shadow_control.vue'
+import ColorInput from 'src/components/color_input/color_input.vue'
+import OpacityInput from 'src/components/opacity_input/opacity_input.vue'
 import TabSwitcher from 'src/components/tab_switcher/tab_switcher.jsx'
+import Popover from 'src/components/popover/popover.vue'
 
 import { init } from 'src/services/theme_data/theme_data_3.service.js'
 import { getCssRules } from 'src/services/theme_data/css_utils.js'
@@ -25,10 +29,13 @@ export default {
   components: {
     Select,
     Checkbox,
+    Popover,
     StringSetting,
     ComponentPreview,
     TabSwitcher,
-    ShadowControl
+    ShadowControl,
+    ColorInput,
+    OpacityInput
   },
   setup () {
     // Meta stuff
@@ -168,6 +175,60 @@ export default {
       return selectedComponentRulesObject.value[component]?.[variant]?.[states]
     })
 
+    const editedSubrulesFallback = computed(() => {
+      const parentComponent = selectedComponentName.value
+
+      const subrules = {}
+      selectedComponentRulesList.forEach(sr => {
+        console.log('SR', toValue(sr))
+        if (!sr.parent) return
+        if (sr.parent.component === parentComponent) {
+          const component = sr.component
+          const { variant = 'normal', state = [] } = sr
+
+          subrules[component] = {} || subrules[component]
+          subrules[component][variant] = {} || subrules[component][variant]
+          subrules[component][variant][state.join(':')] = sr
+        }
+      })
+
+      return subrules
+    })
+
+    const componentHas = (subComponent) => {
+      return !!selectedComponent.value.validInnerComponents?.find(x => x === subComponent)
+    }
+
+    const editedTextColor = computed(() => get(
+      editedSubrulesFallback.value,
+      'Text.normal.normal.directives.textColor',
+      null
+    ))
+
+    const editedLinkColor = computed(() => get(
+      editedSubrulesFallback.value,
+      'Link.normal.normal.directives.linkColor',
+      null
+    ))
+
+    const editedIconColor = computed(() => get(
+      editedSubrulesFallback.value,
+      'Icon.normal.normal.directives.iconColor',
+      null
+    ))
+
+    const editedBackground = computed(() => get(
+      editedRuleFallback.value,
+      'directives.background',
+      null
+    ))
+
+    const editedOpacity = computed(() => get(
+      editedSubrulesFallback.value,
+      'Link.normal.normal.directives.linkColor',
+      null
+    ))
+
     const editedShadow = computed(() => {
       return editedRuleFallback.value?.directives.shadow
     })
@@ -188,8 +249,6 @@ export default {
 
       selectedComponentRulesList.splice(0, selectedComponentRulesList.length)
       selectedComponentRulesList.push(...processedRulesList)
-
-      console.log('FALLBACK', toValue(editedRuleFallback.value))
 
       previewRules.splice(0, previewRules.length)
       previewRules.push(...init({
@@ -212,6 +271,11 @@ export default {
       selectedComponentName,
       updateSelectedComponent
     )
+
+    const isShadowTabOpen = ref(false)
+    const onTabSwitch = (tab) => {
+      isShadowTabOpen.value = tab === 'shadow'
+    }
 
     return {
       name,
@@ -236,6 +300,12 @@ export default {
         }
       },
       editedRuleFallback,
+      editedSubrulesFallback,
+      editedBackground,
+      editedOpacity,
+      editedTextColor,
+      editedLinkColor,
+      editedIconColor,
       editedShadow,
       previewCss,
       previewClass,
@@ -243,6 +313,9 @@ export default {
       getFriendlyNamePath,
       getVariantPath,
       getStatePath,
+      componentHas,
+      isShadowTabOpen,
+      onTabSwitch,
       fallbackI18n (translated, fallback) {
         if (translated.startsWith('settings.style.themes3')) {
           return fallback

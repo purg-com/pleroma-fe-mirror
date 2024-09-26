@@ -52,38 +52,32 @@
       </ul>
     </div>
     <div class="setting-item component-editor">
-      <label
-        for="component-selector"
-        class="component-selector-label"
-      >
-        {{ $t('settings.style.themes3.editor.component_selector') }}
-        {{ ' ' }}
-      </label>
-      <Select
-        v-model="selectedComponentKey"
-        id="component-selector"
-        class="component-selector"
-      >
-        <option
-          v-for="key in componentKeys"
-          :key="'component-' + key"
-          :value="key"
-        >
-          {{ fallbackI18n($t(getFriendlyNamePath(componentsMap.get(key).name)), componentsMap.get(key).name) }}
-        </option>
-      </Select>
-        <label
-          for="component-selector"
-          class="component-selector-label"
-        >
+      <div class="component-selector">
+        <label for="component-selector">
           {{ $t('settings.style.themes3.editor.component_selector') }}
+          {{ ' ' }}
         </label>
-      <div class="variant-selector">
+        <Select
+          v-model="selectedComponentKey"
+          id="component-selector"
+        >
+          <option
+            v-for="key in componentKeys"
+            :key="'component-' + key"
+            :value="key"
+          >
+            {{ fallbackI18n($t(getFriendlyNamePath(componentsMap.get(key).name)), componentsMap.get(key).name) }}
+          </option>
+        </Select>
+      </div>
+      <div
+        class="variant-selector"
+        v-if="selectedComponentVariantsAll.length > 1"
+      >
         <label for="variant-selector">
           {{ $t('settings.style.themes3.editor.variant_selector') }}
         </label>
         <Select
-          v-if="selectedComponentVariantsAll.length > 1"
           v-model="selectedVariant"
         >
           <option
@@ -94,16 +88,15 @@
             {{ fallbackI18n($t(getVariantPath(selectedComponentName, variant)), variant)  }}
           </option>
         </Select>
-        <div v-else>
-          {{ $t('settings.style.themes3.editor.only_variant') }}
-        </div>
       </div>
-      <div class="state-selector">
-        <label for="variant-selector">
+      <div
+        class="state-selector"
+        v-if="selectedComponentStates.length > 0"
+      >
+        <label>
           {{ $t('settings.style.themes3.editor.states_selector') }}
         </label>
         <ul
-          v-if="selectedComponentStates.length > 0"
           class="state-selector-list"
           >
           <li
@@ -118,9 +111,6 @@
             </Checkbox>
           </li>
         </ul>
-        <div v-else>
-          {{ $t('settings.style.themes3.editor.only_state') }}
-        </div>
       </div>
       <div class="preview-container">
         <!-- eslint-disable vue/no-v-html vue/no-v-text-v-html-on-component -->
@@ -131,6 +121,8 @@
         <!-- eslint-enable vue/no-v-html vue/no-v-text-v-html-on-component -->
         <ComponentPreview
           class="component-preview"
+          showText="componentHas('Text')"
+          :shadowControl="isShadowTabOpen && editedShadow"
           :previewClass="previewClass"
           :previewStyle="editorHintStyle"
           @update:shadow="({ axis, value }) => updateProperty(axis, value)"
@@ -144,15 +136,97 @@
         <div
           class="editor-tab"
           :label="$t('settings.style.themes3.editor.main_tab')"
-          :data-tab-name="main"
+          key="main"
         >
-          lol
+          <ColorInput
+            v-model="editedBackground"
+            :disabled="!editedBackgroundPresent"
+            :label="$t('settings.style.themes3.editor.background')"
+          />
+          <Popover trigger="hover">
+            <template #trigger>
+              <Checkbox v-model="editedBackgroundPresent" />
+            </template>
+            <template #content>
+              {{ $t('settings.style.themes3.editor.include_in_rule') }}
+            </template>
+          </Popover>
+          <OpacityInput
+            v-model="editedOpacity"
+            :disabled="!editedOpacityPresent"
+           :label="$t('settings.style.themes3.editor.opacity')"
+          />
+          <Popover trigger="hover">
+            <template #trigger>
+              <Checkbox v-model="editedOpacityPresent" />
+            </template>
+            <template #content>
+              {{ $t('settings.style.themes3.editor.include_in_rule') }}
+            </template>
+          </Popover>
+          <ColorInput
+            v-model="editedTextColor"
+            :label="$t('settings.style.themes3.editor.text_color')"
+            :disabled="!editedTextPresent"
+            v-if="componentHas('Text')"
+          />
+          <Popover
+            trigger="hover"
+            v-if="componentHas('Text')"
+          >
+            <template #trigger>
+              <Checkbox v-model="editedTextPresent" />
+            </template>
+            <template #content>
+              {{ $t('settings.style.themes3.editor.include_in_rule') }}
+            </template>
+          </Popover>
+          <ColorInput
+            v-model="editedLinkColor"
+            :label="$t('settings.style.themes3.editor.link_color')"
+            :disabled="!editedLinkPresent"
+            v-if="componentHas('Link')"
+          />
+          <Popover
+            trigger="hover"
+            v-if="componentHas('Link')"
+          >
+            <template #trigger>
+              <Checkbox v-model="editedLinkPresent" />
+            </template>
+            <template #content>
+              {{ $t('settings.style.themes3.editor.include_in_rule') }}
+            </template>
+          </Popover>
+          <ColorInput
+            v-model="editedIconColor"
+            :label="$t('settings.style.themes3.editor.icon_color')"
+            :disabled="!editedOpacityPresent"
+            v-if="componentHas('Icon')"
+          />
+          <Popover
+            trigger="hover"
+            v-if="componentHas('Icon')"
+          >
+            <template #trigger>
+              <Checkbox v-model="editedIconPresent" />
+            </template>
+            <template #content>
+              {{ $t('settings.style.themes3.editor.include_in_rule') }}
+            </template>
+          </Popover>
         </div>
         <div
-          class="editor-tab"
+          class="editor-tab shadow-tab"
           :label="$t('settings.style.themes3.editor.shadows_tab')"
-          :data-tab-name="shadow"
+          key="shadow"
         >
+          <Checkbox
+            class="style-control"
+            v-model="editedOpacityPresent"
+          >
+            {{ $t('settings.style.themes3.editor.include_in_rule') }}
+          </checkbox>
           <ShadowControl
             v-model="editedShadow"
             :no-preview="true"

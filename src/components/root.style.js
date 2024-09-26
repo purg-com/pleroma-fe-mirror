@@ -1,6 +1,7 @@
 export default {
   name: 'Root',
   selector: ':root',
+  notEditable: true,
   validInnerComponents: [
     'Underlay',
     'Modals',

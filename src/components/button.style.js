@@ -23,8 +23,7 @@ export default {
     // This (currently) is further multipled by number of places where component can exist.
   },
   editor: {
-    aspect: '6:1',
-    border: 0
+    aspect: '2 / 1'
   },
   // This lists all other components that can possibly exist within one. Recursion is currently not supported (and probably won't be supported ever).
   validInnerComponents: [

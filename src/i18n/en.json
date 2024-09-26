@@ -765,10 +765,13 @@
           "component_selector": "Component",
           "variant_selector": "Variant",
           "states_selector": "States",
-          "only_variant": "Component doesn't have any variants",
-          "only_state": "Component only has default state",
           "main_tab": "Main",
           "shadows_tab": "Shadows",
+          "background": "Background color",
+          "text_color": "Text color",
+          "icon_color": "Icon color",
+          "link_color": "Link color",
+          "include_in_rule": "Add to rule",
           "components": {
             "normal": {
               "state": "Normal",
