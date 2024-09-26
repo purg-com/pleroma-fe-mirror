@@ -16,7 +16,7 @@
         v-for="folder in bookmarkFolders.slice().reverse()"
         :key="folder"
         :folder="folder"
-        class="bookmark-folder-item"
+        class="list-item"
       />
     </div>
   </div>

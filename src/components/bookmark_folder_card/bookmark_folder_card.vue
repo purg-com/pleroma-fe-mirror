@@ -41,12 +41,14 @@
 <style lang="scss">
 .bookmark-folder-card {
   display: flex;
+  align-items: center;
 }
 
 .bookmark-folder-name {
   flex-grow: 1;
 
-  .iconLetter, .iconEmoji {
+  .iconLetter,
+  .iconEmoji {
     margin-right: 0.5em;
   }
 
