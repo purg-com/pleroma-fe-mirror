@@ -13,6 +13,10 @@
     </div>
     <div class="panel-body">
       <BookmarkFolderCard
+        :all-bookmarks="true"
+        class="list-item"
+      />
+      <BookmarkFolderCard
         v-for="folder in bookmarkFolders.slice().reverse()"
         :key="folder"
         :folder="folder"

@@ -1,5 +1,25 @@
 <template>
-  <div class="bookmark-folder-card">
+  <div
+    v-if="allBookmarks"
+    class="bookmark-folder-card"
+  >
+    <router-link
+      :to="{ name: 'bookmarks' }"
+      class="bookmark-folder-name"
+    >
+      <span class="icon">
+        <FAIcon
+          fixed-width
+          class="fa-scale-110 menu-icon"
+          icon="bookmark"
+        />
+      </span>{{ $t('nav.all_bookmarks') }}
+    </router-link>
+  </div>
+  <div
+    v-else
+    class="bookmark-folder-card"
+  >
     <router-link
       :to="{ name: 'bookmark-folder', params: { id: folder.id } }"
       class="bookmark-folder-name"
@@ -44,27 +64,31 @@
   align-items: center;
 }
 
-.bookmark-folder-name {
+a.bookmark-folder-name {
+  display: flex;
+  align-items: center;
   flex-grow: 1;
 
+  .icon,
   .iconLetter,
   .iconEmoji {
-    margin-right: 0.5em;
-  }
-
-  .iconLetter {
+    display: inline-block;
     height: 2.5rem;
     width: 2.5rem;
+    margin-right: 0.5rem;
+  }
+
+  .icon,
+  .iconLetter {
     font-size: 1.5rem;
+    line-height: 2.5rem;
+    text-align: center;
   }
 
   .iconEmoji {
-    display: inline-block;
     text-align: center;
     object-fit: contain;
     vertical-align: middle;
-    height: 2.5em;
-    width: 2.5em;
 
     > span {
       font-size: 1.5rem;

@@ -9,11 +9,12 @@ library.add(
 
 const BookmarkFolderCard = {
   props: [
-    'folder'
+    'folder',
+    'allBookmarks'
   ],
   computed: {
     firstLetter () {
-      return this.folder.name[0]
+      return this.folder ? this.folder.name[0] : null
     }
   }
 }
