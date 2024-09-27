@@ -226,7 +226,7 @@ export default {
     const getEditedElement = (component, directive) => computed({
       get () {
         let usedRule
-        const fallback = editorFriendlyFallbackStructure
+        const fallback = editorFriendlyFallbackStructure.value
         const real = allEditedRules
         const path = getPath(component, directive)
 
@@ -261,7 +261,7 @@ export default {
     const isTextColorPresent = isElementPresent('Text', 'color', '#000000')
     const isLinkColorPresent = isElementPresent('Link', 'color', '#000080')
     const isIconColorPresent = isElementPresent('Icon', 'color', '#909090')
-    const isShadowPresent = isElementPresent(null, 'shadow', [{ x: 0, y: 0, blur: 0, color: '#000000' }])
+    const isShadowPresent = isElementPresent(null, 'shadow', [])
 
     const updateSelectedComponent = () => {
       selectedVariant.value = 'normal'
