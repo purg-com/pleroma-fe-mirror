@@ -1,5 +1,5 @@
 import { ref, reactive, computed, watch } from 'vue'
-import { get } from 'lodash'
+import { get, set } from 'lodash'
 
 import Select from 'src/components/select/select.vue'
 import Checkbox from 'src/components/checkbox/checkbox.vue'
@@ -17,7 +17,12 @@ import { getCssRules } from 'src/services/theme_data/css_utils.js'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faFloppyDisk, faFolderOpen, faFile } from '@fortawesome/free-solid-svg-icons'
 
-const toValue = (x) => JSON.parse(JSON.stringify(x === undefined ? '"lol"' : x))
+// helper for debugging
+// eslint-disable-next-line no-unused-vars
+const toValue = (x) => JSON.parse(JSON.stringify(x === undefined ? 'null' : x))
+
+// helper to make states comparable
+const normalizeStates = (states) => ['normal', ...(states?.filter(x => x !== 'normal') || [])].join(':')
 
 library.add(
   faFile,
@@ -95,11 +100,8 @@ export default {
     const selectedComponentVariantsAll = computed(() => {
       return Object.keys({ normal: null, ...(selectedComponent.value.variants || {}) })
     })
-    // const selectedComponentVariants = computed(() => {
-    //   return selectedComponentVariantsAll.value.filter(x => x !== 'normal')
-    // })
 
-    const selectedStates = reactive(new Set())
+    const selectedState = reactive(new Set())
     const selectedComponentStatesAll = computed(() => {
       return Object.keys({ normal: null, ...(selectedComponent.value.states || {}) })
     })
@@ -137,8 +139,8 @@ export default {
       if (!!selectedComponent.value.variants?.normal || selectedVariant.value !== 'normal') {
         selectors.push(selectedComponent.value.variants[selectedVariant.value])
       }
-      if (selectedStates.size > 0) {
-        selectedStates.forEach(state => {
+      if (selectedState.size > 0) {
+        selectedState.forEach(state => {
           const original = selectedComponent.value.states[state]
           selectors.push(simulatePseudoSelectors(original))
         })
@@ -151,104 +153,119 @@ export default {
       return scoped.join('\n')
     })
 
-    // Rules stuff
-    const selectedComponentRulesList = reactive([])
-    const selectedComponentRulesObject = computed(() => {
-      const result = {}
-      selectedComponentRulesList.forEach(
-        (rule) => {
-          const component = rule.component
-          const { variant = 'normal', state = [] } = rule
-          result[component] = result[component] || {}
-          result[component][variant] = result[component][variant] || {}
-          result[component][variant][state.join(':')] = rule
-        }
-      )
-      return result
-    })
+    // Rules stuff aka meat and potatoes
+    const editorFriendlyFallbackStructure = computed(() => {
+      const root = {}
 
-    // Edited rule
-    const editedRuleFallback = computed(() => {
-      const component = selectedComponentName.value
-      const variant = selectedVariant.value
-      const states = ['normal', ...selectedStates.keys()].join(':')
-      return selectedComponentRulesObject.value[component]?.[variant]?.[states]
-    })
+      componentKeys.forEach((componentKey) => {
+        const componentValue = componentsMap.get(componentKey)
+        const { defaultRules } = componentValue
+        defaultRules.forEach((rule) => {
+          const { parent: rParent } = rule
+          const parent = rParent ?? rule
+          const hasChildren = !!rParent
+          const child = hasChildren ? rule : null
 
-    const editedSubrulesFallback = computed(() => {
-      const parentComponent = selectedComponentName.value
+          const {
+            component: pComponent,
+            variant: pVariant = 'normal',
+            state: pState = [] // no relation to Intel CPUs whatsoever
+          } = parent
 
-      const subrules = {}
-      selectedComponentRulesList.forEach(sr => {
-        console.log('SR', toValue(sr))
-        if (!sr.parent) return
-        if (sr.parent.component === parentComponent) {
-          const component = sr.component
-          const { variant = 'normal', state = [] } = sr
+          const pPath = `${pComponent}.${pVariant}.${normalizeStates(pState)}`
 
-          subrules[component] = {} || subrules[component]
-          subrules[component][variant] = {} || subrules[component][variant]
-          subrules[component][variant][state.join(':')] = sr
-        }
+          let output = get(root, pPath)
+          if (!output) {
+            set(root, pPath, {})
+            output = get(root, pPath)
+          }
+
+          if (hasChildren) {
+            output._children = output._children ?? {}
+            const {
+              component: cComponent,
+              variant: cVariant = 'normal',
+              state: cState = [],
+              directives
+            } = child
+
+            const cPath = `${cComponent}.${cVariant}.${normalizeStates(cState)}`
+            set(output._children, cPath, directives)
+          }
+        })
       })
 
-      return subrules
+      return root
     })
+
+    // All rules that are made by editor
+    const allEditedRules = reactive({})
 
     const componentHas = (subComponent) => {
       return !!selectedComponent.value.validInnerComponents?.find(x => x === subComponent)
     }
 
-    const editedTextColor = computed(() => get(
-      editedSubrulesFallback.value,
-      'Text.normal.normal.directives.textColor',
-      null
-    ))
-
-    const editedLinkColor = computed(() => get(
-      editedSubrulesFallback.value,
-      'Link.normal.normal.directives.linkColor',
-      null
-    ))
-
-    const editedIconColor = computed(() => get(
-      editedSubrulesFallback.value,
-      'Icon.normal.normal.directives.iconColor',
-      null
-    ))
-
-    const editedBackground = computed(() => get(
-      editedRuleFallback.value,
-      'directives.background',
-      null
-    ))
-
-    const editedOpacity = computed(() => get(
-      editedSubrulesFallback.value,
-      'Link.normal.normal.directives.linkColor',
-      null
-    ))
-
-    const editedShadow = computed(() => {
-      return editedRuleFallback.value?.directives.shadow
+    const getPath = (component, directive) => {
+      const pathSuffix = component ? `._children.${component}.normal.normal` : ''
+      const path = `${selectedComponentName.value}.${selectedVariant.value}.${normalizeStates([...selectedState])}${pathSuffix}.directives.${directive}`
+      return path
+    }
+    const isElementPresent = (component, directive, defaultValue = '') => computed({
+      get () {
+        return get(allEditedRules, getPath(component, directive)) != null
+      },
+      set (value) {
+        if (value) {
+          set(allEditedRules, getPath(component, directive), defaultValue)
+        } else {
+          set(allEditedRules, getPath(component, directive), null)
+        }
+      }
     })
+
+    const getEditedElement = (component, directive) => computed({
+      get () {
+        let usedRule
+        const fallback = editorFriendlyFallbackStructure
+        const real = allEditedRules
+        const path = getPath(component, directive)
+
+        usedRule = get(real, path) // get real
+        if (!usedRule) {
+          console.log('FALLBACK')
+          usedRule = get(fallback, path)
+        } else {
+          console.log('REAL')
+        }
+
+        console.log('GET', path, toValue(usedRule))
+
+        return usedRule
+      },
+      set (value) {
+        console.log(1, toValue(allEditedRules))
+        set(allEditedRules, getPath(component, directive))
+        console.log(2, toValue(allEditedRules))
+      }
+    })
+
+    const editedBackgroundColor = getEditedElement(null, 'background')
+    const editedOpacity = getEditedElement(null, 'opacity')
+    const editedTextColor = getEditedElement('Text', 'color')
+    const editedLinkColor = getEditedElement('Link', 'color')
+    const editedIconColor = getEditedElement('Icon', 'color')
+    const editedShadow = getEditedElement(null, 'shadow')
+
+    const isBackgroundColorPresent = isElementPresent(null, 'background', '#FFFFFF')
+    const isOpacityPresent = isElementPresent(null, 'opacity', 1)
+    const isTextColorPresent = isElementPresent('Text', 'color', '#000000')
+    const isLinkColorPresent = isElementPresent('Link', 'color', '#000080')
+    const isIconColorPresent = isElementPresent('Icon', 'color', '#909090')
+    const isShadowPresent = isElementPresent(null, 'shadow', [{ x: 0, y: 0, blur: 0, color: '#000000' }])
 
     const updateSelectedComponent = () => {
       selectedVariant.value = 'normal'
-      selectedStates.clear()
-
-      const processedRulesList = selectedComponent.value.defaultRules.map(r => {
-        const rule = {
-          component: selectedComponentName.value,
-          variant: 'normal',
-          ...r,
-          state: ['normal', ...(r.state || []).filter(x => x !== 'normal')]
-        }
-        return rule
-      })
-
-      selectedComponentRulesList.splice(0, selectedComponentRulesList.length)
-      selectedComponentRulesList.push(...processedRulesList)
+      selectedState.clear()
 
       previewRules.splice(0, previewRules.length)
       previewRules.push(...init({
@@ -289,24 +306,27 @@ export default {
       selectedComponentKey,
       selectedComponentVariantsAll,
       selectedComponentStates,
-      selectedComponentRulesObject,
       selectedVariant,
-      selectedStates,
+      selectedState,
       updateSelectedStates (state, v) {
         if (v) {
-          selectedStates.add(state)
+          selectedState.add(state)
         } else {
-          selectedStates.delete(state)
+          selectedState.delete(state)
         }
       },
-      editedRuleFallback,
-      editedSubrulesFallback,
-      editedBackground,
+      editedBackgroundColor,
       editedOpacity,
       editedTextColor,
       editedLinkColor,
       editedIconColor,
       editedShadow,
+      isBackgroundColorPresent,
+      isOpacityPresent,
+      isTextColorPresent,
+      isLinkColorPresent,
+      isIconColorPresent,
+      isShadowPresent,
       previewCss,
       previewClass,
       editorHintStyle,

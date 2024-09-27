@@ -100,7 +100,7 @@
           class="state-selector-list"
           >
           <li
-            v-for="state in selectedComponentStates"
+            v-for="state in selectedStates"
             :key="'component-variant-' + state"
             >
             <Checkbox
@@ -139,13 +139,13 @@
           key="main"
         >
           <ColorInput
-            v-model="editedBackground"
-            :disabled="!editedBackgroundPresent"
+            v-model="editedBackgroundColor"
+            :disabled="!isBackgroundColorPresent"
             :label="$t('settings.style.themes3.editor.background')"
           />
           <Popover trigger="hover">
             <template #trigger>
-              <Checkbox v-model="editedBackgroundPresent" />
+              <Checkbox v-model="isBackgroundColorPresent" />
             </template>
             <template #content>
               {{ $t('settings.style.themes3.editor.include_in_rule') }}
@@ -153,12 +153,12 @@
           </Popover>
           <OpacityInput
             v-model="editedOpacity"
-            :disabled="!editedOpacityPresent"
+            :disabled="!isOpacityPresent"
            :label="$t('settings.style.themes3.editor.opacity')"
           />
           <Popover trigger="hover">
             <template #trigger>
-              <Checkbox v-model="editedOpacityPresent" />
+              <Checkbox v-model="isOpacityPresent" />
             </template>
             <template #content>
               {{ $t('settings.style.themes3.editor.include_in_rule') }}
@@ -167,7 +167,7 @@
           <ColorInput
             v-model="editedTextColor"
             :label="$t('settings.style.themes3.editor.text_color')"
-            :disabled="!editedTextPresent"
+            :disabled="!isTextColorPresent"
             v-if="componentHas('Text')"
           />
           <Popover
@@ -175,7 +175,7 @@
             v-if="componentHas('Text')"
           >
             <template #trigger>
-              <Checkbox v-model="editedTextPresent" />
+              <Checkbox v-model="isTextColorPresent" />
             </template>
             <template #content>
               {{ $t('settings.style.themes3.editor.include_in_rule') }}
@@ -184,7 +184,7 @@
           <ColorInput
             v-model="editedLinkColor"
             :label="$t('settings.style.themes3.editor.link_color')"
-            :disabled="!editedLinkPresent"
+            :disabled="!isLinkColorPresent"
             v-if="componentHas('Link')"
           />
           <Popover
@@ -192,7 +192,7 @@
             v-if="componentHas('Link')"
           >
             <template #trigger>
-              <Checkbox v-model="editedLinkPresent" />
+              <Checkbox v-model="isLinkColorPresent" />
             </template>
             <template #content>
               {{ $t('settings.style.themes3.editor.include_in_rule') }}
@@ -201,7 +201,7 @@
           <ColorInput
             v-model="editedIconColor"
             :label="$t('settings.style.themes3.editor.icon_color')"
-            :disabled="!editedOpacityPresent"
+            :disabled="!isIconColorPresent"
             v-if="componentHas('Icon')"
           />
           <Popover
@@ -209,7 +209,7 @@
             v-if="componentHas('Icon')"
           >
             <template #trigger>
-              <Checkbox v-model="editedIconPresent" />
+              <Checkbox v-model="isIconColorPresent" />
             </template>
             <template #content>
               {{ $t('settings.style.themes3.editor.include_in_rule') }}
@@ -223,15 +223,15 @@
         >
           <Checkbox
             class="style-control"
-            v-model="editedOpacityPresent"
+            v-model="isShadowPresent"
           >
             {{ $t('settings.style.themes3.editor.include_in_rule') }}
           </checkbox>
           <ShadowControl
             v-model="editedShadow"
+            :disabled="isShadowPresent"
             :no-preview="true"
             :separate-inset="shadowSelected === 'avatar' || shadowSelected === 'avatarStatus'"
-            :fallback="currentShadowFallback"
           />
         </div>
       </tab-switcher>
