@@ -1,5 +1,8 @@
 <template>
-<div class="ComponentPreview">
+<div
+  class="ComponentPreview"
+  :class="{ '-shadow-controls': shadowControl }"
+>
   <label
     class="header"
     v-show="shadowControl"
@@ -29,7 +32,7 @@
   >
   <div
     class="preview-window"
-    :class="{ disabled: disabled && shadowControl, '-light-grid': lightGrid }"
+    :class="{ '-light-grid': lightGrid }"
   >
     <div
       class="preview-block"
