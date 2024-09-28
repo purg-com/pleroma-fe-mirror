@@ -172,7 +172,7 @@ export default {
             state: pState = [] // no relation to Intel CPUs whatsoever
           } = parent
 
-          const pPath = `${pComponent}.${pVariant}.${normalizeStates(pState)}`
+          const pPath = `${hasChildren ? pComponent : componentValue.name}.${pVariant}.${normalizeStates(pState)}`
 
           let output = get(root, pPath)
           if (!output) {
@@ -191,6 +191,8 @@ export default {
 
             const cPath = `${cComponent}.${cVariant}.${normalizeStates(cState)}`
             set(output._children, cPath, directives)
+          } else {
+            output.directives = parent.directives
           }
         })
       })
@@ -210,13 +212,18 @@ export default {
       const path = `${selectedComponentName.value}.${selectedVariant.value}.${normalizeStates([...selectedState])}${pathSuffix}.directives.${directive}`
       return path
     }
+
     const isElementPresent = (component, directive, defaultValue = '') => computed({
       get () {
         return get(allEditedRules, getPath(component, directive)) != null
       },
       set (value) {
         if (value) {
-          set(allEditedRules, getPath(component, directive), defaultValue)
+          const fallback = get(
+            editorFriendlyFallbackStructure.value,
+            getPath(component, directive)
+          )
+          set(allEditedRules, getPath(component, directive), fallback ?? defaultValue)
         } else {
           set(allEditedRules, getPath(component, directive), null)
         }
@@ -232,20 +239,13 @@ export default {
 
         usedRule = get(real, path) // get real
         if (!usedRule) {
-          console.log('FALLBACK')
           usedRule = get(fallback, path)
-        } else {
-          console.log('REAL')
         }
-
-        console.log('GET', path, toValue(usedRule))
 
         return usedRule
       },
       set (value) {
-        console.log(1, toValue(allEditedRules))
-        set(allEditedRules, getPath(component, directive))
-        console.log(2, toValue(allEditedRules))
+        set(allEditedRules, getPath(component, directive), value)
       }
     })
 
