@@ -34,7 +34,7 @@ const toModel = (object = {}) => ({
 
 export default {
   props: [
-    'modelValue', 'fallback', 'separateInset', 'noPreview'
+    'modelValue', 'fallback', 'separateInset', 'noPreview', 'disabled'
   ],
   emits: ['update:modelValue'],
   data () {
