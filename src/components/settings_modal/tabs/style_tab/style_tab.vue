@@ -121,10 +121,12 @@
         <!-- eslint-enable vue/no-v-html vue/no-v-text-v-html-on-component -->
         <ComponentPreview
           class="component-preview"
-          showText="componentHas('Text')"
-          :shadowControl="isShadowTabOpen && editedShadow"
+          :showText="componentHas('Text')"
+          :shadowControl="isShadowTabOpen"
+          :shadow="editedShadow"
           :previewClass="previewClass"
           :previewStyle="editorHintStyle"
+          :disabled="!isShadowPresent"
           @update:shadow="({ axis, value }) => updateProperty(axis, value)"
         />
       </div>
@@ -229,7 +231,7 @@
           </checkbox>
           <ShadowControl
             v-model="editedShadow"
-            :disabled="isShadowPresent"
+            :disabled="!isShadowPresent"
             :no-preview="true"
             :separate-inset="shadowSelected === 'avatar' || shadowSelected === 'avatarStatus'"
           />
