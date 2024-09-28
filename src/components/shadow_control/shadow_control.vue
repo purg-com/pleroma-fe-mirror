@@ -1,7 +1,7 @@
 <template>
   <div
     class="label shadow-control"
-    :class="{ disabled: !present, '-no-preview': noPreview }"
+    :class="{ disabled: disabled || !present, '-no-preview': noPreview }"
   >
     <ComponentPreview
       v-if="!noPreview"
@@ -9,7 +9,7 @@
       :shadow-control="true"
       :shadow="selected"
       :preview-style="style"
-      :disabled="!present"
+      :disabled="disabled || !present"
       @update:shadow="({ axis, value }) => updateProperty(axis, value)"
     />
     <div class="shadow-switcher">
@@ -34,7 +34,7 @@
       >
         <button
           class="btn button-default"
-          :disabled="shadowsAreNull"
+          :disabled="disabled || shadowsAreNull"
           @click="add"
         >
           <FAIcon
@@ -44,8 +44,8 @@
         </button>
         <button
           class="btn button-default"
-          :disabled="!moveUpValid"
-          :class="{ disabled: !moveUpValid }"
+          :disabled="disabled || !moveUpValid"
+          :class="{ disabled: disabled || !moveUpValid }"
           @click="moveUp"
         >
           <FAIcon
@@ -55,8 +55,8 @@
         </button>
         <button
           class="btn button-default"
-          :disabled="!moveDnValid"
-          :class="{ disabled: !moveDnValid }"
+          :disabled="disabled || !moveDnValid"
+          :class="{ disabled: disabled || !moveDnValid }"
           @click="moveDn"
         >
           <FAIcon
@@ -66,8 +66,8 @@
         </button>
         <button
           class="btn button-default"
-          :disabled="!present"
-          :class="{ disabled: !present }"
+          :disabled="disabled || !present"
+          :class="{ disabled: disabled || !present }"
           @click="del"
         >
           <FAIcon
@@ -79,34 +79,34 @@
     </div>
     <div class="shadow-tweak">
       <div
-        :class="{ disabled: !present }"
+        :class="{ disabled: disabled || !present }"
         class="name-control style-control"
       >
         <label
           for="name"
           class="label"
-          :class="{ faint: !present }"
+          :class="{ faint: disabled || !present }"
         >
           {{ $t('settings.style.shadows.name') }}
         </label>
         <input
           id="name"
           :value="selected?.name"
-          :disabled="!present"
-          :class="{ disabled: !present }"
+          :disabled="disabled || !present"
+          :class="{ disabled: disabled || !present }"
           name="name"
           class="input input-string"
           @input="e => updateProperty('name', e.target.value)"
         >
       </div>
       <div
-        :disabled="!present"
+        :disabled="disabled || !present"
         class="inset-control style-control"
       >
         <Checkbox
           id="inset"
           :value="selected?.inset"
-          :disabled="!present"
+          :disabled="disabled || !present"
           name="inset"
           class="input-inset input-boolean"
           @input="e => updateProperty('inset', e.target.checked)"
@@ -117,22 +117,22 @@
         </Checkbox>
       </div>
       <div
-        :disabled="!present"
-        :class="{ disabled: !present }"
+        :disabled="disabled || !present"
+        :class="{ disabled: disabled || !present }"
         class="blur-control style-control"
       >
         <label
           for="blur"
           class="label"
-          :class="{ faint: !present }"
+          :class="{ faint: disabled || !present }"
         >
           {{ $t('settings.style.shadows.blur') }}
         </label>
         <input
           id="blur"
           :value="selected?.blur"
-          :disabled="!present"
-          :class="{ disabled: !present }"
+          :disabled="disabled || !present"
+          :class="{ disabled: disabled || !present }"
           name="blur"
           class="input input-range"
           type="range"
@@ -142,9 +142,9 @@
         >
         <input
           :value="selected?.blur"
-          :disabled="!present"
-          :class="{ disabled: !present }"
-          class="input input-number"
+          class="input input-number -small"
+          :disabled="disabled || !present"
+          :class="{ disabled: disabled || !present }"
           type="number"
           min="0"
           @input="e => updateProperty('blur', e.target.value)"
@@ -152,22 +152,22 @@
       </div>
       <div
         class="spread-control style-control"
-        :class="{ disabled: !present || (separateInset && !selected?.inset) }"
+        :class="{ disabled: disabled || !present || (separateInset && !selected?.inset) }"
       >
         <label
           for="spread"
           class="label"
-          :class="{ faint: !present || (separateInset && !selected?.inset) }"
+          :class="{ faint: disabled || !present || (separateInset && !selected?.inset) }"
         >
           {{ $t('settings.style.shadows.spread') }}
         </label>
         <input
           id="spread"
           :value="selected?.spread"
-          :disabled="!present || (separateInset && !selected?.inset)"
-          :class="{ disabled: !present || (separateInset && !selected?.inset) }"
+          :disabled="disabled || !present || (separateInset && !selected?.inset)"
+          :class="{ disabled: disabled || !present || (separateInset && !selected?.inset) }"
           name="spread"
-          class="input input-range"
+          class="input input-number -small"
           type="range"
           max="20"
           min="-20"
@@ -175,16 +175,16 @@
         >
         <input
           :value="selected?.spread"
-          :disabled="{ disabled: !present || (separateInset && !selected?.inset) }"
-          :class="{ disabled: !present || (separateInset && !selected?.inset) }"
-          class="input input-number"
+          class="input input-number -small"
+          :class="{ disabled: disabled || !present || (separateInset && !selected?.inset) }"
+          :disabled="{ disabled: disabled || !present || (separateInset && !selected?.inset) }"
           type="number"
           @input="e => updateProperty('spread', e.target.value)"
         >
       </div>
       <ColorInput
         :model-value="selected?.color"
-        :disabled="!present"
+        :disabled="disabled || !present"
         :label="$t('settings.style.common.color')"
         :fallback="currentFallback?.color"
         :show-optional-tickbox="false"
@@ -193,13 +193,13 @@
       />
       <OpacityInput
         :model-value="selected?.alpha"
-        :disabled="!present"
+        :disabled="disabled || !present"
         @update:modelValue="e => updateProperty('alpha', e)"
       />
       <i18n-t
         scope="global"
         keypath="settings.style.shadows.hintV3"
-        :class="{ faint: !present }"
+        :class="{ faint: disabled || !present }"
         tag="p"
       >
         <code>--variable,mod</code>
