@@ -167,7 +167,7 @@
           :disabled="disabled || !present || (separateInset && !selected?.inset)"
           :class="{ disabled: disabled || !present || (separateInset && !selected?.inset) }"
           name="spread"
-          class="input input-number -small"
+          class="input input-range"
           type="range"
           max="20"
           min="-20"
