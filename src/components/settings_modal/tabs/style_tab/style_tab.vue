@@ -123,11 +123,11 @@
           class="component-preview"
           :showText="componentHas('Text')"
           :shadowControl="isShadowTabOpen"
-          :shadow="editedShadow"
           :previewClass="previewClass"
           :previewStyle="editorHintStyle"
-          :disabled="!isShadowPresent"
-          @update:shadow="({ axis, value }) => updateProperty(axis, value)"
+          :disabled="!editedSubShadow"
+          :shadow="editedSubShadow"
+          @update:shadow="({ axis, value }) => updateSubShadow(axis, value)"
         />
       </div>
       <tab-switcher
@@ -156,7 +156,7 @@
           <OpacityInput
             v-model="editedOpacity"
             :disabled="!isOpacityPresent"
-           :label="$t('settings.style.themes3.editor.opacity')"
+            :label="$t('settings.style.themes3.editor.opacity')"
           />
           <Popover trigger="hover">
             <template #trigger>
@@ -187,7 +187,7 @@
             <label
               for="textAuto"
               class="label"
-              :class="{ faint: disabled || !present }"
+              :class="{ faint: !isTextAutoPresent }"
             >
               {{ $t('settings.style.themes3.editor.text_auto.label') }}
             </label>
@@ -275,6 +275,7 @@
             :disabled="!isShadowPresent"
             :no-preview="true"
             :separate-inset="shadowSelected === 'avatar' || shadowSelected === 'avatarStatus'"
+            @subShadowSelected="onSubShadow"
           />
         </div>
       </tab-switcher>

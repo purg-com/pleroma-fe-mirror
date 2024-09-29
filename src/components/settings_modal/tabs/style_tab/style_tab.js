@@ -259,6 +259,7 @@ export default {
       }
     })
 
+    // All the editable stuff for the component
     const editedBackgroundColor = getEditedElement(null, 'background')
     const editedOpacity = getEditedElement(null, 'opacity')
     const editedTextColor = getEditedElement('Text', 'textColor')
@@ -266,6 +267,34 @@ export default {
     const editedLinkColor = getEditedElement('Link', 'textColor')
     const editedIconColor = getEditedElement('Icon', 'textColor')
     const editedShadow = getEditedElement(null, 'shadow')
+
+    // Shadow is partially edited outside the ShadowControl
+    // for better space utilization
+    const editedSubShadowId = ref(null)
+    const editedSubShadow = computed(() => {
+      if (editedShadow.value == null || editedSubShadowId.value == null) return null
+      return editedShadow.value[editedSubShadowId.value]
+    })
+
+    const updateSubShadow = (axis, value) => {
+      if (!editedSubShadow.value || editedSubShadowId.value == null) return
+      const newEditedShadow = [...editedShadow.value]
+
+      newEditedShadow[editedSubShadowId.value] = {
+        ...newEditedShadow[editedSubShadowId.value],
+        [axis]: value
+      }
+
+      editedShadow.value = newEditedShadow
+    }
+
+    const onSubShadow = (id) => {
+      if (id != null) {
+        editedSubShadowId.value = id
+      } else {
+        editedSubShadow.value = null
+      }
+    }
 
     const isBackgroundColorPresent = isElementPresent(null, 'background', '#FFFFFF')
     const isOpacityPresent = isElementPresent(null, 'opacity', 1)
@@ -293,7 +322,6 @@ export default {
               directives: stateData.directives || {}
             }
 
-            console.log('PARENT', parent)
             if (parent) {
               result.parent = {
                 component: parent
@@ -311,8 +339,6 @@ export default {
       }
 
       convert(selectedComponentName.value, allEditedRules[selectedComponentName.value])
-      console.log(toValue(allEditedRules))
-      console.log(toValue(resultRules))
 
       return resultRules
     })
@@ -351,13 +377,13 @@ export default {
     // TODO this is VERY primitive right now, need to make it
     // support variables, fallbacks etc.
     const getContrast = (bg, text) => {
-      console.log('CONTRAST', bg, text)
       try {
         const bgRgb = hex2rgb(bg)
         const textRgb = hex2rgb(text)
 
         const ratio = getContrastRatio(bgRgb, textRgb)
         return {
+          // TODO this ideally should be part of <ContractRatio />
           ratio,
           text: ratio.toPrecision(3) + ':1',
           // AA level, AAA level
@@ -406,6 +432,9 @@ export default {
       editedLinkColor,
       editedIconColor,
       editedShadow,
+      editedSubShadow,
+      onSubShadow,
+      updateSubShadow,
       getContrast,
       isBackgroundColorPresent,
       isOpacityPresent,

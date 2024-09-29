@@ -84,6 +84,9 @@ export const getCssRules = (rules, debug) => rules.map(rule => {
         ].join(';\n  ')
       }
       case 'shadow': {
+        if (!rule.dynamicVars.shadow) {
+          return ''
+        }
         return '  ' + [
           '--shadow: ' + getCssShadow(rule.dynamicVars.shadow),
           '--shadowFilter: ' + getCssShadowFilter(rule.dynamicVars.shadow),
