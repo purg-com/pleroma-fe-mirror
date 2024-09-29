@@ -772,6 +772,12 @@
           "icon_color": "Icon color",
           "link_color": "Link color",
           "include_in_rule": "Add to rule",
+          "text_auto": {
+            "label": "Auto-contrast",
+            "no-preserve": "Black or White",
+            "preserve": "Keep color",
+            "no-auto": "Disabled"
+          },
           "components": {
             "normal": {
               "state": "Normal",

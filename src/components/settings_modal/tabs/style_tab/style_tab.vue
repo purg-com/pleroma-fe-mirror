@@ -183,6 +183,47 @@
               {{ $t('settings.style.themes3.editor.include_in_rule') }}
             </template>
           </Popover>
+          <div class="style-control suboption">
+            <label
+              for="textAuto"
+              class="label"
+              :class="{ faint: disabled || !present }"
+            >
+              {{ $t('settings.style.themes3.editor.text_auto.label') }}
+            </label>
+            <Select
+              id="textAuto"
+              v-model="editedTextAuto"
+              :disabled="!isTextAutoPresent"
+            >
+              <option value="no-preserve">
+                {{ $t('settings.style.themes3.editor.text_auto.no-preserve') }}
+              </option>
+              <option value="no-auto">
+                {{ $t('settings.style.themes3.editor.text_auto.no-auto') }}
+              </option>
+              <option value="preserve">
+                {{ $t('settings.style.themes3.editor.text_auto.preserve') }}
+              </option>
+            </Select>
+          </div>
+          <Popover
+            trigger="hover"
+            v-if="componentHas('Text')"
+          >
+            <template #trigger>
+              <Checkbox v-model="isTextAutoPresent" />
+            </template>
+            <template #content>
+              {{ $t('settings.style.themes3.editor.include_in_rule') }}
+            </template>
+          </Popover>
+          <div>
+            <ContrastRatio :contrast="getContrast(editedBackgroundColor, editedTextColor)" />
+          </div>
+          <div>
+            <!-- spacer for missing checkbox -->
+          </div>
           <ColorInput
             v-model="editedLinkColor"
             :label="$t('settings.style.themes3.editor.link_color')"

@@ -10,9 +10,15 @@ import ColorInput from 'src/components/color_input/color_input.vue'
 import OpacityInput from 'src/components/opacity_input/opacity_input.vue'
 import TabSwitcher from 'src/components/tab_switcher/tab_switcher.jsx'
 import Popover from 'src/components/popover/popover.vue'
+import ContrastRatio from 'src/components/contrast_ratio/contrast_ratio.vue'
 
 import { init } from 'src/services/theme_data/theme_data_3.service.js'
 import { getCssRules } from 'src/services/theme_data/css_utils.js'
+import {
+  // rgb2hex,
+  hex2rgb,
+  getContrastRatio
+} from 'src/services/color_convert/color_convert.js'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faFloppyDisk, faFolderOpen, faFile } from '@fortawesome/free-solid-svg-icons'
@@ -40,7 +46,8 @@ export default {
     TabSwitcher,
     ShadowControl,
     ColorInput,
-    OpacityInput
+    OpacityInput,
+    ContrastRatio
   },
   setup () {
     // Meta stuff
@@ -153,7 +160,10 @@ export default {
       return scoped.join('\n')
     })
 
-    // Rules stuff aka meat and potatoes
+    // ### Rules stuff aka meat and potatoes
+    // The native structure of separate rules and the child -> parent
+    // relation isn't very convenient for editor, we replace the array
+    // and child -> parent structure with map and parent -> child structure
     const editorFriendlyFallbackStructure = computed(() => {
       const root = {}
 
@@ -251,27 +261,66 @@ export default {
 
     const editedBackgroundColor = getEditedElement(null, 'background')
     const editedOpacity = getEditedElement(null, 'opacity')
-    const editedTextColor = getEditedElement('Text', 'color')
-    const editedLinkColor = getEditedElement('Link', 'color')
-    const editedIconColor = getEditedElement('Icon', 'color')
+    const editedTextColor = getEditedElement('Text', 'textColor')
+    const editedTextAuto = getEditedElement('Text', 'textAuto')
+    const editedLinkColor = getEditedElement('Link', 'textColor')
+    const editedIconColor = getEditedElement('Icon', 'textColor')
     const editedShadow = getEditedElement(null, 'shadow')
 
     const isBackgroundColorPresent = isElementPresent(null, 'background', '#FFFFFF')
     const isOpacityPresent = isElementPresent(null, 'opacity', 1)
-    const isTextColorPresent = isElementPresent('Text', 'color', '#000000')
-    const isLinkColorPresent = isElementPresent('Link', 'color', '#000080')
-    const isIconColorPresent = isElementPresent('Icon', 'color', '#909090')
+    const isTextColorPresent = isElementPresent('Text', 'textColor', '#000000')
+    const isTextAutoPresent = isElementPresent('Text', 'textAuto', '#000000')
+    const isLinkColorPresent = isElementPresent('Link', 'textColor', '#000080')
+    const isIconColorPresent = isElementPresent('Icon', 'textColor', '#909090')
     const isShadowPresent = isElementPresent(null, 'shadow', [])
 
-    const updateSelectedComponent = () => {
-      selectedVariant.value = 'normal'
-      selectedState.clear()
+    const editorFriendlyToOriginal = computed(() => {
+      const resultRules = []
 
+      const convert = (component, data = {}, parent) => {
+        const variants = Object.entries(data || {})
+
+        variants.forEach(([variant, variantData]) => {
+          const states = Object.entries(variantData)
+
+          states.forEach(([jointState, stateData]) => {
+            const state = jointState.split(/:/g)
+            const result = {
+              component,
+              variant,
+              state,
+              directives: stateData.directives || {}
+            }
+
+            console.log('PARENT', parent)
+            if (parent) {
+              result.parent = {
+                component: parent
+              }
+            }
+
+            resultRules.push(result)
+
+            // Currently we only support single depth for simplicity's sake
+            if (!parent) {
+              Object.entries(stateData._children || {}).forEach(([cName, child]) => convert(cName, child, component))
+            }
+          })
+        })
+      }
+
+      convert(selectedComponentName.value, allEditedRules[selectedComponentName.value])
+      console.log(toValue(allEditedRules))
+      console.log(toValue(resultRules))
+
+      return resultRules
+    })
+
+    const updatePreview = () => {
       previewRules.splice(0, previewRules.length)
       previewRules.push(...init({
-        inputRuleset: [{
-          component: selectedComponentName.value
-        }],
+        inputRuleset: editorFriendlyToOriginal.value,
         initialStaticVars: {
           ...palette
         },
@@ -282,12 +331,47 @@ export default {
       }).eager)
     }
 
+    const updateSelectedComponent = () => {
+      selectedVariant.value = 'normal'
+      selectedState.clear()
+      updatePreview()
+    }
     updateSelectedComponent()
+
+    watch(
+      allEditedRules,
+      updatePreview
+    )
 
     watch(
       selectedComponentName,
       updateSelectedComponent
     )
+
+    // TODO this is VERY primitive right now, need to make it
+    // support variables, fallbacks etc.
+    const getContrast = (bg, text) => {
+      console.log('CONTRAST', bg, text)
+      try {
+        const bgRgb = hex2rgb(bg)
+        const textRgb = hex2rgb(text)
+
+        const ratio = getContrastRatio(bgRgb, textRgb)
+        return {
+          ratio,
+          text: ratio.toPrecision(3) + ':1',
+          // AA level, AAA level
+          aa: ratio >= 4.5,
+          aaa: ratio >= 7,
+          // same but for 18pt+ texts
+          laa: ratio >= 3,
+          laaa: ratio >= 4.5
+        }
+      } catch (e) {
+        console.warn('Failure computing contrast', e)
+        return { error: e }
+      }
+    }
 
     const isShadowTabOpen = ref(false)
     const onTabSwitch = (tab) => {
@@ -318,12 +402,15 @@ export default {
       editedBackgroundColor,
       editedOpacity,
       editedTextColor,
+      editedTextAuto,
       editedLinkColor,
       editedIconColor,
       editedShadow,
+      getContrast,
       isBackgroundColorPresent,
       isOpacityPresent,
       isTextColorPresent,
+      isTextAutoPresent,
       isLinkColorPresent,
       isIconColorPresent,
       isShadowPresent,
