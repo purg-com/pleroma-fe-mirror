@@ -61,12 +61,13 @@ label.Select {
   &:disabled {
     background-color: var(--background);
     opacity: 1; /* override browser */
+    color: var(--faint);
 
     select {
       &[multiple],
       &[size] {
         option.-active {
-          color: var(--text);
+          color: var(--faint);
           background: transparent;
         }
       }

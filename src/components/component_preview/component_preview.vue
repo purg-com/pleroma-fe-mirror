@@ -168,6 +168,7 @@
     }
 
     .preview-block {
+      background: var(--background, var(--bg));
       display: flex;
       justify-content: center;
       align-items: center;
@@ -178,6 +179,8 @@
       border-width: 0;
       border-style: solid;
       border-color: var(--border);
+      border-radius: var(--roundness);
+      box-shadow: var(--shadow);
     }
   }
 }
