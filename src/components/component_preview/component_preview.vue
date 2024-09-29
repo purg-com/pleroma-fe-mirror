@@ -166,7 +166,7 @@
     }
 
     .preview-block {
-      background: var(--background);
+      background: var(--background, var(--bg));
       display: flex;
       justify-content: center;
       align-items: center;
