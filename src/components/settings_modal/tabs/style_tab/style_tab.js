@@ -56,21 +56,45 @@ export default {
     const license = ref('')
     const website = ref('')
 
-    // ### Initialization stuff
-    const palette = {
-      // These are here just to establish order,
-      // themes should override those
-      bg: '#121a24',
-      fg: '#182230',
-      text: '#b9b9ba',
-      link: '#d8a070',
-      accent: '#d8a070',
-      cRed: '#FF0000',
-      cBlue: '#0095ff',
-      cGreen: '#0fa00f',
-      cOrange: '#ffa500'
-    }
+    // ### Palette stuff
+    const palettes = reactive({
+      light: {
+        bg: '#f2f6f9',
+        fg: '#d6dfed',
+        text: '#304055',
+        underlay: '#5d6086',
+        accent: '#f55b1b',
+        cBlue: '#0095ff',
+        cRed: '#d31014',
+        cGreen: '#0fa00f',
+        cOrange: '#ffa500',
+        border: '#d8e6f9'
+      },
+      dark: {
+        bg: '#121a24',
+        fg: '#182230',
+        text: '#b9b9ba',
+        link: '#d8a070',
+        accent: '#d8a070',
+        cRed: '#FF0000',
+        cBlue: '#0095ff',
+        cGreen: '#0fa00f',
+        cOrange: '#ffa500'
+      }
+    })
 
+    const editedPalette = ref('dark')
+    const palette = computed({
+      get () {
+        return palettes[editedPalette.value]
+      },
+      set (newPalette) {
+        console.log(newPalette)
+        palettes[editedPalette.value] = newPalette
+      }
+    })
+
+    // ### I18n stuff
     // The paths in i18n are getting ridicously long, this effectively shortens them
     const getI18nPath = (componentName) => `settings.style.themes3.editor.components.${componentName}`
     const getFriendlyNamePath = (componentName) => getI18nPath(componentName) + '.friendlyName'
@@ -85,6 +109,7 @@ export default {
         : `${getI18nPath(componentName)}.states.${state}`
     }
 
+    // ### Initialization stuff
     // Getting existing components
     const componentsContext = require.context('src', true, /\.style.js(on)?$/)
     const componentKeysAll = componentsContext.keys()
@@ -356,7 +381,7 @@ export default {
       previewRules.push(...init({
         inputRuleset: editorFriendlyToOriginal.value,
         initialStaticVars: {
-          ...palette
+          ...palette.value
         },
         ultimateBackgroundColor: '#000000',
         rootComponentName: selectedComponentName.value,
@@ -374,6 +399,16 @@ export default {
 
     watch(
       allEditedRules,
+      updatePreview
+    )
+
+    watch(
+      palettes,
+      updatePreview
+    )
+
+    watch(
+      editedPalette,
       updatePreview
     )
 
@@ -417,6 +452,8 @@ export default {
       author,
       license,
       website,
+      palette,
+      editedPalette,
       componentKeys,
       componentsMap,
       selectedComponent,

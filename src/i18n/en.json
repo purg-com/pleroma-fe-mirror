@@ -778,6 +778,23 @@
             "preserve": "Keep color",
             "no-auto": "Disabled"
           },
+          "palette": {
+            "label": "Edited palette",
+            "dark": "Dark mode",
+            "light": "Light mode",
+            "bg": "Panel background",
+            "fg": "Buttons etc.",
+            "text": "Text",
+            "link": "Links",
+            "accent": "Accent color",
+            "cRed": "Red color",
+            "cBlue": "Blue color",
+            "cGreen": "Green color",
+            "cOrange": "Orange color",
+            "extra1": "Extra 1",
+            "extra2": "Extra 2",
+            "extra3": "Extra 3"
+          },
           "components": {
             "normal": {
               "state": "Normal",

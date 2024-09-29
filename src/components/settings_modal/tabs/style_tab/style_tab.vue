@@ -51,6 +51,80 @@
         </li>
       </ul>
     </div>
+    <div class="setting-item palette-editor">
+      <div class="label">
+        <label for="palette-selector">
+          {{ $t('settings.style.themes3.editor.palette.label') }}
+          {{ ' ' }}
+        </label>
+        <Select
+          v-model="editedPalette"
+          id="palette-selector"
+        >
+          <option key="dark" value="dark">
+            {{ $t('settings.style.themes3.editor.palette.dark') }}
+          </option>
+          <option key="light" value="light">
+            {{ $t('settings.style.themes3.editor.palette.light') }}
+          </option>
+        </Select>
+      </div>
+      <div class="colors">
+        <ColorInput
+          v-model="palette.bg"
+          :label="$t('settings.style.themes3.editor.palette.bg')"
+        />
+        <ColorInput
+          v-model="palette.fg"
+          :label="$t('settings.style.themes3.editor.palette.fg')"
+        />
+        <ColorInput
+          v-model="palette.text"
+          :label="$t('settings.style.themes3.editor.palette.text')"
+        />
+        <ColorInput
+          v-model="palette.link"
+          :label="$t('settings.style.themes3.editor.palette.link')"
+          :fallback="palette.accent"
+        />
+        <ColorInput
+          v-model="palette.accent"
+          :label="$t('settings.style.themes3.editor.palette.accent')"
+          :fallback="palette.link"
+        />
+        <ColorInput
+          v-model="palette.cRed"
+          :label="$t('settings.style.themes3.editor.palette.cRed')"
+        />
+        <ColorInput
+          v-model="palette.cBlue"
+          :label="$t('settings.style.themes3.editor.palette.cBlue')"
+        />
+        <ColorInput
+          v-model="palette.cGreen"
+          :label="$t('settings.style.themes3.editor.palette.cGreen')"
+        />
+        <ColorInput
+          v-model="palette.cOrange"
+          :label="$t('settings.style.themes3.editor.palette.cOrange')"
+        />
+        <ColorInput
+          v-model="palette.extra1"
+          fallback="#000000"
+          :label="$t('settings.style.themes3.editor.palette.extra1')"
+        />
+        <ColorInput
+          v-model="palette.extra2"
+          fallback="#000000"
+          :label="$t('settings.style.themes3.editor.palette.extra2')"
+        />
+        <ColorInput
+          v-model="palette.extra3"
+          fallback="#000000"
+          :label="$t('settings.style.themes3.editor.palette.extra3')"
+        />
+      </div>
+    </div>
     <div class="setting-item component-editor">
       <div class="component-selector">
         <label for="component-selector">

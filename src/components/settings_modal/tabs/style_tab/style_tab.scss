@@ -9,14 +9,11 @@
       margin-right: 0.5em;
       flex: 1 1 0;
       line-height: 2;
+      min-height: 2em;
     }
 
     &.suboption {
       margin-left: 1em;
-    }
-
-    .opt {
-      margin: 0.5em;
     }
 
     .color-input {
@@ -87,6 +84,21 @@
       li {
         text-align: right;
       }
+    }
+  }
+
+  .palette-editor {
+    > label:not(.Select) {
+      font-weight: bold;
+      justify-self: right;
+    }
+
+    .colors {
+      display: grid;
+      justify-content: space-around;
+      grid-template-columns: repeat(4, min-content);
+      grid-template-rows: repeat(auto-fit, min-content);
+      grid-gap: 0.5em;
     }
   }
 
