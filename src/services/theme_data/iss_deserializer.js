@@ -136,7 +136,7 @@ export const deserialize = (input) => {
 
       output.directives = Object.fromEntries(content.map(d => {
         const [property, value] = d.split(':')
-        let realValue = value.trim()
+        let realValue = (value || '').trim()
         if (property === 'shadow') {
           if (realValue === 'none') {
             realValue = []

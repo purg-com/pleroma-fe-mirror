@@ -7,6 +7,7 @@ import ComponentPreview from 'src/components/component_preview/component_preview
 import StringSetting from '../../helpers/string_setting.vue'
 import ShadowControl from 'src/components/shadow_control/shadow_control.vue'
 import ColorInput from 'src/components/color_input/color_input.vue'
+import PaletteEditor from 'src/components/palette_editor/palette_editor.vue'
 import OpacityInput from 'src/components/opacity_input/opacity_input.vue'
 import TabSwitcher from 'src/components/tab_switcher/tab_switcher.jsx'
 import Popover from 'src/components/popover/popover.vue'
@@ -14,6 +15,8 @@ import ContrastRatio from 'src/components/contrast_ratio/contrast_ratio.vue'
 
 import { init } from 'src/services/theme_data/theme_data_3.service.js'
 import { getCssRules } from 'src/services/theme_data/css_utils.js'
+import { serialize } from 'src/services/theme_data/iss_serializer.js'
+import { deserialize } from 'src/services/theme_data/iss_deserializer.js'
 import {
   // rgb2hex,
   hex2rgb,
@@ -46,6 +49,7 @@ export default {
     TabSwitcher,
     ShadowControl,
     ColorInput,
+    PaletteEditor,
     OpacityInput,
     ContrastRatio
   },
@@ -55,6 +59,15 @@ export default {
     const author = ref('')
     const license = ref('')
     const website = ref('')
+
+    const metaOut = computed(() => {
+      return `@meta {
+  name: ${name.value};
+  author: ${author.value};
+  license: ${license.value};
+  website: ${website.value};
+}`
+    })
 
     // ### Palette stuff
     const palettes = reactive({
@@ -83,13 +96,23 @@ export default {
       }
     })
 
+    const palettesOut = computed(() => {
+      return Object.entries(palettes).map(([name, palette]) => {
+        const entries = Object
+          .entries(palette)
+          .map(([slot, data]) => `  ${slot}: ${data};`)
+          .join('\n')
+
+        return `@palette.${name} {\n${entries}\n}`
+      }).join('\n\n')
+    })
+
     const editedPalette = ref('dark')
     const palette = computed({
       get () {
         return palettes[editedPalette.value]
       },
       set (newPalette) {
-        console.log(newPalette)
         palettes[editedPalette.value] = newPalette
       }
     })
@@ -97,6 +120,14 @@ export default {
     // ### I18n stuff
     // The paths in i18n are getting ridicously long, this effectively shortens them
     const getI18nPath = (componentName) => `settings.style.themes3.editor.components.${componentName}`
+    // vue i18n doesn't seem to have (working) mechanic to have a fallback so we have to
+    // make do ourselves
+    const fallbackI18n = (translated, fallback) => {
+      if (translated.startsWith('settings.style.themes3')) {
+        return fallback
+      }
+      return translated
+    }
     const getFriendlyNamePath = (componentName) => getI18nPath(componentName) + '.friendlyName'
     const getVariantPath = (componentName, variant) => {
       return variant === 'normal'
@@ -139,6 +170,13 @@ export default {
     const selectedComponentStates = computed(() => {
       return selectedComponentStatesAll.value.filter(x => x !== 'normal')
     })
+    const updateSelectedStates = (state, v) => {
+      if (v) {
+        selectedState.add(state)
+      } else {
+        selectedState.delete(state)
+      }
+    }
 
     // ### Preview stuff
     const editorHintStyle = computed(() => {
@@ -447,6 +485,20 @@ export default {
       isShadowTabOpen.value = tab === 'shadow'
     }
 
+    const exportStyle = () => {
+      console.log('ORIG', toValue(editorFriendlyToOriginal.value))
+      console.log('SERI', serialize(editorFriendlyToOriginal.value))
+
+      const result = [
+        metaOut.value,
+        palettesOut.value,
+        serialize(editorFriendlyToOriginal.value)
+      ].join('\n\n')
+
+      console.log('RESULT', result)
+      console.log('DESERI', deserialize(result))
+    }
+
     return {
       name,
       author,
@@ -463,13 +515,7 @@ export default {
       selectedComponentStates,
       selectedVariant,
       selectedState,
-      updateSelectedStates (state, v) {
-        if (v) {
-          selectedState.add(state)
-        } else {
-          selectedState.delete(state)
-        }
-      },
+      updateSelectedStates,
       editedBackgroundColor,
       editedOpacity,
       editedTextColor,
@@ -492,17 +538,13 @@ export default {
       previewClass,
       editorHintStyle,
       getFriendlyNamePath,
+      fallbackI18n,
       getVariantPath,
       getStatePath,
       componentHas,
       isShadowTabOpen,
       onTabSwitch,
-      fallbackI18n (translated, fallback) {
-        if (translated.startsWith('settings.style.themes3')) {
-          return fallback
-        }
-        return translated
-      }
+      exportStyle
     }
   }
 }

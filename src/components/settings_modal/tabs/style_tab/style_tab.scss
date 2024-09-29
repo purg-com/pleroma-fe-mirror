@@ -88,17 +88,9 @@
   }
 
   .palette-editor {
-    > label:not(.Select) {
+    > .label:not(.Select) {
       font-weight: bold;
       justify-self: right;
-    }
-
-    .colors {
-      display: grid;
-      justify-content: space-around;
-      grid-template-columns: repeat(4, min-content);
-      grid-template-rows: repeat(auto-fit, min-content);
-      grid-gap: 0.5em;
     }
   }
 
