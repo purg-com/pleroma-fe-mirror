@@ -50,13 +50,13 @@ export default {
     ContrastRatio
   },
   setup () {
-    // Meta stuff
+    // ### Meta stuff
     const name = ref('')
     const author = ref('')
     const license = ref('')
     const website = ref('')
 
-    // Initialization stuff
+    // ### Initialization stuff
     const palette = {
       // These are here just to establish order,
       // themes should override those
@@ -71,10 +71,9 @@ export default {
       cOrange: '#ffa500'
     }
 
+    // The paths in i18n are getting ridicously long, this effectively shortens them
     const getI18nPath = (componentName) => `settings.style.themes3.editor.components.${componentName}`
-
     const getFriendlyNamePath = (componentName) => getI18nPath(componentName) + '.friendlyName'
-
     const getVariantPath = (componentName, variant) => {
       return variant === 'normal'
         ? 'settings.style.themes3.editor.components.normal.variant'
@@ -116,7 +115,7 @@ export default {
       return selectedComponentStatesAll.value.filter(x => x !== 'normal')
     })
 
-    // Preview stuff
+    // ### Preview stuff
     const editorHintStyle = computed(() => {
       const editorHint = selectedComponent.value.editor
       const styles = []
@@ -131,6 +130,8 @@ export default {
       return styles.join('; ')
     })
 
+    // Apart from "hover" we can't really show how component looks like in
+    // certain states, so we have to fake them.
     const simulatePseudoSelectors = css => css
       .replace(selectedComponent.value.selector, '.ComponentPreview .preview-block')
       .replace(':active', '.preview-active')
@@ -213,16 +214,20 @@ export default {
     // All rules that are made by editor
     const allEditedRules = reactive({})
 
+    // Checkging whether component can support some "directives" which
+    // are actually virtual subcomponents, i.e. Text, Link etc
     const componentHas = (subComponent) => {
       return !!selectedComponent.value.validInnerComponents?.find(x => x === subComponent)
     }
 
+    // Path is path for lodash's get and set
     const getPath = (component, directive) => {
       const pathSuffix = component ? `._children.${component}.normal.normal` : ''
       const path = `${selectedComponentName.value}.${selectedVariant.value}.${normalizeStates([...selectedState])}${pathSuffix}.directives.${directive}`
       return path
     }
 
+    // Templates for directives
     const isElementPresent = (component, directive, defaultValue = '') => computed({
       get () {
         return get(allEditedRules, getPath(component, directive)) != null
@@ -296,6 +301,9 @@ export default {
       }
     }
 
+    // Whether specific directives present in the edited rule or not
+    // Somewhat serves double-duty as it creates/removes the directive
+    // when set
     const isBackgroundColorPresent = isElementPresent(null, 'background', '#FFFFFF')
     const isOpacityPresent = isElementPresent(null, 'opacity', 1)
     const isTextColorPresent = isElementPresent('Text', 'textColor', '#000000')
