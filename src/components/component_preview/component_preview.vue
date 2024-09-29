@@ -166,12 +166,19 @@
     }
 
     .preview-block {
-      width: 33%;
-      height: 33%;
-      border-radius: var(--roundness);
       background: var(--background);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-width: 33%;
+      min-height: 33%;
+      max-width: 80%;
+      max-height: 80%;
+      border-width: 0;
+      border-style: solid;
+      border-color: var(--border);
+      border-radius: var(--roundness);
       box-shadow: var(--shadow);
-      border: 1px solid var(--border);
     }
   }
 }

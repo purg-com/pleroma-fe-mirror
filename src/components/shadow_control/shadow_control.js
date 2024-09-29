@@ -36,7 +36,7 @@ export default {
   props: [
     'modelValue', 'fallback', 'separateInset', 'noPreview', 'disabled'
   ],
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'subShadowSelected'],
   data () {
     return {
       selectedId: 0,
@@ -93,9 +93,13 @@ export default {
       }
     }
   },
+  watch: {
+    selected (value) {
+      this.$emit('subShadowSelected', this.selectedId)
+    }
+  },
   methods: {
     updateProperty: throttle(function (prop, value) {
-      console.log(prop, value)
       this.cValue[this.selectedId][prop] = value
       if (prop === 'inset' && value === false && this.separateInset) {
         this.cValue[this.selectedId].spread = 0
