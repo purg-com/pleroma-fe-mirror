@@ -779,7 +779,7 @@
             "no-auto": "Disabled"
           },
           "palette": {
-            "label": "Edited palette",
+            "label": "Palette",
             "dark": "Dark mode",
             "light": "Light mode",
             "bg": "Panel background",

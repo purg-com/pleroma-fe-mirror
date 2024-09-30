@@ -10,7 +10,7 @@ import ColorInput from 'src/components/color_input/color_input.vue'
 import PaletteEditor from 'src/components/palette_editor/palette_editor.vue'
 import OpacityInput from 'src/components/opacity_input/opacity_input.vue'
 import TabSwitcher from 'src/components/tab_switcher/tab_switcher.jsx'
-import Popover from 'src/components/popover/popover.vue'
+import Tooltip from 'src/components/tooltip/tooltip.vue'
 import ContrastRatio from 'src/components/contrast_ratio/contrast_ratio.vue'
 
 import { init } from 'src/services/theme_data/theme_data_3.service.js'
@@ -43,7 +43,7 @@ export default {
   components: {
     Select,
     Checkbox,
-    Popover,
+    Tooltip,
     StringSetting,
     ComponentPreview,
     TabSwitcher,

@@ -165,44 +165,29 @@
             :disabled="!isBackgroundColorPresent"
             :label="$t('settings.style.themes3.editor.background')"
           />
-          <Popover trigger="hover">
-            <template #trigger>
-              <Checkbox v-model="isBackgroundColorPresent" />
-            </template>
-            <template #content>
-              {{ $t('settings.style.themes3.editor.include_in_rule') }}
-            </template>
-          </Popover>
+          <Tooltip :text="$t('settings.style.themes3.editor.include_in_rule')">
+            <Checkbox v-model="isBackgroundColorPresent" />
+          </Tooltip>
           <OpacityInput
             v-model="editedOpacity"
             :disabled="!isOpacityPresent"
             :label="$t('settings.style.themes3.editor.opacity')"
           />
-          <Popover trigger="hover">
-            <template #trigger>
-              <Checkbox v-model="isOpacityPresent" />
-            </template>
-            <template #content>
-              {{ $t('settings.style.themes3.editor.include_in_rule') }}
-            </template>
-          </Popover>
+          <Tooltip :text="$t('settings.style.themes3.editor.include_in_rule')">
+            <Checkbox v-model="isOpacityPresent" />
+          </Tooltip>
           <ColorInput
             v-model="editedTextColor"
             :label="$t('settings.style.themes3.editor.text_color')"
             :disabled="!isTextColorPresent"
             v-if="componentHas('Text')"
           />
-          <Popover
-            trigger="hover"
+          <Tooltip
             v-if="componentHas('Text')"
+            :text="$t('settings.style.themes3.editor.include_in_rule')"
           >
-            <template #trigger>
-              <Checkbox v-model="isTextColorPresent" />
-            </template>
-            <template #content>
-              {{ $t('settings.style.themes3.editor.include_in_rule') }}
-            </template>
-          </Popover>
+            <Checkbox v-model="isTextColorPresent" />
+          </Tooltip>
           <div class="style-control suboption">
             <label
               for="textAuto"
@@ -227,17 +212,12 @@
               </option>
             </Select>
           </div>
-          <Popover
-            trigger="hover"
+          <Tooltip
             v-if="componentHas('Text')"
+            :text="$t('settings.style.themes3.editor.include_in_rule')"
           >
-            <template #trigger>
-              <Checkbox v-model="isTextAutoPresent" />
-            </template>
-            <template #content>
-              {{ $t('settings.style.themes3.editor.include_in_rule') }}
-            </template>
-          </Popover>
+            <Checkbox v-model="isTextAutoPresent" />
+          </Tooltip>
           <div>
             <ContrastRatio :contrast="getContrast(editedBackgroundColor, editedTextColor)" />
           </div>
@@ -250,34 +230,24 @@
             :disabled="!isLinkColorPresent"
             v-if="componentHas('Link')"
           />
-          <Popover
-            trigger="hover"
+          <Tooltip
             v-if="componentHas('Link')"
+            :text="$t('settings.style.themes3.editor.include_in_rule')"
           >
-            <template #trigger>
-              <Checkbox v-model="isLinkColorPresent" />
-            </template>
-            <template #content>
-              {{ $t('settings.style.themes3.editor.include_in_rule') }}
-            </template>
-          </Popover>
+            <Checkbox v-model="isLinkColorPresent" />
+          </Tooltip>
           <ColorInput
             v-model="editedIconColor"
             :label="$t('settings.style.themes3.editor.icon_color')"
             :disabled="!isIconColorPresent"
             v-if="componentHas('Icon')"
           />
-          <Popover
-            trigger="hover"
+          <Tooltip
             v-if="componentHas('Icon')"
+            :text="$t('settings.style.themes3.editor.include_in_rule')"
           >
-            <template #trigger>
-              <Checkbox v-model="isIconColorPresent" />
-            </template>
-            <template #content>
-              {{ $t('settings.style.themes3.editor.include_in_rule') }}
-            </template>
-          </Popover>
+            <Checkbox v-model="isIconColorPresent" />
+          </Tooltip>
         </div>
         <div
           class="editor-tab shadow-tab"
