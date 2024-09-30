@@ -212,6 +212,11 @@ const interfaceMod = {
     setLastTimeline ({ commit }, value) {
       commit('setLastTimeline', value)
     },
+    setPalette ({ dispatch, commit }, { paletteData }) {
+      console.log('PAL', paletteData)
+      commit('setOption', { name: 'userPalette', value: paletteData })
+      dispatch('setTheme', { themeName: null, recompile: true })
+    },
     setTheme ({ commit, rootState }, { themeName, themeData, recompile, saveData } = {}) {
       const {
         theme: instanceThemeName
@@ -221,21 +226,52 @@ const interfaceMod = {
         theme: userThemeName,
         customTheme: userThemeSnapshot,
         customThemeSource: userThemeSource,
+        userPalette,
         forceThemeRecompilation,
         themeDebug,
         theme3hacks
       } = rootState.config
 
+      const userPaletteIss = (() => {
+        if (!userPalette) return null
+        const result = {
+          component: 'Root',
+          directives: {}
+        }
+
+        Object
+          .entries(userPalette)
+          .filter(([k]) => k !== 'name')
+          .forEach(([k, v]) => {
+            let issRootDirectiveName
+            switch (k) {
+              case 'background':
+                issRootDirectiveName = 'bg'
+                break
+              case 'foreground':
+                issRootDirectiveName = 'fg'
+                break
+              default:
+                issRootDirectiveName = k
+            }
+            result.directives['--' + issRootDirectiveName] = 'color | ' + v
+          })
+        return result
+      })()
       const actualThemeName = userThemeName || instanceThemeName
 
       const forceRecompile = forceThemeRecompilation || recompile
 
       let promise = null
 
+      console.log('TEST', actualThemeName, themeData)
+
       if (themeData) {
         promise = Promise.resolve(normalizeThemeData(themeData))
       } else if (themeName) {
         promise = getPreset(themeName).then(themeData => normalizeThemeData(themeData))
+      } else if (themeName === null) {
+        promise = Promise.resolve(null)
       } else if (userThemeSource || userThemeSnapshot) {
         promise = Promise.resolve(normalizeThemeData({
           _pleroma_theme_version: 2,
@@ -264,13 +300,14 @@ const interfaceMod = {
 
       promise
         .then(realThemeData => {
-          const theme2ruleset = convertTheme2To3(realThemeData)
+          const theme2ruleset = realThemeData ? convertTheme2To3(realThemeData) : null
 
           if (saveData) {
             commit('setOption', { name: 'theme', value: themeName || actualThemeName })
             commit('setOption', { name: 'customTheme', value: realThemeData })
             commit('setOption', { name: 'customThemeSource', value: realThemeData })
           }
+
           const hacks = []
 
           Object.entries(theme3hacks).forEach(([key, value]) => {
@@ -336,9 +373,15 @@ const interfaceMod = {
           })
 
           const ruleset = [
-            ...theme2ruleset,
             ...hacks
           ]
+          if (!theme2ruleset && userPaletteIss) {
+            ruleset.unshift(userPaletteIss)
+          }
+
+          if (theme2ruleset) {
+            ruleset.unshift(...theme2ruleset)
+          }
 
           applyTheme(
             ruleset,
@@ -355,6 +398,7 @@ const interfaceMod = {
 export default interfaceMod
 
 export const normalizeThemeData = (input) => {
+  console.log(input)
   if (Array.isArray(input)) {
     const themeData = { colors: {} }
     themeData.colors.bg = input[1]
@@ -365,7 +409,7 @@ export const normalizeThemeData = (input) => {
     themeData.colors.cGreen = input[6]
     themeData.colors.cBlue = input[7]
     themeData.colors.cOrange = input[8]
-    return generatePreset(themeData).theme
+    return generatePreset(themeData).source || generatePreset(themeData).theme
   }
 
   let themeData, themeSource

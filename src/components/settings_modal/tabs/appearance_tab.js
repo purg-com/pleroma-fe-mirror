@@ -9,7 +9,7 @@ import FontControl from 'src/components/font_control/font_control.vue'
 import { normalizeThemeData } from 'src/modules/interface'
 
 import {
-  getThemes
+  getThemeResources
 } from 'src/services/style_setter/style_setter.js'
 import { convertTheme2To3 } from 'src/services/theme_data/theme2_to_theme3.js'
 import { init } from 'src/services/theme_data/theme_data_3.service.js'
@@ -35,6 +35,17 @@ const AppearanceTab = {
   data () {
     return {
       availableStyles: [],
+      availablePalettes: [],
+      palettesKeys: [
+        'background',
+        'foreground',
+        'link',
+        'text',
+        'cRed',
+        'cBlue',
+        'cGreen',
+        'cOrange'
+      ],
       intersectionObserver: null,
       thirdColumnModeOptions: ['none', 'notifications', 'postform'].map(mode => ({
         key: mode,
@@ -64,29 +75,36 @@ const AppearanceTab = {
     Preview
   },
   mounted () {
-    getThemes()
-      .then((promises) => {
-        return Promise.all(
-          Object.entries(promises)
-            .map(([k, v]) => v.then(res => [k, res]))
-        )
+    getThemeResources('/static/styles.json')
+      .then((themes) => {
+        this.availableStyles = Object
+          .entries(themes)
+          .map(([key, data]) => ({ key, data, name: data.name || data[0], version: 'v2' }))
       })
-      .then(themes => themes.reduce((acc, [k, v]) => {
-        if (v) {
-          return [
-            ...acc,
-            {
-              name: v.name || v[0],
-              key: k,
-              data: v
-            }
-          ]
-        } else {
-          return acc
-        }
-      }, []))
-      .then((themesComplete) => {
-        this.availableStyles = themesComplete
+
+    getThemeResources('/static/palettes/index.json')
+      .then((palettes) => {
+        const result = {}
+        console.log(palettes)
+        Object.entries(palettes).forEach(([k, v]) => {
+          if (Array.isArray(v)) {
+            const [
+              name,
+              background,
+              foreground,
+              text,
+              link,
+              cRed = '#FF0000',
+              cBlue = '#0000FF',
+              cGreen = '#00FF00',
+              cOrange = '#E3FF00'
+            ] = v
+            result[k] = { name, background, foreground, text, link, cRed, cBlue, cGreen, cOrange }
+          } else {
+            result[k] = v
+          }
+        })
+        this.availablePalettes = result
       })
 
     if (window.IntersectionObserver) {
@@ -171,18 +189,30 @@ const AppearanceTab = {
     setTheme (name) {
       this.$store.dispatch('setTheme', { themeName: name, saveData: true, recompile: true })
     },
+    setPalette (name) {
+      this.$store.dispatch('setPalette', { paletteData: name })
+    },
     previewTheme (key, input) {
-      const style = normalizeThemeData(input)
-      const x = 2
-      if (x === 1) return
-      const theme2 = convertTheme2To3(style)
-      const theme3 = init({
-        inputRuleset: theme2,
-        ultimateBackgroundColor: '#000000',
-        liteMode: true,
-        debug: true,
-        onlyNormalState: true
-      })
+      let theme3
+      if (input) {
+        const style = normalizeThemeData(input)
+        const theme2 = convertTheme2To3(style)
+        theme3 = init({
+          inputRuleset: theme2,
+          ultimateBackgroundColor: '#000000',
+          liteMode: true,
+          debug: true,
+          onlyNormalState: true
+        })
+      } else {
+        theme3 = init({
+          inputRuleset: [],
+          ultimateBackgroundColor: '#000000',
+          liteMode: true,
+          debug: true,
+          onlyNormalState: true
+        })
+      }
 
       return getScopedVersion(
         getCssRules(theme3.eager),

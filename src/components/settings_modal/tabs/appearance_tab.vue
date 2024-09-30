@@ -7,12 +7,32 @@
         ref="themeList"
       >
         <button
+          class="button-default theme-preview"
+          data-theme-key="stock"
+          @click="setTheme(null)"
+        >
+          <!-- eslint-disable vue/no-v-text-v-html-on-component -->
+          <component
+            :is="'style'"
+            v-html="previewTheme('stock')"
+          />
+          <!-- eslint-enable vue/no-v-text-v-html-on-component -->
+          <preview />
+          <h4 class="theme-name">
+            {{ $t('settings.style.stock_theme_used') }}
+            <span class="alert neutral version">v3</span>
+          </h4>
+        </button>
+        <button
           v-if="isCustomThemeUsed"
           disabled
           class="button-default theme-preview"
         >
           <preview />
-          <h4 class="theme-name">{{ $t('settings.style.custom_theme_used') }}</h4>
+          <h4 class="theme-name">
+            {{ $t('settings.style.custom_theme_used') }}
+            <span class="alert neutral version">v2</span>
+          </h4>
         </button>
         <button
           v-for="style in availableStyles"
@@ -30,9 +50,31 @@
           />
           <!-- eslint-enable vue/no-v-text-v-html-on-component -->
           <preview :class="{ placeholder: ready }" :id="'theme-preview-' + style.key"/>
-          <h4 class="theme-name">{{ style.name }}</h4>
+          <h4 class="theme-name">
+            {{ style.name }}
+            <span class="alert neutral version">{{ style.version }}</span>
+          </h4>
         </button>
       </ul>
+      <h3>{{ $t('settings.style.themes3.palette.label') }}</h3>
+      <div class="palettes">
+        <button
+          v-for="p in availablePalettes"
+          class="btn button-default palette-entry"
+          :key="p.name"
+          @click="() => setPalette(p)"
+        >
+          <label>
+            {{ p.name }}
+          </label>
+          <span
+            v-for="c in palettesKeys"
+            :key="c"
+            class="palette-square"
+            :style="{ backgroundColor: p[c], border: '1px solid ' + (p[c] ?? 'var(--text)') }"
+          />
+        </button>
+      </div>
     </div>
     <div class="alert neutral theme-notice">
       {{ $t("settings.style.appearance_tab_note") }}
@@ -256,58 +298,4 @@
 
 <script src="./appearance_tab.js"></script>
 
-<style lang="scss">
-.appearance-tab {
-  .theme-notice {
-    padding: 0.5em;
-    margin: 1em;
-  }
-
-  .column-settings {
-    display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
-  }
-
-  .column-settings .size-label {
-    display: block;
-    margin-bottom: 0.5em;
-    margin-top: 0.5em;
-  }
-
-  .theme-list {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    margin: -0.5em 0;
-    height: 25em;
-    overflow-x: hidden;
-    overflow-y: auto;
-    scrollbar-gutter: stable;
-    border-radius: var(--roundness);
-    border: 1px solid var(--border);
-    padding: 0;
-
-    .theme-preview {
-      font-size: 1rem; // fix for firefox
-      width: 19rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 0.5em;
-
-      &.placeholder {
-        opacity: 0.2;
-      }
-
-      .theme-preview-container {
-        pointer-events: none;
-        zoom: 0.5;
-        border: none;
-        border-radius: var(--roundness);
-        text-align: left;
-      }
-    }
-  }
-}
-</style>
+<style lang="scss" src="./appearance_tab.scss"></style>

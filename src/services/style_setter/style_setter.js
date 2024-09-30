@@ -256,13 +256,13 @@ export const applyConfig = (input) => {
   body.classList.remove('hidden')
 }
 
-export const getThemes = () => {
+export const getThemeResources = (url) => {
   const cache = 'no-store'
 
-  return window.fetch('/static/styles.json', { cache })
+  return window.fetch(url, { cache })
     .then((data) => data.json())
-    .then((themes) => {
-      return Object.entries(themes).map(([k, v]) => {
+    .then((resources) => {
+      return Object.entries(resources).map(([k, v]) => {
         let promise = null
         if (typeof v === 'object') {
           promise = Promise.resolve(v)
@@ -284,10 +284,26 @@ export const getThemes = () => {
           return acc
         }, {})
     })
+    .then((promises) => {
+      return Promise.all(
+        Object.entries(promises)
+          .map(([k, v]) => v.then(res => [k, res]))
+      )
+    })
+    .then(themes => themes.reduce((acc, [k, v]) => {
+      if (v) {
+        return {
+          ...acc,
+          [k]: v
+        }
+      } else {
+        return acc
+      }
+    }, {}))
 }
 
 export const getPreset = (val) => {
-  return getThemes()
+  return getThemeResources('/static/styles.json')
     .then((themes) => themes[val] ? themes[val] : themes['pleroma-dark'])
     .then((theme) => {
       const isV1 = Array.isArray(theme)

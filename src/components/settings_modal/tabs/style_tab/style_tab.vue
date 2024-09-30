@@ -54,7 +54,7 @@
     <div class="setting-item palette-editor">
       <div class="label">
         <label for="palette-selector">
-          {{ $t('settings.style.themes3.editor.palette.label') }}
+          {{ $t('settings.style.themes3.palette.label') }}
           {{ ' ' }}
         </label>
         <Select
@@ -62,10 +62,10 @@
           id="palette-selector"
         >
           <option key="dark" value="dark">
-            {{ $t('settings.style.themes3.editor.palette.dark') }}
+            {{ $t('settings.style.themes3.palette.dark') }}
           </option>
           <option key="light" value="light">
-            {{ $t('settings.style.themes3.editor.palette.light') }}
+            {{ $t('settings.style.themes3.palette.light') }}
           </option>
         </Select>
       </div>

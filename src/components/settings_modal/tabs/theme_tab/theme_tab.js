@@ -5,7 +5,7 @@ import {
   relativeLuminance
 } from 'src/services/color_convert/color_convert.js'
 import {
-  getThemes
+  getThemeResources
 } from 'src/services/style_setter/style_setter.js'
 import {
   newImporter,
@@ -125,25 +125,9 @@ export default {
   created () {
     const self = this
 
-    getThemes()
-      .then((promises) => {
-        return Promise.all(
-          Object.entries(promises)
-            .map(([k, v]) => v.then(res => [k, res]))
-        )
-      })
-      .then(themes => themes.reduce((acc, [k, v]) => {
-        if (v) {
-          return {
-            ...acc,
-            [k]: v
-          }
-        } else {
-          return acc
-        }
-      }, {}))
+    getThemeResources('/static/styles.json')
       .then((themesComplete) => {
-        self.availableStyles = themesComplete
+        self.availableStyles = Object.values(themesComplete)
       })
   },
   mounted () {
@@ -412,9 +396,6 @@ export default {
       forceUseSource = false
     ) {
       this.dismissWarning()
-      if (!source && !theme) {
-        throw new Error('Can\'t load theme: empty')
-      }
       const version = (origin === 'localStorage' && !theme.colors)
         ? 'l1'
         : fileVersion
@@ -494,14 +475,7 @@ export default {
         customTheme: theme,
         customThemeSource: source
       } = this.$store.getters.mergedConfig
-      if (!theme && !source) {
-        // Anon user or never touched themes
-        this.loadTheme(
-          this.$store.state.instance.themeData,
-          'defaults',
-          confirmLoadSource
-        )
-      } else {
+      if (theme || source) {
         this.loadTheme(
           {
             theme,

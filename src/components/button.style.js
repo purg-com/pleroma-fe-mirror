@@ -63,9 +63,15 @@ export default {
       }
     },
     {
-      state: ['hover', 'pressed'],
+      state: ['pressed', 'hover'],
       directives: {
         shadow: ['--defaultButtonHoverGlow', '--pressedButtonBevel']
+      }
+    },
+    {
+      state: ['pressed', 'hover', 'focused'],
+      directives: {
+        shadow: ['--pressedButtonBevel']
       }
     },
     {

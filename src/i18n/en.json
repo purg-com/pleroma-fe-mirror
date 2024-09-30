@@ -748,11 +748,31 @@
     "more_settings": "More settings",
     "style": {
       "custom_theme_used": "(Custom theme)",
+      "stock_theme_used": "(Stock theme)",
       "themes2_outdated": "Editor for Themes V2 is being phased out and will eventually be replaced with a new one that takes advantage of new Themes V3 engine. It should still work but experience might be degraded and inconsistent.",
       "appearance_tab_note": "Changes on this tab do not affect the theme used, so exported theme will be different from what seen in the UI",
       "update_preview": "Update preview",
       "themes3": {
         "define": "Override",
+        "palette": {
+          "label": "Palette",
+          "import": "Import",
+          "export": "Export",
+          "dark": "Dark mode",
+          "light": "Light mode",
+          "bg": "Panel background",
+          "fg": "Buttons etc.",
+          "text": "Text",
+          "link": "Links",
+          "accent": "Accent color",
+          "cRed": "Red color",
+          "cBlue": "Blue color",
+          "cGreen": "Green color",
+          "cOrange": "Orange color",
+          "extra1": "Extra 1",
+          "extra2": "Extra 2",
+          "extra3": "Extra 3"
+        },
         "editor": {
           "title": "Style",
           "new_style": "New",
@@ -777,23 +797,6 @@
             "no-preserve": "Black or White",
             "preserve": "Keep color",
             "no-auto": "Disabled"
-          },
-          "palette": {
-            "label": "Palette",
-            "dark": "Dark mode",
-            "light": "Light mode",
-            "bg": "Panel background",
-            "fg": "Buttons etc.",
-            "text": "Text",
-            "link": "Links",
-            "accent": "Accent color",
-            "cRed": "Red color",
-            "cBlue": "Blue color",
-            "cGreen": "Green color",
-            "cOrange": "Orange color",
-            "extra1": "Extra 1",
-            "extra2": "Extra 2",
-            "extra3": "Extra 3"
           },
           "components": {
             "normal": {
