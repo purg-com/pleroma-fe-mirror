@@ -5,9 +5,6 @@ import {
   relativeLuminance
 } from 'src/services/color_convert/color_convert.js'
 import {
-  getThemeResources
-} from 'src/services/style_setter/style_setter.js'
-import {
   newImporter,
   newExporter
 } from 'src/services/export_import/export_import.js'
@@ -123,12 +120,22 @@ export default {
     }
   },
   created () {
-    const self = this
+    const currentIndex = this.$store.state.instance.themesIndex
 
-    getThemeResources('/static/styles.json')
-      .then((themesComplete) => {
-        self.availableStyles = Object.values(themesComplete)
-      })
+    let promise
+    if (currentIndex) {
+      promise = Promise.resolve(currentIndex)
+    } else {
+      promise = this.$store.dispatch('fetchThemesIndex')
+    }
+
+    promise.then(themesIndex => {
+      Object
+        .values(themesIndex)
+        .forEach(themeFunc => {
+          themeFunc().then(themeData => this.availableStyles.push(themeData))
+        })
+    })
   },
   mounted () {
     this.loadThemeFromLocalStorage()

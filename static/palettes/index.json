@@ -8,8 +8,8 @@
     "text": "#b9b9b9",
     "link": "#baaa9c",
     "cRed": "#d31014",
-    "cBlue": "#0fa00f",
-    "cGreen": "#0095ff",
+    "cGreen": "#0fa00f",
+    "cBlue": "#0095ff",
     "cOrange": "#ffa500"
   },
   "pleroma-amoled": [ "Pleroma Dark AMOLED", "#000000", "#111111", "#b0b0b1", "#d8a070", "#aa0000", "#0fa00f", "#0095ff", "#d59500"],
@@ -20,8 +20,8 @@
     "link": "#81a2be",
     "text": "#c5c8c6",
     "cRed": "#cc6666",
-    "cBlue": "#8abeb7",
-    "cGreen": "#b5bd68",
+    "cGreen": "#8abeb7",
+    "cBlue": "#b5bd68",
     "cOrange": "#de935f",
     "_cYellow": "#f0c674",
     "_cPurple": "#b294bb"

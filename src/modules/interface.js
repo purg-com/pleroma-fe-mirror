@@ -1,4 +1,4 @@
-import { getPreset, applyTheme, tryLoadCache } from '../services/style_setter/style_setter.js'
+import { getResourcesIndex, applyTheme, tryLoadCache } from '../services/style_setter/style_setter.js'
 import { CURRENT_VERSION, generatePreset } from 'src/services/theme_data/theme_data.service.js'
 import { convertTheme2To3 } from 'src/services/theme_data/theme2_to_theme3.js'
 
@@ -212,35 +212,229 @@ const interfaceMod = {
     setLastTimeline ({ commit }, value) {
       commit('setLastTimeline', value)
     },
-    setPalette ({ dispatch, commit }, { paletteData }) {
-      console.log('PAL', paletteData)
-      commit('setOption', { name: 'userPalette', value: paletteData })
-      dispatch('setTheme', { themeName: null, recompile: true })
+    async fetchPalettesIndex ({ commit, state }) {
+      try {
+        const value = await getResourcesIndex('/static/palettes/index.json')
+        commit('setInstanceOption', { name: 'palettesIndex', value })
+        return value
+      } catch (e) {
+        console.error('Could not fetch palettes index', e)
+        return {}
+      }
     },
-    setTheme ({ commit, rootState }, { themeName, themeData, recompile, saveData } = {}) {
+    setPalette ({ dispatch, commit }, value) {
+      dispatch('resetV3')
+      dispatch('resetV2')
+
+      commit('setOption', { name: 'palette', value })
+
+      dispatch('applyTheme')
+    },
+    setPaletteCustom ({ dispatch, commit }, value) {
+      dispatch('resetV3')
+      dispatch('resetV2')
+
+      commit('setOption', { name: 'paletteCustomData', value })
+
+      dispatch('applyTheme')
+    },
+    async fetchStylesIndex ({ commit, state }) {
+      try {
+        const value = await getResourcesIndex('/static/styles/index.json')
+        commit('setInstanceOption', { name: 'stylesIndex', value })
+        return value
+      } catch (e) {
+        console.error('Could not fetch styles index', e)
+        return Promise.resolve({})
+      }
+    },
+    setStyle ({ dispatch, commit }, value) {
+      dispatch('resetV3')
+      dispatch('resetV2')
+
+      commit('setOption', { name: 'style', value })
+
+      dispatch('applyTheme')
+    },
+    setStyleCustom ({ dispatch, commit }, value) {
+      dispatch('resetV3')
+      dispatch('resetV2')
+
+      commit('setOption', { name: 'styleCustomData', value })
+
+      dispatch('applyTheme')
+    },
+    async fetchThemesIndex ({ commit, state }) {
+      try {
+        const value = await getResourcesIndex('/static/styles.json')
+        commit('setInstanceOption', { name: 'themesIndex', value })
+        return value
+      } catch (e) {
+        console.error('Could not fetch themes index', e)
+        return Promise.resolve({})
+      }
+    },
+    setTheme ({ dispatch, commit }, value) {
+      dispatch('resetV3')
+      dispatch('resetV2')
+
+      commit('setOption', { name: 'theme', value })
+
+      dispatch('applyTheme')
+    },
+    setThemeCustom ({ dispatch, commit }, value) {
+      dispatch('resetV3')
+      dispatch('resetV2')
+
+      commit('setOption', { name: 'customTheme', value })
+      commit('setOption', { name: 'customThemeSource', value })
+
+      dispatch('applyTheme')
+    },
+    resetV3 ({ dispatch, commit }) {
+      commit('setOption', { name: 'style', value: null })
+      commit('setOption', { name: 'styleCustomData', value: null })
+      commit('setOption', { name: 'palette', value: null })
+      commit('setOption', { name: 'paletteCustomData', value: null })
+    },
+    resetV2 ({ dispatch, commit }) {
+      commit('setOption', { name: 'theme', value: null })
+      commit('setOption', { name: 'customTheme', value: null })
+      commit('setOption', { name: 'customThemeSource', value: null })
+    },
+    async applyTheme (
+      { dispatch, commit, rootState },
+      { recompile = true } = {}
+    ) {
+      // If we're not not forced to recompile try using
+      // cache (tryLoadCache return true if load successful)
+
       const {
-        theme: instanceThemeName
+        style: instanceStyleName,
+        palette: instancePaletteName
+      } = rootState.instance
+      let {
+        theme: instanceThemeV2Name,
+        themesIndex,
+        stylesIndex,
+        palettesIndex
       } = rootState.instance
 
       const {
-        theme: userThemeName,
-        customTheme: userThemeSnapshot,
-        customThemeSource: userThemeSource,
-        userPalette,
+        style: userStyleName,
+        styleCustomData: userStyleCustomData,
+        palette: userPaletteName,
+        paletteCustomData: userPaletteCustomData,
         forceThemeRecompilation,
         themeDebug,
         theme3hacks
       } = rootState.config
+      let {
+        theme: userThemeV2Name,
+        customTheme: userThemeV2Snapshot,
+        customThemeSource: userThemeV2Source
 
-      const userPaletteIss = (() => {
-        if (!userPalette) return null
+      } = rootState.config
+
+      const forceRecompile = forceThemeRecompilation || recompile
+      if (!forceRecompile && !themeDebug && tryLoadCache()) {
+        return commit('setThemeApplied')
+      }
+
+      let majorVersionUsed
+
+      if (userPaletteName || userPaletteCustomData ||
+          userStyleName || userStyleCustomData ||
+          instancePaletteName ||
+          instanceStyleName
+      ) {
+        // Palette and/or style overrides V2 themes
+        instanceThemeV2Name = null
+        userThemeV2Name = null
+        userThemeV2Source = null
+        userThemeV2Snapshot = null
+
+        majorVersionUsed = 'v3'
+        if (!palettesIndex || !stylesIndex) {
+          const result = await Promise.all([
+            dispatch('fetchPalettesIndex'),
+            dispatch('fetchStylesIndex')
+          ])
+
+          palettesIndex = result[0]
+          stylesIndex = result[1]
+        }
+      } else {
+        majorVersionUsed = 'v2'
+        // Promise.all just to be uniform with v3
+        const result = await Promise.all([
+          dispatch('fetchThemesIndex')
+        ])
+        themesIndex = result[0]
+      }
+
+      let styleDataUsed = null
+      let styleNameUsed = null
+      let paletteDataUsed = null
+      let paletteNameUsed = null
+      let themeNameUsed = null
+      let themeDataUsed = null
+
+      if (majorVersionUsed === 'v3') {
+        if (userStyleCustomData) {
+          styleNameUsed = 'custom' // custom data overrides name
+          styleDataUsed = userStyleCustomData
+        } else {
+          styleNameUsed = userStyleName || instanceStyleName
+          let styleFetchFunc = stylesIndex[themeNameUsed]
+          if (!styleFetchFunc) {
+            const newName = Object.keys(stylesIndex)[0]
+            styleFetchFunc = stylesIndex[newName]
+            console.warn(`Style with id '${styleNameUsed}' not found, falling back to '${newName}'`)
+          }
+          styleDataUsed = await styleFetchFunc?.()
+        }
+
+        if (userPaletteCustomData) {
+          paletteNameUsed = 'custom' // custom data overrides name
+          paletteDataUsed = userPaletteCustomData
+        } else {
+          paletteNameUsed = userPaletteName || instanceStyleName
+          let paletteFetchFunc = palettesIndex[themeNameUsed]
+          if (!paletteFetchFunc) {
+            const newName = Object.keys(palettesIndex)[0]
+            paletteFetchFunc = palettesIndex[newName]
+            console.warn(`Palette with id '${paletteNameUsed}' not found, falling back to '${newName}'`)
+          }
+          paletteDataUsed = await paletteFetchFunc?.()
+        }
+      } else {
+        if (userThemeV2Snapshot || userThemeV2Source) {
+          themeNameUsed = 'custom' // custom data overrides name
+          themeDataUsed = userThemeV2Snapshot || userThemeV2Source
+        } else {
+          themeNameUsed = userThemeV2Name || instanceThemeV2Name
+          let themeFetchFunc = themesIndex[themeNameUsed]
+          if (!themeFetchFunc) {
+            const newName = Object.keys(themesIndex)[0]
+            themeFetchFunc = themesIndex[newName]
+            console.warn(`Theme with id '${themeNameUsed}' not found, falling back to '${newName}'`)
+          }
+          themeDataUsed = await themeFetchFunc?.()
+        }
+        // Themes v2 editor support
+        commit('setInstanceOption', { name: 'themeData', value: themeDataUsed })
+      }
+
+      const paletteIss = (() => {
+        if (!paletteDataUsed) return null
         const result = {
           component: 'Root',
           directives: {}
         }
 
         Object
-          .entries(userPalette)
+          .entries(paletteDataUsed)
           .filter(([k]) => k !== 'name')
           .forEach(([k, v]) => {
             let issRootDirectiveName
@@ -258,139 +452,84 @@ const interfaceMod = {
           })
         return result
       })()
-      const actualThemeName = userThemeName || instanceThemeName
 
-      const forceRecompile = forceThemeRecompilation || recompile
+      const theme2ruleset = themeDataUsed && convertTheme2To3(normalizeThemeData(themeDataUsed))
+      const hacks = []
 
-      let promise = null
-
-      console.log('TEST', actualThemeName, themeData)
-
-      if (themeData) {
-        promise = Promise.resolve(normalizeThemeData(themeData))
-      } else if (themeName) {
-        promise = getPreset(themeName).then(themeData => normalizeThemeData(themeData))
-      } else if (themeName === null) {
-        promise = Promise.resolve(null)
-      } else if (userThemeSource || userThemeSnapshot) {
-        promise = Promise.resolve(normalizeThemeData({
-          _pleroma_theme_version: 2,
-          theme: userThemeSnapshot,
-          source: userThemeSource
-        }))
-      } else if (actualThemeName && actualThemeName !== 'custom') {
-        promise = getPreset(actualThemeName).then(themeData => {
-          const realThemeData = normalizeThemeData(themeData)
-          if (actualThemeName === instanceThemeName) {
-            // This sole line is the reason why this whole block is above the recompilation check
-            commit('setInstanceOption', { name: 'themeData', value: { theme: realThemeData } })
-          }
-          return realThemeData
-        })
-      } else {
-        throw new Error('Cannot load any theme!')
-      }
-
-      // If we're not not forced to recompile try using
-      // cache (tryLoadCache return true if load successful)
-      if (!forceRecompile && !themeDebug && tryLoadCache()) {
-        commit('setThemeApplied')
-        return
-      }
-
-      promise
-        .then(realThemeData => {
-          const theme2ruleset = realThemeData ? convertTheme2To3(realThemeData) : null
-
-          if (saveData) {
-            commit('setOption', { name: 'theme', value: themeName || actualThemeName })
-            commit('setOption', { name: 'customTheme', value: realThemeData })
-            commit('setOption', { name: 'customThemeSource', value: realThemeData })
-          }
-
-          const hacks = []
-
-          Object.entries(theme3hacks).forEach(([key, value]) => {
-            switch (key) {
-              case 'fonts': {
-                Object.entries(theme3hacks.fonts).forEach(([fontKey, font]) => {
-                  if (!font?.family) return
-                  switch (fontKey) {
-                    case 'interface':
-                      hacks.push({
-                        component: 'Root',
-                        directives: {
-                          '--font': 'generic | ' + font.family
-                        }
-                      })
-                      break
-                    case 'input':
-                      hacks.push({
-                        component: 'Input',
-                        directives: {
-                          '--font': 'generic | ' + font.family
-                        }
-                      })
-                      break
-                    case 'post':
-                      hacks.push({
-                        component: 'RichContent',
-                        directives: {
-                          '--font': 'generic | ' + font.family
-                        }
-                      })
-                      break
-                    case 'monospace':
-                      hacks.push({
-                        component: 'Root',
-                        directives: {
-                          '--monoFont': 'generic | ' + font.family
-                        }
-                      })
-                      break
-                  }
-                })
-                break
+      Object.entries(theme3hacks).forEach(([key, value]) => {
+        switch (key) {
+          case 'fonts': {
+            Object.entries(theme3hacks.fonts).forEach(([fontKey, font]) => {
+              if (!font?.family) return
+              switch (fontKey) {
+                case 'interface':
+                  hacks.push({
+                    component: 'Root',
+                    directives: {
+                      '--font': 'generic | ' + font.family
+                    }
+                  })
+                  break
+                case 'input':
+                  hacks.push({
+                    component: 'Input',
+                    directives: {
+                      '--font': 'generic | ' + font.family
+                    }
+                  })
+                  break
+                case 'post':
+                  hacks.push({
+                    component: 'RichContent',
+                    directives: {
+                      '--font': 'generic | ' + font.family
+                    }
+                  })
+                  break
+                case 'monospace':
+                  hacks.push({
+                    component: 'Root',
+                    directives: {
+                      '--monoFont': 'generic | ' + font.family
+                    }
+                  })
+                  break
               }
-              case 'underlay': {
-                if (value !== 'none') {
-                  const newRule = {
-                    component: 'Underlay',
-                    directives: {}
-                  }
-                  if (value === 'opaque') {
-                    newRule.directives.opacity = 1
-                    newRule.directives.background = '--wallpaper'
-                  }
-                  if (value === 'transparent') {
-                    newRule.directives.opacity = 0
-                  }
-                  hacks.push(newRule)
-                }
-                break
+            })
+            break
+          }
+          case 'underlay': {
+            if (value !== 'none') {
+              const newRule = {
+                component: 'Underlay',
+                directives: {}
               }
+              if (value === 'opaque') {
+                newRule.directives.opacity = 1
+                newRule.directives.background = '--wallpaper'
+              }
+              if (value === 'transparent') {
+                newRule.directives.opacity = 0
+              }
+              hacks.push(newRule)
             }
-          })
-
-          const ruleset = [
-            ...hacks
-          ]
-          if (!theme2ruleset && userPaletteIss) {
-            ruleset.unshift(userPaletteIss)
+            break
           }
+        }
+      })
 
-          if (theme2ruleset) {
-            ruleset.unshift(...theme2ruleset)
-          }
+      const rulesetArray = [
+        theme2ruleset,
+        styleDataUsed,
+        paletteIss,
+        hacks
+      ].filter(x => x)
 
-          applyTheme(
-            ruleset,
-            () => commit('setThemeApplied'),
-            themeDebug
-          )
-        })
-
-      return promise
+      return applyTheme(
+        rulesetArray.flat(),
+        () => commit('setThemeApplied'),
+        themeDebug
+      )
     }
   }
 }
@@ -398,7 +537,6 @@ const interfaceMod = {
 export default interfaceMod
 
 export const normalizeThemeData = (input) => {
-  console.log(input)
   if (Array.isArray(input)) {
     const themeData = { colors: {} }
     themeData.colors.bg = input[1]

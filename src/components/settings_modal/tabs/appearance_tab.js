@@ -8,9 +8,6 @@ import FontControl from 'src/components/font_control/font_control.vue'
 
 import { normalizeThemeData } from 'src/modules/interface'
 
-import {
-  getThemeResources
-} from 'src/services/style_setter/style_setter.js'
 import { convertTheme2To3 } from 'src/services/theme_data/theme2_to_theme3.js'
 import { init } from 'src/services/theme_data/theme_data_3.service.js'
 import {
@@ -42,8 +39,8 @@ const AppearanceTab = {
         'link',
         'text',
         'cRed',
-        'cBlue',
         'cGreen',
+        'cBlue',
         'cOrange'
       ],
       intersectionObserver: null,
@@ -75,37 +72,50 @@ const AppearanceTab = {
     Preview
   },
   mounted () {
-    getThemeResources('/static/styles.json')
-      .then((themes) => {
-        this.availableStyles = Object
-          .entries(themes)
-          .map(([key, data]) => ({ key, data, name: data.name || data[0], version: 'v2' }))
-      })
+    const updateIndex = (resource) => {
+      const capitalizedResource = resource[0].toUpperCase() + resource.slice(1)
+      const currentIndex = this.$store.state.instance[`${resource}sIndex`]
 
-    getThemeResources('/static/palettes/index.json')
-      .then((palettes) => {
-        const result = {}
-        console.log(palettes)
-        Object.entries(palettes).forEach(([k, v]) => {
-          if (Array.isArray(v)) {
-            const [
-              name,
-              background,
-              foreground,
-              text,
-              link,
-              cRed = '#FF0000',
-              cBlue = '#0000FF',
-              cGreen = '#00FF00',
-              cOrange = '#E3FF00'
-            ] = v
-            result[k] = { name, background, foreground, text, link, cRed, cBlue, cGreen, cOrange }
-          } else {
-            result[k] = v
-          }
-        })
-        this.availablePalettes = result
+      let promise
+      if (currentIndex) {
+        promise = Promise.resolve(currentIndex)
+      } else {
+        promise = this.$store.dispatch(`fetch${capitalizedResource}sIndex`)
+      }
+
+      return promise.then(index => {
+        return Object
+          .entries(index)
+          .map(([k, func]) => [k, func()])
       })
+    }
+
+    updateIndex('theme').then(themes => {
+      themes.forEach(([key, themePromise]) => themePromise.then(data => {
+        this.availableStyles.push({ key, data, name: data.name, version: 'v2' })
+      }))
+    })
+
+    updateIndex('palette').then(palettes => {
+      palettes.forEach(([key, palettePromise]) => palettePromise.then(v => {
+        if (Array.isArray(v)) {
+          const [
+            name,
+            background,
+            foreground,
+            text,
+            link,
+            cRed = '#FF0000',
+            cGreen = '#00FF00',
+            cBlue = '#0000FF',
+            cOrange = '#E3FF00'
+          ] = v
+          this.availablePalettes.push({ key, name, background, foreground, text, link, cRed, cBlue, cGreen, cOrange })
+        } else {
+          this.availablePalettes.push({ key, ...v })
+        }
+      }))
+    })
 
     if (window.IntersectionObserver) {
       this.intersectionObserver = new IntersectionObserver((entries, observer) => {
@@ -186,11 +196,13 @@ const AppearanceTab = {
       const { theme } = this.mergedConfig
       return key === theme
     },
-    setTheme (name) {
-      this.$store.dispatch('setTheme', { themeName: name, saveData: true, recompile: true })
+    async setTheme (name) {
+      await this.$store.dispatch('setTheme', name)
+      this.$store.dispatch('applyTheme')
     },
-    setPalette (name) {
-      this.$store.dispatch('setPalette', { paletteData: name })
+    async setPalette (name) {
+      await this.$store.dispatch('setPalette', name)
+      this.$store.dispatch('applyTheme')
     },
     previewTheme (key, input) {
       let theme3

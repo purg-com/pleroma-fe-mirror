@@ -1,4 +1,3 @@
-import { hex2rgb } from '../color_convert/color_convert.js'
 import { init, getEngineChecksum } from '../theme_data/theme_data_3.service.js'
 import { getCssRules } from '../theme_data/css_utils.js'
 import { defaultState } from '../../modules/config.js'
@@ -53,7 +52,7 @@ export const generateTheme = async (inputRuleset, callbacks, debug) => {
   // Assuming that "worst case scenario background" is panel background since it's the most likely one
   const themes3 = init({
     inputRuleset,
-    ultimateBackgroundColor: inputRuleset[0].directives['--bg'].split('|')[1].trim(),
+    ultimateBackgroundColor: inputRuleset[0].directives['--bg']?.split('|')[1].trim() || '#000000',
     debug
   })
 
@@ -256,73 +255,36 @@ export const applyConfig = (input) => {
   body.classList.remove('hidden')
 }
 
-export const getThemeResources = (url) => {
+export const getResourcesIndex = async (url) => {
   const cache = 'no-store'
 
-  return window.fetch(url, { cache })
-    .then((data) => data.json())
-    .then((resources) => {
-      return Object.entries(resources).map(([k, v]) => {
-        let promise = null
-        if (typeof v === 'object') {
-          promise = Promise.resolve(v)
-        } else if (typeof v === 'string') {
-          promise = window.fetch(v, { cache })
-            .then((data) => data.json())
-            .catch((e) => {
-              console.error(e)
-              return null
-            })
-        }
-        return [k, promise]
-      })
-    })
-    .then((promises) => {
-      return promises
-        .reduce((acc, [k, v]) => {
-          acc[k] = v
-          return acc
-        }, {})
-    })
-    .then((promises) => {
-      return Promise.all(
-        Object.entries(promises)
-          .map(([k, v]) => v.then(res => [k, res]))
-      )
-    })
-    .then(themes => themes.reduce((acc, [k, v]) => {
-      if (v) {
-        return {
-          ...acc,
-          [k]: v
-        }
-      } else {
-        return acc
-      }
-    }, {}))
-}
-
-export const getPreset = (val) => {
-  return getThemeResources('/static/styles.json')
-    .then((themes) => themes[val] ? themes[val] : themes['pleroma-dark'])
-    .then((theme) => {
-      const isV1 = Array.isArray(theme)
-      const data = isV1 ? {} : theme.theme
-
-      if (isV1) {
-        const bg = hex2rgb(theme[1])
-        const fg = hex2rgb(theme[2])
-        const text = hex2rgb(theme[3])
-        const link = hex2rgb(theme[4])
-
-        const cRed = hex2rgb(theme[5] || '#FF0000')
-        const cGreen = hex2rgb(theme[6] || '#00FF00')
-        const cBlue = hex2rgb(theme[7] || '#0000FF')
-        const cOrange = hex2rgb(theme[8] || '#E3FF00')
-
-        data.colors = { bg, fg, text, link, cRed, cBlue, cGreen, cOrange }
-      }
-
-      return { theme: data, source: theme.source }
-    })
+  try {
+    const data = await window.fetch(url, { cache })
+    const resources = await data.json()
+    return Object.fromEntries(
+      Object
+        .entries(resources)
+        .map(([k, v]) => {
+          if (typeof v === 'object') {
+            return [k, () => Promise.resolve(v)]
+          } else if (typeof v === 'string') {
+            return [
+              k,
+              () => window
+                .fetch(v, { cache })
+                .then((data) => data.json())
+                .catch((e) => {
+                  console.error(e)
+                  return null
+                })
+            ]
+          } else {
+            console.error(`Unknown resource format - ${k} is a ${typeof v}`)
+            return [k, null]
+          }
+        })
+    )
+  } catch (e) {
+    return Promise.reject(e)
+  }
 }

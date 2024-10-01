@@ -350,7 +350,7 @@ const afterStoreSetup = async ({ store, i18n }) => {
   store.dispatch('setInstanceOption', { name: 'server', value: server })
 
   await setConfig({ store })
-  await store.dispatch('setTheme')
+  await store.dispatch('applyTheme', { recompile: false })
 
   applyConfig(store.state.config)
 
