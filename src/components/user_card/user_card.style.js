@@ -25,7 +25,7 @@ export default {
           color: '#000000',
           alpha: 0.6
         }],
-        '--profileTint': 'color | $alpha(--background, 0.5)'
+        '--profileTint': 'color | $alpha(--background 0.5)'
       }
     },
     {

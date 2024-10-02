@@ -92,7 +92,7 @@ export default {
     {
       state: ['disabled'],
       directives: {
-        background: '$blend(--inheritedBackground, 0.25, --parent)',
+        background: '$blend(--inheritedBackground 0.25 --parent)',
         shadow: ['--defaultButtonBevel']
       }
     },

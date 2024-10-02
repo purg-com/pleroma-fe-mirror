@@ -43,7 +43,7 @@ export default {
 
         // Selection colors
         '--selectionBackground': 'color | --accent',
-        '--selectionText': 'color | $textColor(--accent, --text, no-preserve)'
+        '--selectionText': 'color | $textColor(--accent --text no-preserve)'
       }
     }
   ]
