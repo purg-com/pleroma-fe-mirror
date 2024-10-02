@@ -464,8 +464,8 @@ const interfaceMod = {
             text,
             link,
             cRed = '#FF0000',
-            cBlue = '#0000FF',
             cGreen = '#00FF00',
+            cBlue = '#0000FF',
             cOrange = '#E3FF00'
           ] = paletteDataUsed
           paletteDataUsed = { name, background, foreground, text, link, cRed, cBlue, cGreen, cOrange }
