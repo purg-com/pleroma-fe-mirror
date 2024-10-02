@@ -1,78 +1,105 @@
 <template>
-<div
-  class="ComponentPreview"
-  :class="{ '-shadow-controls': shadowControl }"
->
-  <label
-    class="header"
-    v-show="shadowControl"
-    :class="{ faint: disabled }"
-  >
-    {{ $t('settings.style.shadows.offset') }}
-  </label>
-  <input
-    v-show="shadowControl"
-    :value="shadow?.y"
-    :disabled="disabled"
-    :class="{ disabled }"
-    class="input input-number y-shift-number"
-    type="number"
-    @input="e => updateProperty('y', e.target.value)"
-  >
-  <input
-    v-show="shadowControl"
-    :value="shadow?.y"
-    :disabled="disabled"
-    :class="{ disabled }"
-    class="input input-range y-shift-slider"
-    type="range"
-    max="20"
-    min="-20"
-    @input="e => updateProperty('y', e.target.value)"
-  >
   <div
-    class="preview-window"
-    :class="{ '-light-grid': lightGrid }"
+    class="ComponentPreview"
+    :class="{ '-shadow-controls': shadowControl }"
   >
-    <div
-      class="preview-block"
-      :class="previewClass"
-      :style="previewStyle"
+    <label
+      v-show="shadowControl"
+      class="header"
+      :class="{ faint: disabled }"
     >
-      TEST
+      {{ $t('settings.style.shadows.offset') }}
+    </label>
+    <input
+      v-show="shadowControl"
+      :value="shadow?.y"
+      :disabled="disabled"
+      :class="{ disabled }"
+      class="input input-number y-shift-number"
+      type="number"
+      @input="e => updateProperty('y', e.target.value)"
+    >
+    <input
+      v-show="shadowControl"
+      :value="shadow?.y"
+      :disabled="disabled"
+      :class="{ disabled }"
+      class="input input-range y-shift-slider"
+      type="range"
+      max="20"
+      min="-20"
+      @input="e => updateProperty('y', e.target.value)"
+    >
+    <div
+      class="preview-window"
+      :class="{ '-light-grid': lightGrid }"
+    >
+      <div
+        class="preview-block"
+        :class="previewClass"
+        :style="previewStyle"
+      >
+        TEST
+      </div>
     </div>
+    <input
+      v-show="shadowControl"
+      :value="shadow?.x"
+      :disabled="disabled"
+      :class="{ disabled }"
+      class="input input-number x-shift-number"
+      type="number"
+      @input="e => updateProperty('x', e.target.value)"
+    >
+    <input
+      v-show="shadowControl"
+      :value="shadow?.x"
+      :disabled="disabled"
+      :class="{ disabled }"
+      class="input input-range x-shift-slider"
+      type="range"
+      max="20"
+      min="-20"
+      @input="e => updateProperty('x', e.target.value)"
+    >
+    <Checkbox
+      id="lightGrid"
+      v-model="lightGrid"
+      name="lightGrid"
+      class="input-light-grid"
+    >
+      {{ $t('settings.style.shadows.light_grid') }}
+    </Checkbox>
   </div>
-  <input
-    v-show="shadowControl"
-    :value="shadow?.x"
-    :disabled="disabled"
-    :class="{ disabled }"
-    class="input input-number x-shift-number"
-    type="number"
-    @input="e => updateProperty('x', e.target.value)"
-  >
-  <input
-    v-show="shadowControl"
-    :value="shadow?.x"
-    :disabled="disabled"
-    :class="{ disabled }"
-    class="input input-range x-shift-slider"
-    type="range"
-    max="20"
-    min="-20"
-    @input="e => updateProperty('x', e.target.value)"
-  >
-  <Checkbox
-    id="lightGrid"
-    v-model="lightGrid"
-    name="lightGrid"
-    class="input-light-grid"
-  >
-    {{ $t('settings.style.shadows.light_grid') }}
-  </Checkbox>
-</div>
 </template>
 
+<script>
+import Checkbox from 'src/components/checkbox/checkbox.vue'
+
+export default {
+  components: {
+    Checkbox
+  },
+  props: [
+    'shadow',
+    'shadowControl',
+    'previewClass',
+    'previewStyle',
+    'disabled'
+  ],
+  emits: ['update:shadow'],
+  data () {
+    return {
+      lightGrid: false
+    }
+  },
+  methods: {
+    updateProperty (axis, value) {
+      this.$emit('update:shadow', { axis, value })
+    }
+  }
+}
+</script>
 <style lang="scss">
 .ComponentPreview {
   display: grid;
@@ -185,30 +212,3 @@
   }
 }
 </style>
-<script>
-import Checkbox from 'src/components/checkbox/checkbox.vue'
-
-export default {
-  props: [
-    'shadow',
-    'shadowControl',
-    'previewClass',
-    'previewStyle',
-    'disabled'
-  ],
-  data () {
-    return {
-      lightGrid: false
-    }
-  },
-  emits: ['update:shadow'],
-  components: {
-    Checkbox
-  },
-  methods: {
-    updateProperty (axis, value) {
-      this.$emit('update:shadow', { axis, value })
-    }
-  }
-}
-</script>
