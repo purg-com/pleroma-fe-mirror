@@ -51,32 +51,6 @@
         </li>
       </ul>
     </div>
-    <div class="setting-item palette-editor">
-      <div class="label">
-        <label for="palette-selector">
-          {{ $t('settings.style.themes3.palette.label') }}
-          {{ ' ' }}
-        </label>
-        <Select
-          id="palette-selector"
-          v-model="editedPalette"
-        >
-          <option
-            key="dark"
-            value="dark"
-          >
-            {{ $t('settings.style.themes3.palette.dark') }}
-          </option>
-          <option
-            key="light"
-            value="light"
-          >
-            {{ $t('settings.style.themes3.palette.light') }}
-          </option>
-        </Select>
-      </div>
-      <PaletteEditor v-model="palette" />
-    </div>
     <div class="setting-item component-editor">
       <div class="component-selector">
         <label for="component-selector">
@@ -126,11 +100,11 @@
           class="state-selector-list"
         >
           <li
-            v-for="state in selectedStates"
-            :key="'component-variant-' + state"
+            v-for="state in selectedComponentStates"
+            :key="'component-state-' + state"
           >
             <Checkbox
-              :value="selectedStates.has(state)"
+              :value="selectedState.has(state)"
               @update:modelValue="(v) => updateSelectedStates(state, v)"
             >
               {{ fallbackI18n($t(getStatePath(selectedComponentName, state)), state) }}
@@ -275,6 +249,32 @@
           />
         </div>
       </tab-switcher>
+    </div>
+    <div class="setting-item palette-editor">
+      <div class="label">
+        <label for="palette-selector">
+          {{ $t('settings.style.themes3.palette.label') }}
+          {{ ' ' }}
+        </label>
+        <Select
+          id="palette-selector"
+          v-model="editedPalette"
+        >
+          <option
+            key="dark"
+            value="dark"
+          >
+            {{ $t('settings.style.themes3.palette.dark') }}
+          </option>
+          <option
+            key="light"
+            value="light"
+          >
+            {{ $t('settings.style.themes3.palette.light') }}
+          </option>
+        </Select>
+      </div>
+      <PaletteEditor v-model="palette" />
     </div>
   </div>
 </template>
