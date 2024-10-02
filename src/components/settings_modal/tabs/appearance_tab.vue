@@ -9,7 +9,8 @@
         <button
           class="button-default theme-preview"
           data-theme-key="stock"
-          @click="setTheme(null)"
+          @click="resetTheming"
+          :class="{ toggled: isStyleActive('stock') }"
         >
           <!-- eslint-disable vue/no-v-text-v-html-on-component -->
           <component
@@ -49,7 +50,7 @@
             v-html="previewTheme(style.key, style.data)"
           />
           <!-- eslint-enable vue/no-v-text-v-html-on-component -->
-          <preview :class="{ placeholder: ready }" :id="'theme-preview-' + style.key"/>
+          <preview :id="'theme-preview-' + style.key"/>
           <h4 class="theme-name">
             {{ style.name }}
             <span class="alert neutral version">{{ style.version }}</span>
@@ -61,8 +62,9 @@
         <button
           v-for="p in availablePalettes"
           class="btn button-default palette-entry"
+          :class="{ toggled: isPaletteActive(p.key) }"
           :key="p.name"
-          @click="() => setPalette(p)"
+          @click="() => setPalette(p.key)"
         >
           <label>
             {{ p.name }}

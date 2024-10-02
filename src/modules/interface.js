@@ -223,16 +223,16 @@ const interfaceMod = {
       }
     },
     setPalette ({ dispatch, commit }, value) {
-      dispatch('resetV3')
-      dispatch('resetV2')
+      dispatch('resetThemeV3Palette')
+      dispatch('resetThemeV2')
 
       commit('setOption', { name: 'palette', value })
 
       dispatch('applyTheme')
     },
     setPaletteCustom ({ dispatch, commit }, value) {
-      dispatch('resetV3')
-      dispatch('resetV2')
+      dispatch('resetThemeV3Palette')
+      dispatch('resetThemeV2')
 
       commit('setOption', { name: 'paletteCustomData', value })
 
@@ -249,16 +249,16 @@ const interfaceMod = {
       }
     },
     setStyle ({ dispatch, commit }, value) {
-      dispatch('resetV3')
-      dispatch('resetV2')
+      dispatch('resetThemeV3')
+      dispatch('resetThemeV2')
 
       commit('setOption', { name: 'style', value })
 
       dispatch('applyTheme')
     },
     setStyleCustom ({ dispatch, commit }, value) {
-      dispatch('resetV3')
-      dispatch('resetV2')
+      dispatch('resetThemeV3')
+      dispatch('resetThemeV2')
 
       commit('setOption', { name: 'styleCustomData', value })
 
@@ -275,29 +275,33 @@ const interfaceMod = {
       }
     },
     setTheme ({ dispatch, commit }, value) {
-      dispatch('resetV3')
-      dispatch('resetV2')
+      dispatch('resetThemeV3')
+      dispatch('resetThemeV3Palette')
+      dispatch('resetThemeV2')
 
       commit('setOption', { name: 'theme', value })
 
       dispatch('applyTheme')
     },
     setThemeCustom ({ dispatch, commit }, value) {
-      dispatch('resetV3')
-      dispatch('resetV2')
+      dispatch('resetThemeV3')
+      dispatch('resetThemeV3Palette')
+      dispatch('resetThemeV2')
 
       commit('setOption', { name: 'customTheme', value })
       commit('setOption', { name: 'customThemeSource', value })
 
       dispatch('applyTheme')
     },
-    resetV3 ({ dispatch, commit }) {
+    resetThemeV3 ({ dispatch, commit }) {
       commit('setOption', { name: 'style', value: null })
       commit('setOption', { name: 'styleCustomData', value: null })
+    },
+    resetThemeV3Palette ({ dispatch, commit }) {
       commit('setOption', { name: 'palette', value: null })
       commit('setOption', { name: 'paletteCustomData', value: null })
     },
-    resetV2 ({ dispatch, commit }) {
+    resetThemeV2 ({ dispatch, commit }) {
       commit('setOption', { name: 'theme', value: null })
       commit('setOption', { name: 'customTheme', value: null })
       commit('setOption', { name: 'customThemeSource', value: null })
@@ -333,7 +337,6 @@ const interfaceMod = {
         theme: userThemeV2Name,
         customTheme: userThemeV2Snapshot,
         customThemeSource: userThemeV2Source
-
       } = rootState.config
 
       const forceRecompile = forceThemeRecompilation || recompile
@@ -343,10 +346,34 @@ const interfaceMod = {
 
       let majorVersionUsed
 
+      console.log(
+        'USER V3',
+        userPaletteName,
+        userStyleName
+      )
+      console.log(
+        'USER V2',
+        userThemeV2Name,
+        userThemeV2Source,
+        userThemeV2Snapshot
+      )
+
+      console.log(
+        'INST V3',
+        instancePaletteName,
+        instanceStyleName
+      )
+      console.log(
+        'INST V2',
+        instanceThemeV2Name
+      )
+
       if (userPaletteName || userPaletteCustomData ||
           userStyleName || userStyleCustomData ||
           instancePaletteName ||
-          instanceStyleName
+          instanceStyleName ||
+          (instanceThemeV2Name == null &&
+           userThemeV2Name == null)
       ) {
         // Palette and/or style overrides V2 themes
         instanceThemeV2Name = null
@@ -364,13 +391,20 @@ const interfaceMod = {
           palettesIndex = result[0]
           stylesIndex = result[1]
         }
-      } else {
+      } else if (
+        userThemeV2Name ||
+          userThemeV2Snapshot ||
+          userThemeV2Source ||
+          instanceThemeV2Name
+      ) {
         majorVersionUsed = 'v2'
         // Promise.all just to be uniform with v3
         const result = await Promise.all([
           dispatch('fetchThemesIndex')
         ])
         themesIndex = result[0]
+      } else {
+        majorVersionUsed = 'v3'
       }
 
       let styleDataUsed = null
@@ -380,51 +414,92 @@ const interfaceMod = {
       let themeNameUsed = null
       let themeDataUsed = null
 
-      if (majorVersionUsed === 'v3') {
-        if (userStyleCustomData) {
-          styleNameUsed = 'custom' // custom data overrides name
-          styleDataUsed = userStyleCustomData
-        } else {
-          styleNameUsed = userStyleName || instanceStyleName
-          let styleFetchFunc = stylesIndex[themeNameUsed]
-          if (!styleFetchFunc) {
-            const newName = Object.keys(stylesIndex)[0]
-            styleFetchFunc = stylesIndex[newName]
-            console.warn(`Style with id '${styleNameUsed}' not found, falling back to '${newName}'`)
-          }
-          styleDataUsed = await styleFetchFunc?.()
-        }
+      const getData = async (resource, index, customData, name) => {
+        const capitalizedResource = resource[0].toUpperCase() + resource.slice(1)
+        const result = {}
 
-        if (userPaletteCustomData) {
-          paletteNameUsed = 'custom' // custom data overrides name
-          paletteDataUsed = userPaletteCustomData
+        if (customData) {
+          result.nameUsed = 'custom' // custom data overrides name
+          result.dataUsed = customData
         } else {
-          paletteNameUsed = userPaletteName || instanceStyleName
-          let paletteFetchFunc = palettesIndex[themeNameUsed]
-          if (!paletteFetchFunc) {
-            const newName = Object.keys(palettesIndex)[0]
-            paletteFetchFunc = palettesIndex[newName]
-            console.warn(`Palette with id '${paletteNameUsed}' not found, falling back to '${newName}'`)
+          result.nameUsed = name
+
+          if (result.nameUsed === 'stock') {
+            result.dataUsed = null
+            return result
           }
-          paletteDataUsed = await paletteFetchFunc?.()
+
+          let fetchFunc = index[result.nameUsed]
+          // Fallbacks
+          if (!fetchFunc) {
+            const newName = Object.keys(index)[0]
+            fetchFunc = index[newName]
+            console.warn(`${capitalizedResource} with id '${styleNameUsed}' not found, trying back to '${newName}'`)
+            if (!fetchFunc) {
+              console.warn(`${capitalizedResource} doesn't have a fallback, defaulting to stock.`)
+              fetchFunc = () => Promise.resolve(null)
+            }
+          }
+          result.dataUsed = await fetchFunc()
         }
+        return result
+      }
+
+      console.log('VERSION', majorVersionUsed)
+
+      if (majorVersionUsed === 'v3') {
+        const palette = await getData(
+          'palette',
+          palettesIndex,
+          userPaletteCustomData,
+          userPaletteName || instancePaletteName
+        )
+        paletteNameUsed = palette.nameUsed
+        paletteDataUsed = palette.dataUsed
+        if (Array.isArray(paletteDataUsed)) {
+          const [
+            name,
+            background,
+            foreground,
+            text,
+            link,
+            cRed = '#FF0000',
+            cBlue = '#0000FF',
+            cGreen = '#00FF00',
+            cOrange = '#E3FF00'
+          ] = paletteDataUsed
+          paletteDataUsed = { name, background, foreground, text, link, cRed, cBlue, cGreen, cOrange }
+        }
+        console.log('PAL', userPaletteName, paletteNameUsed)
+        console.log('PAL', paletteDataUsed)
+
+        const style = await getData(
+          'style',
+          stylesIndex,
+          userStyleCustomData,
+          userStyleName || instanceStyleName
+        )
+        styleNameUsed = style.nameUsed
+        styleDataUsed = style.dataUsed
       } else {
-        if (userThemeV2Snapshot || userThemeV2Source) {
-          themeNameUsed = 'custom' // custom data overrides name
-          themeDataUsed = userThemeV2Snapshot || userThemeV2Source
-        } else {
-          themeNameUsed = userThemeV2Name || instanceThemeV2Name
-          let themeFetchFunc = themesIndex[themeNameUsed]
-          if (!themeFetchFunc) {
-            const newName = Object.keys(themesIndex)[0]
-            themeFetchFunc = themesIndex[newName]
-            console.warn(`Theme with id '${themeNameUsed}' not found, falling back to '${newName}'`)
-          }
-          themeDataUsed = await themeFetchFunc?.()
-        }
+        const theme = await getData(
+          'theme',
+          themesIndex,
+          userThemeV2Source || userThemeV2Snapshot,
+          userThemeV2Name || instanceThemeV2Name
+        )
+        themeNameUsed = theme.nameUsed
+        themeDataUsed = theme.dataUsed
+
         // Themes v2 editor support
         commit('setInstanceOption', { name: 'themeData', value: themeDataUsed })
       }
+
+      console.log('STYLE', styleNameUsed, paletteNameUsed, themeNameUsed)
+
+      // commit('setOption', { name: 'palette', value: paletteNameUsed })
+      // commit('setOption', { name: 'style', value: styleNameUsed })
+      // commit('setOption', { name: 'theme', value: themeNameUsed })
 
       const paletteIss = (() => {
         if (!paletteDataUsed) return null
@@ -433,6 +508,7 @@ const interfaceMod = {
           directives: {}
         }
 
+        console.log('PALETTE', paletteDataUsed)
         Object
           .entries(paletteDataUsed)
           .filter(([k]) => k !== 'name')

@@ -174,7 +174,11 @@ const AppearanceTab = {
     },
     isCustomThemeUsed () {
       const { theme } = this.mergedConfig
-      return theme === 'custom' || theme === null
+      return theme === 'custom'
+    },
+    isCustomStyleUsed (name) {
+      const { style } = this.mergedConfig
+      return style === 'custom'
     },
     ...SharedComputedObject()
   },
@@ -196,12 +200,26 @@ const AppearanceTab = {
       const { theme } = this.mergedConfig
       return key === theme
     },
-    async setTheme (name) {
-      await this.$store.dispatch('setTheme', name)
+    isStyleActive (key) {
+      const { style } = this.mergedConfig
+      return key === style
+    },
+    isPaletteActive (key) {
+      const { palette } = this.mergedConfig
+      return key === palette
+    },
+    setTheme (name) {
+      this.$store.dispatch('setTheme', name)
       this.$store.dispatch('applyTheme')
     },
-    async setPalette (name) {
-      await this.$store.dispatch('setPalette', name)
+    setPalette (name) {
+      this.$store.dispatch('setPalette', name)
+      this.$store.dispatch('applyTheme')
+    },
+    resetTheming (name) {
+      this.$store.dispatch('resetThemeV2')
+      this.$store.dispatch('resetThemeV3')
+      this.$store.dispatch('setStyle', 'stock')
       this.$store.dispatch('applyTheme')
     },
     previewTheme (key, input) {

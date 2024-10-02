@@ -52,7 +52,6 @@ export const generateTheme = async (inputRuleset, callbacks, debug) => {
   // Assuming that "worst case scenario background" is panel background since it's the most likely one
   const themes3 = init({
     inputRuleset,
-    ultimateBackgroundColor: inputRuleset[0].directives['--bg']?.split('|')[1].trim() || '#000000',
     debug
   })
 
@@ -146,6 +145,7 @@ export const tryLoadCache = () => {
 }
 
 export const applyTheme = async (input, onFinish = (data) => {}, debug) => {
+  console.log('INPUT', input)
   const eagerStyles = createStyleSheet(EAGER_STYLE_ID)
   const lazyStyles = createStyleSheet(LAZY_STYLE_ID)
 

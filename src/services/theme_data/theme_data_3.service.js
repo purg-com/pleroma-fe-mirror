@@ -230,6 +230,12 @@ export const init = ({
     })
     .map(({ data }) => data)
 
+  if (!ultimateBackgroundColor) {
+    console.warn('No ultimate background color provided, falling back to panel color')
+    const rootRule = ruleset.findLast((x) => (x.component === 'Root' && x.directives?.['--bg']))
+    ultimateBackgroundColor = rootRule.directives['--bg'].split('|')[1].trim()
+  }
+
   const virtualComponents = new Set(Object.values(components).filter(c => c.virtual).map(c => c.name))
   const nonEditableComponents = new Set(Object.values(components).filter(c => c.notEditable).map(c => c.name))
 
