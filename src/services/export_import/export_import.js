@@ -20,6 +20,7 @@ export const newExporter = ({
 })
 
 export const newImporter = ({
+  accept = '.json',
   onImport,
   onImportFailure,
   validator = () => true
@@ -27,18 +28,19 @@ export const newImporter = ({
   importData () {
     const filePicker = document.createElement('input')
     filePicker.setAttribute('type', 'file')
-    filePicker.setAttribute('accept', '.json')
+    filePicker.setAttribute('accept', accept)
 
     filePicker.addEventListener('change', event => {
       if (event.target.files[0]) {
+        const filename = event.target.files[0].name
         // eslint-disable-next-line no-undef
         const reader = new FileReader()
         reader.onload = ({ target }) => {
           try {
             const parsed = JSON.parse(target.result)
-            const validationResult = validator(parsed)
+            const validationResult = validator(parsed, filename)
             if (validationResult === true) {
-              onImport(parsed)
+              onImport(parsed, filename)
             } else {
               onImportFailure({ validationResult })
             }

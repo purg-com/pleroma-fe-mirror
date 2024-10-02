@@ -3,8 +3,17 @@
     class="appearance-tab"
     :label="$t('settings.general')"
   >
-    <div class="setting-item">
+    <div class="setting-item heading">
       <h2>{{ $t('settings.theme') }}</h2>
+      <button
+        class="btn button-default"
+        @click="importTheme"
+      >
+        <FAIcon icon="folder-open" />
+        {{ $t('settings.style.themes3.editor.load_style') }}
+      </button>
+    </div>
+    <div class="setting-item">
       <ul
         ref="themeList"
         class="theme-list"

@@ -5,6 +5,21 @@
     margin: 1em;
   }
 
+  .setting-item {
+    padding-bottom: 0;
+
+    &.heading {
+      display: grid;
+      align-items: baseline;
+      grid-template-columns: 1fr auto auto auto;
+      grid-gap: 0.5em;
+
+      h2 {
+        flex: 1 0 auto;
+      }
+    }
+  }
+
   .palettes {
     display: grid;
     grid-template-columns: 1fr 1fr;

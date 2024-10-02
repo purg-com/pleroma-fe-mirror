@@ -347,33 +347,24 @@ const interfaceMod = {
       let majorVersionUsed
 
       console.log(
-        'USER V3',
-        userPaletteName,
-        userStyleName
+        `USER V3 palette: ${userPaletteName}, style: ${userStyleName} `
       )
       console.log(
-        'USER V2',
-        userThemeV2Name,
-        userThemeV2Source,
-        userThemeV2Snapshot
+        `USER V2 name: ${userThemeV2Name}, source: ${userThemeV2Source}, snapshot: ${userThemeV2Snapshot}`
       )
 
-      console.log(
-        'INST V3',
-        instancePaletteName,
-        instanceStyleName
-      )
-      console.log(
-        'INST V2',
-        instanceThemeV2Name
-      )
+      console.log(`INST V3 palette: ${instancePaletteName}, style: ${instanceStyleName}`)
+      console.log('INST V2 theme: ' + instanceThemeV2Name)
 
       if (userPaletteName || userPaletteCustomData ||
           userStyleName || userStyleCustomData ||
-          instancePaletteName ||
-          instanceStyleName ||
-          (instanceThemeV2Name == null &&
-           userThemeV2Name == null)
+          (
+            // User V2 overrides instance V3
+            (instancePaletteName ||
+             instanceStyleName) &&
+              instanceThemeV2Name == null &&
+              userThemeV2Name == null
+          )
       ) {
         // Palette and/or style overrides V2 themes
         instanceThemeV2Name = null

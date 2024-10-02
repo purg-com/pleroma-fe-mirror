@@ -8,6 +8,7 @@ import FontControl from 'src/components/font_control/font_control.vue'
 
 import { normalizeThemeData } from 'src/modules/interface'
 
+import { newImporter } from 'src/services/export_import/export_import.js'
 import { convertTheme2To3 } from 'src/services/theme_data/theme2_to_theme3.js'
 import { init } from 'src/services/theme_data/theme_data_3.service.js'
 import {
@@ -33,6 +34,12 @@ const AppearanceTab = {
     return {
       availableStyles: [],
       availablePalettes: [],
+      themeImporter: newImporter({
+        accept: '.json, .piss',
+        validator: this.importValidator,
+        onImport: this.onImport,
+        onImportFailure: this.onImportFailure
+      }),
       palettesKeys: [
         'background',
         'foreground',
@@ -184,7 +191,6 @@ const AppearanceTab = {
   },
   methods: {
     updateFont (key, value) {
-      console.log(key, value)
       this.$store.dispatch('setOption', {
         name: 'theme3hacks',
         value: {
@@ -195,6 +201,26 @@ const AppearanceTab = {
           }
         }
       })
+    },
+    importTheme () {
+      this.themeImporter.importData()
+    },
+    onImport (parsed, filename) {
+      if (filename.endsWith('.json')) {
+        this.$store.dispatch('setThemeCustom', parsed.source || parsed.theme)
+        this.$store.dispatch('applyTheme')
+      }
+
+      // this.loadTheme(parsed, 'file', forceSource)
+    },
+    onImportFailure (result) {
+      this.$store.dispatch('pushGlobalNotice', { messageKey: 'settings.invalid_theme_imported', level: 'error' })
+    },
+    importValidator (parsed, filename) {
+      if (filename.endsWith('.json')) {
+        const version = parsed._pleroma_theme_version
+        return version >= 1 || version <= 2
+      }
     },
     isThemeActive (key) {
       const { theme } = this.mergedConfig
@@ -207,6 +233,9 @@ const AppearanceTab = {
     isPaletteActive (key) {
       const { palette } = this.mergedConfig
       return key === palette
+    },
+    importStyle () {
+
     },
     setTheme (name) {
       this.$store.dispatch('setTheme', name)
