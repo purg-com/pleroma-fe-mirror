@@ -1,16 +1,19 @@
 <template>
-  <div class="appearance-tab" :label="$t('settings.general')">
+  <div
+    class="appearance-tab"
+    :label="$t('settings.general')"
+  >
     <div class="setting-item">
       <h2>{{ $t('settings.theme') }}</h2>
       <ul
-        class="theme-list"
         ref="themeList"
+        class="theme-list"
       >
         <button
           class="button-default theme-preview"
           data-theme-key="stock"
-          @click="resetTheming"
           :class="{ toggled: isStyleActive('stock') }"
+          @click="resetTheming"
         >
           <!-- eslint-disable vue/no-v-text-v-html-on-component -->
           <component
@@ -37,8 +40,8 @@
         </button>
         <button
           v-for="style in availableStyles"
-          :data-theme-key="style.key"
           :key="style.key"
+          :data-theme-key="style.key"
           class="button-default theme-preview"
           :class="{ toggled: isThemeActive(style.key) }"
           @click="setTheme(style.key)"
@@ -50,7 +53,7 @@
             v-html="previewTheme(style.key, style.data)"
           />
           <!-- eslint-enable vue/no-v-text-v-html-on-component -->
-          <preview :id="'theme-preview-' + style.key"/>
+          <preview :id="'theme-preview-' + style.key" />
           <h4 class="theme-name">
             {{ style.name }}
             <span class="alert neutral version">{{ style.version }}</span>
@@ -61,9 +64,9 @@
       <div class="palettes">
         <button
           v-for="p in availablePalettes"
+          :key="p.name"
           class="btn button-default palette-entry"
           :class="{ toggled: isPaletteActive(p.key) }"
-          :key="p.name"
           @click="() => setPalette(p.key)"
         >
           <label>
@@ -104,7 +107,7 @@
                 <code>px</code>
                 <code>rem</code>
               </i18n-t>
-              <br/>
+              <br>
               <i18n-t
                 scope="global"
                 keypath="settings.text_size_tip2"

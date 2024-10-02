@@ -58,13 +58,19 @@
           {{ ' ' }}
         </label>
         <Select
-          v-model="editedPalette"
           id="palette-selector"
+          v-model="editedPalette"
         >
-          <option key="dark" value="dark">
+          <option
+            key="dark"
+            value="dark"
+          >
             {{ $t('settings.style.themes3.palette.dark') }}
           </option>
-          <option key="light" value="light">
+          <option
+            key="light"
+            value="light"
+          >
             {{ $t('settings.style.themes3.palette.light') }}
           </option>
         </Select>
@@ -78,8 +84,8 @@
           {{ ' ' }}
         </label>
         <Select
-          v-model="selectedComponentKey"
           id="component-selector"
+          v-model="selectedComponentKey"
         >
           <option
             v-for="key in componentKeys"
@@ -91,8 +97,8 @@
         </Select>
       </div>
       <div
-        class="variant-selector"
         v-if="selectedComponentVariantsAll.length > 1"
+        class="variant-selector"
       >
         <label for="variant-selector">
           {{ $t('settings.style.themes3.editor.variant_selector') }}
@@ -102,32 +108,32 @@
         >
           <option
             v-for="variant in selectedComponentVariantsAll"
-            :value="variant"
             :key="'component-variant-' + variant"
+            :value="variant"
           >
-            {{ fallbackI18n($t(getVariantPath(selectedComponentName, variant)), variant)  }}
+            {{ fallbackI18n($t(getVariantPath(selectedComponentName, variant)), variant) }}
           </option>
         </Select>
       </div>
       <div
-        class="state-selector"
         v-if="selectedComponentStates.length > 0"
+        class="state-selector"
       >
         <label>
           {{ $t('settings.style.themes3.editor.states_selector') }}
         </label>
         <ul
           class="state-selector-list"
-          >
+        >
           <li
             v-for="state in selectedStates"
             :key="'component-variant-' + state"
-            >
+          >
             <Checkbox
               :value="selectedStates.has(state)"
-                @update:modelValue="(v) => updateSelectedStates(state, v)"
-              >
-              {{ fallbackI18n($t(getStatePath(selectedComponentName, state)), state)  }}
+              @update:modelValue="(v) => updateSelectedStates(state, v)"
+            >
+              {{ fallbackI18n($t(getStatePath(selectedComponentName, state)), state) }}
             </Checkbox>
           </li>
         </ul>
@@ -141,10 +147,10 @@
         <!-- eslint-enable vue/no-v-html vue/no-v-text-v-html-on-component -->
         <ComponentPreview
           class="component-preview"
-          :showText="componentHas('Text')"
-          :shadowControl="isShadowTabOpen"
-          :previewClass="previewClass"
-          :previewStyle="editorHintStyle"
+          :show-text="componentHas('Text')"
+          :shadow-control="isShadowTabOpen"
+          :preview-class="previewClass"
+          :preview-style="editorHintStyle"
           :disabled="!editedSubShadow"
           :shadow="editedSubShadow"
           @update:shadow="({ axis, value }) => updateSubShadow(axis, value)"
@@ -156,9 +162,9 @@
         :on-switch="onTabSwitch"
       >
         <div
+          key="main"
           class="editor-tab"
           :label="$t('settings.style.themes3.editor.main_tab')"
-          key="main"
         >
           <ColorInput
             v-model="editedBackgroundColor"
@@ -177,10 +183,10 @@
             <Checkbox v-model="isOpacityPresent" />
           </Tooltip>
           <ColorInput
+            v-if="componentHas('Text')"
             v-model="editedTextColor"
             :label="$t('settings.style.themes3.editor.text_color')"
             :disabled="!isTextColorPresent"
-            v-if="componentHas('Text')"
           />
           <Tooltip
             v-if="componentHas('Text')"
@@ -225,10 +231,10 @@
             <!-- spacer for missing checkbox -->
           </div>
           <ColorInput
+            v-if="componentHas('Link')"
             v-model="editedLinkColor"
             :label="$t('settings.style.themes3.editor.link_color')"
             :disabled="!isLinkColorPresent"
-            v-if="componentHas('Link')"
           />
           <Tooltip
             v-if="componentHas('Link')"
@@ -237,10 +243,10 @@
             <Checkbox v-model="isLinkColorPresent" />
           </Tooltip>
           <ColorInput
+            v-if="componentHas('Icon')"
             v-model="editedIconColor"
             :label="$t('settings.style.themes3.editor.icon_color')"
             :disabled="!isIconColorPresent"
-            v-if="componentHas('Icon')"
           />
           <Tooltip
             v-if="componentHas('Icon')"
@@ -250,13 +256,13 @@
           </Tooltip>
         </div>
         <div
+          key="shadow"
           class="editor-tab shadow-tab"
           :label="$t('settings.style.themes3.editor.shadows_tab')"
-          key="shadow"
         >
           <Checkbox
-            class="style-control"
             v-model="isShadowPresent"
+            class="style-control"
           >
             {{ $t('settings.style.themes3.editor.include_in_rule') }}
           </checkbox>

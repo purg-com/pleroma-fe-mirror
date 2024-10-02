@@ -15,14 +15,14 @@
         class="btn button-default"
         @click="importPalette"
       >
-        <FAIcon icon="file-import"/>
+        <FAIcon icon="file-import" />
         {{ $t('settings.style.themes3.palette.import') }}
       </button>
       <button
         class="btn button-default"
         @click="exportPalette"
       >
-        <FAIcon icon="file-export"/>
+        <FAIcon icon="file-export" />
         {{ $t('settings.style.themes3.palette.export') }}
       </button>
     </div>
