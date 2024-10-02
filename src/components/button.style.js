@@ -9,9 +9,9 @@ export default {
     // However, cascading still works, so resulting state will be result of merging of all relevant states/variants
     // normal: '' // normal state is implicitly added, it is always included
     toggled: '.toggled',
-    pressed: ':active',
+    focused: ':focus-visible',
+    pressed: ':focus:active',
     hover: ':hover:not(:disabled)',
-    focused: ':focus-within',
     disabled: ':disabled'
   },
   // Variants are mutually exclusive, each component implicitly has "normal" variant, and all other variants inherit from it.
@@ -35,10 +35,11 @@ export default {
     {
       component: 'Root',
       directives: {
-        '--defaultButtonHoverGlow': 'shadow | 0 0 4 --text',
+        '--defaultButtonHoverGlow': 'shadow | 0 0 4 --text / 0.5',
+        '--defaultButtonFocusGlow': 'shadow | 0 0 4 4 --link / 0.5',
         '--defaultButtonShadow': 'shadow | 0 0 2 #000000',
-        '--defaultButtonBevel': 'shadow | $borderSide(#FFFFFF, top, 0.2), $borderSide(#000000, bottom, 0.2)',
-        '--pressedButtonBevel': 'shadow | $borderSide(#FFFFFF, bottom, 0.2), $borderSide(#000000, top, 0.2)'
+        '--defaultButtonBevel': 'shadow | $borderSide(#FFFFFF top 0.2 2), $borderSide(#000000 bottom 0.2 2)',
+        '--pressedButtonBevel': 'shadow | $borderSide(#FFFFFF bottom 0.2 2), $borderSide(#000000 top 0.2 2)'
       }
     },
     {
@@ -57,6 +58,12 @@ export default {
       }
     },
     {
+      state: ['focused'],
+      directives: {
+        shadow: ['--defaultButtonFocusGlow', '--defaultButtonBevel']
+      }
+    },
+    {
       state: ['pressed'],
       directives: {
         shadow: ['--defaultButtonShadow', '--pressedButtonBevel']
@@ -65,13 +72,7 @@ export default {
     {
       state: ['pressed', 'hover'],
       directives: {
-        shadow: ['--defaultButtonHoverGlow', '--pressedButtonBevel']
-      }
-    },
-    {
-      state: ['pressed', 'hover', 'focused'],
-      directives: {
-        shadow: ['--pressedButtonBevel']
+        shadow: ['--pressedButtonBevel', '--defaultButtonHoverGlow']
       }
     },
     {

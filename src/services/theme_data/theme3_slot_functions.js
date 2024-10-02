@@ -3,7 +3,7 @@ import { alphaBlend, getTextColor, relativeLuminance } from '../color_convert/co
 
 export const process = (text, functions, { findColor, findShadow }, { dynamicVars, staticVars }) => {
   const { funcName, argsString } = /\$(?<funcName>\w+)\((?<argsString>[#a-zA-Z0-9-,.'"\s]*)\)/.exec(text).groups
-  const args = argsString.split(/,/g).map(a => a.trim())
+  const args = argsString.split(/ /g).map(a => a.trim())
 
   const func = functions[funcName]
   if (args.length < func.argsNeeded) {

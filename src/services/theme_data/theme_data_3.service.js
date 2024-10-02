@@ -22,7 +22,7 @@ import {
   normalizeCombination,
   findRules
 } from './iss_utils.js'
-import { parseCssShadow } from './css_utils.js'
+import { parseShadow } from './iss_deserializer.js'
 
 // Ensuring the order of components
 const components = {
@@ -48,7 +48,7 @@ const findShadow = (shadows, { dynamicVars, staticVars }) => {
         const variableSlot = variable.substring(2)
         return findShadow(staticVars[variableSlot], { dynamicVars, staticVars })
       } else {
-        targetShadow = parseCssShadow(shadow)
+        targetShadow = parseShadow(shadow)
       }
     } else {
       targetShadow = shadow
@@ -410,10 +410,10 @@ export const init = ({
       const dynamicSlots = Object.entries(computedDirectives).filter(([k, v]) => k.startsWith('--'))
 
       dynamicSlots.forEach(([k, v]) => {
-        const [type, ...value] = v.split('|').map(x => x.trim()) // woah, Extreme!
+        const [type, value] = v.split('|').map(x => x.trim()) // woah, Extreme!
         switch (type) {
           case 'color': {
-            const color = findColor(value[0], { dynamicVars, staticVars })
+            const color = findColor(value, { dynamicVars, staticVars })
             dynamicVars[k] = color
             if (combination.component === rootComponentName) {
               staticVars[k.substring(2)] = color
@@ -421,7 +421,7 @@ export const init = ({
             break
           }
           case 'shadow': {
-            const shadow = value
+            const shadow = value.split(/,/g).map(s => s.trim())
             dynamicVars[k] = shadow
             if (combination.component === rootComponentName) {
               staticVars[k.substring(2)] = shadow

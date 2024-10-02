@@ -1,6 +1,6 @@
 import { flattenDeep } from 'lodash'
 
-const parseShadow = string => {
+export const parseShadow = string => {
   const modes = ['_full', 'inset', 'x', 'y', 'blur', 'spread', 'color', 'alpha']
   const regexPrep = [
     // inset keyword (optional)
@@ -26,7 +26,12 @@ const parseShadow = string => {
     const numeric = new Set(['x', 'y', 'blur', 'spread', 'alpha'])
     const { x, y, blur, spread, alpha, inset, color } = Object.fromEntries(modes.map((mode, i) => {
       if (numeric.has(mode)) {
-        return [mode, Number(result[i])]
+        const number = Number(result[i])
+        if (Number.isNaN(number)) {
+          if (mode === 'alpha') return [mode, 1]
+          return [mode, 0]
+        }
+        return [mode, number]
       } else if (mode === 'inset') {
         return [mode, !!result[i]]
       } else {
