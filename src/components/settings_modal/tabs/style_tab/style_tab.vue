@@ -125,7 +125,7 @@
           :shadow-control="isShadowTabOpen"
           :preview-class="previewClass"
           :preview-style="editorHintStyle"
-          :disabled="!editedSubShadow"
+          :disabled="!editedSubShadow && typeof editedShadow !== 'string'"
           :shadow="editedSubShadow"
           @update:shadow="({ axis, value }) => updateSubShadow(axis, value)"
         />

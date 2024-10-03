@@ -44,8 +44,8 @@ const findShadow = (shadows, { dynamicVars, staticVars }) => {
       if (shadow.startsWith('$')) {
         targetShadow = process(shadow, shadowFunctions, { findColor, findShadow }, { dynamicVars, staticVars })
       } else if (shadow.startsWith('--')) {
-        const [variable] = shadow.split(/,/g).map(str => str.trim()) // discarding modifier since it's not supported
-        const variableSlot = variable.substring(2)
+        // modifiers are completely unsupported here
+        const variableSlot = shadow.substring(2)
         return findShadow(staticVars[variableSlot], { dynamicVars, staticVars })
       } else {
         targetShadow = parseShadow(shadow)
@@ -66,6 +66,7 @@ const findColor = (color, { dynamicVars, staticVars }) => {
   if (typeof color !== 'string' || (!color.startsWith('--') && !color.startsWith('$'))) return color
   let targetColor = null
   if (color.startsWith('--')) {
+    // Modifier support is pretty much for v2 themes only
     const [variable, modifier] = color.split(/,/g).map(str => str.trim())
     const variableSlot = variable.substring(2)
     if (variableSlot === 'stack') {
@@ -421,7 +422,7 @@ export const init = ({
             break
           }
           case 'shadow': {
-            const shadow = value.split(/,/g).map(s => s.trim())
+            const shadow = value.split(/,/g).map(s => s.trim()).filter(x => x)
             dynamicVars[k] = shadow
             if (combination.component === rootComponentName) {
               staticVars[k.substring(2)] = shadow

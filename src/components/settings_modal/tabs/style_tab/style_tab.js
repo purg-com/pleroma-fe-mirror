@@ -219,9 +219,13 @@ export default {
       return selectors.map(x => x.substring(1)).join('')
     })
     const previewCss = computed(() => {
-      const scoped = getCssRules(previewRules)
-        .map(simulatePseudoSelectors)
-      return scoped.join('\n')
+      try {
+        const scoped = getCssRules(previewRules).map(simulatePseudoSelectors)
+        return scoped.join('\n')
+      } catch (e) {
+        console.error('Invalid ruleset', e)
+        return null
+      }
     })
 
     // ### Rules stuff aka meat and potatoes
@@ -415,17 +419,22 @@ export default {
     })
 
     const updatePreview = () => {
-      previewRules.splice(0, previewRules.length)
-      previewRules.push(...init({
-        inputRuleset: editorFriendlyToOriginal.value,
-        initialStaticVars: {
-          ...palette.value
-        },
-        ultimateBackgroundColor: '#000000',
-        rootComponentName: selectedComponentName.value,
-        editMode: true,
-        debug: true
-      }).eager)
+      try {
+        const rules = init({
+          inputRuleset: editorFriendlyToOriginal.value,
+          initialStaticVars: {
+            ...palette.value
+          },
+          ultimateBackgroundColor: '#000000',
+          rootComponentName: selectedComponentName.value,
+          editMode: true,
+          debug: true
+        }).eager
+        previewRules.splice(0, previewRules.length)
+        previewRules.push(...rules)
+      } catch (e) {
+        console.error('Could not compile preview theme', e)
+      }
     }
 
     const updateSelectedComponent = () => {

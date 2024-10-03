@@ -966,6 +966,9 @@
         "blur": "Blur",
         "spread": "Spread",
         "inset": "Inset",
+        "raw": "Plain shadow",
+        "expression": "Expression (advanced)",
+        "empty_expression": "Empty expression",
         "hintV3": "For shadows you can also use the {0} notation to use other color slot.",
         "filter_hint": {
           "always_drop_shadow": "Warning, this shadow always uses {0} when browser supports it.",
