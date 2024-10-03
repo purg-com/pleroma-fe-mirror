@@ -327,11 +327,7 @@ const setConfig = async ({ store }) => {
 
 const checkOAuthToken = async ({ store }) => {
   if (store.getters.getUserToken()) {
-    try {
-      await store.dispatch('loginUser', store.getters.getUserToken())
-    } catch (e) {
-      console.error(e)
-    }
+    return store.dispatch('loginUser', store.getters.getUserToken())
   }
   return Promise.resolve()
 }
@@ -349,19 +345,26 @@ const afterStoreSetup = async ({ store, i18n }) => {
   const server = (typeof overrides.target !== 'undefined') ? overrides.target : window.location.origin
   store.dispatch('setInstanceOption', { name: 'server', value: server })
 
+  document.querySelector('#status').textContent = i18n.global.t('splash.settings')
   await setConfig({ store })
-  await store.dispatch('setTheme')
+  document.querySelector('#status').textContent = i18n.global.t('splash.theme')
+  try {
+    await store.dispatch('setTheme').catch((e) => { console.error('Error setting theme', e) })
+  } catch (e) {
+    return Promise.reject(e)
+  }
 
-  applyConfig(store.state.config)
+  applyConfig(store.state.config, i18n.global)
 
   // Now we can try getting the server settings and logging in
   // Most of these are preloaded into the index.html so blocking is minimized
+  document.querySelector('#status').textContent = i18n.global.t('splash.instance')
   await Promise.all([
     checkOAuthToken({ store }),
     getInstancePanel({ store }),
     getNodeInfo({ store }),
     getInstanceConfig({ store })
-  ])
+  ]).catch(e => Promise.reject(e))
 
   // Start fetching things that don't need to block the UI
   store.dispatch('fetchMutes')
@@ -395,9 +398,9 @@ const afterStoreSetup = async ({ store, i18n }) => {
 
   // remove after vue 3.3
   app.config.unwrapInjectedRef = true
+  document.querySelector('#status').textContent = i18n.global.t('splash.almost')
 
   app.mount('#app')
-
   return app
 }
 
