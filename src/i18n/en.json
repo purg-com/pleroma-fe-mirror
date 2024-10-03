@@ -1495,5 +1495,17 @@
   },
   "unicode_domain_indicator": {
     "tooltip": "This domain contains non-ascii characters."
+  },
+  "splash": {
+    "loading": "Loading...",
+    "theme": "Applying theme, please wait warmly...",
+    "instance": "Getting instance info...",
+    "settings": "Applying settings...",
+    "almost": "Reticulating splines...",
+    "fun_1": "Drink more water",
+    "fun_2": "Take it easy!",
+    "fun_3": "Suya...",
+    "fun_4": "My Pleroma machine is full power!",
+    "error": "Something went wrong"
   }
 }

@@ -42,14 +42,13 @@ const adoptStyleSheets = (styles) => {
   // is nothing to do here.
 }
 
-export const generateTheme = async (inputRuleset, callbacks, debug) => {
+export const generateTheme = (inputRuleset, callbacks, debug) => {
   const {
     onNewRule = (rule, isLazy) => {},
     onLazyFinished = () => {},
     onEagerFinished = () => {}
   } = callbacks
 
-  // Assuming that "worst case scenario background" is panel background since it's the most likely one
   const themes3 = init({
     inputRuleset,
     debug
@@ -144,12 +143,11 @@ export const tryLoadCache = () => {
   }
 }
 
-export const applyTheme = async (input, onFinish = (data) => {}, debug) => {
-  console.log('INPUT', input)
+export const applyTheme = (input, onFinish = (data) => {}, debug) => {
   const eagerStyles = createStyleSheet(EAGER_STYLE_ID)
   const lazyStyles = createStyleSheet(LAZY_STYLE_ID)
 
-  const { lazyProcessFunc } = await generateTheme(
+  const { lazyProcessFunc } = generateTheme(
     input,
     {
       onNewRule (rule, isLazy) {
@@ -168,15 +166,22 @@ export const applyTheme = async (input, onFinish = (data) => {}, debug) => {
         adoptStyleSheets([eagerStyles, lazyStyles])
         const cache = { engineChecksum: getEngineChecksum(), data: [eagerStyles.rules, lazyStyles.rules] }
         onFinish(cache)
-        localStorage.setItem('pleroma-fe-theme-cache', JSON.stringify(cache))
+        try {
+          localStorage.setItem('pleroma-fe-theme-cache', JSON.stringify(cache))
+        } catch (e) {
+          localStorage.removeItem('pleroma-fe-theme-cache')
+          try {
+            localStorage.setItem('pleroma-fe-theme-cache', JSON.stringify(cache))
+          } catch (e) {
+            console.warn('cannot save cache!', e)
+          }
+        }
       }
     },
     debug
   )
 
   setTimeout(lazyProcessFunc, 0)
-
-  return Promise.resolve()
 }
 
 const extractStyleConfig = ({
@@ -221,7 +226,7 @@ const extractStyleConfig = ({
 
 const defaultStyleConfig = extractStyleConfig(defaultState)
 
-export const applyConfig = (input) => {
+export const applyConfig = (input, i18n) => {
   const config = extractStyleConfig(input)
 
   if (config === defaultStyleConfig) {
@@ -229,8 +234,6 @@ export const applyConfig = (input) => {
   }
 
   const head = document.head
-  const body = document.body
-  body.classList.add('hidden')
 
   const rules = Object
     .entries(config)
@@ -251,8 +254,6 @@ export const applyConfig = (input) => {
         --roundness: var(--forcedRoundness) !important;
     }`, 'index-max')
   }
-
-  body.classList.remove('hidden')
 }
 
 export const getResourcesIndex = async (url) => {
