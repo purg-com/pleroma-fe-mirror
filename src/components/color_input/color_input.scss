@@ -1,12 +1,15 @@
 .color-input {
   display: inline-flex;
 
+  .label {
+    flex: 1 1 auto;
+  }
+
   &-field.input {
     display: inline-flex;
     flex: 0 0 0;
     max-width: 9em;
     align-items: stretch;
-    padding: 0.2em 8px;
 
     input {
       color: var(--text);
@@ -25,6 +28,7 @@
     .nativeColor {
       cursor: pointer;
       flex: 0 0 auto;
+      padding: 0;
 
       input {
         appearance: none;
@@ -41,10 +45,10 @@
     .invalidIndicator,
     .transparentIndicator {
       flex: 0 0 2em;
-      margin: 0 0.5em;
+      margin: 0.2em 0.5em;
       min-width: 2em;
       align-self: stretch;
-      min-height: 1.5em;
+      min-height: 1.1em;
       border-radius: var(--roundness);
     }
 
@@ -81,9 +85,17 @@
         border-bottom-right-radius: var(--roundness);
       }
     }
-  }
 
-  .label {
-    flex: 1 1 auto;
+    &.disabled,
+    &:disabled {
+      .nativeColor input,
+      .computedIndicator,
+      .validIndicator,
+      .invalidIndicator,
+      .transparentIndicator {
+        /* stylelint-disable-next-line declaration-no-important */
+        opacity: 0.25 !important;
+      }
+    }
   }
 }

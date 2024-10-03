@@ -10,17 +10,18 @@ const hoverGlow = {
 export default {
   name: 'Input',
   selector: '.input',
-  variant: {
+  states: {
+    hover: ':hover:not(.disabled)',
+    focused: ':focus-within',
+    disabled: '.disabled'
+  },
+  variants: {
     checkbox: '.-checkbox',
     radio: '.-radio'
   },
-  states: {
-    disabled: ':disabled',
-    hover: ':hover:not(:disabled)',
-    focused: ':focus-within'
-  },
   validInnerComponents: [
-    'Text'
+    'Text',
+    'Icon'
   ],
   defaultRules: [
     {
@@ -54,6 +55,34 @@ export default {
       state: ['hover'],
       directives: {
         shadow: [hoverGlow, '--defaultInputBevel']
+      }
+    },
+    {
+      state: ['disabled'],
+      directives: {
+        background: '--parent'
+      }
+    },
+    {
+      component: 'Text',
+      parent: {
+        component: 'Input',
+        state: ['disabled']
+      },
+      directives: {
+        textOpacity: 0.25,
+        textOpacityMode: 'blend'
+      }
+    },
+    {
+      component: 'Icon',
+      parent: {
+        component: 'Input',
+        state: ['disabled']
+      },
+      directives: {
+        textOpacity: 0.25,
+        textOpacityMode: 'blend'
       }
     }
   ]

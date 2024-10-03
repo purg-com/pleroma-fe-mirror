@@ -876,6 +876,9 @@
         "component": "Component",
         "override": "Override",
         "shadow_id": "Shadow #{value}",
+        "offset": "Shadow offset",
+        "light_grid": "Use light checkerboard",
+        "name": "Name",
         "blur": "Blur",
         "spread": "Spread",
         "inset": "Inset",
@@ -883,6 +886,7 @@
         "filter_hint": {
           "always_drop_shadow": "Warning, this shadow always uses {0} when browser supports it.",
           "drop_shadow_syntax": "{0} does not support {1} parameter and {2} keyword.",
+          "avatar_inset_short": "Separate inset shadow",
           "avatar_inset": "Please note that combining both inset and non-inset shadows on avatars might give unexpected results with transparent avatars.",
           "spread_zero": "Shadows with spread > 0 will appear as if it was set to zero",
           "inset_classic": "Inset shadows will be using {0}"
@@ -1407,6 +1411,18 @@
   },
   "unicode_domain_indicator": {
     "tooltip": "This domain contains non-ascii characters."
+  },
+  "splash": {
+    "loading": "Loading...",
+    "theme": "Applying theme, please wait warmly...",
+    "instance": "Getting instance info...",
+    "settings": "Applying settings...",
+    "almost": "Reticulating splines...",
+    "fun_1": "Drink more water",
+    "fun_2": "Take it easy!",
+    "fun_3": "Suya...",
+    "fun_4": "My Pleroma machine is full power!",
+    "error": "Something went wrong"
   },
   "bookmark_folders": {
     "select_folder": "Select bookmark folder",
