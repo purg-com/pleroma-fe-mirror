@@ -7,7 +7,7 @@
       <h2>{{ $t('settings.theme') }}</h2>
       <button
         class="btn button-default"
-        @click="importTheme"
+        @click="importFile"
       >
         <FAIcon icon="folder-open" />
         {{ $t('settings.style.themes3.editor.load_style') }}
@@ -30,7 +30,7 @@
             v-html="previewTheme('stock')"
           />
           <!-- eslint-enable vue/no-v-text-v-html-on-component -->
-          <preview />
+          <preview id="theme-preview-stock" />
           <h4 class="theme-name">
             {{ $t('settings.style.stock_theme_used') }}
             <span class="alert neutral version">v3</span>
@@ -71,23 +71,30 @@
       </ul>
       <h3>{{ $t('settings.style.themes3.palette.label') }}</h3>
       <div class="palettes">
-        <button
-          v-for="p in availablePalettes"
-          :key="p.name"
-          class="btn button-default palette-entry"
-          :class="{ toggled: isPaletteActive(p.key) }"
-          @click="() => setPalette(p.key)"
-        >
-          <label>
-            {{ p.name }}
-          </label>
-          <span
-            v-for="c in palettesKeys"
-            :key="c"
-            class="palette-square"
-            :style="{ backgroundColor: p[c], border: '1px solid ' + (p[c] ?? 'var(--text)') }"
-          />
-        </button>
+        <template v-if="customThemeVersion === 'v3'">
+          <button
+            v-for="p in availablePalettes"
+            :key="p.name"
+            class="btn button-default palette-entry"
+            :class="{ toggled: isPaletteActive(p.key) }"
+            @click="() => setPalette(p.key)"
+          >
+            <label>
+              {{ p.name }}
+            </label>
+            <span
+              v-for="c in palettesKeys"
+              :key="c"
+              class="palette-square"
+              :style="{ backgroundColor: p[c], border: '1px solid ' + (p[c] ?? 'var(--text)') }"
+            />
+          </button>
+        </template>
+        <template v-else-if="customThemeVersion === 'v2'">
+          <div class="alert neutral theme-notice unsupported-theme-v2">
+            {{$t('settings.style.themes3.palette.v2_unsupported')}}
+          </div>
+        </template>
       </div>
     </div>
     <div class="alert neutral theme-notice">

@@ -771,7 +771,8 @@
           "cOrange": "Orange color",
           "extra1": "Extra 1",
           "extra2": "Extra 2",
-          "extra3": "Extra 3"
+          "extra3": "Extra 3",
+          "v2_unsupported": "Older v2 themes don't support palettes. Switch to v3 theme to make use of palettes",
         },
         "editor": {
           "title": "Style",

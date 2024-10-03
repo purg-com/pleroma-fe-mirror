@@ -5,6 +5,7 @@ import { convertTheme2To3 } from 'src/services/theme_data/theme2_to_theme3.js'
 const defaultState = {
   localFonts: null,
   themeApplied: false,
+  themeVersion: 'v3',
   temporaryChangesTimeoutId: null, // used for temporary options that revert after a timeout
   temporaryChangesConfirm: () => {}, // used for applying temporary options
   temporaryChangesRevert: () => {}, // used for reverting temporary options
@@ -307,7 +308,7 @@ const interfaceMod = {
       commit('setOption', { name: 'customThemeSource', value: null })
     },
     async applyTheme (
-      { dispatch, commit, rootState },
+      { dispatch, commit, rootState, state },
       { recompile = true } = {}
     ) {
       // If we're not not forced to recompile try using
@@ -397,6 +398,8 @@ const interfaceMod = {
       } else {
         majorVersionUsed = 'v3'
       }
+
+      state.themeVersion = majorVersionUsed
 
       let styleDataUsed = null
       let styleNameUsed = null

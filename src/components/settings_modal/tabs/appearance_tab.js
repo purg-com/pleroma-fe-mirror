@@ -34,7 +34,7 @@ const AppearanceTab = {
     return {
       availableStyles: [],
       availablePalettes: [],
-      themeImporter: newImporter({
+      fileImporter: newImporter({
         accept: '.json, .piss',
         validator: this.importValidator,
         onImport: this.onImport,
@@ -179,6 +179,10 @@ const AppearanceTab = {
         this.$store.dispatch('setOption', { name: 'interfaceLanguage', value: val })
       }
     },
+    customThemeVersion () {
+      const { themeVersion } = this.$store.state.interface
+      return themeVersion
+    },
     isCustomThemeUsed () {
       const { theme } = this.mergedConfig
       return theme === 'custom'
@@ -202,8 +206,8 @@ const AppearanceTab = {
         }
       })
     },
-    importTheme () {
-      this.themeImporter.importData()
+    importFile () {
+      this.fileImporter.importData()
     },
     onImport (parsed, filename) {
       if (filename.endsWith('.json')) {
@@ -234,14 +238,18 @@ const AppearanceTab = {
       const { palette } = this.mergedConfig
       return key === palette
     },
-    importStyle () {
-
+    setStyle (name) {
+      this.$store.dispatch('resetThemeV2')
+      this.$store.dispatch('setTheme', name)
+      this.$store.dispatch('applyTheme')
     },
     setTheme (name) {
+      this.$store.dispatch('resetThemeV3')
       this.$store.dispatch('setTheme', name)
       this.$store.dispatch('applyTheme')
     },
     setPalette (name) {
+      this.$store.dispatch('resetThemeV2')
       this.$store.dispatch('setPalette', name)
       this.$store.dispatch('applyTheme')
     },
