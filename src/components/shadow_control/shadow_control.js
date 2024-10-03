@@ -1,6 +1,7 @@
 import ColorInput from 'src/components/color_input/color_input.vue'
 import OpacityInput from 'src/components/opacity_input/opacity_input.vue'
 import Select from 'src/components/select/select.vue'
+import SelectMotion from 'src/components/select/select_motion.vue'
 import Checkbox from 'src/components/checkbox/checkbox.vue'
 import Popover from 'src/components/popover/popover.vue'
 import ComponentPreview from 'src/components/component_preview/component_preview.vue'
@@ -54,12 +55,10 @@ export default {
     ColorInput,
     OpacityInput,
     Select,
+    SelectMotion,
     Checkbox,
     Popover,
     ComponentPreview
-  },
-  beforeUpdate () {
-    this.cValue = (this.modelValue ?? this.fallback ?? []).map(toModel)
   },
   computed: {
     selectedType: {
@@ -73,7 +72,6 @@ export default {
     selected: {
       get () {
         const selected = this.cValue[this.selectedId]
-        console.log('SELECTED', selected)
         if (selected && typeof selected === 'object') {
           return { ...selected }
         } else if (typeof selected === 'string') {
@@ -94,12 +92,6 @@ export default {
     },
     currentFallback () {
       return this.fallback?.[this.selectedId]
-    },
-    moveUpValid () {
-      return this.selectedId > 0
-    },
-    moveDnValid () {
-      return this.selectedId < this.cValue.length - 1
     },
     usingFallback () {
       return this.modelValue == null
@@ -123,11 +115,20 @@ export default {
     }
   },
   watch: {
+    modelValue (value) {
+      if (!value) this.cValue = (this.modelValue ?? this.fallback ?? []).map(toModel)
+    },
     selected (value) {
       this.$emit('subShadowSelected', this.selectedId)
     }
   },
   methods: {
+    getNewSubshadow () {
+      return toModel(this.selected)
+    },
+    onSelectChange (id) {
+      this.selectedId = id
+    },
     getSubshadowLabel (shadow, index) {
       if (typeof shadow === 'object') {
         return shadow?.name ?? this.$t('settings.style.shadows.shadow_id', { value: index })
@@ -141,28 +142,6 @@ export default {
         this.cValue[this.selectedId].spread = 0
       }
       this.$emit('update:modelValue', this.cValue)
-    }, 100),
-    add () {
-      this.cValue.push(toModel(this.selected))
-      this.selectedId = Math.max(this.cValue.length - 1, 0)
-      this.$emit('update:modelValue', this.cValue)
-    },
-    del () {
-      this.cValue.splice(this.selectedId, 1)
-      this.selectedId = this.cValue.length === 0 ? undefined : Math.max(this.selectedId - 1, 0)
-      this.$emit('update:modelValue', this.cValue)
-    },
-    moveUp () {
-      const movable = this.cValue.splice(this.selectedId, 1)[0]
-      this.cValue.splice(this.selectedId - 1, 0, movable)
-      this.selectedId -= 1
-      this.$emit('update:modelValue', this.cValue)
-    },
-    moveDn () {
-      const movable = this.cValue.splice(this.selectedId, 1)[0]
-      this.cValue.splice(this.selectedId + 1, 0, movable)
-      this.selectedId += 1
-      this.$emit('update:modelValue', this.cValue)
-    }
+    }, 100)
   }
 }

@@ -28,53 +28,14 @@
           {{ getSubshadowLabel(shadow, index) }}
         </option>
       </Select>
-      <div
-        class="id-control btn-group arrange-buttons"
-      >
-        <button
-          class="btn button-default"
-          :disabled="disabled || shadowsAreNull"
-          @click="add"
-        >
-          <FAIcon
-            fixed-width
-            icon="plus"
-          />
-        </button>
-        <button
-          class="btn button-default"
-          :disabled="disabled || !moveUpValid"
-          :class="{ disabled: disabled || !moveUpValid }"
-          @click="moveUp"
-        >
-          <FAIcon
-            fixed-width
-            icon="chevron-up"
-          />
-        </button>
-        <button
-          class="btn button-default"
-          :disabled="disabled || !moveDnValid"
-          :class="{ disabled: disabled || !moveDnValid }"
-          @click="moveDn"
-        >
-          <FAIcon
-            fixed-width
-            icon="chevron-down"
-          />
-        </button>
-        <button
-          class="btn button-default"
-          :disabled="disabled || !present"
-          :class="{ disabled: disabled || !present }"
-          @click="del"
-        >
-          <FAIcon
-            fixed-width
-            icon="times"
-          />
-        </button>
-      </div>
+      <SelectMotion
+        class="arrange-buttons"
+        v-model="cValue"
+        :selectedId="selectedId"
+        :get-add-value="getNewSubshadow"
+        :disabled="disabled"
+        @update:selectedId="onSelectChange"
+      />
     </div>
     <div class="shadow-tweak">
       <Select
