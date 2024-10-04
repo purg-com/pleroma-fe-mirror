@@ -140,6 +140,7 @@ const defaultState = {
   shoutAvailable: false,
   pleromaChatMessagesAvailable: false,
   pleromaCustomEmojiReactionsAvailable: false,
+  pleromaBookmarkFoldersAvailable: false,
   gopherAvailable: false,
   mediaProxyAvailable: false,
   suggestionsEnabled: false,

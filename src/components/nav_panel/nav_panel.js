@@ -1,3 +1,4 @@
+import BookmarkFoldersMenuContent from 'src/components/bookmark_folders_menu/bookmark_folders_menu_content.vue'
 import ListsMenuContent from 'src/components/lists_menu/lists_menu_content.vue'
 import { mapState, mapGetters } from 'vuex'
 import { TIMELINES, ROOT_ITEMS } from 'src/components/navigation/navigation.js'
@@ -41,6 +42,7 @@ const NavPanel = {
   created () {
   },
   components: {
+    BookmarkFoldersMenuContent,
     ListsMenuContent,
     NavigationEntry,
     NavigationPins,
@@ -51,6 +53,7 @@ const NavPanel = {
       editMode: false,
       showTimelines: false,
       showLists: false,
+      showBookmarkFolders: false,
       timelinesList: Object.entries(TIMELINES).map(([k, v]) => ({ ...v, name: k })),
       rootList: Object.entries(ROOT_ITEMS).map(([k, v]) => ({ ...v, name: k }))
     }
@@ -61,6 +64,9 @@ const NavPanel = {
     },
     toggleLists () {
       this.showLists = !this.showLists
+    },
+    toggleBookmarkFolders () {
+      this.showBookmarkFolders = !this.showBookmarkFolders
     },
     toggleEditMode () {
       this.editMode = !this.editMode
@@ -90,7 +96,8 @@ const NavPanel = {
       pleromaChatMessagesAvailable: state => state.instance.pleromaChatMessagesAvailable,
       supportsAnnouncements: state => state.announcements.supportsAnnouncements,
       pinnedItems: state => new Set(state.serverSideStorage.prefsStorage.collections.pinnedNavItems),
-      collapsed: state => state.serverSideStorage.prefsStorage.simple.collapseNav
+      collapsed: state => state.serverSideStorage.prefsStorage.simple.collapseNav,
+      bookmarkFolders: state => state.instance.pleromaBookmarkFoldersAvailable
     }),
     timelinesItems () {
       return filterNavigation(
@@ -102,7 +109,8 @@ const NavPanel = {
           hasAnnouncements: this.supportsAnnouncements,
           isFederating: this.federating,
           isPrivate: this.privateMode,
-          currentUser: this.currentUser
+          currentUser: this.currentUser,
+          supportsBookmarkFolders: this.bookmarkFolders
         }
       )
     },
@@ -116,7 +124,8 @@ const NavPanel = {
           hasAnnouncements: this.supportsAnnouncements,
           isFederating: this.federating,
           isPrivate: this.privateMode,
-          currentUser: this.currentUser
+          currentUser: this.currentUser,
+          supportsBookmarkFolders: this.bookmarkFolders
         }
       )
     },
