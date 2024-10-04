@@ -483,7 +483,7 @@ const interfaceMod = {
           userThemeV2Name || instanceThemeV2Name
         )
         themeNameUsed = theme.nameUsed
-        themeDataUsed = theme.dataUsed
+        themeDataUsed = { ...theme.dataUsed, themeEngineVersion: CURRENT_VERSION }
 
         // Themes v2 editor support
         commit('setInstanceOption', { name: 'themeData', value: themeDataUsed })
