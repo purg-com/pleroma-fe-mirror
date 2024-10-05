@@ -87,6 +87,10 @@
               icon="bookmark"
             /><span>{{ $t("status.unbookmark") }}</span>
           </button>
+          <StatusBookmarkFolderMenu
+            v-if="status.bookmarked && bookmarkFolders"
+            :status="status"
+          />
         </template>
         <button
           v-if="ownStatus && editingAvailable"

@@ -22,11 +22,25 @@
             :icon="item.icon"
           />
         </span>
+        <img
+          v-if="item.iconEmojiUrl"
+          class="menu-icon iconEmoji iconEmoji-image"
+          :src="item.iconEmojiUrl"
+          :alt="item.iconEmoji"
+          :title="item.iconEmoji"
+        >
         <span
-          v-if="item.iconLetter"
-          class="icon iconLetter fa-scale-110 menu-icon"
-        >{{ item.iconLetter }}
+          v-else-if="item.iconEmoji"
+          class="menu-icon iconEmoji"
+        >
+          <span>
+            {{ item.iconEmoji }}
+          </span>
         </span>
+        <span
+          v-else-if="item.iconLetter"
+          class="icon iconLetter fa-scale-110 menu-icon"
+        >{{ item.iconLetter }}</span>
         <span class="label">
           {{ item.labelRaw || $t(item.label) }}
         </span>
@@ -109,6 +123,24 @@
 
   .badge {
     margin: 0 var(--__horizontal-gap);
+  }
+
+  .iconEmoji {
+    display: inline-block;
+    text-align: center;
+    object-fit: contain;
+    vertical-align: middle;
+    height: var(--__line-height);
+    width: var(--__line-height);
+
+    > span {
+      font-size: 1.5rem;
+    }
+  }
+
+  img.iconEmoji {
+    padding: 0.25rem;
+    box-sizing: border-box;
   }
 }
 </style>

@@ -26,6 +26,7 @@ const Timeline = {
     'userId',
     'listId',
     'statusId',
+    'bookmarkFolderId',
     'tag',
     'embedded',
     'count',
@@ -123,6 +124,7 @@ const Timeline = {
       userId: this.userId,
       listId: this.listId,
       statusId: this.statusId,
+      bookmarkFolderId: this.bookmarkFolderId,
       tag: this.tag
     })
   },
@@ -186,6 +188,7 @@ const Timeline = {
         userId: this.userId,
         listId: this.listId,
         statusId: this.statusId,
+        bookmarkFolderId: this.bookmarkFolderId,
         tag: this.tag
       }).then(({ statuses }) => {
         if (statuses && statuses.length === 0) {

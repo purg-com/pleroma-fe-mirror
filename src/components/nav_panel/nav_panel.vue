@@ -84,6 +84,39 @@
           />
         </div>
         <NavigationEntry
+          v-if="currentUser && bookmarkFolders"
+          :show-pin="false"
+          :item="{ icon: 'bookmark', label: 'nav.bookmarks' }"
+          :aria-expanded="showBookmarkFolders ? 'true' : 'false'"
+          @click="toggleBookmarkFolders"
+        >
+          <router-link
+            :title="$t('bookmarks.manage_bookmark_folders')"
+            class="button-unstyled extra-button"
+            :to="{ name: 'bookmark-folders' }"
+            @click.stop
+          >
+            <FAIcon
+              fixed-width
+              icon="wrench"
+            />
+          </router-link>
+          <FAIcon
+            class="timelines-chevron"
+            fixed-width
+            :icon="showBookmarkFolders ? 'chevron-up' : 'chevron-down'"
+          />
+        </NavigationEntry>
+        <div
+          v-show="showBookmarkFolders"
+          class="timelines-background menu-item-collapsible"
+          :class="{ '-expanded': showBookmarkFolders }"
+        >
+          <BookmarkFoldersMenuContent
+            class="timelines"
+          />
+        </div>
+        <NavigationEntry
           v-for="item in rootItems"
           :key="item.name"
           :show-pin="editMode || forceEditMode"

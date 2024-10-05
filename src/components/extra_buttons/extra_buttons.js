@@ -1,6 +1,7 @@
 import Popover from '../popover/popover.vue'
 import genRandomSeed from '../../services/random_seed/random_seed.service.js'
 import ConfirmModal from '../confirm_modal/confirm_modal.vue'
+import StatusBookmarkFolderMenu from '../status_bookmark_folder_menu/status_bookmark_folder_menu.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faEllipsisH,
@@ -36,7 +37,8 @@ const ExtraButtons = {
   props: ['status'],
   components: {
     Popover,
-    ConfirmModal
+    ConfirmModal,
+    StatusBookmarkFolderMenu
   },
   data () {
     return {
@@ -144,6 +146,9 @@ const ExtraButtons = {
     },
     canBookmark () {
       return !!this.currentUser
+    },
+    bookmarkFolders () {
+      return this.$store.state.instance.pleromaBookmarkFoldersAvailable
     },
     statusLink () {
       return `${this.$store.state.instance.server}${this.$router.resolve({ name: 'conversation', params: { id: this.status.id } }).href}`

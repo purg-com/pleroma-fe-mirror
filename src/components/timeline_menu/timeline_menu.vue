@@ -15,6 +15,10 @@
         :show-pin="false"
         class="timelines"
       />
+      <BookmarkFoldersMenuContent
+        v-else-if="useBookmarkFoldersMenu"
+        class="timelines"
+      />
       <ul v-else>
         <NavigationEntry
           v-for="item in timelinesList"
