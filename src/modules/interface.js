@@ -220,7 +220,8 @@ const interfaceMod = {
         return value
       } catch (e) {
         console.error('Could not fetch palettes index', e)
-        return {}
+        commit('setInstanceOption', { name: 'palettesIndex', value: { _error: e } })
+        return Promise.resolve({})
       }
     },
     setPalette ({ dispatch, commit }, value) {
@@ -246,6 +247,7 @@ const interfaceMod = {
         return value
       } catch (e) {
         console.error('Could not fetch styles index', e)
+        commit('setInstanceOption', { name: 'stylesIndex', value: { _error: e } })
         return Promise.resolve({})
       }
     },
@@ -272,6 +274,7 @@ const interfaceMod = {
         return value
       } catch (e) {
         console.error('Could not fetch themes index', e)
+        commit('setInstanceOption', { name: 'themesIndex', value: { _error: e } })
         return Promise.resolve({})
       }
     },
@@ -374,29 +377,33 @@ const interfaceMod = {
         userThemeV2Snapshot = null
 
         majorVersionUsed = 'v3'
-        if (!palettesIndex || !stylesIndex) {
-          const result = await Promise.all([
-            dispatch('fetchPalettesIndex'),
-            dispatch('fetchStylesIndex')
-          ])
-
-          palettesIndex = result[0]
-          stylesIndex = result[1]
-        }
       } else if (
-        userThemeV2Name ||
+        (userThemeV2Name ||
           userThemeV2Snapshot ||
           userThemeV2Source ||
-          instanceThemeV2Name
+         instanceThemeV2Name)
       ) {
         majorVersionUsed = 'v2'
+      } else {
+        // if all fails fallback to v3
+        majorVersionUsed = 'v3'
+      }
+
+      if (majorVersionUsed === 'v3') {
+        const result = await Promise.all([
+          dispatch('fetchPalettesIndex'),
+          dispatch('fetchStylesIndex')
+        ])
+
+        palettesIndex = result[0]
+        stylesIndex = result[1]
+      } else {
         // Promise.all just to be uniform with v3
         const result = await Promise.all([
           dispatch('fetchThemesIndex')
         ])
+
         themesIndex = result[0]
-      } else {
-        majorVersionUsed = 'v3'
       }
 
       state.themeVersion = majorVersionUsed
@@ -483,7 +490,7 @@ const interfaceMod = {
           userThemeV2Name || instanceThemeV2Name
         )
         themeNameUsed = theme.nameUsed
-        themeDataUsed = { ...theme.dataUsed, themeEngineVersion: CURRENT_VERSION }
+        themeDataUsed = theme.dataUsed
 
         // Themes v2 editor support
         commit('setInstanceOption', { name: 'themeData', value: themeDataUsed })
@@ -523,7 +530,7 @@ const interfaceMod = {
         return result
       })()
 
-      const theme2ruleset = themeDataUsed && convertTheme2To3(normalizeThemeData(themeDataUsed))
+      const theme2ruleset = themeDataUsed && convertTheme2To3(generatePreset(themeDataUsed).source)
       const hacks = []
 
       Object.entries(theme3hacks).forEach(([key, value]) => {
