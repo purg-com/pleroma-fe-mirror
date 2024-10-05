@@ -2,6 +2,7 @@ import { ref, reactive, computed, watch } from 'vue'
 import { get, set } from 'lodash'
 
 import Select from 'src/components/select/select.vue'
+import SelectMotion from 'src/components/select/select_motion.vue'
 import Checkbox from 'src/components/checkbox/checkbox.vue'
 import ComponentPreview from 'src/components/component_preview/component_preview.vue'
 import StringSetting from '../../helpers/string_setting.vue'
@@ -42,6 +43,7 @@ library.add(
 export default {
   components: {
     Select,
+    SelectMotion,
     Checkbox,
     Tooltip,
     StringSetting,
@@ -115,6 +117,19 @@ export default {
       set (newPalette) {
         palettes[editedPalette.value] = newPalette
       }
+    })
+
+    const getNewPalette = () => ({
+      name: 'new palette',
+      bg: '#121a24',
+      fg: '#182230',
+      text: '#b9b9ba',
+      link: '#d8a070',
+      accent: '#d8a070',
+      cRed: '#FF0000',
+      cBlue: '#0095ff',
+      cGreen: '#0fa00f',
+      cOrange: '#ffa500'
     })
 
     // ### I18n stuff
@@ -515,6 +530,7 @@ export default {
       website,
       palette,
       editedPalette,
+      getNewPalette,
       componentKeys,
       componentsMap,
       selectedComponent,

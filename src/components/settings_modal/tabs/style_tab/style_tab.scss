@@ -88,9 +88,12 @@
   }
 
   .palette-editor {
-    > .label:not(.Select) {
-      font-weight: bold;
-      justify-self: right;
+    display: grid;
+
+    .palette-selector {
+      &-label {
+        font-weight: bold;
+      }
     }
   }
 

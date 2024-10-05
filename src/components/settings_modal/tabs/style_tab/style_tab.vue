@@ -260,29 +260,34 @@
         :label="$t('settings.style.themes3.editor.palette_tab')"
         class="setting-item palette-editor"
       >
-        <div class="label">
-          <label for="palette-selector">
+          <label
+            class="palette-selector-label"
+            for="palette-selector"
+          >
             {{ $t('settings.style.themes3.palette.label') }}
             {{ ' ' }}
           </label>
           <Select
             id="palette-selector"
             v-model="editedPalette"
+            class="palette-list"
+            size="10"
           >
             <option
-              key="dark"
-              value="dark"
+              v-for="(p, index) in palettes"
+              :key="p"
+              :value="index"
             >
-              {{ $t('settings.style.themes3.palette.dark') }}
-            </option>
-            <option
-              key="light"
-              value="light"
-            >
-              {{ $t('settings.style.themes3.palette.light') }}
+              {{ p }}
             </option>
           </Select>
-        </div>
+          <SelectMotion
+            class="palette-list-movement"
+            v-model="palettes"
+            :selected-id="editedPalette"
+            :get-add-value="getNewPalette"
+            @update:selectedId="e => editecPalette = e"
+          />
         <PaletteEditor v-model="palette" />
       </div>
     </tab-switcher>
