@@ -799,6 +799,8 @@
             "preserve": "Keep color",
             "no-auto": "Disabled"
           },
+          "component_tab": "Components style",
+          "palette_tab": "Color presets",
           "components": {
             "normal": {
               "state": "Normal",
