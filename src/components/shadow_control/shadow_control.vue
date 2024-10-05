@@ -29,9 +29,8 @@
         </option>
       </Select>
       <SelectMotion
-        class="arrange-buttons"
         v-model="cValue"
-        :selectedId="selectedId"
+        :selected-id="selectedId"
         :get-add-value="getNewSubshadow"
         :disabled="disabled"
         @update:selectedId="onSelectChange"
@@ -55,8 +54,7 @@
           class="input shadow-expression"
           :disabled="disabled || shadowsAreNull"
           :class="{disabled: disabled || shadowsAreNull}"
-        >
-        </textarea>
+        />
       </template>
       <template v-else-if="selectedType === 'object'">
         <div

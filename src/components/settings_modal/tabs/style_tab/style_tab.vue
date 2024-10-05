@@ -53,8 +53,8 @@
     </div>
     <tab-switcher>
       <div
-        class="setting-item component-editor"
         key="component"
+        class="setting-item component-editor"
         :label="$t('settings.style.themes3.editor.component_tab')"
       >
         <div class="component-selector">

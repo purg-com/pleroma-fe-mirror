@@ -92,7 +92,7 @@
         </template>
         <template v-else-if="customThemeVersion === 'v2'">
           <div class="alert neutral theme-notice unsupported-theme-v2">
-            {{$t('settings.style.themes3.palette.v2_unsupported')}}
+            {{ $t('settings.style.themes3.palette.v2_unsupported') }}
           </div>
         </template>
       </div>

@@ -17,18 +17,18 @@
       :disabled="disabled || !moveUpValid"
       :class="{ disabled: disabled || !moveUpValid }"
       @click="moveUp"
-      >
+    >
       <FAIcon
         fixed-width
         icon="chevron-up"
-        />
+      />
     </button>
     <button
       class="btn button-default"
       :disabled="disabled || !moveDnValid"
       :class="{ disabled: disabled || !moveDnValid }"
       @click="moveDn"
-      >
+    >
       <FAIcon
         fixed-width
         icon="chevron-down"
