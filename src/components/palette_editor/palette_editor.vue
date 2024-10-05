@@ -1,31 +1,27 @@
 <template>
   <div class="PaletteEditor">
-    <div class="colors">
-      <ColorInput
-        v-for="key in paletteKeys"
-        :key="key"
-        :model-value="props.modelValue[key]"
-        :fallback="fallback(key)"
-        :label="$t('settings.style.themes3.palette.' + key)"
-        @update:modelValue="value => updatePalette(key, value)"
-      />
-    </div>
-    <div class="controls">
-      <button
-        class="btn button-default"
-        @click="importPalette"
-      >
-        <FAIcon icon="file-import" />
-        {{ $t('settings.style.themes3.palette.import') }}
-      </button>
-      <button
-        class="btn button-default"
-        @click="exportPalette"
-      >
-        <FAIcon icon="file-export" />
-        {{ $t('settings.style.themes3.palette.export') }}
-      </button>
-    </div>
+    <ColorInput
+      v-for="key in paletteKeys"
+      :key="key"
+      :model-value="props.modelValue[key]"
+      :fallback="fallback(key)"
+      :label="$t('settings.style.themes3.palette.' + key)"
+      @update:modelValue="value => updatePalette(key, value)"
+    />
+    <button
+      class="btn button-default palette-import-button"
+      @click="importPalette"
+    >
+      <FAIcon icon="file-import" />
+      {{ $t('settings.style.themes3.palette.import') }}
+    </button>
+    <button
+      class="btn button-default palette-export-button"
+      @click="exportPalette"
+    >
+      <FAIcon icon="file-export" />
+      {{ $t('settings.style.themes3.palette.export') }}
+    </button>
   </div>
 </template>
 
@@ -106,18 +102,23 @@ const updatePalette = (paletteKey, value) => {
 
 <style lang="scss">
 .PaletteEditor {
-  .colors {
-    display: grid;
-    justify-content: space-around;
-    grid-template-columns: repeat(4, min-content);
-    grid-template-rows: repeat(auto-fit, min-content);
-    grid-gap: 0.5em;
+  display: grid;
+  justify-content: space-around;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr) auto;
+  grid-gap: 0.5em;
+  align-items: space-between;
+
+  .palette-import-button {
+    grid-column: 1 / span 2;
   }
 
-  .controls {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 0.5em;
+  .palette-export-button {
+    grid-column: 3 / span 2;
+  }
+
+  .color-input.style-control {
+    margin: 0;
   }
 }
 </style>

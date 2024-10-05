@@ -72,8 +72,9 @@ export default {
     })
 
     // ### Palette stuff
-    const palettes = reactive({
-      light: {
+    const palettes = reactive([
+      {
+        name: 'light',
         bg: '#f2f6f9',
         fg: '#d6dfed',
         text: '#304055',
@@ -85,7 +86,8 @@ export default {
         cOrange: '#ffa500',
         border: '#d8e6f9'
       },
-      dark: {
+      {
+        name: 'dark',
         bg: '#121a24',
         fg: '#182230',
         text: '#b9b9ba',
@@ -96,10 +98,11 @@ export default {
         cGreen: '#0fa00f',
         cOrange: '#ffa500'
       }
-    })
+    ])
 
     const palettesOut = computed(() => {
-      return Object.entries(palettes).map(([name, palette]) => {
+      console.log('WORK DAMN', palettes)
+      return palettes.map(({ name, ...palette }) => {
         const entries = Object
           .entries(palette)
           .map(([slot, data]) => `  ${slot}: ${data};`)
@@ -109,9 +112,10 @@ export default {
       }).join('\n\n')
     })
 
-    const editedPalette = ref('dark')
+    const editedPalette = ref(0)
     const palette = computed({
       get () {
+        console.log(palettes, editedPalette.value)
         return palettes[editedPalette.value]
       },
       set (newPalette) {
@@ -435,10 +439,12 @@ export default {
 
     const updatePreview = () => {
       try {
+        const { name, ...paletteData } = palette.value
+        console.log('WORK', paletteData)
         const rules = init({
           inputRuleset: editorFriendlyToOriginal.value,
           initialStaticVars: {
-            ...palette.value
+            ...paletteData
           },
           ultimateBackgroundColor: '#000000',
           rootComponentName: selectedComponentName.value,
@@ -529,6 +535,7 @@ export default {
       license,
       website,
       palette,
+      palettes,
       editedPalette,
       getNewPalette,
       componentKeys,

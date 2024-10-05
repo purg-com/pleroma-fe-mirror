@@ -760,8 +760,6 @@
           "label": "Palette",
           "import": "Import",
           "export": "Export",
-          "dark": "Dark mode",
-          "light": "Light mode",
           "bg": "Panel background",
           "fg": "Buttons etc.",
           "text": "Text",

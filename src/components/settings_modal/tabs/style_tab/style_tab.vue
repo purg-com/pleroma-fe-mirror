@@ -271,14 +271,14 @@
             id="palette-selector"
             v-model="editedPalette"
             class="palette-list"
-            size="10"
+            size="9"
           >
             <option
               v-for="(p, index) in palettes"
-              :key="p"
+              :key="p.name"
               :value="index"
             >
-              {{ p }}
+              {{ p.name }}
             </option>
           </Select>
           <SelectMotion
@@ -286,9 +286,12 @@
             v-model="palettes"
             :selected-id="editedPalette"
             :get-add-value="getNewPalette"
-            @update:selectedId="e => editecPalette = e"
+            @update:selectedId="e => editedPalette = e"
           />
-        <PaletteEditor v-model="palette" />
+        <PaletteEditor
+          class="palette-editor-edit"
+          v-model="palette"
+        />
       </div>
     </tab-switcher>
   </div>
