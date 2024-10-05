@@ -25,5 +25,7 @@
   "sidebarRight": false,
   "subjectLineBehavior": "email",
   "theme": null,
+  "style": null,
+  "palette": null,
   "webPushNotifications": false
 }
