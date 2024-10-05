@@ -530,7 +530,7 @@ const interfaceMod = {
         return result
       })()
 
-      const theme2ruleset = themeDataUsed && convertTheme2To3(generatePreset(themeDataUsed).source)
+      const theme2ruleset = themeDataUsed && convertTheme2To3(normalizeThemeData(themeDataUsed))
       const hacks = []
 
       Object.entries(theme3hacks).forEach(([key, value]) => {
@@ -614,19 +614,6 @@ const interfaceMod = {
 export default interfaceMod
 
 export const normalizeThemeData = (input) => {
-  if (Array.isArray(input)) {
-    const themeData = { colors: {} }
-    themeData.colors.bg = input[1]
-    themeData.colors.fg = input[2]
-    themeData.colors.text = input[3]
-    themeData.colors.link = input[4]
-    themeData.colors.cRed = input[5]
-    themeData.colors.cGreen = input[6]
-    themeData.colors.cBlue = input[7]
-    themeData.colors.cOrange = input[8]
-    return generatePreset(themeData).source || generatePreset(themeData).theme
-  }
-
   let themeData, themeSource
 
   if (input.themeFileVerison === 1) {
