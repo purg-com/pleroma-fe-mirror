@@ -17,12 +17,16 @@ import ContrastRatio from 'src/components/contrast_ratio/contrast_ratio.vue'
 import { init } from 'src/services/theme_data/theme_data_3.service.js'
 import { getCssRules } from 'src/services/theme_data/css_utils.js'
 import { serialize } from 'src/services/theme_data/iss_serializer.js'
-import { deserialize } from 'src/services/theme_data/iss_deserializer.js'
+// import { deserialize } from 'src/services/theme_data/iss_deserializer.js'
 import {
   // rgb2hex,
   hex2rgb,
   getContrastRatio
 } from 'src/services/color_convert/color_convert.js'
+import {
+  // newImporter,
+  newExporter
+} from 'src/services/export_import/export_import.js'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faFloppyDisk, faFolderOpen, faFile } from '@fortawesome/free-solid-svg-icons'
@@ -492,18 +496,19 @@ export default {
       isShadowTabOpen.value = tab === 'shadow'
     }
 
-    const exportStyle = () => {
-      console.log('ORIG', toValue(editorFriendlyToOriginal.value))
-      console.log('SERI', serialize(editorFriendlyToOriginal.value))
-
-      const result = [
+    const styleExporter = newExporter({
+      filename: 'pleroma.palette.json',
+      getExportedObject: () => exportStyleData
+    })
+    const exportStyleData = computed(() => {
+      return [
         metaOut.value,
         palettesOut.value,
         serialize(editorFriendlyToOriginal.value)
       ].join('\n\n')
-
-      console.log('RESULT', result)
-      console.log('DESERI', deserialize(result))
+    })
+    const exportStyle = () => {
+      styleExporter.exportData()
     }
 
     return {
