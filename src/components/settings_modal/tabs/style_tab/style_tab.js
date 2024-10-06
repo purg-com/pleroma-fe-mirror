@@ -60,6 +60,9 @@ export default {
     ContrastRatio
   },
   setup () {
+    // All rules that are made by editor
+    const allEditedRules = reactive({})
+
     // ## Meta stuff
     const name = ref('')
     const author = ref('')
@@ -80,6 +83,18 @@ export default {
     // ## Palette stuff
     const palettes = reactive([
       {
+        name: 'dark',
+        bg: '#121a24',
+        fg: '#182230',
+        text: '#b9b9ba',
+        link: '#d8a070',
+        accent: '#d8a070',
+        cRed: '#FF0000',
+        cBlue: '#0095ff',
+        cGreen: '#0fa00f',
+        cOrange: '#ffa500'
+      },
+      {
         name: 'light',
         bg: '#f2f6f9',
         fg: '#d6dfed',
@@ -91,18 +106,6 @@ export default {
         cGreen: '#0fa00f',
         cOrange: '#ffa500',
         border: '#d8e6f9'
-      },
-      {
-        name: 'dark',
-        bg: '#121a24',
-        fg: '#182230',
-        text: '#b9b9ba',
-        link: '#d8a070',
-        accent: '#d8a070',
-        cRed: '#FF0000',
-        cBlue: '#0095ff',
-        cGreen: '#0fa00f',
-        cOrange: '#ffa500'
       }
     ])
     const selectedPaletteId = ref(0)
@@ -224,9 +227,6 @@ export default {
 
       return root
     })
-
-    // All rules that are made by editor
-    const allEditedRules = reactive({})
 
     // Checkging whether component can support some "directives" which
     // are actually virtual subcomponents, i.e. Text, Link etc
@@ -395,53 +395,6 @@ export default {
         return null
       }
     })
-    const updatePreview = () => {
-      try {
-        const { name, ...paletteData } = selectedPalette.value
-        const rules = init({
-          inputRuleset: editorFriendlyToOriginal.value,
-          initialStaticVars: {
-            ...paletteData
-          },
-          ultimateBackgroundColor: '#000000',
-          rootComponentName: selectedComponentName.value,
-          editMode: true,
-          debug: true
-        }).eager
-        previewRules.splice(0, previewRules.length)
-        previewRules.push(...rules)
-      } catch (e) {
-        console.error('Could not compile preview theme', e)
-      }
-    }
-    const updateSelectedComponent = () => {
-      selectedVariant.value = 'normal'
-      selectedState.clear()
-      updatePreview()
-    }
-    updateSelectedComponent()
-
-    watch(
-      allEditedRules,
-      updatePreview
-    )
-
-    watch(
-      palettes,
-      updatePreview
-    )
-
-    watch(
-      selectedPalette,
-      updatePreview
-    )
-
-    watch(
-      selectedComponentName,
-      updateSelectedComponent
-    )
-
-    // export and import
     const editorFriendlyToOriginal = computed(() => {
       const resultRules = []
 
@@ -481,10 +434,61 @@ export default {
       return resultRules
     })
 
+    const updatePreview = () => {
+      try {
+        const { name, ...paletteData } = selectedPalette.value
+        // This normally would be handled by Root but since we pass something
+        // else we have to make do ourselves
+        paletteData.accent = paletteData.accent || paletteData.link
+        paletteData.link = paletteData.link || paletteData.accent
+        const rules = init({
+          inputRuleset: editorFriendlyToOriginal.value,
+          initialStaticVars: {
+            ...paletteData
+          },
+          ultimateBackgroundColor: '#000000',
+          rootComponentName: selectedComponentName.value,
+          editMode: true,
+          debug: true
+        }).eager
+        previewRules.splice(0, previewRules.length)
+        previewRules.push(...rules)
+      } catch (e) {
+        console.error('Could not compile preview theme', e)
+      }
+    }
+
+    const updateSelectedComponent = () => {
+      selectedVariant.value = 'normal'
+      selectedState.clear()
+      updatePreview()
+    }
+    updateSelectedComponent()
+
+    // export and import
+    watch(
+      allEditedRules,
+      updatePreview
+    )
+
+    watch(
+      palettes,
+      updatePreview
+    )
+
+    watch(
+      selectedPalette,
+      updatePreview
+    )
+
+    watch(
+      selectedComponentName,
+      updateSelectedComponent
+    )
+
     // ## Variables
     const allCustomVirtualDirectives = [...componentsMap.values()]
       .map(c => {
-        console.log(c.defaultRules.filter(c => c.component === 'Root'))
         return c
           .defaultRules
           .filter(c => c.component === 'Root')
@@ -504,6 +508,17 @@ export default {
     const virtualDirectives = reactive(allCustomVirtualDirectives)
     const selectedVirtualDirectiveId = ref(0)
     const selectedVirtualDirective = computed(() => virtualDirectives[selectedVirtualDirectiveId.value])
+    const selectedVirtualDirectiveParsed = computed({
+      get () {
+        switch (selectedVirtualDirective.value.valType) {
+          case 'shadow':
+            return {}
+          default:
+            return null
+        }
+      }
+    })
+
     const getNewDirective = () => ({
       name: 'newDirective',
       valType: 'generic',
@@ -512,8 +527,10 @@ export default {
 
     // ## Export and Import
     const styleExporter = newExporter({
-      filename: 'pleroma.palette.json',
-      getExportedObject: () => exportStyleData
+      filename: name.value || 'pleroma_theme',
+      mime: 'text/plain',
+      extension: 'piss',
+      getExportedObject: () => exportStyleData.value
     })
     const exportStyleData = computed(() => {
       return [
@@ -591,6 +608,7 @@ export default {
       virtualDirectives,
       selectedVirtualDirective,
       selectedVirtualDirectiveId,
+      selectedVirtualDirectiveParsed,
       getNewDirective,
 
       // ## Export and Import

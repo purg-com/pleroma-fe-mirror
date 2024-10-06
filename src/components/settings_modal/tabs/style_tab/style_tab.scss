@@ -87,34 +87,32 @@
     }
   }
 
-  .palette-editor {
+  .list-editor {
     display: grid;
     grid-template-areas:
       "label    editor"
       "selector editor"
-      "motion   editor";
+      "movement editor";
     grid-template-columns: auto 1fr;
     grid-template-rows: auto 1fr auto;
     grid-gap: 0.5em;
 
-    .palette-editor-edit {
+    .list-edit-area {
       grid-area: editor;
     }
 
-    .palette-selector {
+    .list-select {
+      grid-area: selector;
+      margin: 0;
+
       &-label {
         font-weight: bold;
         grid-area: label;
         margin: 0;
       }
-    }
-
-    .palette-list {
-      grid-area: selector;
-      margin: 0;
 
       &-movement {
-        grid-area: motion;
+        grid-area: movement;
         margin: 0;
       }
     }
