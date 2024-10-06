@@ -245,7 +245,6 @@
             >
               {{ $t('settings.style.themes3.editor.include_in_rule') }}
             </checkbox>
-            {{ editedShadow }}
             <ShadowControl
               v-model="editedShadow"
               :disabled="!isShadowPresent"
