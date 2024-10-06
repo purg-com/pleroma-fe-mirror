@@ -35,11 +35,11 @@ export default {
     {
       component: 'Root',
       directives: {
-        '--defaultButtonHoverGlow': 'shadow | 0 0 4 --text / 0.5',
-        '--defaultButtonFocusGlow': 'shadow | 0 0 4 4 --link / 0.5',
-        '--defaultButtonShadow': 'shadow | 0 0 2 #000000',
-        '--defaultButtonBevel': 'shadow | $borderSide(#FFFFFF top 0.2 2), $borderSide(#000000 bottom 0.2 2)',
-        '--pressedButtonBevel': 'shadow | $borderSide(#FFFFFF bottom 0.2 2), $borderSide(#000000 top 0.2 2)'
+        '--buttonDefaultHoverGlow': 'shadow | 0 0 4 --text / 0.5',
+        '--buttonDefaultFocusGlow': 'shadow | 0 0 4 4 --link / 0.5',
+        '--buttonDefaultShadow': 'shadow | 0 0 2 #000000',
+        '--buttonDefaultBevel': 'shadow | $borderSide(#FFFFFF top 0.2 2), $borderSide(#000000 bottom 0.2 2)',
+        '--buttonPressedBevel': 'shadow | $borderSide(#FFFFFF bottom 0.2 2), $borderSide(#000000 top 0.2 2)'
       }
     },
     {
@@ -47,53 +47,53 @@ export default {
       // like within it
       directives: {
         background: '--fg',
-        shadow: ['--defaultButtonShadow', '--defaultButtonBevel'],
+        shadow: ['--buttonDefaultShadow', '--buttonDefaultBevel'],
         roundness: 3
       }
     },
     {
       state: ['hover'],
       directives: {
-        shadow: ['--defaultButtonHoverGlow', '--defaultButtonBevel']
+        shadow: ['--buttonDefaultHoverGlow', '--buttonDefaultBevel']
       }
     },
     {
       state: ['focused'],
       directives: {
-        shadow: ['--defaultButtonFocusGlow', '--defaultButtonBevel']
+        shadow: ['--buttonDefaultFocusGlow', '--buttonDefaultBevel']
       }
     },
     {
       state: ['pressed'],
       directives: {
-        shadow: ['--defaultButtonShadow', '--pressedButtonBevel']
+        shadow: ['--buttonDefaultShadow', '--buttonPressedBevel']
       }
     },
     {
       state: ['pressed', 'hover'],
       directives: {
-        shadow: ['--pressedButtonBevel', '--defaultButtonHoverGlow']
+        shadow: ['--buttonPressedBevel', '--buttonDefaultHoverGlow']
       }
     },
     {
       state: ['toggled'],
       directives: {
         background: '--inheritedBackground,-14.2',
-        shadow: ['--defaultButtonShadow', '--pressedButtonBevel']
+        shadow: ['--buttonDefaultShadow', '--buttonPressedBevel']
       }
     },
     {
       state: ['toggled', 'hover'],
       directives: {
         background: '--inheritedBackground,-14.2',
-        shadow: ['--defaultButtonHoverGlow', '--pressedButtonBevel']
+        shadow: ['--buttonDefaultHoverGlow', '--buttonPressedBevel']
       }
     },
     {
       state: ['disabled'],
       directives: {
         background: '$blend(--inheritedBackground 0.25 --parent)',
-        shadow: ['--defaultButtonBevel']
+        shadow: ['--buttonDefaultBevel']
       }
     },
     {
