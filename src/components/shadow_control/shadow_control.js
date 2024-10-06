@@ -50,11 +50,8 @@ export default {
   ],
   emits: ['update:modelValue', 'subShadowSelected'],
   data () {
-    console.log('MODEL VALUE', this.modelValue, this.fallback)
     return {
-      selectedId: 0,
-      // TODO there are some bugs regarding display of array (it's not getting updated when deleting for some reason)
-      cValue: (this.modelValue ?? this.fallback ?? []).map(toModel)
+      selectedId: 0
     }
   },
   components: {
@@ -66,10 +63,15 @@ export default {
     Popover,
     ComponentPreview
   },
-  beforeUpdate () {
-    this.cValue = (this.modelValue ?? this.fallback ?? []).map(toModel)
-  },
   computed: {
+    cValue: {
+      get () {
+        return (this.modelValue ?? this.fallback ?? []).map(toModel)
+      },
+      set (newVal) {
+        this.$emit('update:modelValue', newVal)
+      }
+    },
     selectedType: {
       get () {
         return typeof this.selected
@@ -124,9 +126,6 @@ export default {
     }
   },
   watch: {
-    modelValue (value) {
-      if (!value) this.cValue = (this.modelValue ?? this.fallback ?? []).map(toModel)
-    },
     selected (value) {
       this.$emit('subShadowSelected', this.selectedId)
     }

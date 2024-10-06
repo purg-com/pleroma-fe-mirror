@@ -82,9 +82,7 @@ const moveDn = () => {
 }
 
 const add = () => {
-  const newModel = [...props.modelValue]
-  newModel.push(props.getAddValue())
-  console.log(newModel)
+  const newModel = [...props.modelValue, props.getAddValue()]
 
   emit('update:modelValue', newModel)
   emit('update:selectedId', Math.max(newModel.length - 1, 0))
