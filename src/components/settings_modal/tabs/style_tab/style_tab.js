@@ -17,7 +17,7 @@ import ContrastRatio from 'src/components/contrast_ratio/contrast_ratio.vue'
 import { init } from 'src/services/theme_data/theme_data_3.service.js'
 import { getCssRules } from 'src/services/theme_data/css_utils.js'
 import { serialize } from 'src/services/theme_data/iss_serializer.js'
-// import { deserialize } from 'src/services/theme_data/iss_deserializer.js'
+import { parseShadow /* , deserialize */ } from 'src/services/theme_data/iss_deserializer.js'
 import {
   // rgb2hex,
   hex2rgb,
@@ -259,7 +259,7 @@ export default {
       }
     })
 
-    const getEditedElement = (component, directive) => computed({
+    const getEditedElement = (component, directive, postProcess = x => x) => computed({
       get () {
         let usedRule
         const fallback = editorFriendlyFallbackStructure.value
@@ -271,7 +271,11 @@ export default {
           usedRule = get(fallback, path)
         }
 
-        return usedRule
+        if (directive === 'shadow') {
+          console.log('EDITED', usedRule)
+          console.log('PP', postProcess(usedRule))
+        }
+        return postProcess(usedRule)
       },
       set (value) {
         set(allEditedRules, getPath(component, directive), value)
@@ -316,9 +320,22 @@ export default {
       }
     }
 
+    const normalizeShadows = (shadows) => {
+      console.log('NORMALIZE')
+      return shadows?.map(shadow => {
+        if (typeof shadow === 'object') {
+          return shadow
+        }
+        if (typeof shadow === 'string') {
+          return parseShadow(shadow)
+        }
+        return null
+      })
+    }
+
     // Shadow is partially edited outside the ShadowControl
     // for better space utilization
-    const editedShadow = getEditedElement(null, 'shadow')
+    const editedShadow = getEditedElement(null, 'shadow', normalizeShadows)
     const editedSubShadowId = ref(null)
     const editedSubShadow = computed(() => {
       if (editedShadow.value == null || editedSubShadowId.value == null) return null
@@ -511,8 +528,15 @@ export default {
     const selectedVirtualDirectiveParsed = computed({
       get () {
         switch (selectedVirtualDirective.value.valType) {
-          case 'shadow':
-            return {}
+          case 'shadow': {
+            const directiveValue = selectedVirtualDirective.value.value
+            if (Array.isArray(directiveValue)) {
+              return normalizeShadows(directiveValue)
+            } else {
+              const splitShadow = directiveValue.split(/,/g).map(x => x.trim())
+              return normalizeShadows(splitShadow)
+            }
+          }
           default:
             return null
         }

@@ -245,6 +245,7 @@
             >
               {{ $t('settings.style.themes3.editor.include_in_rule') }}
             </checkbox>
+            {{ editedShadow }}
             <ShadowControl
               v-model="editedShadow"
               :disabled="!isShadowPresent"
@@ -327,11 +328,15 @@
             @update:selectedId="e => selectedVirtualDirectiveId = e"
           />
           <div class="list-edit-area">
+            <Select>
+              <option value='shadow'>shadow</option>
+              <option value='shadow'>color</option>
+              <option value='shadow'>generic</option>
+            </Select>
             <ShadowControl
               v-if="selectedVirtualDirective.valType === 'shadow'"
-              v-model="selectedVirtualDirective.value"
+              v-model="selectedVirtualDirectiveParsed"
             />
-            {{ selectedVirtualDirective.valType }}
           </div>
       </div>
     </tab-switcher>

@@ -45,6 +45,7 @@ export default {
   ],
   emits: ['update:modelValue', 'subShadowSelected'],
   data () {
+    console.log('MODEL VALUE', this.modelValue, this.fallback)
     return {
       selectedId: 0,
       // TODO there are some bugs regarding display of array (it's not getting updated when deleting for some reason)
@@ -59,6 +60,9 @@ export default {
     Checkbox,
     Popover,
     ComponentPreview
+  },
+  beforeUpdate () {
+    this.cValue = (this.modelValue ?? this.fallback ?? []).map(toModel)
   },
   computed: {
     selectedType: {

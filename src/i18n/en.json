@@ -774,6 +774,9 @@
           "extra3": "Extra 3",
           "v2_unsupported": "Older v2 themes don't support palettes. Switch to v3 theme to make use of palettes"
         },
+        "variables": {
+          "label": "Variables"
+        },
         "editor": {
           "title": "Style",
           "new_style": "New",
@@ -800,7 +803,8 @@
             "no-auto": "Disabled"
           },
           "component_tab": "Components style",
-          "palette_tab": "Color presets"
+          "palette_tab": "Color presets",
+          "variables_tab": "Variables (Advanced)"
         },
         "hacks": {
           "underlay_overrides": "Change underlay",

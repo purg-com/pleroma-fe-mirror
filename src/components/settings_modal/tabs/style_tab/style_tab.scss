@@ -93,7 +93,7 @@
       "label    editor"
       "selector editor"
       "movement editor";
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 10em 1fr;
     grid-template-rows: auto 1fr auto;
     grid-gap: 0.5em;
 
@@ -124,9 +124,9 @@
     grid-template-rows: auto auto 1fr;
     grid-gap: 0.5em;
     grid-template-areas:
-      "component    component  variant"
-      "state        state      state"
-      "preview      settings    settings";
+      "component component variant"
+      "state     state     state"
+      "preview   settings  settings";
 
     .component-selector {
       grid-area: component;

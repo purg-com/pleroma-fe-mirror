@@ -107,7 +107,7 @@ const updatePalette = (paletteKey, value) => {
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(3, 1fr) auto;
   grid-gap: 0.5em;
-  align-items: space-between;
+  align-items: baseline;
 
   .palette-import-button {
     grid-column: 1 / span 2;
