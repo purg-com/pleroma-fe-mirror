@@ -76,7 +76,7 @@
           </Select>
         </div>
         <div
-          v-if="selectedComponentVariantsAll.length > 1"
+          v-if="selectedComponentVariants.length > 1"
           class="variant-selector"
         >
           <label for="variant-selector">
@@ -86,7 +86,7 @@
             v-model="selectedVariant"
           >
             <option
-              v-for="variant in selectedComponentVariantsAll"
+              v-for="variant in selectedComponentVariants"
               :key="'component-variant-' + variant"
               :value="variant"
             >

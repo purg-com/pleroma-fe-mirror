@@ -60,7 +60,7 @@ export default {
     ContrastRatio
   },
   setup () {
-    // ### Meta stuff
+    // ## Meta stuff
     const name = ref('')
     const author = ref('')
     const license = ref('')
@@ -77,7 +77,7 @@ export default {
       ].join('\n')
     })
 
-    // ### Palette stuff
+    // ## Palette stuff
     const palettes = reactive([
       {
         name: 'light',
@@ -105,29 +105,15 @@ export default {
         cOrange: '#ffa500'
       }
     ])
-
-    const palettesOut = computed(() => {
-      return palettes.map(({ name, ...palette }) => {
-        const entries = Object
-          .entries(palette)
-          .map(([slot, data]) => `  ${slot}: ${data};`)
-          .join('\n')
-
-        return `@palette.${name} {\n${entries}\n}`
-      }).join('\n\n')
-    })
-
-    const editedPalette = ref(0)
-    const palette = computed({
+    const selectedPaletteId = ref(0)
+    const selectedPalette = computed({
       get () {
-        console.log(palettes, editedPalette.value)
-        return palettes[editedPalette.value]
+        return palettes[selectedPaletteId.value]
       },
       set (newPalette) {
-        palettes[editedPalette.value] = newPalette
+        palettes[selectedPaletteId.value] = newPalette
       }
     })
-
     const getNewPalette = () => ({
       name: 'new palette',
       bg: '#121a24',
@@ -141,11 +127,21 @@ export default {
       cOrange: '#ffa500'
     })
 
-    // ### Initialization stuff
+    const palettesOut = computed(() => {
+      return palettes.map(({ name, ...palette }) => {
+        const entries = Object
+          .entries(palette)
+          .map(([slot, data]) => `  ${slot}: ${data};`)
+          .join('\n')
+
+        return `@palette.${name} {\n${entries}\n}`
+      }).join('\n\n')
+    })
+
+    // ## Components stuff
     // Getting existing components
     const componentsContext = require.context('src', true, /\.style.js(on)?$/)
     const componentKeysAll = componentsContext.keys()
-
     const componentsMap = new Map(
       componentKeysAll
         .map(
@@ -154,23 +150,23 @@ export default {
     )
     const componentKeys = [...componentsMap.keys()]
 
-    // Initializing selected component and its computed descendants
+    // selection basis
     const selectedComponentKey = ref(componentsMap.keys().next().value)
     const selectedComponent = computed(() => componentsMap.get(selectedComponentKey.value))
     const selectedComponentName = computed(() => selectedComponent.value.name)
-
-    const selectedVariant = ref('normal')
-    const selectedComponentVariantsAll = computed(() => {
+    const selectedComponentVariants = computed(() => {
       return Object.keys({ normal: null, ...(selectedComponent.value.variants || {}) })
     })
-
-    const selectedState = reactive(new Set())
     const selectedComponentStatesAll = computed(() => {
       return Object.keys({ normal: null, ...(selectedComponent.value.states || {}) })
     })
     const selectedComponentStates = computed(() => {
       return selectedComponentStatesAll.value.filter(x => x !== 'normal')
     })
+
+    // selection
+    const selectedVariant = ref('normal')
+    const selectedState = reactive(new Set())
     const updateSelectedStates = (state, v) => {
       if (v) {
         selectedState.add(state)
@@ -178,56 +174,6 @@ export default {
         selectedState.delete(state)
       }
     }
-
-    // ### Preview stuff
-    const editorHintStyle = computed(() => {
-      const editorHint = selectedComponent.value.editor
-      const styles = []
-      if (editorHint && Object.keys(editorHint).length > 0) {
-        if (editorHint.aspect != null) {
-          styles.push(`aspect-ratio: ${editorHint.aspect} !important;`)
-        }
-        if (editorHint.border != null) {
-          styles.push(`border-width: ${editorHint.border}px !important;`)
-        }
-      }
-      return styles.join('; ')
-    })
-
-    // Apart from "hover" we can't really show how component looks like in
-    // certain states, so we have to fake them.
-    const simulatePseudoSelectors = css => css
-      .replace(selectedComponent.value.selector, '.ComponentPreview .preview-block')
-      .replace(':active', '.preview-active')
-      .replace(':hover', '.preview-hover')
-      .replace(':active', '.preview-active')
-      .replace(':focus', '.preview-focus')
-      .replace(':focus-within', '.preview-focus-within')
-      .replace(':disabled', '.preview-disabled')
-
-    const previewRules = reactive([])
-    const previewClass = computed(() => {
-      const selectors = []
-      if (!!selectedComponent.value.variants?.normal || selectedVariant.value !== 'normal') {
-        selectors.push(selectedComponent.value.variants[selectedVariant.value])
-      }
-      if (selectedState.size > 0) {
-        selectedState.forEach(state => {
-          const original = selectedComponent.value.states[state]
-          selectors.push(simulatePseudoSelectors(original))
-        })
-      }
-      return selectors.map(x => x.substring(1)).join('')
-    })
-    const previewCss = computed(() => {
-      try {
-        const scoped = getCssRules(previewRules).map(simulatePseudoSelectors)
-        return scoped.join('\n')
-      } catch (e) {
-        console.error('Invalid ruleset', e)
-        return null
-      }
-    })
 
     // ### Rules stuff aka meat and potatoes
     // The native structure of separate rules and the child -> parent
@@ -334,21 +280,58 @@ export default {
 
     // All the editable stuff for the component
     const editedBackgroundColor = getEditedElement(null, 'background')
+    const isBackgroundColorPresent = isElementPresent(null, 'background', '#FFFFFF')
     const editedOpacity = getEditedElement(null, 'opacity')
+    const isOpacityPresent = isElementPresent(null, 'opacity', 1)
     const editedTextColor = getEditedElement('Text', 'textColor')
+    const isTextColorPresent = isElementPresent('Text', 'textColor', '#000000')
     const editedTextAuto = getEditedElement('Text', 'textAuto')
+    const isTextAutoPresent = isElementPresent('Text', 'textAuto', '#000000')
     const editedLinkColor = getEditedElement('Link', 'textColor')
+    const isLinkColorPresent = isElementPresent('Link', 'textColor', '#000080')
     const editedIconColor = getEditedElement('Icon', 'textColor')
-    const editedShadow = getEditedElement(null, 'shadow')
+    const isIconColorPresent = isElementPresent('Icon', 'textColor', '#909090')
+    // TODO this is VERY primitive right now, need to make it
+    // support variables, fallbacks etc.
+    const getContrast = (bg, text) => {
+      try {
+        const bgRgb = hex2rgb(bg)
+        const textRgb = hex2rgb(text)
+
+        const ratio = getContrastRatio(bgRgb, textRgb)
+        return {
+          // TODO this ideally should be part of <ContractRatio />
+          ratio,
+          text: ratio.toPrecision(3) + ':1',
+          // AA level, AAA level
+          aa: ratio >= 4.5,
+          aaa: ratio >= 7,
+          // same but for 18pt+ texts
+          laa: ratio >= 3,
+          laaa: ratio >= 4.5
+        }
+      } catch (e) {
+        console.warn('Failure computing contrast', e)
+        return { error: e }
+      }
+    }
 
     // Shadow is partially edited outside the ShadowControl
     // for better space utilization
+    const editedShadow = getEditedElement(null, 'shadow')
     const editedSubShadowId = ref(null)
     const editedSubShadow = computed(() => {
       if (editedShadow.value == null || editedSubShadowId.value == null) return null
       return editedShadow.value[editedSubShadowId.value]
     })
-
+    const isShadowPresent = isElementPresent(null, 'shadow', [])
+    const onSubShadow = (id) => {
+      if (id != null) {
+        editedSubShadowId.value = id
+      } else {
+        editedSubShadow.value = null
+      }
+    }
     const updateSubShadow = (axis, value) => {
       if (!editedSubShadow.value || editedSubShadowId.value == null) return
       const newEditedShadow = [...editedShadow.value]
@@ -360,26 +343,105 @@ export default {
 
       editedShadow.value = newEditedShadow
     }
-
-    const onSubShadow = (id) => {
-      if (id != null) {
-        editedSubShadowId.value = id
-      } else {
-        editedSubShadow.value = null
-      }
+    const isShadowTabOpen = ref(false)
+    const onTabSwitch = (tab) => {
+      isShadowTabOpen.value = tab === 'shadow'
     }
 
-    // Whether specific directives present in the edited rule or not
-    // Somewhat serves double-duty as it creates/removes the directive
-    // when set
-    const isBackgroundColorPresent = isElementPresent(null, 'background', '#FFFFFF')
-    const isOpacityPresent = isElementPresent(null, 'opacity', 1)
-    const isTextColorPresent = isElementPresent('Text', 'textColor', '#000000')
-    const isTextAutoPresent = isElementPresent('Text', 'textAuto', '#000000')
-    const isLinkColorPresent = isElementPresent('Link', 'textColor', '#000080')
-    const isIconColorPresent = isElementPresent('Icon', 'textColor', '#909090')
-    const isShadowPresent = isElementPresent(null, 'shadow', [])
+    // component preview
+    const editorHintStyle = computed(() => {
+      const editorHint = selectedComponent.value.editor
+      const styles = []
+      if (editorHint && Object.keys(editorHint).length > 0) {
+        if (editorHint.aspect != null) {
+          styles.push(`aspect-ratio: ${editorHint.aspect} !important;`)
+        }
+        if (editorHint.border != null) {
+          styles.push(`border-width: ${editorHint.border}px !important;`)
+        }
+      }
+      return styles.join('; ')
+    })
+    // Apart from "hover" we can't really show how component looks like in
+    // certain states, so we have to fake them.
+    const simulatePseudoSelectors = css => css
+      .replace(selectedComponent.value.selector, '.ComponentPreview .preview-block')
+      .replace(':active', '.preview-active')
+      .replace(':hover', '.preview-hover')
+      .replace(':active', '.preview-active')
+      .replace(':focus', '.preview-focus')
+      .replace(':focus-within', '.preview-focus-within')
+      .replace(':disabled', '.preview-disabled')
+    const previewClass = computed(() => {
+      const selectors = []
+      if (!!selectedComponent.value.variants?.normal || selectedVariant.value !== 'normal') {
+        selectors.push(selectedComponent.value.variants[selectedVariant.value])
+      }
+      if (selectedState.size > 0) {
+        selectedState.forEach(state => {
+          const original = selectedComponent.value.states[state]
+          selectors.push(simulatePseudoSelectors(original))
+        })
+      }
+      return selectors.map(x => x.substring(1)).join('')
+    })
+    const previewRules = reactive([])
+    const previewCss = computed(() => {
+      try {
+        const scoped = getCssRules(previewRules).map(simulatePseudoSelectors)
+        return scoped.join('\n')
+      } catch (e) {
+        console.error('Invalid ruleset', e)
+        return null
+      }
+    })
+    const updatePreview = () => {
+      try {
+        const { name, ...paletteData } = selectedPalette.value
+        const rules = init({
+          inputRuleset: editorFriendlyToOriginal.value,
+          initialStaticVars: {
+            ...paletteData
+          },
+          ultimateBackgroundColor: '#000000',
+          rootComponentName: selectedComponentName.value,
+          editMode: true,
+          debug: true
+        }).eager
+        previewRules.splice(0, previewRules.length)
+        previewRules.push(...rules)
+      } catch (e) {
+        console.error('Could not compile preview theme', e)
+      }
+    }
+    const updateSelectedComponent = () => {
+      selectedVariant.value = 'normal'
+      selectedState.clear()
+      updatePreview()
+    }
+    updateSelectedComponent()
 
+    watch(
+      allEditedRules,
+      updatePreview
+    )
+
+    watch(
+      palettes,
+      updatePreview
+    )
+
+    watch(
+      selectedPalette,
+      updatePreview
+    )
+
+    watch(
+      selectedComponentName,
+      updateSelectedComponent
+    )
+
+    // export and import
     const editorFriendlyToOriginal = computed(() => {
       const resultRules = []
 
@@ -419,83 +481,36 @@ export default {
       return resultRules
     })
 
-    const updatePreview = () => {
-      try {
-        const { name, ...paletteData } = palette.value
-        const rules = init({
-          inputRuleset: editorFriendlyToOriginal.value,
-          initialStaticVars: {
-            ...paletteData
-          },
-          ultimateBackgroundColor: '#000000',
-          rootComponentName: selectedComponentName.value,
-          editMode: true,
-          debug: true
-        }).eager
-        previewRules.splice(0, previewRules.length)
-        previewRules.push(...rules)
-      } catch (e) {
-        console.error('Could not compile preview theme', e)
-      }
-    }
-
-    const updateSelectedComponent = () => {
-      selectedVariant.value = 'normal'
-      selectedState.clear()
-      updatePreview()
-    }
-    updateSelectedComponent()
-
-    watch(
-      allEditedRules,
-      updatePreview
-    )
-
-    watch(
-      palettes,
-      updatePreview
-    )
-
-    watch(
-      editedPalette,
-      updatePreview
-    )
-
-    watch(
-      selectedComponentName,
-      updateSelectedComponent
-    )
-
-    // TODO this is VERY primitive right now, need to make it
-    // support variables, fallbacks etc.
-    const getContrast = (bg, text) => {
-      try {
-        const bgRgb = hex2rgb(bg)
-        const textRgb = hex2rgb(text)
-
-        const ratio = getContrastRatio(bgRgb, textRgb)
+    // ## Variables
+    const allCustomVirtualDirectives = [...componentsMap.values()]
+      .map(c => {
+        console.log(c.defaultRules.filter(c => c.component === 'Root'))
+        return c
+          .defaultRules
+          .filter(c => c.component === 'Root')
+          .map(x => Object.entries(x.directives))
+          .flat()
+      })
+      .filter(x => x)
+      .flat()
+      .map(([name, value]) => {
+        const [valType, valVal] = value.split('|')
         return {
-          // TODO this ideally should be part of <ContractRatio />
-          ratio,
-          text: ratio.toPrecision(3) + ':1',
-          // AA level, AAA level
-          aa: ratio >= 4.5,
-          aaa: ratio >= 7,
-          // same but for 18pt+ texts
-          laa: ratio >= 3,
-          laaa: ratio >= 4.5
+          name: name.substring(2),
+          valType: valType.trim(),
+          value: valVal.trim()
         }
-      } catch (e) {
-        console.warn('Failure computing contrast', e)
-        return { error: e }
-      }
-    }
+      })
+    const virtualDirectives = reactive(allCustomVirtualDirectives)
+    const selectedVirtualDirectiveId = ref(0)
+    const selectedVirtualDirective = computed(() => virtualDirectives[selectedVirtualDirectiveId.value])
+    const getNewDirective = () => ({
+      name: 'newDirective',
+      valType: 'generic',
+      value: 'foobar'
+    })
 
-    const isShadowTabOpen = ref(false)
-    const onTabSwitch = (tab) => {
-      isShadowTabOpen.value = tab === 'shadow'
-    }
-
+    // ## Export and Import
     const styleExporter = newExporter({
       filename: 'pleroma.palette.json',
       getExportedObject: () => exportStyleData
@@ -512,48 +527,73 @@ export default {
     }
 
     return {
+      // ## Meta
       name,
       author,
       license,
       website,
-      palette,
+
+      // ## Palette
       palettes,
-      editedPalette,
+      selectedPalette,
+      selectedPaletteId,
       getNewPalette,
+
+      // ## Components
       componentKeys,
       componentsMap,
+
+      // selection basis
       selectedComponent,
       selectedComponentName,
       selectedComponentKey,
-      selectedComponentVariantsAll,
+      selectedComponentVariants,
       selectedComponentStates,
+
+      // selection
       selectedVariant,
       selectedState,
       updateSelectedStates,
+
+      // component directives
+      componentHas,
+
+      // component colors
       editedBackgroundColor,
+      isBackgroundColorPresent,
       editedOpacity,
+      isOpacityPresent,
       editedTextColor,
+      isTextColorPresent,
       editedTextAuto,
+      isTextAutoPresent,
       editedLinkColor,
+      isLinkColorPresent,
       editedIconColor,
+      isIconColorPresent,
+      getContrast,
+
+      // component shadow
       editedShadow,
       editedSubShadow,
+      isShadowPresent,
       onSubShadow,
       updateSubShadow,
-      getContrast,
-      isBackgroundColorPresent,
-      isOpacityPresent,
-      isTextColorPresent,
-      isTextAutoPresent,
-      isLinkColorPresent,
-      isIconColorPresent,
-      isShadowPresent,
-      previewCss,
-      previewClass,
-      editorHintStyle,
-      componentHas,
       isShadowTabOpen,
       onTabSwitch,
+
+      // component preview
+      editorHintStyle,
+      previewCss,
+      previewClass,
+
+      // ## Variables
+      virtualDirectives,
+      selectedVirtualDirective,
+      selectedVirtualDirectiveId,
+      getNewDirective,
+
+      // ## Export and Import
       exportStyle
     }
   }
