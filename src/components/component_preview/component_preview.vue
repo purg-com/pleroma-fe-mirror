@@ -111,6 +111,8 @@ export default {
     "x-num   x-slide .      "
     "options options options";
   grid-gap: 0.5em;
+  max-width: 25em;
+  max-height: 25em;
 
   .header {
     grid-area: header;

@@ -4,6 +4,7 @@
 <template>
   <div class="StyleTab">
     <div class="setting-item heading">
+      <!-- TODO: This needs to go -->
       <h2>{{ $t('settings.style.themes3.editor.title') }}</h2>
       <button
         class="btn button-default"
@@ -350,7 +351,9 @@
             <Select
               v-model="selectedVirtualDirective.valType"
             >
-              <option value='shadow'>shadow</option>
+              <option value='shadow'>
+              {{ $t('settings.style.themes3.variables.type_label') }}
+                shadow</option>
               <option value='shadow'>color</option>
               <option value='shadow'>generic</option>
             </Select>

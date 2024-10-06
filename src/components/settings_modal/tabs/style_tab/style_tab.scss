@@ -119,6 +119,12 @@
     }
   }
 
+  .palettes-editor {
+    .list-edit-area {
+      align-self: baseline;
+    }
+  }
+
   .variables-editor {
     .variable-selector {
       display: grid;
@@ -131,6 +137,10 @@
     .list-edit-area {
       display: grid;
       grid-template-rows: subgrid;
+    }
+
+    .shadow-control {
+      grid-row: 2 / span 2;
     }
   }
 

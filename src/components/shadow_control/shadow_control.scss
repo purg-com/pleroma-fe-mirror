@@ -9,12 +9,11 @@
   width: 100%;
 
   &.-compact {
-    grid-template-columns: 1fr;
-    grid-template-rows: 10em auto auto;
+    grid-template-columns: 10em 1fr;
+    grid-template-rows: auto auto;
     grid-template-areas:
-      "selector"
-      "preview"
-      "tweak";
+      "selector preview"
+      "tweak tweak";
 
     &.-no-preview {
       grid-template-columns: 1fr;
@@ -116,6 +115,7 @@
     min-width: 10em;
     margin-left: 0.125em;
     align-self: start;
+    justify-self: center;
   }
 }
 

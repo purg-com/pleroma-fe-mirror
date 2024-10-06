@@ -757,7 +757,7 @@
       "themes3": {
         "define": "Override",
         "palette": {
-          "label": "Palette",
+          "label": "Palettes",
           "import": "Import",
           "export": "Export",
           "bg": "Panel background",

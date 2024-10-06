@@ -18,9 +18,9 @@ export default {
     {
       component: 'Root',
       directives: {
-        '--inputDefaultBevel': 'shadow | $borderSide(#FFFFFF bottom 0.2), $borderSide(#000000 top 0.2)',
-        '--inputDefaultHoverGlow': 'shadow | 0 0 4 --text / 0.5',
-        '--inputDefaultFocusGlow': 'shadow | 0 0 4 4 --link / 0.5'
+        '--defaultInputBevel': 'shadow | $borderSide(#FFFFFF bottom 0.2), $borderSide(#000000 top 0.2)',
+        '--defaultInputHoverGlow': 'shadow | 0 0 4 --text / 0.5',
+        '--defaultInputFocusGlow': 'shadow | 0 0 4 4 --link / 0.5'
       }
     },
     {
@@ -41,25 +41,25 @@ export default {
           spread: 0,
           color: '#000000',
           alpha: 1
-        }, '--inputDefaultBevel']
+        }, '--defaultInputBevel']
       }
     },
     {
       state: ['hover'],
       directives: {
-        shadow: ['--inputDefaultHoverGlow', '--inputDefaultBevel']
+        shadow: ['--defaultInputHoverGlow', '--defaultInputBevel']
       }
     },
     {
       state: ['focused'],
       directives: {
-        shadow: ['--inputDefaultFocusGlow', '--inputDefaultBevel']
+        shadow: ['--defaultInputFocusGlow', '--defaultInputBevel']
       }
     },
     {
       state: ['focused', 'hover'],
       directives: {
-        shadow: ['--inputDefaultFocusGlow', '--inputDefaultHoverGlow', '--inputDefaultBevel']
+        shadow: ['--defaultInputFocusGlow', '--defaultInputHoverGlow', '--defaultInputBevel']
       }
     },
     {
