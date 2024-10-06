@@ -136,29 +136,6 @@ export default {
       cOrange: '#ffa500'
     })
 
-    // ### I18n stuff
-    // The paths in i18n are getting ridicously long, this effectively shortens them
-    const getI18nPath = (componentName) => `settings.style.themes3.editor.components.${componentName}`
-    // vue i18n doesn't seem to have (working) mechanic to have a fallback so we have to
-    // make do ourselves
-    const fallbackI18n = (translated, fallback) => {
-      if (translated.startsWith('settings.style.themes3')) {
-        return fallback
-      }
-      return translated
-    }
-    const getFriendlyNamePath = (componentName) => getI18nPath(componentName) + '.friendlyName'
-    const getVariantPath = (componentName, variant) => {
-      return variant === 'normal'
-        ? 'settings.style.themes3.editor.components.normal.variant'
-        : `${getI18nPath(componentName)}.variants.${variant}`
-    }
-    const getStatePath = (componentName, state) => {
-      return state === 'normal'
-        ? 'settings.style.themes3.editor.components.normal.state'
-        : `${getI18nPath(componentName)}.states.${state}`
-    }
-
     // ### Initialization stuff
     // Getting existing components
     const componentsContext = require.context('src', true, /\.style.js(on)?$/)
@@ -569,10 +546,6 @@ export default {
       previewCss,
       previewClass,
       editorHintStyle,
-      getFriendlyNamePath,
-      fallbackI18n,
-      getVariantPath,
-      getStatePath,
       componentHas,
       isShadowTabOpen,
       onTabSwitch,

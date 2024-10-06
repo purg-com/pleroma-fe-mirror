@@ -800,46 +800,7 @@
             "no-auto": "Disabled"
           },
           "component_tab": "Components style",
-          "palette_tab": "Color presets",
-          "components": {
-            "normal": {
-              "state": "Normal",
-              "variant": "Default"
-            },
-            "Alert": {
-              "friendlyName": "Alert",
-              "variants": {
-                "error": "Error",
-                "warning": "Warning",
-                "success": "Success"
-              }
-            },
-            "Button": {
-              "friendlyName": "Button",
-              "variants": {
-                "danger": "Dangerous"
-              },
-              "states": {
-                "toggled": "Toggled",
-                "pressed": "Pressed",
-                "hover": "Hovered",
-                "focused": "Has focus",
-                "disabled": "Disabled"
-              }
-            },
-            "Input": {
-              "friendlyName": "Input fields",
-              "variants": {
-                "checkbox": "Checkbox",
-                "radio": "Radio"
-              },
-              "states": {
-                "hover": "Hovered",
-                "focus": "Focused",
-                "disabled": "Disabled"
-              }
-            }
-          }
+          "palette_tab": "Color presets"
         },
         "hacks": {
           "underlay_overrides": "Change underlay",

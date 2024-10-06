@@ -71,7 +71,7 @@
               :key="'component-' + key"
               :value="key"
             >
-              {{ fallbackI18n($t(getFriendlyNamePath(componentsMap.get(key).name)), componentsMap.get(key).name) }}
+              {{ componentsMap.get(key).name }}
             </option>
           </Select>
         </div>
@@ -90,7 +90,7 @@
               :key="'component-variant-' + variant"
               :value="variant"
             >
-              {{ fallbackI18n($t(getVariantPath(selectedComponentName, variant)), variant) }}
+              {{ variant }}
             </option>
           </Select>
         </div>
@@ -112,7 +112,7 @@
                 :value="selectedState.has(state)"
                 @update:modelValue="(v) => updateSelectedStates(state, v)"
               >
-                {{ fallbackI18n($t(getStatePath(selectedComponentName, state)), state) }}
+                {{ state }}
               </Checkbox>
             </li>
           </ul>
