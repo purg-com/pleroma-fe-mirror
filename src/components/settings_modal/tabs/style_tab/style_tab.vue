@@ -259,7 +259,7 @@
       <div
         key="palette"
         :label="$t('settings.style.themes3.editor.palette_tab')"
-        class="setting-item list-editor"
+        class="setting-item list-editor palette-editor"
       >
           <label
             class="list-select-label"
@@ -297,46 +297,68 @@
       <div
         key="variables"
         :label="$t('settings.style.themes3.editor.variables_tab')"
-        class="setting-item list-editor"
+        class="setting-item list-editor variables-editor"
       >
-          <label
-            class="list-select-label"
-            for="variables-selector"
+        <label
+          class="list-select-label"
+          for="variables-selector"
+        >
+          {{ $t('settings.style.themes3.variables.label') }}
+          {{ ' ' }}
+        </label>
+        <Select
+          id="variables-selector"
+          v-model="selectedVirtualDirectiveId"
+          class="list-select"
+          size="9"
+        >
+          <option
+            v-for="(p, index) in virtualDirectives"
+            :key="p.name"
+            :value="index"
           >
-            {{ $t('settings.style.themes3.variables.label') }}
-            {{ ' ' }}
-          </label>
-          <Select
-            id="variables-selector"
-            v-model="selectedVirtualDirectiveId"
-            class="list-select"
-            size="9"
-          >
-            <option
-              v-for="(p, index) in virtualDirectives"
-              :key="p.name"
-              :value="index"
+            {{ p.name }}
+          </option>
+        </Select>
+        <SelectMotion
+          class="list-select-movement"
+          v-model="virtualDirectives"
+          :selected-id="selectedVirtualDirectiveId"
+          :get-add-value="getNewVirtualDirective"
+          @update:selectedId="e => selectedVirtualDirectiveId = e"
+        />
+        <div class="list-edit-area">
+          <div class="variable-selector">
+            <label
+              class="variable-name-label"
+              for="variables-selector"
             >
-              {{ p.name }}
-            </option>
-          </Select>
-          <SelectMotion
-            class="list-select-movement"
-            v-model="virtualDirectives"
-            :selected-id="selectedVirtualDirectiveId"
-            :get-add-value="getNewVirtualDirective"
-            @update:selectedId="e => selectedVirtualDirectiveId = e"
-          />
-          <div class="list-edit-area">
-            <Select>
+              {{ $t('settings.style.themes3.variables.name_label') }}
+              {{ ' ' }}
+            </label>
+            <input
+              class="input"
+              v-model="selectedVirtualDirective.name"
+            >
+            <label
+              class="variable-type-label"
+              for="variables-selector"
+            >
+              {{ $t('settings.style.themes3.variables.type_label') }}
+              {{ ' ' }}
+            </label>
+            <Select
+              v-model="selectedVirtualDirective.valType"
+            >
               <option value='shadow'>shadow</option>
               <option value='shadow'>color</option>
               <option value='shadow'>generic</option>
             </Select>
-            <ShadowControl
-              v-if="selectedVirtualDirective.valType === 'shadow'"
-              v-model="selectedVirtualDirectiveParsed"
-            />
+          </div>
+          <ShadowControl
+            v-if="selectedVirtualDirective.valType === 'shadow'"
+            v-model="selectedVirtualDirectiveParsed"
+          />
           </div>
       </div>
     </tab-switcher>
