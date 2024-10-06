@@ -41,7 +41,12 @@ const toModel = (input) => {
 
 export default {
   props: [
-    'modelValue', 'fallback', 'separateInset', 'noPreview', 'disabled'
+    'modelValue',
+    'fallback',
+    'separateInset',
+    'noPreview',
+    'disabled',
+    'compact'
   ],
   emits: ['update:modelValue', 'subShadowSelected'],
   data () {

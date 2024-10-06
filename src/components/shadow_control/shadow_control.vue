@@ -1,7 +1,7 @@
 <template>
   <div
-    class="label shadow-control"
-    :class="{ disabled: disabled || !present, '-no-preview': noPreview }"
+    class="ShadowControl label shadow-control"
+    :class="{ disabled: disabled || !present, '-no-preview': noPreview, '-compact': compact }"
   >
     <ComponentPreview
       v-if="!noPreview"
@@ -16,7 +16,7 @@
         id="shadow-list"
         v-model="selectedId"
         class="shadow-list"
-        size="10"
+        size="4"
         :disabled="disabled || shadowsAreNull"
       >
         <option

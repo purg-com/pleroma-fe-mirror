@@ -250,6 +250,7 @@
               v-model="editedShadow"
               :disabled="!isShadowPresent"
               :no-preview="true"
+              :compact="true"
               :separate-inset="shadowSelected === 'avatar' || shadowSelected === 'avatarStatus'"
               @subShadowSelected="onSubShadow"
             />
@@ -272,7 +273,7 @@
             id="palette-selector"
             v-model="selectedPaletteId"
             class="list-select"
-            size="10"
+            size="4"
           >
             <option
               v-for="(p, index) in palettes"
@@ -358,6 +359,7 @@
           <ShadowControl
             v-if="selectedVirtualDirective.valType === 'shadow'"
             v-model="selectedVirtualDirectiveParsed"
+            :compact="true"
           />
           </div>
       </div>
