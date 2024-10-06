@@ -63,12 +63,14 @@ export default {
     const website = ref('')
 
     const metaOut = computed(() => {
-      return `@meta {
-  name: ${name.value};
-  author: ${author.value};
-  license: ${license.value};
-  website: ${website.value};
-}`
+      return [
+        '@meta {',
+        `  name: ${name.value};`,
+        `  author: ${author.value};`,
+        `  license: ${license.value};`,
+        `  website: ${website.value};`,
+        '}'
+      ].join('\n')
     })
 
     // ### Palette stuff
@@ -101,7 +103,6 @@ export default {
     ])
 
     const palettesOut = computed(() => {
-      console.log('WORK DAMN', palettes)
       return palettes.map(({ name, ...palette }) => {
         const entries = Object
           .entries(palette)
@@ -417,7 +418,6 @@ export default {
     const updatePreview = () => {
       try {
         const { name, ...paletteData } = palette.value
-        console.log('WORK', paletteData)
         const rules = init({
           inputRuleset: editorFriendlyToOriginal.value,
           initialStaticVars: {
