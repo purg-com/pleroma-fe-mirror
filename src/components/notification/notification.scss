@@ -26,6 +26,7 @@
     overflow: hidden;
     display: flex;
     flex-wrap: nowrap;
+    gap: 1ex;
 
     & .status-username,
     & .mute-thread,
