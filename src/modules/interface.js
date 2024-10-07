@@ -629,7 +629,7 @@ export const normalizeThemeData = (input) => {
     themeSource = input.source
   } else if (
     Object.prototype.hasOwnProperty.call(input, 'themeEngineVersion') ||
-      Object.prototype.hasOwnProperty.call(input, 'bg')
+      Object.prototype.hasOwnProperty.call(input, 'colors')
   ) {
     // We got passed a source/snapshot
     themeData = input
