@@ -39,6 +39,13 @@
         <FAIcon icon="arrows-rotate" />
         {{ $t('settings.style.themes3.editor.refresh_preview') }}
       </button>
+      <button
+        class="btn button-default button-apply"
+        @click="applyTheme"
+      >
+        <FAIcon icon="check" />
+        {{ $t('settings.style.themes3.editor.apply_preview') }}
+      </button>
       <ul class="setting-list style-metadata">
         <li>
           <StringSetting class="meta-field" v-model="name">

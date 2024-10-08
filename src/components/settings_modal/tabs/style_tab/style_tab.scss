@@ -66,14 +66,14 @@
     &.heading {
       display: grid;
       grid-template:
-        "meta meta preview"
-        "meta meta preview"
-        "meta meta preview"
-        "meta meta preview"
-        "new  new  preview"
-        "load save refresh";
+        "meta meta preview preview"
+        "meta meta preview preview"
+        "meta meta preview preview"
+        "meta meta preview preview"
+        "new  new  preview preview"
+        "load save refresh apply";
       grid-gap: 0.5em;
-      grid-template-columns: min-content min-content 6fr;
+      grid-template-columns: min-content min-content 6fr max-content;
       grid-template-rows: repeat(4, min-content) repeat(2, 2em);
 
       ul.setting-list {
@@ -115,6 +115,10 @@
 
       .button-refresh {
         grid-area: refresh;
+      }
+
+      .button-apply {
+        grid-area: apply;
       }
     }
   }

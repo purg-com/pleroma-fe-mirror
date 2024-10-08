@@ -33,7 +33,13 @@ import {
 } from 'src/services/export_import/export_import.js'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faFloppyDisk, faFolderOpen, faFile, faArrowsRotate } from '@fortawesome/free-solid-svg-icons'
+import {
+  faFloppyDisk,
+  faFolderOpen,
+  faFile,
+  faArrowsRotate,
+  faCheck
+} from '@fortawesome/free-solid-svg-icons'
 
 // helper for debugging
 // eslint-disable-next-line no-unused-vars
@@ -46,7 +52,8 @@ library.add(
   faFile,
   faFloppyDisk,
   faFolderOpen,
-  faArrowsRotate
+  faArrowsRotate,
+  faCheck
 )
 
 export default {

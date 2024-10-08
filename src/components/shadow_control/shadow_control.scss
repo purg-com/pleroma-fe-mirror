@@ -5,8 +5,6 @@
   grid-template-areas: "selector preview tweak";
   grid-gap: 0.5em;
   justify-content: stretch;
-  margin-bottom: 1em;
-  width: 100%;
 
   &.-compact {
     grid-template-columns: 10em 1fr;
