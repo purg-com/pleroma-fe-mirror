@@ -4,49 +4,59 @@
 <template>
   <div class="StyleTab">
     <div class="setting-item heading">
-      <!-- TODO: This needs to go -->
-      <h2>{{ $t('settings.style.themes3.editor.title') }}</h2>
+      <!-- eslint-disable vue/no-v-text-v-html-on-component -->
+      <component
+        :is="'style'"
+        v-html="overallPreviewRules"
+      />
+      <!-- eslint-enable vue/no-v-text-v-html-on-component -->
+      <Preview id="edited-style-preview" />
       <button
-        class="btn button-default"
+        class="btn button-default button-new"
         @click="clearTheme"
       >
         <FAIcon icon="file" />
         {{ $t('settings.style.themes3.editor.new_style') }}
       </button>
       <button
-        class="btn button-default"
+        class="btn button-default button-load"
         @click="importStyle"
       >
         <FAIcon icon="folder-open" />
         {{ $t('settings.style.themes3.editor.load_style') }}
       </button>
       <button
-        class="btn button-default"
+        class="btn button-default button-save"
         @click="exportStyle"
       >
         <FAIcon icon="floppy-disk" />
         {{ $t('settings.style.themes3.editor.save_style') }}
       </button>
-    </div>
-    <div class="setting-item metadata">
-      <ul class="setting-list">
+      <button
+        class="btn button-default button-refresh"
+        @click="updateOverallPreview"
+      >
+        <FAIcon icon="arrows-rotate" />
+        {{ $t('settings.style.themes3.editor.refresh_preview') }}
+      </button>
+      <ul class="setting-list style-metadata">
         <li>
-          <StringSetting v-model="name">
+          <StringSetting class="meta-field" v-model="name">
             {{ $t('settings.style.themes3.editor.style_name') }}
           </StringSetting>
         </li>
         <li>
-          <StringSetting v-model="author">
+          <StringSetting class="meta-field" v-model="author">
             {{ $t('settings.style.themes3.editor.style_author') }}
           </StringSetting>
         </li>
         <li>
-          <StringSetting v-model="license">
+          <StringSetting class="meta-field" v-model="license">
             {{ $t('settings.style.themes3.editor.style_license') }}
           </StringSetting>
         </li>
         <li>
-          <StringSetting v-model="website">
+          <StringSetting class="meta-field" v-model="website">
             {{ $t('settings.style.themes3.editor.style_website') }}
           </StringSetting>
         </li>
@@ -262,34 +272,34 @@
         :label="$t('settings.style.themes3.editor.palette_tab')"
         class="setting-item list-editor palette-editor"
       >
-          <label
-            class="list-select-label"
-            for="palette-selector"
+        <label
+          class="list-select-label"
+          for="palette-selector"
+        >
+          {{ $t('settings.style.themes3.palette.label') }}
+          {{ ' ' }}
+        </label>
+        <Select
+          id="palette-selector"
+          v-model="selectedPaletteId"
+          class="list-select"
+          size="4"
+        >
+          <option
+            v-for="(p, index) in palettes"
+            :key="p.name"
+            :value="index"
           >
-            {{ $t('settings.style.themes3.palette.label') }}
-            {{ ' ' }}
-          </label>
-          <Select
-            id="palette-selector"
-            v-model="selectedPaletteId"
-            class="list-select"
-            size="4"
-          >
-            <option
-              v-for="(p, index) in palettes"
-              :key="p.name"
-              :value="index"
-            >
-              {{ p.name }}
-            </option>
-          </Select>
-          <SelectMotion
-            class="list-select-movement"
-            v-model="palettes"
-            :get-add-value="getNewPalette"
-            :selected-id="selectedPaletteId"
-            @update:selectedId="e => selectedPaletteId = e"
-          />
+            {{ p.name }}
+          </option>
+        </Select>
+        <SelectMotion
+          class="list-select-movement"
+          v-model="palettes"
+          :get-add-value="getNewPalette"
+          :selected-id="selectedPaletteId"
+          @update:selectedId="e => selectedPaletteId = e"
+        />
         <PaletteEditor
           class="list-edit-area"
           v-model="selectedPalette"

@@ -799,6 +799,7 @@
           "link_color": "Link color",
           "include_in_rule": "Add to rule",
           "test_string": "TEST",
+          "refresh_preview": "Refresh preview",
           "text_auto": {
             "label": "Auto-contrast",
             "no-preserve": "Black or White",

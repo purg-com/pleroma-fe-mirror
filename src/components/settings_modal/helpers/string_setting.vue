@@ -5,6 +5,7 @@
   >
     <label
       :for="path"
+      class="setting-label"
       :class="{ 'faint': shouldBeDisabled }"
     >
       <template v-if="backendDescriptionLabel">

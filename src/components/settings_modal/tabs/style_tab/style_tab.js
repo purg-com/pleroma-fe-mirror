@@ -13,9 +13,13 @@ import OpacityInput from 'src/components/opacity_input/opacity_input.vue'
 import TabSwitcher from 'src/components/tab_switcher/tab_switcher.jsx'
 import Tooltip from 'src/components/tooltip/tooltip.vue'
 import ContrastRatio from 'src/components/contrast_ratio/contrast_ratio.vue'
+import Preview from '../theme_tab/theme_preview.vue'
 
 import { init } from 'src/services/theme_data/theme_data_3.service.js'
-import { getCssRules } from 'src/services/theme_data/css_utils.js'
+import {
+  getCssRules,
+  getScopedVersion
+} from 'src/services/theme_data/css_utils.js'
 import { serialize } from 'src/services/theme_data/iss_serializer.js'
 import { parseShadow /* , deserialize */ } from 'src/services/theme_data/iss_deserializer.js'
 import {
@@ -29,7 +33,7 @@ import {
 } from 'src/services/export_import/export_import.js'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faFloppyDisk, faFolderOpen, faFile } from '@fortawesome/free-solid-svg-icons'
+import { faFloppyDisk, faFolderOpen, faFile, faArrowsRotate } from '@fortawesome/free-solid-svg-icons'
 
 // helper for debugging
 // eslint-disable-next-line no-unused-vars
@@ -41,7 +45,8 @@ const normalizeStates = (states) => ['normal', ...(states?.filter(x => x !== 'no
 library.add(
   faFile,
   faFloppyDisk,
-  faFolderOpen
+  faFolderOpen,
+  faArrowsRotate
 )
 
 export default {
@@ -57,7 +62,8 @@ export default {
     ColorInput,
     PaletteEditor,
     OpacityInput,
-    ContrastRatio
+    ContrastRatio,
+    Preview
   },
   setup () {
     // All rules that are made by editor
@@ -549,6 +555,40 @@ export default {
       value: 'foobar'
     })
 
+    const overallPreviewRules = ref()
+    const updateOverallPreview = () => {
+      try {
+        // This normally would be handled by Root but since we pass something
+        // else we have to make do ourselves
+
+        const { name, ...rest } = selectedPalette.value
+        const paletteRule = {
+          component: 'Root',
+          directives: Object
+            .entries(rest)
+            .map(([k, v]) => ['--' + k, v])
+            .reduce((acc, [k, v]) => ({ ...acc, [k]: `color | ${v}` }), {})
+        }
+
+        const rules = init({
+          inputRuleset: [
+            ...editorFriendlyToOriginal.value,
+            paletteRule
+          ],
+          ultimateBackgroundColor: '#000000',
+          liteMode: true,
+          debug: true
+        }).eager
+
+        overallPreviewRules.value = getScopedVersion(
+          getCssRules(rules),
+          '#edited-style-preview'
+        ).join('\n')
+      } catch (e) {
+        console.error('Could not compile preview theme', e)
+      }
+    }
+
     // ## Export and Import
     const styleExporter = newExporter({
       filename: name.value || 'pleroma_theme',
@@ -627,6 +667,10 @@ export default {
       editorHintStyle,
       previewCss,
       previewClass,
+
+      // overall preview
+      overallPreviewRules,
+      updateOverallPreview,
 
       // ## Variables
       virtualDirectives,
