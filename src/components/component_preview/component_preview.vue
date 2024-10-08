@@ -39,7 +39,7 @@
         :class="previewClass"
         :style="previewStyle"
       >
-        TEST
+        {{ $t('settings.style.themes3.editor.test_string') }}
       </div>
     </div>
     <input
