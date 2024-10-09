@@ -28,6 +28,7 @@ export const newExporter = ({
 
 export const newImporter = ({
   accept = '.json',
+  parser = (string) => JSON.parse(string),
   onImport,
   onImportFailure,
   validator = () => true
@@ -44,7 +45,7 @@ export const newImporter = ({
         const reader = new FileReader()
         reader.onload = ({ target }) => {
           try {
-            const parsed = JSON.parse(target.result)
+            const parsed = parser(target.result)
             const validationResult = validator(parsed, filename)
             if (validationResult === true) {
               onImport(parsed, filename)

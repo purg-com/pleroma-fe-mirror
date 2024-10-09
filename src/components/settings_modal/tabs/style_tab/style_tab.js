@@ -21,14 +21,14 @@ import {
   getScopedVersion
 } from 'src/services/theme_data/css_utils.js'
 import { serializeShadow, serialize } from 'src/services/theme_data/iss_serializer.js'
-import { parseShadow /* , deserialize */ } from 'src/services/theme_data/iss_deserializer.js'
+import { parseShadow, deserialize } from 'src/services/theme_data/iss_deserializer.js'
 import {
   // rgb2hex,
   hex2rgb,
   getContrastRatio
 } from 'src/services/color_convert/color_convert.js'
 import {
-  // newImporter,
+  newImporter,
   newExporter
 } from 'src/services/export_import/export_import.js'
 
@@ -195,47 +195,53 @@ export default {
     // The native structure of separate rules and the child -> parent
     // relation isn't very convenient for editor, we replace the array
     // and child -> parent structure with map and parent -> child structure
+    const rulesToEditorFriendly = (rules, root = {}) => rules.reduce((acc, rule) => {
+      const { parent: rParent, component: rComponent } = rule
+      const parent = rParent ?? rule
+      const hasChildren = !!rParent
+      const child = hasChildren ? rule : null
+
+      const {
+        component: pComponent,
+        variant: pVariant = 'normal',
+        state: pState = [] // no relation to Intel CPUs whatsoever
+      } = parent
+
+      const pPath = `${hasChildren ? pComponent : rComponent}.${pVariant}.${normalizeStates(pState)}`
+
+      let output = get(acc, pPath)
+      if (!output) {
+        set(acc, pPath, {})
+        output = get(acc, pPath)
+      }
+
+      if (hasChildren) {
+        acc._children = acc._children ?? {}
+        const {
+          component: cComponent,
+          variant: cVariant = 'normal',
+          state: cState = [],
+          directives
+        } = child
+
+        const cPath = `${cComponent}.${cVariant}.${normalizeStates(cState)}`
+        set(output._children, cPath, directives)
+      } else {
+        output.directives = parent.directives
+      }
+      return acc
+    }, root)
+
     const editorFriendlyFallbackStructure = computed(() => {
       const root = {}
 
       componentKeys.forEach((componentKey) => {
         const componentValue = componentsMap.get(componentKey)
-        const { defaultRules } = componentValue
-        defaultRules.forEach((rule) => {
-          const { parent: rParent } = rule
-          const parent = rParent ?? rule
-          const hasChildren = !!rParent
-          const child = hasChildren ? rule : null
-
-          const {
-            component: pComponent,
-            variant: pVariant = 'normal',
-            state: pState = [] // no relation to Intel CPUs whatsoever
-          } = parent
-
-          const pPath = `${hasChildren ? pComponent : componentValue.name}.${pVariant}.${normalizeStates(pState)}`
-
-          let output = get(root, pPath)
-          if (!output) {
-            set(root, pPath, {})
-            output = get(root, pPath)
-          }
-
-          if (hasChildren) {
-            output._children = output._children ?? {}
-            const {
-              component: cComponent,
-              variant: cVariant = 'normal',
-              state: cState = [],
-              directives
-            } = child
-
-            const cPath = `${cComponent}.${cVariant}.${normalizeStates(cState)}`
-            set(output._children, cPath, directives)
-          } else {
-            output.directives = parent.directives
-          }
-        })
+        const { defaultRules, name } = componentValue
+        rulesToEditorFriendly(
+          defaultRules.map((rule) => ({ ...rule, component: name })),
+          root
+        )
       })
 
       return root
@@ -642,6 +648,32 @@ export default {
       extension: 'piss',
       getExportedObject: () => exportStyleData.value
     })
+
+    const styleImporter = newImporter({
+      accept: '.piss',
+      parser: (string) => deserialize(string),
+      onImport (parsed, filename) {
+        const editorComponents = parsed.filter(x => x.component.startsWith('@'))
+        const rules = parsed.filter(x => !x.component.startsWith('@'))
+        const metaIn = editorComponents.find(x => x.component === '@meta').directives
+        const palettesIn = editorComponents.filter(x => x.component === '@palette').directives
+
+        name.value = metaIn.name
+        license.value = metaIn.license
+        author.value = metaIn.author
+        website.value = metaIn.website
+
+        Object.keys(allEditedRules).forEach((k) => delete allEditedRules[k])
+
+        rules.forEach(rule => {
+          rulesToEditorFriendly(
+            [rule],
+            allEditedRules
+          )
+        })
+      }
+    })
+
     const exportStyleData = computed(() => {
       return [
         metaOut.value,
@@ -649,8 +681,13 @@ export default {
         serialize(editorFriendlyToOriginal.value)
       ].join('\n\n')
     })
+
     const exportStyle = () => {
       styleExporter.exportData()
+    }
+
+    const importStyle = () => {
+      styleImporter.importData()
     }
 
     return {
@@ -727,7 +764,8 @@ export default {
       getNewDirective,
 
       // ## Export and Import
-      exportStyle
+      exportStyle,
+      importStyle
     }
   }
 }
