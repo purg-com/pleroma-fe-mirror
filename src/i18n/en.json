@@ -774,11 +774,6 @@
           "extra3": "Extra 3",
           "v2_unsupported": "Older v2 themes don't support palettes. Switch to v3 theme to make use of palettes"
         },
-        "variables": {
-          "label": "Variables",
-          "name_label": "Name:",
-          "type_label": "Type:"
-        },
         "editor": {
           "title": "Style",
           "new_style": "New",
@@ -809,7 +804,16 @@
           },
           "component_tab": "Components style",
           "palette_tab": "Color presets",
-          "variables_tab": "Variables (Advanced)"
+          "variables_tab": "Variables (Advanced)",
+          "variables": {
+            "label": "Variables",
+            "name_label": "Name:",
+            "type_label": "Type:",
+            "type_shadow": "Shadow",
+            "type_color": "Color",
+            "type_generic": "Generic",
+            "virtual_color": "Variable color value"
+          },
         },
         "hacks": {
           "underlay_overrides": "Change underlay",

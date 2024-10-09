@@ -321,7 +321,7 @@
           class="list-select-label"
           for="variables-selector"
         >
-          {{ $t('settings.style.themes3.variables.label') }}
+          {{ $t('settings.style.themes3.editor.variables.label') }}
           {{ ' ' }}
         </label>
         <Select
@@ -351,7 +351,7 @@
               class="variable-name-label"
               for="variables-selector"
             >
-              {{ $t('settings.style.themes3.variables.name_label') }}
+              {{ $t('settings.style.themes3.editor.variables.name_label') }}
               {{ ' ' }}
             </label>
             <input
@@ -362,25 +362,34 @@
               class="variable-type-label"
               for="variables-selector"
             >
-              {{ $t('settings.style.themes3.variables.type_label') }}
+              {{ $t('settings.style.themes3.editor.variables.type_label') }}
               {{ ' ' }}
             </label>
             <Select
-              v-model="selectedVirtualDirective.valType"
+              v-model="selectedVirtualDirectiveValType"
             >
               <option value='shadow'>
-              {{ $t('settings.style.themes3.variables.type_label') }}
-                shadow</option>
-              <option value='shadow'>color</option>
-              <option value='shadow'>generic</option>
+                {{ $t('settings.style.themes3.editor.variables.type_shadow') }}
+              </option>
+              <option value='color'>
+                {{ $t('settings.style.themes3.editor.variables.type_color') }}
+              </option>
+              <option value='generic'>
+                {{ $t('settings.style.themes3.editor.variables.type_generic') }}
+              </option>
             </Select>
           </div>
           <ShadowControl
-            v-if="selectedVirtualDirective.valType === 'shadow'"
+            v-if="selectedVirtualDirectiveValType === 'shadow'"
             v-model="selectedVirtualDirectiveParsed"
             :compact="true"
           />
-          </div>
+          <ColorInput
+            v-if="selectedVirtualDirectiveValType === 'color'"
+            v-model="selectedVirtualDirectiveParsed"
+            :label="$t('settings.style.themes3.editor.variables.virtual_color')"
+          />
+        </div>
       </div>
     </tab-switcher>
   </div>

@@ -20,7 +20,7 @@ import {
   getCssRules,
   getScopedVersion
 } from 'src/services/theme_data/css_utils.js'
-import { serialize } from 'src/services/theme_data/iss_serializer.js'
+import { serializeShadow, serialize } from 'src/services/theme_data/iss_serializer.js'
 import { parseShadow /* , deserialize */ } from 'src/services/theme_data/iss_deserializer.js'
 import {
   // rgb2hex,
@@ -537,7 +537,33 @@ export default {
       })
     const virtualDirectives = reactive(allCustomVirtualDirectives)
     const selectedVirtualDirectiveId = ref(0)
-    const selectedVirtualDirective = computed(() => virtualDirectives[selectedVirtualDirectiveId.value])
+    const selectedVirtualDirective = computed({
+      get () {
+        return virtualDirectives[selectedVirtualDirectiveId.value]
+      },
+      set (value) {
+        console.log('SET', value)
+        virtualDirectives[selectedVirtualDirectiveId.value].value = value
+      }
+    })
+    const selectedVirtualDirectiveValType = computed({
+      get () {
+        return virtualDirectives[selectedVirtualDirectiveId.value].valType
+      },
+      set (value) {
+        virtualDirectives[selectedVirtualDirectiveId.value].valType = value
+        switch (value) {
+          case 'shadow':
+            virtualDirectives[selectedVirtualDirectiveId.value].value = '0 0 0 #000000'
+            break
+          case 'color':
+            virtualDirectives[selectedVirtualDirectiveId.value].value = '#000000'
+            break
+          default:
+            virtualDirectives[selectedVirtualDirectiveId.value].value = 'none'
+        }
+      }
+    })
     const selectedVirtualDirectiveParsed = computed({
       get () {
         switch (selectedVirtualDirective.value.valType) {
@@ -550,8 +576,21 @@ export default {
               return normalizeShadows(splitShadow)
             }
           }
+          case 'color':
+            console.log('COLOR', selectedVirtualDirective.value.value)
+            return selectedVirtualDirective.value.value
           default:
-            return null
+            return selectedVirtualDirective.value.value
+        }
+      },
+      set (value) {
+        switch (selectedVirtualDirective.value.valType) {
+          case 'shadow': {
+            virtualDirectives[selectedVirtualDirectiveId.value].value = value.map(x => serializeShadow(x)).join(', ')
+            break
+          }
+          default:
+            virtualDirectives[selectedVirtualDirectiveId.value].value = value
         }
       }
     })
@@ -684,6 +723,7 @@ export default {
       selectedVirtualDirective,
       selectedVirtualDirectiveId,
       selectedVirtualDirectiveParsed,
+      selectedVirtualDirectiveValType,
       getNewDirective,
 
       // ## Export and Import
