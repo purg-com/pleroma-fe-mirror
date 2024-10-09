@@ -170,7 +170,7 @@ export default {
     },
     configSink () {
       if (this.path == null) {
-        return (k, v) => this.$emit('modelValue:update', v)
+        return (k, v) => this.$emit('update:modelValue', v)
       }
       switch (this.realSource) {
         case 'profile':
