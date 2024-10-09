@@ -28,7 +28,7 @@
 <script setup>
 import ColorInput from 'src/components/color_input/color_input.vue'
 import {
-  // newImporter,
+  newImporter,
   newExporter
 } from 'src/services/export_import/export_import.js'
 
@@ -46,23 +46,23 @@ library.add(
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue'])
 const paletteExporter = newExporter({
-  filename: 'pleroma.palette.json',
+  filename: 'pleroma',
+  extension: 'palette.json',
   getExportedObject: () => props.modelValue
 })
-/*
-   const themeImporter = newImporter({
-     validator: importValidator,
-     onImport,
-     onImportFailure,
-   })
-*/
+const paletteImporter = newImporter({
+  accept: '.palette.json',
+  onImport (parsed, filename) {
+    emit('update:modelValue', parsed)
+  }
+})
 
 const exportPalette = () => {
   paletteExporter.exportData()
 }
 
 const importPalette = () => {
-  // TODO
+  paletteImporter.importData()
 }
 
 const paletteKeys = [
