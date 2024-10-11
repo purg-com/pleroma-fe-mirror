@@ -121,9 +121,22 @@ export default {
         border: '#d8e6f9'
       }
     ])
+
+    // This is kinda dumb but you cannot "replace" reactive() object
+    // and so v-model simply fails when you try to chage (increase only?)
+    // length of the array. Since linter complains about mutating modelValue
+    // inside SelectMotion, the next best thing is to just wipe existing array
+    // and replace it with new one.
+
+    const onPalettesUpdate = (e) => {
+      palettes.splice(0, palettes.length)
+      palettes.push(...e)
+    }
+
     const selectedPaletteId = ref(0)
     const selectedPalette = computed({
       get () {
+        console.log(palettes, toValue(palettes))
         return palettes[selectedPaletteId.value]
       },
       set (newPalette) {
@@ -542,6 +555,12 @@ export default {
         }
       })
     const virtualDirectives = reactive(allCustomVirtualDirectives)
+
+    const onVirtualDirectivesUpdate = (e) => {
+      virtualDirectives.splice(0, virtualDirectives.length)
+      virtualDirectives.push(...e)
+    }
+
     const selectedVirtualDirectiveId = ref(0)
     const selectedVirtualDirective = computed({
       get () {
@@ -601,7 +620,7 @@ export default {
       }
     })
 
-    const getNewDirective = () => ({
+    const getNewVirtualDirective = () => ({
       name: 'newDirective',
       valType: 'generic',
       value: 'foobar'
@@ -656,12 +675,14 @@ export default {
         const editorComponents = parsed.filter(x => x.component.startsWith('@'))
         const rules = parsed.filter(x => !x.component.startsWith('@'))
         const metaIn = editorComponents.find(x => x.component === '@meta').directives
-        const palettesIn = editorComponents.filter(x => x.component === '@palette').directives
+        const palettesIn = editorComponents.filter(x => x.component === '@palette')
 
         name.value = metaIn.name
         license.value = metaIn.license
         author.value = metaIn.author
         website.value = metaIn.website
+
+        console.log('PALETTES', palettesIn)
 
         Object.keys(allEditedRules).forEach((k) => delete allEditedRules[k])
 
@@ -699,6 +720,7 @@ export default {
 
       // ## Palette
       palettes,
+      onPalettesUpdate,
       selectedPalette,
       selectedPaletteId,
       getNewPalette,
@@ -757,11 +779,12 @@ export default {
 
       // ## Variables
       virtualDirectives,
+      onVirtualDirectivesUpdate,
       selectedVirtualDirective,
       selectedVirtualDirectiveId,
       selectedVirtualDirectiveParsed,
       selectedVirtualDirectiveValType,
-      getNewDirective,
+      getNewVirtualDirective,
 
       // ## Export and Import
       exportStyle,

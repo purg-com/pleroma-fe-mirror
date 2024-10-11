@@ -302,15 +302,24 @@
         </Select>
         <SelectMotion
           class="list-select-movement"
-          v-model="palettes"
-          :get-add-value="getNewPalette"
+          :modelValue="palettes"
+          @update:modelValue="onPalettesUpdate"
           :selected-id="selectedPaletteId"
+          :get-add-value="getNewPalette"
           @update:selectedId="e => selectedPaletteId = e"
         />
-        <PaletteEditor
-          class="list-edit-area"
-          v-model="selectedPalette"
-        />
+        <div class="list-edit-area">
+          <StringSetting
+            class="palette-name-input"
+            v-model="selectedPalette.name"
+          >
+            {{ $t('settings.style.themes3.palette.name_label') }}
+          </StringSetting>
+          <PaletteEditor
+            class="palette-editor-single"
+            v-model="selectedPalette"
+          />
+        </div>
       </div>
       <div
         key="variables"
@@ -328,7 +337,7 @@
           id="variables-selector"
           v-model="selectedVirtualDirectiveId"
           class="list-select"
-          size="9"
+          size="20"
         >
           <option
             v-for="(p, index) in virtualDirectives"
@@ -340,7 +349,8 @@
         </Select>
         <SelectMotion
           class="list-select-movement"
-          v-model="virtualDirectives"
+          :modelValue="virtualDirectives"
+          @update:modelValue="onVirtualDirectivesUpdate"
           :selected-id="selectedVirtualDirectiveId"
           :get-add-value="getNewVirtualDirective"
           @update:selectedId="e => selectedVirtualDirectiveId = e"

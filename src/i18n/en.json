@@ -757,7 +757,8 @@
       "themes3": {
         "define": "Override",
         "palette": {
-          "label": "Palettes",
+          "label": "Color schemes",
+          "name_label": "Color scheme name",
           "import": "Import",
           "export": "Export",
           "bg": "Panel background",
@@ -803,7 +804,7 @@
             "no-auto": "Disabled"
           },
           "component_tab": "Components style",
-          "palette_tab": "Color presets",
+          "palette_tab": "Color schemes",
           "variables_tab": "Variables (Advanced)",
           "variables": {
             "label": "Variables",

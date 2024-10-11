@@ -159,7 +159,14 @@
     width: min-content;
 
     .list-edit-area {
+      display: grid;
       align-self: baseline;
+      grid-template-rows: subgrid;
+      grid-template-columns: 1fr;
+    }
+
+    .palette-editor-single {
+      grid-row: 2 / span 2;
     }
   }
 
