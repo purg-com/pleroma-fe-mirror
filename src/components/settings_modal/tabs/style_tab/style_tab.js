@@ -689,7 +689,7 @@ export default {
 
     // ## Export and Import
     const styleExporter = newExporter({
-      filename: name.value || 'pleroma_theme',
+      filename: () => exports.name.value ?? 'pleroma_theme',
       mime: 'text/plain',
       extension: 'piss',
       getExportedObject: () => exportStyleData.value

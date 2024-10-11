@@ -16,7 +16,8 @@ export const newExporter = ({
 
     // Create an invisible link with a data url and simulate a click
     const e = document.createElement('a')
-    e.setAttribute('download', `${filename}.${extension}`)
+    const realFilename = typeof filename === 'function' ? filename() : filename
+    e.setAttribute('download', `${realFilename}.${extension}`)
     e.setAttribute('href', `data:${mime};base64, ${window.btoa(stringified)}`)
     e.style.display = 'none'
 
