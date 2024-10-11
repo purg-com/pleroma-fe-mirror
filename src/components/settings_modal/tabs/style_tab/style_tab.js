@@ -78,18 +78,18 @@ export default {
     const allEditedRules = reactive({})
 
     // ## Meta stuff
-    const name = ref('')
-    const author = ref('')
-    const license = ref('')
-    const website = ref('')
+    exports.name = ref('')
+    exports.author = ref('')
+    exports.license = ref('')
+    exports.website = ref('')
 
     const metaOut = computed(() => {
       return [
         '@meta {',
-        `  name: ${name.value};`,
-        `  author: ${author.value};`,
-        `  license: ${license.value};`,
-        `  website: ${website.value};`,
+        `  name: ${exports.name.value};`,
+        `  author: ${exports.author.value};`,
+        `  license: ${exports.license.value};`,
+        `  website: ${exports.website.value};`,
         '}'
       ].join('\n')
     })
@@ -122,6 +122,7 @@ export default {
         border: '#d8e6f9'
       }
     ])
+    exports.palettes = palettes
 
     // This is kinda dumb but you cannot "replace" reactive() object
     // and so v-model simply fails when you try to chage (increase only?)
@@ -133,6 +134,7 @@ export default {
       palettes.splice(0, palettes.length)
       palettes.push(...e)
     }
+    exports.onPalettesUpdate = onPalettesUpdate
 
     const selectedPaletteId = ref(0)
     const selectedPalette = computed({
@@ -143,7 +145,10 @@ export default {
         palettes[selectedPaletteId.value] = newPalette
       }
     })
-    const getNewPalette = () => ({
+    exports.selectedPaletteId = selectedPaletteId
+    exports.selectedPalette = selectedPalette
+
+    exports.getNewPalette = () => ({
       name: 'new palette',
       bg: '#121a24',
       fg: '#182230',
@@ -177,26 +182,31 @@ export default {
           key => [key, componentsContext(key).default]
         ).filter(([key, component]) => !component.virtual && !component.notEditable)
     )
+    exports.componentsMap = componentsMap
     const componentKeys = [...componentsMap.keys()]
+    exports.componentKeys = componentKeys
 
     // selection basis
     const selectedComponentKey = ref(componentsMap.keys().next().value)
+    exports.selectedComponentKey = selectedComponentKey
     const selectedComponent = computed(() => componentsMap.get(selectedComponentKey.value))
     const selectedComponentName = computed(() => selectedComponent.value.name)
-    const selectedComponentVariants = computed(() => {
+    exports.selectedComponentVariants = computed(() => {
       return Object.keys({ normal: null, ...(selectedComponent.value.variants || {}) })
     })
     const selectedComponentStatesAll = computed(() => {
       return Object.keys({ normal: null, ...(selectedComponent.value.states || {}) })
     })
-    const selectedComponentStates = computed(() => {
+    exports.selectedComponentStates = computed(() => {
       return selectedComponentStatesAll.value.filter(x => x !== 'normal')
     })
 
     // selection
     const selectedVariant = ref('normal')
+    exports.selectedVariant = selectedVariant
     const selectedState = reactive(new Set())
-    const updateSelectedStates = (state, v) => {
+    exports.selectedState = selectedState
+    exports.updateSelectedStates = (state, v) => {
       if (v) {
         selectedState.add(state)
       } else {
@@ -262,7 +272,7 @@ export default {
 
     // Checkging whether component can support some "directives" which
     // are actually virtual subcomponents, i.e. Text, Link etc
-    const componentHas = (subComponent) => {
+    exports.componentHas = (subComponent) => {
       return !!selectedComponent.value.validInnerComponents?.find(x => x === subComponent)
     }
 
@@ -315,23 +325,24 @@ export default {
     })
 
     // All the editable stuff for the component
-    const editedBackgroundColor = getEditedElement(null, 'background')
-    const isBackgroundColorPresent = isElementPresent(null, 'background', '#FFFFFF')
-    const editedOpacity = getEditedElement(null, 'opacity')
-    const isOpacityPresent = isElementPresent(null, 'opacity', 1)
-    const editedTextColor = getEditedElement('Text', 'textColor')
-    const isTextColorPresent = isElementPresent('Text', 'textColor', '#000000')
-    const editedTextAuto = getEditedElement('Text', 'textAuto')
-    const isTextAutoPresent = isElementPresent('Text', 'textAuto', '#000000')
-    const editedLinkColor = getEditedElement('Link', 'textColor')
-    const isLinkColorPresent = isElementPresent('Link', 'textColor', '#000080')
-    const editedIconColor = getEditedElement('Icon', 'textColor')
-    const isIconColorPresent = isElementPresent('Icon', 'textColor', '#909090')
-    const editedBorderColor = getEditedElement('Border', 'textColor')
-    const isBorderColorPresent = isElementPresent('Border', 'textColor', '#909090')
+    exports.editedBackgroundColor = getEditedElement(null, 'background')
+    exports.isBackgroundColorPresent = isElementPresent(null, 'background', '#FFFFFF')
+    exports.editedOpacity = getEditedElement(null, 'opacity')
+    exports.isOpacityPresent = isElementPresent(null, 'opacity', 1)
+    exports.editedTextColor = getEditedElement('Text', 'textColor')
+    exports.isTextColorPresent = isElementPresent('Text', 'textColor', '#000000')
+    exports.editedTextAuto = getEditedElement('Text', 'textAuto')
+    exports.isTextAutoPresent = isElementPresent('Text', 'textAuto', '#000000')
+    exports.editedLinkColor = getEditedElement('Link', 'textColor')
+    exports.isLinkColorPresent = isElementPresent('Link', 'textColor', '#000080')
+    exports.editedIconColor = getEditedElement('Icon', 'textColor')
+    exports.isIconColorPresent = isElementPresent('Icon', 'textColor', '#909090')
+    exports.editedBorderColor = getEditedElement('Border', 'textColor')
+    exports.isBorderColorPresent = isElementPresent('Border', 'textColor', '#909090')
+
     // TODO this is VERY primitive right now, need to make it
     // support variables, fallbacks etc.
-    const getContrast = (bg, text) => {
+    exports.getContrast = (bg, text) => {
       try {
         const bgRgb = hex2rgb(bg)
         const textRgb = hex2rgb(text)
@@ -369,20 +380,23 @@ export default {
     // Shadow is partially edited outside the ShadowControl
     // for better space utilization
     const editedShadow = getEditedElement(null, 'shadow', normalizeShadows)
+    exports.editedShadow = editedShadow
     const editedSubShadowId = ref(null)
+    exports.editedSubShadowId = editedSubShadowId
     const editedSubShadow = computed(() => {
       if (editedShadow.value == null || editedSubShadowId.value == null) return null
       return editedShadow.value[editedSubShadowId.value]
     })
-    const isShadowPresent = isElementPresent(null, 'shadow', [])
-    const onSubShadow = (id) => {
+    exports.editedSubShadow = editedSubShadow
+    exports.isShadowPresent = isElementPresent(null, 'shadow', [])
+    exports.onSubShadow = (id) => {
       if (id != null) {
         editedSubShadowId.value = id
       } else {
         editedSubShadow.value = null
       }
     }
-    const updateSubShadow = (axis, value) => {
+    exports.updateSubShadow = (axis, value) => {
       if (!editedSubShadow.value || editedSubShadowId.value == null) return
       const newEditedShadow = [...editedShadow.value]
 
@@ -393,13 +407,13 @@ export default {
 
       editedShadow.value = newEditedShadow
     }
-    const isShadowTabOpen = ref(false)
-    const onTabSwitch = (tab) => {
-      isShadowTabOpen.value = tab === 'shadow'
+    exports.isShadowTabOpen = ref(false)
+    exports.onTabSwitch = (tab) => {
+      exports.isShadowTabOpen.value = tab === 'shadow'
     }
 
     // component preview
-    const editorHintStyle = computed(() => {
+    exports.editorHintStyle = computed(() => {
       const editorHint = selectedComponent.value.editor
       const styles = []
       if (editorHint && Object.keys(editorHint).length > 0) {
@@ -422,7 +436,7 @@ export default {
       .replace(':focus', '.preview-focus')
       .replace(':focus-within', '.preview-focus-within')
       .replace(':disabled', '.preview-disabled')
-    const previewClass = computed(() => {
+    exports.previewClass = computed(() => {
       const selectors = []
       if (!!selectedComponent.value.variants?.normal || selectedVariant.value !== 'normal') {
         selectors.push(selectedComponent.value.variants[selectedVariant.value])
@@ -436,7 +450,8 @@ export default {
       return selectors.map(x => x.substring(1)).join('')
     })
     const previewRules = reactive([])
-    const previewCss = computed(() => {
+    exports.previewRules = previewRules
+    exports.previewCss = computed(() => {
       try {
         const scoped = getCssRules(previewRules).map(simulatePseudoSelectors)
         return scoped.join('\n')
@@ -556,23 +571,25 @@ export default {
         }
       })
     const virtualDirectives = reactive(allCustomVirtualDirectives)
+    exports.virtualDirectives = virtualDirectives
 
-    const onVirtualDirectivesUpdate = (e) => {
+    exports.onVirtualDirectivesUpdate = (e) => {
       virtualDirectives.splice(0, virtualDirectives.length)
       virtualDirectives.push(...e)
     }
 
     const selectedVirtualDirectiveId = ref(0)
+    exports.selectedVirtualDirectiveId = selectedVirtualDirectiveId
     const selectedVirtualDirective = computed({
       get () {
         return virtualDirectives[selectedVirtualDirectiveId.value]
       },
       set (value) {
-        console.log('SET', value)
         virtualDirectives[selectedVirtualDirectiveId.value].value = value
       }
     })
-    const selectedVirtualDirectiveValType = computed({
+    exports.selectedVirtualDirective = selectedVirtualDirective
+    exports.selectedVirtualDirectiveValType = computed({
       get () {
         return virtualDirectives[selectedVirtualDirectiveId.value].valType
       },
@@ -590,7 +607,7 @@ export default {
         }
       }
     })
-    const selectedVirtualDirectiveParsed = computed({
+    exports.selectedVirtualDirectiveParsed = computed({
       get () {
         switch (selectedVirtualDirective.value.valType) {
           case 'shadow': {
@@ -621,7 +638,7 @@ export default {
       }
     })
 
-    const getNewVirtualDirective = () => ({
+    exports.getNewVirtualDirective = () => ({
       name: 'newDirective',
       valType: 'generic',
       value: 'foobar'
@@ -636,7 +653,8 @@ export default {
     }
 
     const overallPreviewRules = ref()
-    const updateOverallPreview = () => {
+    exports.overallPreviewRules = overallPreviewRules
+    exports.updateOverallPreview = () => {
       try {
         // This normally would be handled by Root but since we pass something
         // else we have to make do ourselves
@@ -686,10 +704,10 @@ export default {
         const metaIn = editorComponents.find(x => x.component === '@meta').directives
         const palettesIn = editorComponents.filter(x => x.component === '@palette')
 
-        name.value = metaIn.name
-        license.value = metaIn.license
-        author.value = metaIn.author
-        website.value = metaIn.website
+        exports.name.value = metaIn.name
+        exports.license.value = metaIn.license
+        exports.author.value = metaIn.author
+        exports.website.value = metaIn.website
 
         onPalettesUpdate(palettesIn.map(x => ({ name: x.variant, ...x.directives })))
         console.log('PALETTES', palettesIn)
@@ -713,96 +731,14 @@ export default {
       ].join('\n\n')
     })
 
-    const exportStyle = () => {
+    exports.exportStyle = () => {
       styleExporter.exportData()
     }
 
-    const importStyle = () => {
+    exports.importStyle = () => {
       styleImporter.importData()
     }
 
-    return {
-      // ## Meta
-      name,
-      author,
-      license,
-      website,
-
-      // ## Palette
-      palettes,
-      onPalettesUpdate,
-      selectedPalette,
-      selectedPaletteId,
-      getNewPalette,
-
-      // ## Components
-      componentKeys,
-      componentsMap,
-
-      // selection basis
-      selectedComponent,
-      selectedComponentName,
-      selectedComponentKey,
-      selectedComponentVariants,
-      selectedComponentStates,
-
-      // selection
-      selectedVariant,
-      selectedState,
-      updateSelectedStates,
-
-      // component directives
-      componentHas,
-
-      // component colors
-      editedBackgroundColor,
-      isBackgroundColorPresent,
-      editedOpacity,
-      isOpacityPresent,
-      editedTextColor,
-      isTextColorPresent,
-      editedTextAuto,
-      isTextAutoPresent,
-      editedLinkColor,
-      isLinkColorPresent,
-      editedIconColor,
-      isIconColorPresent,
-      editedBorderColor,
-      isBorderColorPresent,
-      getContrast,
-
-      // component shadow
-      editedShadow,
-      editedSubShadow,
-      isShadowPresent,
-      onSubShadow,
-      updateSubShadow,
-      isShadowTabOpen,
-      onTabSwitch,
-
-      // component preview
-      editorHintStyle,
-      previewCss,
-      previewClass,
-
-      // overall preview
-      overallPreviewRules,
-      updateOverallPreview,
-
-      // ## Variables
-      virtualDirectives,
-      onVirtualDirectivesUpdate,
-      selectedVirtualDirective,
-      selectedVirtualDirectiveId,
-      selectedVirtualDirectiveParsed,
-      selectedVirtualDirectiveValType,
-      getNewVirtualDirective,
-
-      // ## Export and Import
-      exportStyle,
-      importStyle,
-
-      ...exports
-    }
+    return exports
   }
 }
