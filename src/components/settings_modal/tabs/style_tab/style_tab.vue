@@ -165,6 +165,7 @@
           >
             <ColorInput
               v-model="editedBackgroundColor"
+              :fallback="computeColor(editedBackgroundColor)"
               :disabled="!isBackgroundColorPresent"
               :label="$t('settings.style.themes3.editor.background')"
             />
@@ -182,6 +183,7 @@
             <ColorInput
               v-if="componentHas('Text')"
               v-model="editedTextColor"
+              :fallback="computeColor(editedTextColor)"
               :label="$t('settings.style.themes3.editor.text_color')"
               :disabled="!isTextColorPresent"
             />
@@ -230,6 +232,7 @@
             <ColorInput
               v-if="componentHas('Link')"
               v-model="editedLinkColor"
+              :fallback="computeColor(editedLinkColor)"
               :label="$t('settings.style.themes3.editor.link_color')"
               :disabled="!isLinkColorPresent"
             />
@@ -242,6 +245,7 @@
             <ColorInput
               v-if="componentHas('Icon')"
               v-model="editedIconColor"
+              :fallback="computeColor(editedIconColor)"
               :label="$t('settings.style.themes3.editor.icon_color')"
               :disabled="!isIconColorPresent"
             />
@@ -250,6 +254,19 @@
               :text="$t('settings.style.themes3.editor.include_in_rule')"
             >
               <Checkbox v-model="isIconColorPresent" />
+            </Tooltip>
+            <ColorInput
+              v-if="componentHas('Border')"
+              v-model="editedBorderColor"
+              :fallback="computeColor(editedBorderColor)"
+              :label="$t('settings.style.themes3.editor.Border_color')"
+              :disabled="!isBorderColorPresent"
+            />
+            <Tooltip
+              v-if="componentHas('Border')"
+              :text="$t('settings.style.themes3.editor.include_in_rule')"
+            >
+              <Checkbox v-model="isBorderColorPresent" />
             </Tooltip>
           </div>
           <div
@@ -397,6 +414,7 @@
           <ColorInput
             v-if="selectedVirtualDirectiveValType === 'color'"
             v-model="selectedVirtualDirectiveParsed"
+            :fallback="computeColor(selectedVirtualDirectiveParsed)"
             :label="$t('settings.style.themes3.editor.variables.virtual_color')"
           />
         </div>

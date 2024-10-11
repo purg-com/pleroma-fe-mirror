@@ -15,7 +15,7 @@ import Tooltip from 'src/components/tooltip/tooltip.vue'
 import ContrastRatio from 'src/components/contrast_ratio/contrast_ratio.vue'
 import Preview from '../theme_tab/theme_preview.vue'
 
-import { init } from 'src/services/theme_data/theme_data_3.service.js'
+import { init, findColor } from 'src/services/theme_data/theme_data_3.service.js'
 import {
   getCssRules,
   getScopedVersion
@@ -23,7 +23,7 @@ import {
 import { serializeShadow, serialize } from 'src/services/theme_data/iss_serializer.js'
 import { parseShadow, deserialize } from 'src/services/theme_data/iss_deserializer.js'
 import {
-  // rgb2hex,
+  rgb2hex,
   hex2rgb,
   getContrastRatio
 } from 'src/services/color_convert/color_convert.js'
@@ -73,6 +73,7 @@ export default {
     Preview
   },
   setup () {
+    const exports = {}
     // All rules that are made by editor
     const allEditedRules = reactive({})
 
@@ -136,7 +137,6 @@ export default {
     const selectedPaletteId = ref(0)
     const selectedPalette = computed({
       get () {
-        console.log(palettes, toValue(palettes))
         return palettes[selectedPaletteId.value]
       },
       set (newPalette) {
@@ -327,6 +327,8 @@ export default {
     const isLinkColorPresent = isElementPresent('Link', 'textColor', '#000080')
     const editedIconColor = getEditedElement('Icon', 'textColor')
     const isIconColorPresent = isElementPresent('Icon', 'textColor', '#909090')
+    const editedBorderColor = getEditedElement('Border', 'textColor')
+    const isBorderColorPresent = isElementPresent('Border', 'textColor', '#909090')
     // TODO this is VERY primitive right now, need to make it
     // support variables, fallbacks etc.
     const getContrast = (bg, text) => {
@@ -353,7 +355,6 @@ export default {
     }
 
     const normalizeShadows = (shadows) => {
-      console.log('NORMALIZE')
       return shadows?.map(shadow => {
         if (typeof shadow === 'object') {
           return shadow
@@ -626,6 +627,14 @@ export default {
       value: 'foobar'
     })
 
+    exports.computeColor = (color) => {
+      const computedColor = findColor(color, { dynamicVars: {}, staticVars: selectedPalette.value })
+      if (computedColor) {
+        return rgb2hex(computedColor)
+      }
+      return null
+    }
+
     const overallPreviewRules = ref()
     const updateOverallPreview = () => {
       try {
@@ -682,6 +691,7 @@ export default {
         author.value = metaIn.author
         website.value = metaIn.website
 
+        onPalettesUpdate(palettesIn.map(x => ({ name: x.variant, ...x.directives })))
         console.log('PALETTES', palettesIn)
 
         Object.keys(allEditedRules).forEach((k) => delete allEditedRules[k])
@@ -757,6 +767,8 @@ export default {
       isLinkColorPresent,
       editedIconColor,
       isIconColorPresent,
+      editedBorderColor,
+      isBorderColorPresent,
       getContrast,
 
       // component shadow
@@ -788,7 +800,9 @@ export default {
 
       // ## Export and Import
       exportStyle,
-      importStyle
+      importStyle,
+
+      ...exports
     }
   }
 }

@@ -130,7 +130,7 @@ export default {
       return this.modelValue === 'transparent'
     },
     computedColor () {
-      return this.modelValue && this.modelValue.startsWith('--')
+      return this.modelValue && (this.modelValue.startsWith('--') || this.modelValue.startsWith('$'))
     }
   },
   methods: {

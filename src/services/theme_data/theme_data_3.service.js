@@ -62,7 +62,7 @@ const findShadow = (shadows, { dynamicVars, staticVars }) => {
   })
 }
 
-const findColor = (color, { dynamicVars, staticVars }) => {
+export const findColor = (color, { dynamicVars, staticVars }) => {
   if (typeof color !== 'string' || (!color.startsWith('--') && !color.startsWith('$'))) return color
   let targetColor = null
   if (color.startsWith('--')) {
