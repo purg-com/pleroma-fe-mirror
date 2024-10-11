@@ -409,6 +409,7 @@
           <ShadowControl
             v-if="selectedVirtualDirectiveValType === 'shadow'"
             v-model="selectedVirtualDirectiveParsed"
+            :computeColor="computeColor"
             :compact="true"
           />
           <ColorInput

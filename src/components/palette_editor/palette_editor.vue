@@ -46,12 +46,12 @@ library.add(
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue'])
 const paletteExporter = newExporter({
-  filename: 'pleroma',
-  extension: 'palette.json',
+  filename: 'pleroma_palette',
+  extension: 'json',
   getExportedObject: () => props.modelValue
 })
 const paletteImporter = newImporter({
-  accept: '.palette.json',
+  accept: '.json',
   onImport (parsed, filename) {
     emit('update:modelValue', parsed)
   }

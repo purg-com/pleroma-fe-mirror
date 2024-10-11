@@ -46,6 +46,7 @@ export default {
     'separateInset',
     'noPreview',
     'disabled',
+    'computeColor',
     'compact'
   ],
   emits: ['update:modelValue', 'subShadowSelected'],
@@ -106,6 +107,13 @@ export default {
     },
     usingFallback () {
       return this.modelValue == null
+    },
+    getFallback () {
+      if (typeof this.computeColor === 'function' && this.selected?.color) {
+        return this.computeColor(this.selected.color)
+      } else {
+        return this.currentFallback?.color
+      }
     },
     style () {
       try {

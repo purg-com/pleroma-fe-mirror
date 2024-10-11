@@ -620,7 +620,6 @@ export default {
             }
           }
           case 'color':
-            console.log('COLOR', selectedVirtualDirective.value.value)
             return selectedVirtualDirective.value.value
           default:
             return selectedVirtualDirective.value.value

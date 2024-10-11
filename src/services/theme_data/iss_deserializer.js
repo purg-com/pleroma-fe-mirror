@@ -21,7 +21,11 @@ export const parseShadow = string => {
   const regex = new RegExp(regexPrep, 'gis') // global, (stable) indices, single-string
   const result = regex.exec(string)
   if (result == null) {
-    return string
+    if (string.startsWith('$') || string.startsWith('--')) {
+      return string
+    } else {
+      throw new Error(`Invalid shadow definition: ${string}`)
+    }
   } else {
     const numeric = new Set(['x', 'y', 'blur', 'spread', 'alpha'])
     const { x, y, blur, spread, alpha, inset, color } = Object.fromEntries(modes.map((mode, i) => {

@@ -1,6 +1,6 @@
 import { unroll } from './iss_utils.js'
 
-export const serializeShadow = s => {
+export const serializeShadow = (s, throwOnInvalid) => {
   if (typeof s === 'object') {
     return `${s.inset ? 'inset ' : ''}${s.x} ${s.y} ${s.blur} ${s.spread} ${s.color} / ${s.alpha}`
   } else {
