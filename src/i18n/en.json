@@ -814,7 +814,7 @@
             "type_color": "Color",
             "type_generic": "Generic",
             "virtual_color": "Variable color value"
-          },
+          }
         },
         "hacks": {
           "underlay_overrides": "Change underlay",
