@@ -4,7 +4,7 @@
   >
     <button
       class="btn button-default"
-      :disabled="disabled || shadowsAreNull"
+      :disabled="disabled"
       @click="add"
     >
       <FAIcon

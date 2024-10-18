@@ -1,10 +1,11 @@
 import { flattenDeep } from 'lodash'
 
-export const parseShadow = string => {
-  const modes = ['_full', 'inset', 'x', 'y', 'blur', 'spread', 'color', 'alpha']
+export const deserializeShadow = string => {
+  const modes = ['_full', 'inset', 'x', 'y', 'blur', 'spread', 'color', 'alpha', 'name']
   const regexPrep = [
     // inset keyword (optional)
-    '^(?:(inset)\\s+)?',
+    '^',
+    '(?:(inset)\\s+)?',
     // x
     '(?:(-?[0-9]+(?:\\.[0-9]+)?)\\s+)',
     // y
@@ -16,7 +17,10 @@ export const parseShadow = string => {
     // either hex, variable or function
     '(#[0-9a-f]{6}|--[a-z\\-_]+|\\$[a-z\\-()_]+)',
     // opacity (optional)
-    '(?:\\s+\\/\\s+([0-9]+(?:\\.[0-9]+)?)\\s*)?$'
+    '(?:\\s+\\/\\s+([0-9]+(?:\\.[0-9]+)?)\\s*)?',
+    // name
+    '(?:\\s+#(\\w+)\\s*)?',
+    '$'
   ].join('')
   const regex = new RegExp(regexPrep, 'gis') // global, (stable) indices, single-string
   const result = regex.exec(string)
@@ -28,7 +32,7 @@ export const parseShadow = string => {
     }
   } else {
     const numeric = new Set(['x', 'y', 'blur', 'spread', 'alpha'])
-    const { x, y, blur, spread, alpha, inset, color } = Object.fromEntries(modes.map((mode, i) => {
+    const { x, y, blur, spread, alpha, inset, color, name } = Object.fromEntries(modes.map((mode, i) => {
       if (numeric.has(mode)) {
         const number = Number(result[i])
         if (Number.isNaN(number)) {
@@ -43,7 +47,7 @@ export const parseShadow = string => {
       }
     }).filter(([k, v]) => v !== false).slice(1))
 
-    return { x, y, blur, spread, color, alpha, inset }
+    return { x, y, blur, spread, color, alpha, inset, name }
   }
 }
 // this works nearly the same as HTML tree converter
@@ -150,7 +154,7 @@ export const deserialize = (input) => {
           if (realValue === 'none') {
             realValue = []
           } else {
-            realValue = value.split(',').map(v => parseShadow(v.trim()))
+            realValue = value.split(',').map(v => deserializeShadow(v.trim()))
           }
         } if (!Number.isNaN(Number(value))) {
           realValue = Number(value)

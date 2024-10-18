@@ -21,7 +21,7 @@ import {
   getScopedVersion
 } from 'src/services/theme_data/css_utils.js'
 import { serializeShadow, serialize } from 'src/services/theme_data/iss_serializer.js'
-import { parseShadow, deserialize } from 'src/services/theme_data/iss_deserializer.js'
+import { deserializeShadow, deserialize } from 'src/services/theme_data/iss_deserializer.js'
 import {
   rgb2hex,
   hex2rgb,
@@ -371,7 +371,11 @@ export default {
           return shadow
         }
         if (typeof shadow === 'string') {
-          return parseShadow(shadow)
+          try {
+            return deserializeShadow(shadow)
+          } catch (e) {
+            console.warn(e)
+          }
         }
         return null
       })
@@ -580,6 +584,7 @@ export default {
 
     const selectedVirtualDirectiveId = ref(0)
     exports.selectedVirtualDirectiveId = selectedVirtualDirectiveId
+
     const selectedVirtualDirective = computed({
       get () {
         return virtualDirectives[selectedVirtualDirectiveId.value]
@@ -589,6 +594,7 @@ export default {
       }
     })
     exports.selectedVirtualDirective = selectedVirtualDirective
+
     exports.selectedVirtualDirectiveValType = computed({
       get () {
         return virtualDirectives[selectedVirtualDirectiveId.value].valType
@@ -607,35 +613,56 @@ export default {
         }
       }
     })
-    exports.selectedVirtualDirectiveParsed = computed({
-      get () {
-        switch (selectedVirtualDirective.value.valType) {
+
+    const draftVirtualDirectiveValid = ref(true)
+    const draftVirtualDirective = ref({})
+    exports.draftVirtualDirective = draftVirtualDirective
+
+    watch(
+      selectedVirtualDirective,
+      (directive) => {
+        switch (directive.valType) {
           case 'shadow': {
-            const directiveValue = selectedVirtualDirective.value.value
-            if (Array.isArray(directiveValue)) {
-              return normalizeShadows(directiveValue)
+            if (Array.isArray(directive.value)) {
+              draftVirtualDirective.value = normalizeShadows(directive.value)
             } else {
-              const splitShadow = directiveValue.split(/,/g).map(x => x.trim())
-              return normalizeShadows(splitShadow)
+              const splitShadow = directive.value.split(/,/g).map(x => x.trim())
+              draftVirtualDirective.value = normalizeShadows(splitShadow)
             }
-          }
-          case 'color':
-            return selectedVirtualDirective.value.value
-          default:
-            return selectedVirtualDirective.value.value
-        }
-      },
-      set (value) {
-        switch (selectedVirtualDirective.value.valType) {
-          case 'shadow': {
-            virtualDirectives[selectedVirtualDirectiveId.value].value = value.map(x => serializeShadow(x)).join(', ')
             break
           }
+          case 'color':
+            draftVirtualDirective.value = directive.value
+            break
           default:
-            virtualDirectives[selectedVirtualDirectiveId.value].value = value
+            draftVirtualDirective.value = directive.value
+            break
         }
-      }
-    })
+      },
+      { immediate: true }
+    )
+
+    watch(
+      draftVirtualDirective,
+      (directive) => {
+        try {
+          switch (selectedVirtualDirective.value.valType) {
+            case 'shadow': {
+              virtualDirectives[selectedVirtualDirectiveId.value].value =
+                directive.map(x => serializeShadow(x)).join(', ')
+              break
+            }
+            default:
+              virtualDirectives[selectedVirtualDirectiveId.value].value = directive
+          }
+          draftVirtualDirectiveValid.value = true
+        } catch (e) {
+          console.error('Invalid virtual directive value', e)
+          draftVirtualDirectiveValid.value = false
+        }
+      },
+      { immediate: true }
+    )
 
     exports.getNewVirtualDirective = () => ({
       name: 'newDirective',

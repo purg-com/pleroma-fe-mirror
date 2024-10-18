@@ -285,7 +285,7 @@
               :disabled="!isShadowPresent"
               :no-preview="true"
               :compact="true"
-              :separate-inset="shadowSelected === 'avatar' || shadowSelected === 'avatarStatus'"
+              :compute-color="computeColor"
               @subShadowSelected="onSubShadow"
             />
           </div>
@@ -408,14 +408,14 @@
           </div>
           <ShadowControl
             v-if="selectedVirtualDirectiveValType === 'shadow'"
-            v-model="selectedVirtualDirectiveParsed"
-            :computeColor="computeColor"
+            v-model="draftVirtualDirective"
+            :compute-color="computeColor"
             :compact="true"
           />
           <ColorInput
             v-if="selectedVirtualDirectiveValType === 'color'"
-            v-model="selectedVirtualDirectiveParsed"
-            :fallback="computeColor(selectedVirtualDirectiveParsed)"
+            v-model="draftVirtualDirective"
+            :fallback="computeColor(draftVirtualDirective)"
             :label="$t('settings.style.themes3.editor.variables.virtual_color')"
           />
         </div>

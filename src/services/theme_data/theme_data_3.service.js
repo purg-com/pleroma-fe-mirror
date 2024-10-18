@@ -22,7 +22,7 @@ import {
   normalizeCombination,
   findRules
 } from './iss_utils.js'
-import { parseShadow } from './iss_deserializer.js'
+import { deserializeShadow } from './iss_deserializer.js'
 
 // Ensuring the order of components
 const components = {
@@ -48,7 +48,7 @@ const findShadow = (shadows, { dynamicVars, staticVars }) => {
         const variableSlot = shadow.substring(2)
         return findShadow(staticVars[variableSlot], { dynamicVars, staticVars })
       } else {
-        targetShadow = parseShadow(shadow)
+        targetShadow = deserializeShadow(shadow)
       }
     } else {
       targetShadow = shadow
