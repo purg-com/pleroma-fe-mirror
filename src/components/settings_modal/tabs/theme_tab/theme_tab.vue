@@ -957,6 +957,7 @@
             v-model="currentShadow"
             :separate-inset="shadowSelected === 'avatar' || shadowSelected === 'avatarStatus'"
             :fallback="currentShadowFallback"
+            :static-vars="previewTheme.colors"
           />
         </div>
         <div
