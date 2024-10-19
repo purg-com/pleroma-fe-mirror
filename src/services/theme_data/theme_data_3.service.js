@@ -37,7 +37,7 @@ const components = {
   ChatMessage: null
 }
 
-const findShadow = (shadows, { dynamicVars, staticVars }) => {
+export const findShadow = (shadows, { dynamicVars, staticVars }) => {
   return (shadows || []).map(shadow => {
     let targetShadow
     if (typeof shadow === 'string') {

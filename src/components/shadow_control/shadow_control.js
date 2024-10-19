@@ -5,9 +5,13 @@ import SelectMotion from 'src/components/select/select_motion.vue'
 import Checkbox from 'src/components/checkbox/checkbox.vue'
 import Popover from 'src/components/popover/popover.vue'
 import ComponentPreview from 'src/components/component_preview/component_preview.vue'
-import { getCssShadow, getCssShadowFilter } from '../../services/theme_data/theme_data.service.js'
+import { rgb2hex } from 'src/services/color_convert/color_convert.js'
+import { serializeShadow } from 'src/services/theme_data/iss_serializer.js'
+import { deserializeShadow } from 'src/services/theme_data/iss_deserializer.js'
+import { getCssShadow, getCssShadowFilter } from 'src/services/theme_data/css_utils.js'
+import { findShadow, findColor } from 'src/services/theme_data/theme_data_3.service.js'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { throttle } from 'lodash'
+import { throttle, flattenDeep } from 'lodash'
 import {
   faTimes,
   faChevronDown,
@@ -46,13 +50,14 @@ export default {
     'separateInset',
     'noPreview',
     'disabled',
-    'computeColor',
+    'staticVars',
     'compact'
   ],
   emits: ['update:modelValue', 'subShadowSelected'],
   data () {
     return {
-      selectedId: 0
+      selectedId: 0,
+      invalid: false
     }
   },
   components: {
@@ -97,7 +102,7 @@ export default {
       }
     },
     present () {
-      return this.selected != null && !this.usingFallback
+      return this.selected != null && this.modelValue != null
     },
     shadowsAreNull () {
       return this.modelValue == null
@@ -105,31 +110,38 @@ export default {
     currentFallback () {
       return this.fallback?.[this.selectedId]
     },
-    usingFallback () {
-      return this.modelValue == null
-    },
-    getFallback () {
-      if (typeof this.computeColor === 'function' && this.selected?.color) {
-        return this.computeColor(this.selected.color)
+    getColorFallback () {
+      if (this.staticVars && this.selected?.color) {
+        const computedColor = findColor(this.selected.color, { dynamicVars: {}, staticVars: this.staticVars }, true)
+        if (computedColor) return rgb2hex(computedColor)
+        return null
       } else {
         return this.currentFallback?.color
       }
     },
     style () {
       try {
+        let result
+        const serialized = this.cValue.map(x => serializeShadow(x)).join(',')
+        deserializeShadow(serialized) // validate
+        const expandedShadow = flattenDeep(findShadow(this.cValue, { dynamicVars: {}, staticVars: this.staticVars }))
+        const fixedShadows = expandedShadow.map(x => ({ ...x, color: console.log(x) || rgb2hex(x.color) }))
+
         if (this.separateInset) {
-          return {
-            filter: getCssShadowFilter(this.cValue),
-            boxShadow: getCssShadow(this.cValue, true)
+          result = {
+            filter: getCssShadowFilter(fixedShadows),
+            boxShadow: getCssShadow(fixedShadows, true)
+          }
+        } else {
+          result = {
+            boxShadow: getCssShadow(fixedShadows)
           }
         }
-        return {
-          boxShadow: getCssShadow(this.cValue)
-        }
+        this.invalid = false
+        return result
       } catch (e) {
-        return {
-          border: '1px solid red'
-        }
+        console.error('Invalid shadow', e)
+        this.invalid = true
       }
     }
   },

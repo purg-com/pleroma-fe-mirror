@@ -3,6 +3,12 @@
     class="ComponentPreview"
     :class="{ '-shadow-controls': shadowControl }"
   >
+    <!-- eslint-disable vue/no-v-html vue/no-v-text-v-html-on-component -->
+    <component
+      :is="'style'"
+      v-html="previewCss"
+    />
+    <!-- eslint-enable vue/no-v-html vue/no-v-text-v-html-on-component -->
     <label
       v-show="shadowControl"
       class="header"
@@ -11,7 +17,7 @@
       {{ $t('settings.style.shadows.offset') }}
     </label>
     <input
-      v-show="shadowControl"
+      v-show="shadowControl && !hideControls"
       :value="shadow?.y"
       :disabled="disabled"
       :class="{ disabled }"
@@ -20,7 +26,7 @@
       @input="e => updateProperty('y', e.target.value)"
     >
     <input
-      v-show="shadowControl"
+      v-show="shadowControl && !hideControls"
       :value="shadow?.y"
       :disabled="disabled"
       :class="{ disabled }"
@@ -41,9 +47,14 @@
       >
         {{ $t('settings.style.themes3.editor.test_string') }}
       </div>
+      <div v-if="invalid" class="invalid-container">
+        <div class="alert error invalid-label">
+          {{ $t('settings.style.themes3.editor.invalid') }}
+        </div>
+      </div>
     </div>
     <input
-      v-show="shadowControl"
+      v-show="shadowControl && !hideControls"
       :value="shadow?.x"
       :disabled="disabled"
       :class="{ disabled }"
@@ -52,7 +63,7 @@
       @input="e => updateProperty('x', e.target.value)"
     >
     <input
-      v-show="shadowControl"
+      v-show="shadowControl && !hideControls"
       :value="shadow?.x"
       :disabled="disabled"
       :class="{ disabled }"
@@ -85,7 +96,9 @@ export default {
     'shadowControl',
     'previewClass',
     'previewStyle',
-    'disabled'
+    'previewCss',
+    'disabled',
+    'invalid'
   ],
   emits: ['update:shadow'],
   data () {
@@ -93,9 +106,14 @@ export default {
       lightGrid: false
     }
   },
+  computed: {
+    hideControls () {
+      return typeof this.shadow === 'string'
+    }
+  },
   methods: {
     updateProperty (axis, value) {
-      this.$emit('update:shadow', { axis, value })
+      this.$emit('update:shadow', { axis, value: Number(value) })
     }
   }
 }
@@ -119,6 +137,22 @@ export default {
     justify-self: center;
     align-self: baseline;
     line-height: 2;
+  }
+
+  .invalid-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    background-color: rgba(100 0 0 / 50%);
+
+    .alert {
+      padding: 0.5em 1em;
+    }
   }
 
   .input-light-grid {
@@ -170,6 +204,7 @@ export default {
       --__grid-color2-disabled: rgba(255 255 255 / 20%);
     }
 
+    position: relative;
     grid-area: preview;
     aspect-ratio: 1;
     display: flex;

@@ -28,7 +28,7 @@ export const deserializeShadow = string => {
     if (string.startsWith('$') || string.startsWith('--')) {
       return string
     } else {
-      throw new Error(`Invalid shadow definition: ${string}`)
+      throw new Error(`Invalid shadow definition: '${string}'`)
     }
   } else {
     const numeric = new Set(['x', 'y', 'blur', 'spread', 'alpha'])

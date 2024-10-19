@@ -148,6 +148,7 @@
             :shadow-control="isShadowTabOpen"
             :preview-class="previewClass"
             :preview-style="editorHintStyle"
+            :preview-css="previewCss"
             :disabled="!editedSubShadow && typeof editedShadow !== 'string'"
             :shadow="editedSubShadow"
             @update:shadow="({ axis, value }) => updateSubShadow(axis, value)"
@@ -285,7 +286,7 @@
               :disabled="!isShadowPresent"
               :no-preview="true"
               :compact="true"
-              :compute-color="computeColor"
+              :static-vars="selectedPalette"
               @subShadowSelected="onSubShadow"
             />
           </div>
@@ -409,7 +410,7 @@
           <ShadowControl
             v-if="selectedVirtualDirectiveValType === 'shadow'"
             v-model="draftVirtualDirective"
-            :compute-color="computeColor"
+            :static-vars="selectedPalette"
             :compact="true"
           />
           <ColorInput

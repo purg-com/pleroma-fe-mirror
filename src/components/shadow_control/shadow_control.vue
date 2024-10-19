@@ -5,9 +5,11 @@
   >
     <ComponentPreview
       v-if="!noPreview"
+      :invalid="invalid"
       class="shadow-preview"
       :shadow-control="true"
       :shadow="selected"
+      :preview-style="style"
       :disabled="disabled || !present"
       @update:shadow="({ axis, value }) => updateProperty(axis, value)"
     />
@@ -165,7 +167,7 @@
           :model-value="selected?.color"
           :disabled="disabled || !present"
           :label="$t('settings.style.common.color')"
-          :fallback="getFallback"
+          :fallback="getColorFallback"
           :show-optional-tickbox="false"
           name="shadow"
           @update:modelValue="e => updateProperty('color', e)"

@@ -793,8 +793,10 @@
           "text_color": "Text color",
           "icon_color": "Icon color",
           "link_color": "Link color",
+          "border_color": "Border color",
           "include_in_rule": "Add to rule",
           "test_string": "TEST",
+          "invalid": "Invalid",
           "refresh_preview": "Refresh preview",
           "apply_preview": "Apply",
           "text_auto": {
