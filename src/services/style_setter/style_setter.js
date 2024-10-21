@@ -56,22 +56,7 @@ export const generateTheme = (inputRuleset, callbacks, debug) => {
 
   getCssRules(themes3.eager, debug).forEach(rule => {
     // Hacks to support multiple selectors on same component
-    if (rule.match(/::-webkit-scrollbar-button/)) {
-      const parts = rule.split(/[{}]/g)
-      const newRule = [
-        parts[0],
-        ', ',
-        parts[0].replace(/button/, 'thumb'),
-        ', ',
-        parts[0].replace(/scrollbar-button/, 'resizer'),
-        ' {',
-        parts[1],
-        '}'
-      ].join('')
-      onNewRule(newRule, false)
-    } else {
-      onNewRule(rule, false)
-    }
+    onNewRule(rule, false)
   })
   onEagerFinished()
 
@@ -85,22 +70,7 @@ export const generateTheme = (inputRuleset, callbacks, debug) => {
     const chunk = chunks[counter]
     Promise.all(chunk.map(x => x())).then(result => {
       getCssRules(result.filter(x => x), debug).forEach(rule => {
-        if (rule.match(/\.modal-view/)) {
-          const parts = rule.split(/[{}]/g)
-          const newRule = [
-            parts[0],
-            ', ',
-            parts[0].replace(/\.modal-view/, '#modal'),
-            ', ',
-            parts[0].replace(/\.modal-view/, '.shout-panel'),
-            ' {',
-            parts[1],
-            '}'
-          ].join('')
-          onNewRule(newRule, true)
-        } else {
-          onNewRule(rule, true)
-        }
+        onNewRule(rule, true)
       })
       // const t1 = performance.now()
       // console.debug('Chunk ' + counter + ' took ' + (t1 - t0) + 'ms')

@@ -1,6 +1,6 @@
 export default {
   name: 'Scrollbar',
-  selector: '::-webkit-scrollbar',
+  selector: ['::-webkit-scrollbar-button', '::-webkit-scrollbar-thumb', '::-webkit-resizer'],
   notEditable: true, // for now
   defaultRules: [
     {
