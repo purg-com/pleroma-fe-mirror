@@ -7,9 +7,9 @@
   >
     <div class="settings-modal-panel panel">
       <div class="panel-heading">
-        <span class="title">
+        <h1 class="title">
           {{ modalMode === 'user' ? $t('settings.settings') : $t('admin_dash.window_title') }}
-        </span>
+        </h1>
         <transition name="fade">
           <div
             v-if="currentSaveStateNotice"

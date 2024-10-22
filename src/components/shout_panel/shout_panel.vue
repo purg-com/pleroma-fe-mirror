@@ -9,14 +9,14 @@
         :class="{ 'shout-heading': floating }"
         @click.stop.prevent="togglePanel"
       >
-        <div class="title">
+        <h1 class="title">
           {{ $t('shoutbox.title') }}
           <FAIcon
             v-if="floating"
             icon="times"
             class="close-icon"
           />
-        </div>
+        </h1>
       </div>
       <div class="panel-body shout-window">
         <div

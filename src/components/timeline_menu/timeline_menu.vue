@@ -29,8 +29,8 @@
       </ul>
     </template>
     <template #trigger>
-      <span class="button-unstyled title timeline-menu-title">
-        <span class="timeline-title">{{ timelineName() }}</span>
+      <span class="button-unstyled timeline-menu-title">
+        <h1 class="title timeline-title">{{ timelineName() }}</h1>
         <span>
           <FAIcon
             size="sm"

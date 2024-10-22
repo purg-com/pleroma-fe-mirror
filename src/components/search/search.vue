@@ -1,9 +1,9 @@
 <template>
   <div class="Search panel panel-default">
     <div class="panel-heading">
-      <div class="title">
+      <h1 class="title">
         {{ $t('nav.search') }}
-      </div>
+      </h1>
     </div>
     <div class="panel-body search-input-container">
       <input

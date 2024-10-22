@@ -7,7 +7,9 @@
   >
     <div class="post-form-modal-panel panel">
       <div class="panel-heading">
-        {{ $t('post_status.new_status') }}
+        <h1 class="title">
+          {{ $t('post_status.new_status') }}
+        </h1>
       </div>
       <PostStatusForm
         class="panel-body"

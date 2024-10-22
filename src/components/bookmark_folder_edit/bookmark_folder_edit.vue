@@ -13,7 +13,7 @@
           icon="chevron-left"
         />
       </button>
-      <div class="title">
+      <h1 class="title">
         <i18n-t
           v-if="id"
           keypath="bookmark_folders.editing_folder"
@@ -26,7 +26,7 @@
           v-else
           keypath="bookmark_folders.creating_folder"
         />
-      </div>
+      </h1>
     </div>
     <div class="panel-body">
       <div class="input-wrap">
