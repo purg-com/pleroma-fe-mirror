@@ -166,27 +166,21 @@
           >
             <ColorInput
               v-model="editedBackgroundColor"
-              :fallback="computeColor(editedBackgroundColor)"
+              :fallback="computeColor(editedBackgroundColor) ?? previewColors.background"
               :disabled="!isBackgroundColorPresent"
               :label="$t('settings.style.themes3.editor.background')"
+              :hide-optional-checkbox="true"
             />
             <Tooltip :text="$t('settings.style.themes3.editor.include_in_rule')">
               <Checkbox v-model="isBackgroundColorPresent" />
             </Tooltip>
-            <OpacityInput
-              v-model="editedOpacity"
-              :disabled="!isOpacityPresent"
-              :label="$t('settings.style.themes3.editor.opacity')"
-            />
-            <Tooltip :text="$t('settings.style.themes3.editor.include_in_rule')">
-              <Checkbox v-model="isOpacityPresent" />
-            </Tooltip>
             <ColorInput
               v-if="componentHas('Text')"
               v-model="editedTextColor"
-              :fallback="computeColor(editedTextColor)"
+              :fallback="computeColor(editedTextColor) ?? previewColors.text"
               :label="$t('settings.style.themes3.editor.text_color')"
               :disabled="!isTextColorPresent"
+              :hide-optional-checkbox="true"
             />
             <Tooltip
               v-if="componentHas('Text')"
@@ -194,7 +188,10 @@
             >
               <Checkbox v-model="isTextColorPresent" />
             </Tooltip>
-            <div class="style-control suboption">
+            <div
+              v-if="componentHas('Text')"
+              class="style-control suboption"
+            >
               <label
                 for="textAuto"
                 class="label"
@@ -224,18 +221,27 @@
             >
               <Checkbox v-model="isTextAutoPresent" />
             </Tooltip>
-            <div>
-              <ContrastRatio :contrast="getContrast(editedBackgroundColor, editedTextColor)" />
+            <div
+              class="style-control suboption"
+              v-if="componentHas('Text')"
+            >
+              <label class="label">
+                {{$t('settings.style.themes3.editor.contrast') }}
+              </label>
+              <ContrastRatio
+                :show-ratio="true"
+                :contrast="contrast"
+              />
             </div>
-            <div>
-              <!-- spacer for missing checkbox -->
+            <div v-if="componentHas('Text')">
             </div>
             <ColorInput
               v-if="componentHas('Link')"
               v-model="editedLinkColor"
-              :fallback="computeColor(editedLinkColor)"
+              :fallback="computeColor(editedLinkColor) ?? previewColors.link"
               :label="$t('settings.style.themes3.editor.link_color')"
               :disabled="!isLinkColorPresent"
+              :hide-optional-checkbox="true"
             />
             <Tooltip
               v-if="componentHas('Link')"
@@ -246,9 +252,10 @@
             <ColorInput
               v-if="componentHas('Icon')"
               v-model="editedIconColor"
-              :fallback="computeColor(editedIconColor)"
+              :fallback="computeColor(editedIconColor) ?? previewColors.icon"
               :label="$t('settings.style.themes3.editor.icon_color')"
               :disabled="!isIconColorPresent"
+              :hide-optional-checkbox="true"
             />
             <Tooltip
               v-if="componentHas('Icon')"
@@ -259,15 +266,24 @@
             <ColorInput
               v-if="componentHas('Border')"
               v-model="editedBorderColor"
-              :fallback="computeColor(editedBorderColor)"
-              :label="$t('settings.style.themes3.editor.Border_color')"
+              :fallback="computeColor(editedBorderColor) ?? previewColors.border"
+              :label="$t('settings.style.themes3.editor.border_color')"
               :disabled="!isBorderColorPresent"
+              :hide-optional-checkbox="true"
             />
             <Tooltip
               v-if="componentHas('Border')"
               :text="$t('settings.style.themes3.editor.include_in_rule')"
             >
               <Checkbox v-model="isBorderColorPresent" />
+            </Tooltip>
+            <OpacityInput
+              v-model="editedOpacity"
+              :disabled="!isOpacityPresent"
+              :label="$t('settings.style.themes3.editor.opacity')"
+            />
+            <Tooltip :text="$t('settings.style.themes3.editor.include_in_rule')">
+              <Checkbox v-model="isOpacityPresent" />
             </Tooltip>
           </div>
           <div
@@ -418,6 +434,7 @@
             v-model="draftVirtualDirective"
             :fallback="computeColor(draftVirtualDirective)"
             :label="$t('settings.style.themes3.editor.variables.virtual_color')"
+            :hide-optional-checkbox="true"
           />
         </div>
       </div>

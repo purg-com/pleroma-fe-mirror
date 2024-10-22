@@ -340,9 +340,7 @@ export default {
     exports.editedBorderColor = getEditedElement('Border', 'textColor')
     exports.isBorderColorPresent = isElementPresent('Border', 'textColor', '#909090')
 
-    // TODO this is VERY primitive right now, need to make it
-    // support variables, fallbacks etc.
-    exports.getContrast = (bg, text) => {
+    const getContrast = (bg, text) => {
       try {
         const bgRgb = hex2rgb(bg)
         const textRgb = hex2rgb(text)
@@ -464,6 +462,24 @@ export default {
         return null
       }
     })
+
+    const applicablePreviewRules = computed(() => {
+      return previewRules.filter(rule => {
+        const filterable = rule.parent ? rule.parent : rule
+        const variantMatches = filterable.variant === selectedVariant.value
+        const stateMatches = filterable.state.filter(x => x !== 'normal').every(x => selectedState.has(x))
+        return variantMatches && stateMatches
+      })
+    })
+    const previewColors = computed(() => ({
+      text: applicablePreviewRules.value.find(r => r.component === 'Text').virtualDirectives['--text'],
+      link: applicablePreviewRules.value.find(r => r.component === 'Link').virtualDirectives['--link'],
+      border: applicablePreviewRules.value.find(r => r.component === 'Border').virtualDirectives['--border'],
+      icon: applicablePreviewRules.value.find(r => r.component === 'Icon').virtualDirectives['--icon'],
+      background: applicablePreviewRules.value.find(r => r.parent == null).dynamicVars.stacked
+    }))
+    exports.previewColors = previewColors
+
     const editorFriendlyToOriginal = computed(() => {
       const resultRules = []
 
@@ -677,6 +693,14 @@ export default {
       }
       return null
     }
+
+    exports.contrast = computed(() => {
+      console.log('APR', applicablePreviewRules.value)
+      return getContrast(
+        exports.computeColor(previewColors.value.background),
+        exports.computeColor(previewColors.value.text)
+      )
+    })
 
     const overallPreviewRules = ref()
     exports.overallPreviewRules = overallPreviewRules

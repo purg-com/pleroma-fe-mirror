@@ -11,7 +11,7 @@
       {{ label }}
     </label>
     <Checkbox
-      v-if="typeof fallback !== 'undefined' && showOptionalTickbox"
+      v-if="typeof fallback !== 'undefined' && showOptionalCheckbox && !hideOptionalCheckbox"
       :model-value="present"
       :disabled="disabled"
       class="opt"
@@ -112,10 +112,16 @@ export default {
       default: false
     },
     // Show "optional" tickbox, for when value might become mandatory
-    showOptionalTickbox: {
+    showOptionalCheckbox: {
       required: false,
       type: Boolean,
       default: true
+    },
+    // Force "optional" tickbox to hide
+    hideOptionalCheckbox: {
+      required: false,
+      type: Boolean,
+      default: false
     }
   },
   emits: ['update:modelValue'],

@@ -168,7 +168,7 @@
           :disabled="disabled || !present"
           :label="$t('settings.style.common.color')"
           :fallback="getColorFallback"
-          :show-optional-tickbox="false"
+          :show-optional-checkbox="false"
           name="shadow"
           @update:modelValue="e => updateProperty('color', e)"
         />
