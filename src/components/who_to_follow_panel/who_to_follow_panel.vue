@@ -2,9 +2,9 @@
   <div class="who-to-follow-panel">
     <div class="panel panel-default base01-background">
       <div class="panel-heading timeline-heading base02-background base04">
-        <div class="title">
+        <h1 class="title">
           {{ $t('who_to_follow.who_to_follow') }}
-        </div>
+        </h1>
       </div>
       <div class="who-to-follow">
         <p

@@ -3,12 +3,12 @@
     <div class="underlay underlay-preview" />
     <div class="panel dummy">
       <div class="panel-heading">
-        <div class="title">
+        <h1 class="title">
           {{ $t('settings.style.preview.header') }}
           <span class="badge -notification">
             99
           </span>
-        </div>
+        </h1>
         <span class="faint">
           {{ $t('settings.style.preview.header_faint') }}
         </span>

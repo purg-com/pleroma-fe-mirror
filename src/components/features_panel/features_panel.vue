@@ -2,9 +2,9 @@
   <div class="features-panel">
     <div class="panel panel-default base01-background">
       <div class="panel-heading timeline-heading base02-background base04">
-        <div class="title">
+        <h1 class="title">
           {{ $t('features_panel.title') }}
-        </div>
+        </h1>
       </div>
       <div class="panel-body features-panel">
         <ul>

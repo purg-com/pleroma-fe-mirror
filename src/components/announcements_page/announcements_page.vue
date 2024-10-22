@@ -1,9 +1,9 @@
 <template>
   <div class="panel panel-default announcements-page">
     <div class="panel-heading">
-      <span>
+      <h1 class="title">
         {{ $t('announcements.page_header') }}
-      </span>
+      </h1>
     </div>
     <div class="panel-body">
       <section

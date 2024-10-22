@@ -1,7 +1,9 @@
 <template>
   <div class="settings panel panel-default">
     <div class="panel-heading">
-      {{ $t('registration.registration') }}
+      <h1 class="title">
+        {{ $t('registration.registration') }}
+      </h1>
     </div>
     <div
       v-if="!hasSignUpNotice"

@@ -50,13 +50,13 @@
       @touchmove.stop="notificationsTouchMove"
     >
       <div class="panel-heading mobile-notifications-header">
-        <span class="title">
+        <h1 class="title">
           {{ $t('notifications.notifications') }}
           <span
             v-if="unseenCountBadgeText"
             class="badge -notification unseen-count"
           >{{ unseenCountBadgeText }}</span>
-        </span>
+        </h1>
         <span class="spacer" />
         <button
           v-if="notificationsAtTop"

@@ -14,13 +14,13 @@
           v-if="!noHeading"
           class="notifications-heading panel-heading -sticky"
         >
-          <div class="title">
+          <h1 class="title">
             {{ $t('notifications.notifications') }}
             <span
               v-if="unseenCountBadgeText"
               class="badge -notification unseen-count"
             >{{ unseenCountBadgeText }}</span>
-          </div>
+          </h1>
           <div
             v-if="showScrollTop"
             class="rightside-button"
