@@ -75,9 +75,17 @@ const paletteKeys = [
   'cBlue',
   'cGreen',
   'cOrange',
+  'wallpaper',
   'extra1',
   'extra2',
-  'extra3'
+  'extra3',
+  'extra4',
+  'extra5',
+  'extra6',
+  'extra7',
+  'extra8',
+  'extra9',
+  'extra10'
 ]
 
 const fallback = (key) => {
@@ -88,6 +96,9 @@ const fallback = (key) => {
     return props.modelValue.accent
   }
   if (key.startsWith('extra')) {
+    return '#FF00FF'
+  }
+  if (key.startsWith('wallpaper')) {
     return '#008080'
   }
 }
@@ -105,7 +116,7 @@ const updatePalette = (paletteKey, value) => {
   display: grid;
   justify-content: space-around;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(3, 1fr) auto;
+  grid-template-rows: repeat(5, 1fr) auto;
   grid-gap: 0.5em;
   align-items: baseline;
 
