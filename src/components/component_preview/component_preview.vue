@@ -11,19 +11,50 @@
     <!-- eslint-enable vue/no-v-html vue/no-v-text-v-html-on-component -->
     <label
       v-show="shadowControl"
+      role="heading"
       class="header"
       :class="{ faint: disabled }"
     >
       {{ $t('settings.style.shadows.offset') }}
     </label>
+    <label
+      v-show="shadowControl && !hideControls"
+      class="x-shift-number"
+    >
+      {{ $t('settings.style.shadows.offset-x') }}
+      <input
+        :value="shadow?.x"
+        :disabled="disabled"
+        :class="{ disabled }"
+        class="input input-number"
+        type="number"
+        @input="e => updateProperty('x', e.target.value)"
+      >
+    </label>
+    <label
+      class="y-shift-number"
+      v-show="shadowControl && !hideControls"
+    >
+      {{ $t('settings.style.shadows.offset-y') }}
+      <input
+        :value="shadow?.y"
+        :disabled="disabled"
+        :class="{ disabled }"
+        class="input input-number"
+        type="number"
+        @input="e => updateProperty('y', e.target.value)"
+      >
+    </label>
     <input
       v-show="shadowControl && !hideControls"
-      :value="shadow?.y"
+      :value="shadow?.x"
       :disabled="disabled"
       :class="{ disabled }"
-      class="input input-number y-shift-number"
-      type="number"
-      @input="e => updateProperty('y', e.target.value)"
+      class="input input-range x-shift-slider"
+      type="range"
+      max="20"
+      min="-20"
+      @input="e => updateProperty('x', e.target.value)"
     >
     <input
       v-show="shadowControl && !hideControls"
@@ -43,7 +74,7 @@
       <div
         class="preview-block"
         :class="previewClass"
-        :style="previewStyle"
+        :style="style"
       >
         {{ $t('settings.style.themes3.editor.test_string') }}
       </div>
@@ -53,43 +84,42 @@
         </div>
       </div>
     </div>
-    <input
-      v-show="shadowControl && !hideControls"
-      :value="shadow?.x"
-      :disabled="disabled"
-      :class="{ disabled }"
-      class="input input-number x-shift-number"
-      type="number"
-      @input="e => updateProperty('x', e.target.value)"
-    >
-    <input
-      v-show="shadowControl && !hideControls"
-      :value="shadow?.x"
-      :disabled="disabled"
-      :class="{ disabled }"
-      class="input input-range x-shift-slider"
-      type="range"
-      max="20"
-      min="-20"
-      @input="e => updateProperty('x', e.target.value)"
-    >
-    <Checkbox
-      id="lightGrid"
-      v-model="lightGrid"
-      name="lightGrid"
-      class="input-light-grid"
-    >
-      {{ $t('settings.style.shadows.light_grid') }}
-    </Checkbox>
+    <div class="assists">
+      <Checkbox
+        v-model="lightGrid"
+        name="lightGrid"
+        class="input-light-grid"
+      >
+        {{ $t('settings.style.shadows.light_grid') }}
+      </Checkbox>
+      <div class="style-control">
+        <label class="label">
+          {{ $t('settings.style.shadows.zoom') }}
+        </label>
+        <input
+          v-model="zoom"
+          class="input input-number y-shift-number"
+          type="number"
+        >
+      </div>
+      <ColorInput
+        class="input-color-input"
+        v-model="colorOverride"
+        fallback="#606060"
+        :label="$t('settings.style.shadows.color_override')"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import Checkbox from 'src/components/checkbox/checkbox.vue'
+import ColorInput from 'src/components/color_input/color_input.vue'
 
 export default {
   components: {
-    Checkbox
+    Checkbox,
+    ColorInput
   },
   props: [
     'shadow',
@@ -103,10 +133,21 @@ export default {
   emits: ['update:shadow'],
   data () {
     return {
-      lightGrid: false
+      colorOverride: null,
+      lightGrid: false,
+      zoom: 100
     }
   },
   computed: {
+    style () {
+      console.log(this.previewStyle)
+      const result = [
+        this.previewStyle,
+        `zoom: ${this.zoom / 100}`
+      ]
+      if (this.colorOverride) result.push(`--background: ${this.colorOverride}`)
+      return result
+    },
     hideControls () {
       return typeof this.shadow === 'string'
     }
@@ -121,16 +162,27 @@ export default {
 <style lang="scss">
 .ComponentPreview {
   display: grid;
-  grid-template-columns: 3em 1fr 3em;
-  grid-template-rows: 2em 1fr 2em;
+  grid-template-columns: 1em 1fr 1fr 1em;
+  grid-template-rows: 2em 1fr 1fr 1fr 1em 2em max-content;
   grid-template-areas:
-    ".       header  y-num  "
-    ".       preview y-slide"
-    "x-num   x-slide .      "
-    "options options options";
+    "header     header     header     header "
+    "preview    preview    preview    y-slide"
+    "preview    preview    preview    y-slide"
+    "preview    preview    preview    y-slide"
+    "x-slide    x-slide    x-slide    .      "
+    "x-num      x-num      y-num      y-num  "
+    "assists    assists    assists    assists";
   grid-gap: 0.5em;
-  max-width: 25em;
-  max-height: 25em;
+
+  &:not(.-shadow-controls) {
+    grid-template-areas:
+      "header     header     header     header "
+      "preview    preview    preview    y-slide"
+      "preview    preview    preview    y-slide"
+      "preview    preview    preview    y-slide"
+      "assists    assists    assists    assists";
+    grid-template-rows: 2em 1fr 1fr 1fr max-content;
+  }
 
   .header {
     grid-area: header;
@@ -155,8 +207,15 @@ export default {
     }
   }
 
+  .assists {
+    grid-area: assists;
+    display: grid;
+    grid-auto-flow: rows;
+    grid-auto-rows: 2em;
+    grid-gap: 0.5em;
+  }
+
   .input-light-grid {
-    grid-area: options;
     justify-self: center;
   }
 
@@ -166,6 +225,19 @@ export default {
 
   .x-shift-number {
     grid-area: x-num;
+    justify-self: right;
+  }
+
+  .y-shift-number {
+    grid-area: y-num;
+    justify-self: left;
+  }
+
+  .x-shift-number,
+  .y-shift-number {
+    input {
+      max-width: 4em;
+    }
   }
 
   .x-shift-slider {
@@ -173,10 +245,6 @@ export default {
     height: auto;
     align-self: start;
     min-width: 10em;
-  }
-
-  .y-shift-number {
-    grid-area: y-num;
   }
 
   .y-shift-slider {

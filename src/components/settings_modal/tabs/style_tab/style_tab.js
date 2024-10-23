@@ -680,6 +680,14 @@ export default {
       { immediate: true }
     )
 
+    const virtualDirectivesOut = computed(() => {
+      return [
+        'Root {',
+        ...virtualDirectives.map(vd => `  --${vd.name}: ${vd.value};`),
+        '}'
+      ].join('\n')
+    })
+
     exports.getNewVirtualDirective = () => ({
       name: 'newDirective',
       valType: 'generic',
@@ -695,7 +703,6 @@ export default {
     }
 
     exports.contrast = computed(() => {
-      console.log('APR', applicablePreviewRules.value)
       return getContrast(
         exports.computeColor(previewColors.value.background),
         exports.computeColor(previewColors.value.text)
@@ -777,6 +784,7 @@ export default {
       return [
         metaOut.value,
         palettesOut.value,
+        virtualDirectivesOut.value,
         serialize(editorFriendlyToOriginal.value)
       ].join('\n\n')
     })
