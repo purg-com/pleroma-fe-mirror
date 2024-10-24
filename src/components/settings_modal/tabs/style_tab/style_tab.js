@@ -616,16 +616,23 @@ export default {
         return virtualDirectives[selectedVirtualDirectiveId.value].valType
       },
       set (value) {
-        virtualDirectives[selectedVirtualDirectiveId.value].valType = value
+        const newValType = value
+        let newValue
         switch (value) {
           case 'shadow':
-            virtualDirectives[selectedVirtualDirectiveId.value].value = '0 0 0 #000000'
+            newValue = '0 0 0 #000000 / 1'
             break
           case 'color':
-            virtualDirectives[selectedVirtualDirectiveId.value].value = '#000000'
+            newValue = '#000000'
             break
           default:
-            virtualDirectives[selectedVirtualDirectiveId.value].value = 'none'
+            newValue = 'none'
+        }
+        const newName = virtualDirectives[selectedVirtualDirectiveId.value].name
+        virtualDirectives[selectedVirtualDirectiveId.value] = {
+          name: newName,
+          value: newValue,
+          valType: newValType
         }
       }
     })
