@@ -123,7 +123,7 @@ export default {
       try {
         let result
         const serialized = this.cValue.map(x => serializeShadow(x)).join(',')
-        deserializeShadow(serialized) // validate
+        serialized.split(/,/).map(deserializeShadow) // validate
         const expandedShadow = flattenDeep(findShadow(this.cValue, { dynamicVars: {}, staticVars: this.staticVars }))
         const fixedShadows = expandedShadow.map(x => ({ ...x, color: console.log(x) || rgb2hex(x.color) }))
 

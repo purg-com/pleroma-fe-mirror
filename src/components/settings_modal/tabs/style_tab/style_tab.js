@@ -472,11 +472,11 @@ export default {
       })
     })
     const previewColors = computed(() => ({
-      text: applicablePreviewRules.value.find(r => r.component === 'Text').virtualDirectives['--text'],
-      link: applicablePreviewRules.value.find(r => r.component === 'Link').virtualDirectives['--link'],
-      border: applicablePreviewRules.value.find(r => r.component === 'Border').virtualDirectives['--border'],
-      icon: applicablePreviewRules.value.find(r => r.component === 'Icon').virtualDirectives['--icon'],
-      background: applicablePreviewRules.value.find(r => r.parent == null).dynamicVars.stacked
+      text: applicablePreviewRules.value.find(r => r.component === 'Text')?.virtualDirectives['--text'],
+      link: applicablePreviewRules.value.find(r => r.component === 'Link')?.virtualDirectives['--link'],
+      border: applicablePreviewRules.value.find(r => r.component === 'Border')?.virtualDirectives['--border'],
+      icon: applicablePreviewRules.value.find(r => r.component === 'Icon')?.virtualDirectives['--icon'],
+      background: applicablePreviewRules.value.find(r => r.parent == null)?.dynamicVars.stacked
     }))
     exports.previewColors = previewColors
 
@@ -683,7 +683,7 @@ export default {
     const virtualDirectivesOut = computed(() => {
       return [
         'Root {',
-        ...virtualDirectives.map(vd => `  --${vd.name}: ${vd.value};`),
+        ...virtualDirectives.map(vd => `  --${vd.name}: ${vd.valType} | ${vd.value};`),
         '}'
       ].join('\n')
     })
@@ -757,7 +757,8 @@ export default {
       parser: (string) => deserialize(string),
       onImport (parsed, filename) {
         const editorComponents = parsed.filter(x => x.component.startsWith('@'))
-        const rules = parsed.filter(x => !x.component.startsWith('@'))
+        const rootComponent = parsed.find(x => x.component === 'Root')
+        const rules = parsed.filter(x => !x.component.startsWith('@') && x.component !== 'Root')
         const metaIn = editorComponents.find(x => x.component === '@meta').directives
         const palettesIn = editorComponents.filter(x => x.component === '@palette')
 
@@ -766,8 +767,16 @@ export default {
         exports.author.value = metaIn.author
         exports.website.value = metaIn.website
 
+        virtualDirectives.splice(0, virtualDirectives.length)
+        const newVirtualDirectives = Object
+          .entries(rootComponent.directives)
+          .map(([name, value]) => {
+            const [valType, valVal] = value.split('|').map(x => x.trim())
+            return { name: name.substring(2), valType, value: valVal }
+          })
+        virtualDirectives.push(...newVirtualDirectives)
+
         onPalettesUpdate(palettesIn.map(x => ({ name: x.variant, ...x.directives })))
-        console.log('PALETTES', palettesIn)
 
         Object.keys(allEditedRules).forEach((k) => delete allEditedRules[k])
 
