@@ -732,10 +732,18 @@ export default {
             .reduce((acc, [k, v]) => ({ ...acc, [k]: `color | ${v}` }), {})
         }
 
+        const virtualDirectivesRule = {
+          component: 'Root',
+          directives: Object.fromEntries(
+            virtualDirectives.map(vd => [`--${vd.name}`, `${vd.valType} | ${vd.value}`])
+          )
+        }
+
         const rules = init({
           inputRuleset: [
-            ...editorFriendlyToOriginal.value,
-            paletteRule
+            paletteRule,
+            virtualDirectivesRule,
+            ...editorFriendlyToOriginal.value
           ],
           ultimateBackgroundColor: '#000000',
           liteMode: true,
