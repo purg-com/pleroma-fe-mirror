@@ -1,4 +1,4 @@
-import { ref, reactive, computed, watch } from 'vue'
+import { ref, reactive, computed, watch, provide } from 'vue'
 import { get, set } from 'lodash'
 
 import Select from 'src/components/select/select.vue'
@@ -15,12 +15,14 @@ import Tooltip from 'src/components/tooltip/tooltip.vue'
 import ContrastRatio from 'src/components/contrast_ratio/contrast_ratio.vue'
 import Preview from '../theme_tab/theme_preview.vue'
 
+import VirtualDirectivesTab from './virtual_directives_tab.vue'
+
 import { init, findColor } from 'src/services/theme_data/theme_data_3.service.js'
 import {
   getCssRules,
   getScopedVersion
 } from 'src/services/theme_data/css_utils.js'
-import { serializeShadow, serialize } from 'src/services/theme_data/iss_serializer.js'
+import { serialize } from 'src/services/theme_data/iss_serializer.js'
 import { deserializeShadow, deserialize } from 'src/services/theme_data/iss_deserializer.js'
 import {
   rgb2hex,
@@ -70,7 +72,8 @@ export default {
     PaletteEditor,
     OpacityInput,
     ContrastRatio,
-    Preview
+    Preview,
+    VirtualDirectivesTab
   },
   setup () {
     const exports = {}
@@ -147,6 +150,7 @@ export default {
     })
     exports.selectedPaletteId = selectedPaletteId
     exports.selectedPalette = selectedPalette
+    provide('selectedPalette', selectedPalette)
 
     exports.getNewPalette = () => ({
       name: 'new palette',
@@ -313,10 +317,6 @@ export default {
           usedRule = get(fallback, path)
         }
 
-        if (directive === 'shadow') {
-          console.log('EDITED', usedRule)
-          console.log('PP', postProcess(usedRule))
-        }
         return postProcess(usedRule)
       },
       set (value) {
@@ -378,6 +378,7 @@ export default {
         return null
       })
     }
+    provide('normalizeShadows', normalizeShadows)
 
     // Shadow is partially edited outside the ShadowControl
     // for better space utilization
@@ -571,7 +572,6 @@ export default {
       updateSelectedComponent
     )
 
-    // ## Variables
     const allCustomVirtualDirectives = [...componentsMap.values()]
       .map(c => {
         return c
@@ -590,115 +590,19 @@ export default {
           value: valVal.trim()
         }
       })
-    const virtualDirectives = reactive(allCustomVirtualDirectives)
+
+    const virtualDirectives = ref(allCustomVirtualDirectives)
     exports.virtualDirectives = virtualDirectives
-
-    exports.onVirtualDirectivesUpdate = (e) => {
-      virtualDirectives.splice(0, virtualDirectives.length)
-      virtualDirectives.push(...e)
+    exports.updateVirtualDirectives = (value) => {
+      virtualDirectives.value = value
     }
-
-    const selectedVirtualDirectiveId = ref(0)
-    exports.selectedVirtualDirectiveId = selectedVirtualDirectiveId
-
-    const selectedVirtualDirective = computed({
-      get () {
-        return virtualDirectives[selectedVirtualDirectiveId.value]
-      },
-      set (value) {
-        virtualDirectives[selectedVirtualDirectiveId.value].value = value
-      }
-    })
-    exports.selectedVirtualDirective = selectedVirtualDirective
-
-    exports.selectedVirtualDirectiveValType = computed({
-      get () {
-        return virtualDirectives[selectedVirtualDirectiveId.value].valType
-      },
-      set (value) {
-        const newValType = value
-        let newValue
-        switch (value) {
-          case 'shadow':
-            newValue = '0 0 0 #000000 / 1'
-            break
-          case 'color':
-            newValue = '#000000'
-            break
-          default:
-            newValue = 'none'
-        }
-        const newName = virtualDirectives[selectedVirtualDirectiveId.value].name
-        virtualDirectives[selectedVirtualDirectiveId.value] = {
-          name: newName,
-          value: newValue,
-          valType: newValType
-        }
-      }
-    })
-
-    const draftVirtualDirectiveValid = ref(true)
-    const draftVirtualDirective = ref({})
-    exports.draftVirtualDirective = draftVirtualDirective
-
-    watch(
-      selectedVirtualDirective,
-      (directive) => {
-        switch (directive.valType) {
-          case 'shadow': {
-            if (Array.isArray(directive.value)) {
-              draftVirtualDirective.value = normalizeShadows(directive.value)
-            } else {
-              const splitShadow = directive.value.split(/,/g).map(x => x.trim())
-              draftVirtualDirective.value = normalizeShadows(splitShadow)
-            }
-            break
-          }
-          case 'color':
-            draftVirtualDirective.value = directive.value
-            break
-          default:
-            draftVirtualDirective.value = directive.value
-            break
-        }
-      },
-      { immediate: true }
-    )
-
-    watch(
-      draftVirtualDirective,
-      (directive) => {
-        try {
-          switch (selectedVirtualDirective.value.valType) {
-            case 'shadow': {
-              virtualDirectives[selectedVirtualDirectiveId.value].value =
-                directive.map(x => serializeShadow(x)).join(', ')
-              break
-            }
-            default:
-              virtualDirectives[selectedVirtualDirectiveId.value].value = directive
-          }
-          draftVirtualDirectiveValid.value = true
-        } catch (e) {
-          console.error('Invalid virtual directive value', e)
-          draftVirtualDirectiveValid.value = false
-        }
-      },
-      { immediate: true }
-    )
 
     const virtualDirectivesOut = computed(() => {
       return [
         'Root {',
-        ...virtualDirectives.map(vd => `  --${vd.name}: ${vd.valType} | ${vd.value};`),
+        ...virtualDirectives.value.map(vd => `  --${vd.name}: ${vd.valType} | ${vd.value};`),
         '}'
       ].join('\n')
-    })
-
-    exports.getNewVirtualDirective = () => ({
-      name: 'newDirective',
-      valType: 'generic',
-      value: 'foobar'
     })
 
     exports.computeColor = (color) => {
@@ -708,6 +612,7 @@ export default {
       }
       return null
     }
+    provide('computeColor', exports.computeColor)
 
     exports.contrast = computed(() => {
       return getContrast(
@@ -735,7 +640,7 @@ export default {
         const virtualDirectivesRule = {
           component: 'Root',
           directives: Object.fromEntries(
-            virtualDirectives.map(vd => [`--${vd.name}`, `${vd.valType} | ${vd.value}`])
+            virtualDirectives.value.map(vd => [`--${vd.name}`, `${vd.valType} | ${vd.value}`])
           )
         }
 
@@ -782,14 +687,13 @@ export default {
         exports.author.value = metaIn.author
         exports.website.value = metaIn.website
 
-        virtualDirectives.splice(0, virtualDirectives.length)
         const newVirtualDirectives = Object
           .entries(rootComponent.directives)
           .map(([name, value]) => {
             const [valType, valVal] = value.split('|').map(x => x.trim())
             return { name: name.substring(2), valType, value: valVal }
           })
-        virtualDirectives.push(...newVirtualDirectives)
+        virtualDirectives.value = newVirtualDirectives
 
         onPalettesUpdate(palettesIn.map(x => ({ name: x.variant, ...x.directives })))
 

@@ -72,6 +72,7 @@ const moveUp = () => {
 const moveDnValid = computed(() => {
   return props.selectedId < props.modelValue.length - 1
 })
+
 const moveDn = () => {
   const newModel = [...props.modelValue]
   const movable = newModel.splice(props.selectedId.value, 1)[0]
