@@ -7,7 +7,7 @@
       <!-- eslint-disable vue/no-v-text-v-html-on-component -->
       <component
         :is="'style'"
-        v-html="overallPreviewRules"
+        v-html="overallPreviewCssRules"
       />
       <!-- eslint-enable vue/no-v-text-v-html-on-component -->
       <Preview id="edited-style-preview" />
@@ -41,7 +41,7 @@
       </button>
       <button
         class="btn button-default button-apply"
-        @click="applyTheme"
+        @click="applyStyle"
       >
         <FAIcon icon="check" />
         {{ $t('settings.style.themes3.editor.apply_preview') }}

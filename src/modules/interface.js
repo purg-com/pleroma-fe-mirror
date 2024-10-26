@@ -351,10 +351,10 @@ const interfaceMod = {
       let majorVersionUsed
 
       console.log(
-        `USER V3 palette: ${userPaletteName}, style: ${userStyleName} `
+        `USER V3 palette: ${userPaletteName}, style: ${userStyleName} , custom: ${!!userStyleCustomData}`
       )
       console.log(
-        `USER V2 name: ${userThemeV2Name}, source: ${userThemeV2Source}, snapshot: ${userThemeV2Snapshot}`
+        `USER V2 name: ${userThemeV2Name}, source: ${!!userThemeV2Source}, snapshot: ${!!userThemeV2Snapshot}`
       )
 
       console.log(`INST V3 palette: ${instancePaletteName}, style: ${instanceStyleName}`)
@@ -411,8 +411,8 @@ const interfaceMod = {
       let styleDataUsed = null
       let styleNameUsed = null
       let paletteDataUsed = null
-      let paletteNameUsed = null
-      let themeNameUsed = null
+      // let paletteNameUsed = null
+      // let themeNameUsed = null
       let themeDataUsed = null
 
       const getData = async (resource, index, customData, name) => {
@@ -455,7 +455,7 @@ const interfaceMod = {
           userPaletteCustomData,
           userPaletteName || instancePaletteName
         )
-        paletteNameUsed = palette.nameUsed
+        // paletteNameUsed = palette.nameUsed
         paletteDataUsed = palette.dataUsed
         if (Array.isArray(paletteDataUsed)) {
           const [
@@ -471,9 +471,8 @@ const interfaceMod = {
           ] = paletteDataUsed
           paletteDataUsed = { name, background, foreground, text, link, cRed, cBlue, cGreen, cOrange }
         }
-        console.log('PAL', userPaletteName, paletteNameUsed)
-        console.log('PAL', paletteDataUsed)
 
+        console.log('USCD', userStyleCustomData)
         const style = await getData(
           'style',
           stylesIndex,
@@ -489,14 +488,12 @@ const interfaceMod = {
           userThemeV2Source || userThemeV2Snapshot,
           userThemeV2Name || instanceThemeV2Name
         )
-        themeNameUsed = theme.nameUsed
+        // themeNameUsed = theme.nameUsed
         themeDataUsed = theme.dataUsed
 
         // Themes v2 editor support
         commit('setInstanceOption', { name: 'themeData', value: themeDataUsed })
       }
-
-      console.log('STYLE', styleNameUsed, paletteNameUsed, themeNameUsed)
 
       // commit('setOption', { name: 'palette', value: paletteNameUsed })
       // commit('setOption', { name: 'style', value: styleNameUsed })

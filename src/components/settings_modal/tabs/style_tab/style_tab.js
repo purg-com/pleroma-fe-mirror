@@ -1,4 +1,5 @@
 import { ref, reactive, computed, watch, provide } from 'vue'
+import { useStore } from 'vuex'
 import { get, set } from 'lodash'
 
 import Select from 'src/components/select/select.vue'
@@ -75,8 +76,9 @@ export default {
     Preview,
     VirtualDirectivesTab
   },
-  setup () {
+  setup (props, context) {
     const exports = {}
+    const store = useStore()
     // All rules that are made by editor
     const allEditedRules = reactive({})
 
@@ -515,7 +517,9 @@ export default {
         })
       }
 
-      convert(selectedComponentName.value, allEditedRules[selectedComponentName.value])
+      componentsMap.values().forEach(({ name }) => {
+        convert(name, allEditedRules[name])
+      })
 
       return resultRules
     })
@@ -621,47 +625,61 @@ export default {
       )
     })
 
-    const overallPreviewRules = ref()
-    exports.overallPreviewRules = overallPreviewRules
-    exports.updateOverallPreview = () => {
+    const overallPreviewCssRules = ref()
+    exports.overallPreviewCssRules = overallPreviewCssRules
+
+    const paletteRule = computed(() => {
+      const { name, ...rest } = selectedPalette.value
+      return {
+        component: 'Root',
+        directives: Object
+          .entries(rest)
+          .filter(([k, v]) => v)
+          .map(([k, v]) => ['--' + k, v])
+          .reduce((acc, [k, v]) => ({ ...acc, [k]: `color | ${v}` }), {})
+      }
+    })
+
+    const virtualDirectivesRule = computed(() => ({
+      component: 'Root',
+      directives: Object.fromEntries(
+        virtualDirectives.value.map(vd => [`--${vd.name}`, `${vd.valType} | ${vd.value}`])
+      )
+    }))
+
+    const exportRules = computed(() => [
+      paletteRule.value,
+      virtualDirectivesRule.value,
+      ...editorFriendlyToOriginal.value
+    ])
+
+    const compilePreviewRules = () => {
       try {
-        // This normally would be handled by Root but since we pass something
-        // else we have to make do ourselves
-
-        const { name, ...rest } = selectedPalette.value
-        const paletteRule = {
-          component: 'Root',
-          directives: Object
-            .entries(rest)
-            .map(([k, v]) => ['--' + k, v])
-            .reduce((acc, [k, v]) => ({ ...acc, [k]: `color | ${v}` }), {})
-        }
-
-        const virtualDirectivesRule = {
-          component: 'Root',
-          directives: Object.fromEntries(
-            virtualDirectives.value.map(vd => [`--${vd.name}`, `${vd.valType} | ${vd.value}`])
-          )
-        }
-
         const rules = init({
-          inputRuleset: [
-            paletteRule,
-            virtualDirectivesRule,
-            ...editorFriendlyToOriginal.value
-          ],
+          inputRuleset: exportRules.value,
           ultimateBackgroundColor: '#000000',
           liteMode: true,
           debug: true
         }).eager
 
-        overallPreviewRules.value = getScopedVersion(
-          getCssRules(rules),
-          '#edited-style-preview'
-        ).join('\n')
+        return rules
       } catch (e) {
         console.error('Could not compile preview theme', e)
+        return null
       }
+    }
+
+    exports.updateOverallPreview = () => {
+      const rules = compilePreviewRules()
+      if (rules === null) return
+      overallPreviewCssRules.value = getScopedVersion(
+        getCssRules(rules),
+        '#edited-style-preview'
+      ).join('\n')
+    }
+
+    exports.applyStyle = () => {
+      store.dispatch('setStyleCustom', exportRules.value)
     }
 
     // ## Export and Import
