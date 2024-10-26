@@ -151,6 +151,7 @@
             :preview-css="previewCss"
             :disabled="!editedSubShadow && typeof editedShadow !== 'string'"
             :shadow="editedSubShadow"
+            :no-color-control="true"
             @update:shadow="({ axis, value }) => updateSubShadow(axis, value)"
           />
         </div>

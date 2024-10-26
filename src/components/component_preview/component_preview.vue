@@ -103,6 +103,7 @@
         >
       </div>
       <ColorInput
+        v-if="!noColorControl"
         class="input-color-input"
         v-model="colorOverride"
         fallback="#606060"
@@ -128,19 +129,19 @@ export default {
     'previewStyle',
     'previewCss',
     'disabled',
-    'invalid'
+    'invalid',
+    'noColorControl'
   ],
   emits: ['update:shadow'],
   data () {
     return {
-      colorOverride: null,
+      colorOverride: undefined,
       lightGrid: false,
       zoom: 100
     }
   },
   computed: {
     style () {
-      console.log(this.previewStyle)
       const result = [
         this.previewStyle,
         `zoom: ${this.zoom / 100}`
