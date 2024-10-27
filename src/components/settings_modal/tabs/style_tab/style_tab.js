@@ -102,7 +102,7 @@ export default {
     // ## Palette stuff
     const palettes = reactive([
       {
-        name: 'dark',
+        name: 'default',
         bg: '#121a24',
         fg: '#182230',
         text: '#b9b9ba',
@@ -192,19 +192,20 @@ export default {
     const componentKeys = [...componentsMap.keys()]
     exports.componentKeys = componentKeys
 
-    // selection basis
+    // Component list and selection
     const selectedComponentKey = ref(componentsMap.keys().next().value)
     exports.selectedComponentKey = selectedComponentKey
+
     const selectedComponent = computed(() => componentsMap.get(selectedComponentKey.value))
     const selectedComponentName = computed(() => selectedComponent.value.name)
+
+    // Selection basis
     exports.selectedComponentVariants = computed(() => {
       return Object.keys({ normal: null, ...(selectedComponent.value.variants || {}) })
     })
-    const selectedComponentStatesAll = computed(() => {
-      return Object.keys({ normal: null, ...(selectedComponent.value.states || {}) })
-    })
     exports.selectedComponentStates = computed(() => {
-      return selectedComponentStatesAll.value.filter(x => x !== 'normal')
+      const all = Object.keys({ normal: null, ...(selectedComponent.value.states || {}) })
+      return all.filter(x => x !== 'normal')
     })
 
     // selection
@@ -219,6 +220,17 @@ export default {
         selectedState.delete(state)
       }
     }
+
+    // Reset variant and state on component change
+    const updateSelectedComponent = () => {
+      selectedVariant.value = 'normal'
+      selectedState.clear()
+    }
+
+    watch(
+      selectedComponentName,
+      updateSelectedComponent
+    )
 
     // ### Rules stuff aka meat and potatoes
     // The native structure of separate rules and the child -> parent
@@ -276,13 +288,13 @@ export default {
       return root
     })
 
-    // Checkging whether component can support some "directives" which
+    // Checking whether component can support some "directives" which
     // are actually virtual subcomponents, i.e. Text, Link etc
     exports.componentHas = (subComponent) => {
       return !!selectedComponent.value.validInnerComponents?.find(x => x === subComponent)
     }
 
-    // Path is path for lodash's get and set
+    // Path for lodash's get and set
     const getPath = (component, directive) => {
       const pathSuffix = component ? `._children.${component}.normal.normal` : ''
       const path = `${selectedComponentName.value}.${selectedVariant.value}.${normalizeStates([...selectedState])}${pathSuffix}.directives.${directive}`
@@ -431,57 +443,6 @@ export default {
       }
       return styles.join('; ')
     })
-    // Apart from "hover" we can't really show how component looks like in
-    // certain states, so we have to fake them.
-    const simulatePseudoSelectors = css => css
-      .replace(selectedComponent.value.selector, '.ComponentPreview .preview-block')
-      .replace(':active', '.preview-active')
-      .replace(':hover', '.preview-hover')
-      .replace(':active', '.preview-active')
-      .replace(':focus', '.preview-focus')
-      .replace(':focus-within', '.preview-focus-within')
-      .replace(':disabled', '.preview-disabled')
-    exports.previewClass = computed(() => {
-      const selectors = []
-      if (!!selectedComponent.value.variants?.normal || selectedVariant.value !== 'normal') {
-        selectors.push(selectedComponent.value.variants[selectedVariant.value])
-      }
-      if (selectedState.size > 0) {
-        selectedState.forEach(state => {
-          const original = selectedComponent.value.states[state]
-          selectors.push(simulatePseudoSelectors(original))
-        })
-      }
-      return selectors.map(x => x.substring(1)).join('')
-    })
-    const previewRules = reactive([])
-    exports.previewRules = previewRules
-    exports.previewCss = computed(() => {
-      try {
-        const scoped = getCssRules(previewRules).map(simulatePseudoSelectors)
-        return scoped.join('\n')
-      } catch (e) {
-        console.error('Invalid ruleset', e)
-        return null
-      }
-    })
-
-    const applicablePreviewRules = computed(() => {
-      return previewRules.filter(rule => {
-        const filterable = rule.parent ? rule.parent : rule
-        const variantMatches = filterable.variant === selectedVariant.value
-        const stateMatches = filterable.state.filter(x => x !== 'normal').every(x => selectedState.has(x))
-        return variantMatches && stateMatches
-      })
-    })
-    const previewColors = computed(() => ({
-      text: applicablePreviewRules.value.find(r => r.component === 'Text')?.virtualDirectives['--text'],
-      link: applicablePreviewRules.value.find(r => r.component === 'Link')?.virtualDirectives['--link'],
-      border: applicablePreviewRules.value.find(r => r.component === 'Border')?.virtualDirectives['--border'],
-      icon: applicablePreviewRules.value.find(r => r.component === 'Icon')?.virtualDirectives['--icon'],
-      background: applicablePreviewRules.value.find(r => r.parent == null)?.dynamicVars.stacked
-    }))
-    exports.previewColors = previewColors
 
     const editorFriendlyToOriginal = computed(() => {
       const resultRules = []
@@ -524,58 +485,6 @@ export default {
       return resultRules
     })
 
-    const updatePreview = () => {
-      try {
-        const { name, ...paletteData } = selectedPalette.value
-        // This normally would be handled by Root but since we pass something
-        // else we have to make do ourselves
-        paletteData.accent = paletteData.accent || paletteData.link
-        paletteData.link = paletteData.link || paletteData.accent
-        const rules = init({
-          inputRuleset: editorFriendlyToOriginal.value,
-          initialStaticVars: {
-            ...paletteData
-          },
-          ultimateBackgroundColor: '#000000',
-          rootComponentName: selectedComponentName.value,
-          editMode: true,
-          debug: true
-        }).eager
-        previewRules.splice(0, previewRules.length)
-        previewRules.push(...rules)
-      } catch (e) {
-        console.error('Could not compile preview theme', e)
-      }
-    }
-
-    const updateSelectedComponent = () => {
-      selectedVariant.value = 'normal'
-      selectedState.clear()
-      updatePreview()
-    }
-    updateSelectedComponent()
-
-    // export and import
-    watch(
-      allEditedRules,
-      updatePreview
-    )
-
-    watch(
-      palettes,
-      updatePreview
-    )
-
-    watch(
-      selectedPalette,
-      updatePreview
-    )
-
-    watch(
-      selectedComponentName,
-      updateSelectedComponent
-    )
-
     const allCustomVirtualDirectives = [...componentsMap.values()]
       .map(c => {
         return c
@@ -610,7 +519,7 @@ export default {
     })
 
     exports.computeColor = (color) => {
-      const computedColor = findColor(color, { dynamicVars: {}, staticVars: selectedPalette.value })
+      const computedColor = findColor(color, { dynamicVars: dynamicVars.value, staticVars: selectedPalette.value })
       if (computedColor) {
         return rgb2hex(computedColor)
       }
@@ -624,9 +533,6 @@ export default {
         exports.computeColor(previewColors.value.text)
       )
     })
-
-    const overallPreviewCssRules = ref()
-    exports.overallPreviewCssRules = overallPreviewCssRules
 
     const paletteRule = computed(() => {
       const { name, ...rest } = selectedPalette.value
@@ -646,41 +552,6 @@ export default {
         virtualDirectives.value.map(vd => [`--${vd.name}`, `${vd.valType} | ${vd.value}`])
       )
     }))
-
-    const exportRules = computed(() => [
-      paletteRule.value,
-      virtualDirectivesRule.value,
-      ...editorFriendlyToOriginal.value
-    ])
-
-    const compilePreviewRules = () => {
-      try {
-        const rules = init({
-          inputRuleset: exportRules.value,
-          ultimateBackgroundColor: '#000000',
-          liteMode: true,
-          debug: true
-        }).eager
-
-        return rules
-      } catch (e) {
-        console.error('Could not compile preview theme', e)
-        return null
-      }
-    }
-
-    exports.updateOverallPreview = () => {
-      const rules = compilePreviewRules()
-      if (rules === null) return
-      overallPreviewCssRules.value = getScopedVersion(
-        getCssRules(rules),
-        '#edited-style-preview'
-      ).join('\n')
-    }
-
-    exports.applyStyle = () => {
-      store.dispatch('setStyleCustom', exportRules.value)
-    }
 
     // ## Export and Import
     const styleExporter = newExporter({
@@ -723,6 +594,8 @@ export default {
             allEditedRules
           )
         })
+
+        exports.updateOverallPreview()
       }
     })
 
@@ -742,6 +615,117 @@ export default {
     exports.importStyle = () => {
       styleImporter.importData()
     }
+
+    const exportRules = computed(() => [
+      paletteRule.value,
+      virtualDirectivesRule.value,
+      ...editorFriendlyToOriginal.value
+    ])
+
+    exports.applyStyle = () => {
+      store.dispatch('setStyleCustom', exportRules.value)
+    }
+
+    const overallPreviewRules = ref([])
+    exports.overallPreviewRules = overallPreviewRules
+
+    const overallPreviewCssRules = computed(() => getScopedVersion(
+      getCssRules(overallPreviewRules.value),
+      '#edited-style-preview'
+    ).join('\n'))
+    exports.overallPreviewCssRules = overallPreviewCssRules
+
+    const updateOverallPreview = () => {
+      try {
+        overallPreviewRules.value = init({
+          inputRuleset: exportRules.value,
+          ultimateBackgroundColor: '#000000',
+          liteMode: true,
+          debug: true
+        }).eager
+      } catch (e) {
+        console.error('Could not compile preview theme', e)
+        return null
+      }
+    }
+    //
+    // Apart from "hover" we can't really show how component looks like in
+    // certain states, so we have to fake them.
+    const simulatePseudoSelectors = css => css
+      .replace(selectedComponent.value.selector, '.component-preview .preview-block')
+      .replace(':active', '.preview-active')
+      .replace(':hover', '.preview-hover')
+      .replace(':active', '.preview-active')
+      .replace(':focus', '.preview-focus')
+      .replace(':focus-within', '.preview-focus-within')
+      .replace(':disabled', '.preview-disabled')
+
+    const previewRules = computed(() => {
+      return overallPreviewRules.value.filter(r => {
+        const rule = r.parent ? r.parent : r
+        if (rule.component !== selectedComponentName.value) return false
+        if (rule.variant !== selectedVariant.value) return false
+        return r.state.filter(x => x !== 'normal').every(x => selectedState.has(x)) &&
+          [...selectedState.values()].every(x => r.state.indexOf(x) >= 0)
+      })
+    })
+
+    exports.previewClass = computed(() => {
+      const selectors = []
+      if (!!selectedComponent.value.variants?.normal || selectedVariant.value !== 'normal') {
+        selectors.push(selectedComponent.value.variants[selectedVariant.value])
+      }
+      if (selectedState.size > 0) {
+        selectedState.forEach(state => {
+          const original = selectedComponent.value.states[state]
+          selectors.push(simulatePseudoSelectors(original))
+        })
+      }
+      return selectors.map(x => x.substring(1)).join('')
+    })
+
+    exports.previewCss = computed(() => {
+      try {
+        const scoped = getCssRules(previewRules.value).map(simulatePseudoSelectors)
+        return scoped.join('\n')
+      } catch (e) {
+        console.error('Invalid ruleset', e)
+        return null
+      }
+    })
+
+    const dynamicVars = computed(() => {
+      console.log('ERR', toValue(previewRules.value))
+      // NEED TO FIND SHORTEST
+      return previewRules.value.find(r => r.parent == null).dynamicVars
+    })
+
+    const previewColors = computed(() => {
+      const stacked = dynamicVars.value.stacked
+      const background = typeof stacked === 'string' ? stacked : rgb2hex(stacked)
+      return {
+        text: previewRules.value.find(r => r.component === 'Text')?.virtualDirectives['--text'],
+        link: previewRules.value.find(r => r.component === 'Link')?.virtualDirectives['--link'],
+        border: previewRules.value.find(r => r.component === 'Border')?.virtualDirectives['--border'],
+        icon: previewRules.value.find(r => r.component === 'Icon')?.virtualDirectives['--icon'],
+        background
+      }
+    })
+    exports.previewColors = previewColors
+    exports.updateOverallPreview = updateOverallPreview
+
+    updateOverallPreview()
+
+    watch(
+      [
+        allEditedRules,
+        palettes,
+        selectedPalette,
+        selectedState,
+        selectedVariant
+      ],
+      updateOverallPreview
+    )
 
     return exports
   }
