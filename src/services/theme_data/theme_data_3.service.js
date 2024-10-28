@@ -173,8 +173,6 @@ export const getEngineChecksum = () => engineChecksum
  * @param {boolean} onlyNormalState - only use components 'normal' states, meant for generating theme
  *   previews since states are the biggest factor for compilation time and are completely unnecessary
  *   when previewing multiple themes at same time
- * @param {string} rootComponentName - [UNTESTED] which component to start from, meant for previewing a
- *   part of the theme (i.e. just the button) for themes 3 editor.
  */
 export const init = ({
   inputRuleset,
@@ -183,9 +181,9 @@ export const init = ({
   liteMode = false,
   editMode = false,
   onlyNormalState = false,
-  rootComponentName = 'Root',
   initialStaticVars = {}
 }) => {
+  const rootComponentName = 'Root'
   if (!inputRuleset) throw new Error('Ruleset is null or undefined!')
   const staticVars = { ...initialStaticVars }
   const stacked = {}
