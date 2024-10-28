@@ -1,6 +1,6 @@
 import { ref, reactive, computed, watch, provide } from 'vue'
 import { useStore } from 'vuex'
-import { get, set } from 'lodash'
+import { get, set, unset } from 'lodash'
 
 import Select from 'src/components/select/select.vue'
 import SelectMotion from 'src/components/select/select_motion.vue'
@@ -314,7 +314,7 @@ export default {
           )
           set(allEditedRules, getPath(component, directive), fallback ?? defaultValue)
         } else {
-          set(allEditedRules, getPath(component, directive), null)
+          unset(allEditedRules, getPath(component, directive))
         }
       }
     })
@@ -334,7 +334,11 @@ export default {
         return postProcess(usedRule)
       },
       set (value) {
-        set(allEditedRules, getPath(component, directive), value)
+        if (value) {
+          set(allEditedRules, getPath(component, directive), value)
+        } else {
+          unset(allEditedRules, getPath(component, directive))
+        }
       }
     })
 
