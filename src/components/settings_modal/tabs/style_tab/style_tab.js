@@ -672,8 +672,10 @@ export default {
         const rule = parentComponentMatch ? r.parent : r
         if (rule.component !== selectedComponentName.value) return false
         if (rule.variant !== selectedVariant.value) return false
-        return r.state.filter(x => x !== 'normal').every(x => selectedState.has(x)) &&
-          [...selectedState.values()].every(x => r.state.indexOf(x) >= 0)
+        const ruleState = new Set(rule.state.filter(x => x !== 'normal'))
+        const differenceA = [...ruleState].filter(x => !selectedState.has(x))
+        const differenceB = [...selectedState].filter(x => !ruleState.has(x))
+        return (differenceA.length + differenceB.length) === 0
       })
       const sorted = [...filtered]
         .filter(x => x.component === selectedComponentName.value)
@@ -715,7 +717,6 @@ export default {
     })
 
     const dynamicVars = computed(() => {
-      console.log('ERR', selectedComponentName.value)
       return previewRules.value[0].dynamicVars
     })
 
