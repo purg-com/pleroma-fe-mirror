@@ -662,7 +662,10 @@ export default {
 
     const previewRules = computed(() => {
       return overallPreviewRules.value.filter(r => {
-        const rule = r.parent ? r.parent : r
+        const componentMatch = r.component === selectedComponentName.value
+        const parentComponentMatch = r.parent === selectedComponentName.value
+        if (!componentMatch && !parentComponentMatch) return false
+        const rule = parentComponentMatch ? r.parent : r
         if (rule.component !== selectedComponentName.value) return false
         if (rule.variant !== selectedVariant.value) return false
         return r.state.filter(x => x !== 'normal').every(x => selectedState.has(x)) &&
@@ -695,9 +698,14 @@ export default {
     })
 
     const dynamicVars = computed(() => {
-      console.log('ERR', toValue(previewRules.value))
-      // NEED TO FIND SHORTEST
-      return previewRules.value.find(r => r.parent == null).dynamicVars
+      console.log('ERR', selectedComponentName.value)
+      const sorted = [...previewRules.value].sort((a, b) => {
+        const aSelectorLength = a.selector.split(/ /g).length
+        const bSelectorLength = b.selector.split(/ /g).length
+        return aSelectorLength - bSelectorLength
+      })
+
+      return sorted[0].dynamicVars
     })
 
     const previewColors = computed(() => {
