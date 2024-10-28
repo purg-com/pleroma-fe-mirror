@@ -651,8 +651,8 @@ export default {
     //
     // Apart from "hover" we can't really show how component looks like in
     // certain states, so we have to fake them.
-    const simulatePseudoSelectors = css => css
-      .replace(selectedComponent.value.selector, '.component-preview .preview-block')
+    const simulatePseudoSelectors = (css, prefix) => css
+      .replace(prefix, '.component-preview .preview-block')
       .replace(':active', '.preview-active')
       .replace(':hover', '.preview-hover')
       .replace(':active', '.preview-active')
@@ -661,9 +661,9 @@ export default {
       .replace(':disabled', '.preview-disabled')
 
     const previewRules = computed(() => {
-      return overallPreviewRules.value.filter(r => {
+      const filtered = overallPreviewRules.value.filter(r => {
         const componentMatch = r.component === selectedComponentName.value
-        const parentComponentMatch = r.parent === selectedComponentName.value
+        const parentComponentMatch = r.parent?.component === selectedComponentName.value
         if (!componentMatch && !parentComponentMatch) return false
         const rule = parentComponentMatch ? r.parent : r
         if (rule.component !== selectedComponentName.value) return false
@@ -671,6 +671,17 @@ export default {
         return r.state.filter(x => x !== 'normal').every(x => selectedState.has(x)) &&
           [...selectedState.values()].every(x => r.state.indexOf(x) >= 0)
       })
+      const sorted = [...filtered]
+        .filter(x => x.component === selectedComponentName.value)
+        .sort((a, b) => {
+          const aSelectorLength = a.selector.split(/ /g).length
+          const bSelectorLength = b.selector.split(/ /g).length
+          return aSelectorLength - bSelectorLength
+        })
+
+      const prefix = sorted[0].selector
+
+      return filtered.filter(x => x.selector.startsWith(prefix))
     })
 
     exports.previewClass = computed(() => {
@@ -681,6 +692,7 @@ export default {
       if (selectedState.size > 0) {
         selectedState.forEach(state => {
           const original = selectedComponent.value.states[state]
+          console.log('ORIG', original)
           selectors.push(simulatePseudoSelectors(original))
         })
       }
@@ -689,7 +701,8 @@ export default {
 
     exports.previewCss = computed(() => {
       try {
-        const scoped = getCssRules(previewRules.value).map(simulatePseudoSelectors)
+        const prefix = previewRules.value[0].selector
+        const scoped = getCssRules(previewRules.value).map(x => simulatePseudoSelectors(x, prefix))
         return scoped.join('\n')
       } catch (e) {
         console.error('Invalid ruleset', e)
@@ -699,13 +712,7 @@ export default {
 
     const dynamicVars = computed(() => {
       console.log('ERR', selectedComponentName.value)
-      const sorted = [...previewRules.value].sort((a, b) => {
-        const aSelectorLength = a.selector.split(/ /g).length
-        const bSelectorLength = b.selector.split(/ /g).length
-        return aSelectorLength - bSelectorLength
-      })
-
-      return sorted[0].dynamicVars
+      return previewRules.value[0].dynamicVars
     })
 
     const previewColors = computed(() => {
