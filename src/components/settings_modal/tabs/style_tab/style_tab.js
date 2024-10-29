@@ -523,9 +523,14 @@ export default {
     })
 
     exports.computeColor = (color) => {
-      const computedColor = findColor(color, { dynamicVars: dynamicVars.value, staticVars: staticVars.value })
-      if (computedColor) {
-        return rgb2hex(computedColor)
+      let computedColor
+      try {
+        computedColor = findColor(color, { dynamicVars: dynamicVars.value, staticVars: staticVars.value })
+        if (computedColor) {
+          return rgb2hex(computedColor)
+        }
+      } catch (e) {
+        console.warn(e)
       }
       return null
     }
