@@ -26,7 +26,7 @@ export default {
 
     exports.emit = emit
     exports.computeColor = inject('computeColor')
-    exports.selectedPalette = inject('selectedPalette')
+    exports.staticVars = inject('staticVars')
 
     const selectedVirtualDirectiveId = ref(0)
     exports.selectedVirtualDirectiveId = selectedVirtualDirectiveId

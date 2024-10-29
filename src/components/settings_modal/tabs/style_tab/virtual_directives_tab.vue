@@ -68,7 +68,7 @@
     <ShadowControl
       v-if="selectedVirtualDirectiveValType === 'shadow'"
       v-model="draftVirtualDirective"
-      :static-vars="selectedPalette"
+      :static-vars="staticVars"
       :compact="true"
     />
     <ColorInput

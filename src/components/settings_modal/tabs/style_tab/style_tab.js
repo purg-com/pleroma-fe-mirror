@@ -523,7 +523,7 @@ export default {
     })
 
     exports.computeColor = (color) => {
-      const computedColor = findColor(color, { dynamicVars: dynamicVars.value, staticVars: selectedPalette.value })
+      const computedColor = findColor(color, { dynamicVars: dynamicVars.value, staticVars: staticVars.value })
       if (computedColor) {
         return rgb2hex(computedColor)
       }
@@ -719,6 +719,20 @@ export default {
     const dynamicVars = computed(() => {
       return previewRules.value[0].dynamicVars
     })
+
+    const staticVars = computed(() => {
+      const rootComponent = overallPreviewRules.value.find(r => {
+        return r.component === 'Root'
+      })
+      const rootDirectivesEntries = Object.entries(rootComponent.directives)
+      const directives = Object.fromEntries(
+        rootDirectivesEntries
+          .filter(([k, v]) => k.startsWith('--') && v.startsWith('color | '))
+          .map(([k, v]) => [k.substring(2), v.substring('color | '.length)]))
+      return directives
+    })
+    provide('staticVars', staticVars)
+    exports.staticVars = staticVars
 
     const previewColors = computed(() => {
       const stacked = dynamicVars.value.stacked

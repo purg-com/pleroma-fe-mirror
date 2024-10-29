@@ -303,7 +303,7 @@
               :disabled="!isShadowPresent"
               :no-preview="true"
               :compact="true"
-              :static-vars="selectedPalette"
+              :static-vars="staticVars"
               @subShadowSelected="onSubShadow"
             />
           </div>
