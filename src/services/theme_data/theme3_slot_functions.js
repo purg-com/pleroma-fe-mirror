@@ -23,6 +23,16 @@ export const colorFunctions = {
       return { ...colorArg, a: amount }
     }
   },
+  brightness: {
+    argsNeeded: 2,
+    exec: (args, { findColor }, { dynamicVars, staticVars }) => {
+      const [color, amountArg] = args
+
+      const colorArg = convert(findColor(color, { dynamicVars, staticVars })).hsl
+      colorArg.l += Number(amountArg)
+      return { ...convert(colorArg).rgb }
+    }
+  },
   textColor: {
     argsNeeded: 2,
     exec: (args, { findColor }, { dynamicVars, staticVars }) => {
