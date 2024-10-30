@@ -391,6 +391,7 @@ export default {
             return deserializeShadow(shadow)
           } catch (e) {
             console.warn(e)
+            return shadow
           }
         }
         return null
@@ -703,7 +704,6 @@ export default {
       if (selectedState.size > 0) {
         selectedState.forEach(state => {
           const original = selectedComponent.value.states[state]
-          console.log('ORIG', original)
           selectors.push(simulatePseudoSelectors(original))
         })
       }
