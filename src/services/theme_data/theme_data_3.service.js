@@ -518,7 +518,7 @@ export const init = ({
       combination.component = component.name
       combination.lazy = component.lazy || parent?.lazy
       combination.parent = parent
-      if (combination.state.indexOf('hover') >= 0) {
+      if (!liteMode && combination.state.indexOf('hover') >= 0) {
         combination.lazy = true
       }
 
