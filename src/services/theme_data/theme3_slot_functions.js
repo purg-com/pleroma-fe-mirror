@@ -15,6 +15,11 @@ export const process = (text, functions, { findColor, findShadow }, { dynamicVar
 export const colorFunctions = {
   alpha: {
     argsNeeded: 2,
+    documentation: 'Changes alpha value of the color only to be used for CSS variables',
+    args: [
+      'color: source color used',
+      'amount: alpha value'
+    ],
     exec: (args, { findColor }, { dynamicVars, staticVars }) => {
       const [color, amountArg] = args
 
@@ -25,6 +30,11 @@ export const colorFunctions = {
   },
   brightness: {
     argsNeeded: 2,
+    document: 'Changes brightness/lightness of color in HSL colorspace',
+    args: [
+      'color: source color used',
+      'amount: lightness value'
+    ],
     exec: (args, { findColor }, { dynamicVars, staticVars }) => {
       const [color, amountArg] = args
 
@@ -35,6 +45,15 @@ export const colorFunctions = {
   },
   textColor: {
     argsNeeded: 2,
+    documentation: 'Get text color with adequate contrast for given background and intended text color. Same function is used internally',
+    args: [
+      'background: color of backdrop where text will be shown',
+      'foreground: intended text color',
+      `[preserve]: (optional) intended color preservation:
+'preserve' - try to preserve the color
+'no-preserve' - if can't get adequate color - fall back to black or white
+'no-auto' - don't do anything (useless as a color function)`
+    ],
     exec: (args, { findColor }, { dynamicVars, staticVars }) => {
       const [backgroundArg, foregroundArg, preserve = 'preserve'] = args
 
@@ -46,6 +65,12 @@ export const colorFunctions = {
   },
   blend: {
     argsNeeded: 3,
+    documentation: 'Alpha blending between two colors',
+    args: [
+      'background: bottom layer color',
+      'amount: opacity of top layer',
+      'foreground: upper layer color'
+    ],
     exec: (args, { findColor }, { dynamicVars, staticVars }) => {
       const [backgroundArg, amountArg, foregroundArg] = args
 
@@ -58,6 +83,11 @@ export const colorFunctions = {
   },
   mod: {
     argsNeeded: 2,
+    documentation: 'Old function that increases or decreases brightness depending if color is dark or light. Advised against using it as it might give unexpected results.',
+    args: [
+      'color: source color',
+      'amount: how much darken/brighten the color'
+    ],
     exec: (args, { findColor }, { dynamicVars, staticVars }) => {
       const [colorArg, amountArg] = args
 
@@ -75,6 +105,13 @@ export const colorFunctions = {
 export const shadowFunctions = {
   borderSide: {
     argsNeeded: 3,
+    documentation: 'Simulate a border on a side with a shadow, best works on inset border',
+    args: [
+      'color: border color',
+      'side: string indicating on which side border should be, takes either one word or two words joined by dash (i.e. "left" or "bottom-right")',
+      '[alpha]: (Optional) border opacity, defaults to 1 (fully opaque)',
+      '[inset]: (Optional) whether border should be on the inside or outside, defaults to inside'
+    ],
     exec: (args, { findColor }) => {
       const [color, side, alpha = '1', widthArg = '1', inset = 'inset'] = args
 
