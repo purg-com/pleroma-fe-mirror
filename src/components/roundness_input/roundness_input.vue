@@ -1,6 +1,6 @@
 <template>
   <div
-    class="opacity-control style-control"
+    class="roundness-control style-control"
     :class="{ disabled: !present || disabled }"
   >
     <label
@@ -8,7 +8,7 @@
       class="label"
       :class="{ faint: !present || disabled }"
     >
-      {{ label  }}
+      {{ label }}
     </label>
     <Checkbox
       v-if="typeof fallback !== 'undefined'"
@@ -24,9 +24,9 @@
       :value="modelValue || fallback"
       :disabled="!present || disabled"
       :class="{ disabled: !present || disabled }"
-      max="1"
+      max="999"
       min="0"
-      step=".05"
+      step="1"
       @input="$emit('update:modelValue', $event.target.value)"
     >
   </div>
