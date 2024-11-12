@@ -792,6 +792,8 @@
           "icon_color": "Icon color",
           "link_color": "Link color",
           "contrast": "Text contrast",
+          "roundness": "Roundness",
+          "opacity": "Opacity",
           "border_color": "Border color",
           "include_in_rule": "Add to rule",
           "test_string": "TEST",

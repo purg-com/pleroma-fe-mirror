@@ -11,6 +11,7 @@ import ShadowControl from 'src/components/shadow_control/shadow_control.vue'
 import ColorInput from 'src/components/color_input/color_input.vue'
 import PaletteEditor from 'src/components/palette_editor/palette_editor.vue'
 import OpacityInput from 'src/components/opacity_input/opacity_input.vue'
+import RoundnessInput from 'src/components/roundness_input/roundness_input.vue'
 import TabSwitcher from 'src/components/tab_switcher/tab_switcher.jsx'
 import Tooltip from 'src/components/tooltip/tooltip.vue'
 import ContrastRatio from 'src/components/contrast_ratio/contrast_ratio.vue'
@@ -72,6 +73,7 @@ export default {
     ColorInput,
     PaletteEditor,
     OpacityInput,
+    RoundnessInput,
     ContrastRatio,
     Preview,
     VirtualDirectivesTab
@@ -347,6 +349,8 @@ export default {
     exports.isBackgroundColorPresent = isElementPresent(null, 'background', '#FFFFFF')
     exports.editedOpacity = getEditedElement(null, 'opacity')
     exports.isOpacityPresent = isElementPresent(null, 'opacity', 1)
+    exports.editedRoundness = getEditedElement(null, 'roundness')
+    exports.isRoundnessPresent = isElementPresent(null, 'roundness', 0)
     exports.editedTextColor = getEditedElement('Text', 'textColor')
     exports.isTextColorPresent = isElementPresent('Text', 'textColor', '#000000')
     exports.editedTextAuto = getEditedElement('Text', 'textAuto')

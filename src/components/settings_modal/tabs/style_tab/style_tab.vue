@@ -286,6 +286,14 @@
             <Tooltip :text="$t('settings.style.themes3.editor.include_in_rule')">
               <Checkbox v-model="isOpacityPresent" />
             </Tooltip>
+            <RoundnessInput
+              v-model="editedRoundness"
+              :disabled="!isRoundnessPresent"
+              :label="$t('settings.style.themes3.editor.roundness')"
+            />
+            <Tooltip :text="$t('settings.style.themes3.editor.include_in_rule')">
+              <Checkbox v-model="isRoundnessPresent" />
+            </Tooltip>
           </div>
           <div
             key="shadow"
