@@ -112,9 +112,14 @@ export default {
     },
     getColorFallback () {
       if (this.staticVars && this.selected?.color) {
-        const computedColor = findColor(this.selected.color, { dynamicVars: {}, staticVars: this.staticVars }, true)
-        if (computedColor) return rgb2hex(computedColor)
-        return null
+        try {
+          const computedColor = findColor(this.selected.color, { dynamicVars: {}, staticVars: this.staticVars }, true)
+          if (computedColor) return rgb2hex(computedColor)
+          return null
+        } catch (e) {
+          console.warn(e)
+          return null
+        }
       } else {
         return this.currentFallback?.color
       }

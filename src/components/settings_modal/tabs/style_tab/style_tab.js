@@ -1,6 +1,6 @@
-import { ref, reactive, computed, watch, provide } from 'vue'
+import { ref, reactive, computed, watch, watchEffect, provide } from 'vue'
 import { useStore } from 'vuex'
-import { get, set, unset } from 'lodash'
+import { get, set, unset, throttle } from 'lodash'
 
 import Select from 'src/components/select/select.vue'
 import SelectMotion from 'src/components/select/select_motion.vue'
@@ -639,13 +639,21 @@ export default {
     const overallPreviewRules = ref([])
     exports.overallPreviewRules = overallPreviewRules
 
-    const overallPreviewCssRules = computed(() => getScopedVersion(
-      getCssRules(overallPreviewRules.value),
-      '#edited-style-preview'
-    ).join('\n'))
+    const overallPreviewCssRules = ref([])
+    watchEffect(throttle(() => {
+      try {
+        overallPreviewCssRules.value = getScopedVersion(
+          getCssRules(overallPreviewRules.value),
+          '#edited-style-preview'
+        ).join('\n')
+      } catch (e) {
+        console.error(e)
+      }
+    }, 500))
+
     exports.overallPreviewCssRules = overallPreviewCssRules
 
-    const updateOverallPreview = () => {
+    const updateOverallPreview = throttle(() => {
       try {
         overallPreviewRules.value = init({
           inputRuleset: exportRules.value,
@@ -657,7 +665,7 @@ export default {
         console.error('Could not compile preview theme', e)
         return null
       }
-    }
+    }, 1000)
     //
     // Apart from "hover" we can't really show how component looks like in
     // certain states, so we have to fake them.
@@ -730,10 +738,13 @@ export default {
         return r.component === 'Root'
       })
       const rootDirectivesEntries = Object.entries(rootComponent.directives)
-      const directives = Object.fromEntries(
-        rootDirectivesEntries
-          .filter(([k, v]) => k.startsWith('--') && v.startsWith('color | '))
-          .map(([k, v]) => [k.substring(2), v.substring('color | '.length)]))
+      const directives = {}
+      rootDirectivesEntries
+        .filter(([k, v]) => k.startsWith('--') && v.startsWith('color | '))
+        .map(([k, v]) => [k.substring(2), v.substring('color | '.length)])
+        .forEach(([k, v]) => {
+          directives[k] = findColor(v, { dynamicVars: {}, staticVars: directives })
+        })
       return directives
     })
     provide('staticVars', staticVars)
