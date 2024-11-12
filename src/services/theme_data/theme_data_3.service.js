@@ -227,8 +227,8 @@ export const init = ({
       bScore += b.component === 'Text' ? 1 : 0
 
       // Debug
-      a.specifityScore = aScore
-      b.specifityScore = bScore
+      a._specificityScore = aScore
+      b._specificityScore = bScore
 
       if (aScore === bScore) {
         return ai - bi

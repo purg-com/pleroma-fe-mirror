@@ -33,7 +33,7 @@ const AppearanceTab = {
   data () {
     return {
       availableStyles: [],
-      availablePalettes: [],
+      bundledPalettes: [],
       fileImporter: newImporter({
         accept: '.json, .piss',
         validator: this.importValidator,
@@ -41,8 +41,8 @@ const AppearanceTab = {
         onImportFailure: this.onImportFailure
       }),
       palettesKeys: [
-        'background',
-        'foreground',
+        'bg',
+        'fg',
         'link',
         'text',
         'cRed',
@@ -103,13 +103,13 @@ const AppearanceTab = {
       }))
     })
 
-    updateIndex('palette').then(palettes => {
-      palettes.forEach(([key, palettePromise]) => palettePromise.then(v => {
+    updateIndex('palette').then(bundledPalettes => {
+      bundledPalettes.forEach(([key, palettePromise]) => palettePromise.then(v => {
         if (Array.isArray(v)) {
           const [
             name,
-            background,
-            foreground,
+            bg,
+            fg,
             text,
             link,
             cRed = '#FF0000',
@@ -117,9 +117,9 @@ const AppearanceTab = {
             cBlue = '#0000FF',
             cOrange = '#E3FF00'
           ] = v
-          this.availablePalettes.push({ key, name, background, foreground, text, link, cRed, cBlue, cGreen, cOrange })
+          this.bundledPalettes.push({ key, name, bg, fg, text, link, cRed, cBlue, cGreen, cOrange })
         } else {
-          this.availablePalettes.push({ key, ...v })
+          this.bundledPalettes.push({ key, ...v })
         }
       }))
     })
@@ -147,6 +147,50 @@ const AppearanceTab = {
     })
   },
   computed: {
+    availablePalettes () {
+      return [
+        ...this.bundledPalettes,
+        ...this.stylePalettes
+      ]
+    },
+    stylePalettes () {
+      if (!this.mergedConfig.styleCustomData) return
+      const meta = this.mergedConfig.styleCustomData
+        .find(x => x.component === '@meta')
+      const result = this.mergedConfig.styleCustomData
+        .filter(x => x.component.startsWith('@palette'))
+        .map(x => {
+          const {
+            variant,
+            bg,
+            fg,
+            text,
+            link,
+            accent,
+            cRed,
+            cBlue,
+            cGreen,
+            cOrange,
+            wallpaper
+          } = x
+
+          const result = {
+            name: `${meta.name}: ${variant}`,
+            bg,
+            fg,
+            text,
+            link,
+            accent,
+            cRed,
+            cBlue,
+            cGreen,
+            cOrange,
+            wallpaper
+          }
+          return Object.fromEntries(Object.entries(result).filter(([k, v]) => v))
+        })
+      return result
+    },
     noIntersectionObserver () {
       return !window.IntersectionObserver
     },
@@ -251,6 +295,11 @@ const AppearanceTab = {
     setPalette (name) {
       this.$store.dispatch('resetThemeV2')
       this.$store.dispatch('setPalette', name)
+      this.$store.dispatch('applyTheme')
+    },
+    setPaletteCustom (p) {
+      this.$store.dispatch('resetThemeV2')
+      this.$store.dispatch('setPaletteCustom', p)
       this.$store.dispatch('applyTheme')
     },
     resetTheming (name) {

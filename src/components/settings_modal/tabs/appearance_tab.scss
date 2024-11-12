@@ -25,6 +25,7 @@
     grid-template-columns: 1fr 1fr;
     grid-gap: 0.5em;
 
+    h4,
     .unsupported-theme-v2 {
       grid-column: 1 / span 2;
     }

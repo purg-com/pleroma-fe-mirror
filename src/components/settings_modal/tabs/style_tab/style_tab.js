@@ -101,6 +101,14 @@ export default {
       ].join('\n')
     })
 
+    const metaRule = computed(() => ({
+      component: '@meta',
+      name: exports.name.value,
+      author: exports.author.value,
+      license: exports.license.value,
+      website: exports.website.value
+    }))
+
     // ## Palette stuff
     const palettes = reactive([
       {
@@ -169,6 +177,22 @@ export default {
       cOrange: '#ffa500'
     })
 
+    // Raw format
+    const palettesRule = computed(() => {
+      return palettes.map(palette => {
+        const { name, ...rest } = palette
+        return {
+          component: '@palette',
+          variant: name,
+          ...Object
+            .entries(rest)
+            .filter(([k, v]) => v)
+            .reduce((acc, [k, v]) => ({ ...acc, [k]: v }), {})
+        }
+      })
+    })
+
+    // Text format
     const palettesOut = computed(() => {
       return palettes.map(({ name, ...palette }) => {
         const entries = Object
@@ -519,6 +543,15 @@ export default {
       virtualDirectives.value = value
     }
 
+    // Raw format
+    const virtualDirectivesRule = computed(() => ({
+      component: 'Root',
+      directives: Object.fromEntries(
+        virtualDirectives.value.map(vd => [`--${vd.name}`, `${vd.valType} | ${vd.value}`])
+      )
+    }))
+
+    // Text format
     const virtualDirectivesOut = computed(() => {
       return [
         'Root {',
@@ -547,25 +580,6 @@ export default {
         exports.computeColor(previewColors.value.text)
       )
     })
-
-    const paletteRule = computed(() => {
-      const { name, ...rest } = selectedPalette.value
-      return {
-        component: 'Root',
-        directives: Object
-          .entries(rest)
-          .filter(([k, v]) => v)
-          .map(([k, v]) => ['--' + k, v])
-          .reduce((acc, [k, v]) => ({ ...acc, [k]: `color | ${v}` }), {})
-      }
-    })
-
-    const virtualDirectivesRule = computed(() => ({
-      component: 'Root',
-      directives: Object.fromEntries(
-        virtualDirectives.value.map(vd => [`--${vd.name}`, `${vd.valType} | ${vd.value}`])
-      )
-    }))
 
     // ## Export and Import
     const styleExporter = newExporter({
@@ -613,6 +627,15 @@ export default {
       }
     })
 
+    // Raw format
+    const exportRules = computed(() => [
+      metaRule.value,
+      ...palettesRule.value,
+      virtualDirectivesRule.value,
+      ...editorFriendlyToOriginal.value
+    ])
+
+    // Text format
     const exportStyleData = computed(() => {
       return [
         metaOut.value,
@@ -629,12 +652,6 @@ export default {
     exports.importStyle = () => {
       styleImporter.importData()
     }
-
-    const exportRules = computed(() => [
-      paletteRule.value,
-      virtualDirectivesRule.value,
-      ...editorFriendlyToOriginal.value
-    ])
 
     exports.applyStyle = () => {
       store.dispatch('setStyleCustom', exportRules.value)

@@ -390,6 +390,13 @@ const afterStoreSetup = async ({ store, i18n }) => {
   app.use(store)
   app.use(i18n)
 
+  // Little thing to get out of invalid theme state
+  window.resetThemes = () => {
+    store.dispatch('resetThemeV3')
+    store.dispatch('resetThemeV3Palette')
+    store.dispatch('resetThemeV2')
+  }
+
   app.use(vClickOutside)
   app.use(VBodyScrollLock)
   app.use(VueVirtualScroller)

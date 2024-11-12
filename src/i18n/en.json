@@ -771,7 +771,9 @@
           "cGreen": "Green color",
           "cOrange": "Orange color",
           "wallpaper": "Wallpaper",
-          "v2_unsupported": "Older v2 themes don't support palettes. Switch to v3 theme to make use of palettes"
+          "v2_unsupported": "Older v2 themes don't support palettes. Switch to v3 theme to make use of palettes",
+          "bundled": "Bundled palettes",
+          "style": "Palettes provided by selected style"
         },
         "editor": {
           "title": "Style",

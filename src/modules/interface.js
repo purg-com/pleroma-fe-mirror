@@ -460,8 +460,8 @@ const interfaceMod = {
         if (Array.isArray(paletteDataUsed)) {
           const [
             name,
-            background,
-            foreground,
+            bg,
+            fg,
             text,
             link,
             cRed = '#FF0000',
@@ -469,10 +469,10 @@ const interfaceMod = {
             cBlue = '#0000FF',
             cOrange = '#E3FF00'
           ] = paletteDataUsed
-          paletteDataUsed = { name, background, foreground, text, link, cRed, cBlue, cGreen, cOrange }
+          paletteDataUsed = { name, bg, fg, text, link, cRed, cBlue, cGreen, cOrange }
         }
+        console.log(paletteDataUsed)
 
-        console.log('USCD', userStyleCustomData)
         const style = await getData(
           'style',
           stylesIndex,

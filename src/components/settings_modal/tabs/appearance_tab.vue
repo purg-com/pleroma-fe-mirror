@@ -72,12 +72,33 @@
       <h3>{{ $t('settings.style.themes3.palette.label') }}</h3>
       <div class="palettes">
         <template v-if="customThemeVersion === 'v3'">
+          <h4>{{ $t('settings.style.themes3.palette.bundled') }}</h4>
           <button
-            v-for="p in availablePalettes"
+            v-for="p in bundledPalettes"
             :key="p.name"
             class="btn button-default palette-entry"
             :class="{ toggled: isPaletteActive(p.key) }"
             @click="() => setPalette(p.key)"
+          >
+            <label>
+              {{ p.name }}
+            </label>
+            <span
+              v-for="c in palettesKeys"
+              :key="c"
+              class="palette-square"
+              :style="{ backgroundColor: p[c], border: '1px solid ' + (p[c] ?? 'var(--text)') }"
+            />
+          </button>
+          <h4 v-if="stylePalettes?.length > 0">
+            {{ $t('settings.style.themes3.palette.style') }}
+          </h4>
+          <button
+            v-for="p in stylePalettes || []"
+            :key="p.name"
+            class="btn button-default palette-entry"
+            :class="{ toggled: isPaletteActive(p.key) }"
+            @click="() => setPaletteCustom(p)"
           >
             <label>
               {{ p.name }}

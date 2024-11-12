@@ -3,8 +3,8 @@
   "pleroma-light": [ "Pleroma Light", "#f2f4f6", "#dbe0e8", "#304055", "#f86f0f", "#d31014", "#0fa00f", "#0095ff", "#ffa500" ],
   "classic-dark": {
     "name": "Classic Dark",
-    "background": "#161c20",
-    "foreground": "#282e32",
+    "bg": "#161c20",
+    "fg": "#282e32",
     "text": "#b9b9b9",
     "link": "#baaa9c",
     "cRed": "#d31014",
@@ -16,8 +16,8 @@
   "pleroma-amoled": [ "Pleroma Dark AMOLED", "#000000", "#111111", "#b0b0b1", "#d8a070", "#aa0000", "#0fa00f", "#0095ff", "#d59500"],
   "tomorrow-night": {
     "name": "Tomorrow Night",
-    "background": "#1d1f21",
-    "foreground": "#373b41",
+    "bg": "#1d1f21",
+    "fg": "#373b41",
     "link": "#81a2be",
     "text": "#c5c8c6",
     "cRed": "#cc6666",
