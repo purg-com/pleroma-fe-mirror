@@ -75,17 +75,7 @@ const paletteKeys = [
   'cBlue',
   'cGreen',
   'cOrange',
-  'wallpaper',
-  'extra1',
-  'extra2',
-  'extra3',
-  'extra4',
-  'extra5',
-  'extra6',
-  'extra7',
-  'extra8',
-  'extra9',
-  'extra10'
+  'wallpaper'
 ]
 
 const fallback = (key) => {
