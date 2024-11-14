@@ -2,6 +2,8 @@ import { init, getEngineChecksum } from '../theme_data/theme_data_3.service.js'
 import { getCssRules } from '../theme_data/css_utils.js'
 import { defaultState } from '../../modules/config.js'
 import { chunk } from 'lodash'
+import pako from 'pako'
+import localforage from 'localforage'
 
 // On platforms where this is not supported, it will return undefined
 // Otherwise it will return an array
@@ -87,12 +89,15 @@ export const generateTheme = (inputRuleset, callbacks, debug) => {
   return { lazyProcessFunc: processChunk }
 }
 
-export const tryLoadCache = () => {
-  const json = localStorage.getItem('pleroma-fe-theme-cache')
-  if (!json) return null
+export const tryLoadCache = async () => {
+  console.info('Trying to load compiled theme data from cache')
+  const data = await localforage.getItem('pleromafe-theme-cache')
+  if (!data) return null
   let cache
   try {
-    cache = JSON.parse(json)
+    const decoded = new TextDecoder().decode(pako.inflate(data))
+    cache = JSON.parse(decoded)
+    console.info(`Loaded theme from cache, size=${cache}`)
   } catch (e) {
     console.error('Failed to decode theme cache:', e)
     return false
@@ -136,16 +141,10 @@ export const applyTheme = (input, onFinish = (data) => {}, debug) => {
         adoptStyleSheets([eagerStyles, lazyStyles])
         const cache = { engineChecksum: getEngineChecksum(), data: [eagerStyles.rules, lazyStyles.rules] }
         onFinish(cache)
-        try {
-          localStorage.setItem('pleroma-fe-theme-cache', JSON.stringify(cache))
-        } catch (e) {
-          localStorage.removeItem('pleroma-fe-theme-cache')
-          try {
-            localStorage.setItem('pleroma-fe-theme-cache', JSON.stringify(cache))
-          } catch (e) {
-            console.warn('cannot save cache!', e)
-          }
+        const compress = (js) => {
+          return pako.deflate(JSON.stringify(js))
         }
+        localforage.setItem('pleromafe-theme-cache', compress(cache))
       }
     },
     debug

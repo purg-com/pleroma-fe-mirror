@@ -312,7 +312,7 @@ const interfaceMod = {
     },
     async applyTheme (
       { dispatch, commit, rootState, state },
-      { recompile = true } = {}
+      { recompile = false } = {}
     ) {
       // If we're not not forced to recompile try using
       // cache (tryLoadCache return true if load successful)
@@ -350,15 +350,15 @@ const interfaceMod = {
 
       let majorVersionUsed
 
-      console.log(
-        `USER V3 palette: ${userPaletteName}, style: ${userStyleName} , custom: ${!!userStyleCustomData}`
+      console.debug(
+        `User V3 palette: ${userPaletteName}, style: ${userStyleName} , custom: ${!!userStyleCustomData}`
       )
-      console.log(
-        `USER V2 name: ${userThemeV2Name}, source: ${!!userThemeV2Source}, snapshot: ${!!userThemeV2Snapshot}`
+      console.debug(
+        `User V2 name: ${userThemeV2Name}, source: ${!!userThemeV2Source}, snapshot: ${!!userThemeV2Snapshot}`
       )
 
-      console.log(`INST V3 palette: ${instancePaletteName}, style: ${instanceStyleName}`)
-      console.log('INST V2 theme: ' + instanceThemeV2Name)
+      console.debug(`Instance V3 palette: ${instancePaletteName}, style: ${instanceStyleName}`)
+      console.debug('Instance V2 theme: ' + instanceThemeV2Name)
 
       if (userPaletteName || userPaletteCustomData ||
           userStyleName || userStyleCustomData ||
@@ -446,7 +446,7 @@ const interfaceMod = {
         return result
       }
 
-      console.log('VERSION', majorVersionUsed)
+      console.debug('Version used', majorVersionUsed)
 
       if (majorVersionUsed === 'v3') {
         const palette = await getData(
@@ -471,7 +471,7 @@ const interfaceMod = {
           ] = paletteDataUsed
           paletteDataUsed = { name, bg, fg, text, link, cRed, cBlue, cGreen, cOrange }
         }
-        console.log(paletteDataUsed)
+        console.debug('Palette data used', paletteDataUsed)
 
         const style = await getData(
           'style',
@@ -506,7 +506,6 @@ const interfaceMod = {
           directives: {}
         }
 
-        console.log('PALETTE', paletteDataUsed)
         Object
           .entries(paletteDataUsed)
           .filter(([k]) => k !== 'name')
