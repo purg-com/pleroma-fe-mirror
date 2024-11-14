@@ -26,7 +26,8 @@
     grid-gap: 0.5em;
 
     h4,
-    .unsupported-theme-v2 {
+    .unsupported-theme-v2,
+    .userPalette {
       grid-column: 1 / span 2;
     }
   }
@@ -71,6 +72,7 @@
     border-radius: var(--roundness);
     border: 1px solid var(--border);
     padding: 0;
+    margin-bottom: 1em;
 
     .theme-preview {
       font-size: 1rem; // fix for firefox

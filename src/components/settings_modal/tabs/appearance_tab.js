@@ -3,6 +3,7 @@ import ChoiceSetting from '../helpers/choice_setting.vue'
 import IntegerSetting from '../helpers/integer_setting.vue'
 import FloatSetting from '../helpers/float_setting.vue'
 import UnitSetting, { defaultHorizontalUnits } from '../helpers/unit_setting.vue'
+import PaletteEditor from 'src/components/palette_editor/palette_editor.vue'
 
 import FontControl from 'src/components/font_control/font_control.vue'
 
@@ -50,6 +51,7 @@ const AppearanceTab = {
         'cBlue',
         'cOrange'
       ],
+      userPalette: {},
       intersectionObserver: null,
       thirdColumnModeOptions: ['none', 'notifications', 'postform'].map(mode => ({
         key: mode,
@@ -76,7 +78,8 @@ const AppearanceTab = {
     UnitSetting,
     ProfileSettingIndicator,
     FontControl,
-    Preview
+    Preview,
+    PaletteEditor
   },
   mounted () {
     const updateIndex = (resource) => {
@@ -105,6 +108,7 @@ const AppearanceTab = {
 
     updateIndex('palette').then(bundledPalettes => {
       bundledPalettes.forEach(([key, palettePromise]) => palettePromise.then(v => {
+        let palette
         if (Array.isArray(v)) {
           const [
             name,
@@ -117,9 +121,15 @@ const AppearanceTab = {
             cBlue = '#0000FF',
             cOrange = '#E3FF00'
           ] = v
-          this.bundledPalettes.push({ key, name, bg, fg, text, link, cRed, cBlue, cGreen, cOrange })
+          palette = { key, name, bg, fg, text, link, cRed, cBlue, cGreen, cOrange }
+          this.bundledPalettes.push()
         } else {
-          this.bundledPalettes.push({ key, ...v })
+          palette = { key, ...v }
+        }
+        this.bundledPalettes.push(palette)
+
+        if (this.isPaletteActive(key)) {
+          this.userPalette = palette
         }
       }))
     })
@@ -292,15 +302,18 @@ const AppearanceTab = {
       this.$store.dispatch('setTheme', name)
       this.$store.dispatch('applyTheme')
     },
-    setPalette (name) {
+    setPalette (name, data) {
       this.$store.dispatch('resetThemeV2')
       this.$store.dispatch('setPalette', name)
       this.$store.dispatch('applyTheme')
+      this.userPalette = data
     },
-    setPaletteCustom (p) {
+    setPaletteCustom (data) {
+      console.log('APPLY CUSTOM', data)
       this.$store.dispatch('resetThemeV2')
-      this.$store.dispatch('setPaletteCustom', p)
+      this.$store.dispatch('setPaletteCustom', data)
       this.$store.dispatch('applyTheme')
+      this.userPalette = data
     },
     resetTheming (name) {
       this.$store.dispatch('resetThemeV2')

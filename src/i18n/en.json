@@ -759,8 +759,9 @@
         "palette": {
           "label": "Color schemes",
           "name_label": "Color scheme name",
-          "import": "Import",
-          "export": "Export",
+          "import": "Import palette",
+          "export": "Export palette",
+          "apply": "Apply palette",
           "bg": "Panel background",
           "fg": "Buttons etc.",
           "text": "Text",
@@ -773,7 +774,8 @@
           "wallpaper": "Wallpaper",
           "v2_unsupported": "Older v2 themes don't support palettes. Switch to v3 theme to make use of palettes",
           "bundled": "Bundled palettes",
-          "style": "Palettes provided by selected style"
+          "style": "Palettes provided by selected style",
+          "user": "Custom palette"
         },
         "editor": {
           "title": "Style",

@@ -5,15 +5,6 @@
   >
     <div class="setting-item">
       <h2>{{ $t('settings.theme') }}</h2>
-      <button
-        class="btn button-default"
-        @click="importFile"
-      >
-        <FAIcon icon="folder-open" />
-        {{ $t('settings.style.themes3.editor.load_style') }}
-      </button>
-    </div>
-    <div class="setting-item">
       <ul
         ref="themeList"
         class="theme-list"
@@ -88,7 +79,7 @@
               :key="p.name"
               class="btn button-default palette-entry"
               :class="{ toggled: isPaletteActive(p.key) }"
-              @click="() => setPalette(p.key)"
+              @click="() => setPalette(p.key, p)"
             >
               <label>
                 {{ p.name }}
@@ -120,6 +111,16 @@
                 :style="{ backgroundColor: p[c], border: '1px solid ' + (p[c] ?? 'var(--text)') }"
               />
             </button>
+            <h4>
+              {{ $t('settings.style.themes3.palette.user') }}
+            </h4>
+            <PaletteEditor
+              class="userPalette"
+              v-model="userPalette"
+              :compact="true"
+              :apply="true"
+              @applyPalette="data => setPaletteCustom(data)"
+            />
           </template>
           <template v-else-if="customThemeVersion === 'v2'">
             <div class="alert neutral theme-notice unsupported-theme-v2">
