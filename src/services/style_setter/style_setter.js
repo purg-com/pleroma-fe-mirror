@@ -219,8 +219,9 @@ export const applyConfig = (input, i18n) => {
   styleSheet.toString()
   styleSheet.insertRule(`:root { ${rules} }`, 'index-max')
 
+  // TODO find a way to make this not apply to theme previews
   if (Object.prototype.hasOwnProperty.call(config, 'forcedRoundness')) {
-    styleSheet.insertRule(` * {
+    styleSheet.insertRule(` *:not(.preview-block) {
         --roundness: var(--forcedRoundness) !important;
     }`, 'index-max')
   }
