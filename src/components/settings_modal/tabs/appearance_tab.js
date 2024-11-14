@@ -293,33 +293,21 @@ const AppearanceTab = {
       return key === palette
     },
     setStyle (name) {
-      this.$store.dispatch('resetThemeV2')
       this.$store.dispatch('setTheme', name)
-      this.$store.dispatch('applyTheme')
     },
     setTheme (name) {
-      this.$store.dispatch('resetThemeV3')
       this.$store.dispatch('setTheme', name)
-      this.$store.dispatch('applyTheme')
     },
     setPalette (name, data) {
-      this.$store.dispatch('resetThemeV2')
       this.$store.dispatch('setPalette', name)
-      this.$store.dispatch('applyTheme')
       this.userPalette = data
     },
     setPaletteCustom (data) {
-      console.log('APPLY CUSTOM', data)
-      this.$store.dispatch('resetThemeV2')
       this.$store.dispatch('setPaletteCustom', data)
-      this.$store.dispatch('applyTheme')
       this.userPalette = data
     },
     resetTheming (name) {
-      this.$store.dispatch('resetThemeV2')
-      this.$store.dispatch('resetThemeV3')
       this.$store.dispatch('setStyle', 'stock')
-      this.$store.dispatch('applyTheme')
     },
     previewTheme (key, input) {
       let theme3
