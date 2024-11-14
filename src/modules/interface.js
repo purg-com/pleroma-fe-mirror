@@ -230,7 +230,7 @@ const interfaceMod = {
 
       commit('setOption', { name: 'palette', value })
 
-      dispatch('applyTheme')
+      dispatch('applyTheme', { recompile: true })
     },
     setPaletteCustom ({ dispatch, commit }, value) {
       dispatch('resetThemeV3Palette')
@@ -238,7 +238,7 @@ const interfaceMod = {
 
       commit('setOption', { name: 'paletteCustomData', value })
 
-      dispatch('applyTheme')
+      dispatch('applyTheme', { recompile: true })
     },
     async fetchStylesIndex ({ commit, state }) {
       try {
@@ -257,7 +257,7 @@ const interfaceMod = {
 
       commit('setOption', { name: 'style', value })
 
-      dispatch('applyTheme')
+      dispatch('applyTheme', { recompile: true })
     },
     setStyleCustom ({ dispatch, commit }, value) {
       dispatch('resetThemeV3')
@@ -265,7 +265,7 @@ const interfaceMod = {
 
       commit('setOption', { name: 'styleCustomData', value })
 
-      dispatch('applyTheme')
+      dispatch('applyTheme', { recompile: true })
     },
     async fetchThemesIndex ({ commit, state }) {
       try {
@@ -285,7 +285,7 @@ const interfaceMod = {
 
       commit('setOption', { name: 'theme', value })
 
-      dispatch('applyTheme')
+      dispatch('applyTheme', { recompile: true })
     },
     setThemeCustom ({ dispatch, commit }, value) {
       dispatch('resetThemeV3')
@@ -295,7 +295,7 @@ const interfaceMod = {
       commit('setOption', { name: 'customTheme', value })
       commit('setOption', { name: 'customThemeSource', value })
 
-      dispatch('applyTheme')
+      dispatch('applyTheme', { recompile: true })
     },
     resetThemeV3 ({ dispatch, commit }) {
       commit('setOption', { name: 'style', value: null })
