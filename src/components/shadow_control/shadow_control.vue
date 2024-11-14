@@ -145,8 +145,8 @@
           <input
             id="spread"
             :value="selected?.spread"
-            :disabled="disabled || !present || (separateInset && !selected?.inset)"
             :class="{ disabled: disabled || !present || (separateInset && !selected?.inset) }"
+            :disabled="disabled || !present || (separateInset && !selected?.inset)"
             name="spread"
             class="input input-range"
             type="range"
@@ -158,7 +158,7 @@
             :value="selected?.spread"
             class="input input-number -small"
             :class="{ disabled: disabled || !present || (separateInset && !selected?.inset) }"
-            :disabled="{ disabled: disabled || !present || (separateInset && !selected?.inset) }"
+            :disabled="disabled || !present || (separateInset && !selected?.inset)"
             type="number"
             @input="e => updateProperty('spread', e.target.value)"
           >

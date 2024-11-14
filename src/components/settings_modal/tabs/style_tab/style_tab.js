@@ -380,7 +380,7 @@ export default {
     exports.editedOpacity = getEditedElement(null, 'opacity')
     exports.isOpacityPresent = isElementPresent(null, 'opacity', 1)
     exports.editedRoundness = getEditedElement(null, 'roundness')
-    exports.isRoundnessPresent = isElementPresent(null, 'roundness', 0)
+    exports.isRoundnessPresent = isElementPresent(null, 'roundness', '0')
     exports.editedTextColor = getEditedElement('Text', 'textColor')
     exports.isTextColorPresent = isElementPresent('Text', 'textColor', '#000000')
     exports.editedTextAuto = getEditedElement('Text', 'textAuto')
