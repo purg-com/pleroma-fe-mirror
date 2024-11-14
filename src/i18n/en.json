@@ -777,7 +777,7 @@
         },
         "editor": {
           "title": "Style",
-          "new_style": "New",
+          "reset_style": "Reset",
           "load_style": "Open",
           "save_style": "Save",
           "style_name": "Stylesheet name",

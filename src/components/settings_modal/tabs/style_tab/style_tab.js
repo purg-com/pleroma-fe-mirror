@@ -1,4 +1,4 @@
-import { ref, reactive, computed, watch, watchEffect, provide } from 'vue'
+import { ref, reactive, computed, watch, watchEffect, provide, getCurrentInstance } from 'vue'
 import { useStore } from 'vuex'
 import { get, set, unset, throttle } from 'lodash'
 
@@ -83,6 +83,12 @@ export default {
     const store = useStore()
     // All rules that are made by editor
     const allEditedRules = reactive({})
+
+    exports.isActive = computed(() => {
+      const tabSwitcher = getCurrentInstance().parent.ctx
+      console.log('TABSW', tabSwitcher)
+      return tabSwitcher ? tabSwitcher.isActive('style') : false
+    })
 
     // ## Meta stuff
     exports.name = ref('')

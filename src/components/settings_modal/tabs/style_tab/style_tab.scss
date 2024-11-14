@@ -48,6 +48,42 @@
     }
   }
 
+  .meta-preview {
+    display: grid;
+    grid-template:
+      "meta meta preview preview"
+      "meta meta preview preview"
+      "meta meta preview preview"
+      "meta meta preview preview";
+    grid-gap: 0.5em;
+    grid-template-columns: min-content min-content 6fr max-content;
+
+    ul.setting-list {
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-rows: subgrid;
+      grid-area: meta;
+
+      > li {
+        margin: 0;
+      }
+
+      .meta-field {
+        margin: 0;
+
+        .setting-label {
+          display: inline-block;
+          margin-bottom: 0.5em;
+        }
+      }
+    }
+
+    #edited-style-preview {
+      grid-area: preview;
+    }
+  }
+
   .setting-item {
     padding-bottom: 0;
 
@@ -61,65 +97,6 @@
 
     &:not(:last-child) {
       margin-bottom: 0.5em;
-    }
-
-    &.heading {
-      display: grid;
-      grid-template:
-        "meta meta preview preview"
-        "meta meta preview preview"
-        "meta meta preview preview"
-        "meta meta preview preview"
-        "new  new  preview preview"
-        "load save refresh apply";
-      grid-gap: 0.5em;
-      grid-template-columns: min-content min-content 6fr max-content;
-      grid-template-rows: repeat(4, min-content) repeat(2, 2em);
-
-      ul.setting-list {
-        padding: 0;
-        margin: 0;
-        display: grid;
-        grid-template-rows: subgrid;
-        grid-area: meta;
-
-        > li {
-          margin: 0;
-        }
-
-        .meta-field {
-          margin: 0;
-
-          .setting-label {
-            display: inline-block;
-            margin-bottom: 0.5em;
-          }
-        }
-      }
-
-      #edited-style-preview {
-        grid-area: preview;
-      }
-
-      .button-save {
-        grid-area: save;
-      }
-
-      .button-load {
-        grid-area: load;
-      }
-
-      .button-new {
-        grid-area: new;
-      }
-
-      .button-refresh {
-        grid-area: refresh;
-      }
-
-      .button-apply {
-        grid-area: apply;
-      }
     }
   }
 
@@ -268,6 +245,20 @@
     .shadow-tab {
       grid-template-columns: 1fr;
       justify-items: center;
+    }
+  }
+}
+
+.extra-content {
+  .style-actions-container {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+
+    .style-actions {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(7em, 1fr));
+      grid-gap: 0.25em;
     }
   }
 }

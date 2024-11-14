@@ -3,7 +3,7 @@
     class="appearance-tab"
     :label="$t('settings.general')"
   >
-    <div class="setting-item heading">
+    <div class="setting-item">
       <h2>{{ $t('settings.theme') }}</h2>
       <button
         class="btn button-default"

@@ -4,70 +4,75 @@
 <template>
   <div class="StyleTab">
     <div class="setting-item heading">
-      <!-- eslint-disable vue/no-v-text-v-html-on-component -->
-      <component
-        :is="'style'"
-        v-html="overallPreviewCssRules"
-      />
-      <!-- eslint-enable vue/no-v-text-v-html-on-component -->
-      <Preview id="edited-style-preview" />
-      <button
-        class="btn button-default button-new"
-        @click="clearTheme"
-      >
-        <FAIcon icon="file" />
-        {{ $t('settings.style.themes3.editor.new_style') }}
-      </button>
-      <button
-        class="btn button-default button-load"
-        @click="importStyle"
-      >
-        <FAIcon icon="folder-open" />
-        {{ $t('settings.style.themes3.editor.load_style') }}
-      </button>
-      <button
-        class="btn button-default button-save"
-        @click="exportStyle"
-      >
-        <FAIcon icon="floppy-disk" />
-        {{ $t('settings.style.themes3.editor.save_style') }}
-      </button>
-      <button
-        class="btn button-default button-refresh"
-        @click="updateOverallPreview"
-      >
-        <FAIcon icon="arrows-rotate" />
-        {{ $t('settings.style.themes3.editor.refresh_preview') }}
-      </button>
-      <button
-        class="btn button-default button-apply"
-        @click="applyStyle"
-      >
-        <FAIcon icon="check" />
-        {{ $t('settings.style.themes3.editor.apply_preview') }}
-      </button>
-      <ul class="setting-list style-metadata">
-        <li>
-          <StringSetting class="meta-field" v-model="name">
-            {{ $t('settings.style.themes3.editor.style_name') }}
-          </StringSetting>
-        </li>
-        <li>
-          <StringSetting class="meta-field" v-model="author">
-            {{ $t('settings.style.themes3.editor.style_author') }}
-          </StringSetting>
-        </li>
-        <li>
-          <StringSetting class="meta-field" v-model="license">
-            {{ $t('settings.style.themes3.editor.style_license') }}
-          </StringSetting>
-        </li>
-        <li>
-          <StringSetting class="meta-field" v-model="website">
-            {{ $t('settings.style.themes3.editor.style_website') }}
-          </StringSetting>
-        </li>
-      </ul>
+      <h2> {{ $t('settings.style.themes3.editor.title') }} </h2>
+      <div class="meta-preview">
+        <!-- eslint-disable vue/no-v-text-v-html-on-component -->
+        <component
+          :is="'style'"
+          v-html="overallPreviewCssRules"
+        />
+        <!-- eslint-enable vue/no-v-text-v-html-on-component -->
+        <Preview id="edited-style-preview" />
+        <teleport
+          v-if="isActive"
+          to="#unscrolled-content"
+        >
+          <div class="style-actions-container">
+            <div class="style-actions">
+              <button
+                class="btn button-default button-new"
+                @click="clearTheme"
+              >
+                <FAIcon icon="arrows-rotate" />
+                {{ $t('settings.style.themes3.editor.reset_style') }}
+              </button>
+              <button
+                class="btn button-default button-load"
+                @click="importStyle"
+              >
+                <FAIcon icon="folder-open" />
+                {{ $t('settings.style.themes3.editor.load_style') }}
+              </button>
+              <button
+                class="btn button-default button-save"
+                @click="exportStyle"
+              >
+                <FAIcon icon="floppy-disk" />
+                {{ $t('settings.style.themes3.editor.save_style') }}
+              </button>
+              <button
+                class="btn button-default button-apply"
+                @click="applyStyle"
+              >
+                <FAIcon icon="check" />
+                {{ $t('settings.style.themes3.editor.apply_preview') }}
+              </button>
+            </div>
+          </div>
+        </teleport>
+        <ul class="setting-list style-metadata">
+          <li>
+            <StringSetting class="meta-field" v-model="name">
+              {{ $t('settings.style.themes3.editor.style_name') }}
+            </StringSetting>
+          </li>
+          <li>
+            <StringSetting class="meta-field" v-model="author">
+              {{ $t('settings.style.themes3.editor.style_author') }}
+            </StringSetting>
+          </li>
+          <li>
+            <StringSetting class="meta-field" v-model="license">
+              {{ $t('settings.style.themes3.editor.style_license') }}
+            </StringSetting>
+          </li>
+          <li>
+            <StringSetting class="meta-field" v-model="website">
+              {{ $t('settings.style.themes3.editor.style_website') }}
+            </StringSetting>
+          </li>
+        </ul>
+      </div>
     </div>
     <tab-switcher>
       <div
