@@ -32,8 +32,7 @@ export const TIMELINES = {
   bookmarks: {
     route: 'bookmarks',
     icon: 'bookmark',
-    label: 'nav.bookmarks',
-    criteria: ['!supportsBookmarkFolders', 'supportsBookmarkFolders']
+    label: 'nav.bookmarks'
   },
   favorites: {
     routeObject: { name: 'user-profile', query: { tab: 'favorites' } },
