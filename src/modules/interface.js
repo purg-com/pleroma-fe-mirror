@@ -344,7 +344,7 @@ const interfaceMod = {
       } = rootState.config
 
       const forceRecompile = forceThemeRecompilation || recompile
-      if (!forceRecompile && !themeDebug && tryLoadCache()) {
+      if (!forceRecompile && !themeDebug && await tryLoadCache()) {
         return commit('setThemeApplied')
       }
 
