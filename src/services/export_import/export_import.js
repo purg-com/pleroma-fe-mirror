@@ -46,7 +46,7 @@ export const newImporter = ({
         const reader = new FileReader()
         reader.onload = ({ target }) => {
           try {
-            const parsed = parser(target.result)
+            const parsed = parser(target.result, filename)
             const validationResult = validator(parsed, filename)
             if (validationResult === true) {
               onImport(parsed, filename)

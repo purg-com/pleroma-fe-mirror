@@ -16,6 +16,7 @@ import {
   getCssRules,
   getScopedVersion
 } from 'src/services/theme_data/css_utils.js'
+import { deserialize } from 'src/services/theme_data/iss_deserializer.js'
 
 import SharedComputedObject from '../helpers/shared_computed_object.js'
 import ProfileSettingIndicator from '../helpers/profile_setting_indicator.vue'
@@ -39,6 +40,7 @@ const AppearanceTab = {
         accept: '.json, .piss',
         validator: this.importValidator,
         onImport: this.onImport,
+        parser: this.importParser,
         onImportFailure: this.onImportFailure
       }),
       palettesKeys: [
@@ -263,21 +265,33 @@ const AppearanceTab = {
     importFile () {
       this.fileImporter.importData()
     },
+    importParser (file, filename) {
+      if (filename.endsWith('.json')) {
+        return JSON.parse(file)
+      } else if (filename.endsWith('.piss')) {
+        return deserialize(file)
+      }
+    },
     onImport (parsed, filename) {
       if (filename.endsWith('.json')) {
         this.$store.dispatch('setThemeCustom', parsed.source || parsed.theme)
-        this.$store.dispatch('applyTheme')
+      } else if (filename.endsWith('.piss')) {
+        this.$store.dispatch('setStyleCustom', parsed)
       }
-
-      // this.loadTheme(parsed, 'file', forceSource)
     },
     onImportFailure (result) {
+      console.error('Failure importing theme:', result)
       this.$store.dispatch('pushGlobalNotice', { messageKey: 'settings.invalid_theme_imported', level: 'error' })
     },
     importValidator (parsed, filename) {
       if (filename.endsWith('.json')) {
         const version = parsed._pleroma_theme_version
         return version >= 1 || version <= 2
+      } else if (filename.endsWith('.piss')) {
+        if (!Array.isArray(parsed)) return false
+        if (parsed.length < 1) return false
+        if (parsed.find(x => x.component === '@meta') == null) return false
+        return true
       }
     },
     isThemeActive (key) {

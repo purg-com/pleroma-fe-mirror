@@ -597,7 +597,11 @@ export default {
 
     const styleImporter = newImporter({
       accept: '.piss',
-      parser: (string) => deserialize(string),
+      parser (string) { return deserialize(string) },
+      onImportFailure (result) {
+        console.error('Failure importing style:', result)
+        this.$store.dispatch('pushGlobalNotice', { messageKey: 'settings.invalid_theme_imported', level: 'error' })
+      },
       onImport (parsed, filename) {
         const editorComponents = parsed.filter(x => x.component.startsWith('@'))
         const rootComponent = parsed.find(x => x.component === 'Root')
