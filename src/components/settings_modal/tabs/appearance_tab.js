@@ -172,8 +172,8 @@ const AppearanceTab = {
       const result = this.mergedConfig.styleCustomData
         .filter(x => x.component.startsWith('@palette'))
         .map(x => {
+          const { variant, directives } = x
           const {
-            variant,
             bg,
             fg,
             text,
@@ -184,10 +184,10 @@ const AppearanceTab = {
             cGreen,
             cOrange,
             wallpaper
-          } = x
+          } = directives
 
           const result = {
-            name: `${meta.name}: ${variant}`,
+            name: `${meta.directives.name || this.$t('settings.style.themes3.palette.imported')}: ${variant}`,
             bg,
             fg,
             text,
@@ -240,12 +240,12 @@ const AppearanceTab = {
       return themeVersion
     },
     isCustomThemeUsed () {
-      const { theme } = this.mergedConfig
-      return theme === 'custom'
+      const { customTheme, customThemeSource } = this.mergedConfig
+      return customTheme != null || customThemeSource != null
     },
     isCustomStyleUsed (name) {
-      const { style } = this.mergedConfig
-      return style === 'custom'
+      const { styleCustomData } = this.mergedConfig
+      return styleCustomData != null
     },
     ...SharedComputedObject()
   },

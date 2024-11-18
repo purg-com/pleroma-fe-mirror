@@ -86,7 +86,6 @@ export default {
 
     exports.isActive = computed(() => {
       const tabSwitcher = getCurrentInstance().parent.ctx
-      console.log('TABSW', tabSwitcher)
       return tabSwitcher ? tabSwitcher.isActive('style') : false
     })
 
@@ -109,10 +108,12 @@ export default {
 
     const metaRule = computed(() => ({
       component: '@meta',
-      name: exports.name.value,
-      author: exports.author.value,
-      license: exports.license.value,
-      website: exports.website.value
+      directives: {
+        name: exports.name.value,
+        author: exports.author.value,
+        license: exports.license.value,
+        website: exports.website.value
+      }
     }))
 
     // ## Palette stuff
@@ -190,9 +191,9 @@ export default {
         return {
           component: '@palette',
           variant: name,
-          ...Object
+          directives: Object
             .entries(rest)
-            .filter(([k, v]) => v)
+            .filter(([k, v]) => v && k)
             .reduce((acc, [k, v]) => ({ ...acc, [k]: v }), {})
         }
       })
@@ -203,6 +204,7 @@ export default {
       return palettes.map(({ name, ...palette }) => {
         const entries = Object
           .entries(palette)
+          .filter(([k, v]) => v && k)
           .map(([slot, data]) => `  ${slot}: ${data};`)
           .join('\n')
 
@@ -561,7 +563,9 @@ export default {
     const virtualDirectivesOut = computed(() => {
       return [
         'Root {',
-        ...virtualDirectives.value.map(vd => `  --${vd.name}: ${vd.valType} | ${vd.value};`),
+        ...virtualDirectives.value
+          .filter(vd => vd.name && vd.valType && vd.value)
+          .map(vd => `  --${vd.name}: ${vd.valType} | ${vd.value};`),
         '}'
       ].join('\n')
     })

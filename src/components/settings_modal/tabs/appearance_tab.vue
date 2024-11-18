@@ -102,7 +102,7 @@
               @click="() => setPaletteCustom(p)"
             >
               <label>
-                {{ p.name }}
+                {{ p.name ?? $t('settings.style.themes3.palette.user') }}
               </label>
               <span
                 v-for="c in palettesKeys"
