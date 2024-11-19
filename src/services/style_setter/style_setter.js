@@ -228,35 +228,56 @@ export const applyConfig = (input, i18n) => {
 
 export const getResourcesIndex = async (url, parser = JSON.parse) => {
   const cache = 'no-store'
+  const customUrl = url.replace(/\.(\w+)$/, '.custom.$1')
+  let builtin
+  let custom
+
+  const resourceTransform = (resources) => {
+    return Object
+      .entries(resources)
+      .map(([k, v]) => {
+        if (typeof v === 'object') {
+          return [k, () => Promise.resolve(v)]
+        } else if (typeof v === 'string') {
+          return [
+            k,
+            () => window
+              .fetch(v, { cache })
+              .then(data => data.text())
+              .then(text => parser(text))
+              .catch(e => {
+                console.error(e)
+                return null
+              })
+          ]
+        } else {
+          console.error(`Unknown resource format - ${k} is a ${typeof v}`)
+          return [k, null]
+        }
+      })
+  }
 
   try {
-    const data = await window.fetch(url, { cache })
-    const resources = await data.json()
-    return Object.fromEntries(
-      Object
-        .entries(resources)
-        .map(([k, v]) => {
-          if (typeof v === 'object') {
-            return [k, () => Promise.resolve(v)]
-          } else if (typeof v === 'string') {
-            return [
-              k,
-              () => window
-                .fetch(v, { cache })
-                .then(data => data.text())
-                .then(text => parser(text))
-                .catch(e => {
-                  console.error(e)
-                  return null
-                })
-            ]
-          } else {
-            console.error(`Unknown resource format - ${k} is a ${typeof v}`)
-            return [k, null]
-          }
-        })
-    )
+    const builtinData = await window.fetch(url, { cache })
+    const builtinResources = await builtinData.json()
+    builtin = resourceTransform(builtinResources)
   } catch (e) {
-    return Promise.reject(e)
+    builtin = []
+    console.warn(`Builtin resources at ${url} unavailable`)
   }
+
+  try {
+    const customData = await window.fetch(customUrl, { cache })
+    const customResources = await customData.json()
+    custom = resourceTransform(customResources)
+  } catch (e) {
+    custom = []
+    console.warn(`Custom resources at ${customUrl} unavailable`)
+  }
+
+  const total = [...builtin, ...custom]
+  if (total.length === 0) {
+    return Promise.reject(new Error(`Resource at ${url} and ${customUrl} completely unavailable. Panicking`))
+  }
+  return Promise.resolve(Object.fromEntries(total))
 }
