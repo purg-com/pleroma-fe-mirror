@@ -1,11 +1,18 @@
 import { getResourcesIndex, applyTheme, tryLoadCache } from '../services/style_setter/style_setter.js'
 import { CURRENT_VERSION, generatePreset } from 'src/services/theme_data/theme_data.service.js'
 import { convertTheme2To3 } from 'src/services/theme_data/theme2_to_theme3.js'
+import { deserialize } from '../services/theme_data/iss_deserializer.js'
 
 const defaultState = {
   localFonts: null,
   themeApplied: false,
   themeVersion: 'v3',
+  styleNameUsed: null,
+  styleDataUsed: null,
+  paletteNameUsed: null,
+  paletteDataUsed: null,
+  themeNameUsed: null,
+  themeDataUsed: null,
   temporaryChangesTimeoutId: null, // used for temporary options that revert after a timeout
   temporaryChangesConfirm: () => {}, // used for applying temporary options
   temporaryChangesRevert: () => {}, // used for reverting temporary options
@@ -242,7 +249,10 @@ const interfaceMod = {
     },
     async fetchStylesIndex ({ commit, state }) {
       try {
-        const value = await getResourcesIndex('/static/styles/index.json')
+        const value = await getResourcesIndex(
+          '/static/styles/index.json',
+          deserialize
+        )
         commit('setInstanceOption', { name: 'stylesIndex', value })
         return value
       } catch (e) {
@@ -310,17 +320,44 @@ const interfaceMod = {
       commit('setOption', { name: 'customTheme', value: null })
       commit('setOption', { name: 'customThemeSource', value: null })
     },
-    async applyTheme (
-      { dispatch, commit, rootState, state },
-      { recompile = false } = {}
-    ) {
-      // If we're not not forced to recompile try using
-      // cache (tryLoadCache return true if load successful)
+    async getThemeData ({ dispatch, commit, rootState, state }) {
+      console.log('GET THEME DATA CALLED')
+      const getData = async (resource, index, customData, name) => {
+        const capitalizedResource = resource[0].toUpperCase() + resource.slice(1)
+        const result = {}
+
+        if (customData) {
+          result.nameUsed = 'custom' // custom data overrides name
+          result.dataUsed = customData
+        } else {
+          result.nameUsed = name
+
+          if (result.nameUsed === 'stock') {
+            result.dataUsed = null
+            return result
+          }
+
+          let fetchFunc = index[result.nameUsed]
+          // Fallbacks
+          if (!fetchFunc) {
+            const newName = Object.keys(index)[0]
+            fetchFunc = index[newName]
+            console.warn(`${capitalizedResource} with id '${state.styleNameUsed}' not found, trying back to '${newName}'`)
+            if (!fetchFunc) {
+              console.warn(`${capitalizedResource} doesn't have a fallback, defaulting to stock.`)
+              fetchFunc = () => Promise.resolve(null)
+            }
+          }
+          result.dataUsed = await fetchFunc()
+        }
+        return result
+      }
 
       const {
         style: instanceStyleName,
         palette: instancePaletteName
       } = rootState.instance
+
       let {
         theme: instanceThemeV2Name,
         themesIndex,
@@ -332,21 +369,14 @@ const interfaceMod = {
         style: userStyleName,
         styleCustomData: userStyleCustomData,
         palette: userPaletteName,
-        paletteCustomData: userPaletteCustomData,
-        forceThemeRecompilation,
-        themeDebug,
-        theme3hacks
+        paletteCustomData: userPaletteCustomData
       } = rootState.config
+
       let {
         theme: userThemeV2Name,
         customTheme: userThemeV2Snapshot,
         customThemeSource: userThemeV2Source
       } = rootState.config
-
-      const forceRecompile = forceThemeRecompilation || recompile
-      if (!forceRecompile && !themeDebug && await tryLoadCache()) {
-        return commit('setThemeApplied')
-      }
 
       let majorVersionUsed
 
@@ -408,44 +438,6 @@ const interfaceMod = {
 
       state.themeVersion = majorVersionUsed
 
-      let styleDataUsed = null
-      let styleNameUsed = null
-      let paletteDataUsed = null
-      // let paletteNameUsed = null
-      // let themeNameUsed = null
-      let themeDataUsed = null
-
-      const getData = async (resource, index, customData, name) => {
-        const capitalizedResource = resource[0].toUpperCase() + resource.slice(1)
-        const result = {}
-
-        if (customData) {
-          result.nameUsed = 'custom' // custom data overrides name
-          result.dataUsed = customData
-        } else {
-          result.nameUsed = name
-
-          if (result.nameUsed === 'stock') {
-            result.dataUsed = null
-            return result
-          }
-
-          let fetchFunc = index[result.nameUsed]
-          // Fallbacks
-          if (!fetchFunc) {
-            const newName = Object.keys(index)[0]
-            fetchFunc = index[newName]
-            console.warn(`${capitalizedResource} with id '${styleNameUsed}' not found, trying back to '${newName}'`)
-            if (!fetchFunc) {
-              console.warn(`${capitalizedResource} doesn't have a fallback, defaulting to stock.`)
-              fetchFunc = () => Promise.resolve(null)
-            }
-          }
-          result.dataUsed = await fetchFunc()
-        }
-        return result
-      }
-
       console.debug('Version used', majorVersionUsed)
 
       if (majorVersionUsed === 'v3') {
@@ -455,9 +447,9 @@ const interfaceMod = {
           userPaletteCustomData,
           userPaletteName || instancePaletteName
         )
-        // paletteNameUsed = palette.nameUsed
-        paletteDataUsed = palette.dataUsed
-        if (Array.isArray(paletteDataUsed)) {
+        state.paletteNameUsed = palette.nameUsed
+        state.paletteDataUsed = palette.dataUsed
+        if (Array.isArray(state.paletteDataUsed)) {
           const [
             name,
             bg,
@@ -468,10 +460,10 @@ const interfaceMod = {
             cGreen = '#00FF00',
             cBlue = '#0000FF',
             cOrange = '#E3FF00'
-          ] = paletteDataUsed
-          paletteDataUsed = { name, bg, fg, text, link, cRed, cBlue, cGreen, cOrange }
+          ] = palette.dataUsed
+          state.paletteDataUsed = { name, bg, fg, text, link, cRed, cBlue, cGreen, cOrange }
         }
-        console.debug('Palette data used', paletteDataUsed)
+        console.debug('Palette data used', palette.dataUsed)
 
         const style = await getData(
           'style',
@@ -479,8 +471,14 @@ const interfaceMod = {
           userStyleCustomData,
           userStyleName || instanceStyleName
         )
-        styleNameUsed = style.nameUsed
-        styleDataUsed = style.dataUsed
+        state.styleNameUsed = style.nameUsed
+        state.styleDataUsed = style.dataUsed
+
+        console.log(
+          'GOT THEME DATA',
+          state.styleDataUsed,
+          state.paletteDataUsed
+        )
       } else {
         const theme = await getData(
           'theme',
@@ -489,25 +487,40 @@ const interfaceMod = {
           userThemeV2Name || instanceThemeV2Name
         )
         // themeNameUsed = theme.nameUsed
-        themeDataUsed = theme.dataUsed
-
-        // Themes v2 editor support
-        commit('setInstanceOption', { name: 'themeData', value: themeDataUsed })
+        state.themeDataUsed = theme.dataUsed
       }
+    },
+    async applyTheme (
+      { dispatch, commit, rootState, state },
+      { recompile = false } = {}
+    ) {
+      const {
+        forceThemeRecompilation,
+        themeDebug,
+        theme3hacks
+      } = rootState.config
+      // If we're not not forced to recompile try using
+      // cache (tryLoadCache return true if load successful)
+
+      const forceRecompile = forceThemeRecompilation || recompile
+      if (!forceRecompile && !themeDebug && await tryLoadCache()) {
+        return commit('setThemeApplied')
+      }
+      await dispatch('getThemeData')
 
       // commit('setOption', { name: 'palette', value: paletteNameUsed })
       // commit('setOption', { name: 'style', value: styleNameUsed })
       // commit('setOption', { name: 'theme', value: themeNameUsed })
 
       const paletteIss = (() => {
-        if (!paletteDataUsed) return null
+        if (!state.paletteDataUsed) return null
         const result = {
           component: 'Root',
           directives: {}
         }
 
         Object
-          .entries(paletteDataUsed)
+          .entries(state.paletteDataUsed)
           .filter(([k]) => k !== 'name')
           .forEach(([k, v]) => {
             let issRootDirectiveName
@@ -526,7 +539,7 @@ const interfaceMod = {
         return result
       })()
 
-      const theme2ruleset = themeDataUsed && convertTheme2To3(normalizeThemeData(themeDataUsed))
+      const theme2ruleset = state.themeDataUsed && convertTheme2To3(normalizeThemeData(state.themeDataUsed))
       const hacks = []
 
       Object.entries(theme3hacks).forEach(([key, value]) => {
@@ -593,7 +606,7 @@ const interfaceMod = {
 
       const rulesetArray = [
         theme2ruleset,
-        styleDataUsed,
+        state.styleDataUsed,
         paletteIss,
         hacks
       ].filter(x => x)

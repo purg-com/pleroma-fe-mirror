@@ -18,7 +18,7 @@
           <!-- eslint-disable vue/no-v-text-v-html-on-component -->
           <component
             :is="'style'"
-            v-html="previewTheme('stock')"
+            v-html="previewTheme('stock', 'v3')"
           />
           <!-- eslint-enable vue/no-v-text-v-html-on-component -->
           <preview id="theme-preview-stock" />
@@ -30,7 +30,7 @@
         <button
           v-if="isCustomThemeUsed"
           disabled
-          class="button-default theme-preview"
+          class="button-default theme-preview toggled"
         >
           <preview />
           <h4 class="theme-name">
@@ -39,19 +39,31 @@
           </h4>
         </button>
         <button
+          v-if="isCustomStyleUsed"
+          disabled
+          class="button-default theme-preview toggled"
+        >
+          <preview />
+          <h4 class="theme-name">
+            {{ $t('settings.style.custom_style_used') }}
+            <span class="alert neutral version">v3</span>
+          </h4>
+        </button>
+        <button
           v-for="style in availableStyles"
           :key="style.key"
           :data-theme-key="style.key"
           class="button-default theme-preview"
           :class="{ toggled: isThemeActive(style.key) }"
-          @click="setTheme(style.key)"
+          @click="style.version === 'v2' ? setTheme(style.key) : setStyle(style.key)"
         >
           <!-- eslint-disable vue/no-v-text-v-html-on-component -->
-          <component
-            :is="'style'"
-            v-if="style.ready || noIntersectionObserver"
-            v-html="previewTheme(style.key, style.data)"
-          />
+          <div v-if="style.ready || noIntersectionObserver">
+            <component
+              :is="'style'"
+              v-html="previewTheme(style.key, style.version, style.data)"
+            />
+          </div>
           <!-- eslint-enable vue/no-v-text-v-html-on-component -->
           <preview :id="'theme-preview-' + style.key" />
           <h4 class="theme-name">

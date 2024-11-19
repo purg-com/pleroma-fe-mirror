@@ -226,7 +226,7 @@ export const applyConfig = (input, i18n) => {
   }
 }
 
-export const getResourcesIndex = async (url) => {
+export const getResourcesIndex = async (url, parser = JSON.parse) => {
   const cache = 'no-store'
 
   try {
@@ -243,8 +243,9 @@ export const getResourcesIndex = async (url) => {
               k,
               () => window
                 .fetch(v, { cache })
-                .then((data) => data.json())
-                .catch((e) => {
+                .then(data => data.text())
+                .then(text => parser(text))
+                .catch(e => {
                   console.error(e)
                   return null
                 })

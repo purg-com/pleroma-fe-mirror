@@ -36,6 +36,7 @@ const AppearanceTab = {
     return {
       availableStyles: [],
       bundledPalettes: [],
+      compilationCache: {},
       fileImporter: newImporter({
         accept: '.json, .piss',
         validator: this.importValidator,
@@ -84,6 +85,8 @@ const AppearanceTab = {
     PaletteEditor
   },
   mounted () {
+    this.$store.dispatch('getThemeData')
+
     const updateIndex = (resource) => {
       const capitalizedResource = resource[0].toUpperCase() + resource.slice(1)
       const currentIndex = this.$store.state.instance[`${resource}sIndex`]
@@ -101,6 +104,13 @@ const AppearanceTab = {
           .map(([k, func]) => [k, func()])
       })
     }
+
+    updateIndex('style').then(styles => {
+      styles.forEach(([key, stylePromise]) => stylePromise.then(data => {
+        const meta = data.find(x => x.component === '@meta')
+        this.availableStyles.push({ key, data, name: meta.directives.name, version: 'v3' })
+      }))
+    })
 
     updateIndex('theme').then(themes => {
       themes.forEach(([key, themePromise]) => themePromise.then(data => {
@@ -166,11 +176,15 @@ const AppearanceTab = {
       ]
     },
     stylePalettes () {
-      if (!this.mergedConfig.styleCustomData) return
-      const meta = this.mergedConfig.styleCustomData
-        .find(x => x.component === '@meta')
-      const result = this.mergedConfig.styleCustomData
-        .filter(x => x.component.startsWith('@palette'))
+      const ruleset = this.$store.state.interface.styleDataUsed || []
+      console.log(
+        'ASR',
+        this.$store.state.interface.paletteDataUsed,
+        this.$store.state.interface.styleDataUsed
+      )
+      if (!ruleset && ruleset.length === 0) return
+      const meta = ruleset.find(x => x.component === '@meta')
+      const result = ruleset.filter(x => x.component.startsWith('@palette'))
         .map(x => {
           const { variant, directives } = x
           const {
@@ -307,7 +321,7 @@ const AppearanceTab = {
       return key === palette
     },
     setStyle (name) {
-      this.$store.dispatch('setTheme', name)
+      this.$store.dispatch('setStyle', name)
     },
     setTheme (name) {
       this.$store.dispatch('setTheme', name)
@@ -323,18 +337,30 @@ const AppearanceTab = {
     resetTheming (name) {
       this.$store.dispatch('setStyle', 'stock')
     },
-    previewTheme (key, input) {
+    previewTheme (key, version, input) {
       let theme3
-      if (input) {
-        const style = normalizeThemeData(input)
-        const theme2 = convertTheme2To3(style)
-        theme3 = init({
-          inputRuleset: theme2,
-          ultimateBackgroundColor: '#000000',
-          liteMode: true,
-          debug: true,
-          onlyNormalState: true
-        })
+      if (this.compilationCache[key]) {
+        theme3 = this.compilationCache[key]
+      } else if (input) {
+        if (version === 'v2') {
+          const style = normalizeThemeData(input)
+          const theme2 = convertTheme2To3(style)
+          theme3 = init({
+            inputRuleset: theme2,
+            ultimateBackgroundColor: '#000000',
+            liteMode: true,
+            debug: true,
+            onlyNormalState: true
+          })
+        } else if (version === 'v3') {
+          theme3 = init({
+            inputRuleset: input,
+            ultimateBackgroundColor: '#000000',
+            liteMode: true,
+            debug: true,
+            onlyNormalState: true
+          })
+        }
       } else {
         theme3 = init({
           inputRuleset: [],
@@ -343,6 +369,10 @@ const AppearanceTab = {
           debug: true,
           onlyNormalState: true
         })
+      }
+
+      if (!this.compilationCache[key]) {
+        this.compilationCache[key] = theme3
       }
 
       return getScopedVersion(

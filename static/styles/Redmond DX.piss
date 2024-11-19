@@ -31,18 +31,18 @@
 
 @palette.Vapor {
   bg: #F0ADCD;
-  fg: #a177ee;
+  fg: #bca4ee;
   text: #602040;
-  link: #086866;
+  link: #064745;
   accent: #9DF7C8;
-  cRed: #ff0088;
-  cBlue: #20c8e9;
-  cGreen: #0fd27d;
-  cOrange: #ECE646;
+  cRed: #86004a;
+  cBlue: #0e5663;
+  cGreen: #0a8b51;
+  cOrange: #787424;
 }
 
 Root {
-  --gradientColor: color | $brightness(--fg, 20);
+  --gradientColor: color | --accent;
   --inputColor: color | #FFFFFF;
   --bevelLight: color | $brightness(--bg 50);
   --bevelDark: color | $brightness(--bg -20);

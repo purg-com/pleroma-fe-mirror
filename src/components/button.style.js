@@ -90,6 +90,13 @@ export default {
       }
     },
     {
+      state: ['toggled', 'disabled'],
+      directives: {
+        background: '$blend(--inheritedBackground 0.25 --parent)',
+        shadow: ['--buttonPressedBevel']
+      }
+    },
+    {
       state: ['disabled'],
       directives: {
         background: '$blend(--inheritedBackground 0.25 --parent)',
