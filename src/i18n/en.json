@@ -701,6 +701,7 @@
     "use_websockets": "Use websockets (Realtime updates)",
     "text": "Text",
     "theme": "Theme",
+    "theme_old": "Theme (old)",
     "theme_help": "Use hex color codes (#rrggbb) to customize your color theme.",
     "theme_help_v2_1": "You can also override certain component's colors and opacity by toggling the checkbox, use \"Clear all\" button to clear all overrides.",
     "theme_help_v2_2": "Icons underneath some entries are background/text contrast indicators, hover over for detailed info. Please keep in mind that when using transparency contrast indicators show the worst possible case.",

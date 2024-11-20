@@ -64,6 +64,9 @@ const SettingsModalContent = {
     },
     bodyLock () {
       return this.$store.state.interface.settingsModalState === 'visible'
+    },
+    expertLevel () {
+      return this.$store.state.config.expertLevel
     }
   },
   methods: {

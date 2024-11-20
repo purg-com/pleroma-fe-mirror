@@ -28,7 +28,8 @@
       <StyleTab />
     </div>
     <div
-      :label="$t('settings.theme')"
+      v-if="expertLevel > 0"
+      :label="$t('settings.theme_old')"
       icon="paint-brush"
       data-tab-name="theme"
     >
