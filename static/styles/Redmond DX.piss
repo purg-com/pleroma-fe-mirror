@@ -47,9 +47,10 @@ Root {
   --bevelLight: color | $brightness(--bg 50);
   --bevelDark: color | $brightness(--bg -20);
   --bevelExtraDark: color | #404040;
-  --buttonDefaultBevel: shadow | $borderSide(--bevelExtraDark bottom-right 1 1), $borderSide(--bevelLight top-left 1 1), $borderSide(--bevelDark bottom-right 1 2);
-  --buttonPressedBevel: shadow | inset 0 0 0 1 #000000 / 1 #Outer , inset 0 0 0 2 --bevelExtraDark / 1 #inner;
-  --defaultInputBevel: shadow | $borderSide(--bevelLight bottom-right 1), $borderSide(--bevelDark top-left 1 1), $borderSide(--bg bottom-right 1 2), $borderSide(--bevelExtraDark top-left 1 2);
+  --buttonDefaultBevel: shadow | $borderSide(--bevelDark bottom-right 1 1), $borderSide(--bevelLight top-left 1 1), $borderSide(--bevelExtraDark bottom-right 1 2);
+  --buttonPressedFocusedBevel: shadow | inset 0 0 0 1 #000000 / 1 #Outer , inset 0 0 0 2 --bevelExtraDark / 1 #inner;
+  --buttonPressedBevel: shadow | $borderSide(--bevelDark top-left 1 1), $borderSide(--bevelLight bottom-right 1 1), $borderSide(--bevelExtraDark top-left 1 2);
+  --defaultInputBevel: shadow | $borderSide(--bevelDark top-left 1 1), $borderSide(--bevelLight bottom-right 1 1), $borderSide(--bevelExtraDark top-left 1 2), $borderSide(--bg bottom-right 1 2);
 }
 
 Button:toggled {
@@ -80,10 +81,42 @@ Button:pressed:hover {
   shadow: --buttonPressedBevel
 }
 
+Button:hover:pressed:focused {
+  shadow: --buttonPressedFocusedBevel
+}
+
+Button:pressed:focused {
+  shadow: --buttonPressedFocusedBevel
+}
+
+Button:toggled:pressed {
+  shadow: --buttonPressedFocusedBevel
+}
+
 Input {
   background: $mod(--bg -80);
   shadow: --defaultInputBevel;
   roundness: 0
+}
+
+Input:focused {
+  shadow: inset 0 0 0 1 #000000 / 1, --defaultInputBevel
+}
+
+Input:focused:hover {
+  shadow: --defaultInputBevel
+}
+
+Input:focused:hover:disabled {
+  shadow: --defaultInputBevel
+}
+
+Input:hover {
+  shadow: --defaultInputBevel
+}
+
+Input:disabled {
+  shadow: --defaultInputBevel
 }
 
 Panel {
@@ -106,7 +139,8 @@ Tab:active {
 }
 
 Tab:active:hover {
-  background: --bg
+  background: --bg;
+  shadow: --defaultButtonBevel
 }
 
 Tab:active:hover:disabled {
@@ -123,5 +157,9 @@ Tab:disabled {
 
 Tab {
   background: --bg;
+  shadow: --buttonDefaultBevel
+}
+
+Tab:hover:active {
   shadow: --buttonDefaultBevel
 }
