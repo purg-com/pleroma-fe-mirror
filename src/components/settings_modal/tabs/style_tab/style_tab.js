@@ -540,8 +540,8 @@ export default {
         const [valType, valVal] = value.split('|')
         return {
           name: name.substring(2),
-          valType: valType.trim(),
-          value: valVal.trim()
+          valType: valType?.trim(),
+          value: valVal?.trim()
         }
       })
 
