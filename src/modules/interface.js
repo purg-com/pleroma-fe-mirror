@@ -321,7 +321,6 @@ const interfaceMod = {
       commit('setOption', { name: 'customThemeSource', value: null })
     },
     async getThemeData ({ dispatch, commit, rootState, state }) {
-      console.log('GET THEME DATA CALLED')
       const getData = async (resource, index, customData, name) => {
         const capitalizedResource = resource[0].toUpperCase() + resource.slice(1)
         const result = {}
@@ -473,12 +472,6 @@ const interfaceMod = {
         )
         state.styleNameUsed = style.nameUsed
         state.styleDataUsed = style.dataUsed
-
-        console.log(
-          'GOT THEME DATA',
-          state.styleDataUsed,
-          state.paletteDataUsed
-        )
       } else {
         const theme = await getData(
           'theme',
