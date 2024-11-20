@@ -138,7 +138,6 @@ export default {
     })
   },
   mounted () {
-    this.loadThemeFromLocalStorage()
     if (typeof this.shadowSelected === 'undefined') {
       this.shadowSelected = this.shadowsAvailable[0]
     }
@@ -295,6 +294,9 @@ export default {
         console.warn('Failure computing contrasts', e)
         return {}
       }
+    },
+    themeDataUsed () {
+      return this.$store.state.interface.themeDataUsed
     },
     shadowsAvailable () {
       return Object.keys(DEFAULT_SHADOWS).sort()
@@ -478,15 +480,11 @@ export default {
       this.dismissWarning()
     },
     loadThemeFromLocalStorage (confirmLoadSource = false, forceSnapshot = false) {
-      const {
-        customTheme: theme,
-        customThemeSource: source
-      } = this.$store.getters.mergedConfig
-      if (theme || source) {
+      const theme = this.themeDataUsed?.source
+      if (theme) {
         this.loadTheme(
           {
-            theme,
-            source: forceSnapshot ? theme : source
+            theme
           },
           'localStorage',
           confirmLoadSource
@@ -705,6 +703,9 @@ export default {
     }
   },
   watch: {
+    themeDataUsed () {
+      this.loadThemeFromLocalStorage()
+    },
     currentRadii () {
       try {
         this.previewTheme.radii = generateRadii({ radii: this.currentRadii }).theme.radii
