@@ -693,14 +693,13 @@ export default {
         overallPreviewRules.value = init({
           inputRuleset: exportRules.value,
           ultimateBackgroundColor: '#000000',
-          liteMode: true,
           debug: true
         }).eager
       } catch (e) {
         console.error('Could not compile preview theme', e)
         return null
       }
-    }, 1000)
+    }, 5000)
     //
     // Apart from "hover" we can't really show how component looks like in
     // certain states, so we have to fake them.
