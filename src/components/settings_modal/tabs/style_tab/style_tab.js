@@ -82,7 +82,12 @@ export default {
     const exports = {}
     const store = useStore()
     // All rules that are made by editor
-    const allEditedRules = reactive({})
+    const allEditedRules = ref(store.state.interface.styleDataUsed || {})
+    const styleDataUsed = computed(() => store.state.interface.styleDataUsed)
+
+    watch([styleDataUsed], (value) => {
+      onImport(store.state.interface.styleDataUsed)
+    }, { once: true })
 
     exports.isActive = computed(() => {
       const tabSwitcher = getCurrentInstance().parent.ctx
@@ -170,6 +175,8 @@ export default {
     exports.selectedPaletteId = selectedPaletteId
     exports.selectedPalette = selectedPalette
     provide('selectedPalette', selectedPalette)
+
+    watch([selectedPalette], () => updateOverallPreview())
 
     exports.getNewPalette = () => ({
       name: 'new palette',
@@ -338,7 +345,7 @@ export default {
     // Templates for directives
     const isElementPresent = (component, directive, defaultValue = '') => computed({
       get () {
-        return get(allEditedRules, getPath(component, directive)) != null
+        return get(allEditedRules.value, getPath(component, directive)) != null
       },
       set (value) {
         if (value) {
@@ -346,9 +353,9 @@ export default {
             editorFriendlyFallbackStructure.value,
             getPath(component, directive)
           )
-          set(allEditedRules, getPath(component, directive), fallback ?? defaultValue)
+          set(allEditedRules.value, getPath(component, directive), fallback ?? defaultValue)
         } else {
-          unset(allEditedRules, getPath(component, directive))
+          unset(allEditedRules.value, getPath(component, directive))
         }
       }
     })
@@ -357,7 +364,7 @@ export default {
       get () {
         let usedRule
         const fallback = editorFriendlyFallbackStructure.value
-        const real = allEditedRules
+        const real = allEditedRules.value
         const path = getPath(component, directive)
 
         usedRule = get(real, path) // get real
@@ -369,9 +376,9 @@ export default {
       },
       set (value) {
         if (value) {
-          set(allEditedRules, getPath(component, directive), value)
+          set(allEditedRules.value, getPath(component, directive), value)
         } else {
-          unset(allEditedRules, getPath(component, directive))
+          unset(allEditedRules.value, getPath(component, directive))
         }
       }
     })
@@ -520,7 +527,7 @@ export default {
       }
 
       componentsMap.values().forEach(({ name }) => {
-        convert(name, allEditedRules[name])
+        convert(name, allEditedRules.value[name])
       })
 
       return resultRules
@@ -599,6 +606,40 @@ export default {
       getExportedObject: () => exportStyleData.value
     })
 
+    const onImport = parsed => {
+      const editorComponents = parsed.filter(x => x.component.startsWith('@'))
+      const rootComponent = parsed.find(x => x.component === 'Root')
+      const rules = parsed.filter(x => !x.component.startsWith('@') && x.component !== 'Root')
+      const metaIn = editorComponents.find(x => x.component === '@meta').directives
+      const palettesIn = editorComponents.filter(x => x.component === '@palette')
+
+      exports.name.value = metaIn.name
+      exports.license.value = metaIn.license
+      exports.author.value = metaIn.author
+      exports.website.value = metaIn.website
+
+      const newVirtualDirectives = Object
+        .entries(rootComponent.directives)
+        .map(([name, value]) => {
+          const [valType, valVal] = value.split('|').map(x => x.trim())
+          return { name: name.substring(2), valType, value: valVal }
+        })
+      virtualDirectives.value = newVirtualDirectives
+
+      onPalettesUpdate(palettesIn.map(x => ({ name: x.variant, ...x.directives })))
+
+      Object.keys(allEditedRules.value).forEach((k) => delete allEditedRules.value[k])
+
+      rules.forEach(rule => {
+        rulesToEditorFriendly(
+          [rule],
+          allEditedRules.value
+        )
+      })
+
+      exports.updateOverallPreview()
+    }
+
     const styleImporter = newImporter({
       accept: '.piss',
       parser (string) { return deserialize(string) },
@@ -606,39 +647,7 @@ export default {
         console.error('Failure importing style:', result)
         this.$store.dispatch('pushGlobalNotice', { messageKey: 'settings.invalid_theme_imported', level: 'error' })
       },
-      onImport (parsed, filename) {
-        const editorComponents = parsed.filter(x => x.component.startsWith('@'))
-        const rootComponent = parsed.find(x => x.component === 'Root')
-        const rules = parsed.filter(x => !x.component.startsWith('@') && x.component !== 'Root')
-        const metaIn = editorComponents.find(x => x.component === '@meta').directives
-        const palettesIn = editorComponents.filter(x => x.component === '@palette')
-
-        exports.name.value = metaIn.name
-        exports.license.value = metaIn.license
-        exports.author.value = metaIn.author
-        exports.website.value = metaIn.website
-
-        const newVirtualDirectives = Object
-          .entries(rootComponent.directives)
-          .map(([name, value]) => {
-            const [valType, valVal] = value.split('|').map(x => x.trim())
-            return { name: name.substring(2), valType, value: valVal }
-          })
-        virtualDirectives.value = newVirtualDirectives
-
-        onPalettesUpdate(palettesIn.map(x => ({ name: x.variant, ...x.directives })))
-
-        Object.keys(allEditedRules).forEach((k) => delete allEditedRules[k])
-
-        rules.forEach(rule => {
-          rulesToEditorFriendly(
-            [rule],
-            allEditedRules
-          )
-        })
-
-        exports.updateOverallPreview()
-      }
+      onImport
     })
 
     // Raw format
@@ -691,7 +700,18 @@ export default {
     const updateOverallPreview = throttle(() => {
       try {
         overallPreviewRules.value = init({
-          inputRuleset: exportRules.value,
+          inputRuleset: [
+            ...exportRules.value,
+            {
+              component: 'Root',
+              directives: Object.fromEntries(
+                Object
+                  .entries(selectedPalette.value)
+                  .filter(([k, v]) => k && v && k !== 'name')
+                  .map(([k, v]) => [`--${k}`, `color | ${v}`])
+              )
+            }
+          ],
           ultimateBackgroundColor: '#000000',
           debug: true
         }).eager
@@ -802,7 +822,7 @@ export default {
 
     watch(
       [
-        allEditedRules,
+        allEditedRules.value,
         palettes,
         selectedPalette,
         selectedState,
