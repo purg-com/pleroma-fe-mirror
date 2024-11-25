@@ -15,7 +15,7 @@ export const deserializeShadow = string => {
     // spread (optional)
     '(?:(-?[0-9]+(?:\\.[0-9]+)?)\\s+)?',
     // either hex, variable or function
-    '(#[0-9a-f]{6}|--[a-z0-9\\-_]+|\\$[a-z0-9\\-()_]+)',
+    '(#[0-9a-f]{6}|--[a-z0-9\\-_]+|\\$[a-z0-9\\-()_ ]+)',
     // opacity (optional)
     '(?:\\s+\\/\\s+([0-9]+(?:\\.[0-9]+)?)\\s*)?',
     // name
