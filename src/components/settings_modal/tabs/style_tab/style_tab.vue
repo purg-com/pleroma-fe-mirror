@@ -21,7 +21,7 @@
             <div class="style-actions">
               <button
                 class="btn button-default button-new"
-                @click="clearTheme"
+                @click="clearStyle"
               >
                 <FAIcon icon="arrows-rotate" />
                 {{ $t('settings.style.themes3.editor.reset_style') }}

@@ -661,6 +661,10 @@ export default {
       ].join('\n\n')
     })
 
+    exports.clearStyle = () => {
+      onImport(store.state.interface.styleDataUsed)
+    }
+
     exports.exportStyle = () => {
       styleExporter.exportData()
     }
