@@ -1,0 +1,63 @@
+@meta {
+  name: Breezy DX;
+  author: HJ;
+  license: WTFPL;
+  website: ebin.club;
+}
+
+@palette.Dark {
+  bg: #121a24;
+  fg: #182230;
+  text: #b9b9ba;
+  link: #d8a070;
+  accent: #d8a070;
+  cRed: #FF0000;
+  cBlue: #0095ff;
+  cGreen: #0fa00f;
+  cOrange: #ffa500;
+}
+
+@palette.Light {
+  bg: #f2f6f9;
+  fg: #d6dfed;
+  text: #304055;
+  underlay: #5d6086;
+  accent: #f55b1b;
+  cBlue: #0095ff;
+  cRed: #d31014;
+  cGreen: #0fa00f;
+  cOrange: #ffa500;
+  border: #d8e6f9;
+}
+
+Root {
+  --badgeNotification: color | --cRed;
+  --buttonDefaultHoverGlow: shadow | inset 0 0 0 1 --accent / 1;
+  --buttonDefaultFocusGlow: shadow | inset 0 0 0 1 --accent / 1;
+  --buttonDefaultShadow: shadow | inset 0 0 0 1 --text / 0.35, 0 5 5 -5 #000000 / 0.35;
+  --buttonDefaultBevel: shadow | inset 0 14 14 -14 #FFFFFF / 0.1;
+  --buttonPressedBevel: shadow | inset 0 -20 20 -20 #000000 / 0.05, inset 0 20 0 80 --accent / 0.2;
+  --defaultInputBevel: shadow | inset 0 0 0 1 --text / 0.35;
+  --defaultInputHoverGlow: shadow | 0 0 0 1 --accent / 1;
+  --defaultInputFocusGlow: shadow | 0 0 0 1 --link / 1;
+}
+
+Button:disabled {
+  shadow: --buttonDefaultBevel, --buttonDefaultShadow
+}
+
+Button:hover {
+  shadow: --buttonDefaultHoverGlow, --buttonDefaultBevel, --buttonDefaultShadow
+}
+
+Input {
+  shadow: --defaultInputBevel
+}
+
+PanelHeader {
+  shadow: inset 0 30 30 -30 #ffffff / 0.25
+}
+
+Tab:hover {
+  shadow: --buttonDefaultHoverGlow, --buttonDefaultBevel, --buttonDefaultShadow
+}
