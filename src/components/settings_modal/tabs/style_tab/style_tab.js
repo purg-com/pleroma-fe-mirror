@@ -357,6 +357,7 @@ export default {
         } else {
           unset(allEditedRules.value, getPath(component, directive))
         }
+        exports.updateOverallPreview()
       }
     })
 
@@ -380,6 +381,7 @@ export default {
         } else {
           unset(allEditedRules.value, getPath(component, directive))
         }
+        exports.updateOverallPreview()
       }
     })
 
