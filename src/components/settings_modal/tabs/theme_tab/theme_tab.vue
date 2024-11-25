@@ -958,6 +958,7 @@
             :separate-inset="shadowSelected === 'avatar' || shadowSelected === 'avatarStatus'"
             :fallback="currentShadowFallback"
             :static-vars="previewTheme.colors"
+            :compact="true"
           />
         </div>
         <div
