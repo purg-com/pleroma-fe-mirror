@@ -298,7 +298,7 @@ export default {
       }
 
       if (hasChildren) {
-        acc._children = acc._children ?? {}
+        output._children = output._children ?? {}
         const {
           component: cComponent,
           variant: cVariant = 'normal',
@@ -307,7 +307,7 @@ export default {
         } = child
 
         const cPath = `${cComponent}.${cVariant}.${normalizeStates(cState)}`
-        set(output._children, cPath, directives)
+        set(output._children, cPath, { directives })
       } else {
         output.directives = parent.directives
       }
@@ -628,14 +628,7 @@ export default {
 
       onPalettesUpdate(palettesIn.map(x => ({ name: x.variant, ...x.directives })))
 
-      Object.keys(allEditedRules.value).forEach((k) => delete allEditedRules.value[k])
-
-      rules.forEach(rule => {
-        rulesToEditorFriendly(
-          [rule],
-          allEditedRules.value
-        )
-      })
+      allEditedRules.value = rulesToEditorFriendly(rules)
 
       exports.updateOverallPreview()
     }
