@@ -448,6 +448,8 @@ const interfaceMod = {
         )
         state.paletteNameUsed = palette.nameUsed
         state.paletteDataUsed = palette.dataUsed
+        state.paletteDataUsed.link = state.paletteDataUsed.link || state.paletteDataUsed.accent
+        state.paletteDataUsed.accent = state.paletteDataUsed.accent || state.paletteDataUsed.link
         if (Array.isArray(state.paletteDataUsed)) {
           const [
             name,
@@ -460,7 +462,18 @@ const interfaceMod = {
             cBlue = '#0000FF',
             cOrange = '#E3FF00'
           ] = palette.dataUsed
-          state.paletteDataUsed = { name, bg, fg, text, link, cRed, cBlue, cGreen, cOrange }
+          state.paletteDataUsed = {
+            name,
+            bg,
+            fg,
+            text,
+            link,
+            accent: link,
+            cRed,
+            cBlue,
+            cGreen,
+            cOrange
+          }
         }
         console.debug('Palette data used', palette.dataUsed)
 
