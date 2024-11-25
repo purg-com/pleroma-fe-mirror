@@ -37,16 +37,23 @@
           {{ $t('status.sensitive_muted') }}
         </small>
         <small
+          v-if="muteBotStatuses && botStatus"
+          class="mute-thread"
+        >
+          {{ $t('status.bot_muted') }}
+        </small>
+        <small
           v-if="showReasonMutedThread"
           class="mute-thread"
         >
-          {{ $t('status.thread_muted') }}
-        </small>
-        <small
-          v-if="showReasonMutedThread && muteWordHits.length > 0"
-          class="mute-thread"
-        >
-          {{ $t('status.thread_muted_and_words') }}
+          <span>
+            {{ $t('status.thread_muted') }}
+          </span>
+          <span
+            v-if="muteWordHits.length > 0"
+          >
+            {{ $t('status.thread_muted_and_words') }}
+          </span>
         </small>
         <small
           class="mute-words"
