@@ -34,7 +34,8 @@ library.add(
 const AppearanceTab = {
   data () {
     return {
-      availableStyles: [],
+      availableThemesV3: [],
+      availableThemesV2: [],
       bundledPalettes: [],
       compilationCache: {},
       fileImporter: newImporter({
@@ -108,13 +109,13 @@ const AppearanceTab = {
     updateIndex('style').then(styles => {
       styles.forEach(([key, stylePromise]) => stylePromise.then(data => {
         const meta = data.find(x => x.component === '@meta')
-        this.availableStyles.push({ key, data, name: meta.directives.name, version: 'v3' })
+        this.availableThemesV3.push({ key, data, name: meta.directives.name, version: 'v3' })
       }))
     })
 
     updateIndex('theme').then(themes => {
       themes.forEach(([key, themePromise]) => themePromise.then(data => {
-        this.availableStyles.push({ key, data, name: data.name, version: 'v2' })
+        this.availableThemesV2.push({ key, data, name: data.name, version: 'v2' })
       }))
     })
 
@@ -169,6 +170,12 @@ const AppearanceTab = {
     })
   },
   computed: {
+    availableStyles () {
+      return [
+        ...this.availableThemesV3,
+        ...this.availableThemesV2
+      ]
+    },
     availablePalettes () {
       return [
         ...this.bundledPalettes,

@@ -275,7 +275,7 @@ export const getResourcesIndex = async (url, parser = JSON.parse) => {
     console.warn(`Custom resources at ${customUrl} unavailable`)
   }
 
-  const total = [...builtin, ...custom]
+  const total = [...custom, ...builtin]
   if (total.length === 0) {
     return Promise.reject(new Error(`Resource at ${url} and ${customUrl} completely unavailable. Panicking`))
   }
