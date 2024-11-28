@@ -339,6 +339,9 @@ const interfaceMod = {
           let fetchFunc = index[result.nameUsed]
           // Fallbacks
           if (!fetchFunc) {
+            if (resource === 'style' || resource === 'palette') {
+              return result
+            }
             const newName = Object.keys(index)[0]
             fetchFunc = index[newName]
             console.warn(`${capitalizedResource} with id '${state.styleNameUsed}' not found, trying back to '${newName}'`)
