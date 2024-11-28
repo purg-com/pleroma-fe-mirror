@@ -123,6 +123,8 @@ const setSettings = async ({ apiConfig, staticConfig, store }) => {
   }
 
   copyInstanceOption('theme')
+  copyInstanceOption('style')
+  copyInstanceOption('palette')
   copyInstanceOption('nsfwCensorImage')
   copyInstanceOption('background')
   copyInstanceOption('hidePostStats')

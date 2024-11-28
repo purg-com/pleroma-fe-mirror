@@ -331,7 +331,7 @@ const interfaceMod = {
         } else {
           result.nameUsed = name
 
-          if (result.nameUsed === 'stock') {
+          if (result.nameUsed == null) {
             result.dataUsed = null
             return result
           }
@@ -448,8 +448,10 @@ const interfaceMod = {
         )
         state.paletteNameUsed = palette.nameUsed
         state.paletteDataUsed = palette.dataUsed
-        state.paletteDataUsed.link = state.paletteDataUsed.link || state.paletteDataUsed.accent
-        state.paletteDataUsed.accent = state.paletteDataUsed.accent || state.paletteDataUsed.link
+        if (state.paletteDataUsed) {
+          state.paletteDataUsed.link = state.paletteDataUsed.link || state.paletteDataUsed.accent
+          state.paletteDataUsed.accent = state.paletteDataUsed.accent || state.paletteDataUsed.link
+        }
         if (Array.isArray(state.paletteDataUsed)) {
           const [
             name,

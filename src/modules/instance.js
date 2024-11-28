@@ -99,6 +99,8 @@ const defaultState = {
   sidebarRight: false,
   subjectLineBehavior: 'email',
   theme: 'pleroma-dark',
+  palette: null,
+  style: null,
   emojiReactionsScale: 0.5,
   textSize: '14px',
   emojiSize: '2.2rem',
