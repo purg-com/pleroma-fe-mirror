@@ -67,6 +67,9 @@ const SettingsModalContent = {
     },
     expertLevel () {
       return this.$store.state.config.expertLevel
+    },
+    isMobileLayout () {
+      return this.$store.state.interface.layoutType === 'mobile'
     }
   },
   methods: {
