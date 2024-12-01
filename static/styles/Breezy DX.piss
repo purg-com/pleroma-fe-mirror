@@ -6,28 +6,29 @@
 }
 
 @palette.Dark {
-  bg: #121a24;
-  fg: #182230;
-  text: #b9b9ba;
-  link: #d8a070;
-  accent: #d8a070;
-  cRed: #FF0000;
-  cBlue: #0095ff;
-  cGreen: #0fa00f;
-  cOrange: #ffa500;
+  bg: #292C32;
+  fg: #292C32;
+  text: #ffffff;
+  link: #1CA4F3;
+  accent: #1CA4F3;
+  cRed: #f41a51;
+  cBlue: #1CA4F3;
+  cGreen: #1af46e;
+  cOrange: #f4af1a;
 }
 
 @palette.Light {
-  bg: #f2f6f9;
-  fg: #d6dfed;
-  text: #304055;
+  bg: #EFF0F2;
+  fg: #EFF0F2;
+  text: #1B1F22;
   underlay: #5d6086;
-  accent: #f55b1b;
-  cBlue: #0095ff;
-  cRed: #d31014;
-  cGreen: #0fa00f;
-  cOrange: #ffa500;
+  accent: #1CA4F3;
+  cBlue: #1CA4F3;
+  cRed: #f41a51;
+  cGreen: #1af46e;
+  cOrange: #f4af1a;
   border: #d8e6f9;
+  link: #1CA4F3;
 }
 
 Root {
@@ -36,7 +37,7 @@ Root {
   --buttonDefaultFocusGlow: shadow | inset 0 0 0 1 --accent / 1;
   --buttonDefaultShadow: shadow | inset 0 0 0 1 --text / 0.35, 0 5 5 -5 #000000 / 0.35;
   --buttonDefaultBevel: shadow | inset 0 14 14 -14 #FFFFFF / 0.1;
-  --buttonPressedBevel: shadow | inset 0 -20 20 -20 #000000 / 0.05, inset 0 20 0 80 --accent / 0.2;
+  --buttonPressedBevel: shadow | inset 0 -20 20 -20 #000000 / 0.05;
   --defaultInputBevel: shadow | inset 0 0 0 1 --text / 0.35;
   --defaultInputHoverGlow: shadow | 0 0 0 1 --accent / 1;
   --defaultInputFocusGlow: shadow | 0 0 0 1 --link / 1;
@@ -48,6 +49,14 @@ Button:disabled {
 
 Button:hover {
   shadow: --buttonDefaultHoverGlow, --buttonDefaultBevel, --buttonDefaultShadow
+}
+
+Button:toggled {
+  background: $blend(--bg 0.8 --accent)
+}
+
+Button:pressed {
+  background: $blend(--bg 0.8 --accent)
 }
 
 Input {
