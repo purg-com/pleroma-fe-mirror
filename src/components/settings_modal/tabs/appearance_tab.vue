@@ -123,10 +123,11 @@
                 :style="{ backgroundColor: p[c], border: '1px solid ' + (p[c] ?? 'var(--text)') }"
               />
             </button>
-            <h4>
+            <h4 v-if="expertLevel > 0">
               {{ $t('settings.style.themes3.palette.user') }}
             </h4>
             <PaletteEditor
+              v-if="expertLevel > 0"
               class="userPalette"
               v-model="userPalette"
               :compact="true"

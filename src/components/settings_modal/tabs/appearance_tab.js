@@ -119,6 +119,8 @@ const AppearanceTab = {
       }))
     })
 
+    this.userPalette = this.$store.state.interface.paletteDataUsed || {}
+
     updateIndex('palette').then(bundledPalettes => {
       bundledPalettes.forEach(([key, palettePromise]) => palettePromise.then(v => {
         let palette
@@ -140,10 +142,6 @@ const AppearanceTab = {
           palette = { key, ...v }
         }
         this.bundledPalettes.push(palette)
-
-        if (this.isPaletteActive(key)) {
-          this.userPalette = palette
-        }
       }))
     })
 
@@ -169,7 +167,15 @@ const AppearanceTab = {
       })
     })
   },
+  watch: {
+    paletteDataUsed () {
+      this.userPalette = this.paletteDataUsed || {}
+    }
+  },
   computed: {
+    paletteDataUsed () {
+      return this.$store.state.interface.paletteDataUsed
+    },
     availableStyles () {
       return [
         ...this.availableThemesV3,
@@ -184,11 +190,6 @@ const AppearanceTab = {
     },
     stylePalettes () {
       const ruleset = this.$store.state.interface.styleDataUsed || []
-      console.log(
-        'ASR',
-        this.$store.state.interface.paletteDataUsed,
-        this.$store.state.interface.styleDataUsed
-      )
       if (!ruleset && ruleset.length === 0) return
       const meta = ruleset.find(x => x.component === '@meta')
       const result = ruleset.filter(x => x.component.startsWith('@palette'))
