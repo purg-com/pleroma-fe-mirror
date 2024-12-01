@@ -130,7 +130,7 @@
 
         &:not(.active) {
           margin-top: 0;
-          margin-left: 20%;
+          margin-left: 1.5em;
         }
 
         @media all and (max-width: 800px) {
@@ -138,6 +138,11 @@
           padding-right: calc(0.25em + 200px);
           margin-right: calc(0.25em - 200px);
           margin-left: 0.25em;
+
+          &:not(.active) {
+            margin-top: 0;
+            margin-left: 0.5em;
+          }
 
           .text {
             display: none;
