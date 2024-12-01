@@ -31,10 +31,13 @@
     }
 
     .select-multiple {
+      margin-top: 1em;
       display: flex;
+      flex-direction: column;
 
       .option-list {
         margin: 0;
+        margin-top: 0.5em;
         padding-left: 0.5em;
       }
     }
