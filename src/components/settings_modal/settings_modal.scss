@@ -76,6 +76,23 @@
     }
   }
 
+  &.-mobile {
+    .setting-list,
+    .option-list {
+      padding-left: 0.25em;
+
+      > li {
+        margin: 1em 0;
+        line-height: 1.5em;
+        vertical-align: center;
+      }
+
+      &.two-column {
+        column-count: 1;
+      }
+    }
+  }
+
   &.peek {
     .settings-modal-panel {
       /* Explanation:
