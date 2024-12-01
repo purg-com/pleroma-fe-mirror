@@ -168,6 +168,25 @@ const updatePalette = (paletteKey, value) => {
         grid-column: 1 / span 2;
       }
     }
+
+    .-mobile & {
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(10, 1fr) auto;
+
+      .palette-import-button {
+        grid-column: 1;
+      }
+
+      .palette-export-button {
+        grid-column: 1;
+      }
+
+      &.-apply {
+        .palette-apply-button {
+          grid-column: 1;
+        }
+      }
+    }
   }
 }
 </style>

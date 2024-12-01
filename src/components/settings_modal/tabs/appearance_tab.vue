@@ -93,15 +93,19 @@
               :class="{ toggled: isPaletteActive(p.key) }"
               @click="() => setPalette(p.key, p)"
             >
-              <label>
-                {{ p.name }}
-              </label>
-              <span
-                v-for="c in palettesKeys"
-                :key="c"
-                class="palette-square"
-                :style="{ backgroundColor: p[c], border: '1px solid ' + (p[c] ?? 'var(--text)') }"
-              />
+              <div class="palette-label">
+                <label>
+                  {{ p.name }}
+                </label>
+              </div>
+              <div class="palette-preview">
+                <span
+                  v-for="c in palettesKeys"
+                  :key="c"
+                  class="palette-square"
+                  :style="{ backgroundColor: p[c], border: '1px solid ' + (p[c] ?? 'var(--text)') }"
+                />
+              </div>
             </button>
             <h4 v-if="stylePalettes?.length > 0">
               {{ $t('settings.style.themes3.palette.style') }}
@@ -113,15 +117,19 @@
               :class="{ toggled: isPaletteActive(p.key) }"
               @click="() => setPaletteCustom(p)"
             >
-              <label>
-                {{ p.name ?? $t('settings.style.themes3.palette.user') }}
-              </label>
-              <span
-                v-for="c in palettesKeys"
-                :key="c"
-                class="palette-square"
-                :style="{ backgroundColor: p[c], border: '1px solid ' + (p[c] ?? 'var(--text)') }"
-              />
+              <div class="palette-label">
+                <label>
+                  {{ p.name ?? $t('settings.style.themes3.palette.user') }}
+                </label>
+              </div>
+              <div class="palette-preview">
+                <span
+                  v-for="c in palettesKeys"
+                  :key="c"
+                  class="palette-square"
+                  :style="{ backgroundColor: p[c], border: '1px solid ' + (p[c] ?? 'var(--text)') }"
+                />
+              </div>
             </button>
             <h4 v-if="expertLevel > 0">
               {{ $t('settings.style.themes3.palette.user') }}
