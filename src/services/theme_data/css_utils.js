@@ -82,7 +82,7 @@ export const getCssRules = (rules, debug) => rules.map(rule => {
           `
         }
         if (v === 'transparent') {
-          if (rule.component === 'Root') return []
+          if (rule.component === 'Root') return null
           return [
             rule.directives.backgroundNoCssColor !== 'yes' ? ('background-color: ' + v) : '',
             '  --background: ' + v
@@ -114,7 +114,7 @@ export const getCssRules = (rules, debug) => rules.map(rule => {
       }
       default:
         if (k.startsWith('--')) {
-          const [type, value] = v.split('|').map(x => x.trim()) // woah, Extreme!
+          const [type, value] = v.split('|').map(x => x.trim())
           switch (type) {
             case 'color': {
               const color = rule.dynamicVars[k]
@@ -127,21 +127,20 @@ export const getCssRules = (rules, debug) => rules.map(rule => {
             case 'generic':
               return k + ': ' + value
             default:
-              return ''
+              return null
           }
         }
-        return ''
+        return null
     }
-  }).filter(x => x).map(x => '  ' + x).join(';\n')
+  }).filter(x => x).map(x => '  ' + x + ';').join('\n')
 
   return [
     header,
-    directives + ';',
+    directives,
     (rule.component === 'Text' && rule.state.indexOf('faint') < 0 && rule.directives.textNoCssColor !== 'yes') ? '  color: var(--text);' : '',
-    '',
     virtualDirectives,
     footer
-  ].join('\n')
+  ].filter(x => x).join('\n')
 }).filter(x => x)
 
 export const getScopedVersion = (rules, newScope) => {

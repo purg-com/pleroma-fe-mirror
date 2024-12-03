@@ -122,16 +122,28 @@ export const applyTheme = (input, onFinish = (data) => {}, debug) => {
   const eagerStyles = createStyleSheet(EAGER_STYLE_ID)
   const lazyStyles = createStyleSheet(LAZY_STYLE_ID)
 
+  const insertRule = (styles, rule) => {
+    if (rule.indexOf('webkit') >= 0) {
+      try {
+        styles.sheet.insertRule(rule, 'index-max')
+        styles.rules.push(rule)
+      } catch (e) {
+        console.warn('Can\'t insert rule due to lack of support', e)
+      }
+    } else {
+      styles.sheet.insertRule(rule, 'index-max')
+      styles.rules.push(rule)
+    }
+  }
+
   const { lazyProcessFunc } = generateTheme(
     input,
     {
       onNewRule (rule, isLazy) {
         if (isLazy) {
-          lazyStyles.sheet.insertRule(rule, 'index-max')
-          lazyStyles.rules.push(rule)
+          insertRule(lazyStyles, rule)
         } else {
-          eagerStyles.sheet.insertRule(rule, 'index-max')
-          eagerStyles.rules.push(rule)
+          insertRule(eagerStyles, rule)
         }
       },
       onEagerFinished () {
