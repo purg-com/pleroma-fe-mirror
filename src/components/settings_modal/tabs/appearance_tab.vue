@@ -54,7 +54,7 @@
           :key="style.key"
           :data-theme-key="style.key"
           class="button-default theme-preview"
-          :class="{ toggled: isThemeActive(style.key) }"
+          :class="{ toggled: isStyleActive(style.key) }"
           @click="style.version === 'v2' ? setTheme(style.key) : setStyle(style.key)"
         >
           <!-- eslint-disable vue/no-v-text-v-html-on-component -->
@@ -114,7 +114,7 @@
               v-for="p in stylePalettes || []"
               :key="p.name"
               class="btn button-default palette-entry"
-              :class="{ toggled: isPaletteActive(p.key) }"
+              :class="{ toggled: isPaletteActive('style.' + p.key) }"
               @click="() => setPaletteCustom(p)"
             >
               <div class="palette-label">

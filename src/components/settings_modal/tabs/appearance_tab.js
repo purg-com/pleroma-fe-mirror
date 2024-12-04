@@ -27,6 +27,10 @@ import {
 
 import Preview from './theme_tab/theme_preview.vue'
 
+// helper for debugging
+// eslint-disable-next-line no-unused-vars
+const toValue = (x) => JSON.parse(JSON.stringify(x === undefined ? 'null' : x))
+
 library.add(
   faGlobe
 )
@@ -317,16 +321,13 @@ const AppearanceTab = {
       }
     },
     isThemeActive (key) {
-      const { theme } = this.mergedConfig
-      return key === theme
+      return key === (this.mergedConfig.theme || this.$store.state.instance.theme)
     },
     isStyleActive (key) {
-      const { style } = this.mergedConfig
-      return key === style
+      return key === (this.mergedConfig.style || this.$store.state.instance.style)
     },
     isPaletteActive (key) {
-      const { palette } = this.mergedConfig
-      return key === palette
+      return key === (this.mergedConfig.palette || this.$store.state.instance.palette)
     },
     setStyle (name) {
       this.$store.dispatch('setStyle', name)
