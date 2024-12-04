@@ -490,6 +490,8 @@ const interfaceMod = {
         )
         state.styleNameUsed = style.nameUsed
         state.styleDataUsed = style.dataUsed
+        state.themeDataUsed = null
+        state.themeNameUsed = null
       } else {
         const theme = await getData(
           'theme',
@@ -497,8 +499,12 @@ const interfaceMod = {
           userThemeV2Source || userThemeV2Snapshot,
           userThemeV2Name || instanceThemeV2Name
         )
-        // themeNameUsed = theme.nameUsed
+        state.themeNameUsed = theme.nameUsed
         state.themeDataUsed = theme.dataUsed
+        state.styleNameUsed = null
+        state.styleDataUsed = null
+        state.paletteNameUsed = null
+        state.paletteDataUsed = null
       }
     },
     async applyTheme (
@@ -518,10 +524,6 @@ const interfaceMod = {
         return commit('setThemeApplied')
       }
       await dispatch('getThemeData')
-
-      // commit('setOption', { name: 'palette', value: paletteNameUsed })
-      // commit('setOption', { name: 'style', value: styleNameUsed })
-      // commit('setOption', { name: 'theme', value: themeNameUsed })
 
       const paletteIss = (() => {
         if (!state.paletteDataUsed) return null
