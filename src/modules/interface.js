@@ -3,12 +3,17 @@ import { CURRENT_VERSION, generatePreset } from 'src/services/theme_data/theme_d
 import { convertTheme2To3 } from 'src/services/theme_data/theme2_to_theme3.js'
 import { deserialize } from '../services/theme_data/iss_deserializer.js'
 
+// helper for debugging
+// eslint-disable-next-line no-unused-vars
+const toValue = (x) => JSON.parse(JSON.stringify(x === undefined ? 'null' : x))
+
 const defaultState = {
   localFonts: null,
   themeApplied: false,
   themeVersion: 'v3',
   styleNameUsed: null,
   styleDataUsed: null,
+  useStylePalette: false, // hack for applying styles from appearance tab
   paletteNameUsed: null,
   paletteDataUsed: null,
   themeNameUsed: null,
@@ -261,21 +266,29 @@ const interfaceMod = {
         return Promise.resolve({})
       }
     },
-    setStyle ({ dispatch, commit }, value) {
+    setStyle ({ dispatch, commit, state }, value) {
       dispatch('resetThemeV3')
       dispatch('resetThemeV2')
+      dispatch('resetThemeV3Palette')
 
       commit('setOption', { name: 'style', value })
+      state.useStylePalette = true
 
-      dispatch('applyTheme', { recompile: true })
+      dispatch('applyTheme', { recompile: true }).then(() => {
+        state.useStylePalette = false
+      })
     },
-    setStyleCustom ({ dispatch, commit }, value) {
+    setStyleCustom ({ dispatch, commit, state }, value) {
       dispatch('resetThemeV3')
       dispatch('resetThemeV2')
+      dispatch('resetThemeV3Palette')
 
       commit('setOption', { name: 'styleCustomData', value })
 
-      dispatch('applyTheme', { recompile: true })
+      state.useStylePalette = true
+      dispatch('applyTheme', { recompile: true }).then(() => {
+        state.useStylePalette = false
+      })
     },
     async fetchThemesIndex ({ commit, state }) {
       try {
@@ -443,14 +456,47 @@ const interfaceMod = {
       console.debug('Version used', majorVersionUsed)
 
       if (majorVersionUsed === 'v3') {
+        state.themeDataUsed = null
+        state.themeNameUsed = null
+
+        const style = await getData(
+          'style',
+          stylesIndex,
+          userStyleCustomData,
+          userStyleName || instanceStyleName
+        )
+        state.styleNameUsed = style.nameUsed
+        state.styleDataUsed = style.dataUsed
+
+        let firstStylePaletteName = null
+        style
+          .dataUsed
+          ?.filter(x => x.component === '@palette')
+          .map(x => {
+            const cleanDirectives = Object.fromEntries(
+              Object
+                .entries(x.directives)
+                .filter(([k, v]) => k)
+            )
+
+            return { name: x.variant, ...cleanDirectives }
+          })
+          .forEach(palette => {
+            const key = 'style.' + palette.name.toLowerCase().replace(/ /, '_')
+            if (!firstStylePaletteName) firstStylePaletteName = key
+            palettesIndex[key] = () => Promise.resolve(palette)
+          })
+
         const palette = await getData(
           'palette',
           palettesIndex,
           userPaletteCustomData,
-          userPaletteName || instancePaletteName
+          state.useStylePalette ? firstStylePaletteName : (userPaletteName || instancePaletteName)
         )
+
         state.paletteNameUsed = palette.nameUsed
         state.paletteDataUsed = palette.dataUsed
+
         if (state.paletteDataUsed) {
           state.paletteDataUsed.link = state.paletteDataUsed.link || state.paletteDataUsed.accent
           state.paletteDataUsed.accent = state.paletteDataUsed.accent || state.paletteDataUsed.link
@@ -481,18 +527,12 @@ const interfaceMod = {
           }
         }
         console.debug('Palette data used', palette.dataUsed)
-
-        const style = await getData(
-          'style',
-          stylesIndex,
-          userStyleCustomData,
-          userStyleName || instanceStyleName
-        )
-        state.styleNameUsed = style.nameUsed
-        state.styleDataUsed = style.dataUsed
-        state.themeDataUsed = null
-        state.themeNameUsed = null
       } else {
+        state.styleNameUsed = null
+        state.styleDataUsed = null
+        state.paletteNameUsed = null
+        state.paletteDataUsed = null
+
         const theme = await getData(
           'theme',
           themesIndex,
@@ -501,10 +541,6 @@ const interfaceMod = {
         )
         state.themeNameUsed = theme.nameUsed
         state.themeDataUsed = theme.dataUsed
-        state.styleNameUsed = null
-        state.styleDataUsed = null
-        state.paletteNameUsed = null
-        state.paletteDataUsed = null
       }
     },
     async applyTheme (

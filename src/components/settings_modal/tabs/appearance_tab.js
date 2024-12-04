@@ -361,8 +361,27 @@ const AppearanceTab = {
             onlyNormalState: true
           })
         } else if (version === 'v3') {
+          const palette = input.find(x => x.component === '@palette')
+          let paletteRule
+          if (palette) {
+            const { directives } = palette
+            directives.link = directives.link || directives.accent
+            directives.accent = directives.accent || directives.link
+            paletteRule = {
+              component: 'Root',
+              directives: Object.fromEntries(
+                Object
+                  .entries(directives)
+                  .filter(([k, v]) => k && k !== 'name')
+                  .map(([k, v]) => ['--' + k, 'color | ' + v])
+              )
+            }
+          } else {
+            paletteRule = null
+          }
+
           theme3 = init({
-            inputRuleset: input,
+            inputRuleset: [...input, paletteRule].filter(x => x),
             ultimateBackgroundColor: '#000000',
             liteMode: true,
             debug: true,
