@@ -482,7 +482,7 @@ const interfaceMod = {
             return { name: x.variant, ...cleanDirectives }
           })
           .forEach(palette => {
-            const key = 'style.' + palette.name.toLowerCase().replace(/ /, '_')
+            const key = 'style.' + palette.name.toLowerCase().replace(/ /g, '_')
             if (!firstStylePaletteName) firstStylePaletteName = key
             palettesIndex[key] = () => Promise.resolve(palette)
           })
@@ -493,6 +493,10 @@ const interfaceMod = {
           userPaletteCustomData,
           state.useStylePalette ? firstStylePaletteName : (userPaletteName || instancePaletteName)
         )
+
+        if (state.useStylePalette) {
+          commit('setOption', { name: 'palette', value: firstStylePaletteName })
+        }
 
         state.paletteNameUsed = palette.nameUsed
         state.paletteDataUsed = palette.dataUsed

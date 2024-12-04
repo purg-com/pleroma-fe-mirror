@@ -141,11 +141,12 @@ const AppearanceTab = {
             cOrange = '#E3FF00'
           ] = v
           palette = { key, name, bg, fg, text, link, cRed, cBlue, cGreen, cOrange }
-          this.bundledPalettes.push()
         } else {
           palette = { key, ...v }
         }
-        this.bundledPalettes.push(palette)
+        if (!palette.key.startsWith('style.')) {
+          this.bundledPalettes.push(palette)
+        }
       }))
     })
 
@@ -214,6 +215,7 @@ const AppearanceTab = {
 
           const result = {
             name: `${meta.directives.name || this.$t('settings.style.themes3.palette.imported')}: ${variant}`,
+            key: `style.${variant.toLowerCase().replace(/ /g, '_')}`,
             bg,
             fg,
             text,

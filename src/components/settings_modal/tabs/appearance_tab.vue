@@ -114,8 +114,8 @@
               v-for="p in stylePalettes || []"
               :key="p.name"
               class="btn button-default palette-entry"
-              :class="{ toggled: isPaletteActive('style.' + p.key) }"
-              @click="() => setPaletteCustom(p)"
+              :class="{ toggled: isPaletteActive(p.key) }"
+              @click="() => setPalette(p.key, p)"
             >
               <div class="palette-label">
                 <label>
