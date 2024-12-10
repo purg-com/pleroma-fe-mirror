@@ -528,7 +528,7 @@ export default {
         })
       }
 
-      componentsMap.values().forEach(({ name }) => {
+      [...componentsMap.values()].forEach(({ name }) => {
         convert(name, allEditedRules.value[name])
       })
 
