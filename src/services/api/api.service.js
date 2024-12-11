@@ -68,8 +68,6 @@ const MASTODON_UNBLOCK_USER_URL = id => `/api/v1/accounts/${id}/unblock`
 const MASTODON_MUTE_USER_URL = id => `/api/v1/accounts/${id}/mute`
 const MASTODON_UNMUTE_USER_URL = id => `/api/v1/accounts/${id}/unmute`
 const MASTODON_REMOVE_USER_FROM_FOLLOWERS = id => `/api/v1/accounts/${id}/remove_from_followers`
-const MASTODON_SUBSCRIBE_USER = id => `/api/v1/pleroma/accounts/${id}/subscribe`
-const MASTODON_UNSUBSCRIBE_USER = id => `/api/v1/pleroma/accounts/${id}/unsubscribe`
 const MASTODON_USER_NOTE_URL = id => `/api/v1/accounts/${id}/note`
 const MASTODON_BOOKMARK_STATUS_URL = id => `/api/v1/statuses/${id}/bookmark`
 const MASTODON_UNBOOKMARK_STATUS_URL = id => `/api/v1/statuses/${id}/unbookmark`
@@ -275,6 +273,7 @@ const followUser = ({ id, credentials, ...options }) => {
   const url = MASTODON_FOLLOW_URL(id)
   const form = {}
   if (options.reblogs !== undefined) { form.reblogs = options.reblogs }
+  if (options.notify !== undefined) { form.notify = options.notify }
   return fetch(url, {
     body: JSON.stringify(form),
     headers: {
@@ -1180,14 +1179,6 @@ const unmuteUser = ({ id, credentials }) => {
   return promisedRequest({ url: MASTODON_UNMUTE_USER_URL(id), credentials, method: 'POST' })
 }
 
-const subscribeUser = ({ id, credentials }) => {
-  return promisedRequest({ url: MASTODON_SUBSCRIBE_USER(id), credentials, method: 'POST' })
-}
-
-const unsubscribeUser = ({ id, credentials }) => {
-  return promisedRequest({ url: MASTODON_UNSUBSCRIBE_USER(id), credentials, method: 'POST' })
-}
-
 const fetchBlocks = ({ maxId, credentials }) => {
   const query = new URLSearchParams({ with_relationships: true })
   if (maxId) {
@@ -1978,8 +1969,6 @@ const apiService = {
   fetchMutes,
   muteUser,
   unmuteUser,
-  subscribeUser,
-  unsubscribeUser,
   fetchBlocks,
   fetchOAuthTokens,
   revokeOAuthToken,
