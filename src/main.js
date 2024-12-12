@@ -70,6 +70,11 @@ const persistedStateOptions = {
     console.error('PleromaFE failed to initialize: ', e)
   }
 
+  window.splashError = e => splashError(i18n, e)
+  window.splashUpdate = key => {
+    document.querySelector('#status').textContent = i18n.global.t(key)
+  }
+
   try {
     let storageError
     const plugins = [pushNotifications]
