@@ -52,11 +52,19 @@ Button:hover {
 }
 
 Button:toggled {
-  background: $blend(--bg 0.8 --accent)
+  background: $blend(--bg 0.3 --accent)
 }
 
 Button:pressed {
   background: $blend(--bg 0.8 --accent)
+}
+
+Button:pressed:toggled {
+  background: $blend(--bg 0.2 --accent)
+}
+
+Button:toggled:hover {
+  background: $blend(--bg 0.3 --accent)
 }
 
 Input {
