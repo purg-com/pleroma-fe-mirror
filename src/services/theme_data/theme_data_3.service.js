@@ -567,6 +567,7 @@ export const init = ({
     lazy,
     eager,
     staticVars,
-    engineChecksum
+    engineChecksum,
+    themeChecksum: sum([lazy, eager])
   }
 }
