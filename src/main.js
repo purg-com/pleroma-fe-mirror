@@ -76,7 +76,9 @@ const persistedStateOptions = {
 
   window.splashError = e => splashError(i18n, e)
   window.splashUpdate = key => {
-    document.querySelector('#status').textContent = i18n.global.t(key)
+    if (document.querySelector('#status')) {
+      document.querySelector('#status').textContent = i18n.global.t(key)
+    }
   }
 
   try {
