@@ -185,7 +185,7 @@ export const defaultState = {
   closingDrawerMarksAsSeen: undefined, // instance default
   unseenAtTop: undefined, // instance default
   ignoreInactionableSeen: undefined, // instance default
-  useAbsoluteTimeFormat: undefined, // instance defualt
+  useAbsoluteTimeFormat: undefined, // instance default
   absoluteTimeFormatMinAge: undefined // instance default
 }
 

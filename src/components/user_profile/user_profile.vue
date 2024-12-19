@@ -142,9 +142,9 @@
       class="panel user-profile-placeholder"
     >
       <div class="panel-heading">
-        <div class="title">
+        <h1 class="title">
           {{ $t('settings.profile_tab') }}
-        </div>
+        </h1>
       </div>
       <div>
         <span v-if="error">{{ error }}</span>

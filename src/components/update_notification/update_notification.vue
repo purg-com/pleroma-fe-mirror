@@ -9,9 +9,9 @@
       :class="{ '-peek': !showingMore }"
     >
       <div class="panel-heading">
-        <span class="title">
+        <h1 class="title">
           {{ $t('update.big_update_title') }}
-        </span>
+        </h1>
       </div>
       <div class="panel-body">
         <div

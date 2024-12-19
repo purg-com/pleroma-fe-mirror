@@ -1,9 +1,9 @@
 <template>
   <div class="panel panel-default">
     <div class="panel-heading">
-      <div class="title">
+      <h1 class="title">
         {{ $t("nav.interactions") }}
-      </div>
+      </h1>
     </div>
     <tab-switcher
       ref="tabSwitcher"

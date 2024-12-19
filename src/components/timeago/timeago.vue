@@ -61,7 +61,7 @@ export default {
           })
         } else if (DateUtils.isSameMonth(this.timeAsDate, now)) {
           return new Intl.DateTimeFormat(this.browserLocale, {
-            hour: 'numeric',
+            month: 'short',
             day: 'numeric'
           })
         } else if (DateUtils.isSameYear(this.timeAsDate, now)) {

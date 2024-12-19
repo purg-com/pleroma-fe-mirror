@@ -7,9 +7,9 @@
     class="chat-list panel panel-default"
   >
     <div class="panel-heading -sticky">
-      <span class="title">
+      <h1 class="title">
         {{ $t("chats.chats") }}
-      </span>
+      </h1>
       <button
         class="button-default"
         @click="newChat"

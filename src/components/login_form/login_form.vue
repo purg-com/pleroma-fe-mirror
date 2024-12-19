@@ -3,7 +3,7 @@
     <!-- Default panel contents -->
 
     <div class="panel-heading">
-      {{ $t('login.login') }}
+      <h1 class="title">{{ $t('login.login') }}</h1>
     </div>
 
     <div class="panel-body">

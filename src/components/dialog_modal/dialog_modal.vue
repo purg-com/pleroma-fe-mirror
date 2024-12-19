@@ -8,9 +8,9 @@
       @click.stop=""
     >
       <div class="panel-heading dialog-modal-heading">
-        <div class="title">
+        <h1 class="title">
           <slot name="header" />
-        </div>
+        </h1>
       </div>
       <div class="panel-body dialog-modal-content">
         <slot name="default" />

@@ -1,9 +1,9 @@
 <template>
   <div class="Bookmark-folders panel panel-default">
     <div class="panel-heading">
-      <div class="title">
+      <h1 class="title">
         {{ $t('nav.bookmark_folders') }}
-      </div>
+      </h1>
       <router-link
         :to="{ name: 'bookmark-folder-new' }"
         class="button-default btn new-folder-button"

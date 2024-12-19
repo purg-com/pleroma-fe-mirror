@@ -9,7 +9,9 @@
       v-if="isExpanded"
       class="panel-heading conversation-heading -sticky"
     >
-      <span class="title"> {{ $t('timeline.conversation') }} </span>
+      <h1 class="title">
+        {{ $t('timeline.conversation') }}
+      </h1>
       <button
         v-if="collapsable"
         class="button-unstyled -link"
