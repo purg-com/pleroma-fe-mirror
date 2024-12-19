@@ -409,13 +409,14 @@
 
   .preview-heading {
     display: flex;
-    padding-left: 0.5em;
+    flex-wrap: wrap;
   }
 
   .preview-toggle {
-    flex: 1;
+    flex: 10 0 auto;
     cursor: pointer;
     user-select: none;
+    padding-left: 0.5em;
 
     &:hover {
       text-decoration: underline;
@@ -446,6 +447,7 @@
   }
 
   .reply-or-quote-selector {
+    flex: 1 0 auto;
     margin-bottom: 0.5em;
     display: grid;
     grid-template-columns: 1fr 1fr;
