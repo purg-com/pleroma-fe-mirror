@@ -30,6 +30,9 @@
           <span>{{ $t('post_status.scope_notice.public') }}</span>
           <a
             class="fa-scale-110 fa-old-padding dismiss"
+            :title="$t('post_status.scope_notice_dismiss')"
+            role="button"
+            tabindex="0"
             @click.prevent="dismissScopeNotice()"
           >
             <FAIcon icon="times" />
@@ -42,6 +45,9 @@
           <span>{{ $t('post_status.scope_notice.unlisted') }}</span>
           <a
             class="fa-scale-110 fa-old-padding dismiss"
+            :title="$t('post_status.scope_notice_dismiss')"
+            role="button"
+            tabindex="0"
             @click.prevent="dismissScopeNotice()"
           >
             <FAIcon icon="times" />
@@ -54,6 +60,9 @@
           <span>{{ $t('post_status.scope_notice.private') }}</span>
           <a
             class="fa-scale-110 fa-old-padding dismiss"
+            :title="$t('post_status.scope_notice_dismiss')"
+            role="button"
+            tabindex="0"
             @click.prevent="dismissScopeNotice()"
           >
             <FAIcon icon="times" />
@@ -117,28 +126,61 @@
             class="preview-status"
           />
         </div>
+        <div
+          v-if="quotable"
+          role="radiogroup"
+          class="btn-group reply-or-quote-selector"
+        >
+          <button
+            :id="`reply-or-quote-option-${randomSeed}-reply`"
+            class="btn button-default reply-or-quote-option"
+            :class="{ toggled: !newStatus.quoting }"
+            tabindex="0"
+            role="radio"
+            :aria-labelledby="`reply-or-quote-option-${randomSeed}-reply`"
+            :aria-checked="!newStatus.quoting"
+            @click="newStatus.quoting = false"
+          >
+            {{ $t('post_status.reply_option') }}
+          </button>
+          <button
+            :id="`reply-or-quote-option-${randomSeed}-quote`"
+            class="btn button-default reply-or-quote-option"
+            :class="{ toggled: newStatus.quoting }"
+            tabindex="0"
+            role="radio"
+            :aria-labelledby="`reply-or-quote-option-${randomSeed}-quote`"
+            :aria-checked="newStatus.quoting"
+            @click="newStatus.quoting = true"
+          >
+            {{ $t('post_status.quote_option') }}
+          </button>
+        </div>
         <EmojiInput
           v-if="!disableSubject && (newStatus.spoilerText || alwaysShowSubject)"
           v-model="newStatus.spoilerText"
           enable-emoji-picker
           :suggest="emojiSuggestor"
-          class="form-control"
+          class="input form-control"
         >
-          <input
-            v-model="newStatus.spoilerText"
-            type="text"
-            :placeholder="$t('post_status.content_warning')"
-            :disabled="posting && !optimisticPosting"
-            size="1"
-            class="form-post-subject"
-          >
+          <template #default="inputProps">
+            <input
+              v-model="newStatus.spoilerText"
+              type="text"
+              :placeholder="$t('post_status.content_warning')"
+              :disabled="posting && !optimisticPosting"
+              v-bind="propsToNative(inputProps)"
+              size="1"
+              class="input form-post-subject"
+            >
+          </template>
         </EmojiInput>
         <EmojiInput
           ref="emoji-input"
           v-model="newStatus.status"
           :suggest="emojiUserSuggestor"
           :placement="emojiPickerPlacement"
-          class="form-control main-input"
+          class="input form-control main-input"
           enable-emoji-picker
           hide-emoji-button
           :newline-on-ctrl-enter="submitOnEnter"
@@ -148,29 +190,32 @@
           @sticker-upload-failed="uploadFailed"
           @shown="handleEmojiInputShow"
         >
-          <textarea
-            ref="textarea"
-            v-model="newStatus.status"
-            :placeholder="placeholder || $t('post_status.default')"
-            rows="1"
-            cols="1"
-            :disabled="posting && !optimisticPosting"
-            class="form-post-body"
-            :class="{ 'scrollable-form': !!maxHeight }"
-            @keydown.exact.enter="submitOnEnter && postStatus($event, newStatus)"
-            @keydown.meta.enter="postStatus($event, newStatus)"
-            @keydown.ctrl.enter="!submitOnEnter && postStatus($event, newStatus)"
-            @input="resize"
-            @compositionupdate="resize"
-            @paste="paste"
-          />
-          <p
-            v-if="hasStatusLengthLimit"
-            class="character-counter faint"
-            :class="{ error: isOverLengthLimit }"
-          >
-            {{ charactersLeft }}
-          </p>
+          <template #default="inputProps">
+            <textarea
+              ref="textarea"
+              v-model="newStatus.status"
+              :placeholder="placeholder || $t('post_status.default')"
+              rows="1"
+              cols="1"
+              :disabled="posting && !optimisticPosting"
+              class="input form-post-body"
+              :class="{ 'scrollable-form': !!maxHeight }"
+              v-bind="propsToNative(inputProps)"
+              @keydown.exact.enter="submitOnEnter && postStatus($event, newStatus)"
+              @keydown.meta.enter="postStatus($event, newStatus)"
+              @keydown.ctrl.enter="!submitOnEnter && postStatus($event, newStatus)"
+              @input="resize"
+              @compositionupdate="resize"
+              @paste="paste"
+            />
+            <p
+              v-if="hasStatusLengthLimit"
+              class="character-counter faint"
+              :class="{ error: isOverLengthLimit }"
+            >
+              {{ charactersLeft }}
+            </p>
+          </template>
         </EmojiInput>
         <div
           v-if="!disableScopeSelector"
@@ -192,7 +237,8 @@
             <Select
               id="post-content-type"
               v-model="newStatus.contentType"
-              class="form-control"
+              class="input form-control"
+              :attrs="{ 'aria-label': $t('post_status.content_type_selection') }"
             >
               <option
                 v-for="postFormat in postFormats"
@@ -265,12 +311,10 @@
         >
           {{ $t('post_status.post') }}
         </button>
-        <!-- touchstart is used to keep the OSK at the same position after a message send -->
         <button
           v-else
           :disabled="uploadingFiles || disableSubmit"
           class="btn button-default"
-          @touchstart.stop.prevent="postStatus($event, newStatus)"
           @click.stop.prevent="postStatus($event, newStatus)"
         >
           {{ $t('post_status.post') }}
@@ -331,8 +375,6 @@
 <script src="./post_status_form.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .post-status-form {
   position: relative;
 
@@ -393,23 +435,23 @@
 
   .preview-error {
     font-style: italic;
-    color: $fallback--faint;
-    color: var(--faint, $fallback--faint);
+    color: var(--textFaint);
   }
 
   .preview-status {
-    border: 1px solid $fallback--border;
-    border: 1px solid var(--border, $fallback--border);
-    border-radius: $fallback--tooltipRadius;
-    border-radius: var(--tooltipRadius, $fallback--tooltipRadius);
+    border: 1px solid var(--border);
+    border-radius: var(--roundness);
     padding: 0.5em;
     margin: 0;
   }
 
+  .reply-or-quote-selector {
+    margin-bottom: 0.5em;
+  }
+
   .text-format {
     .only-format {
-      color: $fallback--faint;
-      color: var(--faint, $fallback--faint);
+      color: var(--textFaint);
     }
   }
 
@@ -455,31 +497,6 @@
     padding: 0 0.1em;
     display: flex;
     align-items: center;
-
-    &.selected,
-    &:hover {
-      // needs to be specific to override icon default color
-      svg,
-      i,
-      label {
-        color: $fallback--lightText;
-        color: var(--lightText, $fallback--lightText);
-      }
-    }
-
-    &.disabled {
-      svg,
-      i {
-        cursor: not-allowed;
-        color: $fallback--icon;
-        color: var(--btnDisabledText, $fallback--icon);
-
-        &:hover {
-          color: $fallback--icon;
-          color: var(--btnDisabledText, $fallback--icon);
-        }
-      }
-    }
   }
 
   .error {
@@ -532,7 +549,7 @@
     line-height: 1.85;
   }
 
-  .form-post-body {
+  .input.form-post-body {
     // TODO: make a resizable textarea component?
     box-sizing: content-box; // needed for easier computation of dynamic size
     overflow: hidden;
@@ -543,6 +560,7 @@
     height: calc(var(--post-line-height) * 1em);
     min-height: calc(var(--post-line-height) * 1em);
     resize: none;
+    background: transparent;
 
     &.scrollable-form {
       overflow-y: auto;
@@ -561,8 +579,7 @@
     margin: 0 0.5em;
 
     &.error {
-      color: $fallback--cRed;
-      color: var(--cRed, $fallback--cRed);
+      color: var(--cRed);
     }
   }
 
@@ -585,14 +602,10 @@
     align-items: center;
     justify-content: center;
     opacity: 0.6;
-    color: $fallback--text;
-    color: var(--text, $fallback--text);
-    background-color: $fallback--bg;
-    background-color: var(--bg, $fallback--bg);
-    border-radius: $fallback--tooltipRadius;
-    border-radius: var(--tooltipRadius, $fallback--tooltipRadius);
-    border: 2px dashed $fallback--text;
-    border: 2px dashed var(--text, $fallback--text);
+    color: var(--text);
+    background-color: var(--bg);
+    border-radius: var(--roundness);
+    border: 2px dashed var(--text);
   }
 }
 </style>

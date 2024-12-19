@@ -10,6 +10,7 @@
       <input
         ref="search"
         v-model="query"
+        class="input"
         :placeholder="$t('lists.search')"
         @input="onInput"
       >
@@ -27,8 +28,6 @@
 
 <script src="./lists_user_search.js"></script>
 <style lang="scss">
-@import "../../variables";
-
 .ListsUserSearch {
   .input-wrap {
     display: flex;

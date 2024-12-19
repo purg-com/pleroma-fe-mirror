@@ -30,7 +30,7 @@
           <div v-else>
             <p
               v-if="passwordResetRequested"
-              class="password-reset-required error"
+              class="alert password-reset-required error"
             >
               {{ $t('password_reset.password_reset_required') }}
             </p>
@@ -43,7 +43,7 @@
                 v-model="user.email"
                 :disabled="isPending"
                 :placeholder="$t('password_reset.placeholder')"
-                class="form-control"
+                class="input form-control"
                 type="input"
               >
             </div>
@@ -77,8 +77,6 @@
 
 <script src="./password_reset.js"></script>
 <style lang="scss">
-@import "../../variables";
-
 .password-reset-form {
   display: flex;
   flex-direction: column;
@@ -115,11 +113,6 @@
   .alert {
     padding: 0.5em;
     margin: 0.3em 0 1em;
-  }
-
-  .password-reset-required {
-    background-color: var(--alertError, $fallback--alertError);
-    padding: 10px 0;
   }
 
   .notice-dismissible {

@@ -107,7 +107,10 @@ export default {
       this.searchBarHidden = hidden
     },
     openSettingsModal () {
-      this.$store.dispatch('openSettingsModal')
+      this.$store.dispatch('openSettingsModal', 'user')
+    },
+    openAdminModal () {
+      this.$store.dispatch('openSettingsModal', 'admin')
     }
   }
 }

@@ -4,8 +4,9 @@ import AsyncComponentError from 'src/components/async_component_error/async_comp
 import getResettableAsyncComponent from 'src/services/resettable_async_component.js'
 import Popover from '../popover/popover.vue'
 import Checkbox from 'src/components/checkbox/checkbox.vue'
+import ConfirmModal from 'src/components/confirm_modal/confirm_modal.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEqual } from 'lodash'
 import {
   newImporter,
   newExporter
@@ -53,8 +54,17 @@ const SettingsModal = {
     Modal,
     Popover,
     Checkbox,
-    SettingsModalContent: getResettableAsyncComponent(
-      () => import('./settings_modal_content.vue'),
+    ConfirmModal,
+    SettingsModalUserContent: getResettableAsyncComponent(
+      () => import('./settings_modal_user_content.vue'),
+      {
+        loadingComponent: PanelLoading,
+        errorComponent: AsyncComponentError,
+        delay: 0
+      }
+    ),
+    SettingsModalAdminContent: getResettableAsyncComponent(
+      () => import('./settings_modal_admin_content.vue'),
       {
         loadingComponent: PanelLoading,
         errorComponent: AsyncComponentError,
@@ -147,17 +157,30 @@ const SettingsModal = {
         PLEROMAFE_SETTINGS_MINOR_VERSION
       ]
       return clone
+    },
+    resetAdminDraft () {
+      this.$store.commit('resetAdminDraft')
+    },
+    pushAdminDraft () {
+      this.$store.dispatch('pushAdminDraft')
     }
   },
   computed: {
     currentSaveStateNotice () {
+      console.log(this.$store.state.interface.settings.currentSaveStateNotice)
       return this.$store.state.interface.settings.currentSaveStateNotice
     },
     modalActivated () {
       return this.$store.state.interface.settingsModalState !== 'hidden'
     },
-    modalOpenedOnce () {
-      return this.$store.state.interface.settingsModalLoaded
+    modalMode () {
+      return this.$store.state.interface.settingsModalMode
+    },
+    modalOpenedOnceUser () {
+      return this.$store.state.interface.settingsModalLoadedUser
+    },
+    modalOpenedOnceAdmin () {
+      return this.$store.state.interface.settingsModalLoadedAdmin
     },
     modalPeeked () {
       return this.$store.state.interface.settingsModalState === 'minimized'
@@ -167,9 +190,14 @@ const SettingsModal = {
         return this.$store.state.config.expertLevel > 0
       },
       set (value) {
-        console.log(value)
         this.$store.dispatch('setOption', { name: 'expertLevel', value: value ? 1 : 0 })
       }
+    },
+    adminDraftAny () {
+      return !isEqual(
+        this.$store.state.adminSettings.config,
+        this.$store.state.adminSettings.draft
+      )
     }
   }
 }

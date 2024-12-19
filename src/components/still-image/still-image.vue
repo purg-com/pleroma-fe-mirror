@@ -28,8 +28,6 @@
 <script src="./still-image.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .still-image {
   position: relative;
   line-height: 0;
@@ -68,8 +66,7 @@
       color: #fff;
       display: block;
       padding: 2px 4px;
-      border-radius: $fallback--tooltipRadius;
-      border-radius: var(--tooltipRadius, $fallback--tooltipRadius);
+      border-radius: var(--roundness);
       z-index: 2;
       visibility: var(--_still-image-label-visibility, visible);
     }

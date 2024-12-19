@@ -38,13 +38,20 @@
       class="button-unstyled interactive"
       target="_blank"
       role="button"
+      :title="$t('tool_tip.favorite')"
       :href="remoteInteractionLink"
     >
-      <FAIcon
-        class="fa-scale-110 fa-old-padding"
-        :title="$t('tool_tip.favorite')"
-        :icon="['far', 'star']"
-      />
+      <FALayers class="fa-scale-110 fa-old-padding-layer">
+        <FAIcon
+          class="fa-scale-110"
+          :icon="['far', 'star']"
+        />
+        <FAIcon
+          class="focus-marker"
+          transform="shrink-6 up-9 right-12"
+          icon="plus"
+        />
+      </FALayers>
     </a>
     <span
       v-if="!mergedConfig.hidePostStats && status.fave_num > 0"
@@ -58,7 +65,6 @@
 <script src="./favorite_button.js"></script>
 
 <style lang="scss">
-@import "../../variables";
 @import "../../mixins";
 
 .FavoriteButton {
@@ -81,8 +87,7 @@
 
     &:hover .svg-inline--fa,
     &.-favorited .svg-inline--fa {
-      color: $fallback--cOrange;
-      color: var(--cOrange, $fallback--cOrange);
+      color: var(--cOrange);
     }
 
     @include unfocused-style {

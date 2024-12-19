@@ -6,6 +6,7 @@
     <label
       :for="name"
       class="label"
+      :class="{ faint: !present || disabled }"
     >
       {{ $t('settings.style.common.opacity') }}
     </label>
@@ -18,10 +19,11 @@
     />
     <input
       :id="name"
-      class="input-number"
+      class="input input-number"
       type="number"
       :value="modelValue || fallback"
       :disabled="!present || disabled"
+      :class="{ disabled: !present || disabled }"
       max="1"
       min="0"
       step=".05"

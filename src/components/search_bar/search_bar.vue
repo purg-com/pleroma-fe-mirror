@@ -8,6 +8,7 @@
       class="button-unstyled nav-icon"
       :title="$t('nav.search')"
       type="button"
+      :aria-expanded="!hidden"
       @click.prevent.stop="toggleHidden"
     >
       <FAIcon
@@ -21,7 +22,7 @@
         id="search-bar-input"
         ref="searchInput"
         v-model="searchTerm"
-        class="search-bar-input"
+        class="input search-bar-input"
         :placeholder="$t('nav.search')"
         type="text"
         @keyup.enter="find(searchTerm)"
@@ -29,6 +30,7 @@
       <button
         class="button-default search-button"
         type="submit"
+        :title="$t('nav.search')"
         @click="find(searchTerm)"
       >
         <FAIcon
@@ -39,6 +41,8 @@
       <button
         class="button-unstyled cancel-search"
         type="button"
+        :title="$t('nav.search_close')"
+        :aria-expanded="!hidden"
         @click.prevent.stop="toggleHidden"
       >
         <FAIcon
@@ -56,8 +60,6 @@
 <script src="./search_bar.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .SearchBar {
   display: inline-flex;
   align-items: baseline;
@@ -82,8 +84,7 @@
   }
 
   .cancel-icon {
-    color: $fallback--text;
-    color: var(--btnTopBarText, $fallback--text);
+    color: var(--text);
   }
 }
 

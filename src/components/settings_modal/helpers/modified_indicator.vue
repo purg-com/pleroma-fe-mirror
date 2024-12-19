@@ -5,17 +5,17 @@
   >
     <Popover
       trigger="hover"
+      :trigger-attrs="{ 'aria-label': $t('settings.setting_changed') }"
     >
       <template #trigger>
         &nbsp;
         <FAIcon
           icon="wrench"
-          :aria-label="$t('settings.setting_changed')"
         />
       </template>
       <template #content>
         <div class="modified-tooltip">
-          {{ $t('settings.setting_changed') }}
+          {{ $t(messageKey) }}
         </div>
       </template>
     </Popover>
@@ -33,7 +33,13 @@ library.add(
 
 export default {
   components: { Popover },
-  props: ['changed']
+  props: {
+    changed: Boolean,
+    messageKey: {
+      type: String,
+      default: 'settings.setting_changed'
+    }
+  }
 }
 </script>
 

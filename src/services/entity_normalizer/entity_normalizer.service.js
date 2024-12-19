@@ -107,6 +107,7 @@ export const parseUser = (data) => {
 
       output.allow_following_move = data.pleroma.allow_following_move
 
+      output.hide_favorites = data.pleroma.hide_favorites
       output.hide_follows = data.pleroma.hide_follows
       output.hide_followers = data.pleroma.hide_followers
       output.hide_follows_count = data.pleroma.hide_follows_count
@@ -165,6 +166,7 @@ export const parseUser = (data) => {
         output.show_role = data.source.pleroma.show_role
         output.discoverable = data.source.pleroma.discoverable
         output.show_birthday = data.pleroma.show_birthday
+        output.actor_type = data.source.pleroma.actor_type
       }
     }
 
@@ -325,6 +327,12 @@ export const parseStatus = (data) => {
       output.thread_muted = pleroma.thread_muted
       output.emoji_reactions = pleroma.emoji_reactions
       output.parent_visible = pleroma.parent_visible === undefined ? true : pleroma.parent_visible
+      output.quote = pleroma.quote ? parseStatus(pleroma.quote) : undefined
+      output.quote_id = pleroma.quote_id ? pleroma.quote_id : (output.quote ? output.quote.id : undefined)
+      output.quote_url = pleroma.quote_url
+      output.quote_visible = pleroma.quote_visible
+      output.quotes_count = pleroma.quotes_count
+      output.bookmark_folder_id = pleroma.bookmark_folder
     } else {
       output.text = data.content
       output.summary = data.spoiler_text
@@ -435,12 +443,12 @@ export const parseNotification = (data) => {
     output.type = mastoDict[data.type] || data.type
     output.seen = data.pleroma.is_seen
     output.status = isStatusNotification(output.type) ? parseStatus(data.status) : null
-    output.action = output.status // TODO: Refactor, this is unneeded
     output.target = output.type !== 'move'
       ? null
       : parseUser(data.target)
     output.from_profile = parseUser(data.account)
     output.emoji = data.emoji
+    output.emoji_url = data.emoji_url
     if (data.report) {
       output.report = data.report
       output.report.content = data.report.content

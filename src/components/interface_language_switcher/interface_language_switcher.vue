@@ -36,7 +36,9 @@
         <button
           class="button-default btn"
           @click="addLanguage"
-        >{{ $t('settings.add_language') }}</button>
+        >
+          {{ $t('settings.add_language') }}
+        </button>
       </li>
     </ul>
   </div>
@@ -102,8 +104,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../../variables";
-
 .interface-language-switcher {
   .language-select {
     margin-right: 1em;

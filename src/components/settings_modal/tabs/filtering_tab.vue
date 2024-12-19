@@ -7,13 +7,11 @@
           <BooleanSetting path="hideFilteredStatuses">
             {{ $t('settings.hide_filtered_statuses') }}
           </BooleanSetting>
-          <ul
-            class="setting-list suboptions"
-            :class="[{disabled: !streaming}]"
-          >
+          <ul class="setting-list suboptions">
             <li>
               <BooleanSetting
-                :disabled="hideFilteredStatuses"
+                parent-path="hideFilteredStatuses"
+                :parent-invert="true"
                 path="hideWordFilteredPosts"
               >
                 {{ $t('settings.hide_wordfiltered_statuses') }}
@@ -22,7 +20,8 @@
             <li>
               <BooleanSetting
                 v-if="user"
-                :disabled="hideFilteredStatuses"
+                parent-path="hideFilteredStatuses"
+                :parent-invert="true"
                 path="hideMutedThreads"
               >
                 {{ $t('settings.hide_muted_threads') }}
@@ -31,7 +30,8 @@
             <li>
               <BooleanSetting
                 v-if="user"
-                :disabled="hideFilteredStatuses"
+                parent-path="hideFilteredStatuses"
+                :parent-invert="true"
                 path="hideMutedPosts"
               >
                 {{ $t('settings.hide_muted_posts') }}
@@ -45,13 +45,18 @@
           </BooleanSetting>
         </li>
         <li>
+          <BooleanSetting path="muteSensitiveStatuses">
+            {{ $t('settings.mute_sensitive_posts') }}
+          </BooleanSetting>
+        </li>
+        <li>
           <BooleanSetting path="hidePostStats">
             {{ $t('settings.hide_post_stats') }}
           </BooleanSetting>
         </li>
         <li>
           <BooleanSetting path="hideBotIndication">
-            {{ $t('settings.hide_bot_indication') }}
+            {{ $t('settings.hide_actor_type_indication') }}
           </BooleanSetting>
         </li>
         <ChoiceSetting
@@ -67,7 +72,7 @@
           <textarea
             id="muteWords"
             v-model="muteWordsString"
-            class="resize-height"
+            class="input resize-height"
           />
           <div>{{ $t('settings.filtering_explanation') }}</div>
         </li>
@@ -90,6 +95,22 @@
           <BooleanSetting path="hideAttachmentsInConv">
             {{ $t('settings.hide_attachments_in_convo') }}
           </BooleanSetting>
+        </li>
+        <li>
+          <BooleanSetting path="hideScrobbles">
+            {{ $t('settings.hide_scrobbles') }}
+          </BooleanSetting>
+        </li>
+        <li>
+          <UnitSetting
+            key="hideScrobblesAfter"
+            path="hideScrobblesAfter"
+            :units="['m', 'h', 'd']"
+            unitSet="time"
+            expert="1"
+          >
+            {{ $t('settings.hide_scrobbles_after') }}
+          </UnitSetting>
         </li>
       </ul>
     </div>

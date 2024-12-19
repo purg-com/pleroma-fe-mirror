@@ -1,7 +1,9 @@
-@import "src/variables";
-
 .settings-modal {
   overflow: hidden;
+
+  h4 {
+    margin-bottom: 0.5em;
+  }
 
   .setting-list,
   .option-list {
@@ -15,6 +17,20 @@
     .suboptions {
       margin-top: 0.3em;
     }
+
+    &.two-column {
+      column-count: 2;
+
+      > li {
+        break-inside: avoid;
+      }
+    }
+  }
+
+  .setting-description {
+    margin-top: 0.2em;
+    margin-bottom: 2em;
+    font-size: 70%;
   }
 
   .settings-modal-panel {
@@ -37,7 +53,9 @@
 
       .btn {
         min-height: 2em;
-        min-width: 10em;
+      }
+
+      .btn:not(.dropdown-button) {
         padding: 0 2em;
       }
     }
@@ -45,6 +63,8 @@
 
   .settings-footer {
     display: flex;
+    flex-wrap: wrap;
+    line-height: 2;
 
     >* {
       margin-right: 0.5em;

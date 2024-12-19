@@ -4,6 +4,7 @@
     :class="{ disabled: !present || disabled }"
   >
     <label
+      :id="name + '-label'"
       :for="name"
       class="label"
     >
@@ -12,7 +13,8 @@
     <input
       v-if="typeof fallback !== 'undefined'"
       :id="name + '-o'"
-      class="opt"
+      :aria-labelledby="name + '-label'"
+      class="input -checkbox opt visible-for-screenreader-only"
       type="checkbox"
       :checked="present"
       @change="$emit('update:modelValue', !present ? fallback : undefined)"
@@ -21,10 +23,11 @@
       v-if="typeof fallback !== 'undefined'"
       class="opt-l"
       :for="name + '-o'"
+      :aria-hidden="true"
     />
     <input
       :id="name"
-      class="input-number"
+      class="input input-number"
       type="range"
       :value="modelValue || fallback"
       :disabled="!present || disabled"
@@ -34,9 +37,10 @@
       @input="$emit('update:modelValue', $event.target.value)"
     >
     <input
-      :id="name"
-      class="input-number"
+      :id="name + '-numeric'"
+      class="input input-number"
       type="number"
+      :aria-labelledby="name + '-label'"
       :value="modelValue || fallback"
       :disabled="!present || disabled"
       :max="hardMax"

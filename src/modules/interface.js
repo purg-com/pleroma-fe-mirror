@@ -1,7 +1,18 @@
+import { getPreset, applyTheme, tryLoadCache } from '../services/style_setter/style_setter.js'
+import { CURRENT_VERSION, generatePreset } from 'src/services/theme_data/theme_data.service.js'
+import { convertTheme2To3 } from 'src/services/theme_data/theme2_to_theme3.js'
+
 const defaultState = {
+  localFonts: null,
+  themeApplied: false,
+  temporaryChangesTimeoutId: null, // used for temporary options that revert after a timeout
+  temporaryChangesConfirm: () => {}, // used for applying temporary options
+  temporaryChangesRevert: () => {}, // used for reverting temporary options
   settingsModalState: 'hidden',
-  settingsModalLoaded: false,
+  settingsModalLoadedUser: false,
+  settingsModalLoadedAdmin: false,
   settingsModalTargetTab: null,
+  settingsModalMode: 'user',
   settings: {
     currentSaveStateNotice: null,
     noticeClearTimeout: null,
@@ -11,7 +22,8 @@ const defaultState = {
     cssFilter: window.CSS && window.CSS.supports && (
       window.CSS.supports('filter', 'drop-shadow(0 0)') ||
       window.CSS.supports('-webkit-filter', 'drop-shadow(0 0)')
-    )
+    ),
+    localFonts: typeof window.queryLocalFonts === 'function'
   },
   layoutType: 'normal',
   globalNotices: [],
@@ -32,6 +44,20 @@ const interfaceMod = {
       } else {
         state.settings.currentSaveStateNotice = { error: true, errorData: error }
       }
+    },
+    setTemporaryChanges (state, { timeoutId, confirm, revert }) {
+      state.temporaryChangesTimeoutId = timeoutId
+      state.temporaryChangesConfirm = confirm
+      state.temporaryChangesRevert = revert
+    },
+    clearTemporaryChanges (state) {
+      clearTimeout(state.temporaryChangesTimeoutId)
+      state.temporaryChangesTimeoutId = null
+      state.temporaryChangesConfirm = () => {}
+      state.temporaryChangesRevert = () => {}
+    },
+    setThemeApplied (state) {
+      state.themeApplied = true
     },
     setNotificationPermission (state, permission) {
       state.notificationPermission = permission
@@ -54,10 +80,17 @@ const interfaceMod = {
           throw new Error('Illegal minimization state of settings modal')
       }
     },
-    openSettingsModal (state) {
+    openSettingsModal (state, value) {
+      state.settingsModalMode = value
       state.settingsModalState = 'visible'
-      if (!state.settingsModalLoaded) {
-        state.settingsModalLoaded = true
+      if (value === 'user') {
+        if (!state.settingsModalLoadedUser) {
+          state.settingsModalLoadedUser = true
+        }
+      } else if (value === 'admin') {
+        if (!state.settingsModalLoadedAdmin) {
+          state.settingsModalLoadedAdmin = true
+        }
       }
     },
     setSettingsModalTargetTab (state, value) {
@@ -77,6 +110,10 @@ const interfaceMod = {
     },
     setLastTimeline (state, value) {
       state.lastTimeline = value
+    },
+    setFontsList (state, value) {
+      // Set is used here so that we filter out duplicate fonts (possibly same font but with different weight)
+      state.localFonts = [...(new Set(value.map(font => font.family))).values()]
     }
   },
   actions: {
@@ -92,8 +129,8 @@ const interfaceMod = {
     closeSettingsModal ({ commit }) {
       commit('closeSettingsModal')
     },
-    openSettingsModal ({ commit }) {
-      commit('openSettingsModal')
+    openSettingsModal ({ commit }, value = 'user') {
+      commit('openSettingsModal', value)
     },
     togglePeekSettingsModal ({ commit }) {
       commit('togglePeekSettingsModal')
@@ -103,7 +140,7 @@ const interfaceMod = {
     },
     openSettingsModalTab ({ commit }, value) {
       commit('setSettingsModalTargetTab', value)
-      commit('openSettingsModal')
+      commit('openSettingsModal', 'user')
     },
     pushGlobalNotice (
       { commit, dispatch, state },
@@ -151,10 +188,215 @@ const interfaceMod = {
         commit('setLayoutType', wideLayout ? 'wide' : normalOrMobile)
       }
     },
+    queryLocalFonts ({ commit, dispatch, state }) {
+      if (state.localFonts !== null) return
+      commit('setFontsList', [])
+      if (!state.browserSupport.localFonts) {
+        return
+      }
+      window
+        .queryLocalFonts()
+        .then((fonts) => {
+          commit('setFontsList', fonts)
+        })
+        .catch((e) => {
+          dispatch('pushGlobalNotice', {
+            messageKey: 'settings.style.themes3.font.font_list_unavailable',
+            messageArgs: {
+              error: e
+            },
+            level: 'error'
+          })
+        })
+    },
     setLastTimeline ({ commit }, value) {
       commit('setLastTimeline', value)
+    },
+    setTheme ({ commit, rootState }, { themeName, themeData, recompile, saveData } = {}) {
+      const {
+        theme: instanceThemeName
+      } = rootState.instance
+
+      const {
+        theme: userThemeName,
+        customTheme: userThemeSnapshot,
+        customThemeSource: userThemeSource,
+        forceThemeRecompilation,
+        themeDebug,
+        theme3hacks
+      } = rootState.config
+
+      const actualThemeName = userThemeName || instanceThemeName
+
+      const forceRecompile = forceThemeRecompilation || recompile
+
+      let promise = null
+
+      if (themeData) {
+        promise = Promise.resolve(normalizeThemeData(themeData))
+      } else if (themeName) {
+        promise = getPreset(themeName).then(themeData => normalizeThemeData(themeData))
+      } else if (userThemeSource || userThemeSnapshot) {
+        promise = Promise.resolve(normalizeThemeData({
+          _pleroma_theme_version: 2,
+          theme: userThemeSnapshot,
+          source: userThemeSource
+        }))
+      } else if (actualThemeName && actualThemeName !== 'custom') {
+        promise = getPreset(actualThemeName).then(themeData => {
+          const realThemeData = normalizeThemeData(themeData)
+          if (actualThemeName === instanceThemeName) {
+            // This sole line is the reason why this whole block is above the recompilation check
+            commit('setInstanceOption', { name: 'themeData', value: { theme: realThemeData } })
+          }
+          return realThemeData
+        })
+      } else {
+        throw new Error('Cannot load any theme!')
+      }
+
+      // If we're not not forced to recompile try using
+      // cache (tryLoadCache return true if load successful)
+      if (!forceRecompile && !themeDebug && tryLoadCache()) {
+        commit('setThemeApplied')
+        return
+      }
+
+      promise
+        .then(realThemeData => {
+          const theme2ruleset = convertTheme2To3(realThemeData)
+
+          if (saveData) {
+            commit('setOption', { name: 'theme', value: themeName || actualThemeName })
+            commit('setOption', { name: 'customTheme', value: realThemeData })
+            commit('setOption', { name: 'customThemeSource', value: realThemeData })
+          }
+          const hacks = []
+
+          Object.entries(theme3hacks).forEach(([key, value]) => {
+            switch (key) {
+              case 'fonts': {
+                Object.entries(theme3hacks.fonts).forEach(([fontKey, font]) => {
+                  if (!font?.family) return
+                  switch (fontKey) {
+                    case 'interface':
+                      hacks.push({
+                        component: 'Root',
+                        directives: {
+                          '--font': 'generic | ' + font.family
+                        }
+                      })
+                      break
+                    case 'input':
+                      hacks.push({
+                        component: 'Input',
+                        directives: {
+                          '--font': 'generic | ' + font.family
+                        }
+                      })
+                      break
+                    case 'post':
+                      hacks.push({
+                        component: 'RichContent',
+                        directives: {
+                          '--font': 'generic | ' + font.family
+                        }
+                      })
+                      break
+                    case 'monospace':
+                      hacks.push({
+                        component: 'Root',
+                        directives: {
+                          '--monoFont': 'generic | ' + font.family
+                        }
+                      })
+                      break
+                  }
+                })
+                break
+              }
+              case 'underlay': {
+                if (value !== 'none') {
+                  const newRule = {
+                    component: 'Underlay',
+                    directives: {}
+                  }
+                  if (value === 'opaque') {
+                    newRule.directives.opacity = 1
+                    newRule.directives.background = '--wallpaper'
+                  }
+                  if (value === 'transparent') {
+                    newRule.directives.opacity = 0
+                  }
+                  hacks.push(newRule)
+                }
+                break
+              }
+            }
+          })
+
+          const ruleset = [
+            ...theme2ruleset,
+            ...hacks
+          ]
+
+          applyTheme(
+            ruleset,
+            () => commit('setThemeApplied'),
+            themeDebug
+          )
+        })
+
+      return promise
     }
   }
 }
 
 export default interfaceMod
+
+export const normalizeThemeData = (input) => {
+  if (Array.isArray(input)) {
+    const themeData = { colors: {} }
+    themeData.colors.bg = input[1]
+    themeData.colors.fg = input[2]
+    themeData.colors.text = input[3]
+    themeData.colors.link = input[4]
+    themeData.colors.cRed = input[5]
+    themeData.colors.cGreen = input[6]
+    themeData.colors.cBlue = input[7]
+    themeData.colors.cOrange = input[8]
+    return generatePreset(themeData).theme
+  }
+
+  let themeData, themeSource
+
+  if (input.themeFileVerison === 1) {
+    // this might not be even used at all, some leftover of unimplemented code in V2 editor
+    return generatePreset(input).theme
+  } else if (
+    Object.prototype.hasOwnProperty.call(input, '_pleroma_theme_version') ||
+      Object.prototype.hasOwnProperty.call(input, 'source') ||
+      Object.prototype.hasOwnProperty.call(input, 'theme')
+  ) {
+    // We got passed a full theme file
+    themeData = input.theme
+    themeSource = input.source
+  } else if (Object.prototype.hasOwnProperty.call(input, 'themeEngineVersion')) {
+    // We got passed a source/snapshot
+    themeData = input
+    themeSource = input
+  }
+  // New theme presets don't have 'theme' property, they use 'source'
+
+  let out // shout, shout let it all out
+  if (themeSource && themeSource.themeEngineVersion === CURRENT_VERSION) {
+    // There are some themes in wild that have completely broken source
+    out = { ...(themeData || {}), ...themeSource }
+  } else {
+    out = themeData
+  }
+
+  // generatePreset here basically creates/updates "snapshot",
+  // while also fixing the 2.2 -> 2.3 colors/shadows/etc
+  return generatePreset(out).theme
+}

@@ -41,7 +41,7 @@
     <input
       ref="input"
       type="file"
-      class="image-cropper-img-input"
+      class="input image-cropper-img-input"
       :accept="mimes"
     >
   </div>

@@ -1,5 +1,6 @@
 <template>
   <div
+    v-show="$store.state.interface.themeApplied"
     id="app-loaded"
     :style="bgStyle"
   >

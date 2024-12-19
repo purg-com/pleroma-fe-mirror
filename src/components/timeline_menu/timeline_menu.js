@@ -2,6 +2,7 @@ import Popover from '../popover/popover.vue'
 import NavigationEntry from 'src/components/navigation/navigation_entry.vue'
 import { mapState } from 'vuex'
 import { ListsMenuContent } from '../lists_menu/lists_menu_content.vue'
+import { BookmarkFoldersMenuContent } from '../bookmark_folders_menu/bookmark_folders_menu_content.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { TIMELINES } from 'src/components/navigation/navigation.js'
 import { filterNavigation } from 'src/components/navigation/filter.js'
@@ -13,13 +14,14 @@ library.add(faChevronDown)
 
 // Route -> i18n key mapping, exported and not in the computed
 // because nav panel benefits from the same information.
-export const timelineNames = () => {
+export const timelineNames = (supportsBookmarkFolders) => {
   return {
     friends: 'nav.home_timeline',
-    bookmarks: 'nav.bookmarks',
+    bookmarks: supportsBookmarkFolders ? 'nav.all_bookmarks' : 'nav.bookmarks',
     dms: 'nav.dms',
     'public-timeline': 'nav.public_tl',
-    'public-external-timeline': 'nav.twkn'
+    'public-external-timeline': 'nav.twkn',
+    quotes: 'nav.quotes'
   }
 }
 
@@ -27,7 +29,8 @@ const TimelineMenu = {
   components: {
     Popover,
     NavigationEntry,
-    ListsMenuContent
+    ListsMenuContent,
+    BookmarkFoldersMenuContent
   },
   data () {
     return {
@@ -35,7 +38,7 @@ const TimelineMenu = {
     }
   },
   created () {
-    if (timelineNames()[this.$route.name]) {
+    if (timelineNames(this.bookmarkFolders)[this.$route.name]) {
       this.$store.dispatch('setLastTimeline', this.$route.name)
     }
   },
@@ -44,10 +47,15 @@ const TimelineMenu = {
       const route = this.$route.name
       return route === 'lists-timeline'
     },
+    useBookmarkFoldersMenu () {
+      const route = this.$route.name
+      return this.bookmarkFolders && (route === 'bookmark-folder' || route === 'bookmarks')
+    },
     ...mapState({
       currentUser: state => state.users.currentUser,
       privateMode: state => state.instance.private,
-      federating: state => state.instance.federating
+      federating: state => state.instance.federating,
+      bookmarkFolders: state => state.instance.pleromaBookmarkFoldersAvailable
     }),
     timelinesList () {
       return filterNavigation(
@@ -56,7 +64,8 @@ const TimelineMenu = {
           hasChats: this.pleromaChatMessagesAvailable,
           isFederating: this.federating,
           isPrivate: this.privateMode,
-          currentUser: this.currentUser
+          currentUser: this.currentUser,
+          supportsBookmarkFolders: this.bookmarkFolders
         }
       )
     }
@@ -88,7 +97,10 @@ const TimelineMenu = {
       if (route === 'lists-timeline') {
         return this.$store.getters.findListTitle(this.$route.params.id)
       }
-      const i18nkey = timelineNames()[this.$route.name]
+      if (route === 'bookmark-folder') {
+        return this.$store.getters.findBookmarkFolderName(this.$route.params.id)
+      }
+      const i18nkey = timelineNames(this.bookmarkFolders)[this.$route.name]
       return i18nkey ? this.$t(i18nkey) : route
     }
   }

@@ -32,12 +32,20 @@
       target="_blank"
       role="button"
       :href="remoteInteractionLink"
+      :title="$t('tool_tip.reply')"
     >
-      <FAIcon
-        icon="reply"
-        class="fa-scale-110 fa-old-padding"
-        :title="$t('tool_tip.reply')"
-      />
+      <FALayers class="fa-old-padding-layer">
+        <FAIcon
+          class="fa-scale-110"
+          icon="reply"
+        />
+        <FAIcon
+          v-if="!replying"
+          class="focus-marker"
+          transform="shrink-6 up-8 right-16"
+          icon="plus"
+        />
+      </FALayers>
     </a>
     <span
       v-if="status.replies_count > 0"
@@ -51,7 +59,6 @@
 <script src="./reply_button.js"></script>
 
 <style lang="scss">
-@import "../../variables";
 @import "../../mixins";
 
 .ReplyButton {
@@ -70,8 +77,7 @@
   .interactive {
     &:hover .svg-inline--fa,
     &.-active .svg-inline--fa {
-      color: $fallback--cBlue;
-      color: var(--cBlue, $fallback--cBlue);
+      color: var(--cBlue);
     }
 
     @include unfocused-style {

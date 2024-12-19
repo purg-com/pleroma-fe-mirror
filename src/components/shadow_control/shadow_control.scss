@@ -1,0 +1,105 @@
+.settings-modal .settings-modal-panel .shadow-control {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: stretch;
+  grid-gap: 0.25em;
+  margin-bottom: 1em;
+
+  .shadow-switcher {
+    order: 1;
+    flex: 1 0 6em;
+    min-width: 6em;
+    margin-right: 0.125em;
+    display: flex;
+    flex-direction: column;
+
+    .shadow-list {
+      flex: 1 0 auto;
+    }
+
+    .arrange-buttons {
+      flex: 0 0 auto;
+      display: grid;
+      grid-auto-columns: 1fr;
+      grid-auto-flow: column;
+      margin-top: 0.25em;
+
+      .button-default {
+        margin: 0;
+        padding: 0;
+      }
+    }
+  }
+
+  .shadow-tweak {
+    order: 3;
+    flex: 2 0 10em;
+    min-width: 10em;
+    margin-left: 0.125em;
+    margin-right: 0.125em;
+
+    /* hack */
+    .input-boolean {
+      flex: 1;
+      display: flex;
+
+      .label {
+        flex: 1;
+      }
+    }
+
+    .input-string {
+      flex: 1 0 5em;
+    }
+
+    .id-control {
+      align-items: stretch;
+
+      .shadow-switcher,
+      .btn {
+        min-width: 1px;
+        margin-right: 5px;
+      }
+
+      .btn {
+        padding: 0 0.4em;
+        margin: 0 0.1em;
+      }
+    }
+  }
+
+  &.-no-preview {
+    .shadow-tweak {
+      order: 0;
+      flex: 2 0 8em;
+      max-width: 100%;
+    }
+
+    .input-range {
+      min-width: 5em;
+    }
+  }
+
+  .inset-alert {
+    padding: 0.25em 0.5em;
+  }
+
+  &.disabled {
+    .inset-alert {
+      opacity: 0.2;
+    }
+  }
+
+  .shadow-preview {
+    order: 2;
+    flex: 3 3 15em;
+    min-width: 10em;
+    margin-left: 0.125em;
+    align-self: start;
+  }
+}
+
+.inset-tooltip {
+  padding: 0.5em;
+  max-width: 30em;
+}

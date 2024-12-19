@@ -80,6 +80,9 @@ const UserProfile = {
     followersTabVisible () {
       return this.isUs || !this.user.hide_followers
     },
+    favoritesTabVisible () {
+      return this.isUs || !this.user.hide_favorites
+    },
     formattedBirthday () {
       const browserLocale = localeService.internalToBrowserLocale(this.$i18n.locale)
       return this.user.birthday && new Date(Date.parse(this.user.birthday)).toLocaleDateString(browserLocale, { timeZone: 'UTC', day: 'numeric', month: 'long', year: 'numeric' })
@@ -103,6 +106,8 @@ const UserProfile = {
         startFetchingTimeline('user', userId)
         startFetchingTimeline('media', userId)
         if (this.isUs) {
+          startFetchingTimeline('favorites')
+        } else if (!this.user.hide_favorites) {
           startFetchingTimeline('favorites', userId)
         }
         // Fetch all pinned statuses immediately
