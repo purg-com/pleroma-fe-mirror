@@ -1,6 +1,9 @@
 <template>
   <div :class="['Timeline', classes.root]">
-    <div :class="classes.header" v-if="!embedded">
+    <div
+      v-if="!embedded"
+      :class="classes.header"
+    >
       <TimelineMenu
         v-if="!embedded"
         :timeline-name="timelineName"

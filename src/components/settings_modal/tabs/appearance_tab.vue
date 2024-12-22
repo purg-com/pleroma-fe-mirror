@@ -73,13 +73,13 @@
         </button>
       </ul>
       <div class="import-file-container">
-      <button
-        class="btn button-default"
-        @click="importFile"
-      >
-        <FAIcon icon="folder-open" />
-        {{ $t('settings.style.themes3.editor.load_style') }}
-      </button>
+        <button
+          class="btn button-default"
+          @click="importFile"
+        >
+          <FAIcon icon="folder-open" />
+          {{ $t('settings.style.themes3.editor.load_style') }}
+        </button>
       </div>
       <div class="setting-item">
         <h2>{{ $t('settings.style.themes3.palette.label') }}</h2>
@@ -136,8 +136,8 @@
             </h4>
             <PaletteEditor
               v-if="expertLevel > 0"
-              class="userPalette"
               v-model="userPalette"
+              class="userPalette"
               :compact="true"
               :apply="true"
               @applyPalette="data => setPaletteCustom(data)"

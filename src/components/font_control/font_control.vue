@@ -14,7 +14,7 @@
     <Checkbox
       v-if="typeof fallback !== 'undefined'"
       :id="name + '-o'"
-      :modelValue="present"
+      :model-value="present"
       @change="$emit('update:modelValue', typeof modelValue === 'undefined' ? fallback : undefined)"
     >
       {{ $t('settings.style.themes3.define') }}
@@ -50,8 +50,8 @@
       >
         <button
           class="btn button-default"
-          @click="toggleManualEntry"
           :title="$t('settings.style.themes3.font.lookup_local_fonts')"
+          @click="toggleManualEntry"
         >
           <FAIcon
             fixed-width
@@ -72,8 +72,8 @@
       >
         <button
           class="btn button-default"
-          @click="toggleManualEntry"
           :title="$t('settings.style.themes3.font.enter_manually')"
+          @click="toggleManualEntry"
         >
           <FAIcon
             fixed-width

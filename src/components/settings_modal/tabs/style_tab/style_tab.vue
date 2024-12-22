@@ -52,22 +52,34 @@
         </teleport>
         <ul class="setting-list style-metadata">
           <li>
-            <StringSetting class="meta-field" v-model="name">
+            <StringSetting
+              v-model="name"
+              class="meta-field"
+            >
               {{ $t('settings.style.themes3.editor.style_name') }}
             </StringSetting>
           </li>
           <li>
-            <StringSetting class="meta-field" v-model="author">
+            <StringSetting
+              v-model="author"
+              class="meta-field"
+            >
               {{ $t('settings.style.themes3.editor.style_author') }}
             </StringSetting>
           </li>
           <li>
-            <StringSetting class="meta-field" v-model="license">
+            <StringSetting
+              v-model="license"
+              class="meta-field"
+            >
               {{ $t('settings.style.themes3.editor.style_license') }}
             </StringSetting>
           </li>
           <li>
-            <StringSetting class="meta-field" v-model="website">
+            <StringSetting
+              v-model="website"
+              class="meta-field"
+            >
               {{ $t('settings.style.themes3.editor.style_website') }}
             </StringSetting>
           </li>
@@ -228,19 +240,18 @@
               <Checkbox v-model="isTextAutoPresent" />
             </Tooltip>
             <div
-              class="style-control suboption"
               v-if="componentHas('Text')"
+              class="style-control suboption"
             >
               <label class="label">
-                {{$t('settings.style.themes3.editor.contrast') }}
+                {{ $t('settings.style.themes3.editor.contrast') }}
               </label>
               <ContrastRatio
                 :show-ratio="true"
                 :contrast="contrast"
               />
             </div>
-            <div v-if="componentHas('Text')">
-            </div>
+            <div v-if="componentHas('Text')" />
             <ColorInput
               v-if="componentHas('Link')"
               v-model="editedLinkColor"
@@ -350,22 +361,22 @@
         </Select>
         <SelectMotion
           class="list-select-movement"
-          :modelValue="palettes"
-          @update:modelValue="onPalettesUpdate"
+          :model-value="palettes"
           :selected-id="selectedPaletteId"
           :get-add-value="getNewPalette"
+          @update:modelValue="onPalettesUpdate"
           @update:selectedId="e => selectedPaletteId = e"
         />
         <div class="list-edit-area">
           <StringSetting
-            class="palette-name-input"
             v-model="selectedPalette.name"
+            class="palette-name-input"
           >
             {{ $t('settings.style.themes3.palette.name_label') }}
           </StringSetting>
           <PaletteEditor
-            class="palette-editor-single"
             v-model="selectedPalette"
+            class="palette-editor-single"
           />
         </div>
       </div>
@@ -373,8 +384,8 @@
         key="variables"
         :label="$t('settings.style.themes3.editor.variables_tab')"
         :model-value="virtualDirectives"
-        @update:modelValue="updateVirtualDirectives"
         :normalize-shadows="normalizeShadows"
+        @update:modelValue="updateVirtualDirectives"
       />
     </tab-switcher>
   </div>
