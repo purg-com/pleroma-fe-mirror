@@ -16,10 +16,12 @@
           @click="resetTheming"
         >
           <!-- eslint-disable vue/no-v-text-v-html-on-component -->
+          <!-- eslint-disable vue/no-v-html -->
           <component
             :is="'style'"
             v-html="previewTheme('stock', 'v3')"
           />
+          <!-- eslint-enable vue/no-v-html -->
           <!-- eslint-enable vue/no-v-text-v-html-on-component -->
           <preview id="theme-preview-stock" />
           <h4 class="theme-name">
@@ -58,12 +60,14 @@
           @click="style.version === 'v2' ? setTheme(style.key) : setStyle(style.key)"
         >
           <!-- eslint-disable vue/no-v-text-v-html-on-component -->
+          <!-- eslint-disable vue/no-v-html -->
           <div v-if="style.ready || noIntersectionObserver">
             <component
               :is="'style'"
               v-html="previewTheme(style.key, style.version, style.data)"
             />
           </div>
+          <!-- eslint-enable vue/no-v-html -->
           <!-- eslint-enable vue/no-v-text-v-html-on-component -->
           <preview :id="'theme-preview-' + style.key" />
           <h4 class="theme-name">
