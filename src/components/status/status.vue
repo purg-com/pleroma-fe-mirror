@@ -386,6 +386,7 @@
               class="heading-edited-row"
             >
               <i18n-t
+                scope="global"
                 keypath="status.edited_at"
                 tag="span"
               >

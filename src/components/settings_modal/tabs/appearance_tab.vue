@@ -164,7 +164,7 @@
         <li>
           <UnitSetting
             path="textSize"
-            step="0.1"
+            :step="0.1"
             :units="['px', 'rem']"
             :reset-default="{ 'px': 14, 'rem': 1 }"
             timed-apply-mode
@@ -240,7 +240,7 @@
         <li>
           <UnitSetting
             path="emojiSize"
-            step="0.1"
+            :step="0.1"
             :units="['px', 'rem']"
             :reset-default="{ 'px': 32, 'rem': 2.2 }"
           >
@@ -263,7 +263,7 @@
         <li>
           <UnitSetting
             path="navbarSize"
-            step="0.1"
+            :step="0.1"
             :units="['px', 'rem']"
             :reset-default="{ 'px': 55, 'rem': 3.5 }"
           >
@@ -274,7 +274,7 @@
         <li>
           <UnitSetting
             path="panelHeaderSize"
-            step="0.1"
+            :step="0.1"
             :units="['px', 'rem']"
             :reset-default="{ 'px': 52, 'rem': 3.2 }"
             timed-apply-mode

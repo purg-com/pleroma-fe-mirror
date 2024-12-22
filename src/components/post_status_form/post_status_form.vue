@@ -181,10 +181,10 @@
           :suggest="emojiUserSuggestor"
           :placement="emojiPickerPlacement"
           class="input form-control main-input"
+          enable-sticker-picker
           enable-emoji-picker
           hide-emoji-button
           :newline-on-ctrl-enter="submitOnEnter"
-          enable-sticker-picker
           @input="onEmojiInputInput"
           @sticker-uploaded="addMediaFile"
           @sticker-upload-failed="uploadFailed"
