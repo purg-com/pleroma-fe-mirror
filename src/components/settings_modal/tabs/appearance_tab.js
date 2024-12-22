@@ -119,7 +119,6 @@ const AppearanceTab = {
 
     updateIndex('theme').then(themes => {
       themes.forEach(([key, themePromise]) => themePromise.then(data => {
-        console.log('DEBUG', data)
         if (!data) {
           console.warn(`Theme with key ${key} is empty or malformed`)
         } else if (Array.isArray(data)) {
