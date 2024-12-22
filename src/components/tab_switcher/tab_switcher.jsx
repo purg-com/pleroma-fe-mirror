@@ -85,6 +85,7 @@ export default {
     setTab (index) {
       if (typeof this.onSwitch === 'function') {
         this.onSwitch.call(null, this.slots()[index].key)
+        console.log('DEBUG', this.slots()[index])
       }
       this.active = index
       if (this.scrollableTabs) {
@@ -145,7 +146,13 @@ export default {
       if (props.fullHeight) {
         classes.push('full-height')
       }
-      const renderSlot = (!this.renderOnlyFocused || active)
+      let delayRender = slot.props['delay-render']
+      if (delayRender && active) {
+        slot.props['delay-render'] = false
+        delayRender = false
+      }
+      console.log('DEBUG', !delayRender, !this.renderOnlyFocused, active)
+      const renderSlot = (!delayRender && (!this.renderOnlyFocused || active))
         ? slot
         : ''
 
