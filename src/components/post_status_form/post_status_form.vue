@@ -235,7 +235,6 @@
             class="text-format"
           >
             <Select
-              id="post-content-type"
               v-model="newStatus.contentType"
               class="input form-control"
               :attrs="{ 'aria-label': $t('post_status.content_type_selection') }"
