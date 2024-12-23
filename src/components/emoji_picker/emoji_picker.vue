@@ -8,7 +8,9 @@
     @close="onPopoverClosed"
   >
     <template #content>
-      <div class="heading">
+      <div
+        class="heading"
+      >
         <!--
           Body scroll lock needs to be on every scrollable element on safari iOS.
           Here we tell it to enable scrolling for this element.
@@ -18,6 +20,7 @@
           ref="header"
           v-body-scroll-lock="isInModal"
           class="emoji-tabs"
+          @wheel.prevent="groupScroll"
         >
           <span
             v-for="group in filteredEmojiGroups"

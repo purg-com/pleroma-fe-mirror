@@ -135,6 +135,9 @@ const EmojiPicker = {
     Popover
   },
   methods: {
+    groupScroll (e) {
+      e.currentTarget.scrollLeft += e.deltaY + e.deltaX
+    },
     updateEmojiSize () {
       const css = window.getComputedStyle(this.$refs.popover.$el)
       const emojiSize = css.getPropertyValue('--emojiSize')
