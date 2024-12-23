@@ -259,12 +259,10 @@ const AppearanceTab = {
         return ['sidebar', 'content', ...notif]
       }
     },
-    instanceSpecificPanelPresent () { return this.$store.state.instance.showInstanceSpecificPanel },
     instanceWallpaperUsed () {
       return this.$store.state.instance.background &&
         !this.$store.state.users.currentUser.background_image
     },
-    instanceShoutboxPresent () { return this.$store.state.instance.shoutAvailable },
     language: {
       get: function () { return this.$store.getters.mergedConfig.interfaceLanguage },
       set: function (val) {
