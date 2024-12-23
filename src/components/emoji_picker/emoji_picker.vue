@@ -106,6 +106,8 @@
               >
                 <div
                   class="emoji-group"
+                  :class="{ ['first-row']: group.isFirstRow }"
+                  :style="{ '--__amount': itemPerRow }"
                 >
                   <h6
                     v-if="group.isFirstRow"
