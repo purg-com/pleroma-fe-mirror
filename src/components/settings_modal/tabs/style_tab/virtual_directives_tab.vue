@@ -72,6 +72,7 @@
         :compact="true"
       />
       <ColorInput
+        name="virtual-directive-color"
         v-if="selectedVirtualDirectiveValType === 'color'"
         v-model="draftVirtualDirective"
         :fallback="computeColor(draftVirtualDirective)"

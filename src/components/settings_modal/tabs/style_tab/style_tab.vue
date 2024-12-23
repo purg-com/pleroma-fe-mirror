@@ -186,6 +186,7 @@
           >
             <ColorInput
               v-model="editedBackgroundColor"
+              name="component-background-color"
               :fallback="computeColor(editedBackgroundColor) ?? previewColors.background"
               :disabled="!isBackgroundColorPresent"
               :label="$t('settings.style.themes3.editor.background')"
@@ -197,6 +198,7 @@
             <ColorInput
               v-if="componentHas('Text')"
               v-model="editedTextColor"
+              name="component-text-color"
               :fallback="computeColor(editedTextColor) ?? previewColors.text"
               :label="$t('settings.style.themes3.editor.text_color')"
               :disabled="!isTextColorPresent"
@@ -257,6 +259,7 @@
             <ColorInput
               v-if="componentHas('Link')"
               v-model="editedLinkColor"
+              name="component-link-color"
               :fallback="computeColor(editedLinkColor) ?? previewColors.link"
               :label="$t('settings.style.themes3.editor.link_color')"
               :disabled="!isLinkColorPresent"
@@ -271,6 +274,7 @@
             <ColorInput
               v-if="componentHas('Icon')"
               v-model="editedIconColor"
+              name="component-icon-color"
               :fallback="computeColor(editedIconColor) ?? previewColors.icon"
               :label="$t('settings.style.themes3.editor.icon_color')"
               :disabled="!isIconColorPresent"
@@ -285,6 +289,7 @@
             <ColorInput
               v-if="componentHas('Border')"
               v-model="editedBorderColor"
+              name="component-border-color"
               :fallback="computeColor(editedBorderColor) ?? previewColors.border"
               :label="$t('settings.style.themes3.editor.border_color')"
               :disabled="!isBorderColorPresent"
@@ -298,6 +303,7 @@
             </Tooltip>
             <OpacityInput
               v-model="editedOpacity"
+              name="component-opacity"
               :disabled="!isOpacityPresent"
               :label="$t('settings.style.themes3.editor.opacity')"
             />
@@ -306,6 +312,7 @@
             </Tooltip>
             <RoundnessInput
               v-model="editedRoundness"
+              name="component-roundness"
               :disabled="!isRoundnessPresent"
               :label="$t('settings.style.themes3.editor.roundness')"
             />
@@ -386,7 +393,6 @@
         key="variables"
         :label="$t('settings.style.themes3.editor.variables_tab')"
         :model-value="virtualDirectives"
-        :normalize-shadows="normalizeShadows"
         @update:modelValue="updateVirtualDirectives"
       />
     </tab-switcher>

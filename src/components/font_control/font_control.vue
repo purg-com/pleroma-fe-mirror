@@ -1,11 +1,8 @@
 <template>
-  <div
-    class="font-control"
-    :class="{ custom: isCustom }"
-  >
+  <div class="font-control">
     <label
       :id="name + '-label'"
-      :for="preset === 'custom' ? name : name + '-font-switcher'"
+      :for="manualEntry ? name : name + '-font-switcher'"
       class="label"
     >
       {{ label }}
@@ -23,12 +20,13 @@
       <label
         v-if="manualEntry"
         :id="name + '-label'"
-        :for="preset === 'custom' ? name : name + '-font-switcher'"
+        :for="manualEntry ? name : name + '-font-switcher'"
         class="label"
       >
         <i18n-t
           keypath="settings.style.themes3.font.entry"
           tag="span"
+          scope="global"
         >
           <template #fontFamily>
             <code>font-family</code>
@@ -38,7 +36,7 @@
       <label
         v-else
         :id="name + '-label'"
-        :for="preset === 'custom' ? name : name + '-font-switcher'"
+        :for="manualEntry ? name : name + '-font-switcher'"
         class="label"
       >
         {{ $t('settings.style.themes3.font.select') }}

@@ -32,7 +32,6 @@
             :description="descriptions && descriptions[attachment.id]"
             :hide-description="size === 'small' || tooManyAttachments && hidingLong"
             :style="itemStyle(attachment.id, row.items)"
-            @setMedia="onMedia"
             @naturalSizeLoad="onNaturalSizeLoad"
           />
         </div>
