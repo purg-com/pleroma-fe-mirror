@@ -11,6 +11,16 @@
       <div
         class="heading"
       >
+        <div class="emoji-search">
+          <input
+            ref="search"
+            v-model="keyword"
+            type="text"
+            class="input form-control"
+            :placeholder="$t('emoji.search_emoji')"
+            @input="$event.target.composing = false"
+          >
+        </div>
         <!--
           Body scroll lock needs to be on every scrollable element on safari iOS.
           Here we tell it to enable scrolling for this element.
@@ -75,16 +85,6 @@
           class="emoji-content"
           :class="{hidden: showingStickers}"
         >
-          <div class="emoji-search">
-            <input
-              ref="search"
-              v-model="keyword"
-              type="text"
-              class="input form-control"
-              :placeholder="$t('emoji.search_emoji')"
-              @input="$event.target.composing = false"
-            >
-          </div>
           <!-- Enables scrolling for this element on safari iOS. See comments for header. -->
           <DynamicScroller
             ref="emoji-groups"
