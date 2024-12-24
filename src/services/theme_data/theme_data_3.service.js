@@ -264,6 +264,7 @@ export const init = ({
       const lowerLevelVirtualDirectivesRaw = computed[lowerLevelSelector]?.virtualDirectivesRaw
 
       const dynamicVars = computed[selector] || {
+        lowerLevelSelector,
         lowerLevelBackground,
         lowerLevelVirtualDirectives,
         lowerLevelVirtualDirectivesRaw
@@ -283,6 +284,8 @@ export const init = ({
       computed[selector] = computed[selector] || {}
       computed[selector].computedRule = computedRule
       computed[selector].dynamicVars = dynamicVars
+      computed[selector].virtualDirectives = computed[lowerLevelSelector]?.virtualDirectives || {}
+      computed[selector].virtualDirectivesRaw = computed[lowerLevelSelector]?.virtualDirectivesRaw || {}
 
       if (virtualComponents.has(combination.component)) {
         const virtualName = [
@@ -330,8 +333,8 @@ export const init = ({
             intendedTextColor,
             newTextRule.directives.textAuto === 'preserve'
           )
-        const virtualDirectives = computed[lowerLevelSelector].virtualDirectives || {}
-        const virtualDirectivesRaw = computed[lowerLevelSelector].virtualDirectivesRaw || {}
+        const virtualDirectives = { ...(computed[lowerLevelSelector].virtualDirectives || {}) }
+        const virtualDirectivesRaw = { ...(computed[lowerLevelSelector].virtualDirectivesRaw || {}) }
 
         // Storing color data in lower layer to use as custom css properties
         virtualDirectives[virtualName] = getTextColorAlpha(newTextRule.directives, textColor, dynamicVars)
@@ -345,12 +348,8 @@ export const init = ({
           selector: cssSelector.split(/ /g).slice(0, -1).join(' '),
           ...combination,
           directives: {},
-          virtualDirectives: {
-            [virtualName]: getTextColorAlpha(newTextRule.directives, textColor, dynamicVars)
-          },
-          virtualDirectivesRaw: {
-            [virtualName]: textColor
-          }
+          virtualDirectives,
+          virtualDirectivesRaw
         }
       } else {
         computed[selector] = computed[selector] || {}
