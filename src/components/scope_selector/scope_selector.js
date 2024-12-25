@@ -3,14 +3,16 @@ import {
   faEnvelope,
   faLock,
   faLockOpen,
-  faGlobe
+  faGlobe,
+  faUsers
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
   faEnvelope,
   faGlobe,
   faLock,
-  faLockOpen
+  faLockOpen,
+  faUsers
 )
 
 const ScopeSelector = {
@@ -28,31 +30,37 @@ const ScopeSelector = {
   },
   computed: {
     showNothing () {
-      return !this.showPublic && !this.showUnlisted && !this.showPrivate && !this.showDirect
+      return !this.showPublic && !this.showUnlisted && !this.showPrivate && !this.showDirect && !this.showLocal
     },
     showPublic () {
-      return this.originalScope !== 'direct' && this.shouldShow('public')
+      return this.shouldShow('public')
     },
     showUnlisted () {
-      return this.originalScope !== 'direct' && this.shouldShow('unlisted')
+      return this.shouldShow('unlisted')
     },
     showPrivate () {
-      return this.originalScope !== 'direct' && this.shouldShow('private')
+      return this.shouldShow('private')
     },
     showDirect () {
       return this.shouldShow('direct')
+    },
+    showLocal () {
+      return this.shouldShow('local')
     },
     css () {
       return {
         public: { toggled: this.currentScope === 'public' },
         unlisted: { toggled: this.currentScope === 'unlisted' },
         private: { toggled: this.currentScope === 'private' },
-        direct: { toggled: this.currentScope === 'direct' }
+        direct: { toggled: this.currentScope === 'direct' },
+        local: { toggled: this.currentScope === 'local' }
       }
     }
   },
   methods: {
     shouldShow (scope) {
+      if ((this.originalScope === 'direct' || this.originalScope === 'local') && scope !== this.originalScope) return false
+
       return this.showAll ||
         this.currentScope === scope ||
         this.originalScope === scope ||
