@@ -10,7 +10,7 @@
         v-bind="!loggedIn ? { href: remoteInteractionLink } : {}"
         role="button"
         class="emoji-reaction btn button-default"
-        :class="{ '-picked-reaction': reactedWith(reaction.name) }"
+        :class="{ '-picked-reaction': reactedWith(reaction.name), toggled: reactedWith(reaction.name) }"
         :title="reaction.url ? reaction.name : undefined"
         :aria-pressed="reactedWith(reaction.name)"
         @click="emojiOnClick(reaction.name, $event)"
