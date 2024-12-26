@@ -33,8 +33,6 @@
 <script src="./link-preview.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-
 .link-preview-card {
   display: flex;
   flex-direction: row;
@@ -46,12 +44,12 @@
     flex-shrink: 0;
     width: 120px;
     max-width: 25%;
+
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: $fallback--attachmentRadius;
-      border-radius: var(--attachmentRadius, $fallback--attachmentRadius);
+      border-radius: var(--roundness);
     }
   }
 
@@ -67,7 +65,7 @@
   }
 
   .card-description {
-    margin: 0.5em 0 0 0;
+    margin: 0.5em 0 0;
     overflow: hidden;
     text-overflow: ellipsis;
     word-break: break-word;
@@ -81,13 +79,10 @@
     margin: 2em 0;
   }
 
-  color: $fallback--text;
-  color: var(--text, $fallback--text);
+  color: var(--text);
   border-style: solid;
   border-width: 1px;
-  border-radius: $fallback--attachmentRadius;
-  border-radius: var(--attachmentRadius, $fallback--attachmentRadius);
-  border-color: $fallback--border;
-  border-color: var(--border, $fallback--border);
+  border-radius: var(--roundness);
+  border-color: var(--border);
 }
 </style>

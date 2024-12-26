@@ -13,7 +13,7 @@
           :id="`poll-${index}`"
           v-model="options[index]"
           size="1"
-          class="poll-option-input"
+          class="input poll-option-input"
           type="text"
           :placeholder="$t('polls.option')"
           :maxlength="maxLength"
@@ -67,7 +67,7 @@
         <input
           v-model="expiryAmount"
           type="number"
-          class="expiry-amount hide-number-spinner"
+          class="input expiry-amount hide-number-spinner"
           :min="minExpirationInCurrentUnit"
           :max="maxExpirationInCurrentUnit"
           @change="expiryAmountChange"
@@ -84,7 +84,7 @@
             :key="unit"
             :value="unit"
           >
-            {{ $t(`time.${unit}_short`, ['']) }}
+            {{ $tc(`time.unit.${unit}_short`, expiryAmount, ['']) }}
           </option>
         </Select>
       </div>
@@ -95,8 +95,6 @@
 <script src="./poll_form.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-
 .poll-form {
   display: flex;
   flex-direction: column;
@@ -117,6 +115,7 @@
 
   .input-container {
     width: 100%;
+
     input {
       // Hack: dodge the floating X icon
       padding-right: 2.5em;

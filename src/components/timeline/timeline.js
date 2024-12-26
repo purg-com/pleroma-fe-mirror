@@ -1,15 +1,21 @@
 import Status from '../status/status.vue'
+import { mapState } from 'vuex'
 import timelineFetcher from '../../services/timeline_fetcher/timeline_fetcher.service.js'
 import Conversation from '../conversation/conversation.vue'
 import TimelineMenu from '../timeline_menu/timeline_menu.vue'
-import TimelineQuickSettings from './timeline_quick_settings.vue'
+import QuickFilterSettings from '../quick_filter_settings/quick_filter_settings.vue'
+import QuickViewSettings from '../quick_view_settings/quick_view_settings.vue'
 import { debounce, throttle, keyBy } from 'lodash'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCircleNotch, faCog } from '@fortawesome/free-solid-svg-icons'
+import { faCircleNotch, faCirclePlus, faCog, faMinus, faArrowUp, faCheck } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
   faCircleNotch,
-  faCog
+  faCog,
+  faMinus,
+  faArrowUp,
+  faCirclePlus,
+  faCheck
 )
 
 const Timeline = {
@@ -18,6 +24,9 @@ const Timeline = {
     'timelineName',
     'title',
     'userId',
+    'listId',
+    'statusId',
+    'bookmarkFolderId',
     'tag',
     'embedded',
     'count',
@@ -27,6 +36,7 @@ const Timeline = {
   ],
   data () {
     return {
+      showScrollTop: false,
       paused: false,
       unfocused: false,
       bottomedOut: false,
@@ -38,7 +48,8 @@ const Timeline = {
     Status,
     Conversation,
     TimelineMenu,
-    TimelineQuickSettings
+    QuickFilterSettings,
+    QuickViewSettings
   },
   computed: {
     filteredVisibleStatuses () {
@@ -60,14 +71,21 @@ const Timeline = {
         return `${this.$t('timeline.show_new')} (${this.newStatusCount})`
       }
     },
+    mobileLoadButtonString () {
+      if (this.timeline.flushMarker !== 0) {
+        return '+'
+      } else {
+        return this.newStatusCount > 99 ? '∞' : this.newStatusCount
+      }
+    },
     classes () {
-      let rootClasses = !this.embedded ? ['panel', 'panel-default'] : ['-nonpanel']
+      let rootClasses = !this.embedded ? ['panel', 'panel-default'] : ['-embedded']
       if (this.blockingClicks) rootClasses = rootClasses.concat(['-blocked', '_misclick-prevention'])
       return {
         root: rootClasses,
-        header: ['timeline-heading'].concat(!this.embedded ? ['panel-heading', '-sticky'] : []),
-        body: ['timeline-body'].concat(!this.embedded ? ['panel-body'] : []),
-        footer: ['timeline-footer'].concat(!this.embedded ? ['panel-footer'] : [])
+        header: ['timeline-heading'].concat(!this.embedded ? ['panel-heading', '-sticky'] : ['panel-body']),
+        body: ['timeline-body'].concat(!this.embedded ? ['panel-body'] : ['panel-body']),
+        footer: ['timeline-footer'].concat(!this.embedded ? ['panel-footer'] : ['panel-body'])
       }
     },
     // id map of statuses which need to be hidden in the main list due to pinning logic
@@ -84,7 +102,10 @@ const Timeline = {
     },
     virtualScrollingEnabled () {
       return this.$store.getters.mergedConfig.virtualScrolling
-    }
+    },
+    ...mapState({
+      mobileLayout: state => state.interface.layoutType === 'mobile'
+    })
   },
   created () {
     const store = this.$store
@@ -101,6 +122,9 @@ const Timeline = {
       timeline: this.timelineName,
       showImmediately,
       userId: this.userId,
+      listId: this.listId,
+      statusId: this.statusId,
+      bookmarkFolderId: this.bookmarkFolderId,
       tag: this.tag
     })
   },
@@ -119,6 +143,9 @@ const Timeline = {
     this.$store.commit('setLoading', { timeline: this.timelineName, value: false })
   },
   methods: {
+    scrollToTop () {
+      window.scrollTo({ top: this.$el.offsetTop })
+    },
     stopBlockingClicks: debounce(function () {
       this.blockingClicks = false
     }, 1000),
@@ -137,6 +164,9 @@ const Timeline = {
       if (this.timeline.flushMarker !== 0) {
         this.$store.commit('clearTimeline', { timeline: this.timelineName, excludeUserId: true })
         this.$store.commit('queueFlush', { timeline: this.timelineName, id: 0 })
+        if (this.timelineName === 'user') {
+          this.$store.dispatch('fetchPinnedStatuses', this.userId)
+        }
         this.fetchOlderStatuses()
       } else {
         this.blockClicksTemporarily()
@@ -156,6 +186,9 @@ const Timeline = {
         older: true,
         showImmediately: true,
         userId: this.userId,
+        listId: this.listId,
+        statusId: this.statusId,
+        bookmarkFolderId: this.bookmarkFolderId,
         tag: this.tag
       }).then(({ statuses }) => {
         if (statuses && statuses.length === 0) {
@@ -217,6 +250,7 @@ const Timeline = {
       }
     },
     handleScroll: throttle(function (e) {
+      this.showScrollTop = this.$el.offsetTop < window.scrollY
       this.determineVisibleStatuses()
       this.scrollLoad(e)
     }, 200),

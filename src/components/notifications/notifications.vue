@@ -1,6 +1,11 @@
 <template>
-  <teleport :disabled="minimalMode || disableTeleport" :to="teleportTarget">
-    <div
+  <teleport
+    :disabled="minimalMode || disableTeleport"
+    :to="teleportTarget"
+  >
+    <component
+      :is="noHeading ? 'div' : 'aside'"
+      ref="root"
       :class="{ minimal: minimalMode }"
       class="Notifications"
     >
@@ -9,31 +14,66 @@
           v-if="!noHeading"
           class="notifications-heading panel-heading -sticky"
         >
-          <div class="title">
+          <h1 class="title">
             {{ $t('notifications.notifications') }}
             <span
-              v-if="unseenCount"
-              class="badge badge-notification unseen-count"
-            >{{ unseenCount }}</span>
+              v-if="unseenCountBadgeText"
+              class="badge -notification unseen-count"
+            >{{ unseenCountBadgeText }}</span>
+          </h1>
+          <div
+            v-if="showScrollTop"
+            class="rightside-button"
+          >
+            <button
+              class="button-unstyled scroll-to-top-button"
+              type="button"
+              :title="$t('general.scroll_to_top')"
+              @click="scrollToTop"
+            >
+              <FALayers class="fa-scale-110 fa-old-padding-layer">
+                <FAIcon icon="arrow-up" />
+                <FAIcon
+                  icon="minus"
+                  transform="up-7"
+                />
+              </FALayers>
+            </button>
           </div>
           <button
             v-if="unseenCount"
             class="button-default read-button"
+            type="button"
             @click.prevent="markAsSeen"
           >
             {{ $t('notifications.read') }}
           </button>
-          <NotificationFilters />
+          <NotificationFilters class="rightside-button" />
         </div>
-        <div class="panel-body">
+        <div
+          class="panel-body"
+          role="feed"
+        >
+          <div
+            v-if="showExtraNotifications"
+            role="listitem"
+            class="notification"
+          >
+            <extra-notifications />
+          </div>
           <div
             v-for="notification in notificationsToDisplay"
             :key="notification.id"
+            role="listitem"
             class="notification"
-            :class="{unseen: !minimalMode && !notification.seen}"
+            :class="{unseen: !minimalMode && shouldShowUnseen(notification)}"
+            @click="e => notificationClicked(notification)"
           >
             <div class="notification-overlay" />
-            <notification :notification="notification" />
+            <notification
+              :notification="notification"
+              @interacted="e => notificationInteracted(notification)"
+            />
           </div>
         </div>
         <div class="panel-footer">
@@ -45,7 +85,7 @@
           </div>
           <button
             v-else-if="!loading"
-            class="button-unstyled -link -fullwidth"
+            class="button-unstyled -link text-center"
             @click.prevent="fetchOlderNotifications()"
           >
             <div class="new-status-notification text-center">
@@ -64,7 +104,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </component>
   </teleport>
 </template>
 

@@ -1,19 +1,24 @@
 <template>
-  <Status
-    v-if="notification.type === 'mention'"
-    class="Notification"
-    :compact="true"
-    :statusoid="notification.status"
-  />
-  <div v-else>
+  <article
+    v-if="notification.type === 'mention' || notification.type === 'status'"
+  >
+    <Status
+      class="Notification"
+      :compact="true"
+      :statusoid="notification.status"
+      @interacted="interacted"
+    />
+  </article>
+  <article v-else>
     <div
       v-if="needMute && !unmuted"
       class="Notification container -muted"
     >
       <small>
-        <router-link :to="userProfileLink">
-          {{ notification.from_profile.screen_name_ui }}
-        </router-link>
+        <user-link
+          :user="notification.from_profile"
+          :at="false"
+        />
       </small>
       <button
         class="button-unstyled unmute"
@@ -34,21 +39,21 @@
       <a
         class="avatar-container"
         :href="$router.resolve(userProfileLink).href"
-        @click.stop.prevent.capture="toggleUserExpanded"
+        @click.prevent
       >
-        <UserAvatar
-          :compact="true"
-          :better-shadow="betterShadow"
-          :user="notification.from_profile"
-        />
+        <UserPopover
+          :user-id="notification.from_profile.id"
+          :overlay-centers="true"
+        >
+          <UserAvatar
+            class="post-avatar"
+            :compact="true"
+            :better-shadow="betterShadow"
+            :user="notification.from_profile"
+          />
+        </UserPopover>
       </a>
       <div class="notification-right">
-        <UserCard
-          v-if="userExpanded"
-          :user-id="getUser(notification).id"
-          :rounded="true"
-          :bordered="true"
-        />
         <span class="notification-details">
           <div class="name-and-action">
             <!-- eslint-disable vue/no-v-html -->
@@ -116,9 +121,22 @@
                   scope="global"
                   keypath="notifications.reacted_with"
                 >
-                  <span class="emoji-reaction-emoji">{{ notification.emoji }}</span>
+                  <img
+                    v-if="notification.emoji_url"
+                    class="emoji-reaction-emoji emoji-reaction-emoji-image"
+                    :src="notification.emoji_url"
+                    :alt="notification.emoji"
+                    :title="notification.emoji"
+                  >
+                  <span
+                    v-else
+                    class="emoji-reaction-emoji"
+                  >{{ notification.emoji }}</span>
                 </i18n-t>
               </small>
+            </span>
+            <span v-if="notification.type === 'pleroma:report'">
+              <small>{{ $t('notifications.submitted_report') }}</small>
             </span>
             <span v-if="notification.type === 'poll'">
               <FAIcon
@@ -136,13 +154,25 @@
             <router-link
               v-if="notification.status"
               :to="{ name: 'conversation', params: { id: notification.status.id } }"
-              class="faint-link"
+              class="timeago-link faint"
             >
               <Timeago
                 :time="notification.created_at"
                 :auto-update="240"
               />
             </router-link>
+            <button
+              class="button-unstyled expand-icon"
+              :title="$t('tool_tip.toggle_expand')"
+              :aria-expanded="statusExpanded"
+              @click.prevent="toggleStatusExpanded"
+            >
+              <FAIcon
+                class="fa-scale-110"
+                fixed-width
+                :icon="statusExpanded ? 'compress-alt' : 'expand-alt'"
+              />
+            </button>
           </div>
           <div
             v-else
@@ -158,6 +188,8 @@
           <button
             v-if="needMute"
             class="button-unstyled"
+            :title="$t('tool_tip.toggle_mute')"
+            :aria-expanded="!unmuted"
             @click.prevent="toggleMute"
           >
             <FAIcon
@@ -170,12 +202,10 @@
           v-if="notification.type === 'follow' || notification.type === 'follow_request'"
           class="follow-text"
         >
-          <router-link
-            :to="userProfileLink"
+          <user-link
             class="follow-name"
-          >
-            @{{ notification.from_profile.screen_name_ui }}
-          </router-link>
+            :user="notification.from_profile"
+          />
           <div
             v-if="notification.type === 'follow_request'"
             style="white-space: nowrap;"
@@ -206,20 +236,45 @@
           v-else-if="notification.type === 'move'"
           class="move-text"
         >
-          <router-link :to="targetUserProfileLink">
-            @{{ notification.target.screen_name_ui }}
-          </router-link>
+          <user-link
+            :user="notification.target"
+          />
         </div>
+        <Report
+          v-else-if="notification.type === 'pleroma:report'"
+          :report-id="notification.report.id"
+        />
         <template v-else>
           <StatusContent
-            class="faint"
-            :compact="true"
-            :status="notification.action"
+            :compact="!statusExpanded"
+            :status="notification.status"
           />
         </template>
       </div>
     </div>
-  </div>
+    <teleport to="#modal">
+      <confirm-modal
+        v-if="showingApproveConfirmDialog"
+        :title="$t('user_card.approve_confirm_title')"
+        :confirm-text="$t('user_card.approve_confirm_accept_button')"
+        :cancel-text="$t('user_card.approve_confirm_cancel_button')"
+        @accepted="doApprove"
+        @cancelled="hideApproveConfirmDialog"
+      >
+        {{ $t('user_card.approve_confirm', { user: user.screen_name_ui }) }}
+      </confirm-modal>
+      <confirm-modal
+        v-if="showingDenyConfirmDialog"
+        :title="$t('user_card.deny_confirm_title')"
+        :confirm-text="$t('user_card.deny_confirm_accept_button')"
+        :cancel-text="$t('user_card.deny_confirm_cancel_button')"
+        @accepted="doDeny"
+        @cancelled="hideDenyConfirmDialog"
+      >
+        {{ $t('user_card.deny_confirm', { user: user.screen_name_ui }) }}
+      </confirm-modal>
+    </teleport>
+  </article>
 </template>
 
 <script src="./notification.js"></script>

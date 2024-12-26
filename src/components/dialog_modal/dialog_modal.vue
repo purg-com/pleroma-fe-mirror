@@ -8,11 +8,11 @@
       @click.stop=""
     >
       <div class="panel-heading dialog-modal-heading">
-        <div class="title">
+        <h1 class="title">
           <slot name="header" />
-        </div>
+        </h1>
       </div>
-      <div class="dialog-modal-content">
+      <div class="panel-body dialog-modal-content">
         <slot name="default" />
       </div>
       <div class="dialog-modal-footer user-interactions panel-footer">
@@ -25,8 +25,6 @@
 <script src="./dialog_modal.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-
 // TODO: unify with other modals.
 .dark-overlay {
   &::before {
@@ -38,8 +36,8 @@
     position: fixed;
     right: 0;
     top: 0;
-    background: rgba(27,31,35,.5);
-    z-index: 99;
+    background: rgb(27 31 35 / 50%);
+    z-index: 2000;
   }
 }
 
@@ -51,11 +49,9 @@
   margin: 15vh auto;
   position: fixed;
   transform: translateX(-50%);
-  z-index: 999;
+  z-index: 2001;
   cursor: default;
   display: block;
-  background-color: $fallback--bg;
-  background-color: var(--bg, $fallback--bg);
 
   .dialog-modal-heading {
     .title {
@@ -65,25 +61,20 @@
 
   .dialog-modal-content {
     margin: 0;
-    padding: 1rem 1rem;
-    background-color: $fallback--bg;
-    background-color: var(--bg, $fallback--bg);
+    padding: 1rem;
     white-space: normal;
   }
 
   .dialog-modal-footer {
     margin: 0;
-    padding: .5em .5em;
-    background-color: $fallback--bg;
-    background-color: var(--bg, $fallback--bg);
-    border-top: 1px solid $fallback--border;
-    border-top: 1px solid var(--border, $fallback--border);
+    padding: 0.5em;
+    border-top: 1px solid var(--border);
     display: flex;
     justify-content: flex-end;
 
     button {
       width: auto;
-      margin-left: .5rem;
+      margin-left: 0.5rem;
     }
   }
 }

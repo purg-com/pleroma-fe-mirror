@@ -11,15 +11,15 @@
 
   .chat-view-body {
     box-sizing: border-box;
-    background-color: var(--chatBg, $fallback--bg);
     display: flex;
     flex-direction: column;
     width: 100%;
     overflow: visible;
     min-height: calc(100vh - var(--navbar-height));
-    margin: 0 0 0 0;
-    border-radius: 10px 10px 0 0;
-    border-radius: var(--panelRadius, 10px) var(--panelRadius, 10px) 0 0;
+    margin: 0;
+    border-radius: var(--roundness);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
 
     &::after {
       border-radius: 0;
@@ -37,8 +37,6 @@
   .footer {
     position: sticky;
     bottom: 0;
-    background-color: $fallback--bg;
-    background-color: var(--bg, $fallback--bg);
     z-index: 1;
   }
 
@@ -61,12 +59,10 @@
     position: absolute;
     right: 1.3em;
     top: -3.2em;
-    background-color: $fallback--fg;
-    background-color: var(--btn, $fallback--fg);
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 1px 1px rgb(0 0 0 / 30%), 0 2px 4px rgb(0 0 0 / 30%);
     z-index: 10;
     transition: 0.35s all;
     transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
@@ -77,12 +73,6 @@
     &.visible {
       opacity: 1;
       visibility: visible;
-    }
-
-    i {
-      font-size: 1em;
-      color: $fallback--text;
-      color: var(--text, $fallback--text);
     }
 
     .unread-message-count {

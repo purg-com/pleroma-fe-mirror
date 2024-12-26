@@ -1,47 +1,31 @@
-import { get, set } from 'lodash'
 import Checkbox from 'src/components/checkbox/checkbox.vue'
-import ModifiedIndicator from './modified_indicator.vue'
-import ServerSideIndicator from './server_side_indicator.vue'
+import Setting from './setting.js'
+
 export default {
-  components: {
-    Checkbox,
-    ModifiedIndicator,
-    ServerSideIndicator
+  ...Setting,
+  props: {
+    ...Setting.props,
+    indeterminateState: [String, Object]
   },
-  props: [
-    'path',
-    'disabled',
-    'expert'
-  ],
+  components: {
+    ...Setting.components,
+    Checkbox
+  },
   computed: {
-    pathDefault () {
-      const [firstSegment, ...rest] = this.path.split('.')
-      return [firstSegment + 'DefaultValue', ...rest].join('.')
-    },
-    state () {
-      const value = get(this.$parent, this.path)
-      if (value === undefined) {
-        return this.defaultState
-      } else {
-        return value
-      }
-    },
-    defaultState () {
-      return get(this.$parent, this.pathDefault)
-    },
-    isServerSide () {
-      return this.path.startsWith('serverSide_')
-    },
-    isChanged () {
-      return !this.path.startsWith('serverSide_') && this.state !== this.defaultState
-    },
-    matchesExpertLevel () {
-      return (this.expert || 0) <= this.$parent.expertLevel
+    ...Setting.computed,
+    isIndeterminate () {
+      return this.visibleState === this.indeterminateState
     }
   },
   methods: {
-    update (e) {
-      set(this.$parent, this.path, e)
+    ...Setting.methods,
+    getValue (e) {
+      // Basic tri-state toggle implementation
+      if (!!this.indeterminateState && !e && this.visibleState === true) {
+        // If we have indeterminate state, switching from true to false first goes through indeterminate
+        return this.indeterminateState
+      }
+      return e
     }
   }
 }

@@ -13,7 +13,7 @@ const SecurityTab = {
       deletingAccount: false,
       deleteAccountConfirmPasswordInput: '',
       deleteAccountError: false,
-      changePasswordInputs: [ '', '', '' ],
+      changePasswordInputs: ['', '', ''],
       changedPassword: false,
       changePasswordError: false,
       moveAccountTarget: '',

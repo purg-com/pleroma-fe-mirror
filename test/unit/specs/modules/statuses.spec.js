@@ -77,24 +77,6 @@ describe('Statuses module', () => {
       expect(state.timelines.public.newStatusCount).to.equal(0)
     })
 
-    it('removes statuses by tag on deletion', () => {
-      const state = defaultState()
-      const status = makeMockStatus({ id: '1' })
-      const otherStatus = makeMockStatus({ id: '3' })
-      status.uri = 'xxx'
-      const deletion = makeMockStatus({ id: '2', type: 'deletion' })
-      deletion.text = 'Dolus deleted notice {{tag:gs.smuglo.li,2016-11-18:noticeId=1038007:objectType=note}}.'
-      deletion.uri = 'xxx'
-
-      mutations.addNewStatuses(state, { statuses: [status, otherStatus], showImmediately: true, timeline: 'public' })
-      mutations.addNewStatuses(state, { statuses: [deletion], showImmediately: true, timeline: 'public' })
-
-      expect(state.allStatuses).to.eql([otherStatus])
-      expect(state.timelines.public.statuses).to.eql([otherStatus])
-      expect(state.timelines.public.visibleStatuses).to.eql([otherStatus])
-      expect(state.timelines.public.maxId).to.eql('3')
-    })
-
     it('does not update the maxId when the noIdUpdate flag is set', () => {
       const state = defaultState()
       const status = makeMockStatus({ id: '1' })
@@ -245,7 +227,7 @@ describe('Statuses module', () => {
     it('increments count in existing reaction', () => {
       const state = defaultState()
       const status = makeMockStatus({ id: '1' })
-      status.emoji_reactions = [ { name: '😂', count: 1, accounts: [] } ]
+      status.emoji_reactions = [{ name: '😂', count: 1, accounts: [] }]
 
       mutations.addNewStatuses(state, { statuses: [status], showImmediately: true, timeline: 'public' })
       mutations.addOwnReaction(state, { id: '1', emoji: '😂', currentUser: { id: 'me' } })
@@ -269,7 +251,7 @@ describe('Statuses module', () => {
     it('decreases count in existing reaction', () => {
       const state = defaultState()
       const status = makeMockStatus({ id: '1' })
-      status.emoji_reactions = [ { name: '😂', count: 2, accounts: [{ id: 'me' }] } ]
+      status.emoji_reactions = [{ name: '😂', count: 2, accounts: [{ id: 'me' }] }]
 
       mutations.addNewStatuses(state, { statuses: [status], showImmediately: true, timeline: 'public' })
       mutations.removeOwnReaction(state, { id: '1', emoji: '😂', currentUser: { id: 'me' } })
@@ -313,64 +295,6 @@ describe('Statuses module', () => {
       mutations.clearTimeline(state, { timeline: 'user', excludeUserId: true })
 
       expect(state.timelines.user.userId).to.eql(123)
-    })
-  })
-
-  describe('notifications', () => {
-    it('removes a notification when the notice gets removed', () => {
-      const user = { id: '1' }
-      const state = defaultState()
-      const status = makeMockStatus({ id: '1' })
-      const otherStatus = makeMockStatus({ id: '3' })
-      const mentionedStatus = makeMockStatus({ id: '2' })
-      mentionedStatus.attentions = [user]
-      mentionedStatus.uri = 'xxx'
-      otherStatus.attentions = [user]
-
-      const deletion = makeMockStatus({ id: '4', type: 'deletion' })
-      deletion.text = 'Dolus deleted notice {{tag:gs.smuglo.li,2016-11-18:noticeId=1038007:objectType=note}}.'
-      deletion.uri = 'xxx'
-      const newNotificationSideEffects = () => {}
-      mutations.addNewStatuses(state, { statuses: [status, otherStatus], user })
-      mutations.addNewNotifications(
-        state,
-        {
-          notifications: [{
-            from_profile: { id: '2' },
-            id: '998',
-            type: 'mention',
-            status: otherStatus,
-            action: otherStatus,
-            seen: false
-          }],
-          newNotificationSideEffects
-        })
-
-      expect(state.notifications.data.length).to.eql(1)
-      mutations.addNewNotifications(
-        state,
-        {
-          notifications: [{
-            from_profile: { id: '2' },
-            id: '999',
-            type: 'mention',
-            status: mentionedStatus,
-            action: mentionedStatus,
-            seen: false
-          }],
-          newNotificationSideEffects
-        })
-
-      mutations.addNewStatuses(state, { statuses: [mentionedStatus], user })
-      expect(state.allStatuses.length).to.eql(3)
-      expect(state.notifications.data.length).to.eql(2)
-      expect(state.notifications.data[1].status).to.eql(mentionedStatus)
-      expect(state.notifications.data[1].action).to.eql(mentionedStatus)
-      expect(state.notifications.data[1].type).to.eql('mention')
-
-      mutations.addNewStatuses(state, { statuses: [deletion], user })
-      expect(state.allStatuses.length).to.eql(2)
-      expect(state.notifications.data.length).to.eql(1)
     })
   })
 })

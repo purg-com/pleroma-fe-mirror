@@ -1,5 +1,5 @@
 <template>
-  <div class="thread-tree">
+  <article class="thread-tree">
     <status
       :key="status.id"
       ref="statusComponent"
@@ -113,20 +113,20 @@
         </template>
       </i18n-t>
     </div>
-  </div>
+  </article>
 </template>
 
 <script src="./thread_tree.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
 .thread-tree-replies {
-  margin-left: var(--status-margin, $status-margin);
-  border-left: 2px solid var(--border, $fallback--border);
+  margin-left: var(--status-margin);
+  border-left: 2px solid var(--border);
 }
 
 .thread-tree-replies-hidden {
-  padding: var(--status-margin, $status-margin);
+  padding: var(--status-margin);
+
   /* Make the button stretch along the whole row */
   display: flex;
   align-items: stretch;

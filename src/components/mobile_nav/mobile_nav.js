@@ -1,34 +1,49 @@
 import SideDrawer from '../side_drawer/side_drawer.vue'
 import Notifications from '../notifications/notifications.vue'
-import { unseenNotificationsFromStore } from '../../services/notification_utils/notification_utils'
+import ConfirmModal from '../confirm_modal/confirm_modal.vue'
+import {
+  unseenNotificationsFromStore,
+  countExtraNotifications
+} from '../../services/notification_utils/notification_utils'
 import GestureService from '../../services/gesture_service/gesture_service'
+import NavigationPins from 'src/components/navigation/navigation_pins.vue'
 import { mapGetters } from 'vuex'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faTimes,
   faBell,
-  faBars
+  faBars,
+  faArrowUp,
+  faMinus,
+  faCheckDouble
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
   faTimes,
   faBell,
-  faBars
+  faBars,
+  faArrowUp,
+  faMinus,
+  faCheckDouble
 )
 
 const MobileNav = {
   components: {
     SideDrawer,
-    Notifications
+    Notifications,
+    NavigationPins,
+    ConfirmModal
   },
   data: () => ({
     notificationsCloseGesture: undefined,
-    notificationsOpen: false
+    notificationsOpen: false,
+    notificationsAtTop: true,
+    showingConfirmLogout: false
   }),
   created () {
     this.notificationsCloseGesture = GestureService.swipeGesture(
       GestureService.DIRECTION_RIGHT,
-      this.closeMobileNotifications,
+      () => this.closeMobileNotifications(true),
       50
     )
   },
@@ -40,12 +55,28 @@ const MobileNav = {
       return unseenNotificationsFromStore(this.$store)
     },
     unseenNotificationsCount () {
+      return this.unseenNotifications.length + countExtraNotifications(this.$store)
+    },
+    unseenCount () {
       return this.unseenNotifications.length
+    },
+    unseenCountBadgeText () {
+      return `${this.unseenCount ? this.unseenCount : ''}`
     },
     hideSitename () { return this.$store.state.instance.hideSitename },
     sitename () { return this.$store.state.instance.name },
     isChat () {
       return this.$route.name === 'chat'
+    },
+    ...mapGetters(['unreadChatCount', 'unreadAnnouncementCount']),
+    chatsPinned () {
+      return new Set(this.$store.state.serverSideStorage.prefsStorage.collections.pinnedNavItems).has('chats')
+    },
+    shouldConfirmLogout () {
+      return this.$store.getters.mergedConfig.modalOnLogout
+    },
+    closingDrawerMarksAsSeen () {
+      return this.$store.getters.mergedConfig.closingDrawerMarksAsSeen
     },
     ...mapGetters(['unreadChatCount'])
   },
@@ -56,12 +87,14 @@ const MobileNav = {
     openMobileNotifications () {
       this.notificationsOpen = true
     },
-    closeMobileNotifications () {
+    closeMobileNotifications (markRead) {
       if (this.notificationsOpen) {
         // make sure to mark notifs seen only when the notifs were open and not
         // from close-calls.
         this.notificationsOpen = false
-        this.markNotificationsAsSeen()
+        if (markRead && this.closingDrawerMarksAsSeen) {
+          this.markNotificationsAsSeen()
+        }
       }
     },
     notificationsTouchStart (e) {
@@ -73,15 +106,32 @@ const MobileNav = {
     scrollToTop () {
       window.scrollTo(0, 0)
     },
+    scrollMobileNotificationsToTop () {
+      this.$refs.mobileNotifications.scrollTo(0, 0)
+    },
+    showConfirmLogout () {
+      this.showingConfirmLogout = true
+    },
+    hideConfirmLogout () {
+      this.showingConfirmLogout = false
+    },
     logout () {
+      if (!this.shouldConfirmLogout) {
+        this.doLogout()
+      } else {
+        this.showConfirmLogout()
+      }
+    },
+    doLogout () {
       this.$router.replace('/main/public')
       this.$store.dispatch('logout')
+      this.hideConfirmLogout()
     },
     markNotificationsAsSeen () {
-      // this.$refs.notifications.markAsSeen()
       this.$store.dispatch('markNotificationsAsSeen')
     },
     onScroll ({ target: { scrollTop, clientHeight, scrollHeight } }) {
+      this.notificationsAtTop = scrollTop > 0
       if (scrollTop + clientHeight >= scrollHeight) {
         this.$refs.notifications.fetchOlderNotifications()
       }

@@ -5,16 +5,19 @@ import { each, get, set, cloneDeep } from 'lodash'
 let loaded = false
 
 const defaultReducer = (state, paths) => (
-  paths.length === 0 ? state : paths.reduce((substate, path) => {
-    set(substate, path, get(state, path))
-    return substate
-  }, {})
+  paths.length === 0
+    ? state
+    : paths.reduce((substate, path) => {
+      set(substate, path, get(state, path))
+      return substate
+    }, {})
 )
 
 const saveImmedeatelyActions = [
   'markNotificationsAsSeen',
   'clearCurrentUser',
   'setCurrentUser',
+  'setServerSideStorage',
   'setHighlight',
   'setOption',
   'setClientData',
@@ -30,12 +33,12 @@ export default function createPersistedState ({
   key = 'vuex-lz',
   paths = [],
   getState = (key, storage) => {
-    let value = storage.getItem(key)
+    const value = storage.getItem(key)
     return value
   },
   setState = (key, state, storage) => {
     if (!loaded) {
-      console.log('waiting for old state to be loaded...')
+      console.info('waiting for old state to be loaded...')
       return Promise.resolve()
     } else {
       return storage.setItem(key, state)
@@ -62,7 +65,7 @@ export default function createPersistedState ({
         }
         loaded = true
       } catch (e) {
-        console.log("Couldn't load state")
+        console.error("Couldn't load state")
         console.error(e)
         loaded = true
       }
@@ -83,8 +86,8 @@ export default function createPersistedState ({
               })
           }
         } catch (e) {
-          console.log("Couldn't persist state:")
-          console.log(e)
+          console.error("Couldn't persist state:")
+          console.error(e)
         }
       })
     }

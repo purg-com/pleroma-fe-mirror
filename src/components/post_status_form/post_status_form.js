@@ -1,4 +1,5 @@
 import statusPoster from '../../services/status_poster/status_poster.service.js'
+import genRandomSeed from '../../services/random_seed/random_seed.service.js'
 import MediaUpload from '../media_upload/media_upload.vue'
 import ScopeSelector from '../scope_selector/scope_selector.vue'
 import EmojiInput from '../emoji_input/emoji_input.vue'
@@ -8,6 +9,7 @@ import Gallery from 'src/components/gallery/gallery.vue'
 import StatusContent from '../status_content/status_content.vue'
 import fileTypeService from '../../services/file_type/file_type.service.js'
 import { findOffset } from '../../services/offset_finder/offset_finder.service.js'
+import { propsToNative } from '../../services/attributes_helper/attributes_helper.service.js'
 import { reject, map, uniqBy, debounce } from 'lodash'
 import suggestor from '../emoji_input/suggestor.js'
 import { mapGetters, mapState } from 'vuex'
@@ -41,7 +43,7 @@ const buildMentionsString = ({ user, attentions = [] }, currentUser) => {
   allAttentions = uniqBy(allAttentions, 'id')
   allAttentions = reject(allAttentions, { id: currentUser.id })
 
-  let mentions = map(allAttentions, (attention) => {
+  const mentions = map(allAttentions, (attention) => {
     return `@${attention.screen_name}`
   })
 
@@ -55,6 +57,14 @@ const pxStringToNumber = (str) => {
 
 const PostStatusForm = {
   props: [
+    'statusId',
+    'statusText',
+    'statusIsSensitive',
+    'statusPoll',
+    'statusFiles',
+    'statusMediaDescriptions',
+    'statusScope',
+    'statusContentType',
     'replyTo',
     'repliedUser',
     'attentions',
@@ -62,6 +72,7 @@ const PostStatusForm = {
     'subject',
     'disableSubject',
     'disableScopeSelector',
+    'disableVisibilitySelector',
     'disableNotice',
     'disableLockWarning',
     'disablePolls',
@@ -76,7 +87,8 @@ const PostStatusForm = {
     'fileLimit',
     'submitOnEnter',
     'emojiPickerPlacement',
-    'optimisticPosting'
+    'optimisticPosting',
+    'profileMention'
   ],
   emits: [
     'posted',
@@ -114,7 +126,7 @@ const PostStatusForm = {
 
     const { scopeCopy } = this.$store.getters.mergedConfig
 
-    if (this.replyTo) {
+    if (this.replyTo || this.profileMention) {
       const currentUser = this.$store.state.users.currentUser
       statusText = buildMentionsString({ user: this.repliedUser, attentions: this.attentions }, currentUser)
     }
@@ -125,22 +137,40 @@ const PostStatusForm = {
 
     const { postContentType: contentType, sensitiveByDefault } = this.$store.getters.mergedConfig
 
+    let statusParams = {
+      spoilerText: this.subject || '',
+      status: statusText,
+      nsfw: !!sensitiveByDefault,
+      files: [],
+      poll: {},
+      mediaDescriptions: {},
+      visibility: scope,
+      contentType
+    }
+
+    if (this.statusId) {
+      const statusContentType = this.statusContentType || contentType
+      statusParams = {
+        spoilerText: this.subject || '',
+        status: this.statusText || '',
+        nsfw: this.statusIsSensitive || !!sensitiveByDefault,
+        files: this.statusFiles || [],
+        poll: this.statusPoll || {},
+        mediaDescriptions: this.statusMediaDescriptions || {},
+        visibility: this.statusScope || scope,
+        contentType: statusContentType,
+        quoting: false
+      }
+    }
+
     return {
+      randomSeed: genRandomSeed(),
       dropFiles: [],
       uploadingFiles: false,
       error: null,
       posting: false,
       highlighted: 0,
-      newStatus: {
-        spoilerText: this.subject || '',
-        status: statusText,
-        nsfw: !!sensitiveByDefault,
-        files: [],
-        poll: {},
-        mediaDescriptions: {},
-        visibility: scope,
-        contentType
-      },
+      newStatus: statusParams,
       caret: 0,
       pollFormVisible: false,
       showDropIcon: 'hide',
@@ -164,7 +194,7 @@ const PostStatusForm = {
     emojiUserSuggestor () {
       return suggestor({
         emoji: [
-          ...this.$store.state.instance.emoji,
+          ...this.$store.getters.standardEmojiList,
           ...this.$store.state.instance.customEmoji
         ],
         store: this.$store
@@ -173,13 +203,13 @@ const PostStatusForm = {
     emojiSuggestor () {
       return suggestor({
         emoji: [
-          ...this.$store.state.instance.emoji,
+          ...this.$store.getters.standardEmojiList,
           ...this.$store.state.instance.customEmoji
         ]
       })
     },
     emoji () {
-      return this.$store.state.instance.emoji || []
+      return this.$store.getters.standardEmojiList || []
     },
     customEmoji () {
       return this.$store.state.instance.customEmoji || []
@@ -236,13 +266,40 @@ const PostStatusForm = {
     uploadFileLimitReached () {
       return this.newStatus.files.length >= this.fileLimit
     },
+    isEdit () {
+      return typeof this.statusId !== 'undefined' && this.statusId.trim() !== ''
+    },
+    quotable () {
+      if (!this.$store.state.instance.quotingAvailable) {
+        return false
+      }
+
+      if (!this.replyTo) {
+        return false
+      }
+
+      const repliedStatus = this.$store.state.statuses.allStatusesObject[this.replyTo]
+      if (!repliedStatus) {
+        return false
+      }
+
+      if (repliedStatus.visibility === 'public' ||
+          repliedStatus.visibility === 'unlisted' ||
+          repliedStatus.visibility === 'local') {
+        return true
+      } else if (repliedStatus.visibility === 'private') {
+        return repliedStatus.user.id === this.$store.state.users.currentUser.id
+      }
+
+      return false
+    },
     ...mapGetters(['mergedConfig']),
     ...mapState({
       mobileLayout: state => state.interface.mobileLayout
     })
   },
   watch: {
-    'newStatus': {
+    newStatus: {
       deep: true,
       handler () {
         this.statusChanged()
@@ -263,7 +320,8 @@ const PostStatusForm = {
         visibility: newStatus.visibility,
         contentType: newStatus.contentType,
         poll: {},
-        mediaDescriptions: {}
+        mediaDescriptions: {},
+        quoting: false
       }
       this.pollFormVisible = false
       this.$refs.mediaUpload && this.$refs.mediaUpload.clearFile()
@@ -273,7 +331,7 @@ const PostStatusForm = {
           this.$refs.textarea.focus()
         })
       }
-      let el = this.$el.querySelector('textarea')
+      const el = this.$el.querySelector('textarea')
       el.style.height = 'auto'
       el.style.height = undefined
       this.error = null
@@ -311,6 +369,8 @@ const PostStatusForm = {
         return
       }
 
+      const replyOrQuoteAttr = newStatus.quoting ? 'quoteId' : 'inReplyToStatusId'
+
       const postingOptions = {
         status: newStatus.status,
         spoilerText: newStatus.spoilerText || null,
@@ -318,7 +378,7 @@ const PostStatusForm = {
         sensitive: newStatus.nsfw,
         media: newStatus.files,
         store: this.$store,
-        inReplyToStatusId: this.replyTo,
+        [replyOrQuoteAttr]: this.replyTo,
         contentType: newStatus.contentType,
         poll,
         idempotencyKey: this.idempotencyKey
@@ -344,6 +404,7 @@ const PostStatusForm = {
       }
       const newStatus = this.newStatus
       this.previewLoading = true
+      const replyOrQuoteAttr = newStatus.quoting ? 'quoteId' : 'inReplyToStatusId'
       statusPoster.postStatus({
         status: newStatus.status,
         spoilerText: newStatus.spoilerText || null,
@@ -351,7 +412,7 @@ const PostStatusForm = {
         sensitive: newStatus.nsfw,
         media: [],
         store: this.$store,
-        inReplyToStatusId: this.replyTo,
+        [replyOrQuoteAttr]: this.replyTo,
         contentType: newStatus.contentType,
         poll: {},
         preview: true
@@ -392,7 +453,7 @@ const PostStatusForm = {
       this.$emit('resize', { delayed: true })
     },
     removeMediaFile (fileInfo) {
-      let index = this.newStatus.files.indexOf(fileInfo)
+      const index = this.newStatus.files.indexOf(fileInfo)
       this.newStatus.files.splice(index, 1)
       this.$emit('resize')
     },
@@ -462,7 +523,7 @@ const PostStatusForm = {
     },
     onEmojiInputInput (e) {
       this.$nextTick(() => {
-        this.resize(this.$refs['textarea'])
+        this.resize(this.$refs.textarea)
       })
     },
     resize (e) {
@@ -473,12 +534,11 @@ const PostStatusForm = {
       if (target.value === '') {
         target.style.height = null
         this.$emit('resize')
-        this.$refs['emoji-input'].resize()
         return
       }
 
-      const formRef = this.$refs['form']
-      const bottomRef = this.$refs['bottom']
+      const formRef = this.$refs.form
+      const bottomRef = this.$refs.bottom
       /* Scroller is either `window` (replies in TL), sidebar (main post form,
        * replies in notifs) or mobile post form. Note that getting and setting
        * scroll is different for `Window` and `Element`s
@@ -560,11 +620,9 @@ const PostStatusForm = {
       } else {
         scrollerRef.scrollTop = targetScroll
       }
-
-      this.$refs['emoji-input'].resize()
     },
     showEmojiPicker () {
-      this.$refs['textarea'].focus()
+      this.$refs.textarea.focus()
       this.$refs['emoji-input'].triggerShowPicker()
     },
     clearError () {
@@ -604,6 +662,9 @@ const PostStatusForm = {
     },
     openProfileTab () {
       this.$store.dispatch('openSettingsModalTab', 'profile')
+    },
+    propsToNative (props) {
+      return propsToNative(props)
     }
   }
 }

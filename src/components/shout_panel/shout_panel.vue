@@ -5,20 +5,20 @@
   >
     <div class="panel panel-default">
       <div
-        class="panel-heading timeline-heading"
+        class="panel-heading"
         :class="{ 'shout-heading': floating }"
         @click.stop.prevent="togglePanel"
       >
-        <div class="title">
+        <h1 class="title">
           {{ $t('shoutbox.title') }}
           <FAIcon
             v-if="floating"
             icon="times"
             class="close-icon"
           />
-        </div>
+        </h1>
       </div>
-      <div class="shout-window">
+      <div class="panel-body shout-window">
         <div
           v-for="message in messages"
           :key="message.id"
@@ -41,10 +41,10 @@
           </div>
         </div>
       </div>
-      <div class="shout-input">
+      <div class="panel-body shout-input">
         <textarea
           v-model="currentMessage"
-          class="shout-input-textarea"
+          class="shout-input-textarea input"
           rows="1"
           @keyup.enter="submit(currentMessage)"
         />
@@ -75,12 +75,10 @@
 <script src="./shout_panel.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-
 .floating-shout {
   position: fixed;
   bottom: 0.5em;
-  z-index: 1000;
+  z-index: var(--ZI_popovers);
   max-width: 25em;
 
   &.-left {
@@ -97,8 +95,7 @@
     cursor: pointer;
 
     .icon {
-      color: $fallback--text;
-      color: var(--panelText, $fallback--text);
+      color: var(--text);
       margin-right: 0.5em;
     }
 
@@ -128,8 +125,7 @@
     img {
       height: 24px;
       width: 24px;
-      border-radius: $fallback--avatarRadius;
-      border-radius: var(--avatarRadius, $fallback--avatarRadius);
+      border-radius: var(--roundness);
       margin-right: 0.5em;
       margin-top: 0.25em;
     }

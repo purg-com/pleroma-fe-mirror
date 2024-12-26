@@ -11,7 +11,7 @@ library.add(
 )
 
 const Flash = {
-  props: [ 'src' ],
+  props: ['src'],
   data () {
     return {
       player: false, // can be true, "hidden", false. hidden = element exists

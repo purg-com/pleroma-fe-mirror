@@ -1,7 +1,20 @@
 .RichContent {
+  font-family: var(--font);
+
+  &.-faint {
+    /* stylelint-disable declaration-no-important */
+    --text: var(--textFaint) !important;
+    --link: var(--linkFaint) !important;
+    --funtextGreentext: var(--funtextGreentextFaint) !important;
+    --funtextCyantext: var(--funtextCyantextFaint) !important;
+    /* stylelint-enable declaration-no-important */
+  }
+
   blockquote {
-    margin: 0.2em 0 0.2em 2em;
+    margin: 0.2em 0 0.2em 0.2em;
     font-style: italic;
+    border-left: 0.2em solid var(--textFaint);
+    padding-left: 1em;
   }
 
   pre {
@@ -13,15 +26,15 @@
   kbd,
   var,
   pre {
-    font-family: var(--postCodeFont, monospace);
+    font-family: var(--monoFont);
   }
 
   p {
-    margin: 0 0 1em 0;
+    margin: 0 0 1em;
   }
 
   p:last-child {
-    margin: 0 0 0 0;
+    margin: 0;
   }
 
   h1 {
@@ -61,4 +74,17 @@
     vertical-align: middle;
     object-fit: contain;
   }
+
+  .greentext {
+    color: var(--funtextGreentext);
+  }
+
+  .cyantext {
+    color: var(--funtextCyantext);
+  }
+}
+
+a .RichContent {
+  /* stylelint-disable-next-line declaration-no-important */
+  color: var(--link) !important;
 }

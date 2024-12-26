@@ -24,10 +24,9 @@
   </div>
 </template>
 
-<script src="./staff_panel.js" ></script>
+<script src="./staff_panel.js"></script>
 
 <style lang="scss">
-
 .staff-group {
   padding-left: 1em;
   padding-top: 1em;

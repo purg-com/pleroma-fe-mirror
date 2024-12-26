@@ -21,15 +21,13 @@
 </template>
 <script src="./mfa_backup_codes.js"></script>
 <style lang="scss">
-@import '../../../../_variables.scss';
-
 .mfa-backup-codes {
   .warning {
-    color: $fallback--cOrange;
-    color: var(--cOrange, $fallback--cOrange);
+    color: var(--cOrange);
   }
+
   .backup-codes {
-    font-family: var(--postCodeFont, monospace);
+    font-family: var(--monoFont);
   }
 }
 </style>

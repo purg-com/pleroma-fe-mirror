@@ -12,6 +12,9 @@
 
 <script>
 export default {
+  provide: {
+    popoversZLayer: 'modals'
+  },
   props: {
     isOpen: {
       type: Boolean,
@@ -26,7 +29,7 @@ export default {
     classes () {
       return {
         'modal-background': !this.noBackground,
-        'open': this.isOpen
+        open: this.isOpen
       }
     }
   }
@@ -35,7 +38,7 @@ export default {
 
 <style lang="scss">
 .modal-view {
-  z-index: 2000;
+  z-index: var(--ZI_modals);
   position: fixed;
   top: 0;
   left: 0;
@@ -56,7 +59,7 @@ export default {
 
   &.modal-background {
     pointer-events: initial;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgb(0 0 0 / 50%);
   }
 
   &.open {
@@ -66,10 +69,11 @@ export default {
 
 @keyframes modal-background-fadein {
   from {
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgb(0 0 0 / 0%);
   }
+
   to {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgb(0 0 0 / 50%);
   }
 }
 </style>

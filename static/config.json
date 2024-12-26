@@ -14,6 +14,7 @@
   "logoMask": true,
   "logoLeft": false,
   "minimalScopesMode": false,
+  "disableUpdateNotification": false,
   "nsfwCensorImage": "",
   "postContentType": "text/plain",
   "redirectRootLogin": "/main/friends",
@@ -23,6 +24,8 @@
   "showInstanceSpecificPanel": false,
   "sidebarRight": false,
   "subjectLineBehavior": "email",
-  "theme": "pleroma-dark",
+  "theme": null,
+  "style": null,
+  "palette": null,
   "webPushNotifications": false
 }

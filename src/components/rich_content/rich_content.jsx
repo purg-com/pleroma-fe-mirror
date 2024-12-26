@@ -8,6 +8,27 @@ import HashtagLink from 'src/components/hashtag_link/hashtag_link.vue'
 
 import './rich_content.scss'
 
+const MAYBE_LINE_BREAKING_ELEMENTS = [
+  'blockquote',
+  'br',
+  'hr',
+  'ul',
+  'ol',
+  'li',
+  'p',
+  'table',
+  'tbody',
+  'td',
+  'th',
+  'thead',
+  'tr',
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'h5'
+]
+
 /**
  * RichContent, The Über-powered component for rendering Post HTML.
  *
@@ -55,6 +76,12 @@ export default {
     },
     // Meme arrows
     greentext: {
+      required: false,
+      type: Boolean,
+      default: false
+    },
+    // Faint style (for notifs)
+    faint: {
       required: false,
       type: Boolean,
       default: false
@@ -149,7 +176,10 @@ export default {
       // Handle tag nodes
       if (Array.isArray(item)) {
         const [opener, children, closer] = item
-        const Tag = getTagName(opener)
+        let Tag = getTagName(opener)
+        if (Tag.toLowerCase() === 'script') Tag = 'js-exploit'
+        if (Tag.toLowerCase() === 'style') Tag = 'css-exploit'
+        const fullAttrs = getAttrs(opener, () => true)
         const attrs = getAttrs(opener)
         const previouslyMentions = currentMentions !== null
         /* During grouping of mentions we trim all the empty text elements
@@ -163,25 +193,22 @@ export default {
               !(children && typeof children[0] === 'string' && children[0].match(/^\s/))
                 ? lastSpacing
                 : ''
-        switch (Tag) {
-          case 'br':
+        if (MAYBE_LINE_BREAKING_ELEMENTS.includes(Tag)) {
+          // all the elements that can cause a line change
+          currentMentions = null
+        } else if (Tag === 'img') { // replace images with StillImage
+          return ['', [mentionsLinePadding, renderImage(opener)], '']
+        } else if (Tag === 'a' && this.handleLinks) { // replace mentions with MentionLink
+          if (fullAttrs.class && fullAttrs.class.includes('mention')) {
+            // Handling mentions here
+            return renderMention(attrs, children)
+          } else {
             currentMentions = null
-            break
-          case 'img': // replace images with StillImage
-            return ['', [mentionsLinePadding, renderImage(opener)], '']
-          case 'a': // replace mentions with MentionLink
-            if (!this.handleLinks) break
-            if (attrs['class'] && attrs['class'].includes('mention')) {
-              // Handling mentions here
-              return renderMention(attrs, children)
-            } else {
-              currentMentions = null
-              break
-            }
-          case 'span':
-            if (this.handleLinks && attrs['class'] && attrs['class'].includes('h-card')) {
-              return ['', children.map(processItem), '']
-            }
+          }
+        } else if (Tag === 'span') {
+          if (this.handleLinks && fullAttrs.class && fullAttrs.class.includes('h-card')) {
+            return ['', children.map(processItem), '']
+          }
         }
 
         if (children !== undefined) {
@@ -213,13 +240,14 @@ export default {
         const [opener, children] = item
         const Tag = opener === '' ? '' : getTagName(opener)
         switch (Tag) {
-          case 'a': // replace mentions with MentionLink
+          case 'a': { // replace mentions with MentionLink
             if (!this.handleLinks) break
-            const attrs = getAttrs(opener)
+            const fullAttrs = getAttrs(opener, () => true)
+            const attrs = getAttrs(opener, () => true)
             // should only be this
             if (
-              (attrs['class'] && attrs['class'].includes('hashtag')) || // Pleroma style
-                (attrs['rel'] === 'tag') // Mastodon style
+              (fullAttrs.class && fullAttrs.class.includes('hashtag')) || // Pleroma style
+                (fullAttrs.rel === 'tag') // Mastodon style
             ) {
               return renderHashtag(attrs, children, encounteredTextReverse)
             } else {
@@ -230,6 +258,7 @@ export default {
                 { newChildren }
               </a>
             }
+          }
           case '':
             return [...children].reverse().map(processItemReverse).reverse()
         }
@@ -254,7 +283,7 @@ export default {
     // DO NOT USE SLOTS they cause a re-render feedback loop here.
     // slots updated -> rerender -> emit -> update up the tree -> rerender -> ...
     // at least until vue3?
-    const result = <span class="RichContent">
+    const result = <span class={['RichContent', this.faint ? '-faint' : '']}>
       { pass2 }
     </span>
 

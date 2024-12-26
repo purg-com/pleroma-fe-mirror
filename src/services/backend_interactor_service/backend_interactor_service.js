@@ -2,10 +2,12 @@ import apiService, { getMastodonSocketURI, ProcessedWS } from '../api/api.servic
 import timelineFetcher from '../timeline_fetcher/timeline_fetcher.service.js'
 import notificationsFetcher from '../notifications_fetcher/notifications_fetcher.service.js'
 import followRequestFetcher from '../../services/follow_request_fetcher/follow_request_fetcher.service'
+import listsFetcher from '../../services/lists_fetcher/lists_fetcher.service.js'
+import bookmarkFoldersFetcher from '../../services/bookmark_folders_fetcher/bookmark_folders_fetcher.service.js'
 
 const backendInteractorService = credentials => ({
-  startFetchingTimeline ({ timeline, store, userId = false, tag }) {
-    return timelineFetcher.startFetching({ timeline, store, credentials, userId, tag })
+  startFetchingTimeline ({ timeline, store, userId = false, listId = false, statusId = false, bookmarkFolderId = false, tag }) {
+    return timelineFetcher.startFetching({ timeline, store, credentials, userId, listId, statusId, bookmarkFolderId, tag })
   },
 
   fetchTimeline (args) {
@@ -22,6 +24,14 @@ const backendInteractorService = credentials => ({
 
   startFetchingFollowRequests ({ store }) {
     return followRequestFetcher.startFetching({ store, credentials })
+  },
+
+  startFetchingLists ({ store }) {
+    return listsFetcher.startFetching({ store, credentials })
+  },
+
+  startFetchingBookmarkFolders ({ store }) {
+    return bookmarkFoldersFetcher.startFetching({ store, credentials })
   },
 
   startUserSocket ({ store }) {

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="side-drawer-container"
+    class="side-drawer-container mobile-drawer"
     :class="{ 'side-drawer-container-closed': closed, 'side-drawer-container-open': !closed }"
   >
     <div
@@ -35,7 +35,10 @@
           v-if="!currentUser"
           @click="toggleDrawer"
         >
-          <router-link :to="{ name: 'login' }">
+          <router-link
+            :to="{ name: 'login' }"
+            class="menu-item"
+          >
             <FAIcon
               fixed-width
               class="fa-scale-110 fa-old-padding"
@@ -47,7 +50,10 @@
           v-if="currentUser || !privateMode"
           @click="toggleDrawer"
         >
-          <router-link :to="{ name: timelinesRoute }">
+          <router-link
+            :to="timelinesRoute"
+            class="menu-item"
+          >
             <FAIcon
               fixed-width
               class="fa-scale-110 fa-old-padding"
@@ -56,12 +62,43 @@
           </router-link>
         </li>
         <li
+          v-if="currentUser"
+          @click="toggleDrawer"
+        >
+          <router-link
+            :to="{ name: 'lists' }"
+            class="menu-item"
+          >
+            <FAIcon
+              fixed-width
+              class="fa-scale-110 fa-old-padding"
+              icon="list"
+            /> {{ $t("nav.lists") }}
+          </router-link>
+        </li>
+        <li
+          v-if="currentUser"
+          @click="toggleDrawer"
+        >
+          <router-link
+            :to="{ name: 'bookmarks' }"
+            class="menu-item"
+          >
+            <FAIcon
+              fixed-width
+              class="fa-scale-110 fa-old-padding"
+              icon="bookmark"
+            /> {{ $t("nav.bookmarks") }}
+          </router-link>
+        </li>
+        <li
           v-if="currentUser && pleromaChatMessagesAvailable"
           @click="toggleDrawer"
         >
           <router-link
             :to="{ name: 'chats', params: { username: currentUser.screen_name } }"
-            style="position: relative"
+            style="position: relative;"
+            class="menu-item"
           >
             <FAIcon
               fixed-width
@@ -70,7 +107,7 @@
             /> {{ $t("nav.chats") }}
             <span
               v-if="unreadChatCount"
-              class="badge badge-notification"
+              class="badge -notification"
             >
               {{ unreadChatCount }}
             </span>
@@ -79,7 +116,10 @@
       </ul>
       <ul v-if="currentUser">
         <li @click="toggleDrawer">
-          <router-link :to="{ name: 'interactions', params: { username: currentUser.screen_name } }">
+          <router-link
+            :to="{ name: 'interactions', params: { username: currentUser.screen_name } }"
+            class="menu-item"
+          >
             <FAIcon
               fixed-width
               class="fa-scale-110 fa-old-padding"
@@ -91,7 +131,10 @@
           v-if="currentUser.locked"
           @click="toggleDrawer"
         >
-          <router-link to="/friend-requests">
+          <router-link
+            to="/friend-requests"
+            class="menu-item"
+          >
             <FAIcon
               fixed-width
               class="fa-scale-110 fa-old-padding"
@@ -99,7 +142,7 @@
             /> {{ $t("nav.friend_requests") }}
             <span
               v-if="followRequestCount > 0"
-              class="badge badge-notification"
+              class="badge -notification"
             >
               {{ followRequestCount }}
             </span>
@@ -109,7 +152,10 @@
           v-if="shout"
           @click="toggleDrawer"
         >
-          <router-link :to="{ name: 'shout-panel' }">
+          <router-link
+            :to="{ name: 'shout-panel' }"
+            class="menu-item"
+          >
             <FAIcon
               fixed-width
               class="fa-scale-110 fa-old-padding"
@@ -123,7 +169,10 @@
           v-if="currentUser || !privateMode"
           @click="toggleDrawer"
         >
-          <router-link :to="{ name: 'search' }">
+          <router-link
+            :to="{ name: 'search' }"
+            class="menu-item"
+          >
             <FAIcon
               fixed-width
               class="fa-scale-110 fa-old-padding"
@@ -135,7 +184,10 @@
           v-if="currentUser && suggestionsEnabled"
           @click="toggleDrawer"
         >
-          <router-link :to="{ name: 'who-to-follow' }">
+          <router-link
+            :to="{ name: 'who-to-follow' }"
+            class="menu-item"
+          >
             <FAIcon
               fixed-width
               class="fa-scale-110 fa-old-padding"
@@ -145,7 +197,7 @@
         </li>
         <li @click="toggleDrawer">
           <button
-            class="button-unstyled -link -fullwidth"
+            class="menu-item"
             @click="openSettingsModal"
           >
             <FAIcon
@@ -156,7 +208,10 @@
           </button>
         </li>
         <li @click="toggleDrawer">
-          <router-link :to="{ name: 'about'}">
+          <router-link
+            :to="{ name: 'about'}"
+            class="menu-item"
+          >
             <FAIcon
               fixed-width
               class="fa-scale-110 fa-old-padding"
@@ -168,23 +223,59 @@
           v-if="currentUser && currentUser.role === 'admin'"
           @click="toggleDrawer"
         >
-          <a
-            href="/pleroma/admin/#/login-pleroma"
-            target="_blank"
+          <button
+            class="menu-item"
+            @click.stop="openAdminModal"
           >
             <FAIcon
               fixed-width
               class="fa-scale-110 fa-old-padding"
               icon="tachometer-alt"
             /> {{ $t("nav.administration") }}
-          </a>
+          </button>
+        </li>
+        <li
+          v-if="currentUser && supportsAnnouncements"
+          @click="toggleDrawer"
+        >
+          <router-link
+            :to="{ name: 'announcements' }"
+            class="menu-item"
+          >
+            <FAIcon
+              fixed-width
+              class="fa-scale-110 fa-old-padding"
+              icon="bullhorn"
+            /> {{ $t("nav.announcements") }}
+            <span
+              v-if="unreadAnnouncementCount"
+              class="badge -notification"
+            >
+              {{ unreadAnnouncementCount }}
+            </span>
+          </router-link>
+        </li>
+        <li
+          v-if="currentUser"
+          @click="toggleDrawer"
+        >
+          <router-link
+            :to="{ name: 'edit-navigation' }"
+            class="menu-item"
+          >
+            <FAIcon
+              fixed-width
+              class="fa-scale-110 fa-old-padding"
+              icon="compass"
+            /> {{ $t("nav.edit_nav_mobile") }}
+          </router-link>
         </li>
         <li
           v-if="currentUser"
           @click="toggleDrawer"
         >
           <button
-            class="button-unstyled -link -fullwidth"
+            class="menu-item"
             @click="doLogout"
           >
             <FAIcon
@@ -204,14 +295,12 @@
   </div>
 </template>
 
-<script src="./side_drawer.js" ></script>
+<script src="./side_drawer.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-
 .side-drawer-container {
   position: fixed;
-  z-index: 1000;
+  z-index: var(--ZI_navbar);
   top: 0;
   left: 0;
   width: 100%;
@@ -240,11 +329,11 @@
   z-index: -1;
   transition: 0.35s;
   transition-property: background-color;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgb(0 0 0 / 50%);
 }
 
 .side-drawer-darken-closed {
-  background-color: rgba(0, 0, 0, 0);
+  background-color: rgb(0 0 0 / 0%);
 }
 
 .side-drawer-click-outside {
@@ -253,24 +342,16 @@
 
 .side-drawer {
   overflow-x: hidden;
-  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
   transition: 0.35s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
   transition-property: transform;
   margin: 0 0 0 -100px;
   padding: 0 0 1em 100px;
   width: 80%;
   max-width: 20em;
   flex: 0 0 80%;
-  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
-  box-shadow: var(--panelShadow);
-  background-color: $fallback--bg;
-  background-color: var(--popover, $fallback--bg);
-  color: $fallback--link;
-  color: var(--popoverText, $fallback--link);
-  --faint: var(--popoverFaintText, $fallback--faint);
-  --faintLink: var(--popoverFaintLink, $fallback--faint);
-  --lightText: var(--popoverLightText, $fallback--lightText);
-  --icon: var(--popoverIcon, $fallback--icon);
+  box-shadow: var(--shadow);
+  background-color: var(--background);
 
   .badge {
     margin-left: 10px;
@@ -316,10 +397,8 @@
   list-style: none;
   margin: 0;
   padding: 0;
-
   border-bottom: 1px solid;
-  border-color: $fallback--border;
-  border-color: var(--border, $fallback--border);
+  border-color: var(--border);
 }
 
 .side-drawer ul:last-child {
@@ -329,23 +408,13 @@
 .side-drawer li {
   padding: 0;
 
-  a, button {
+  a,
+  button {
     box-sizing: border-box;
     display: block;
     height: 3em;
     line-height: 3em;
     padding: 0 0.7em;
-
-    &:hover {
-      background-color: $fallback--lightBg;
-      background-color: var(--selectedMenuPopover, $fallback--lightBg);
-      color: $fallback--text;
-      color: var(--selectedMenuPopoverText, $fallback--text);
-      --faint: var(--selectedMenuPopoverFaintText, $fallback--faint);
-      --faintLink: var(--selectedMenuPopoverFaintLink, $fallback--faint);
-      --lightText: var(--selectedMenuPopoverLightText, $fallback--lightText);
-      --icon: var(--selectedMenuPopoverIcon, $fallback--icon);
-    }
   }
 }
 </style>

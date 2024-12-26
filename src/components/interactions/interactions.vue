@@ -1,17 +1,21 @@
 <template>
   <div class="panel panel-default">
     <div class="panel-heading">
-      <div class="title">
+      <h1 class="title">
         {{ $t("nav.interactions") }}
-      </div>
+      </h1>
     </div>
     <tab-switcher
       ref="tabSwitcher"
       :on-switch="onModeSwitch"
     >
       <span
-        key="mentions"
+        key="statuses"
         :label="$t('nav.mentions')"
+      />
+      <span
+        key="statuses"
+        :label="$t('interactions.statuses')"
       />
       <span
         key="likes+repeats"
@@ -22,6 +26,15 @@
         :label="$t('interactions.follows')"
       />
       <span
+        key="reactions"
+        :label="$t('interactions.emoji_reactions')"
+      />
+      <span
+        v-if="canSeeReports"
+        key="reports"
+        :label="$t('interactions.reports')"
+      />
+      <span
         v-if="!allowFollowingMove"
         key="moves"
         :label="$t('interactions.moves')"
@@ -30,6 +43,7 @@
     <Notifications
       ref="notifications"
       :no-heading="true"
+      :no-extra="true"
       :minimal-mode="true"
       :filter-mode="filterMode"
     />

@@ -7,13 +7,16 @@ import TabSwitcher from 'src/components/tab_switcher/tab_switcher.jsx'
 import RichContent from 'src/components/rich_content/rich_content.jsx'
 import List from '../list/list.vue'
 import withLoadMore from '../../hocs/with_load_more/with_load_more'
+import localeService from 'src/services/locale/locale.service.js'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
-  faCircleNotch
+  faCircleNotch,
+  faBirthdayCake
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
-  faCircleNotch
+  faCircleNotch,
+  faBirthdayCake
 )
 
 const FollowerList = withLoadMore({
@@ -45,7 +48,7 @@ const UserProfile = {
   },
   created () {
     const routeParams = this.$route.params
-    this.load(routeParams.name || routeParams.id)
+    this.load({ name: routeParams.name, id: routeParams.id })
     this.tab = get(this.$route, 'query.tab', defaultTabKey)
   },
   unmounted () {
@@ -76,6 +79,13 @@ const UserProfile = {
     },
     followersTabVisible () {
       return this.isUs || !this.user.hide_followers
+    },
+    favoritesTabVisible () {
+      return this.isUs || !this.user.hide_favorites
+    },
+    formattedBirthday () {
+      const browserLocale = localeService.internalToBrowserLocale(this.$i18n.locale)
+      return this.user.birthday && new Date(Date.parse(this.user.birthday)).toLocaleDateString(browserLocale, { timeZone: 'UTC', day: 'numeric', month: 'long', year: 'numeric' })
     }
   },
   methods: {
@@ -96,6 +106,8 @@ const UserProfile = {
         startFetchingTimeline('user', userId)
         startFetchingTimeline('media', userId)
         if (this.isUs) {
+          startFetchingTimeline('favorites')
+        } else if (!this.user.hide_favorites) {
           startFetchingTimeline('favorites', userId)
         }
         // Fetch all pinned statuses immediately
@@ -106,12 +118,17 @@ const UserProfile = {
       this.userId = null
       this.error = false
 
+      const maybeId = userNameOrId.id
+      const maybeName = userNameOrId.name
+
       // Check if user data is already loaded in store
-      const user = this.$store.getters.findUser(userNameOrId)
+      const user = maybeId ? this.$store.getters.findUser(maybeId) : this.$store.getters.findUserByName(maybeName)
       if (user) {
         loadById(user.id)
       } else {
-        this.$store.dispatch('fetchUser', userNameOrId)
+        (maybeId
+          ? this.$store.dispatch('fetchUser', maybeId)
+          : this.$store.dispatch('fetchUserByName', maybeName))
           .then(({ id }) => loadById(id))
           .catch((reason) => {
             const errorMessage = get(reason, 'error.error')
@@ -150,12 +167,12 @@ const UserProfile = {
   watch: {
     '$route.params.id': function (newVal) {
       if (newVal) {
-        this.switchUser(newVal)
+        this.switchUser({ id: newVal })
       }
     },
     '$route.params.name': function (newVal) {
       if (newVal) {
-        this.switchUser(newVal)
+        this.switchUser({ name: newVal })
       }
     },
     '$route.query': function (newVal) {

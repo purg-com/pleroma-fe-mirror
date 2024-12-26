@@ -4,10 +4,10 @@
     placement="top"
     :offset="{ y: 5 }"
   >
-    <template v-slot:trigger>
+    <template #trigger>
       <slot />
     </template>
-    <template v-slot:content>
+    <template #content>
       <div class="user-list-popover">
         <template v-if="users.length">
           <div
@@ -29,7 +29,7 @@
                 :emoji="user.emoji"
               />
               <!-- eslint-enable vue/no-v-html -->
-              <span class="user-list-screen-name">{{ user.screen_name_ui }}</span>
+              <span class="user-list-screen-name">{{ user.screen_name_ui }}</span><UnicodeDomainIndicator :user="user" />
             </div>
           </div>
         </template>
@@ -45,15 +45,13 @@
   </Popover>
 </template>
 
-<script src="./user_list_popover.js" ></script>
+<script src="./user_list_popover.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-
 .user-list-popover {
   padding: 0.5em;
 
-  --emoji-size: 16px;
+  --emoji-size: calc(var(--emojiSize, 32px) / 2);
 
   .user-list-row {
     padding: 0.25em;

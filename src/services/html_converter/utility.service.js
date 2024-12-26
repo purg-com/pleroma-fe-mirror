@@ -5,7 +5,7 @@
  * @return {String} - tagname, i.e. "div"
  */
 export const getTagName = (tag) => {
-  const result = /(?:<\/(\w+)>|<(\w+)\s?.*?\/?>)/gi.exec(tag)
+  const result = /(?:<\/(\w+)>|<(\w+)\s?.*?\/?>)/gis.exec(tag)
   return result && (result[1] || result[2])
 }
 
@@ -16,19 +16,27 @@ export const getTagName = (tag) => {
  * @return {Object} - map of attributes key = attribute name, value = attribute value
  *   attributes without values represented as boolean true
  */
-export const getAttrs = tag => {
+export const getAttrs = (tag, filter) => {
   const innertag = tag
     .substring(1, tag.length - 1)
     .replace(new RegExp('^' + getTagName(tag)), '')
     .replace(/\/?$/, '')
     .trim()
-  const attrs = Array.from(innertag.matchAll(/([a-z0-9-]+)(?:=("[^"]+?"|'[^']+?'))?/gi))
+  const attrs = Array.from(innertag.matchAll(/([a-z]+[a-z0-9-]*)(?:=("[^"]+?"|'[^']+?'))?/gi))
     .map(([trash, key, value]) => [key, value])
     .map(([k, v]) => {
       if (!v) return [k, true]
       return [k, v.substring(1, v.length - 1)]
     })
-  return Object.fromEntries(attrs)
+  const defaultFilter = ([k, v]) => {
+    const attrKey = k.toLowerCase()
+    if (attrKey === 'style') return false
+    if (attrKey === 'class') {
+      return v === 'greentext' || v === 'cyantext'
+    }
+    return true
+  }
+  return Object.fromEntries(attrs.filter(filter || defaultFilter))
 }
 
 /**
@@ -50,7 +58,7 @@ export const processTextForEmoji = (text, emojis, processor) => {
     if (char === ':') {
       const next = text.slice(i + 1)
       let found = false
-      for (let emoji of emojis) {
+      for (const emoji of emojis) {
         if (next.slice(0, emoji.shortcode.length + 1) === (emoji.shortcode + ':')) {
           found = emoji
           break

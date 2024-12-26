@@ -3,7 +3,9 @@
     <!-- Default panel contents -->
 
     <div class="panel-heading">
-      {{ $t('login.heading.recovery') }}
+      <h1 class="title">
+        {{ $t('login.heading.recovery') }}
+      </h1>
     </div>
 
     <div class="panel-body">
@@ -16,7 +18,7 @@
           <input
             id="code"
             v-model="code"
-            class="form-control"
+            class="input form-control"
           >
         </div>
 
@@ -69,4 +71,4 @@
     </div>
   </div>
 </template>
-<script src="./recovery_form.js" ></script>
+<script src="./recovery_form.js"></script>

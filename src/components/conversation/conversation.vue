@@ -9,7 +9,9 @@
       v-if="isExpanded"
       class="panel-heading conversation-heading -sticky"
     >
-      <span class="title"> {{ $t('timeline.conversation') }} </span>
+      <h1 class="title">
+        {{ $t('timeline.conversation') }}
+      </h1>
       <button
         v-if="collapsable"
         class="button-unstyled -link"
@@ -17,8 +19,38 @@
       >
         {{ $t('timeline.collapse') }}
       </button>
+      <QuickFilterSettings
+        v-if="!collapsable"
+        :conversation="true"
+        class="rightside-button"
+      />
+      <QuickViewSettings
+        v-if="!collapsable"
+        :conversation="true"
+        class="rightside-button"
+      />
     </div>
-    <div class="conversation-body panel-body">
+    <div
+      v-if="isPage && !status"
+      class="conversation-body"
+      :class="{ 'panel-body': isExpanded }"
+    >
+      <p v-if="!loadStatusError">
+        <FAIcon
+          spin
+          icon="circle-notch"
+        />
+        {{ $t('status.loading') }}
+      </p>
+      <p v-else>
+        {{ $t('status.load_error', { error: loadStatusError }) }}
+      </p>
+    </div>
+    <div
+      v-else
+      class="conversation-body"
+      :class="{ 'panel-body': isExpanded }"
+    >
       <div
         v-if="isTreeView"
         class="thread-body"
@@ -31,8 +63,8 @@
             keypath="status.show_all_conversation_with_icon"
             tag="button"
             class="button-unstyled -link"
-            @click.prevent="diveToTopLevel"
             scope="global"
+            @click.prevent="diveToTopLevel"
           >
             <template #icon>
               <FAIcon
@@ -50,7 +82,7 @@
           v-if="shouldShowAncestors"
           class="thread-ancestors"
         >
-          <div
+          <article
             v-for="status in ancestorsOf(diveRoot)"
             :key="status.id"
             class="thread-ancestor"
@@ -120,7 +152,7 @@
                 </i18n-t>
               </div>
             </div>
-          </div>
+          </article>
         </div>
         <thread-tree
           v-for="status in showingTopLevel"
@@ -158,39 +190,42 @@
         v-if="isLinearView"
         class="thread-body"
       >
-        <status
-          v-for="status in conversation"
-          :key="status.id"
-          ref="statusComponent"
-          :inline-expanded="collapsable && isExpanded"
-          :statusoid="status"
-          :expandable="!isExpanded"
-          :show-pinned="pinnedStatusIdsObject && pinnedStatusIdsObject[status.id]"
-          :focused="focused(status.id)"
-          :in-conversation="isExpanded"
-          :highlight="getHighlight()"
-          :replies="getReplies(status.id)"
-          :in-profile="inProfile"
-          :profile-user-id="profileUserId"
-          class="conversation-status status-fadein panel-body"
+        <article>
+          <status
+            v-for="status in conversation"
+            :key="status.id"
+            ref="statusComponent"
+            :inline-expanded="collapsable && isExpanded"
+            :statusoid="status"
+            :expandable="!isExpanded"
+            :show-pinned="pinnedStatusIdsObject && pinnedStatusIdsObject[status.id]"
+            :focused="focused(status.id)"
+            :in-conversation="isExpanded"
+            :highlight="getHighlight()"
+            :replies="getReplies(status.id)"
+            :in-profile="inProfile"
+            :profile-user-id="profileUserId"
+            class="conversation-status status-fadein panel-body"
 
-          :toggle-thread-display="toggleThreadDisplay"
-          :thread-display-status="threadDisplayStatus"
-          :show-thread-recursively="showThreadRecursively"
-          :total-reply-count="totalReplyCount"
-          :total-reply-depth="totalReplyDepth"
-          :status-content-properties="statusContentProperties"
-          :set-status-content-property="setStatusContentProperty"
-          :toggle-status-content-property="toggleStatusContentProperty"
+            :toggle-thread-display="toggleThreadDisplay"
+            :thread-display-status="threadDisplayStatus"
+            :show-thread-recursively="showThreadRecursively"
+            :total-reply-count="totalReplyCount"
+            :total-reply-depth="totalReplyDepth"
+            :status-content-properties="statusContentProperties"
+            :set-status-content-property="setStatusContentProperty"
+            :toggle-status-content-property="toggleStatusContentProperty"
 
-          @goto="setHighlight"
-          @toggleExpanded="toggleExpanded"
-        />
+            @goto="setHighlight"
+            @toggleExpanded="toggleExpanded"
+          />
+        </article>
       </div>
     </div>
   </div>
   <div
     v-else
+    class="Conversation -hidden"
     :style="hiddenStyle"
   />
 </template>
@@ -198,17 +233,19 @@
 <script src="./conversation.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-
 .Conversation {
   z-index: 1;
 
+  &.-hidden {
+    background: var(--__panel-background);
+    backdrop-filter: var(--__panel-backdrop-filter);
+  }
+
   .conversation-dive-to-top-level-box {
-    padding: var(--status-margin, $status-margin);
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    border-bottom-color: var(--border, $fallback--border);
+    padding: var(--status-margin);
+    border-bottom: 1px solid var(--border);
     border-radius: 0;
+
     /* Make the button stretch along the whole row */
     display: flex;
     align-items: stretch;
@@ -216,67 +253,82 @@
   }
 
   .thread-ancestors {
-    margin-left: var(--status-margin, $status-margin);
-    border-left: 2px solid var(--border, $fallback--border);
+    margin-left: var(--status-margin);
+    border-left: 2px solid var(--border);
   }
 
-  .thread-ancestor.-faded .StatusContent {
-    --link: var(--faintLink);
-    --text: var(--faint);
-    color: var(--text);
+  .thread-ancestor.-faded .RichContent {
+    /* stylelint-disable declaration-no-important */
+    --text: var(--textFaint) !important;
+    --link: var(--linkFaint) !important;
+    --funtextGreentext: var(--funtextGreentextFaint) !important;
+    --funtextCyantext: var(--funtextCyantextFaint) !important;
+    /* stylelint-enable declaration-no-important */
   }
 
   .thread-ancestor-dive-box {
-    padding-left: var(--status-margin, $status-margin);
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    border-bottom-color: var(--border, $fallback--border);
+    padding-left: var(--status-margin);
+    border-bottom: 1px solid var(--border);
     border-radius: 0;
+
     /* Make the button stretch along the whole row */
-    &, &-inner {
+    &,
+    &-inner {
       display: flex;
       align-items: stretch;
       flex-direction: column;
     }
   }
+
   .thread-ancestor-dive-box-inner {
-    padding: var(--status-margin, $status-margin);
+    padding: var(--status-margin);
   }
 
   .conversation-status {
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    border-bottom-color: var(--border, $fallback--border);
+    border-bottom: 1px solid var(--border);
     border-radius: 0;
   }
 
   .thread-ancestor-has-other-replies .conversation-status,
+  &:last-child:not(.-expanded) .conversation-status,
+  &.-expanded .conversation-status:last-child,
   .thread-ancestor:last-child .conversation-status,
   .thread-ancestor:last-child .thread-ancestor-dive-box,
-  &:last-child .conversation-status,
   &.-expanded .thread-tree .conversation-status {
     border-bottom: none;
   }
 
   .thread-ancestors + .thread-tree > .conversation-status {
-    border-top-width: 1px;
-    border-top-style: solid;
-    border-top-color: var(--border, $fallback--border);
+    border-top: 1px solid var(--border);
   }
 
   /* expanded conversation in timeline */
   &.status-fadein.-expanded .thread-body {
-    border-left-width: 4px;
-    border-left-style: solid;
-    border-left-color: $fallback--cRed;
-    border-left-color: var(--cRed, $fallback--cRed);
-    border-radius: 0 0 $fallback--panelRadius $fallback--panelRadius;
-    border-radius: 0 0 var(--panelRadius, $fallback--panelRadius) var(--panelRadius, $fallback--panelRadius);
-    border-bottom: 1px solid var(--border, $fallback--border);
+    border-left: 4px solid var(--cRed);
+    border-radius: var(--roundness);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom: 1px solid var(--border);
   }
 
   &.-expanded.status-fadein {
-    margin: calc(var(--status-margin, $status-margin) / 2);
+    --___margin: calc(var(--status-margin) / 2);
+
+    background: var(--background);
+    margin: var(--___margin);
+
+    &::before {
+      z-index: -1;
+      content: "";
+      display: block;
+      position: absolute;
+      top: calc(var(--___margin) * -1);
+      bottom: calc(var(--___margin) * -1);
+      left: calc(var(--___margin) * -1);
+      right: calc(var(--___margin) * -1);
+      background: var(--background);
+      backdrop-filter: var(--__panel-backdrop-filter);
+    }
   }
 }
 </style>

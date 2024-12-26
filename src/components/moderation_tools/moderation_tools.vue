@@ -8,113 +8,116 @@
       @show="setToggled(true)"
       @close="setToggled(false)"
     >
-      <template v-slot:content>
+      <template #content>
         <div class="dropdown-menu">
-          <span v-if="user.is_local">
+          <span v-if="canGrantRole">
             <button
-              class="button-default dropdown-item"
+              class="menu-item dropdown-item menu-item"
               @click="toggleRight(&quot;admin&quot;)"
             >
               {{ $t(!!user.rights.admin ? 'user_card.admin_menu.revoke_admin' : 'user_card.admin_menu.grant_admin') }}
             </button>
             <button
-              class="button-default dropdown-item"
+              class="menu-item dropdown-item menu-item"
               @click="toggleRight(&quot;moderator&quot;)"
             >
               {{ $t(!!user.rights.moderator ? 'user_card.admin_menu.revoke_moderator' : 'user_card.admin_menu.grant_moderator') }}
             </button>
             <div
+              v-if="canChangeActivationState || canDeleteAccount"
               role="separator"
               class="dropdown-divider"
             />
           </span>
           <button
-            class="button-default dropdown-item"
+            v-if="canChangeActivationState"
+            class="menu-item dropdown-item menu-item"
             @click="toggleActivationStatus()"
           >
             {{ $t(!!user.deactivated ? 'user_card.admin_menu.activate_account' : 'user_card.admin_menu.deactivate_account') }}
           </button>
           <button
-            class="button-default dropdown-item"
+            v-if="canDeleteAccount"
+            class="menu-item dropdown-item menu-item"
             @click="deleteUserDialog(true)"
           >
             {{ $t('user_card.admin_menu.delete_account') }}
           </button>
           <div
-            v-if="hasTagPolicy"
+            v-if="canUseTagPolicy"
             role="separator"
             class="dropdown-divider"
           />
-          <span v-if="hasTagPolicy">
+          <span v-if="canUseTagPolicy">
             <button
-              class="button-default dropdown-item"
+              class="menu-item dropdown-item menu-item"
               @click="toggleTag(tags.FORCE_NSFW)"
             >
               <span
-                class="menu-checkbox"
+                class="input menu-checkbox"
                 :class="{ 'menu-checkbox-checked': hasTag(tags.FORCE_NSFW) }"
               />
               {{ $t('user_card.admin_menu.force_nsfw') }}
             </button>
             <button
-              class="button-default dropdown-item"
+              class="menu-item dropdown-item menu-item"
               @click="toggleTag(tags.STRIP_MEDIA)"
             >
               <span
-                class="menu-checkbox"
+                class="input menu-checkbox"
                 :class="{ 'menu-checkbox-checked': hasTag(tags.STRIP_MEDIA) }"
               />
               {{ $t('user_card.admin_menu.strip_media') }}
             </button>
             <button
-              class="button-default dropdown-item"
+              class="menu-item dropdown-item menu-item"
               @click="toggleTag(tags.FORCE_UNLISTED)"
             >
               <span
-                class="menu-checkbox"
+                class="input menu-checkbox"
                 :class="{ 'menu-checkbox-checked': hasTag(tags.FORCE_UNLISTED) }"
               />
               {{ $t('user_card.admin_menu.force_unlisted') }}
             </button>
             <button
-              class="button-default dropdown-item"
+              class="menu-item dropdown-item menu-item"
               @click="toggleTag(tags.SANDBOX)"
             >
               <span
-                class="menu-checkbox"
+                class="input menu-checkbox"
                 :class="{ 'menu-checkbox-checked': hasTag(tags.SANDBOX) }"
               />
               {{ $t('user_card.admin_menu.sandbox') }}
             </button>
             <button
               v-if="user.is_local"
-              class="button-default dropdown-item"
+              class="menu-item dropdown-item menu-item"
               @click="toggleTag(tags.DISABLE_REMOTE_SUBSCRIPTION)"
             >
               <span
-                class="menu-checkbox"
+                class="input menu-checkbox"
                 :class="{ 'menu-checkbox-checked': hasTag(tags.DISABLE_REMOTE_SUBSCRIPTION) }"
               />
               {{ $t('user_card.admin_menu.disable_remote_subscription') }}
             </button>
             <button
               v-if="user.is_local"
-              class="button-default dropdown-item"
+              class="menu-item dropdown-item menu-item"
               @click="toggleTag(tags.DISABLE_ANY_SUBSCRIPTION)"
             >
               <span
-                class="menu-checkbox"
+                class="input menu-checkbox"
                 :class="{ 'menu-checkbox-checked': hasTag(tags.DISABLE_ANY_SUBSCRIPTION) }"
               />
               {{ $t('user_card.admin_menu.disable_any_subscription') }}
             </button>
             <button
               v-if="user.is_local"
-              class="button-default dropdown-item"
+              class="menu-item dropdown-item menu-item"
               @click="toggleTag(tags.QUARANTINE)"
             >
               <span
-                class="menu-checkbox"
+                class="input menu-checkbox"
                 :class="{ 'menu-checkbox-checked': hasTag(tags.QUARANTINE) }"
               />
               {{ $t('user_card.admin_menu.quarantine') }}
@@ -122,7 +125,7 @@
           </span>
         </div>
       </template>
-      <template v-slot:trigger>
+      <template #trigger>
         <button
           class="btn button-default btn-block moderation-tools-button"
           :class="{ toggled }"
@@ -137,11 +140,11 @@
         v-if="showDeleteUserDialog"
         :on-cancel="deleteUserDialog.bind(this, false)"
       >
-        <template v-slot:header>
+        <template #header>
           {{ $t('user_card.admin_menu.delete_user') }}
         </template>
         <p>{{ $t('user_card.admin_menu.delete_user_confirmation') }}</p>
-        <template v-slot:footer>
+        <template #footer>
           <button
             class="btn button-default"
             @click="deleteUserDialog(false)"
@@ -163,18 +166,19 @@
 <script src="./moderation_tools.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-
 .moderation-tools-popover {
   height: 100%;
+
   .trigger {
+    /* stylelint-disable-next-line declaration-no-important */
     display: flex !important;
     height: 100%;
   }
 }
 
 .moderation-tools-button {
-  svg,i {
+  svg,
+  i {
     font-size: 0.8em;
   }
 }

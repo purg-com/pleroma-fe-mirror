@@ -1,6 +1,22 @@
 import apiService from '../api/api.service.js'
 import { promiseInterval } from '../promise_interval/promise_interval.js'
 
+// For using include_types when fetching notifications.
+// Note: chat_mention excluded as pleroma-fe polls them separately
+const mastoApiNotificationTypes = [
+  'mention',
+  'status',
+  'favourite',
+  'reblog',
+  'follow',
+  'follow_request',
+  'move',
+  'poll',
+  'pleroma:emoji_reaction',
+  'pleroma:chat_mention',
+  'pleroma:report'
+]
+
 const update = ({ store, notifications, older }) => {
   store.dispatch('addNewNotifications', { notifications, older })
 }
@@ -9,23 +25,24 @@ const fetchAndUpdate = ({ store, credentials, older = false, since }) => {
   const args = { credentials }
   const { getters } = store
   const rootState = store.rootState || store.state
-  const timelineData = rootState.statuses.notifications
+  const timelineData = rootState.notifications
   const hideMutedPosts = getters.mergedConfig.hideMutedPosts
 
-  args['withMuted'] = !hideMutedPosts
+  args.includeTypes = mastoApiNotificationTypes
+  args.withMuted = !hideMutedPosts
 
-  args['timeline'] = 'notifications'
+  args.timeline = 'notifications'
   if (older) {
     if (timelineData.minId !== Number.POSITIVE_INFINITY) {
-      args['until'] = timelineData.minId
+      args.until = timelineData.minId
     }
     return fetchNotifications({ store, args, older })
   } else {
     // fetch new notifications
     if (since === undefined && timelineData.maxId !== Number.POSITIVE_INFINITY) {
-      args['since'] = timelineData.maxId
+      args.since = timelineData.maxId
     } else if (since !== null) {
-      args['since'] = since
+      args.since = since
     }
     const result = fetchNotifications({ store, args, older })
 
@@ -36,10 +53,14 @@ const fetchAndUpdate = ({ store, credentials, older = false, since }) => {
     // The normal maxId-check does not tell if older notifications have changed
     const notifications = timelineData.data
     const readNotifsIds = notifications.filter(n => n.seen).map(n => n.id)
-    const numUnseenNotifs = notifications.length - readNotifsIds.length
-    if (numUnseenNotifs > 0 && readNotifsIds.length > 0) {
-      args['since'] = Math.max(...readNotifsIds)
-      fetchNotifications({ store, args, older })
+    const unreadNotifsIds = notifications.filter(n => !n.seen).map(n => n.id)
+    if (readNotifsIds.length > 0 && readNotifsIds.length > 0) {
+      const minId = Math.min(...unreadNotifsIds) // Oldest known unread notification
+      if (minId !== Infinity) {
+        args.since = false // Don't use since_id since it sorta conflicts with min_id
+        args.minId = minId - 1 // go beyond
+        fetchNotifications({ store, args, older })
+      }
     }
 
     return result
@@ -63,6 +84,7 @@ const fetchNotifications = ({ store, args, older }) => {
         messageArgs: [error.message],
         timeout: 5000
       })
+      console.error(error)
     })
 }
 

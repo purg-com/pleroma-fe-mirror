@@ -1,5 +1,5 @@
 <template>
-  <div class="user-panel">
+  <aside class="user-panel">
     <div
       v-if="signedIn"
       key="user-panel-signed"
@@ -16,14 +16,21 @@
       v-else
       key="user-panel"
     />
-  </div>
+  </aside>
 </template>
 
 <script src="./user_panel.js"></script>
 
 <style lang="scss">
-.user-panel .signed-in {
-  overflow: visible;
-  z-index: 10;
+.user-panel {
+  .panel {
+    background: var(--background);
+    backdrop-filter: var(--backdrop-filter);
+  }
+
+  .signed-in {
+    overflow: visible;
+    z-index: 10;
+  }
 }
 </style>

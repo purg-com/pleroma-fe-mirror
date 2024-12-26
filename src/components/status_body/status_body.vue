@@ -11,6 +11,7 @@
       >
         <RichContent
           class="media-body summary"
+          :faint="compact"
           :html="status.summary_raw_html"
           :emoji="status.emojis"
         />
@@ -48,6 +49,7 @@
           :html="status.raw_html"
           :emoji="status.emojis"
           :handle-links="true"
+          :faint="compact"
           :greentext="mergedConfig.greentext"
           :attentions="status.attentions"
           @parseReady="onParseReady"
@@ -96,5 +98,5 @@
     <slot v-if="!hideSubjectStatus" />
   </div>
 </template>
-<script src="./status_body.js" ></script>
+<script src="./status_body.js"></script>
 <style lang="scss" src="./status_body.scss" />

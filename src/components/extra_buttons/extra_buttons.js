@@ -1,4 +1,7 @@
 import Popover from '../popover/popover.vue'
+import genRandomSeed from '../../services/random_seed/random_seed.service.js'
+import ConfirmModal from '../confirm_modal/confirm_modal.vue'
+import StatusBookmarkFolderMenu from '../status_bookmark_folder_menu/status_bookmark_folder_menu.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faEllipsisH,
@@ -6,7 +9,10 @@ import {
   faEyeSlash,
   faThumbtack,
   faShareAlt,
-  faExternalLinkAlt
+  faExternalLinkAlt,
+  faHistory,
+  faPlus,
+  faTimes
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faBookmark as faBookmarkReg,
@@ -21,18 +27,49 @@ library.add(
   faThumbtack,
   faShareAlt,
   faExternalLinkAlt,
-  faFlag
+  faFlag,
+  faHistory,
+  faPlus,
+  faTimes
 )
 
 const ExtraButtons = {
-  props: [ 'status' ],
-  components: { Popover },
+  props: ['status'],
+  components: {
+    Popover,
+    ConfirmModal,
+    StatusBookmarkFolderMenu
+  },
+  data () {
+    return {
+      expanded: false,
+      showingDeleteDialog: false,
+      randomSeed: genRandomSeed()
+    }
+  },
   methods: {
+    onShow () {
+      this.expanded = true
+    },
+    onClose () {
+      this.expanded = false
+    },
     deleteStatus () {
-      const confirmed = window.confirm(this.$t('status.delete_confirm'))
-      if (confirmed) {
-        this.$store.dispatch('deleteStatus', { id: this.status.id })
+      if (this.shouldConfirmDelete) {
+        this.showDeleteStatusConfirmDialog()
+      } else {
+        this.doDeleteStatus()
       }
+    },
+    doDeleteStatus () {
+      this.$store.dispatch('deleteStatus', { id: this.status.id })
+      this.hideDeleteStatusConfirmDialog()
+    },
+    showDeleteStatusConfirmDialog () {
+      this.showingDeleteDialog = true
+    },
+    hideDeleteStatusConfirmDialog () {
+      this.showingDeleteDialog = false
     },
     pinStatus () {
       this.$store.dispatch('pinStatus', this.status.id)
@@ -71,14 +108,32 @@ const ExtraButtons = {
     },
     reportStatus () {
       this.$store.dispatch('openUserReportingModal', { userId: this.status.user.id, statusIds: [this.status.id] })
+    },
+    editStatus () {
+      this.$store.dispatch('fetchStatusSource', { id: this.status.id })
+        .then(data => this.$store.dispatch('openEditStatusModal', {
+          statusId: this.status.id,
+          subject: data.spoiler_text,
+          statusText: data.text,
+          statusIsSensitive: this.status.nsfw,
+          statusPoll: this.status.poll,
+          statusFiles: [...this.status.attachments],
+          visibility: this.status.visibility,
+          statusContentType: data.content_type
+        }))
+    },
+    showStatusHistory () {
+      const originalStatus = { ...this.status }
+      const stripFieldsList = ['attachments', 'created_at', 'emojis', 'text', 'raw_html', 'nsfw', 'poll', 'summary', 'summary_raw_html']
+      stripFieldsList.forEach(p => delete originalStatus[p])
+      this.$store.dispatch('openStatusHistoryModal', originalStatus)
     }
   },
   computed: {
     currentUser () { return this.$store.state.users.currentUser },
     canDelete () {
       if (!this.currentUser) { return }
-      const superuser = this.currentUser.rights.moderator || this.currentUser.rights.admin
-      return superuser || this.status.user.id === this.currentUser.id
+      return this.currentUser.privileges.includes('messages_delete') || this.status.user.id === this.currentUser.id
     },
     ownStatus () {
       return this.status.user.id === this.currentUser.id
@@ -89,8 +144,30 @@ const ExtraButtons = {
     canMute () {
       return !!this.currentUser
     },
+    canBookmark () {
+      return !!this.currentUser
+    },
+    bookmarkFolders () {
+      return this.$store.state.instance.pleromaBookmarkFoldersAvailable
+    },
     statusLink () {
       return `${this.$store.state.instance.server}${this.$router.resolve({ name: 'conversation', params: { id: this.status.id } }).href}`
+    },
+    isEdited () {
+      return this.status.edited_at !== null
+    },
+    editingAvailable () { return this.$store.state.instance.editingAvailable },
+    shouldConfirmDelete () {
+      return this.$store.getters.mergedConfig.modalOnDelete
+    },
+    triggerAttrs () {
+      return {
+        title: this.$t('status.more_actions'),
+        id: `popup-trigger-${this.randomSeed}`,
+        'aria-controls': `popup-menu-${this.randomSeed}`,
+        'aria-expanded': this.expanded,
+        'aria-haspopup': 'menu'
+      }
     }
   }
 }

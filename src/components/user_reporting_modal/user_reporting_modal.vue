@@ -5,9 +5,13 @@
   >
     <div class="user-reporting-panel panel">
       <div class="panel-heading">
-        <div class="title">
-          {{ $t('user_reporting.title', [user.screen_name_ui]) }}
-        </div>
+        <i18n-t
+          tag="h1"
+          keypath="user_reporting.title"
+          class="title"
+        >
+          <UserLink :user="user" />
+        </i18n-t>
       </div>
       <div class="panel-body">
         <div class="user-reporting-panel-left">
@@ -15,7 +19,7 @@
             <p>{{ $t('user_reporting.add_comment_description') }}</p>
             <textarea
               v-model="comment"
-              class="form-control"
+              class="input form-control"
               :placeholder="$t('user_reporting.additional_comments')"
               rows="1"
               @input="resize"
@@ -45,7 +49,7 @@
         </div>
         <div class="user-reporting-panel-right">
           <List :items="statuses">
-            <template v-slot:item="{item}">
+            <template #item="{item}">
               <div class="status-fadein user-reporting-panel-sitem">
                 <Status
                   :in-conversation="false"
@@ -68,8 +72,6 @@
 <script src="./user_reporting_modal.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-
 .user-reporting-panel {
   width: 90vw;
   max-width: 700px;
@@ -80,8 +82,7 @@
     display: flex;
     flex-direction: column-reverse;
     border-top: 1px solid;
-    border-color: $fallback--border;
-    border-color: var(--border, $fallback--border);
+    border-color: var(--border);
     overflow: hidden;
   }
 
@@ -117,7 +118,7 @@
     }
 
     .alert {
-      margin: 1em 0 0 0;
+      margin: 1em 0 0;
       line-height: 1.3em;
     }
   }
@@ -151,8 +152,7 @@
       width: 50%;
       max-width: 320px;
       border-right: 1px solid;
-      border-color: $fallback--border;
-      border-color: var(--border, $fallback--border);
+      border-color: var(--border);
       padding: 1.1em;
 
       > div {

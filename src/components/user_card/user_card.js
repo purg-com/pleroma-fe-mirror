@@ -1,11 +1,15 @@
+import { unitToSeconds } from 'src/services/date_utils/date_utils.js'
 import UserAvatar from '../user_avatar/user_avatar.vue'
 import RemoteFollow from '../remote_follow/remote_follow.vue'
 import ProgressButton from '../progress_button/progress_button.vue'
 import FollowButton from '../follow_button/follow_button.vue'
 import ModerationTools from '../moderation_tools/moderation_tools.vue'
 import AccountActions from '../account_actions/account_actions.vue'
+import UserNote from '../user_note/user_note.vue'
 import Select from '../select/select.vue'
+import UserLink from '../user_link/user_link.vue'
 import RichContent from 'src/components/rich_content/rich_content.jsx'
+import ConfirmModal from '../confirm_modal/confirm_modal.vue'
 import generateProfileLink from 'src/services/user_profile_link_generator/user_profile_link_generator'
 import { mapGetters } from 'vuex'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -14,7 +18,9 @@ import {
   faRss,
   faSearchPlus,
   faExternalLinkAlt,
-  faEdit
+  faEdit,
+  faTimes,
+  faExpandAlt
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -22,17 +28,30 @@ library.add(
   faBell,
   faSearchPlus,
   faExternalLinkAlt,
-  faEdit
+  faEdit,
+  faTimes,
+  faExpandAlt
 )
 
 export default {
   props: [
-    'userId', 'switcher', 'selected', 'hideBio', 'rounded', 'bordered', 'allowZoomingAvatar'
+    'userId',
+    'switcher',
+    'selected',
+    'hideBio',
+    'rounded',
+    'bordered',
+    'avatarAction', // default - open profile, 'zoom' - zoom, function - call function
+    'onClose',
+    'hasNoteEditor'
   ],
   data () {
     return {
       followRequestInProgress: false,
-      betterShadow: this.$store.state.interface.browserSupport.cssFilter
+      betterShadow: this.$store.state.interface.browserSupport.cssFilter,
+      showingConfirmMute: false,
+      muteExpiryAmount: 0,
+      muteExpiryUnit: 'minutes'
     }
   },
   created () {
@@ -47,15 +66,16 @@ export default {
     },
     classes () {
       return [{
-        'user-card-rounded-t': this.rounded === 'top', // set border-top-left-radius and border-top-right-radius
-        'user-card-rounded': this.rounded === true, // set border-radius for all sides
-        'user-card-bordered': this.bordered === true // set border for all sides
+        '-rounded-t': this.rounded === 'top', // set border-top-left-radius and border-top-right-radius
+        '-rounded': this.rounded === true, // set border-radius for all sides
+        '-bordered': this.bordered === true, // set border for all sides
+        '-popover': !!this.onClose // set popover rounding
       }]
     },
     style () {
       return {
         backgroundImage: [
-          `linear-gradient(to bottom, var(--profileTint), var(--profileTint))`,
+          'linear-gradient(to bottom, var(--profileTint), var(--profileTint))',
           `url(${this.user.cover_photo})`
         ].join(', ')
       }
@@ -112,6 +132,22 @@ export default {
     hideFollowersCount () {
       return this.isOtherUser && this.user.hide_followers_count
     },
+    showModerationMenu () {
+      const privileges = this.loggedIn.privileges
+      return this.loggedIn.role === 'admin' || privileges.includes('users_manage_activation_state') || privileges.includes('users_delete') || privileges.includes('users_manage_tags')
+    },
+    hasNote () {
+      return this.relationship.note
+    },
+    supportsNote () {
+      return 'note' in this.relationship
+    },
+    shouldConfirmMute () {
+      return this.mergedConfig.modalOnMute
+    },
+    muteExpiryUnits () {
+      return ['minutes', 'hours', 'days']
+    },
     ...mapGetters(['mergedConfig'])
   },
   components: {
@@ -122,11 +158,31 @@ export default {
     ProgressButton,
     FollowButton,
     Select,
-    RichContent
+    RichContent,
+    UserLink,
+    UserNote,
+    ConfirmModal
   },
   methods: {
+    showConfirmMute () {
+      this.showingConfirmMute = true
+    },
+    hideConfirmMute () {
+      this.showingConfirmMute = false
+    },
     muteUser () {
-      this.$store.dispatch('muteUser', this.user.id)
+      if (!this.shouldConfirmMute) {
+        this.doMuteUser()
+      } else {
+        this.showConfirmMute()
+      }
+    },
+    doMuteUser () {
+      this.$store.dispatch('muteUser', {
+        id: this.user.id,
+        expiresIn: this.shouldConfirmMute ? unitToSeconds(this.muteExpiryUnit, this.muteExpiryAmount) : 0
+      })
+      this.hideConfirmMute()
     },
     unmuteUser () {
       this.$store.dispatch('unmuteUser', this.user.id)
@@ -169,7 +225,13 @@ export default {
       this.$store.dispatch('setCurrentMedia', attachment)
     },
     mentionUser () {
-      this.$store.dispatch('openPostStatusModal', { replyTo: true, repliedUser: this.user })
+      this.$store.dispatch('openPostStatusModal', { profileMention: true, repliedUser: this.user })
+    },
+    onAvatarClickHandler (e) {
+      if (this.onAvatarClick) {
+        e.preventDefault()
+        this.onAvatarClick()
+      }
     }
   }
 }

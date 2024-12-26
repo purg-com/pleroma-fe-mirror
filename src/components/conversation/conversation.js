@@ -1,6 +1,10 @@
 import { reduce, filter, findIndex, clone, get } from 'lodash'
 import Status from '../status/status.vue'
 import ThreadTree from '../thread_tree/thread_tree.vue'
+import { WSConnectionStatus } from '../../services/api/api.service.js'
+import { mapGetters, mapState } from 'vuex'
+import QuickFilterSettings from '../quick_filter_settings/quick_filter_settings.vue'
+import QuickViewSettings from '../quick_view_settings/quick_view_settings.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -52,7 +56,8 @@ const conversation = {
       expanded: false,
       threadDisplayStatusObject: {}, // id => 'showing' | 'hidden'
       statusContentPropertiesObject: {},
-      inlineDivePosition: null
+      inlineDivePosition: null,
+      loadStatusError: null
     }
   },
   props: [
@@ -76,6 +81,9 @@ const conversation = {
       // there is a -2 here
       const maxDepth = this.$store.getters.mergedConfig.maxDepthInThread - 2
       return maxDepth >= 1 ? maxDepth : 1
+    },
+    streamingEnabled () {
+      return this.mergedConfig.useStreamingApi && this.mastoUserSocketStatus === WSConnectionStatus.JOINED
     },
     displayStyle () {
       return this.$store.getters.mergedConfig.conversationDisplay
@@ -271,7 +279,7 @@ const conversation = {
           result[irid] = result[irid] || []
           result[irid].push({
             name: `#${i}`,
-            id: id
+            id
           })
         }
         i++
@@ -339,11 +347,17 @@ const conversation = {
     },
     maybeHighlight () {
       return this.isExpanded ? this.highlight : null
-    }
+    },
+    ...mapGetters(['mergedConfig']),
+    ...mapState({
+      mastoUserSocketStatus: state => state.api.mastoUserSocketStatus
+    })
   },
   components: {
     Status,
-    ThreadTree
+    ThreadTree,
+    QuickFilterSettings,
+    QuickViewSettings
   },
   watch: {
     statusId (newVal, oldVal) {
@@ -379,10 +393,14 @@ const conversation = {
             this.setHighlight(this.originalStatusId)
           })
       } else {
+        this.loadStatusError = null
         this.$store.state.api.backendInteractor.fetchStatus({ id: this.statusId })
           .then((status) => {
             this.$store.dispatch('addNewStatuses', { statuses: [status] })
             this.fetchConversation()
+          })
+          .catch((error) => {
+            this.loadStatusError = error
           })
       }
     },
@@ -395,6 +413,11 @@ const conversation = {
     setHighlight (id) {
       if (!id) return
       this.highlight = id
+
+      if (!this.streamingEnabled) {
+        this.$store.dispatch('fetchStatus', id)
+      }
+
       this.$store.dispatch('fetchFavsAndRepeats', id)
       this.$store.dispatch('fetchEmojiReactionsBy', id)
     },

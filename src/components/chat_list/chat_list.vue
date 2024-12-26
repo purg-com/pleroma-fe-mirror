@@ -7,9 +7,9 @@
     class="chat-list panel panel-default"
   >
     <div class="panel-heading -sticky">
-      <span class="title">
+      <h1 class="title">
         {{ $t("chats.chats") }}
-      </span>
+      </h1>
       <button
         class="button-default"
         @click="newChat"
@@ -23,7 +23,7 @@
         class="timeline"
       >
         <List :items="sortedChatList">
-          <template v-slot:item="{item}">
+          <template #item="{item}">
             <ChatListItem
               :key="item.id"
               :compact="false"
@@ -45,8 +45,6 @@
 <script src="./chat_list.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-
 .chat-list {
   min-height: 25em;
   margin-bottom: 0;
@@ -57,8 +55,7 @@
   font-size: 1.2em;
   display: flex;
   justify-content: center;
-  color: $fallback--text;
-  color: var(--faint, $fallback--text);
+  color: var(--textFaint);
 }
 
 </style>

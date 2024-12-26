@@ -3,16 +3,16 @@
     class="chat-title"
     :title="title"
   >
-    <router-link
-      class="avatar-container"
+    <UserPopover
       v-if="withAvatar && user"
-      :to="getUserProfileLink(user)"
+      class="avatar-container"
+      :user-id="user.id"
     >
       <UserAvatar
         class="titlebar-avatar"
         :user="user"
       />
-    </router-link>
+    </UserPopover>
     <RichContent
       v-if="user"
       class="username"
@@ -26,15 +26,13 @@
 <script src="./chat_title.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-
 .chat-title {
   display: flex;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  --emoji-size: 14px;
+  --emoji-size: 1em;
 
   .username {
     max-width: 100%;
@@ -54,8 +52,7 @@
     margin-right: 0.5em;
     height: 1.5em;
     width: 1.5em;
-    border-radius: $fallback--avatarAltRadius;
-    border-radius: var(--avatarAltRadius, $fallback--avatarAltRadius);
+    border-radius: var(--roundness);
 
     &.animated::before {
       display: none;

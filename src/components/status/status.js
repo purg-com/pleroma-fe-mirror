@@ -4,15 +4,16 @@ import ReactButton from '../react_button/react_button.vue'
 import RetweetButton from '../retweet_button/retweet_button.vue'
 import ExtraButtons from '../extra_buttons/extra_buttons.vue'
 import PostStatusForm from '../post_status_form/post_status_form.vue'
-import UserCard from '../user_card/user_card.vue'
 import UserAvatar from '../user_avatar/user_avatar.vue'
 import AvatarList from '../avatar_list/avatar_list.vue'
 import Timeago from '../timeago/timeago.vue'
 import StatusContent from '../status_content/status_content.vue'
 import RichContent from 'src/components/rich_content/rich_content.jsx'
 import StatusPopover from '../status_popover/status_popover.vue'
+import UserPopover from '../user_popover/user_popover.vue'
 import UserListPopover from '../user_list_popover/user_list_popover.vue'
 import EmojiReactions from '../emoji_reactions/emoji_reactions.vue'
+import UserLink from '../user_link/user_link.vue'
 import MentionsLine from 'src/components/mentions_line/mentions_line.vue'
 import MentionLink from 'src/components/mention_link/mention_link.vue'
 import generateProfileLink from 'src/services/user_profile_link_generator/user_profile_link_generator'
@@ -38,7 +39,8 @@ import {
   faThumbtack,
   faChevronUp,
   faChevronDown,
-  faAngleDoubleRight
+  faAngleDoubleRight,
+  faPlay
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -58,7 +60,8 @@ library.add(
   faThumbtack,
   faChevronUp,
   faChevronDown,
-  faAngleDoubleRight
+  faAngleDoubleRight,
+  faPlay
 )
 
 const camelCase = name => name.charAt(0).toUpperCase() + name.slice(1)
@@ -105,7 +108,6 @@ const Status = {
     RetweetButton,
     ExtraButtons,
     PostStatusForm,
-    UserCard,
     UserAvatar,
     AvatarList,
     Timeago,
@@ -115,7 +117,9 @@ const Status = {
     StatusContent,
     RichContent,
     MentionLink,
-    MentionsLine
+    MentionsLine,
+    UserPopover,
+    UserLink
   },
   props: [
     'statusoid',
@@ -131,6 +135,7 @@ const Status = {
     'showPinned',
     'inProfile',
     'profileUserId',
+    'inQuote',
 
     'simpleTree',
     'controlledThreadDisplayStatus',
@@ -149,6 +154,7 @@ const Status = {
     'controlledSetMediaPlaying',
     'dive'
   ],
+  emits: ['interacted'],
   data () {
     return {
       uncontrolledReplying: false,
@@ -157,7 +163,8 @@ const Status = {
       uncontrolledMediaPlaying: [],
       suspendable: true,
       error: null,
-      headTailLinks: null
+      headTailLinks: null,
+      displayQuote: !this.inQuote
     }
   },
   computed: {
@@ -225,17 +232,14 @@ const Status = {
     muteWordHits () {
       return muteWordHits(this.status, this.muteWords)
     },
-    rtBotStatus () {
-      return this.statusoid.user.bot
-    },
     botStatus () {
-      return this.status.user.bot
+      return this.status.user.actor_type === 'Service'
     },
-    botIndicator () {
-      return this.botStatus && !this.hideBotIndication
+    showActorTypeIndicator () {
+      return !this.hideBotIndication
     },
-    rtBotIndicator () {
-      return this.rtBotStatus && !this.hideBotIndication
+    sensitiveStatus () {
+      return this.status.nsfw
     },
     mentionsLine () {
       if (!this.headTailLinks) return []
@@ -264,7 +268,9 @@ const Status = {
         // Wordfiltered
         this.muteWordHits.length > 0 ||
         // bot status
-        (this.muteBotStatuses && this.botStatus && !this.compact)
+        (this.muteBotStatuses && this.botStatus && !this.compact) ||
+        // sensitive status
+        (this.muteSensitiveStatuses && this.sensitiveStatus && !this.compact)
       return !this.unmuted && !this.shouldNotMute && reasonsToMute
     },
     userIsMuted () {
@@ -361,13 +367,20 @@ const Status = {
       return uniqBy(combinedUsers, 'id')
     },
     tags () {
+      // eslint-disable-next-line no-prototype-builtins
       return this.status.tags.filter(tagObj => tagObj.hasOwnProperty('name')).map(tagObj => tagObj.name).join(' ')
     },
     hidePostStats () {
       return this.mergedConfig.hidePostStats
     },
+    shouldDisplayFavsAndRepeats () {
+      return !this.hidePostStats && this.isFocused && (this.combinedFavsAndRepeatsUsers.length > 0 || this.statusFromGlobalRepository.quotes_count)
+    },
     muteBotStatuses () {
       return this.mergedConfig.muteBotStatuses
+    },
+    muteSensitiveStatuses () {
+      return this.mergedConfig.muteSensitiveStatuses
     },
     hideBotIndication () {
       return this.mergedConfig.hideBotIndication
@@ -392,6 +405,50 @@ const Status = {
     },
     visibilityLocalized () {
       return this.$i18n.t('general.scope_in_timeline.' + this.status.visibility)
+    },
+    isEdited () {
+      return this.status.edited_at !== null
+    },
+    editingAvailable () {
+      return this.$store.state.instance.editingAvailable
+    },
+    hasVisibleQuote () {
+      return this.status.quote_url && this.status.quote_visible
+    },
+    hasInvisibleQuote () {
+      return this.status.quote_url && !this.status.quote_visible
+    },
+    quotedStatus () {
+      return this.status.quote_id ? this.$store.state.statuses.allStatusesObject[this.status.quote_id] : undefined
+    },
+    shouldDisplayQuote () {
+      return this.quotedStatus && this.displayQuote
+    },
+    scrobblePresent () {
+      if (this.mergedConfig.hideScrobbles) return false
+      if (!this.status.user.latestScrobble) return false
+      const value = this.mergedConfig.hideScrobblesAfter.match(/\d+/gs)[0]
+      const unit = this.mergedConfig.hideScrobblesAfter.match(/\D+/gs)[0]
+      let multiplier = 60 * 1000 // minutes is smallest unit
+      switch (unit) {
+        case 'm':
+          break
+        case 'h':
+          multiplier *= 60 // hour
+          break
+        case 'd':
+          multiplier *= 60 // hour
+          multiplier *= 24 // day
+          break
+      }
+      const maxAge = Number(value) * multiplier
+      const createdAt = Date.parse(this.status.user.latestScrobble.created_at)
+      const age = Date.now() - createdAt
+      if (age > maxAge) return false
+      return this.status.user.latestScrobble.artist
+    },
+    scrobble () {
+      return this.status.user.latestScrobble
     }
   },
   methods: {
@@ -411,9 +468,11 @@ const Status = {
       this.error = error
     },
     clearError () {
+      this.$emit('interacted')
       this.error = undefined
     },
     toggleReplying () {
+      this.$emit('interacted')
       controlledOrUncontrolledToggle(this, 'replying')
     },
     gotoOriginal (id) {
@@ -448,7 +507,7 @@ const Status = {
     scrollIfHighlighted (highlightId) {
       const id = highlightId
       if (this.status.id === id) {
-        let rect = this.$el.getBoundingClientRect()
+        const rect = this.$el.getBoundingClientRect()
         if (rect.top < 100) {
           // Post is above screen, match its top to screen top
           window.scrollBy(0, rect.top - 100)
@@ -460,10 +519,22 @@ const Status = {
           window.scrollBy(0, rect.bottom - window.innerHeight + 50)
         }
       }
+    },
+    toggleDisplayQuote () {
+      if (this.shouldDisplayQuote) {
+        this.displayQuote = false
+      } else if (!this.quotedStatus) {
+        this.$store.dispatch('fetchStatus', this.status.quote_id)
+          .then(() => {
+            this.displayQuote = true
+          })
+      } else {
+        this.displayQuote = true
+      }
     }
   },
   watch: {
-    'highlight': function (id) {
+    highlight: function (id) {
       this.scrollIfHighlighted(id)
     },
     'status.repeat_num': function (num) {
@@ -478,7 +549,7 @@ const Status = {
         this.$store.dispatch('fetchFavs', this.status.id)
       }
     },
-    'isSuspendable': function (val) {
+    isSuspendable: function (val) {
       this.suspendable = val
     }
   }

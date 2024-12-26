@@ -38,7 +38,7 @@
         v-if="edit"
         v-model="localDescription"
         type="text"
-        class="description-field"
+        class="input description-field"
         :placeholder="$t('post_status.media_description')"
         @keydown.enter.prevent=""
       >
@@ -162,10 +162,11 @@
         target="_blank"
       >
         <FAIcon
-          size="5x"
+          :size="compact ? '2x' : '5x'"
           :icon="placeholderIconClass"
+          :title="localDescription"
         />
-        <p>
+        <p v-if="!compact">
           {{ localDescription }}
         </p>
       </a>
@@ -174,7 +175,6 @@
         :is="videoTag"
         v-if="type === 'video' && !hidden"
         class="video-container"
-        :class="{ 'button-unstyled': 'isModal' }"
         :href="attachment.url"
         @click.stop.prevent="openModal"
       >
@@ -252,7 +252,7 @@
         v-if="edit"
         v-model="localDescription"
         type="text"
-        class="description-field"
+        class="input description-field"
         :placeholder="$t('post_status.media_description')"
         @keydown.enter.prevent=""
       >

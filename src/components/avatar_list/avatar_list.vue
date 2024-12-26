@@ -14,11 +14,9 @@
   </div>
 </template>
 
-<script src="./avatar_list.js" ></script>
+<script src="./avatar_list.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-
 .avatars {
   display: flex;
   margin: 0;
@@ -36,8 +34,7 @@
     }
 
     .avatar-small {
-      border-radius: $fallback--avatarAltRadius;
-      border-radius: var(--avatarAltRadius, $fallback--avatarAltRadius);
+      border-radius: var(--roundness);
       height: 24px;
       width: 24px;
     }

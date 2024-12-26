@@ -10,7 +10,8 @@ library.add(
 
 const HIDDEN_FOR_PAGES = new Set([
   'chats',
-  'chat'
+  'chat',
+  'lists-edit'
 ])
 
 const MobilePostStatusButton = {

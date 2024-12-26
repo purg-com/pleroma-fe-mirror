@@ -3,41 +3,203 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## Unreleased
+## 2.7.1
+Bugfix release. Added small optimizations to emoji picker that should make it a bit more responsive, however it needs rather large change to make it more performant which might come in a major release.
+
 ### Fixed
-- AdminFE button no longer scrolls page to top when clicked
+- Instance default theme not respected
+- Nested panel header having wrong sticky position if navbar height != panel header height
+- Toggled buttons having bad contrast (when using v2 theme)
+
+### Changed
+- Simplify the OAuth client_name to 'PleromaFE'
+- Small optimizations to emoji picker
+
+
+## 2.7.0
+
+### Known issues
+We got some reports related to emoji picker performance, this hopefully will be fixed in 2.7.1.
+
+### Notes
+This release overhauls how themes work, themes now need to be "compiled", which can cause some delay when loading for the first time and temporarily look "wrong" in some places (popups, menus, dialogs). Please do report any issues, especially if your theme looks wrong or breaks interface when loading. Also report issues if you're experiencing constant performance issues.
+
+To admins: remember that you can update PleromaFE to recent `master` or `develop` in admin dashboard in "Front-ends" tab, scroll down to find PleromaFE box and click "Reinstall `master`" or dropdown and then "Reinstall `develop`". Currently there is no mechanism to check if there is an update or not.
+
+### Changed
+- Overhauled the way themes work, migrating to new Pleroma Interface Style Sheets system aka "Themes 3".
+- Notifications are no longer sorted by "seen" status since interacting with them can change their read status and makes UI jumpy. Old behavior can be restored in settings.
+- Notifications are now shown through a ServiceWorker (since mobile chrome does not allow them otherwise), it's always enabled, even if previously we only enabled it for WebPush notifications only. If you don't like websites "running" while closed, check how to disable them in your browser. Old way to show notifications will be used as a fallback but might not have all the new features.
+- Reorganized Settings modal to move out visual stuff into Appearance tab
+
+### Added
+- Emoji pack management to the admin panel
+- Support `status` notification type (subscriptions/bell, fixes PleromaFE on newer PleromaBE versions)
+- Poll end notifications.
+- Added option to not mark all notifications when closing notifications drawer on mobile, this creates a new button to mark all as seen.
+- Option to always "show" notifications when using web push for better compatibility with some browsers (chrome, edge, safari)
+- Option to toggle what notification types appear in native notifications, by default less important ones (likes, repeats, etc) will no longer show up in native notifications.
+- Option to treat non-interactive notifications (likes, repeats et all) as seen for visual purposes (no read mark, ignored in counters, still can show in native notifications)
+- Ability to resize UI (and certain components) scale independent of browser/text scale
+- Ability to override certain aspects of UI style independent of theme used (UI roundness, fonts, underlay)
+- Theme selector with visual previews of the theme
+- Display loading and error indicator for conversation page
+- Option to only show scrobbles that are recent enough
+- Interacting (opening reply box etc) or simply clicking on non-interactive notifications now marks them as read. Clicking on native notifications for non-interactive ones also marks them as seen.
+- Support group actors
+- Focusing into a tab clears all current desktop notifications
+- Ability to change size of emoji
+- Ability to view APNG (Animated PNG) attachments.
+- Support showing extra notifications in the notifications column
+- Create a link to the URL of the scrobble when it's present
+- Allow hiding custom emojis in picker.
+- Ability to mute sensitive posts (ported from eintei).
+- Native notifications now also have "badge" property that matches instance's favicon (visible in Android Chromium at least)
+- Display public favorites on user profiles
+- Display quotes count on posts and add quotes list page
+- Show a dedicated registration notice page when further action is required after registering
+
+### Fixed
+- Synchronized requested notification types with backend, hopefully should fix missing notifications for polls and follow requests
+- Error that appeared on mobile Chromium (and derivatives) when native notifications are allowed
+- Being unable to set notification visibility for reports and follow requests
+- Native notifications appearing as many times as there are open tabs. Clicking on notification will focus last focused tab.
+- The expiry date indication won't be shown if the poll never expires
+- Profile mentions causing a 422 error on newer PleromaBE versions.
+- Color inputs are less ugly now
+- Unread notifications should now properly catch up between sessions (eventually) in polling mode
+- Video posters on Safari
+
+
+## 2.6.1
+### Fixed
+- fix admin dashboard not having any feedback on frontend installation
+- Fix frontend admin tab crashing when no primary frontend is set
+- Add aria attributes to react and extra buttons
+
+## 2.6.0
+### Added
+- add the initial i18n translation file for Taiwanese (Hokkien), and modify some related files.
+- Implemented a very basic instance administration screen
+- Implement quoting
+
+### Fixed
+- Keep aspect ratio of custom emoji reaction in notification
+- Fix openSettingsModalTab so that it correctly opens Settings modal instead of Admin modal
+- Add alt text to emoji picker buttons
+- Use export-subst gitattribute to allow tarball builds
+- fix reports now showing reason/content
+- Fix HTML attribute parsing, discard attributes not strating with a letter
+- Make MentionsLine aware of line breaking by non-br elements
+- Fix a bug where mentioning a user twice will not fill the mention into the textarea
+- Fix parsing non-ascii tags
+- Fix OAuth2 token lingering after revocation
+- fix regex issue in HTML parser/renderer
+- don't display quoted status twice
+- fix typo in code that prevented cards from showing at all
+- Fix react button not working if reaction accounts are not loaded
+- Fix react button misalignment on safari ios
+- Fix pinned statuses gone when reloading user timeline
+- Fix scrolling emoji selector in modal in safari ios
+
+## 2.5.1
+### Fixed
+- Checkboxes in settings can now work with screenreaders
+- Autocomplete in edit boxes can now work with screenreaders
+- Status interact buttons now have focus indicator for anonymous users
+- Top bar buttons now correctly have text labels
+- It is now possible to register if the site admin requires birthday to register
+- User cards from search results will correctly popup
+- Fix notification attachment icon overflow
+- Editing mute words is less laggy
+- Repeater's name will no longer mess up with the directionality of the text sitting on the same line
+- Unauthenticated access will give better error messages
+- It is now easier to close the media viewer with a mouse when there is only one image
+- Deleting profile fields can work properly
+- Clicking the react button will correctly focus the search box
+- Clicking buttons on the top-bar will no longer bring you to the top of the page
+- Emoji picker is much faster to load
+- `blockquote`s have a better display style
+- Announcements posting and editing are now available to everyone with such a privilege, not just admins
+- Adding or removing list members will actually work
+- Emojis without a pack are now correctly displayed in emoji picker
+- Changing notification settings will actually work
+
+### Added
+- You can now set and see birthdays
+- Optional confirmation dialogs when performing various actions
+- You can now set fallback languages
+
+## 2.5.0 - 23.12.2022
+### Fixed
+- UI no longer lags when switching between mobile and desktop mode
+- Popovers no longer constrained by DOM hierarchy, shouldn't be cut off by anything
+- Emoji autocomplete popover and picker popover stick to the text cursor.
+- Attachments are ALWAYS in same order as user uploaded, no more "videos first"
 - Pinned statuses no longer appear at bottom of user timeline (still appear as part of the timeline when fetched deep enough)
 - Fixed many many bugs related to new mentions, including spacing and alignment issues
 - Links in profile bios now properly open in new tabs
+- "Always show mobile button" is working now
 - Inline images now respect their intended width/height attributes
 - Links with `&` in them work properly now
-- Interaction list popovers now properly emojify names
-- Completely hidden posts still had 1px border
-- Attachments are ALWAYS in same order as user uploaded, no more "videos first"
 - Attachment description is prefilled with backend-provided default when uploading
 - Proper visual feedback that next image is loading when browsing
+- Additional HTML sanitization on frontend side in case backend sanitization fails
+- Interaction list popovers now properly emojify names
+- AdminFE button no longer scrolls page to top when clicked
+- User handles with non-ascii domains now have less intrusive indicator for the domain name
+- Completely hidden posts still no longer have 1px border
+- A lot of accessibility improvements
 
 ### Changed
-- (You)s are optional (opt-in) now, bolding your nickname is also optional (opt-out)
+- Using Vue 3 now
+- A lot of internal dependencies updated
+- "(You)s" are optional (opt-in) now, bolding your nickname is also optional (opt-out)
 - User highlight background now also covers the `@`
 - Reverted back to textual `@`, svg version is opt-in.
-- Settings window has been throughly rearranged to make make more sense and make navication settings easier.
+- Settings window has been thoroughly rearranged to make more sense and make navigation settings easier.
 - Uploaded attachments are uniform with displayed attachments
 - Flash is watchable in media-modal (takes up nearly full screen though due to sizing issues)
-- Notifications about likes/repeats/emoji reacts are now minimized so they always take up same amount of space irrelevant to size of post.
+- Notifications about likes/repeats/emoji reacts are now minimized so they always take up same amount of space irrelevant to size of post. (You can expand them to full if need be)
+- Slight width/spacing adjustments
+- More sizing stuff is font-size dependent now
+- Scrollbars are styled/colorized now
+- Scrollbars are toggleable (for stuff that didn't have visible scrollbars before) (opt-in)
+- Updated localization files
+- Top bar is more useful in mobile mode now.
+- "Show new" button is way more compact in mobile mode
+- Slightly adjusted placement and spacing of the topbar buttons so it's less easy to accidentally log yourself out
 
 ### Added
+- 3 column mode: only enables when there's space for it (opt-out, customizable)
+- Apologetic pleroma-tan
+- New button on timeline header to change some of the new and often-used settings
+- Support for lists
+- Added ability to edit posts and view post edit history etc.
+- Added ability to add personal note to users
+- Added initial support for admin announcements
+- Added ui for account migration
+- Added ui for backups
+- Added ability to force-unfollow a user from you
+- Emoji are now grouped by pack
+- Ability to pin navigation items and collapse the navigation menu
+- Ability to rearrange order of attachments when uploading
+- Ability to scroll column (or page) to top via panel header button
 - Options to show domains in mentions
 - Option to show user avatars in mention links (opt-in)
 - Option to disable the tooltip for mentions
 - Option to completely hide muted threads
+- Option to customize what clicking user avatar does in user popover
+- Notifications for poll results
+- "Favorites" link in navigation
+- Very early and somewhat experimental system for automatic settings sync (used only for pinned navigation and apologetic pleroma-tan)
+- Implemented remote interaction with statuses for anon visitors
 - Ability to open videos in modal even if you disabled that feature, via an icon button
 - New button on attachment that indicates that attachment has a description and shows a bar filled with description
 - Attachments are truncated just like post contents
 - Media modal now also displays description and counter position in gallery (i.e. 1/5)
-- Ability to rearrange order of attachments when uploading
 - Enabled users to zoom and pan images in media viewer with mouse and touch
-- Added frontend ui for account migration
+- Timelines/panels and conversations have sticky headers now (a bit glitchy on some browsers like safari) (opt-out)
 
 
 ## [2.4.2] - 2022-01-09

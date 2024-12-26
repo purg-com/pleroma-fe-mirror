@@ -1,37 +1,53 @@
+/* stylelint-disable no-descending-specificity */
 .panel {
+  --__panel-background: var(--background);
+  --__panel-backdrop-filter: var(--backdrop-filter);
+
+  .tab-switcher .tabs {
+    background: var(--__panel-background);
+    backdrop-filter: var(--__panel-backdrop-filter);
+  }
+
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: $fallback--bg;
-  background-color: var(--bg, $fallback--bg);
+
+  .panel-heading {
+    background-color: inherit;
+  }
 
   &::after,
   & {
-    border-radius: $fallback--panelRadius;
-    border-radius: var(--panelRadius, $fallback--panelRadius);
+    border-radius: var(--roundness);
   }
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     z-index: 5;
-    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
-    box-shadow: var(--panelShadow);
+    box-shadow: var(--shadow);
     pointer-events: none;
   }
 }
 
 .panel-body {
   padding: var(--panel-body-padding, 0);
+  background: var(--background);
+  backdrop-filter: var(--__panel-backdrop-filter);
+
+  .tab-switcher .tabs {
+    background: none;
+    backdrop-filter: none;
+  }
 
   &:empty::before {
     content: "¯\\_(ツ)_/¯"; // Could use words but it'd require translations
     display: block;
-    margin: 1em;
+    padding: 1em;
     text-align: center;
   }
 
@@ -44,20 +60,23 @@
 
 .panel-heading,
 .panel-footer {
-  --panel-heading-height-padding: 0.6em;
-  --__panel-heading-height: 3.2em;
-  --__panel-heading-height-inner: calc(var(--__panel-heading-height) - 2 * var(--panel-heading-height-padding));
+  --panel-heading-height-padding: calc(var(--panel-header-height) * 0.2);
+  --__panel-heading-gap: calc(var(--panel-header-height) * 0.1565);
+  --__panel-heading-height: var(--panel-header-height);
+  --__panel-heading-height-inner: calc(var(--__panel-heading-height) - 2 * var(--panel-heading-height-padding, 0));
 
+  font-size: calc(var(--panelHeaderSize) / 3.2);
+  backdrop-filter: var(--__panel-backdrop-filter);
   position: relative;
   box-sizing: border-box;
   display: grid;
   grid-auto-flow: column;
   grid-template-columns: minmax(50%, 1fr);
   grid-auto-columns: auto;
-  grid-column-gap: 0.5em;
+  grid-column-gap: var(--__panel-heading-gap);
   flex: none;
   background-size: cover;
-  padding: 0.6em;
+  padding: var(--panel-heading-height-padding);
   height: var(--__panel-heading-height);
   line-height: var(--__panel-heading-height-inner);
   z-index: 4;
@@ -74,8 +93,7 @@
   &.-stub {
     &,
     &::after {
-      border-radius: $fallback--panelRadius;
-      border-radius: var(--panelRadius, $fallback--panelRadius);
+      border-radius: var(--roundness);
     }
   }
 
@@ -86,7 +104,7 @@
 
   &::after,
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     bottom: 0;
@@ -97,6 +115,8 @@
 
   .title {
     font-size: 1.3em;
+    margin: 0;
+    font-weight: normal;
   }
 
   .alert {
@@ -117,82 +137,76 @@
       padding-bottom: 0;
       align-self: stretch;
     }
+
+    > .alert {
+      line-height: calc(var(--__panel-heading-height-inner) - 2px);
+    }
   }
 }
 
 // TODO Should refactor panels into separate component and utilize slots
 
 .panel-heading {
-  border-radius: $fallback--panelRadius $fallback--panelRadius 0 0;
-  border-radius: var(--panelRadius, $fallback--panelRadius) var(--panelRadius, $fallback--panelRadius) 0 0;
-  border-width: 0 0 1px 0;
+  border-radius: var(--roundness) var(--roundness) 0 0;
+  border-width: 0 0 1px;
   align-items: start;
-  // panel theme
-  color: var(--panelText);
-  background-color: $fallback--bg;
-  background-color: var(--bg, $fallback--bg);
+  background-image:
+    linear-gradient(to bottom, var(--background), var(--background)),
+    linear-gradient(to bottom, var(--__panel-background), var(--__panel-background));
 
   &::after {
-    background-color: $fallback--fg;
-    background-color: var(--panel, $fallback--fg);
+    background-color: var(--background);
     z-index: -2;
-    border-radius: $fallback--panelRadius $fallback--panelRadius 0 0;
-    border-radius: var(--panelRadius, $fallback--panelRadius) var(--panelRadius, $fallback--panelRadius) 0 0;
-    box-shadow: var(--panelHeaderShadow);
-  }
-
-  a,
-  .-link {
-    color: $fallback--link;
-    color: var(--panelLink, $fallback--link);
-  }
-
-  .faint {
-    background-color: transparent;
-    color: $fallback--faint;
-    color: var(--panelFaint, $fallback--faint);
-  }
-
-  .faint-link {
-    color: $fallback--faint;
-    color: var(--faintLink, $fallback--faint);
+    border-radius: var(--roundness) var(--roundness) 0 0;
+    box-shadow: var(--shadow);
   }
 
   &:not(.-flexible-height) {
     > .button-default {
       flex-shrink: 0;
+    }
+  }
 
-      &,
-      i[class*=icon-] {
-        color: $fallback--text;
-        color: var(--btnPanelText, $fallback--text);
-      }
+  .rightside-button {
+    align-self: stretch;
+    text-align: center;
+    width: var(--__panel-heading-height);
+    height: var(--__panel-heading-height);
+    margin: calc(-1 * var(--panel-heading-height-padding)) 0;
+    margin-right: calc(-1 * var(--__panel-heading-gap));
 
-      &:active {
-        background-color: $fallback--fg;
-        background-color: var(--btnPressedPanel, $fallback--fg);
-        color: $fallback--text;
-        color: var(--btnPressedPanelText, $fallback--text);
-      }
+    > button {
+      box-sizing: border-box;
+      padding: calc(1 * var(--panel-heading-height-padding)) 0;
+      height: 100%;
+      width: 100%;
+      text-align: center;
 
-      &:disabled {
-        color: $fallback--text;
-        color: var(--btnDisabledPanelText, $fallback--text);
+      svg {
+        font-size: 1.2em;
       }
+    }
+  }
 
-      &.toggled {
-        color: $fallback--text;
-        color: var(--btnToggledPanelText, $fallback--text);
-      }
+  .rightside-icon {
+    align-self: stretch;
+    text-align: center;
+    width: var(--__panel-heading-height);
+    margin-right: calc(-1 * var(--__panel-heading-gap));
+
+    svg {
+      font-size: 1.2em;
     }
   }
 }
 
 .panel-footer {
-  border-radius: 0 0 $fallback--panelRadius $fallback--panelRadius;
-  border-radius: 0 0 var(--panelRadius, $fallback--panelRadius) var(--panelRadius, $fallback--panelRadius);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
   align-items: center;
-  border-width: 1px 0 0 0;
+  border-width: 1px 0 0;
   border-style: solid;
-  border-color: var(--border, $fallback--border);
+  border-color: var(--border);
+  background-color: var(--__panel-background);
 }
+/* stylelint-enable no-descending-specificity */

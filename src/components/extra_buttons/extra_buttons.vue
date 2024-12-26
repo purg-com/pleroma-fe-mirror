@@ -2,16 +2,24 @@
   <Popover
     class="ExtraButtons"
     trigger="click"
+    :trigger-attrs="triggerAttrs"
     placement="top"
     :offset="{ y: 5 }"
     :bound-to="{ x: 'container' }"
     remove-padding
+    @show="onShow"
+    @close="onClose"
   >
-    <template v-slot:content="{close}">
-      <div class="dropdown-menu">
+    <template #content="{close}">
+      <div
+        :id="`popup-menu-${randomSeed}`"
+        class="dropdown-menu"
+        role="menu"
+      >
         <button
           v-if="canMute && !status.thread_muted"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
+          role="menuitem"
           @click.prevent="muteConversation"
         >
           <FAIcon
@@ -21,7 +29,8 @@
         </button>
         <button
           v-if="canMute && status.thread_muted"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
+          role="menuitem"
           @click.prevent="unmuteConversation"
         >
           <FAIcon
@@ -31,7 +40,8 @@
         </button>
         <button
           v-if="!status.pinned && canPin"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
+          role="menuitem"
           @click.prevent="pinStatus"
           @click="close"
         >
@@ -42,7 +52,8 @@
         </button>
         <button
           v-if="status.pinned && canPin"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
+          role="menuitem"
           @click.prevent="unpinStatus"
           @click="close"
         >
@@ -51,31 +62,64 @@
             icon="thumbtack"
           /><span>{{ $t("status.unpin") }}</span>
         </button>
+        <template v-if="canBookmark">
+          <button
+            v-if="!status.bookmarked"
+            class="menu-item dropdown-item dropdown-item-icon"
+            role="menuitem"
+            @click.prevent="bookmarkStatus"
+            @click="close"
+          >
+            <FAIcon
+              fixed-width
+              :icon="['far', 'bookmark']"
+            /><span>{{ $t("status.bookmark") }}</span>
+          </button>
+          <button
+            v-if="status.bookmarked"
+            class="menu-item dropdown-item dropdown-item-icon"
+            role="menuitem"
+            @click.prevent="unbookmarkStatus"
+            @click="close"
+          >
+            <FAIcon
+              fixed-width
+              icon="bookmark"
+            /><span>{{ $t("status.unbookmark") }}</span>
+          </button>
+          <StatusBookmarkFolderMenu
+            v-if="status.bookmarked && bookmarkFolders"
+            :status="status"
+          />
+        </template>
         <button
-          v-if="!status.bookmarked"
-          class="button-default dropdown-item dropdown-item-icon"
-          @click.prevent="bookmarkStatus"
+          v-if="ownStatus && editingAvailable"
+          class="menu-item dropdown-item dropdown-item-icon"
+          role="menuitem"
+          @click.prevent="editStatus"
           @click="close"
         >
           <FAIcon
             fixed-width
-            :icon="['far', 'bookmark']"
-          /><span>{{ $t("status.bookmark") }}</span>
+            icon="pen"
+          /><span>{{ $t("status.edit") }}</span>
         </button>
         <button
-          v-if="status.bookmarked"
-          class="button-default dropdown-item dropdown-item-icon"
-          @click.prevent="unbookmarkStatus"
+          v-if="isEdited && editingAvailable"
+          class="menu-item dropdown-item dropdown-item-icon"
+          role="menuitem"
+          @click.prevent="showStatusHistory"
           @click="close"
         >
           <FAIcon
             fixed-width
-            icon="bookmark"
-          /><span>{{ $t("status.unbookmark") }}</span>
+            icon="history"
+          /><span>{{ $t("status.status_history") }}</span>
         </button>
         <button
           v-if="canDelete"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
+          role="menuitem"
           @click.prevent="deleteStatus"
           @click="close"
         >
@@ -85,7 +129,8 @@
           /><span>{{ $t("status.delete") }}</span>
         </button>
         <button
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
+          role="menuitem"
           @click.prevent="copyLink"
           @click="close"
         >
@@ -96,7 +141,8 @@
         </button>
         <a
           v-if="!status.is_local"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
+          role="menuitem"
           title="Source"
           :href="status.external_url"
           target="_blank"
@@ -107,7 +153,8 @@
           /><span>{{ $t("status.external_source") }}</span>
         </a>
         <button
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
+          role="menuitem"
           @click.prevent="reportStatus"
           @click="close"
         >
@@ -118,36 +165,73 @@
         </button>
       </div>
     </template>
-    <template v-slot:trigger>
-      <button class="button-unstyled popover-trigger">
-        <FAIcon
-          class="fa-scale-110 fa-old-padding"
-          icon="ellipsis-h"
-        />
-      </button>
+    <template #trigger>
+      <span class="button-unstyled popover-trigger">
+        <FALayers class="fa-old-padding-layer">
+          <FAIcon
+            class="fa-scale-110 "
+            icon="ellipsis-h"
+          />
+          <FAIcon
+            v-show="!expanded"
+            class="focus-marker"
+            transform="shrink-6 up-8 right-16"
+            icon="plus"
+          />
+          <FAIcon
+            v-show="expanded"
+            class="focus-marker"
+            transform="shrink-6 up-8 right-16"
+            icon="times"
+          />
+        </FALayers>
+      </span>
+      <teleport to="#modal">
+        <ConfirmModal
+          v-if="showingDeleteDialog"
+          :title="$t('status.delete_confirm_title')"
+          :cancel-text="$t('status.delete_confirm_cancel_button')"
+          :confirm-text="$t('status.delete_confirm_accept_button')"
+          @cancelled="hideDeleteStatusConfirmDialog"
+          @accepted="doDeleteStatus"
+        >
+          {{ $t('status.delete_confirm') }}
+        </ConfirmModal>
+      </teleport>
     </template>
   </Popover>
 </template>
 
-<script src="./extra_buttons.js" ></script>
+<script src="./extra_buttons.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
+@import "../../mixins";
 
 .ExtraButtons {
-  /* override of popover internal stuff */
-  .popover-trigger-button {
-    width: auto;
-  }
-
   .popover-trigger {
     position: static;
     padding: 10px;
     margin: -10px;
 
     &:hover .svg-inline--fa {
-      color: $fallback--text;
-      color: var(--text, $fallback--text);
+      color: var(--text);
+    }
+  }
+
+  .popover-trigger-button {
+    /* override of popover internal stuff */
+    width: auto;
+
+    @include unfocused-style {
+      .focus-marker {
+        visibility: hidden;
+      }
+    }
+
+    @include focused-style {
+      .focus-marker {
+        visibility: visible;
+      }
     }
   }
 }

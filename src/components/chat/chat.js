@@ -57,6 +57,7 @@ const Chat = {
   },
   unmounted () {
     window.removeEventListener('scroll', this.handleScroll)
+    window.removeEventListener('resize', this.handleResize)
     if (typeof document.hidden !== 'undefined') document.removeEventListener('visibilitychange', this.handleVisibilityChange, false)
     this.$store.dispatch('clearCurrentChat')
   },
@@ -107,7 +108,7 @@ const Chat = {
         }
       })
     },
-    '$route': function () {
+    $route: function () {
       this.startFetching()
     },
     mastoUserSocketStatus (newValue) {
@@ -135,7 +136,7 @@ const Chat = {
     },
     // "Sticks" scroll to bottom instead of top, helps with OSK resizing the viewport
     handleResize (opts = {}) {
-      const { expand = false, delayed = false } = opts
+      const { delayed = false } = opts
 
       if (delayed) {
         setTimeout(() => {
@@ -146,10 +147,10 @@ const Chat = {
 
       this.$nextTick(() => {
         const { offsetHeight = undefined } = getScrollPosition()
-        const diff = this.lastScrollPosition.offsetHeight - offsetHeight
-        if (diff !== 0 || (!this.bottomedOut() && expand)) {
+        const diff = offsetHeight - this.lastScrollPosition.offsetHeight
+        if (diff !== 0 && !this.bottomedOut()) {
           this.$nextTick(() => {
-            window.scrollTo({ top: window.scrollY + diff })
+            window.scrollBy({ top: -Math.trunc(diff) })
           })
         }
         this.lastScrollPosition = getScrollPosition()
@@ -187,6 +188,7 @@ const Chat = {
       }, 5000)
     },
     handleScroll: _.throttle(function () {
+      this.lastScrollPosition = getScrollPosition()
       if (!this.currentChat) { return }
 
       if (this.reachedTop()) {

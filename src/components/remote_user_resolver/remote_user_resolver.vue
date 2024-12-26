@@ -1,7 +1,9 @@
 <template>
   <div class="panel panel-default">
     <div class="panel-heading">
-      {{ $t('remote_user_resolver.remote_user_resolver') }}
+      <h1 class="title">
+        {{ $t('remote_user_resolver.remote_user_resolver') }}
+      </h1>
     </div>
     <div class="panel-body">
       <p>
@@ -15,6 +17,3 @@
 </template>
 
 <script src="./remote_user_resolver.js"></script>
-
-<style lang="scss">
-</style>

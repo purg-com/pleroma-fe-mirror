@@ -13,10 +13,10 @@
   </div>
 </template>
 
-<script src="./terms_of_service_panel.js" ></script>
+<script src="./terms_of_service_panel.js"></script>
 
 <style lang="scss">
 .tos-content {
-  margin: 1em
+  margin: 1em;
 }
 </style>

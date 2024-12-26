@@ -19,6 +19,7 @@ describe('routes', () => {
 
     const matchedComponents = router.currentRoute.value.matched
 
+    // eslint-disable-next-line no-prototype-builtins
     expect(matchedComponents[0].components.default.components.hasOwnProperty('Timeline')).to.eql(true)
   })
 
@@ -27,6 +28,7 @@ describe('routes', () => {
 
     const matchedComponents = router.currentRoute.value.matched
 
+    // eslint-disable-next-line no-prototype-builtins
     expect(matchedComponents[0].components.default.components.hasOwnProperty('UserCard')).to.eql(true)
   })
 
@@ -35,6 +37,31 @@ describe('routes', () => {
 
     const matchedComponents = router.currentRoute.value.matched
 
+    // eslint-disable-next-line no-prototype-builtins
     expect(matchedComponents[0].components.default.components.hasOwnProperty('UserCard')).to.eql(true)
+  })
+
+  it('list view', async () => {
+    await router.push('/lists')
+
+    const matchedComponents = router.currentRoute.value.matched
+
+    expect(Object.prototype.hasOwnProperty.call(matchedComponents[0].components.default.components, 'ListsCard')).to.eql(true)
+  })
+
+  it('list timeline', async () => {
+    await router.push('/lists/1')
+
+    const matchedComponents = router.currentRoute.value.matched
+
+    expect(Object.prototype.hasOwnProperty.call(matchedComponents[0].components.default.components, 'Timeline')).to.eql(true)
+  })
+
+  it('list edit', async () => {
+    await router.push('/lists/1/edit')
+
+    const matchedComponents = router.currentRoute.value.matched
+
+    expect(Object.prototype.hasOwnProperty.call(matchedComponents[0].components.default.components, 'BasicUserCard')).to.eql(true)
   })
 })

@@ -7,14 +7,14 @@
   >
     <div class="settings-modal-panel panel">
       <div class="panel-heading">
-        <span class="title">
-          {{ $t('settings.settings') }}
-        </span>
+        <h1 class="title">
+          {{ modalMode === 'user' ? $t('settings.settings') : $t('admin_dash.window_title') }}
+        </h1>
         <transition name="fade">
           <div
             v-if="currentSaveStateNotice"
             class="alert"
-            :class="{ transparent: !currentSaveStateNotice.error, error: currentSaveStateNotice.error}"
+            :class="{ success: !currentSaveStateNotice.error, error: currentSaveStateNotice.error}"
             @click.prevent
           >
             {{ currentSaveStateNotice.error ? $t('settings.saving_err') : $t('settings.saving_ok') }}
@@ -42,10 +42,12 @@
         </button>
       </div>
       <div class="panel-body">
-        <SettingsModalContent v-if="modalOpenedOnce" />
+        <SettingsModalUserContent v-if="modalMode === 'user' && modalOpenedOnceUser" />
+        <SettingsModalAdminContent v-if="modalMode === 'admin' && modalOpenedOnceAdmin" />
       </div>
-      <div class="panel-footer settings-footer">
+      <div class="panel-footer settings-footer -flexible-height">
         <Popover
+          v-if="modalMode === 'user'"
           class="export"
           trigger="click"
           placement="top"
@@ -53,7 +55,7 @@
           :bound-to="{ x: 'container' }"
           remove-padding
         >
-          <template v-slot:trigger>
+          <template #trigger>
             <button
               class="btn button-default"
               :title="$t('general.close')"
@@ -65,10 +67,10 @@
               />
             </button>
           </template>
-          <template v-slot:content="{close}">
+          <template #content="{close}">
             <div class="dropdown-menu">
               <button
-                class="button-default dropdown-item dropdown-item-icon"
+                class="menu-item dropdown-item dropdown-item-icon"
                 @click.prevent="backup"
                 @click="close"
               >
@@ -78,7 +80,7 @@
                 /><span>{{ $t("settings.file_export_import.backup_settings") }}</span>
               </button>
               <button
-                class="button-default dropdown-item dropdown-item-icon"
+                class="menu-item dropdown-item dropdown-item-icon"
                 @click.prevent="backupWithTheme"
                 @click="close"
               >
@@ -88,7 +90,7 @@
                 /><span>{{ $t("settings.file_export_import.backup_settings_theme") }}</span>
               </button>
               <button
-                class="button-default dropdown-item dropdown-item-icon"
+                class="menu-item dropdown-item dropdown-item-icon"
                 @click.prevent="restore"
                 @click="close"
               >
@@ -107,12 +109,59 @@
         >
           {{ $t("settings.expert_mode") }}
         </Checkbox>
+        <span v-if="modalMode === 'admin'">
+          <i18n-t
+            scope="global"
+            keypath="admin_dash.wip_notice"
+          >
+            <template #adminFeLink>
+              <a
+                href="/pleroma/admin/#/login-pleroma"
+                target="_blank"
+              >
+                {{ $t("admin_dash.old_ui_link") }}
+              </a>
+            </template>
+          </i18n-t>
+        </span>
         <span
           id="unscrolled-content"
           class="extra-content"
         />
+        <span
+          v-if="modalMode === 'admin'"
+          class="admin-buttons"
+        >
+          <button
+            class="button-default btn"
+            :disabled="!adminDraftAny"
+            @click="resetAdminDraft"
+          >
+            {{ $t("admin_dash.reset_all") }}
+          </button>
+          {{ ' ' }}
+          <button
+            class="button-default btn"
+            :disabled="!adminDraftAny"
+            @click="pushAdminDraft"
+          >
+            {{ $t("admin_dash.commit_all") }}
+          </button>
+        </span>
       </div>
     </div>
+    <teleport to="#modal">
+      <ConfirmModal
+        v-if="$store.state.interface.temporaryChangesTimeoutId"
+        :title="$t('settings.confirm_new_setting')"
+        :cancel-text="$t('settings.revert')"
+        :confirm-text="$t('settings.confirm')"
+        @cancelled="$store.state.interface.temporaryChangesRevert"
+        @accepted="$store.state.interface.temporaryChangesConfirm"
+      >
+        {{ $t('settings.confirm_new_question') }}
+      </ConfirmModal>
+    </teleport>
   </Modal>
 </template>
 

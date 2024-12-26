@@ -15,6 +15,7 @@ const actions = {
 
 const testGetters = {
   findUser: state => getters.findUser(state.users),
+  findUserByName: state => getters.findUserByName(state.users),
   relationship: state => getters.relationship(state.users),
   mergedConfig: state => ({
     colors: '',
@@ -95,6 +96,7 @@ const externalProfileStore = createStore({
         credentials: ''
       },
       usersObject: { 100: extUser },
+      usersByNameObject: {},
       users: [extUser],
       relationships: {}
     }
@@ -163,7 +165,8 @@ const localProfileStore = createStore({
       currentUser: {
         credentials: ''
       },
-      usersObject: { 100: localUser, 'testuser': localUser },
+      usersObject: { 100: localUser },
+      usersByNameObject: { testuser: localUser },
       users: [localUser],
       relationships: {}
     }
@@ -175,7 +178,7 @@ describe.skip('UserProfile', () => {
   it('renders external profile', () => {
     const wrapper = mount(UserProfile, {
       global: {
-        plugins: [ externalProfileStore ],
+        plugins: [externalProfileStore],
         mocks: {
           $route: {
             params: { id: 100 },
@@ -192,7 +195,7 @@ describe.skip('UserProfile', () => {
   it('renders local profile', () => {
     const wrapper = mount(UserProfile, {
       global: {
-        plugins: [ localProfileStore ],
+        plugins: [localProfileStore],
         mocks: {
           $route: {
             params: { name: 'testUser' },

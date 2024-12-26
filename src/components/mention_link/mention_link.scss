@@ -1,10 +1,7 @@
-@import '../../_variables.scss';
-
 .MentionLink {
   position: relative;
   white-space: normal;
   display: inline;
-  color: var(--link);
   word-break: normal;
 
   & .new,
@@ -14,7 +11,7 @@
   }
 
   .mention-avatar {
-    border-radius: var(--avatarAltRadius, $fallback--avatarAltRadius);
+    border-radius: var(--roundness);
     width: 1.5em;
     height: 1.5em;
     vertical-align: middle;
@@ -55,10 +52,16 @@
 
   .new {
     &.-you {
-      & .shortName,
-      & .full {
+      .shortName {
         font-weight: 600;
       }
+    }
+
+    &.-has-selection {
+      --color: var(--selectionText);
+      --link: var(--selectionText);
+
+      background-color: var(--selectionBackground);
     }
 
     .at {
@@ -72,8 +75,7 @@
     }
 
     &.-striped {
-      & .shortName,
-      & .full {
+      & .shortName {
         background-image:
           repeating-linear-gradient(
             135deg,
@@ -86,30 +88,25 @@
     }
 
     &.-solid {
-      & .shortName,
-      & .full {
+      .shortName {
         background-image: linear-gradient(var(--____highlight-tintColor2), var(--____highlight-tintColor2));
       }
     }
 
     &.-side {
-      & .shortName,
-      & .userNameFull {
+      .shortName {
         box-shadow: 0 -5px 3px -4px inset var(--____highlight-solidColor);
       }
     }
   }
 
-  &:hover .new .full {
-    opacity: 1;
-    pointer-events: initial;
-  }
-
   .serverName.-faded {
-    color: var(--faintLink, $fallback--link);
+    color: var(--linkFaint);
   }
+}
 
-  .full .-faded {
-    color: var(--faint, $fallback--faint);
-  }
+.mention-link-popover {
+  max-width: 70ch;
+  max-height: 20rem;
+  overflow: hidden;
 }

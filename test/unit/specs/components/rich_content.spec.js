@@ -4,16 +4,26 @@ import RichContent from 'src/components/rich_content/rich_content.jsx'
 const attentions = []
 const global = {
   mocks: {
-    '$store': null
+    $store: {
+      state: {},
+      getters: {
+        mergedConfig: () => ({
+          mentionLinkShowTooltip: true
+        }),
+        findUserByUrl: () => null
+      }
+    }
   },
   stubs: {
     FAIcon: true
   }
 }
 
-const makeMention = (who) => {
+const makeMention = (who, noClass) => {
   attentions.push({ statusnet_profile_url: `https://fake.tld/@${who}` })
-  return `<span class="h-card"><a class="u-url mention" href="https://fake.tld/@${who}">@<span>${who}</span></a></span>`
+  return noClass
+    ? `<span><a href="https://fake.tld/@${who}">@<span>${who}</span></a></span>`
+    : `<span class="h-card"><a class="u-url mention" href="https://fake.tld/@${who}">@<span>${who}</span></a></span>`
 }
 const p = (...data) => `<p>${data.join('')}</p>`
 const compwrap = (...data) => `<span class="RichContent">${data.join('')}</span>`
@@ -131,8 +141,18 @@ describe('RichContent', () => {
       ].join(''),
       [
         makeMention('John'),
-        makeMention('Josh'),
-        makeMention('Jeremy')
+        makeMention('Josh'), makeMention('Jeremy')
+      ].join('')
+    ].join('\n')
+    const strippedHtml = [
+      [
+        makeMention('Jack', true),
+        'let\'s meet up with ',
+        makeMention('Janet', true)
+      ].join(''),
+      [
+        makeMention('John', true),
+        makeMention('Josh', true), makeMention('Jeremy', true)
       ].join('')
     ].join('\n')
 
@@ -147,7 +167,7 @@ describe('RichContent', () => {
       }
     })
 
-    expect(wrapper.html()).to.eql(compwrap(html))
+    expect(wrapper.html()).to.eql(compwrap(strippedHtml))
   })
 
   it('Adds greentext and cyantext to the post', () => {
@@ -349,7 +369,6 @@ describe('RichContent', () => {
       p(
         '<span class="MentionsLine">',
         '<span class="MentionLink mention-link">',
-        '<!-- eslint-disable vue/no-v-html -->',
         '<a href="lol" class="original" target="_blank">',
         '<span>',
         'https://</span>',
@@ -358,10 +377,7 @@ describe('RichContent', () => {
         '<span>',
         '</span>',
         '</a>',
-        '<!-- eslint-enable vue/no-v-html -->',
-        '<!--v-if-->', // v-if placeholder, mentionlink's "new" (i.e. rich) display
         '</span>',
-        '<!--v-if-->', // v-if placeholder, mentionsline's extra mentions and stuff
         '</span>'
       ),
       p(
@@ -380,7 +396,7 @@ describe('RichContent', () => {
       }
     })
 
-    expect(wrapper.html().replace(/\n/g, '')).to.eql(compwrap(expected))
+    expect(wrapper.html().replace(/\n/g, '').replace(/<!--.*?-->/g, '')).to.eql(compwrap(expected))
   })
 
   it('rich contents of nested mentions are handled properly', () => {
@@ -409,10 +425,9 @@ describe('RichContent', () => {
       'Testing'
     ].join('')
     const expected = [
-      '<span class="poast-style">',
+      '<span>',
       '<span class="MentionsLine">',
       '<span class="MentionLink mention-link">',
-      '<!-- eslint-disable vue/no-v-html -->',
       '<a href="lol" class="original" target="_blank">',
       '<span>',
       'https://</span>',
@@ -421,11 +436,8 @@ describe('RichContent', () => {
       '<span>',
       '</span>',
       '</a>',
-      '<!-- eslint-enable vue/no-v-html -->',
-      '<!--v-if-->', // v-if placeholder, mentionlink's "new" (i.e. rich) display
       '</span>',
       '<span class="MentionLink mention-link">',
-      '<!-- eslint-disable vue/no-v-html -->',
       '<a href="lol" class="original" target="_blank">',
       '<span>',
       'https://</span>',
@@ -434,10 +446,7 @@ describe('RichContent', () => {
       '<span>',
       '</span>',
       '</a>',
-      '<!-- eslint-enable vue/no-v-html -->',
-      '<!--v-if-->', // v-if placeholder, mentionlink's "new" (i.e. rich) display
       '</span>',
-      '<!--v-if-->', // v-if placeholder, mentionsline's extra mentions and stuff
       '</span>',
       ' ',
       '</span>',
@@ -455,7 +464,7 @@ describe('RichContent', () => {
       }
     })
 
-    expect(wrapper.html().replace(/\n/g, '')).to.eql(compwrap(expected))
+    expect(wrapper.html().replace(/\n/g, '').replace(/<!--.*?-->/g, '')).to.eql(compwrap(expected))
   })
 
   it('rich contents of a link are handled properly', () => {

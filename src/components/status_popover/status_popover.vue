@@ -1,14 +1,16 @@
 <template>
   <Popover
+    ref="popover"
     trigger="hover"
+    :stay-on-click="true"
     popover-class="popover-default status-popover"
     :bound-to="{ x: 'container' }"
     @show="enter"
   >
-    <template v-slot:trigger>
+    <template #trigger>
       <slot />
     </template>
-    <template v-slot:content>
+    <template #content>
       <Status
         v-if="status"
         :is-preview="true"
@@ -35,25 +37,17 @@
   </Popover>
 </template>
 
-<script src="./status_popover.js" ></script>
+<script src="./status_popover.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-
 /* popover styles load on-demand, so we need to override */
 .status-popover.popover {
   font-size: 1rem;
   min-width: 15em;
   max-width: 95%;
-
-  border-color: $fallback--border;
-  border-color: var(--border, $fallback--border);
+  border-color: var(--border);
   border-style: solid;
   border-width: 1px;
-  border-radius: $fallback--tooltipRadius;
-  border-radius: var(--tooltipRadius, $fallback--tooltipRadius);
-  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
-  box-shadow: var(--popupShadow);
 
   /* TODO cleanup this */
   .Status.Status {

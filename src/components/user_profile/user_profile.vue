@@ -4,41 +4,54 @@
       v-if="user"
       class="user-profile panel panel-default"
     >
-      <UserCard
-        :user-id="userId"
-        :switcher="true"
-        :selected="timeline.viewing"
-        :allow-zooming-avatar="true"
-        rounded="top"
-      />
-      <div
-        v-if="user.fields_html && user.fields_html.length > 0"
-        class="user-profile-fields"
-      >
-        <dl
-          v-for="(field, index) in user.fields_html"
-          :key="index"
-          class="user-profile-field"
+      <div class="panel-body">
+        <UserCard
+          :user-id="userId"
+          :switcher="true"
+          :selected="timeline.viewing"
+          avatar-action="zoom"
+          rounded="top"
+          :has-note-editor="true"
+        />
+        <span
+          v-if="!!user.birthday"
+          class="user-birthday"
         >
-          <dt
-            :title="user.fields_text[index].name"
-            class="user-profile-field-name"
+          <FAIcon
+            class="fa-old-padding"
+            icon="birthday-cake"
+          />
+          {{ $t('user_card.birthday', { birthday: formattedBirthday }) }}
+        </span>
+        <div
+          v-if="user.fields_html && user.fields_html.length > 0"
+          class="user-profile-fields"
+        >
+          <dl
+            v-for="(field, index) in user.fields_html"
+            :key="index"
+            class="user-profile-field"
           >
-            <RichContent
-              :html="field.name"
-              :emoji="user.emoji"
-            />
-          </dt>
-          <dd
-            :title="user.fields_text[index].value"
-            class="user-profile-field-value"
-          >
-            <RichContent
-              :html="field.value"
-              :emoji="user.emoji"
-            />
-          </dd>
-        </dl>
+            <dt
+              :title="user.fields_text[index].name"
+              class="user-profile-field-name"
+            >
+              <RichContent
+                :html="field.name"
+                :emoji="user.emoji"
+              />
+            </dt>
+            <dd
+              :title="user.fields_text[index].value"
+              class="user-profile-field-value"
+            >
+              <RichContent
+                :html="field.value"
+                :emoji="user.emoji"
+              />
+            </dd>
+          </dl>
+        </div>
       </div>
       <tab-switcher
         :active-tab="tab"
@@ -56,16 +69,20 @@
           :user-id="userId"
           :pinned-status-ids="user.pinnedStatusIds"
           :in-profile="true"
-          :footerSlipgate="footerRef"
+          :footer-slipgate="footerRef"
         />
         <div
           v-if="followsTabVisible"
           key="followees"
+          class="panel-body"
           :label="$t('user_card.followees')"
           :disabled="!user.friends_count"
         >
-          <FriendList :user-id="userId">
-            <template v-slot:item="{item}">
+          <FriendList
+            :user-id="userId"
+            :non-interactive="true"
+          >
+            <template #item="{item}">
               <FollowCard :user="item" />
             </template>
           </FriendList>
@@ -73,11 +90,15 @@
         <div
           v-if="followersTabVisible"
           key="followers"
+          class="panel-body"
           :label="$t('user_card.followers')"
           :disabled="!user.followers_count"
         >
-          <FollowerList :user-id="userId">
-            <template v-slot:item="{item}">
+          <FollowerList
+            :user-id="userId"
+            :non-interactive="true"
+          >
+            <template #item="{item}">
               <FollowCard
                 :user="item"
                 :no-follows-you="isUs"
@@ -95,10 +116,10 @@
           :timeline="media"
           :user-id="userId"
           :in-profile="true"
-          :footerSlipgate="footerRef"
+          :footer-slipgate="footerRef"
         />
         <Timeline
-          v-if="isUs"
+          v-if="favoritesTabVisible"
           key="favorites"
           :label="$t('user_card.favorites')"
           :disabled="!favorites.visibleStatuses.length"
@@ -106,22 +127,26 @@
           :title="$t('user_card.favorites')"
           timeline-name="favorites"
           :timeline="favorites"
+          :user-id="isUs ? undefined : userId"
           :in-profile="true"
-          :footerSlipgate="footerRef"
+          :footer-slipgate="footerRef"
         />
       </tab-switcher>
-      <div class="panel-footer" :ref="setFooterRef"></div>
+      <div
+        :ref="setFooterRef"
+        class="panel-footer"
+      />
     </div>
     <div
       v-else
       class="panel user-profile-placeholder"
     >
       <div class="panel-heading">
-        <div class="title">
+        <h1 class="title">
           {{ $t('settings.profile_tab') }}
-        </div>
+        </h1>
       </div>
-      <div class="panel-body">
+      <div>
         <span v-if="error">{{ error }}</span>
         <FAIcon
           v-else
@@ -136,14 +161,16 @@
 <script src="./user_profile.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-
 .user-profile {
   flex: 2;
   flex-basis: 500px;
 
   // No sticky header on user profile
-  --currentPanelStack: 1;
+  --currentPanelStack: 0;
+
+  .user-birthday {
+    margin: 0 0.75em 0.5em;
+  }
 
   .user-profile-fields {
     margin: 0 0.5em;
@@ -163,9 +190,8 @@
     .user-profile-field {
       display: flex;
       margin: 0.25em;
-      border: 1px solid var(--border, $fallback--border);
-      border-radius: $fallback--inputRadius;
-      border-radius: var(--inputRadius, $fallback--inputRadius);
+      border: 1px solid var(--border);
+      border-radius: var(--roundness);
 
       .user-profile-field-name {
         flex: 0 1 30%;
@@ -173,7 +199,7 @@
         text-align: right;
         color: var(--lightText);
         min-width: 120px;
-        border-right: 1px solid var(--border, $fallback--border);
+        border-right: 1px solid var(--border);
       }
 
       .user-profile-field-value {
@@ -182,7 +208,8 @@
         margin: 0 0 0 0.25em;
       }
 
-      .user-profile-field-name, .user-profile-field-value {
+      .user-profile-field-name,
+      .user-profile-field-value {
         line-height: 1.3;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -200,6 +227,7 @@
     padding: 2em;
   }
 }
+
 .user-profile-placeholder {
   .panel-body {
     display: flex;
@@ -208,4 +236,5 @@
     padding: 7em;
   }
 }
+
 </style>

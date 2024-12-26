@@ -8,11 +8,14 @@
         enable-emoji-picker
         :suggest="emojiSuggestor"
       >
-        <input
-          id="username"
-          v-model="newName"
-          class="name-changer"
-        >
+        <template #default="inputProps">
+          <input
+            id="username"
+            v-model="newName"
+            class="input name-changer"
+            v-bind="propsToNative(inputProps)"
+          >
+        </template>
       </EmojiInput>
       <p>{{ $t('settings.bio') }}</p>
       <EmojiInput
@@ -20,10 +23,13 @@
         enable-emoji-picker
         :suggest="emojiUserSuggestor"
       >
-        <textarea
-          v-model="newBio"
-          class="bio resize-height"
-        />
+        <template #default="inputProps">
+          <textarea
+            v-model="newBio"
+            class="input bio resize-height"
+            v-bind="propsToNative(inputProps)"
+          />
+        </template>
       </EmojiInput>
       <p v-if="role === 'admin' || role === 'moderator'">
         <Checkbox v-model="showRole">
@@ -35,6 +41,18 @@
           </template>
         </Checkbox>
       </p>
+      <div>
+        <p>{{ $t('settings.birthday.label') }}</p>
+        <input
+          id="birthday"
+          v-model="newBirthday"
+          type="date"
+          class="input birthday-input"
+        >
+        <Checkbox v-model="showBirthday">
+          {{ $t('settings.birthday.show_birthday') }}
+        </Checkbox>
+      </div>
       <div v-if="maxFields > 0">
         <p>{{ $t('settings.profile_fields.label') }}</p>
         <div
@@ -48,10 +66,14 @@
             hide-emoji-button
             :suggest="userSuggestor"
           >
-            <input
-              v-model="newFields[i].name"
-              :placeholder="$t('settings.profile_fields.name')"
-            >
+            <template #default="inputProps">
+              <input
+                v-model="newFields[i].name"
+                :placeholder="$t('settings.profile_fields.name')"
+                v-bind="propsToNative(inputProps)"
+                class="input"
+              >
+            </template>
           </EmojiInput>
           <EmojiInput
             v-model="newFields[i].value"
@@ -59,10 +81,14 @@
             hide-emoji-button
             :suggest="userSuggestor"
           >
-            <input
-              v-model="newFields[i].value"
-              :placeholder="$t('settings.profile_fields.value')"
-            >
+            <template #default="inputProps">
+              <input
+                v-model="newFields[i].value"
+                :placeholder="$t('settings.profile_fields.value')"
+                v-bind="propsToNative(inputProps)"
+                class="input"
+              >
+            </template>
           </EmojiInput>
           <button
             class="delete-field button-unstyled -hover-highlight"
@@ -85,10 +111,24 @@
         </button>
       </div>
       <p>
-        <Checkbox v-model="bot">
-          {{ $t('settings.bot') }}
-        </Checkbox>
+        <label>
+          {{ $t('settings.actor_type') }}
+          <Select v-model="actorType">
+            <option
+              v-for="option in availableActorTypes"
+              :key="option"
+              :value="option"
+            >
+              {{ $t('settings.actor_type_' + option) }}
+            </option>
+          </Select>
+        </label>
       </p>
+      <div v-if="groupActorAvailable">
+        <small>
+          {{ $t('settings.actor_type_description') }}
+        </small>
+      </div>
       <p>
         <interface-language-switcher
           :prompt-text="$t('settings.email_language')"
@@ -117,8 +157,8 @@
         <button
           v-if="!isDefaultAvatar && pickAvatarBtnVisible"
           :title="$t('settings.reset_avatar')"
-          @click="resetAvatar"
           class="button-unstyled reset-button"
+          @click="resetAvatar"
         >
           <FAIcon
             icon="times"
@@ -167,6 +207,7 @@
       <div>
         <input
           type="file"
+          class="input"
           @change="uploadFile('banner', $event)"
         >
       </div>
@@ -209,6 +250,7 @@
       <div>
         <input
           type="file"
+          class="input"
           @change="uploadFile('background', $event)"
         >
       </div>
@@ -230,37 +272,50 @@
       <h2>{{ $t('settings.account_privacy') }}</h2>
       <ul class="setting-list">
         <li>
-          <BooleanSetting path="serverSide_locked">
+          <BooleanSetting
+            source="profile"
+            path="locked"
+          >
             {{ $t('settings.lock_account_description') }}
           </BooleanSetting>
         </li>
         <li>
-          <BooleanSetting path="serverSide_discoverable">
+          <BooleanSetting
+            source="profile"
+            path="discoverable"
+          >
             {{ $t('settings.discoverable') }}
           </BooleanSetting>
         </li>
         <li>
-          <BooleanSetting path="serverSide_allowFollowingMove">
+          <BooleanSetting
+            source="profile"
+            path="allowFollowingMove"
+          >
             {{ $t('settings.allow_following_move') }}
           </BooleanSetting>
         </li>
         <li>
-          <BooleanSetting path="serverSide_hideFavorites">
+          <BooleanSetting
+            source="profile"
+            path="hideFavorites"
+          >
             {{ $t('settings.hide_favorites_description') }}
           </BooleanSetting>
         </li>
         <li>
-          <BooleanSetting path="serverSide_hideFollowers">
+          <BooleanSetting
+            source="profile"
+            path="hideFollowers"
+          >
             {{ $t('settings.hide_followers_description') }}
           </BooleanSetting>
-          <ul
-            class="setting-list suboptions"
-            :class="[{disabled: !serverSide_hideFollowers}]"
-          >
+          <ul class="setting-list suboptions">
             <li>
               <BooleanSetting
-                path="serverSide_hideFollowersCount"
-                :disabled="!serverSide_hideFollowers"
+                source="profile"
+                path="hideFollowersCount"
+                parent-path="hideFollowers"
               >
                 {{ $t('settings.hide_followers_count_description') }}
               </BooleanSetting>
@@ -268,17 +323,18 @@
           </ul>
         </li>
         <li>
-          <BooleanSetting path="serverSide_hideFollows">
+          <BooleanSetting
+            source="profile"
+            path="hideFollows"
+          >
             {{ $t('settings.hide_follows_description') }}
           </BooleanSetting>
-          <ul
-            class="setting-list suboptions"
-            :class="[{disabled: !serverSide_hideFollows}]"
-          >
+          <ul class="setting-list suboptions">
             <li>
               <BooleanSetting
-                path="serverSide_hideFollowsCount"
-                :disabled="!serverSide_hideFollows"
+                source="profile"
+                path="hideFollowsCount"
+                parent-path="hideFollows"
               >
                 {{ $t('settings.hide_follows_count_description') }}
               </BooleanSetting>

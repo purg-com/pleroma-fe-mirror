@@ -1,3 +1,4 @@
+<!-- FIXME THIS NEEDS TO BE REFACTORED TO USE POPOVER -->
 <template>
   <div
     v-click-outside="onClickOutside"
@@ -6,12 +7,12 @@
     <input
       v-model="term"
       :placeholder="placeholder"
-      class="autosuggest-input"
+      class="input autosuggest-input"
       @click="onInputClick"
     >
     <div
       v-if="resultsVisible && filtered.length > 0"
-      class="autosuggest-results"
+      class="panel autosuggest-results"
     >
       <slot
         v-for="item in filtered"
@@ -24,8 +25,6 @@
 <script src="./autosuggest.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-
 .autosuggest {
   position: relative;
 
@@ -40,18 +39,15 @@
     top: 100%;
     right: 0;
     max-height: 400px;
-    background-color: $fallback--bg;
-    background-color: var(--bg, $fallback--bg);
+    background-color: var(--bg);
     border-style: solid;
     border-width: 1px;
-    border-color: $fallback--border;
-    border-color: var(--border, $fallback--border);
-    border-radius: $fallback--inputRadius;
-    border-radius: var(--inputRadius, $fallback--inputRadius);
+    border-color: var(--border);
+    border-radius: var(--roundness);
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
-    box-shadow: var(--panelShadow);
+    box-shadow: 1px 1px 4px rgb(0 0 0 / 60%);
+    box-shadow: var(--shadow);
     overflow-y: auto;
     z-index: 1;
   }

@@ -38,6 +38,13 @@ const StatusPopover = {
           .catch(e => (this.error = true))
       }
     }
+  },
+  watch: {
+    status (newStatus, oldStatus) {
+      if (newStatus !== oldStatus) {
+        this.$nextTick(() => this.$refs.popover.updateStyles())
+      }
+    }
   }
 }
 

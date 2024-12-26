@@ -25,6 +25,7 @@ const messages = {
   oc: require('../lib/notification-i18n-loader.js!./oc.json'),
   pl: require('../lib/notification-i18n-loader.js!./pl.json'),
   pt: require('../lib/notification-i18n-loader.js!./pt.json'),
+  pdc: require('../lib/notification-i18n-loader.js!./pdc.json'),
   ro: require('../lib/notification-i18n-loader.js!./ro.json'),
   ru: require('../lib/notification-i18n-loader.js!./ru.json'),
   sk: require('../lib/notification-i18n-loader.js!./sk.json'),
