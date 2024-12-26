@@ -54,6 +54,21 @@
           </a>
         </p>
         <p
+          v-else-if="!hideScopeNotice && newStatus.visibility === 'local'"
+          class="visibility-notice notice-dismissible"
+        >
+          <span>{{ $t('post_status.scope_notice.local') }}</span>
+          <a
+            class="fa-scale-110 fa-old-padding dismiss"
+            :title="$t('post_status.scope_notice_dismiss')"
+            role="button"
+            tabindex="0"
+            @click.prevent="dismissScopeNotice()"
+          >
+            <FAIcon icon="times" />
+          </a>
+        </p>
+        <p
           v-else-if="!hideScopeNotice && newStatus.visibility === 'private' && $store.state.users.currentUser.locked"
           class="visibility-notice notice-dismissible"
         >

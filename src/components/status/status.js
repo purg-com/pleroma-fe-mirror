@@ -40,7 +40,8 @@ import {
   faChevronUp,
   faChevronDown,
   faAngleDoubleRight,
-  faPlay
+  faPlay,
+  faUsers
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -61,7 +62,8 @@ library.add(
   faChevronUp,
   faChevronDown,
   faAngleDoubleRight,
-  faPlay
+  faPlay,
+  faUsers
 )
 
 const camelCase = name => name.charAt(0).toUpperCase() + name.slice(1)
@@ -460,6 +462,8 @@ const Status = {
           return 'lock-open'
         case 'direct':
           return 'envelope'
+        case 'local':
+          return 'users'
         default:
           return 'globe'
       }
