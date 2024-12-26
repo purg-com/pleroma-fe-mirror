@@ -126,6 +126,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
+
+      --_still_image-label-scale: 0.3;
     }
 
     .reaction-emoji-content {
