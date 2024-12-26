@@ -187,7 +187,7 @@ export const defaultState = {
   unseenAtTop: undefined, // instance default
   ignoreInactionableSeen: undefined, // instance default
   unsavedPostAction: undefined, // instance default
-  autoSaveDraft: undefined // instance default
+  autoSaveDraft: undefined, // instance default
   useAbsoluteTimeFormat: undefined, // instance default
   absoluteTimeFormatMinAge: undefined // instance default
 }

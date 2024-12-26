@@ -140,7 +140,6 @@ const persistedStateOptions = {
     return await afterStoreSetup({ store, i18n })
   } catch (e) {
     splashError(i18n, e)
-
   }
 })()
 
