@@ -10,6 +10,7 @@ const toValue = (x) => JSON.parse(JSON.stringify(x === undefined ? 'null' : x))
 const defaultState = {
   localFonts: null,
   themeApplied: false,
+  themeChangeInProgress: false,
   themeVersion: 'v3',
   styleNameUsed: null,
   styleDataUsed: null,
@@ -556,11 +557,13 @@ const interfaceMod = {
         themeDebug,
         theme3hacks
       } = rootState.config
+      state.themeChangeInProgress = true
       // If we're not not forced to recompile try using
       // cache (tryLoadCache return true if load successful)
 
       const forceRecompile = forceThemeRecompilation || recompile
       if (!forceRecompile && !themeDebug && await tryLoadCache()) {
+        state.themeChangeInProgress = false
         return commit('setThemeApplied')
       }
       window.splashUpdate('splash.theme')
@@ -669,7 +672,9 @@ const interfaceMod = {
         return applyTheme(
           rulesetArray.flat(),
           () => commit('setThemeApplied'),
-          () => {},
+          () => {
+            state.themeChangeInProgress = false
+          },
           themeDebug
         )
       } catch (e) {

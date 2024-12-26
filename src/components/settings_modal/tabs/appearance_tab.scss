@@ -20,14 +20,25 @@
     }
   }
 
+  h4 {
+    margin: 0.5em 0;
+  }
+
   .palettes {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 0.5em;
+    height: 15em;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-gutter: stable;
+    border-radius: var(--roundness);
+    border: 1px solid var(--border);
+    margin: -0.5em;
+    padding: 0.5em;
 
-    h4,
-    .unsupported-theme-v2,
-    .userPalette {
+    h4 {
+      margin: 0;
       grid-column: 1 / span 2;
     }
   }
@@ -37,6 +48,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 0.5em;
+    height: 2.5em;
 
     .palette-label label {
       text-align: center;
@@ -73,13 +85,13 @@
       margin-top: 0.5em;
       width: 100%;
     }
+  }
 
-    .palette-preview {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      grid-template-rows: 1em 1em;
-      margin-bottom: 0.5em;
-    }
+  .palette-preview {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1em 1em;
+    margin: 0.5em 0;
   }
 
   .theme-list {

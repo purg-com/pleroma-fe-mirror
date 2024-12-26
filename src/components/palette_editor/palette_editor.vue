@@ -30,6 +30,8 @@
       v-if="apply"
       class="btn button-default palette-apply-button"
       @click="applyPalette"
+      :disabled="disabled"
+      :class="{ disabled }"
     >
       {{ $t('settings.style.themes3.palette.apply') }}
     </button>
@@ -67,7 +69,7 @@ const paletteKeys = [
   'wallpaper'
 ]
 
-const props = defineProps(['modelValue', 'compact', 'apply'])
+const props = defineProps(['modelValue', 'compact', 'apply', 'disabled'])
 const emit = defineEmits(['update:modelValue', 'applyPalette'])
 const getExportedObject = () => paletteKeys.reduce((acc, key) => {
   const value = props.modelValue[key]

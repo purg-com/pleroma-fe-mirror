@@ -186,6 +186,9 @@ const AppearanceTab = {
     }
   },
   computed: {
+    switchInProgress () {
+      return this.$store.state.interface.themeChangeInProgress
+    },
     paletteDataUsed () {
       return this.$store.state.interface.paletteDataUsed
     },
