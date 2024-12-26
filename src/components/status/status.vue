@@ -313,6 +313,7 @@
               >
                 <i18n-t
                   keypath="status.reply_to_with_arg"
+                  scope="global"
                 >
                   <template #replyToWithIcon>
                     <StatusPopover
@@ -327,7 +328,10 @@
                         :aria-label="$t('tool_tip.reply')"
                         @click.prevent="gotoOriginal(status.in_reply_to_status_id)"
                       >
-                        <i18n-t keypath="status.reply_to_with_icon">
+                        <i18n-t
+                          keypath="status.reply_to_with_icon"
+                          scope="global"
+                        >
                           <template #icon>
                             <FAIcon
                               class="fa-scale-110 fa-old-padding"
