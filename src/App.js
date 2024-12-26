@@ -44,16 +44,32 @@ export default {
   data: () => ({
     mobileActivePanel: 'timeline'
   }),
+  watch: {
+    themeApplied (value) {
+      this.removeSplash()
+    }
+  },
   created () {
     // Load the locale from the storage
     const val = this.$store.getters.mergedConfig.interfaceLanguage
     this.$store.dispatch('setOption', { name: 'interfaceLanguage', value: val })
     window.addEventListener('resize', this.updateMobileState)
   },
+  mounted () {
+    if (this.$store.state.interface.themeApplied) {
+      this.removeSplash()
+    }
+  },
   unmounted () {
     window.removeEventListener('resize', this.updateMobileState)
   },
   computed: {
+    themeApplied () {
+      return this.$store.state.interface.themeApplied
+    },
+    layoutModalClass () {
+      return '-' + this.layoutType
+    },
     classes () {
       return [
         {
@@ -130,6 +146,15 @@ export default {
     updateMobileState () {
       this.$store.dispatch('setLayoutWidth', windowWidth())
       this.$store.dispatch('setLayoutHeight', windowHeight())
+    },
+    removeSplash () {
+      document.querySelector('#status').textContent = this.$t('splash.fun_' + Math.ceil(Math.random() * 4))
+      const splashscreenRoot = document.querySelector('#splash')
+      splashscreenRoot.addEventListener('transitionend', () => {
+        splashscreenRoot.remove()
+      })
+      splashscreenRoot.classList.add('hidden')
+      document.querySelector('#app').classList.remove('hidden')
     }
   }
 }

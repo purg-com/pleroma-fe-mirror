@@ -8,7 +8,7 @@
       :style="style"
       class="background-image"
     />
-    <div :class="onClose ? '' : panel-heading -flexible-height">
+    <div :class="onClose ? '' : 'panel-heading -flexible-height'">
       <div class="user-info">
         <div class="container">
           <a
@@ -208,7 +208,7 @@
             />
             <template v-if="relationship.following">
               <ProgressButton
-                v-if="!relationship.subscribing"
+                v-if="!relationship.notifying"
                 class="btn button-default"
                 :click="subscribeUser"
                 :title="$t('user_card.subscribe')"

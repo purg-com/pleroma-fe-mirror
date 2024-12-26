@@ -2,7 +2,9 @@
   <div class="Lists panel panel-default">
     <div class="panel-heading">
       <div class="title">
-        {{ $t('lists.lists') }}
+        <h1 class="title">
+          {{ $t('lists.lists') }}
+        </h1>
       </div>
       <router-link
         :to="{ name: 'lists-new' }"

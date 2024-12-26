@@ -1,7 +1,9 @@
 <template>
   <div class="settings panel panel-default">
     <div class="panel-heading">
-      {{ $t('password_reset.password_reset') }}
+      <h1 class="title">
+        {{ $t('password_reset.password_reset') }}
+      </h1>
     </div>
     <div class="panel-body">
       <form

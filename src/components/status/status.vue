@@ -37,16 +37,23 @@
           {{ $t('status.sensitive_muted') }}
         </small>
         <small
+          v-if="muteBotStatuses && botStatus"
+          class="mute-thread"
+        >
+          {{ $t('status.bot_muted') }}
+        </small>
+        <small
           v-if="showReasonMutedThread"
           class="mute-thread"
         >
-          {{ $t('status.thread_muted') }}
-        </small>
-        <small
-          v-if="showReasonMutedThread && muteWordHits.length > 0"
-          class="mute-thread"
-        >
-          {{ $t('status.thread_muted_and_words') }}
+          <span>
+            {{ $t('status.thread_muted') }}
+          </span>
+          <span
+            v-if="muteWordHits.length > 0"
+          >
+            {{ $t('status.thread_muted_and_words') }}
+          </span>
         </small>
         <small
           class="mute-words"
@@ -304,44 +311,57 @@
                 v-if="isReply"
                 class="glued-label reply-glued-label"
               >
-                <StatusPopover
-                  v-if="!isPreview"
-                  :status-id="status.parent_visible && status.in_reply_to_status_id"
-                  class="reply-to-popover"
-                  style="min-width: 0;"
-                  :class="{ '-strikethrough': !status.parent_visible }"
+                <i18n-t
+                  keypath="status.reply_to_with_arg"
                 >
-                  <button
-                    class="button-unstyled reply-to"
-                    :aria-label="$t('tool_tip.reply')"
-                    @click.prevent="gotoOriginal(status.in_reply_to_status_id)"
-                  >
-                    <FAIcon
-                      class="fa-scale-110 fa-old-padding"
-                      icon="reply"
-                      flip="horizontal"
-                    />
-                    {{ ' ' }}
-                    <span
-                      class="reply-to-text"
+                  <template #replyToWithIcon>
+                    <StatusPopover
+                      v-if="!isPreview"
+                      :status-id="status.parent_visible && status.in_reply_to_status_id"
+                      class="reply-to-popover"
+                      style="min-width: 0"
+                      :class="{ '-strikethrough': !status.parent_visible }"
                     >
-                      {{ $t('status.reply_to') }}
-                    </span>
-                  </button>
-                </StatusPopover>
+                      <button
+                        class="button-unstyled reply-to"
+                        :aria-label="$t('tool_tip.reply')"
+                        @click.prevent="gotoOriginal(status.in_reply_to_status_id)"
+                      >
+                        <i18n-t keypath="status.reply_to_with_icon">
+                          <template #icon>
+                            <FAIcon
+                              class="fa-scale-110 fa-old-padding"
+                              icon="reply"
+                              flip="horizontal"
+                            />
+                          </template>
+                          <template #replyTo>
+                            <span
+                              class="reply-to-text"
+                            >
+                              {{ $t('status.reply_to') }}
+                            </span>
+                          </template>
+                        </i18n-t>
+                      </button>
+                    </StatusPopover>
 
-                <span
-                  v-else
-                  class="reply-to-no-popover"
-                >
-                  <span class="reply-to-text">{{ $t('status.reply_to') }}</span>
-                </span>
-                <MentionLink
-                  :content="replyToName"
-                  :url="replyProfileLink"
-                  :user-id="status.in_reply_to_user_id"
-                  :user-screen-name="status.in_reply_to_screen_name"
-                />
+                    <span
+                      v-else
+                      class="reply-to-no-popover"
+                    >
+                      <span class="reply-to-text">{{ $t('status.reply_to') }}</span>
+                    </span>
+                  </template>
+                  <template #user>
+                    <MentionLink
+                      :content="replyToName"
+                      :url="replyProfileLink"
+                      :user-id="status.in_reply_to_user_id"
+                      :user-screen-name="status.in_reply_to_screen_name"
+                    />
+                  </template>
+                </i18n-t>
               </span>
 
               <!-- This little wrapper is made for sole purpose of "gluing" -->
@@ -379,6 +399,7 @@
               class="heading-edited-row"
             >
               <i18n-t
+                scope="global"
                 keypath="status.edited_at"
                 tag="span"
               >
@@ -436,7 +457,10 @@
             v-else-if="hasInvisibleQuote"
             class="quoted-status -unavailable-prompt"
           >
-            <i18n-t keypath="status.invisible_quote">
+            <i18n-t
+              scope="global"
+              keypath="status.invisible_quote"
+            >
               <template #link>
                 <bdi>
                   <a

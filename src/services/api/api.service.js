@@ -68,8 +68,6 @@ const MASTODON_UNBLOCK_USER_URL = id => `/api/v1/accounts/${id}/unblock`
 const MASTODON_MUTE_USER_URL = id => `/api/v1/accounts/${id}/mute`
 const MASTODON_UNMUTE_USER_URL = id => `/api/v1/accounts/${id}/unmute`
 const MASTODON_REMOVE_USER_FROM_FOLLOWERS = id => `/api/v1/accounts/${id}/remove_from_followers`
-const MASTODON_SUBSCRIBE_USER = id => `/api/v1/pleroma/accounts/${id}/subscribe`
-const MASTODON_UNSUBSCRIBE_USER = id => `/api/v1/pleroma/accounts/${id}/unsubscribe`
 const MASTODON_USER_NOTE_URL = id => `/api/v1/accounts/${id}/note`
 const MASTODON_BOOKMARK_STATUS_URL = id => `/api/v1/statuses/${id}/bookmark`
 const MASTODON_UNBOOKMARK_STATUS_URL = id => `/api/v1/statuses/${id}/unbookmark`
@@ -110,6 +108,8 @@ const PLEROMA_DELETE_ANNOUNCEMENT_URL = id => `/api/v1/pleroma/admin/announcemen
 const PLEROMA_SCROBBLES_URL = id => `/api/v1/pleroma/accounts/${id}/scrobbles`
 const PLEROMA_STATUS_QUOTES_URL = id => `/api/v1/pleroma/statuses/${id}/quotes`
 const PLEROMA_USER_FAVORITES_TIMELINE_URL = id => `/api/v1/pleroma/accounts/${id}/favourites`
+const PLEROMA_BOOKMARK_FOLDERS_URL = '/api/v1/pleroma/bookmark_folders'
+const PLEROMA_BOOKMARK_FOLDER_URL = id => `/api/v1/pleroma/bookmark_folders/${id}`
 
 const PLEROMA_ADMIN_CONFIG_URL = '/api/pleroma/admin/config'
 const PLEROMA_ADMIN_DESCRIPTIONS_URL = '/api/pleroma/admin/config/descriptions'
@@ -273,6 +273,7 @@ const followUser = ({ id, credentials, ...options }) => {
   const url = MASTODON_FOLLOW_URL(id)
   const form = {}
   if (options.reblogs !== undefined) { form.reblogs = options.reblogs }
+  if (options.notify !== undefined) { form.notify = options.notify }
   return fetch(url, {
     body: JSON.stringify(form),
     headers: {
@@ -690,7 +691,8 @@ const fetchTimeline = ({
   tag = false,
   withMuted = false,
   replyVisibility = 'all',
-  includeTypes = []
+  includeTypes = [],
+  bookmarkFolderId = false
 }) => {
   const timelineUrls = {
     public: MASTODON_PUBLIC_TIMELINE,
@@ -759,6 +761,9 @@ const fetchTimeline = ({
     includeTypes.forEach(type => {
       params.push(['include_types[]', type])
     })
+  }
+  if (timeline === 'bookmarks' && bookmarkFolderId) {
+    params.push(['folder_id', bookmarkFolderId])
   }
 
   params.push(['limit', 20])
@@ -829,11 +834,14 @@ const unretweet = ({ id, credentials }) => {
     .then((data) => parseStatus(data))
 }
 
-const bookmarkStatus = ({ id, credentials }) => {
+const bookmarkStatus = ({ id, credentials, ...options }) => {
   return promisedRequest({
     url: MASTODON_BOOKMARK_STATUS_URL(id),
     headers: authHeaders(credentials),
-    method: 'POST'
+    method: 'POST',
+    payload: {
+      folder_id: options.folder_id
+    }
   })
 }
 
@@ -1169,14 +1177,6 @@ const muteUser = ({ id, expiresIn, credentials }) => {
 
 const unmuteUser = ({ id, credentials }) => {
   return promisedRequest({ url: MASTODON_UNMUTE_USER_URL(id), credentials, method: 'POST' })
-}
-
-const subscribeUser = ({ id, credentials }) => {
-  return promisedRequest({ url: MASTODON_SUBSCRIBE_USER(id), credentials, method: 'POST' })
-}
-
-const unsubscribeUser = ({ id, credentials }) => {
-  return promisedRequest({ url: MASTODON_UNSUBSCRIBE_USER(id), credentials, method: 'POST' })
 }
 
 const fetchBlocks = ({ maxId, credentials }) => {
@@ -1893,6 +1893,44 @@ const deleteEmojiFile = ({ packName, shortcode }) => {
   return fetch(`${PLEROMA_EMOJI_UPDATE_FILE_URL(packName)}&shortcode=${shortcode}`, { method: 'DELETE' })
 }
 
+const fetchBookmarkFolders = ({ credentials }) => {
+  const url = PLEROMA_BOOKMARK_FOLDERS_URL
+  return fetch(url, { headers: authHeaders(credentials) })
+    .then((data) => data.json())
+}
+
+const createBookmarkFolder = ({ name, emoji, credentials }) => {
+  const url = PLEROMA_BOOKMARK_FOLDERS_URL
+  const headers = authHeaders(credentials)
+  headers['Content-Type'] = 'application/json'
+
+  return fetch(url, {
+    headers,
+    method: 'POST',
+    body: JSON.stringify({ name, emoji })
+  }).then((data) => data.json())
+}
+
+const updateBookmarkFolder = ({ folderId, name, emoji, credentials }) => {
+  const url = PLEROMA_BOOKMARK_FOLDER_URL(folderId)
+  const headers = authHeaders(credentials)
+  headers['Content-Type'] = 'application/json'
+
+  return fetch(url, {
+    headers,
+    method: 'PATCH',
+    body: JSON.stringify({ name, emoji })
+  }).then((data) => data.json())
+}
+
+const deleteBookmarkFolder = ({ folderId, credentials }) => {
+  const url = PLEROMA_BOOKMARK_FOLDER_URL(folderId)
+  return fetch(url, {
+    method: 'DELETE',
+    headers: authHeaders(credentials)
+  })
+}
+
 const apiService = {
   verifyCredentials,
   fetchTimeline,
@@ -1931,8 +1969,6 @@ const apiService = {
   fetchMutes,
   muteUser,
   unmuteUser,
-  subscribeUser,
-  unsubscribeUser,
   fetchBlocks,
   fetchOAuthTokens,
   revokeOAuthToken,
@@ -2023,7 +2059,11 @@ const apiService = {
   updateEmojiFile,
   deleteEmojiFile,
   listRemoteEmojiPacks,
-  downloadRemoteEmojiPack
+  downloadRemoteEmojiPack,
+  fetchBookmarkFolders,
+  createBookmarkFolder,
+  updateBookmarkFolder,
+  deleteBookmarkFolder
 }
 
 export default apiService

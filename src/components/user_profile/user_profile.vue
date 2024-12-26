@@ -142,9 +142,9 @@
       class="panel user-profile-placeholder"
     >
       <div class="panel-heading">
-        <div class="title">
+        <h1 class="title">
           {{ $t('settings.profile_tab') }}
-        </div>
+        </h1>
       </div>
       <div>
         <span v-if="error">{{ error }}</span>
@@ -166,7 +166,7 @@
   flex-basis: 500px;
 
   // No sticky header on user profile
-  --currentPanelStack: 1;
+  --currentPanelStack: 0;
 
   .user-birthday {
     margin: 0 0.75em 0.5em;

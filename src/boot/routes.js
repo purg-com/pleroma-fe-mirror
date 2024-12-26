@@ -27,6 +27,8 @@ import NavPanel from 'src/components/nav_panel/nav_panel.vue'
 import AnnouncementsPage from 'components/announcements_page/announcements_page.vue'
 import QuotesTimeline from '../components/quotes_timeline/quotes_timeline.vue'
 import Drafts from 'components/drafts/drafts.vue'
+import BookmarkFolders from '../components/bookmark_folders/bookmark_folders.vue'
+import BookmarkFolderEdit from '../components/bookmark_folder_edit/bookmark_folder_edit.vue'
 
 export default (store) => {
   const validateAuthenticatedRoute = (to, from, next) => {
@@ -88,7 +90,11 @@ export default (store) => {
     { name: 'lists-timeline', path: '/lists/:id', component: ListsTimeline },
     { name: 'lists-edit', path: '/lists/:id/edit', component: ListsEdit },
     { name: 'lists-new', path: '/lists/new', component: ListsEdit },
-    { name: 'edit-navigation', path: '/nav-edit', component: NavPanel, props: () => ({ forceExpand: true, forceEditMode: true }), beforeEnter: validateAuthenticatedRoute }
+    { name: 'edit-navigation', path: '/nav-edit', component: NavPanel, props: () => ({ forceExpand: true, forceEditMode: true }), beforeEnter: validateAuthenticatedRoute },
+    { name: 'bookmark-folders', path: '/bookmark_folders', component: BookmarkFolders },
+    { name: 'bookmark-folder-new', path: '/bookmarks/new-folder', component: BookmarkFolderEdit },
+    { name: 'bookmark-folder', path: '/bookmarks/:id', component: BookmarkTimeline },
+    { name: 'bookmark-folder-edit', path: '/bookmarks/:id/edit', component: BookmarkFolderEdit }
   ]
 
   if (store.state.instance.pleromaChatMessagesAvailable) {

@@ -3,7 +3,9 @@
     <!-- Default panel contents -->
 
     <div class="panel-heading">
-      {{ $t('login.heading.totp') }}
+      <h1 class="title">
+        {{ $t('login.heading.totp') }}
+      </h1>
     </div>
 
     <div class="panel-body">

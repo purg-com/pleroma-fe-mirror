@@ -97,7 +97,7 @@ const EmojiPicker = {
     enableStickerPicker: {
       required: false,
       type: Boolean,
-      default: false
+      default: true
     },
     hideCustomEmoji: {
       required: false,
@@ -105,7 +105,11 @@ const EmojiPicker = {
       default: false
     }
   },
-  inject: ['popoversZLayer'],
+  inject: {
+    popoversZLayer: {
+      default: ''
+    }
+  },
   data () {
     return {
       keyword: '',
@@ -150,7 +154,9 @@ const EmojiPicker = {
     },
     showPicker () {
       this.$refs.popover.showPopover()
-      this.onShowing()
+      this.$nextTick(() => {
+        this.onShowing()
+      })
     },
     hidePicker () {
       this.$refs.popover.hidePopover()
@@ -178,7 +184,7 @@ const EmojiPicker = {
       if (!this.keepOpen) {
         this.$refs.popover.hidePopover()
       }
-      this.$emit('emoji', { insertion: value, keepOpen: this.keepOpen })
+      this.$emit('emoji', { insertion: value, insertionUrl: emoji.imageUrl, keepOpen: this.keepOpen })
     },
     onScroll (startIndex, endIndex, visibleStartIndex, visibleEndIndex) {
       const target = this.$refs['emoji-groups'].$el

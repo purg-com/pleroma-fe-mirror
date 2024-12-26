@@ -131,7 +131,8 @@
     "mobile_notifications_close": "Fermer les notifications",
     "search_close": "Fermer la barre de recherche",
     "announcements": "Annonces",
-    "mobile_notifications_mark_as_seen": "Marquer tout comme vu"
+    "mobile_notifications_mark_as_seen": "Marquer tout comme vu",
+    "quotes": "Citations"
   },
   "notifications": {
     "broken_favorite": "Message inconnu, recherche en cours…",

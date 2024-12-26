@@ -86,6 +86,8 @@ const GeneralTab = {
         this.$store.dispatch('setOption', { name: 'interfaceLanguage', value: val })
       }
     },
+    instanceShoutboxPresent () { return this.$store.state.instance.shoutAvailable },
+    instanceSpecificPanelPresent () { return this.$store.state.instance.showInstanceSpecificPanel },
     ...SharedComputedObject()
   },
   methods: {

@@ -3,6 +3,13 @@
     class="checkbox"
     :class="{ disabled, indeterminate, 'indeterminate-fix': indeterminateTransitionFix }"
   >
+    <span
+      v-if="!!$slots.before"
+      class="label -before"
+      :class="{ faint: disabled }"
+    >
+      <slot name="before" />
+    </span>
     <input
       type="checkbox"
       class="visible-for-screenreader-only"
@@ -14,11 +21,13 @@
     <i
       class="input -checkbox checkbox-indicator"
       :aria-hidden="true"
+      :class="{ disabled }"
       @transitionend.capture="onTransitionEnd"
     />
     <span
       v-if="!!$slots.default"
-      class="label"
+      class="label -after"
+      :class="{ faint: disabled }"
     >
       <slot />
     </span>
@@ -61,21 +70,26 @@ export default {
   display: inline-block;
   min-height: 1.2em;
 
+  &-indicator,
+  & .label {
+    vertical-align: middle;
+  }
+
   & > &-indicator {
     /* Reset .input stuff */
     padding: 0;
     margin: 0;
     position: relative;
     line-height: inherit;
-    display: inline;
-    padding-left: 1.2em;
+    display: inline-block;
+    width: 1.2em;
+    height: 1.2em;
     box-shadow: none;
   }
 
   &-indicator::before {
     position: absolute;
-    right: 0;
-    top: 0;
+    inset: 0;
     display: block;
     content: "✓";
     transition: color 200ms;
@@ -93,14 +107,9 @@ export default {
     box-sizing: border-box;
   }
 
-  &.disabled {
-    .checkbox-indicator::before,
-    .label {
-      opacity: 0.5;
-    }
-
-    .label {
-      color: var(--text);
+  .disabled {
+    .checkbox-indicator::before {
+      background-color: var(--background);
     }
   }
 
@@ -121,8 +130,14 @@ export default {
     }
   }
 
-  & > span {
-    margin-left: 0.5em;
+  & > .label {
+    &.-after {
+      margin-left: 0.5em;
+    }
+
+    &.-before {
+      margin-right: 0.5em;
+    }
   }
 }
 </style>

@@ -6,13 +6,14 @@
     <select
       :disabled="disabled"
       :value="modelValue"
-      v-bind="attrs"
+      v-bind="$attrs"
       @change="$emit('update:modelValue', $event.target.value)"
     >
       <slot />
     </select>
     {{ ' ' }}
     <FAIcon
+      v-if="!$attrs.size && !$attrs.multiple"
       class="select-down-icon"
       icon="chevron-down"
     />
@@ -39,6 +40,39 @@ label.Select {
     z-index: 1;
     height: 2em;
     line-height: 16px;
+
+    &[multiple],
+    &[size] {
+      height: 100%;
+      padding: 0.2em;
+
+      option {
+        background-color: transparent;
+
+        &:checked,
+        &.-active {
+          color: var(--selectionText);
+          background-color: var(--selectionBackground);
+        }
+      }
+    }
+  }
+
+  &.disabled,
+  &:disabled {
+    background-color: var(--background);
+    opacity: 1; /* override browser */
+    color: var(--faint);
+
+    select {
+      &[multiple],
+      &[size] {
+        option.-active {
+          color: var(--faint);
+          background: transparent;
+        }
+      }
+    }
   }
 
   .select-down-icon {
@@ -50,7 +84,7 @@ label.Select {
     width: 0.875em;
     font-family: var(--font);
     line-height: 2;
-    z-index: 0;
+    z-index: 1;
     pointer-events: none;
   }
 }

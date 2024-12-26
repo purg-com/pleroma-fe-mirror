@@ -48,6 +48,10 @@ export const defaultState = {
   customThemeSource: undefined, // "source", stores original theme data
 
   // V3
+  style: null,
+  styleCustomData: null,
+  palette: null,
+  paletteCustomData: null,
   themeDebug: false, // debug mode that uses computed backgrounds instead of real ones to debug contrast functions
   forceThemeRecompilation: false, //  flag that forces recompilation on boot even if cache exists
   theme3hacks: { // Hacks, user overrides that are independent of theme used
@@ -184,6 +188,8 @@ export const defaultState = {
   ignoreInactionableSeen: undefined, // instance default
   unsavedPostAction: undefined, // instance default
   autoSaveDraft: undefined // instance default
+  useAbsoluteTimeFormat: undefined, // instance default
+  absoluteTimeFormatMinAge: undefined // instance default
 }
 
 // caching the instance default properties
@@ -304,7 +310,7 @@ const config = {
           applyConfig(state)
         }
         if (name.startsWith('theme3hacks')) {
-          dispatch('setTheme', { recompile: true })
+          dispatch('applyTheme', { recompile: true })
         }
         switch (name) {
           case 'theme':

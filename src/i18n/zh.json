@@ -130,20 +130,22 @@
     "edit_nav_mobile": "自定义导航栏",
     "edit_pinned": "编辑固定的项目",
     "mobile_sidebar": "切换移动设备侧栏",
-    "search_close": "关闭搜索栏"
+    "search_close": "关闭搜索栏",
+    "mobile_notifications_mark_as_seen": "全部已阅",
+    "quotes": "引用"
   },
   "notifications": {
     "broken_favorite": "未知的状态，正在搜索中…",
-    "favorited_you": "喜欢了你的状态",
-    "followed_you": "关注了你",
+    "favorited_you": "喜欢了您的状态",
+    "followed_you": "关注了您",
     "load_older": "加载更早的通知",
     "notifications": "通知",
     "read": "已阅！",
-    "repeated_you": "转发了你的状态",
+    "repeated_you": "转发了您的状态",
     "no_more_notifications": "没有更多的通知",
-    "reacted_with": "作出了 {0} 的反应",
+    "reacted_with": "作出了 {0} 的回应",
     "migrated_to": "迁移到了",
-    "follow_request": "想要关注你",
+    "follow_request": "想要关注您",
     "error": "取得通知时发生错误：{0}",
     "poll_ended": "投票结束了",
     "submitted_report": "提交举报",
@@ -152,7 +154,8 @@
     "unread_follow_requests": "{num} 个新关注请求",
     "configuration_tip": "可以在 {theSettings} 里定制什么会显示在这里。{dismiss}",
     "configuration_tip_settings": "设置",
-    "configuration_tip_dismiss": "不再显示"
+    "configuration_tip_dismiss": "不再显示",
+    "subscribed_status": "已发送"
   },
   "polls": {
     "add_poll": "增加投票",
@@ -179,11 +182,12 @@
     "load_older": "加载更早的互动",
     "moves": "用户迁移",
     "reports": "举报",
-    "emoji_reactions": "表情回应"
+    "emoji_reactions": "表情回应",
+    "statuses": "订阅"
   },
   "post_status": {
     "new_status": "发布新状态",
-    "account_not_locked_warning": "你的帐号没有 {0}。任何人都可以关注你并浏览你的上锁内容。",
+    "account_not_locked_warning": "您的帐号没有 {0}。任何人都可以关注您并浏览您的上锁内容。",
     "account_not_locked_warning_link": "上锁",
     "attachments_sensitive": "标记附件为敏感内容",
     "content_type": {
@@ -199,12 +203,12 @@
     "posting": "发送中",
     "scope_notice": {
       "public": "本条内容可以被所有人看到",
-      "private": "关注你的人才能看到本条内容",
+      "private": "关注您的人才能看到本条内容",
       "unlisted": "本条内容既不在公共时间线，也不会在所有已知网络上可见"
     },
     "scope": {
       "direct": "私信 - 只发送给被提及的用户",
-      "private": "仅关注者 - 只有关注了你的人能看到",
+      "private": "仅关注者 - 只有关注了您的人能看到",
       "public": "公共 - 发送到公共时间轴",
       "unlisted": "不公开 - 不会发送到公共时间轴"
     },
@@ -212,7 +216,7 @@
     "preview": "预览",
     "media_description": "媒体描述",
     "media_description_error": "更新媒体失败，请重试",
-    "empty_status_error": "不能发布没有内容、没有附件的发文",
+    "empty_status_error": "不能发布没有内容、没有附件的帖子",
     "post": "发送",
     "edit_remote_warning": "其它远程实例可能不支持编辑并且无法接收您的帖子的最新版本。",
     "edit_unsupported_warning": "Pleroma 不支持对提及或投票进行编辑。",
@@ -233,7 +237,7 @@
     "new_captcha": "点击图片获取新的验证码",
     "username_placeholder": "例如：lain",
     "fullname_placeholder": "例如：岩仓玲音",
-    "bio_placeholder": "例如：\n你好，我是玲音。\n我是一个住在日本郊区的动画少女。你可能在 Wired 见过我。",
+    "bio_placeholder": "例如：\n你好，我是玲音。\n我是一个住在日本郊区的动画少女。您可能在 Wired 见过我。",
     "validations": {
       "username_required": "不能留空",
       "fullname_required": "不能留空",
@@ -247,7 +251,7 @@
     "reason_placeholder": "此实例的注册需要手动批准。\n请让管理员知道您为什么想要注册。",
     "reason": "注册理由",
     "register": "注册",
-    "email_language": "你想从服务器收到什么语言的邮件？",
+    "email_language": "您想从服务器收到什么语言的邮件？",
     "bio_optional": "介绍（可选）",
     "email_optional": "电子邮件（可选）",
     "birthday": "生日：",
@@ -289,7 +293,7 @@
     "background": "背景",
     "bio": "简介",
     "block_export": "屏蔽名单导出",
-    "block_export_button": "导出你的屏蔽名单到一个 csv 文件",
+    "block_export_button": "导出您的屏蔽名单到一个 csv 文件",
     "block_import": "屏蔽名单导入",
     "block_import_error": "导入屏蔽名单出错",
     "blocks_imported": "屏蔽名单导入成功！需要一点时间来处理。",
@@ -310,10 +314,10 @@
     "current_profile_banner": "您当前的横幅图片",
     "data_import_export_tab": "数据导入/导出",
     "default_vis": "默认可见范围",
-    "delete_account": "删除账户",
-    "delete_account_description": "永久删除你的帐号和所有数据。",
-    "delete_account_error": "删除账户时发生错误，如果一直删除不了，请联系实例管理员。",
-    "delete_account_instructions": "在下面输入您的密码来确认删除账户。",
+    "delete_account": "删除账号",
+    "delete_account_description": "永久删除您的帐号和所有数据。",
+    "delete_account_error": "删除账号时发生错误。如果一直删除不了，请联系实例管理员。",
+    "delete_account_instructions": "在下面输入您的密码来确认删除账号。",
     "avatar_size_instruction": "推荐的头像图片最小尺寸为 150x150 像素。",
     "export_theme": "导出预置主题",
     "filtering": "过滤器",
@@ -388,11 +392,11 @@
     "autohide_floating_post_button": "自动隐藏新帖子的按钮（移动设备）",
     "saving_err": "保存设置时发生错误",
     "saving_ok": "设置已保存",
-    "search_user_to_block": "搜索你想屏蔽的用户",
-    "search_user_to_mute": "搜索你想要隐藏的用户",
+    "search_user_to_block": "搜索您想屏蔽的用户",
+    "search_user_to_mute": "搜索您想要隐藏的用户",
     "security_tab": "安全",
     "scope_copy": "回复时复制可见范围（私信中永远会复制）",
-    "minimal_scopes_mode": "使发文可见范围的选项最少化",
+    "minimal_scopes_mode": "使帖子可见范围的选项最小化",
     "set_new_avatar": "设置新头像",
     "set_new_profile_background": "设置新的个人资料背景",
     "set_new_profile_banner": "设置新的横幅图片",
@@ -402,7 +406,7 @@
     "subject_line_email": "类似电子邮件： \"re: 主题\"",
     "subject_line_mastodon": "类似 mastodon: 与原主题相同",
     "subject_line_noop": "不要复制",
-    "post_status_content_type": "发文状态内容类型",
+    "post_status_content_type": "帖子状态内容类型",
     "stop_gifs": "鼠标悬停时播放GIF",
     "streaming": "滚动到顶部时自动推送新内容",
     "text": "文本",
@@ -546,7 +550,8 @@
           "interface": "界面",
           "input": "输入框",
           "post": "发帖文字",
-          "postCode": "帖子中使用等间距文字（富文本）"
+          "postCode": "帖子中使用等间距文字（富文本）",
+          "monospace": "等宽文本"
         },
         "family": "字体名称",
         "size": "大小 (in px)",
@@ -566,7 +571,43 @@
         "header_faint": "这很正常",
         "checkbox": "我已经浏览了条款及细则",
         "link": "一个棒棒的小小链接"
-      }
+      },
+      "custom_theme_used": "（自定义主题）",
+      "themes2_outdated": "V2 主题的编辑器正在被淘汰并且最终会被新的利用 V3 主题引擎的编辑器取代。但是体验有可能会被降级并且不稳定。",
+      "appearance_tab_note": "在这个标签页的更改不会影响使用的主题，所以导出的主题会和界面显示的主题不同",
+      "update_preview": "更新预览",
+      "themes3": {
+        "define": "覆盖",
+        "hacks": {
+          "underlay_overrides": "更改底色",
+          "underlay_override_mode_none": "主题默认",
+          "underlay_override_mode_opaque": "使用单色更改",
+          "underlay_override_mode_transparent": "完全移除（有可能破外一些主题）",
+          "force_interface_roundness": "覆盖界面圆角/锐度",
+          "forced_roundness_mode_disabled": "使用主题默认",
+          "forced_roundness_mode_sharp": "强制使用锐利边角",
+          "forced_roundness_mode_nonsharp": "强制使用不太锋利（1px 圆角）的边角",
+          "forced_roundness_mode_round": "强制使用圆角"
+        },
+        "font": {
+          "group-builtin": "浏览器默认字体",
+          "builtin": {
+            "serif": "衬线字体",
+            "sans-serif": "无衬线字体",
+            "monospace": "等宽字体",
+            "inherit": "未更改"
+          },
+          "group-local": "本地字体",
+          "local-unavailable1": "不可用的本地字体列表",
+          "local-unavailable2": "使用手动输入来指定自定义字体",
+          "font_list_unavailable": "无法找到本地字体：{error}",
+          "lookup_local_fonts": "加载这台电脑的本地字体列表",
+          "enter_manually": "手动输入字体名称",
+          "entry": "输入 {fontFamily}",
+          "select": "选择字体"
+        }
+      },
+      "interface_font_user_override": "覆盖使用的主题/浏览器字体"
     },
     "version": {
       "title": "版本",
@@ -582,12 +623,12 @@
     "notification_setting_privacy_option": "在通知推送中隐藏发送者和内容",
     "notification_setting_privacy": "隐私",
     "hide_follows_count_description": "不显示关注数",
-    "notification_visibility_emoji_reactions": "互动",
+    "notification_visibility_emoji_reactions": "回应",
     "notification_visibility_moves": "用户迁移",
     "new_email": "新邮箱",
-    "emoji_reactions_on_timeline": "在时间线上显示表情符号互动",
+    "emoji_reactions_on_timeline": "在时间线上显示表情符号回应",
     "notification_setting_hide_notification_contents": "隐藏推送通知中的发送者与内容信息",
-    "notification_setting_block_from_strangers": "屏蔽来自你没有关注的用户的通知",
+    "notification_setting_block_from_strangers": "屏蔽来自您没有关注的用户的通知",
     "type_domains_to_mute": "搜索需要隐藏的域名",
     "useStreamingApi": "实时接收帖子和通知",
     "user_mutes": "用户",
@@ -618,15 +659,15 @@
     "mutes_imported": "隐藏名单导入成功！处理它们将需要一段时间。",
     "mute_import_error": "导入隐藏名单出错",
     "mute_import": "隐藏名单导入",
-    "mute_export_button": "导出你的隐藏名单到一个 csv 文件",
+    "mute_export_button": "导出您的隐藏名单到一个 csv 文件",
     "mute_export": "隐藏名单导出",
     "hide_wallpaper": "隐藏实例壁纸",
     "setting_changed": "与默认设置不同",
     "more_settings": "更多设置",
-    "sensitive_by_default": "默认标记发文为敏感内容",
+    "sensitive_by_default": "默认标记帖子为敏感内容",
     "reply_visibility_self_short": "只显示对我本人的回复",
     "reply_visibility_following_short": "显示对我关注的人的回复",
-    "hide_all_muted_posts": "不显示已隐藏的发文",
+    "hide_all_muted_posts": "不显示已隐藏的帖子",
     "hide_media_previews": "隐藏媒体预览",
     "word_filter": "词语过滤",
     "save": "保存更改",
@@ -664,14 +705,14 @@
     "move_account_target": "目标账号（例如 {example}）",
     "moved_account": "账号移动好了。",
     "move_account_error": "移动账号时出错：{error}",
-    "setting_server_side": "这个设置是捆绑到你的个人资料的，能影响所有会话和客户端",
+    "setting_server_side": "这个设置是捆绑到您的个人资料的，能影响所有会话和客户端",
     "post_look_feel": "文章的样子跟感受",
     "email_language": "从服务器收邮件的语言",
-    "account_backup_description": "这个允许你下载一份账号信息和文章的存档，但是现在还不能导入到 Pleroma 账号里。",
+    "account_backup_description": "这个允许您下载一份账号信息和文章的存档，但是现在还不能导入到 Pleroma 账号里。",
     "backup_not_ready": "备份还没准备好。",
     "add_backup_error": "添加新备份时出错：{error}",
     "add_alias_error": "添加别名时出错：{error}",
-    "move_account_notes": "如果你想把账号移动到别的地方，你必须去目标账号，然后加一个指向这里的别名。",
+    "move_account_notes": "如果您想把账号移动到别的地方，您必须去目标账号，然后加一个指向这里的别名。",
     "wordfilter": "词语过滤器",
     "user_profiles": "用户资料",
     "third_column_mode_notifications": "通知栏",
@@ -685,7 +726,7 @@
     },
     "hide_favorites_description": "不显示我的喜欢列表（人们仍然会收到通知）",
     "third_column_mode": "当有足够的空间时，显示第三栏包含",
-    "third_column_mode_postform": "主要的发文形式和导航",
+    "third_column_mode_postform": "主要的帖子形式和导航",
     "columns": "分栏",
     "user_popover_avatar_overlay": "在用户头像上显示用户弹出窗口",
     "navbar_column_stretch": "延伸导航栏至分栏宽度",
@@ -705,12 +746,12 @@
     "max_depth_in_thread": "默认显示同主题帖子中的最大层数",
     "hide_wordfiltered_statuses": "隐藏经过词语过滤的状态",
     "hide_muted_threads": "不显示已隐藏的同主题帖子",
-    "notification_visibility_polls": "你所投的投票的结束于",
+    "notification_visibility_polls": "您所投的投票的结束于",
     "tree_advanced": "允许在树状视图中进行更灵活的导航",
     "tree_fade_ancestors": "以模糊的文字显示当前状态的上级",
     "conversation_display_linear": "线性样式",
     "mention_link_fade_domain": "淡化域名（例如：{'@'}example.org 中的 {'@'}foo{'@'}example.org）",
-    "mention_link_bolden_you": "当你被提及时突出显示提及你",
+    "mention_link_bolden_you": "当您被提及时突出显示提及您",
     "user_popover_avatar_action": "弹出式头像点击动作",
     "user_popover_avatar_action_zoom": "缩放头像",
     "user_popover_avatar_action_close": "关闭弹出窗口",
@@ -750,7 +791,7 @@
     "url": "URL",
     "preview": "预览",
     "commit_value": "保存",
-    "commit_value_tooltip": "当前值未保存，请按此按钮以提交你的修改",
+    "commit_value_tooltip": "当前值未保存，请按此按钮以提交您的修改",
     "reset_value": "重置",
     "reset_value_tooltip": "重置草稿",
     "hard_reset_value": "硬重置",
@@ -760,7 +801,52 @@
     "notification_extra_chats": "显示未读聊天",
     "notification_extra_announcements": "显示未读公告",
     "notification_extra_follow_requests": "显示新的关注请求",
-    "notification_extra_tip": "显示额外通知的定制提示"
+    "notification_extra_tip": "显示额外通知的定制提示",
+    "notification_visibility_follow_requests": "关注请求",
+    "notification_visibility_reports": "举报",
+    "mute_sensitive_posts": "隐藏敏感帖子",
+    "notification_visibility_in_column": "在侧栏/菜单显示通知菜单",
+    "notification_visibility_native_notifications": "显示本地通知",
+    "units": {
+      "time": {
+        "m": "分钟",
+        "s": "秒",
+        "h": "小时",
+        "d": "天"
+      }
+    },
+    "hide_scrobbles_after": "隐藏比这个时间更早的 scrobble",
+    "notification_setting_ignore_inactionable_seen": "忽略无法回复通知（喜欢，转发等）的已阅状态",
+    "notification_setting_unseen_at_top": "将未读通知置顶",
+    "notification_setting_ignore_inactionable_seen_tip": "如果您继续，这将不会标记这些通知为已读，并且您仍会接收到桌面推送通知",
+    "actor_type": "账号：",
+    "actor_type_description": "将您的账号标记为组会使其转发所有提及它的状态。",
+    "actor_type_Person": "正常用户",
+    "actor_type_Service": "机器人",
+    "actor_type_Group": "组",
+    "hide_actor_type_indication": "隐藏帖子中账号类型（机器人，组等）的表示",
+    "notification_setting_annoyance": "烦扰",
+    "notification_setting_drawer_marks_as_seen": "关闭菜单（移动端）来标记全部通知为已阅",
+    "enable_web_push_always_show_tip": "一些浏览器（Chromium，Chrome）需要推送信息才能显示通知，否则会显示“网页在背景发生了更改”的通知，勾选这个选项可以防止这种通知显示，因为 Chrome 在标签页激活时会隐藏网页推送通知。可能会在其他浏览器中显示双重通知。",
+    "enable_web_push_always_show": "总是显示网页推送通知",
+    "force_theme_recompilation_debug": "禁用主题缓存，强制在每次启动时重新编译（调试）",
+    "notification_setting_filters_chrome_push": "在一些浏览器中（Chrome），有可能无法完全按照类型过滤通过推送传递的通知",
+    "hide_scrobbles": "隐藏 scrobble",
+    "appearance": "外观",
+    "confirm_new_setting": "确认新的设置？",
+    "confirm_new_question": "是否保留这些设置？设置将在 10 秒后还原。",
+    "revert": "恢复",
+    "confirm": "确定",
+    "text_size": "文字与界面大小",
+    "text_size_tip": "用 {0} 作为绝对值，{1} 会根据浏览器默认文字大小进行缩放。",
+    "text_size_tip2": "{0} 之外的值可能会破坏一些功能和主题",
+    "emoji_size": "表情符号大小",
+    "navbar_size": "顶栏大小",
+    "panel_header_size": "面板标题大小",
+    "visual_tweaks": "细微外观调整",
+    "theme_debug": "显示当遇到透明背景时背景主题引擎的假设（调试）",
+    "scale_and_layout": "界面大小与布局",
+    "notification_visibility_statuses": "订阅"
   },
   "time": {
     "day": "{0} 天",
@@ -856,7 +942,7 @@
     "nsfw": "NSFW",
     "external_source": "外部来源",
     "expand": "展开",
-    "you": "（你）",
+    "you": "（您）",
     "plus_more": "还有 {number} 个",
     "many_attachments": "文章有 {number} 个附件",
     "collapse_attachments": "折起附件",
@@ -896,7 +982,12 @@
     "reaction_count_label": "{num} 人作出了表情回应",
     "invisible_quote": "引用的状态不可用：{link}",
     "hide_quote": "隐藏引用的状态",
-    "display_quote": "显示引用的状态"
+    "display_quote": "显示引用的状态",
+    "quotes": "引用",
+    "sensitive_muted": "正在隐藏敏感内容",
+    "loading": "加载中...",
+    "load_error": "无法加载动态：{error}",
+    "more_actions": "状态的更多动作"
   },
   "user_card": {
     "approve": "核准",
@@ -911,14 +1002,14 @@
     "followees": "正在关注",
     "followers": "关注者",
     "following": "正在关注！",
-    "follows_you": "关注了你！",
-    "its_you": "就是你！",
+    "follows_you": "关注了您！",
+    "its_you": "就是您！",
     "media": "媒体",
     "mute": "隐藏",
     "muted": "已隐藏",
     "per_day": "每天",
     "remote_follow": "跨站关注",
-    "report": "报告",
+    "report": "举报",
     "statuses": "状态",
     "subscribe": "订阅",
     "unsubscribe": "退订",
@@ -945,7 +1036,7 @@
       "disable_any_subscription": "完全禁止关注用户",
       "quarantine": "不许帖子传入别站",
       "delete_user": "删除用户",
-      "delete_user_data_and_deactivate_confirmation": "这将永久删除该账户的数据并停用该账户。你完全确定吗？"
+      "delete_user_data_and_deactivate_confirmation": "这将永久删除该账号的数据并停用该账号。您完全确定吗？"
     },
     "hidden": "已隐藏",
     "show_repeats": "显示转发",
@@ -993,7 +1084,8 @@
     "note_blank": "（空）",
     "edit_note": "编辑备注",
     "edit_note_apply": "应用",
-    "edit_note_cancel": "取消"
+    "edit_note_cancel": "取消",
+    "group": "组"
   },
   "user_profile": {
     "timeline_title": "用户时间线",
@@ -1001,10 +1093,10 @@
     "profile_loading_error": "抱歉，载入个人资料时出错。"
   },
   "user_reporting": {
-    "title": "报告 {0}",
-    "add_comment_description": "此报告会发送给您的实例监察员。您可以在下面提供更多详细信息解释报告的缘由：",
+    "title": "举报 {0}",
+    "add_comment_description": "此举报会发送给您的实例监察员。您可以在下面提供更多详细信息解释举报的缘由：",
     "additional_comments": "其它信息",
-    "forward_description": "这个账号来自另一个服务器。是否同时发送一份报告副本到那里？",
+    "forward_description": "这个账号来自另一个服务器。是否同时发送一份举报副本到那里？",
     "forward_to": "转发 {0}",
     "submit": "提交",
     "generic_error": "当处理您的请求时，发生了一个错误。"
@@ -1020,7 +1112,7 @@
     "favorite": "喜欢",
     "user_settings": "用户设置",
     "reject_follow_request": "拒绝关注请求",
-    "add_reaction": "添加互动",
+    "add_reaction": "添加回应",
     "bookmark": "书签",
     "accept_follow_request": "接受关注请求",
     "toggle_expand": "展开或折叠通知以显示帖子全文",
@@ -1090,7 +1182,8 @@
       "smileys-and-emotion": "表情与情感"
     },
     "regional_indicator": "地区指示符 {letter}",
-    "unpacked": "未分组的表情符号"
+    "unpacked": "未分组的表情符号",
+    "hide_custom_emoji": "隐藏自定义表情符号"
   },
   "about": {
     "mrf": {
@@ -1157,7 +1250,7 @@
     "chats": "聊天",
     "delete": "删除",
     "message_user": "发消息给 {nickname}",
-    "you": "你："
+    "you": "您："
   },
   "announcements": {
     "page_header": "公告",
@@ -1198,8 +1291,8 @@
     "update_changelog": "关于变化的更多细节，请参见 {theFullChangelog} 。",
     "update_changelog_here": "完整的更新日志",
     "big_update_title": "请忍耐一下",
-    "big_update_content": "我们已经有一段时间没有发布发行版，所以事情的外观和感觉可能与你习惯的不一样。",
-    "update_bugs": "请在 {pleromaGitlab} 上报告任何问题和bug，因为我们已经改变了很多，虽然我们进行了彻底的测试，并且自己使用了开发版本，但我们可能错过了一些东西。我们欢迎你对你可能遇到的问题或如何改进Pleroma和Pleroma-FE提出反馈和建议。",
+    "big_update_content": "我们已经有一段时间没有发布发行版，所以事情的外观和感觉可能与您习惯的不一样。",
+    "update_bugs": "请在 {pleromaGitlab} 上报告任何问题和 bug，因为我们改变了软件中的很多东西，虽然我们进行了彻底的测试，并且我们自己使用开发版本，但我们可能错过了一些东西。我们欢迎您对您可能遇到的问题或如何改进 Pleroma 和 Pleroma-FE 提出反馈和建议。",
     "art_by": "{linkToArtist} 的作品"
   },
   "lists": {
@@ -1232,13 +1325,14 @@
       "nodb": "无数据库配置",
       "instance": "实例",
       "limits": "限制",
-      "frontends": "前端"
+      "frontends": "前端",
+      "emoji": "表情符号"
     },
     "nodb": {
       "heading": "数据库配置已禁用",
       "documentation": "文档",
       "text2": "大多数配置选项将不可用。",
-      "text": "你需要修改后端配置文件，以便将 {property} 设置为 {value}，更多内容请参见 {documentation}。"
+      "text": "您需要修改后端配置文件，以便将 {property} 设置为 {value}，更多内容请参见 {documentation}。"
     },
     "captcha": {
       "native": "本地",
@@ -1281,8 +1375,11 @@
       "set_default_version": "将版本 {version} 设为默认",
       "wip_notice": "请注意，此部分是一个WIP，缺乏某些功能，因为前端管理的后台实现并不完整。",
       "default_frontend": "默认前端",
-      "default_frontend_tip": "默认的前端将显示给所有用户。目前还没有办法让用户选择个人的前端。如果你不使用 PleromaFE，你很可能不得不使用旧的和有问题的 AdminFE 来进行实例配置，直到我们替换它。",
-      "available_frontends": "可供安装"
+      "default_frontend_tip": "默认的前端将显示给所有用户。目前还没有办法让用户选择自己的前端。如果您不使用 PleromaFE，您很可能不得不使用旧的和有问题的 AdminFE 来进行实例配置，直到我们替换它。",
+      "available_frontends": "可供安装",
+      "failure_installing_frontend": "无法安装前端 {version}：{reason}",
+      "success_installing_frontend": "前端 {version} 成功安装",
+      "default_frontend_unavail": "默认前端设置不可以，因为这需要数据库中的配置"
     },
     "temp_overrides": {
       ":pleroma": {
@@ -1306,6 +1403,50 @@
         }
       }
     },
-    "wip_notice": "此管理仪表板是实验性和 WIP 的，{adminFeLink}。"
+    "wip_notice": "此管理仪表板是实验性和 WIP 的，{adminFeLink}。",
+    "emoji": {
+      "remote_pack_instance": "远程表情包实例",
+      "fallback_src": "回退源",
+      "fallback_sha256": "回退 SHA256",
+      "delete_confirm": "您确定要删除 {0} 吗？",
+      "download_pack": "下载表情包",
+      "files": "文件",
+      "downloading_pack": "正在下载 {0}",
+      "download": "下载",
+      "download_as_name": "新名称",
+      "download_as_name_full": "新名称，留空来使用旧的名称",
+      "emoji_changed": "未保存的表情符号文件更改，检查突出显示的的表情符号",
+      "replace_warning": "这将替换本地同名的表情包",
+      "reload": "重新加载表情符号",
+      "create_pack": "创建表情包",
+      "emoji_pack": "表情包",
+      "save_meta": "保存元数据",
+      "delete": "删除",
+      "revert": "恢复",
+      "add_file": "添加文件",
+      "adding_new": "添加新的表情符号",
+      "shortcode": "简码",
+      "filename": "文件名",
+      "new_shortcode": "简码，留空来自动推断",
+      "emoji_packs": "表情包",
+      "remote_packs": "远程表情包",
+      "do_list": "列表",
+      "edit_pack": "编辑表情包",
+      "description": "描述",
+      "global_actions": "全局动作",
+      "importFS": "从文件系统导入表情符号",
+      "error": "错误：{0}",
+      "delete_pack": "删除表情包",
+      "new_pack_name": "新的表情包名称",
+      "create": "创建",
+      "homepage": "主页",
+      "share": "分享",
+      "save": "保存",
+      "revert_meta": "回复元数据",
+      "new_filename": "文件名，留空来自动推断",
+      "editing": "正在编辑 {0}",
+      "delete_title": "确定删除？",
+      "metadata_changed": "元数据和保存的不同"
+    }
   }
 }

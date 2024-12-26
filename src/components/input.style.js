@@ -1,32 +1,26 @@
-const hoverGlow = {
-  x: 0,
-  y: 0,
-  blur: 4,
-  spread: 0,
-  color: '--text',
-  alpha: 1
-}
-
 export default {
   name: 'Input',
   selector: '.input',
-  variant: {
+  states: {
+    hover: ':hover:not(.disabled)',
+    focused: ':focus-within',
+    disabled: '.disabled'
+  },
+  variants: {
     checkbox: '.-checkbox',
     radio: '.-radio'
   },
-  states: {
-    disabled: ':disabled',
-    hover: ':hover:not(:disabled)',
-    focused: ':focus-within'
-  },
   validInnerComponents: [
-    'Text'
+    'Text',
+    'Icon'
   ],
   defaultRules: [
     {
       component: 'Root',
       directives: {
-        '--defaultInputBevel': 'shadow | $borderSide(#FFFFFF, bottom, 0.2)| $borderSide(#000000, top, 0.2)'
+        '--defaultInputBevel': 'shadow | $borderSide(#FFFFFF bottom 0.2), $borderSide(#000000 top 0.2)',
+        '--defaultInputHoverGlow': 'shadow | 0 0 4 --text / 0.5',
+        '--defaultInputFocusGlow': 'shadow | 0 0 4 4 --link / 0.5'
       }
     },
     {
@@ -53,7 +47,47 @@ export default {
     {
       state: ['hover'],
       directives: {
-        shadow: [hoverGlow, '--defaultInputBevel']
+        shadow: ['--defaultInputHoverGlow', '--defaultInputBevel']
+      }
+    },
+    {
+      state: ['focused'],
+      directives: {
+        shadow: ['--defaultInputFocusGlow', '--defaultInputBevel']
+      }
+    },
+    {
+      state: ['focused', 'hover'],
+      directives: {
+        shadow: ['--defaultInputFocusGlow', '--defaultInputHoverGlow', '--defaultInputBevel']
+      }
+    },
+    {
+      state: ['disabled'],
+      directives: {
+        background: '--parent'
+      }
+    },
+    {
+      component: 'Text',
+      parent: {
+        component: 'Input',
+        state: ['disabled']
+      },
+      directives: {
+        textOpacity: 0.25,
+        textOpacityMode: 'blend'
+      }
+    },
+    {
+      component: 'Icon',
+      parent: {
+        component: 'Input',
+        state: ['disabled']
+      },
+      directives: {
+        textOpacity: 0.25,
+        textOpacityMode: 'blend'
       }
     }
   ]

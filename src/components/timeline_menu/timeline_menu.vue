@@ -15,6 +15,10 @@
         :show-pin="false"
         class="timelines"
       />
+      <BookmarkFoldersMenuContent
+        v-else-if="useBookmarkFoldersMenu"
+        class="timelines"
+      />
       <ul v-else>
         <NavigationEntry
           v-for="item in timelinesList"
@@ -25,8 +29,8 @@
       </ul>
     </template>
     <template #trigger>
-      <span class="button-unstyled title timeline-menu-title">
-        <span class="timeline-title">{{ timelineName() }}</span>
+      <span class="button-unstyled timeline-menu-title">
+        <h1 class="title timeline-title">{{ timelineName() }}</h1>
         <span>
           <FAIcon
             size="sm"

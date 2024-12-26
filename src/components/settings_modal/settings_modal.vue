@@ -7,9 +7,9 @@
   >
     <div class="settings-modal-panel panel">
       <div class="panel-heading">
-        <span class="title">
+        <h1 class="title">
           {{ modalMode === 'user' ? $t('settings.settings') : $t('admin_dash.window_title') }}
-        </span>
+        </h1>
         <transition name="fade">
           <div
             v-if="currentSaveStateNotice"
@@ -110,7 +110,10 @@
           {{ $t("settings.expert_mode") }}
         </Checkbox>
         <span v-if="modalMode === 'admin'">
-          <i18n-t keypath="admin_dash.wip_notice">
+          <i18n-t
+            scope="global"
+            keypath="admin_dash.wip_notice"
+          >
             <template #adminFeLink>
               <a
                 href="/pleroma/admin/#/login-pleroma"

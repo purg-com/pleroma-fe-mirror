@@ -6,7 +6,7 @@
     <div class="user-reporting-panel panel">
       <div class="panel-heading">
         <i18n-t
-          tag="div"
+          tag="h1"
           keypath="user_reporting.title"
           class="title"
         >
