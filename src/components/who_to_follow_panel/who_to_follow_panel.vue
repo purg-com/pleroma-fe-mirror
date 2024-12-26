@@ -2,9 +2,9 @@
   <div class="who-to-follow-panel">
     <div class="panel panel-default base01-background">
       <div class="panel-heading timeline-heading base02-background base04">
-        <div class="title">
+        <h1 class="title">
           {{ $t('who_to_follow.who_to_follow') }}
-        </div>
+        </h1>
       </div>
       <div class="who-to-follow">
         <p
@@ -33,24 +33,28 @@
   .who-to-follow * {
     vertical-align: middle;
   }
+
   .who-to-follow img {
     width: 32px;
     height: 32px;
   }
+
   .who-to-follow {
-    padding: 0em 1em;
-    margin: 0px;
+    padding: 0 1em;
+    margin: 0;
   }
+
   .who-to-follow-items {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 0px;
-    margin: 1em 0em;
+    padding: 0;
+    margin: 1em 0;
   }
+
   .who-to-follow-more {
-    padding: 0px;
-    margin: 1em 0em;
+    padding: 0;
+    margin: 1em 0;
     text-align: center;
   }
 </style>

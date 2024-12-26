@@ -55,8 +55,8 @@
     "undo": "Malfari",
     "yes": "Jes",
     "no": "Ne",
-    "unpin": "Malfiksi eron",
-    "pin": "Fiksi eron",
+    "unpin": "Malfiksi",
+    "pin": "Fiksi",
     "scroll_to_top": "Rulumi supren"
   },
   "image_cropper": {
@@ -81,7 +81,11 @@
     "recovery_code": "Rehava kodo",
     "enter_two_factor_code": "Enigu kodon de duobla aŭtentikigo",
     "enter_recovery_code": "Enigu rehavan kodon",
-    "authentication_code": "Aŭtentikiga kodo"
+    "authentication_code": "Aŭtentikiga kodo",
+    "logout_confirm_title": "Konfirmo de adiaŭo",
+    "logout_confirm": "Ĉu vi certe volas adiaŭi?",
+    "logout_confirm_accept_button": "Adiaŭi",
+    "logout_confirm_cancel_button": "Ne adiaŭi"
   },
   "media_modal": {
     "previous": "Antaŭa",
@@ -90,7 +94,7 @@
     "hide": "Fermi vidilon de vidaŭdaĵoj"
   },
   "nav": {
-    "about": "Pri",
+    "about": "Prio",
     "back": "Reen",
     "chat": "Loka babilejo",
     "friend_requests": "Petoj pri abono",
@@ -115,7 +119,11 @@
     "edit_finish": "Fini redakton",
     "mobile_notifications": "Malfermi sciigojn (estas nelegitaj)",
     "mobile_notifications_close": "Fermi sciigojn",
-    "announcements": "Anoncoj"
+    "announcements": "Anoncoj",
+    "search_close": "Fermi serĉujon",
+    "mobile_sidebar": "(Mal)ŝalti flankan breton por telefonoj",
+    "mobile_notifications_mark_as_seen": "Marki ĉion vidita",
+    "quotes": "Citoj"
   },
   "notifications": {
     "broken_favorite": "Nekonata afiŝo, serĉante ĝin…",
@@ -131,7 +139,13 @@
     "follow_request": "volas vin aboni",
     "error": "Eraris akirado de sciigoj: {0}",
     "submitted_report": "sendis raporton",
-    "poll_ended": "enketo finiĝis"
+    "poll_ended": "enketo finiĝis",
+    "unread_chats": "{num} nelegita babilo | {num} nelegitaj babiloj",
+    "unread_follow_requests": "{num} nova abonpeto | {num} novaj abonpetoj",
+    "configuration_tip": "Vi povas ŝanĝi, kio montriĝos ĉi tie en {theSettings}. {dismiss}",
+    "configuration_tip_settings": "la agordoj",
+    "unread_announcements": "{num} nelegita anonco | {num} nelegitaj anoncoj",
+    "configuration_tip_dismiss": "Ne remontri plu"
   },
   "post_status": {
     "new_status": "Afiŝi",
@@ -166,10 +180,14 @@
     "direct_warning_to_first_only": "Ĉi tiu afiŝo estas nur videbla al uzantoj menciitaj je la komenco de la mesaĝo.",
     "direct_warning_to_all": "Ĉi tiu afiŝo estos videbla al ĉiuj menciitaj uzantoj.",
     "media_description": "Priskribo de vidaŭdaĵo",
-    "post": "Afiŝo",
+    "post": "Afiŝi",
     "edit_remote_warning": "Aliaj foraj nodoj eble ne subtenas redaktadon, kaj ne povos ricevi pli novan version de via afiŝo.",
     "edit_unsupported_warning": "Pleroma ne subtenas redaktadon de mencioj aŭ enketoj.",
-    "edit_status": "Redakti afiŝon"
+    "edit_status": "Redakti afiŝon",
+    "content_type_selection": "Formo de afiŝo",
+    "scope_notice_dismiss": "Fermi ĉi tiun avizon",
+    "reply_option": "Respondi al ĉi tiu afiŝo",
+    "quote_option": "Citi ĉi tiun afiŝon"
   },
   "registration": {
     "bio": "Priskribo",
@@ -189,14 +207,18 @@
       "email_required": "ne povas resti malplena",
       "password_required": "ne povas resti malplena",
       "password_confirmation_required": "ne povas resti malplena",
-      "password_confirmation_match": "samu la pasvorton"
+      "password_confirmation_match": "samu la pasvorton",
+      "birthday_min_age": "ne povas esti post {date}",
+      "birthday_required": "ne povas resti malplena"
     },
     "reason_placeholder": "Ĉi-node oni aprobas registriĝojn permane.\nSciigu la administrantojn kial vi volas registriĝi.",
     "reason": "Kialo registriĝi",
     "register": "Registriĝi",
     "bio_optional": "Prio (malnepra)",
     "email_optional": "Retpoŝtadreso (malnepra)",
-    "email_language": "En kiu lingvo vi volus ricevi retleterojn de la servilo?"
+    "email_language": "En kiu lingvo vi volus ricevi retleterojn de la servilo?",
+    "birthday": "Naskiĝtago:",
+    "birthday_optional": "Naskiĝtago (malnepra):"
   },
   "settings": {
     "app_name": "Nomo de aplikaĵo",
@@ -453,7 +475,8 @@
           "interface": "Fasado",
           "input": "Enigaj kampoj",
           "post": "Teksto de afiŝo",
-          "postCode": "Egallarĝa teksto en afiŝo (riĉteksto)"
+          "postCode": "Egallarĝa teksto en afiŝo (riĉteksto)",
+          "monospace": "Egallarĝa teksto"
         },
         "family": "Nomo de tiparo",
         "size": "Grando (en bilderoj)",
@@ -473,6 +496,27 @@
         "header_faint": "Tio estas en ordo",
         "checkbox": "Mi legetis la kondiĉojn de uzado",
         "link": "bela eta ligil’"
+      },
+      "custom_theme_used": "(Propra haŭto)",
+      "themes3": {
+        "hacks": {
+          "underlay_override_mode_transparent": "Tute forigi (povus rompi iujn haŭtojn)",
+          "forced_roundness_mode_disabled": "Uzi implicitajn valorojn de haŭto",
+          "forced_roundness_mode_sharp": "Devigi akrajn randojn",
+          "forced_roundness_mode_nonsharp": "Devigi ne tiom akrajn randojn (rondigo je 1 bildero)",
+          "forced_roundness_mode_round": "Devigi rondajn randojn"
+        },
+        "font": {
+          "builtin": {
+            "serif": "Kalkana",
+            "sans-serif": "Senkalkana",
+            "monospace": "Egallarĝa",
+            "inherit": "Senŝanĝe"
+          },
+          "group-local": "Loke instalitaj signoformoj",
+          "local-unavailable1": "Listo de loke instalitaj signoformoj ne estas disponebla",
+          "font_list_unavailable": "Ne povis akiri loke instalitajn signoformojn: {error}"
+        }
       }
     },
     "discoverable": "Permesi trovon de ĉi tiu konto en serĉrezultoj kaj aliaj servoj",
@@ -603,7 +647,7 @@
     "use_websockets": "Uzi teĥnikaron «websockets» (tuja ĝisdatigo)",
     "mention_link_display_full_for_remote": "plene nur je uzantoj foraj (ekz. {'@'}zozo{'@'}ekzemplo.org)",
     "expert_mode": "Montri altnivelajn",
-    "setting_server_side": "Ĉi tiu agordo estas ligita al via profilo, kaj efektiviĝon en ĉiuj viaj salutoj kaj klientoj",
+    "setting_server_side": "Ĉi tiu agordo estas ligita al via profilo, kaj efektiviĝos en ĉiuj viaj salutoj kaj klientoj",
     "post_look_feel": "Aspekto de afiŝoj",
     "mention_links": "Menciaj ligiloj",
     "email_language": "Lingvo de leteroj ricevotaj de la servilo",
@@ -666,7 +710,71 @@
     "user_popover_avatar_overlay": "Aperigi ŝprucaĵon pri uzanto sur profilbildo",
     "show_yous": "Montri la markon «(Vi)»",
     "user_popover_avatar_action_zoom": "Zomi la profilbildon",
-    "third_column_mode": "Kun sufiĉo da spaco, montri trian kolumnon kun"
+    "third_column_mode": "Kun sufiĉo da spaco, montri trian kolumnon kun",
+    "birthday": {
+      "show_birthday": "Montri mian naskiĝtagon",
+      "label": "Naskiĝtago"
+    },
+    "confirm_dialogs_delete": "forigo de afiŝo",
+    "backup_running": "Ĉi tiu savkopiado progresas, traktis {number} datumon. | Ĉi tiu savkopiado progresas, traktis {number} datumojn.",
+    "backup_failed": "Ĉi tiu savkopiado malsukcesis.",
+    "autocomplete_select_first": "Memage elekti unuan kandidaton kiam rezultoj de memaga konjektado disponeblas",
+    "confirm_dialogs_logout": "adiaŭo",
+    "user_popover_avatar_action": "Post klako sur profilbildon en ŝprucaĵo",
+    "remove_language": "Forigi",
+    "primary_language": "Ĉefa lingvo:",
+    "confirm_dialogs": "Peti konfirmon je",
+    "confirm_dialogs_repeat": "ripeto de afiŝo",
+    "confirm_dialogs_unfollow": "malabono de uzanto",
+    "confirm_dialogs_block": "blokado de uzanto",
+    "confirm_dialogs_mute": "silentigo de uzanto",
+    "confirm_dialogs_approve_follow": "aprobo de abonanto",
+    "confirm_dialogs_deny_follow": "malaprobo de abonanto",
+    "confirm_dialogs_remove_follower": "forigo de abonanto",
+    "tree_fade_ancestors": "Montri responditojn de la nuna afiŝo per teksto malvigla",
+    "units": {
+      "time": {
+        "m": "minutoj",
+        "s": "sekundoj",
+        "h": "horoj",
+        "d": "tagoj"
+      }
+    },
+    "url": "URL",
+    "emoji_reactions_scale": "Grandeco de reagoj",
+    "actor_type_Person": "ordinara uzanto",
+    "actor_type": "Ĉi tiu konto estas:",
+    "actor_type_description": "Se vi markos vian konton grupo, ĝi memage ripetos afiŝojn, kiuj mencios ĝin.",
+    "actor_type_Service": "roboto",
+    "actor_type_Group": "grupo",
+    "hide_actor_type_indication": "Kaŝi specon de aganto (roboto, grupo, ktp.) en afiŝoj",
+    "commit_value_tooltip": "Valoro ne estas konservita; premu ĉi tiun butonon por konfirmi viajn ŝanĝojn",
+    "add_language": "Aldoni rezervan lingvon",
+    "commit_value": "Konservi",
+    "force_theme_recompilation_debug": "Malŝalti haŭtan kaŝmemoron, devigi retradukon post ĉiu enlego (POR ERARSERĈADO)",
+    "fallback_language": "Rezerva lingvo {index}:",
+    "notification_extra_follow_requests": "Montri novajn abonpetojn",
+    "notification_extra_tip": "Montri agordan konsileton por ekstraj sciigoj",
+    "notification_show_extra": "Montri ekstrajn sciigojn en la sciiga kolumno",
+    "notification_extra_chats": "Montri nelegitajn babilojn",
+    "notification_extra_announcements": "Montri nelegitajn anoncojn",
+    "notification_setting_annoyance": "Ĝeno",
+    "mute_sensitive_posts": "Silentigi konsternajn afiŝojn",
+    "preview": "Antaŭrigardo",
+    "notification_visibility_native_notifications": "Montri indiĝenan sciigon",
+    "notification_visibility_follow_requests": "Abonpetoj",
+    "notification_visibility_reports": "Raportoj",
+    "notification_setting_ignore_inactionable_seen": "Malatenti legitecon de nereageblaj sciigoj (ŝatoj, ripetoj, ktp.)",
+    "notification_setting_ignore_inactionable_seen_tip": "Ĉi tio ne markos la sciigojn legitaj, kaj vi ankoraŭ ricevos labortablajn sciigojn pri ili, se vi elektis ricevi tiujn",
+    "notification_setting_unseen_at_top": "Montri nelegitajn sciigojn super aliaj",
+    "appearance": "Aspekto",
+    "confirm_new_setting": "Ĉu konfirmi novan agordon?",
+    "confirm_new_question": "Ĉu tio ĉi aspektas ĝuste? La ŝanĝo malfariĝos post 10 sekundoj.",
+    "revert": "Malfari",
+    "confirm": "Konfirmi",
+    "text_size": "Grandeco de teksto kaj fasado",
+    "emoji_size": "Grandeco de bildosignoj",
+    "navbar_size": "Grandeco de supra breto"
   },
   "timeline": {
     "collapse": "Maletendi",
@@ -753,7 +861,33 @@
     "note_blank": "(Neniu)",
     "edit_note_apply": "Apliki",
     "edit_note_cancel": "Nuligi",
-    "edit_note": "Redakti noton"
+    "edit_note": "Redakti noton",
+    "block_confirm": "Ĉu vi certe volas bloki uzanton {user}?",
+    "block_confirm_accept_button": "Bloki",
+    "remove_follower_confirm": "Ĉu vi certe volas forigi uzanton {user} de viaj abonantoj?",
+    "approve_confirm_accept_button": "Aprobi",
+    "approve_confirm_cancel_button": "Ne aprobi",
+    "approve_confirm": "Ĉu vi certe volas aprobi abonan peton de {user}?",
+    "block_confirm_title": "Konfirmo de blokado",
+    "approve_confirm_title": "Konfirmo de aprobo",
+    "block_confirm_cancel_button": "Ne bloki",
+    "deny_confirm_accept_button": "Malaprobi",
+    "deny_confirm_cancel_button": "Ne malaprobi",
+    "mute_confirm_title": "Silentigi konfirmon",
+    "deny_confirm_title": "Konfirmo de malaprobo",
+    "mute_confirm": "Ĉu vi certe volas silentigi uzanton {user}?",
+    "mute_confirm_accept_button": "Silentigi",
+    "mute_confirm_cancel_button": "Ne silentigi",
+    "mute_duration_prompt": "Silentigi ĉi tiun uzanton por (0 signifas senliman silentigon):",
+    "remove_follower_confirm_accept_button": "Forigi",
+    "remove_follower_confirm_title": "Konfirmo de forigo de abonanto",
+    "birthday": "Naskita je {birthday}",
+    "deny_confirm": "Ĉu vi certe volas malaprobi abonan peton de {user}?",
+    "unfollow_confirm_cancel_button": "Ne malaboni",
+    "unfollow_confirm_title": "Konfirmo de malabono",
+    "unfollow_confirm": "Ĉu vi certe volas malaboni uzanton {user}?",
+    "unfollow_confirm_accept_button": "Malaboni",
+    "remove_follower_confirm_cancel_button": "Ne forigi"
   },
   "user_profile": {
     "timeline_title": "Historio de uzanto",
@@ -775,7 +909,8 @@
     "accept_follow_request": "Akcepti abonpeton",
     "add_reaction": "Aldoni reagon",
     "toggle_expand": "Etendi aŭ maletendi sciigon por montri plenan afiŝon",
-    "toggle_mute": "Etendi aŭ maletendi afiŝon por montri silentigitan enhavon"
+    "toggle_mute": "Etendi aŭ maletendi afiŝon por montri silentigitan enhavon",
+    "autocomplete_available": "{number} rezulto disponeblas. Uzu la sagajn klavojn supren kaj suben por foliumi ilin. | {number} rezulto disponeblas. Uzu la sagajn klavojn supren kaj suben por foliumi ilin."
   },
   "upload": {
     "error": {
@@ -813,7 +948,9 @@
       "symbols": "Simboloj",
       "travel-and-places": "Vojaĝoj kaj lokoj"
     },
-    "regional_indicator": "Regiona marko {letter}"
+    "regional_indicator": "Regiona marko {letter}",
+    "unpacked": "Malpakitaj bildosignoj",
+    "hide_custom_emoji": "Kaŝi proprajn bildosignojn"
   },
   "polls": {
     "not_enough_options": "Tro malmultaj unikaj elektebloj en la enketo",
@@ -892,7 +1029,8 @@
     "follows": "Novaj abonoj",
     "favs_repeats": "Ripetoj kaj ŝatoj",
     "emoji_reactions": "Bildosignaj reagoj",
-    "reports": "Raportoj"
+    "reports": "Raportoj",
+    "statuses": "Abonoj"
   },
   "errors": {
     "storage_unavailable": "Pleroma ne povis aliri deponejon de la foliumilo. Via saluto kaj viaj lokaj agordoj ne estos konservitaj, kaj vi eble renkontos neatenditajn problemojn. Provu permesi kuketojn."
@@ -951,7 +1089,20 @@
     "show_all_conversation_with_icon": "{icon} {text}",
     "show_only_conversation_under_this": "Montri nur respondojn al ĉi tiu afiŝo",
     "status_history": "Historio de afiŝo",
-    "open_gallery": "Malfermi galerion"
+    "open_gallery": "Malfermi galerion",
+    "delete_confirm_title": "Konfirmo de forigo",
+    "delete_confirm_accept_button": "Forigi",
+    "repeat_confirm": "Ĉu vi certe volas ripeti ĉi tiun afiŝon?",
+    "repeat_confirm_title": "Konfirmo de ripeto",
+    "repeat_confirm_accept_button": "Ripeti",
+    "repeat_confirm_cancel_button": "Ne ripeti",
+    "delete_confirm_cancel_button": "Ne forigi",
+    "delete_error": "Eraris forigo de afiŝo: {0}",
+    "hide_quote": "Kaŝi la cititan afiŝon",
+    "display_quote": "Montri la cititan afiŝon",
+    "reaction_count_label": "{num} persono reagis | {num} personoj reagis",
+    "invisible_quote": "Citita afiŝo ne disponeblas: {link}",
+    "quotes": "Citaĵoj"
   },
   "time": {
     "years_short": "{0}j",
@@ -1119,6 +1270,95 @@
     "edit_action": "Redakti",
     "submit_edit_action": "Afiŝi",
     "cancel_edit_action": "Nuligi",
-    "inactive_message": "Ĉi tiu anonco estas neaktiva"
+    "inactive_message": "Ĉi tiu anonco estas neaktiva",
+    "post_form_header": "Afiŝi anoncon"
+  },
+  "admin_dash": {
+    "frontend": {
+      "default_frontend": "Implicita fasado",
+      "install": "Instali",
+      "versions": "Disponeblaj versioj",
+      "install_version": "Instali version {version}",
+      "more_install_options": "Pli da elektebloj je instalo",
+      "more_default_options": "Pli da elektebloj je implicitaj agordoj",
+      "set_default": "Agordi implicita",
+      "reinstall": "Reinstali",
+      "default_frontend_tip": "Implicita fasado montriĝos al ĉiuj uzantoj. Ankoraŭ ne ekzistas maniero, kiel uzanto povas elekti propran fasadon. Se vi ŝaltos ion alian, ol [PleromaFE], vi verŝajne devos uzadi la malnovan kaj erareman [AdminFE] por agordi la nodon, ĝis ni anstataŭigos ĝin.",
+      "repository": "Ligilo al deponejo",
+      "is_default": "(Implicita)",
+      "is_default_custom": "(Implicita, versio: {version})",
+      "set_default_version": "Agordi version {version} implicita"
+    },
+    "emoji": {
+      "download_as_name_full": "Nova nomo; lasu malplena por reuzi",
+      "download_as_name": "Nova nomo",
+      "reload": "Re-enlegi bildosignojn",
+      "importFS": "Enporti bildosignojn de dosiersistemo",
+      "error": "Eraro: {0}",
+      "create": "Krei",
+      "do_list": "Listo",
+      "delete": "Forigi",
+      "add_file": "Aldoni dosieron",
+      "filename": "Dosiernomo",
+      "files": "Dosieroj",
+      "save_meta": "Konservi pridatumojn",
+      "description": "Priskribo",
+      "homepage": "Hejmpaĝo",
+      "save": "Konservi",
+      "revert": "Malfari",
+      "share": "Kunhavigi"
+    },
+    "tabs": {
+      "emoji": "Bildosignoj",
+      "frontends": "Fasadoj",
+      "instance": "Nodo",
+      "limits": "Limoj"
+    },
+    "instance": {
+      "registrations": "Registriĝoj de uzantoj",
+      "instance": "Informoj pri nodo",
+      "restrict": {
+        "profiles": "Aliro al profiloj de uzantoj",
+        "header": "Limigi aliron por sennomaj vizitantoj",
+        "timelines": "Aliro al historioj"
+      },
+      "access": "Aliro al nodo",
+      "kocaptcha": "Agordo de KoCaptcha"
+    },
+    "limits": {
+      "users": "Limoj de profiloj de uzantoj",
+      "profile_fields": "Limoj de kampoj de profiloj",
+      "user_uploads": "Limoj de vidaŭdaĵoj de profiloj",
+      "posts": "Limoj de afiŝoj",
+      "uploads": "Limoj de kunsendaĵoj",
+      "arbitrary_limits": "Arbitraj limoj"
+    },
+    "nodb": {
+      "documentation": "dokumentaĵo"
+    },
+    "window_title": "Administrado",
+    "wip_notice": "Ĉi tiu administra fasado estas eksperimenta kaj ankoraŭ prilaborata, {adminFeLink}.",
+    "old_ui_link": "malnova administra fasado disponeblas tie ĉi",
+    "temp_overrides": {
+      ":pleroma": {
+        ":instance": {
+          ":public": {
+            "label": "Nodo estas publika"
+          },
+          ":background_image": {
+            "label": "Fonbildo",
+            "description": "Fonbildo (uzota ĉefe de PleromaFE)"
+          },
+          ":description_limit": {
+            "description": "Limo de signoj por priskriboj de kunsendaĵoj",
+            "label": "Limo"
+          }
+        }
+      }
+    },
+    "commit_all": "Konservi ĉion",
+    "captcha": {
+      "kocaptcha": "KoCaptcha"
+    }
   }
 }

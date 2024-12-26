@@ -68,8 +68,6 @@ const MASTODON_UNBLOCK_USER_URL = id => `/api/v1/accounts/${id}/unblock`
 const MASTODON_MUTE_USER_URL = id => `/api/v1/accounts/${id}/mute`
 const MASTODON_UNMUTE_USER_URL = id => `/api/v1/accounts/${id}/unmute`
 const MASTODON_REMOVE_USER_FROM_FOLLOWERS = id => `/api/v1/accounts/${id}/remove_from_followers`
-const MASTODON_SUBSCRIBE_USER = id => `/api/v1/pleroma/accounts/${id}/subscribe`
-const MASTODON_UNSUBSCRIBE_USER = id => `/api/v1/pleroma/accounts/${id}/unsubscribe`
 const MASTODON_USER_NOTE_URL = id => `/api/v1/accounts/${id}/note`
 const MASTODON_BOOKMARK_STATUS_URL = id => `/api/v1/statuses/${id}/bookmark`
 const MASTODON_UNBOOKMARK_STATUS_URL = id => `/api/v1/statuses/${id}/unbookmark`
@@ -107,6 +105,25 @@ const PLEROMA_ANNOUNCEMENTS_URL = '/api/v1/pleroma/admin/announcements'
 const PLEROMA_POST_ANNOUNCEMENT_URL = '/api/v1/pleroma/admin/announcements'
 const PLEROMA_EDIT_ANNOUNCEMENT_URL = id => `/api/v1/pleroma/admin/announcements/${id}`
 const PLEROMA_DELETE_ANNOUNCEMENT_URL = id => `/api/v1/pleroma/admin/announcements/${id}`
+const PLEROMA_SCROBBLES_URL = id => `/api/v1/pleroma/accounts/${id}/scrobbles`
+const PLEROMA_STATUS_QUOTES_URL = id => `/api/v1/pleroma/statuses/${id}/quotes`
+const PLEROMA_USER_FAVORITES_TIMELINE_URL = id => `/api/v1/pleroma/accounts/${id}/favourites`
+const PLEROMA_BOOKMARK_FOLDERS_URL = '/api/v1/pleroma/bookmark_folders'
+const PLEROMA_BOOKMARK_FOLDER_URL = id => `/api/v1/pleroma/bookmark_folders/${id}`
+
+const PLEROMA_ADMIN_CONFIG_URL = '/api/pleroma/admin/config'
+const PLEROMA_ADMIN_DESCRIPTIONS_URL = '/api/pleroma/admin/config/descriptions'
+const PLEROMA_ADMIN_FRONTENDS_URL = '/api/pleroma/admin/frontends'
+const PLEROMA_ADMIN_FRONTENDS_INSTALL_URL = '/api/pleroma/admin/frontends/install'
+
+const PLEROMA_EMOJI_RELOAD_URL = '/api/pleroma/admin/reload_emoji'
+const PLEROMA_EMOJI_IMPORT_FS_URL = '/api/pleroma/emoji/packs/import'
+const PLEROMA_EMOJI_PACKS_URL = (page, pageSize) => `/api/v1/pleroma/emoji/packs?page=${page}&page_size=${pageSize}`
+const PLEROMA_EMOJI_PACK_URL = (name) => `/api/v1/pleroma/emoji/pack?name=${name}`
+const PLEROMA_EMOJI_PACKS_DL_REMOTE_URL = '/api/v1/pleroma/emoji/packs/download'
+const PLEROMA_EMOJI_PACKS_LS_REMOTE_URL =
+  (url, page, pageSize) => `/api/v1/pleroma/emoji/packs/remote?url=${url}&page=${page}&page_size=${pageSize}`
+const PLEROMA_EMOJI_UPDATE_FILE_URL = (name) => `/api/v1/pleroma/emoji/packs/files?name=${name}`
 
 const oldfetch = window.fetch
 
@@ -256,6 +273,7 @@ const followUser = ({ id, credentials, ...options }) => {
   const url = MASTODON_FOLLOW_URL(id)
   const form = {}
   if (options.reblogs !== undefined) { form.reblogs = options.reblogs }
+  if (options.notify !== undefined) { form.notify = options.notify }
   return fetch(url, {
     body: JSON.stringify(form),
     headers: {
@@ -665,13 +683,16 @@ const fetchTimeline = ({
   timeline,
   credentials,
   since = false,
+  minId = false,
   until = false,
   userId = false,
   listId = false,
+  statusId = false,
   tag = false,
   withMuted = false,
   replyVisibility = 'all',
-  includeTypes = []
+  includeTypes = [],
+  bookmarkFolderId = false
 }) => {
   const timelineUrls = {
     public: MASTODON_PUBLIC_TIMELINE,
@@ -683,13 +704,19 @@ const fetchTimeline = ({
     media: MASTODON_USER_TIMELINE_URL,
     list: MASTODON_LIST_TIMELINE_URL,
     favorites: MASTODON_USER_FAVORITES_TIMELINE_URL,
+    publicFavorites: PLEROMA_USER_FAVORITES_TIMELINE_URL,
     tag: MASTODON_TAG_TIMELINE_URL,
-    bookmarks: MASTODON_BOOKMARK_TIMELINE_URL
+    bookmarks: MASTODON_BOOKMARK_TIMELINE_URL,
+    quotes: PLEROMA_STATUS_QUOTES_URL
   }
   const isNotifications = timeline === 'notifications'
   const params = []
 
   let url = timelineUrls[timeline]
+
+  if (timeline === 'favorites' && userId) {
+    url = timelineUrls.publicFavorites(userId)
+  }
 
   if (timeline === 'user' || timeline === 'media') {
     url = url(userId)
@@ -699,6 +726,13 @@ const fetchTimeline = ({
     url = url(listId)
   }
 
+  if (timeline === 'quotes') {
+    url = url(statusId)
+  }
+
+  if (minId) {
+    params.push(['min_id', minId])
+  }
   if (since) {
     params.push(['since_id', since])
   }
@@ -728,32 +762,31 @@ const fetchTimeline = ({
       params.push(['include_types[]', type])
     })
   }
+  if (timeline === 'bookmarks' && bookmarkFolderId) {
+    params.push(['folder_id', bookmarkFolderId])
+  }
 
   params.push(['limit', 20])
 
   const queryString = map(params, (param) => `${param[0]}=${param[1]}`).join('&')
   url += `?${queryString}`
 
-  let status = ''
-  let statusText = ''
-
-  let pagination = {}
   return fetch(url, { headers: authHeaders(credentials) })
-    .then((data) => {
-      status = data.status
-      statusText = data.statusText
-      pagination = parseLinkHeaderPagination(data.headers.get('Link'), {
-        flakeId: timeline !== 'bookmarks' && timeline !== 'notifications'
-      })
-      return data
-    })
-    .then((data) => data.json())
-    .then((data) => {
-      if (!data.errors) {
+    .then(async (response) => {
+      const success = response.ok
+
+      const data = await response.json()
+
+      if (success && !data.errors) {
+        const pagination = parseLinkHeaderPagination(response.headers.get('Link'), {
+          flakeId: timeline !== 'bookmarks' && timeline !== 'notifications'
+        })
+
         return { data: data.map(isNotifications ? parseNotification : parseStatus), pagination }
       } else {
-        data.status = status
-        data.statusText = statusText
+        data.errors ||= []
+        data.status = response.status
+        data.statusText = response.statusText
         return data
       }
     })
@@ -801,11 +834,14 @@ const unretweet = ({ id, credentials }) => {
     .then((data) => parseStatus(data))
 }
 
-const bookmarkStatus = ({ id, credentials }) => {
+const bookmarkStatus = ({ id, credentials, ...options }) => {
   return promisedRequest({
     url: MASTODON_BOOKMARK_STATUS_URL(id),
     headers: authHeaders(credentials),
-    method: 'POST'
+    method: 'POST',
+    payload: {
+      folder_id: options.folder_id
+    }
   })
 }
 
@@ -826,6 +862,7 @@ const postStatus = ({
   poll,
   mediaIds = [],
   inReplyToStatusId,
+  quoteId,
   contentType,
   preview,
   idempotencyKey
@@ -844,7 +881,7 @@ const postStatus = ({
   })
   if (pollOptions.some(option => option !== '')) {
     const normalizedPoll = {
-      expires_in: poll.expiresIn,
+      expires_in: parseInt(poll.expiresIn, 10),
       multiple: poll.multiple
     }
     Object.keys(normalizedPoll).forEach(key => {
@@ -857,6 +894,9 @@ const postStatus = ({
   }
   if (inReplyToStatusId) {
     form.append('in_reply_to_id', inReplyToStatusId)
+  }
+  if (quoteId) {
+    form.append('quote_id', quoteId)
   }
   if (preview) {
     form.append('preview', 'true')
@@ -901,7 +941,7 @@ const editStatus = ({
 
   if (pollOptions.some(option => option !== '')) {
     const normalizedPoll = {
-      expires_in: poll.expiresIn,
+      expires_in: parseInt(poll.expiresIn, 10),
       multiple: poll.multiple
     }
     Object.keys(normalizedPoll).forEach(key => {
@@ -927,8 +967,9 @@ const editStatus = ({
 }
 
 const deleteStatus = ({ id, credentials }) => {
-  return fetch(MASTODON_DELETE_URL(id), {
-    headers: authHeaders(credentials),
+  return promisedRequest({
+    url: MASTODON_DELETE_URL(id),
+    credentials,
     method: 'DELETE'
   })
 }
@@ -1117,29 +1158,33 @@ const generateMfaBackupCodes = ({ credentials }) => {
   }).then((data) => data.json())
 }
 
-const fetchMutes = ({ credentials }) => {
-  return promisedRequest({ url: MASTODON_USER_MUTES_URL, credentials })
+const fetchMutes = ({ maxId, credentials }) => {
+  const query = new URLSearchParams({ with_relationships: true })
+  if (maxId) {
+    query.append('max_id', maxId)
+  }
+  return promisedRequest({ url: `${MASTODON_USER_MUTES_URL}?${query.toString()}`, credentials })
     .then((users) => users.map(parseUser))
 }
 
-const muteUser = ({ id, credentials }) => {
-  return promisedRequest({ url: MASTODON_MUTE_USER_URL(id), credentials, method: 'POST' })
+const muteUser = ({ id, expiresIn, credentials }) => {
+  const payload = {}
+  if (expiresIn) {
+    payload.expires_in = expiresIn
+  }
+  return promisedRequest({ url: MASTODON_MUTE_USER_URL(id), credentials, method: 'POST', payload })
 }
 
 const unmuteUser = ({ id, credentials }) => {
   return promisedRequest({ url: MASTODON_UNMUTE_USER_URL(id), credentials, method: 'POST' })
 }
 
-const subscribeUser = ({ id, credentials }) => {
-  return promisedRequest({ url: MASTODON_SUBSCRIBE_USER(id), credentials, method: 'POST' })
-}
-
-const unsubscribeUser = ({ id, credentials }) => {
-  return promisedRequest({ url: MASTODON_UNSUBSCRIBE_USER(id), credentials, method: 'POST' })
-}
-
-const fetchBlocks = ({ credentials }) => {
-  return promisedRequest({ url: MASTODON_USER_BLOCKS_URL, credentials })
+const fetchBlocks = ({ maxId, credentials }) => {
+  const query = new URLSearchParams({ with_relationships: true })
+  if (maxId) {
+    query.append('max_id', maxId)
+  }
+  return promisedRequest({ url: `${MASTODON_USER_BLOCKS_URL}?${query.toString()}`, credentials })
     .then((users) => users.map(parseUser))
 }
 
@@ -1659,6 +1704,233 @@ const setReportState = ({ id, state, credentials }) => {
     })
 }
 
+// ADMIN STUFF // EXPERIMENTAL
+const fetchInstanceDBConfig = ({ credentials }) => {
+  return fetch(PLEROMA_ADMIN_CONFIG_URL, {
+    headers: authHeaders(credentials)
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        return {
+          error: response
+        }
+      }
+    })
+}
+
+const fetchInstanceConfigDescriptions = ({ credentials }) => {
+  return fetch(PLEROMA_ADMIN_DESCRIPTIONS_URL, {
+    headers: authHeaders(credentials)
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        return {
+          error: response
+        }
+      }
+    })
+}
+
+const fetchAvailableFrontends = ({ credentials }) => {
+  return fetch(PLEROMA_ADMIN_FRONTENDS_URL, {
+    headers: authHeaders(credentials)
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        return {
+          error: response
+        }
+      }
+    })
+}
+
+const pushInstanceDBConfig = ({ credentials, payload }) => {
+  return fetch(PLEROMA_ADMIN_CONFIG_URL, {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      ...authHeaders(credentials)
+    },
+    method: 'POST',
+    body: JSON.stringify(payload)
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        return {
+          error: response
+        }
+      }
+    })
+}
+
+const installFrontend = ({ credentials, payload }) => {
+  return fetch(PLEROMA_ADMIN_FRONTENDS_INSTALL_URL, {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      ...authHeaders(credentials)
+    },
+    method: 'POST',
+    body: JSON.stringify(payload)
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        return {
+          error: response
+        }
+      }
+    })
+}
+
+const fetchScrobbles = ({ accountId, limit = 1 }) => {
+  let url = PLEROMA_SCROBBLES_URL(accountId)
+  const params = [['limit', limit]]
+  const queryString = map(params, (param) => `${param[0]}=${param[1]}`).join('&')
+  url += `?${queryString}`
+  return fetch(url, {})
+    .then((response) => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        return {
+          error: response
+        }
+      }
+    })
+}
+
+const deleteEmojiPack = ({ name }) => {
+  return fetch(PLEROMA_EMOJI_PACK_URL(name), { method: 'DELETE' })
+}
+
+const reloadEmoji = () => {
+  return fetch(PLEROMA_EMOJI_RELOAD_URL, { method: 'POST' })
+}
+
+const importEmojiFromFS = () => {
+  return fetch(PLEROMA_EMOJI_IMPORT_FS_URL)
+}
+
+const createEmojiPack = ({ name }) => {
+  return fetch(PLEROMA_EMOJI_PACK_URL(name), { method: 'POST' })
+}
+
+const listEmojiPacks = ({ page, pageSize }) => {
+  return fetch(PLEROMA_EMOJI_PACKS_URL(page, pageSize))
+}
+
+const listRemoteEmojiPacks = ({ instance, page, pageSize }) => {
+  if (!instance.startsWith('http')) {
+    instance = 'https://' + instance
+  }
+
+  return fetch(
+    PLEROMA_EMOJI_PACKS_LS_REMOTE_URL(instance, page, pageSize),
+    {
+      headers: { 'Content-Type': 'application/json' }
+    }
+  )
+}
+
+const downloadRemoteEmojiPack = ({ instance, packName, as }) => {
+  return fetch(
+    PLEROMA_EMOJI_PACKS_DL_REMOTE_URL,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        url: instance, name: packName, as
+      })
+    }
+  )
+}
+
+const saveEmojiPackMetadata = ({ name, newData }) => {
+  return fetch(
+    PLEROMA_EMOJI_PACK_URL(name),
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ metadata: newData })
+    }
+  )
+}
+
+const addNewEmojiFile = ({ packName, file, shortcode, filename }) => {
+  const data = new FormData()
+  if (filename.trim() !== '') { data.set('filename', filename) }
+  if (shortcode.trim() !== '') { data.set('shortcode', shortcode) }
+  data.set('file', file)
+
+  return fetch(
+    PLEROMA_EMOJI_UPDATE_FILE_URL(packName),
+    { method: 'POST', body: data }
+  )
+}
+
+const updateEmojiFile = ({ packName, shortcode, newShortcode, newFilename, force }) => {
+  return fetch(
+    PLEROMA_EMOJI_UPDATE_FILE_URL(packName),
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ shortcode, new_shortcode: newShortcode, new_filename: newFilename, force })
+    }
+  )
+}
+
+const deleteEmojiFile = ({ packName, shortcode }) => {
+  return fetch(`${PLEROMA_EMOJI_UPDATE_FILE_URL(packName)}&shortcode=${shortcode}`, { method: 'DELETE' })
+}
+
+const fetchBookmarkFolders = ({ credentials }) => {
+  const url = PLEROMA_BOOKMARK_FOLDERS_URL
+  return fetch(url, { headers: authHeaders(credentials) })
+    .then((data) => data.json())
+}
+
+const createBookmarkFolder = ({ name, emoji, credentials }) => {
+  const url = PLEROMA_BOOKMARK_FOLDERS_URL
+  const headers = authHeaders(credentials)
+  headers['Content-Type'] = 'application/json'
+
+  return fetch(url, {
+    headers,
+    method: 'POST',
+    body: JSON.stringify({ name, emoji })
+  }).then((data) => data.json())
+}
+
+const updateBookmarkFolder = ({ folderId, name, emoji, credentials }) => {
+  const url = PLEROMA_BOOKMARK_FOLDER_URL(folderId)
+  const headers = authHeaders(credentials)
+  headers['Content-Type'] = 'application/json'
+
+  return fetch(url, {
+    headers,
+    method: 'PATCH',
+    body: JSON.stringify({ name, emoji })
+  }).then((data) => data.json())
+}
+
+const deleteBookmarkFolder = ({ folderId, credentials }) => {
+  const url = PLEROMA_BOOKMARK_FOLDER_URL(folderId)
+  return fetch(url, {
+    method: 'DELETE',
+    headers: authHeaders(credentials)
+  })
+}
+
 const apiService = {
   verifyCredentials,
   fetchTimeline,
@@ -1697,8 +1969,6 @@ const apiService = {
   fetchMutes,
   muteUser,
   unmuteUser,
-  subscribeUser,
-  unsubscribeUser,
   fetchBlocks,
   fetchOAuthTokens,
   revokeOAuthToken,
@@ -1772,7 +2042,28 @@ const apiService = {
   postAnnouncement,
   editAnnouncement,
   deleteAnnouncement,
-  adminFetchAnnouncements
+  fetchScrobbles,
+  adminFetchAnnouncements,
+  fetchInstanceDBConfig,
+  fetchInstanceConfigDescriptions,
+  fetchAvailableFrontends,
+  pushInstanceDBConfig,
+  installFrontend,
+  importEmojiFromFS,
+  reloadEmoji,
+  listEmojiPacks,
+  createEmojiPack,
+  deleteEmojiPack,
+  saveEmojiPackMetadata,
+  addNewEmojiFile,
+  updateEmojiFile,
+  deleteEmojiFile,
+  listRemoteEmojiPacks,
+  downloadRemoteEmojiPack,
+  fetchBookmarkFolders,
+  createBookmarkFolder,
+  updateBookmarkFolder,
+  deleteBookmarkFolder
 }
 
 export default apiService

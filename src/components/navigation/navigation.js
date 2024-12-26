@@ -1,11 +1,16 @@
+// routes that take :username property
 export const USERNAME_ROUTES = new Set([
-  'bookmarks',
   'dms',
   'interactions',
   'notifications',
   'chat',
-  'chats',
-  'user-profile'
+  'chats'
+])
+
+// routes that take :name property
+export const NAME_ROUTES = new Set([
+  'user-profile',
+  'legacy-user-profile'
 ])
 
 export const TIMELINES = {
@@ -32,7 +37,8 @@ export const TIMELINES = {
   bookmarks: {
     route: 'bookmarks',
     icon: 'bookmark',
-    label: 'nav.bookmarks'
+    label: 'nav.bookmarks',
+    criteria: ['!supportsBookmarkFolders']
   },
   favorites: {
     routeObject: { name: 'user-profile', query: { tab: 'favorites' } },
@@ -79,4 +85,24 @@ export const ROOT_ITEMS = {
     badgeGetter: 'unreadAnnouncementCount',
     criteria: ['announcements']
   }
+}
+
+export function routeTo (item, currentUser) {
+  if (!item.route && !item.routeObject) return null
+
+  let route
+
+  if (item.routeObject) {
+    route = item.routeObject
+  } else {
+    route = { name: (item.anon || currentUser) ? item.route : item.anonRoute }
+  }
+
+  if (USERNAME_ROUTES.has(route.name)) {
+    route.params = { username: currentUser.screen_name }
+  } else if (NAME_ROUTES.has(route.name)) {
+    route.params = { name: currentUser.screen_name }
+  }
+
+  return route
 }

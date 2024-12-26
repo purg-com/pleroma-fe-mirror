@@ -28,8 +28,6 @@
 <script src="./still-image.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-
 .still-image {
   position: relative;
   line-height: 0;
@@ -58,18 +56,17 @@
   &.animated {
     &::before {
       zoom: var(--_still_image-label-scale, 1);
-      content: 'gif';
+      content: "gif";
       position: absolute;
       line-height: 1;
       font-size: 0.7em;
       top: 0.5em;
       left: 0.5em;
-      background: rgba(127, 127, 127, 0.5);
+      background: rgb(127 127 127 / 50%);
       color: #fff;
       display: block;
       padding: 2px 4px;
-      border-radius: $fallback--tooltipRadius;
-      border-radius: var(--tooltipRadius, $fallback--tooltipRadius);
+      border-radius: var(--roundness);
       z-index: 2;
       visibility: var(--_still-image-label-visibility, visible);
     }

@@ -1,16 +1,31 @@
 import Timeline from '../timeline/timeline.vue'
 
 const Bookmarks = {
-  computed: {
-    timeline () {
-      return this.$store.state.statuses.timelines.bookmarks
-    }
+  created () {
+    this.$store.commit('clearTimeline', { timeline: 'bookmarks' })
+    this.$store.dispatch('startFetchingTimeline', { timeline: 'bookmarks', bookmarkFolderId: this.folderId || null })
   },
   components: {
     Timeline
   },
+  computed: {
+    folderId () {
+      return this.$route.params.id
+    },
+    timeline () {
+      return this.$store.state.statuses.timelines.bookmarks
+    }
+  },
+  watch: {
+    folderId () {
+      this.$store.commit('clearTimeline', { timeline: 'bookmarks' })
+      this.$store.dispatch('stopFetchingTimeline', 'bookmarks')
+      this.$store.dispatch('startFetchingTimeline', { timeline: 'bookmarks', bookmarkFolderId: this.folderId || null })
+    }
+  },
   unmounted () {
     this.$store.commit('clearTimeline', { timeline: 'bookmarks' })
+    this.$store.dispatch('stopFetchingTimeline', 'bookmarks')
   }
 }
 

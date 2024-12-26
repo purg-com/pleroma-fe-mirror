@@ -1,7 +1,6 @@
 <template>
   <OptionalRouterLink
     v-slot="{ isActive, href, navigate } = {}"
-    ass="ass"
     :to="routeTo"
   >
     <li
@@ -11,7 +10,7 @@
     >
       <component
         :is="routeTo ? 'a' : 'button'"
-        class="main-link button-unstyled"
+        class="main-link"
         :href="href"
         @click="navigate"
       >
@@ -23,11 +22,25 @@
             :icon="item.icon"
           />
         </span>
+        <img
+          v-if="item.iconEmojiUrl"
+          class="menu-icon iconEmoji iconEmoji-image"
+          :src="item.iconEmojiUrl"
+          :alt="item.iconEmoji"
+          :title="item.iconEmoji"
+        >
         <span
-          v-if="item.iconLetter"
-          class="icon iconLetter fa-scale-110 menu-icon"
-        >{{ item.iconLetter }}
+          v-else-if="item.iconEmoji"
+          class="menu-icon iconEmoji"
+        >
+          <span>
+            {{ item.iconEmoji }}
+          </span>
         </span>
+        <span
+          v-else-if="item.iconLetter"
+          class="icon iconLetter fa-scale-110 menu-icon"
+        >{{ item.iconLetter }}</span>
         <span class="label">
           {{ item.labelRaw || $t(item.label) }}
         </span>
@@ -35,7 +48,7 @@
       <slot />
       <div
         v-if="item.badgeGetter && getters[item.badgeGetter]"
-        class="badge badge-notification"
+        class="badge -notification"
       >
         {{ getters[item.badgeGetter] }}
       </div>
@@ -63,71 +76,71 @@
 <script src="./navigation_entry.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
+.NavigationEntry.menu-item {
+  --__line-height: 2.5em;
+  --__horizontal-gap: 0.5em;
+  --__vertical-gap: 0.4em;
 
-.NavigationEntry {
+  padding: 0;
   display: flex;
-  box-sizing: border-box;
   align-items: baseline;
-  height: 3.5em;
-  line-height: 3.5em;
-  padding: 0 1em;
-  width: 100%;
-  color: $fallback--link;
-  color: var(--link, $fallback--link);
 
-  .timelines-chevron {
-    margin-right: 0;
+  &[aria-expanded] {
+    padding-right: var(--__horizontal-gap);
   }
 
   .main-link {
+    line-height: var(--__line-height);
+    box-sizing: border-box;
     flex: 1;
+    padding: var(--__vertical-gap) var(--__horizontal-gap);
   }
 
   .menu-icon {
-    margin-right: 0.8em;
+    line-height: var(--__line-height);
+    padding: 0;
+    width: var(--__line-height);
+    margin-right: var(--__horizontal-gap);
+  }
+
+  .timelines-chevron {
+    line-height: var(--__line-height);
+    padding: 0;
+    width: var(--__line-height);
+    margin-right: 0;
   }
 
   .extra-button {
-    width: 3em;
+    line-height: var(--__line-height);
+    padding: 0;
+    width: var(--__line-height);
     text-align: center;
 
     &:last-child {
-      margin-right: -0.8em;
+      margin-right: calc(-1 * var(--__horizontal-gap));
     }
   }
 
-  &:hover {
-    background-color: $fallback--lightBg;
-    background-color: var(--selectedMenu, $fallback--lightBg);
-    color: $fallback--link;
-    color: var(--selectedMenuText, $fallback--link);
-    --faint: var(--selectedMenuFaintText, $fallback--faint);
-    --faintLink: var(--selectedMenuFaintLink, $fallback--faint);
-    --lightText: var(--selectedMenuLightText, $fallback--lightText);
+  .badge {
+    margin: 0 var(--__horizontal-gap);
+  }
 
-    .menu-icon {
-      --icon: var(--text, $fallback--icon);
+  .iconEmoji {
+    display: inline-block;
+    text-align: center;
+    object-fit: contain;
+    vertical-align: middle;
+    height: var(--__line-height);
+    width: var(--__line-height);
+
+    > span {
+      font-size: 1.5rem;
     }
   }
 
-  &.-active {
-    font-weight: bolder;
-    background-color: $fallback--lightBg;
-    background-color: var(--selectedMenu, $fallback--lightBg);
-    color: $fallback--text;
-    color: var(--selectedMenuText, $fallback--text);
-    --faint: var(--selectedMenuFaintText, $fallback--faint);
-    --faintLink: var(--selectedMenuFaintLink, $fallback--faint);
-    --lightText: var(--selectedMenuLightText, $fallback--lightText);
-
-    .menu-icon {
-      --icon: var(--text, $fallback--icon);
-    }
-
-    &:hover {
-      text-decoration: underline;
-    }
+  img.iconEmoji {
+    padding: 0.25rem;
+    box-sizing: border-box;
   }
 }
 </style>

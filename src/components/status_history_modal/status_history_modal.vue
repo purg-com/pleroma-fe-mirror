@@ -6,7 +6,9 @@
   >
     <div class="status-history-modal-panel panel">
       <div class="panel-heading">
-        {{ $t('status.status_history') }} ({{ historyCount }})
+        <h1 class="title">
+          {{ $t('status.status_history') }} ({{ historyCount }})
+        </h1>
       </div>
       <div class="panel-body">
         <div
@@ -32,6 +34,7 @@
 .modal-view.status-history-modal-view {
   align-items: flex-start;
 }
+
 .status-history-modal-panel {
   flex-shrink: 0;
   margin-top: 25%;

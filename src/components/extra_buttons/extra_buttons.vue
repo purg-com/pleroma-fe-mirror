@@ -2,6 +2,7 @@
   <Popover
     class="ExtraButtons"
     trigger="click"
+    :trigger-attrs="triggerAttrs"
     placement="top"
     :offset="{ y: 5 }"
     :bound-to="{ x: 'container' }"
@@ -10,10 +11,15 @@
     @close="onClose"
   >
     <template #content="{close}">
-      <div class="dropdown-menu">
+      <div
+        :id="`popup-menu-${randomSeed}`"
+        class="dropdown-menu"
+        role="menu"
+      >
         <button
           v-if="canMute && !status.thread_muted"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
+          role="menuitem"
           @click.prevent="muteConversation"
         >
           <FAIcon
@@ -23,7 +29,8 @@
         </button>
         <button
           v-if="canMute && status.thread_muted"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
+          role="menuitem"
           @click.prevent="unmuteConversation"
         >
           <FAIcon
@@ -33,7 +40,8 @@
         </button>
         <button
           v-if="!status.pinned && canPin"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
+          role="menuitem"
           @click.prevent="pinStatus"
           @click="close"
         >
@@ -44,7 +52,8 @@
         </button>
         <button
           v-if="status.pinned && canPin"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
+          role="menuitem"
           @click.prevent="unpinStatus"
           @click="close"
         >
@@ -56,7 +65,8 @@
         <template v-if="canBookmark">
           <button
             v-if="!status.bookmarked"
-            class="button-default dropdown-item dropdown-item-icon"
+            class="menu-item dropdown-item dropdown-item-icon"
+            role="menuitem"
             @click.prevent="bookmarkStatus"
             @click="close"
           >
@@ -67,7 +77,8 @@
           </button>
           <button
             v-if="status.bookmarked"
-            class="button-default dropdown-item dropdown-item-icon"
+            class="menu-item dropdown-item dropdown-item-icon"
+            role="menuitem"
             @click.prevent="unbookmarkStatus"
             @click="close"
           >
@@ -76,10 +87,15 @@
               icon="bookmark"
             /><span>{{ $t("status.unbookmark") }}</span>
           </button>
+          <StatusBookmarkFolderMenu
+            v-if="status.bookmarked && bookmarkFolders"
+            :status="status"
+          />
         </template>
         <button
           v-if="ownStatus && editingAvailable"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
+          role="menuitem"
           @click.prevent="editStatus"
           @click="close"
         >
@@ -90,7 +106,8 @@
         </button>
         <button
           v-if="isEdited && editingAvailable"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
+          role="menuitem"
           @click.prevent="showStatusHistory"
           @click="close"
         >
@@ -101,7 +118,8 @@
         </button>
         <button
           v-if="canDelete"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
+          role="menuitem"
           @click.prevent="deleteStatus"
           @click="close"
         >
@@ -111,7 +129,8 @@
           /><span>{{ $t("status.delete") }}</span>
         </button>
         <button
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
+          role="menuitem"
           @click.prevent="copyLink"
           @click="close"
         >
@@ -122,7 +141,8 @@
         </button>
         <a
           v-if="!status.is_local"
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
+          role="menuitem"
           title="Source"
           :href="status.external_url"
           target="_blank"
@@ -133,7 +153,8 @@
           /><span>{{ $t("status.external_source") }}</span>
         </a>
         <button
-          class="button-default dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item dropdown-item-icon"
+          role="menuitem"
           @click.prevent="reportStatus"
           @click="close"
         >
@@ -165,6 +186,18 @@
           />
         </FALayers>
       </span>
+      <teleport to="#modal">
+        <ConfirmModal
+          v-if="showingDeleteDialog"
+          :title="$t('status.delete_confirm_title')"
+          :cancel-text="$t('status.delete_confirm_cancel_button')"
+          :confirm-text="$t('status.delete_confirm_accept_button')"
+          @cancelled="hideDeleteStatusConfirmDialog"
+          @accepted="doDeleteStatus"
+        >
+          {{ $t('status.delete_confirm') }}
+        </ConfirmModal>
+      </teleport>
     </template>
   </Popover>
 </template>
@@ -172,28 +205,23 @@
 <script src="./extra_buttons.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-@import '../../_mixins.scss';
+@import "../../mixins";
 
 .ExtraButtons {
-  /* override of popover internal stuff */
-  .popover-trigger-button {
-    width: auto;
-  }
-
   .popover-trigger {
     position: static;
     padding: 10px;
     margin: -10px;
 
     &:hover .svg-inline--fa {
-      color: $fallback--text;
-      color: var(--text, $fallback--text);
+      color: var(--text);
     }
-
   }
 
   .popover-trigger-button {
+    /* override of popover internal stuff */
+    width: auto;
+
     @include unfocused-style {
       .focus-marker {
         visibility: hidden;

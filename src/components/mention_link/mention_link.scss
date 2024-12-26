@@ -1,10 +1,7 @@
-@import '../../_variables.scss';
-
 .MentionLink {
   position: relative;
   white-space: normal;
   display: inline;
-  color: var(--link);
   word-break: normal;
 
   & .new,
@@ -14,7 +11,7 @@
   }
 
   .mention-avatar {
-    border-radius: var(--avatarAltRadius, $fallback--avatarAltRadius);
+    border-radius: var(--roundness);
     width: 1.5em;
     height: 1.5em;
     vertical-align: middle;
@@ -59,9 +56,12 @@
         font-weight: 600;
       }
     }
+
     &.-has-selection {
-      color: var(--alertNeutralText, $fallback--text);
-      background-color: var(--alertNeutral, $fallback--fg);
+      --color: var(--selectionText);
+      --link: var(--selectionText);
+
+      background-color: var(--selectionBackground);
     }
 
     .at {
@@ -100,12 +100,8 @@
     }
   }
 
-  .full {
-    pointer-events: none;
-  }
-
   .serverName.-faded {
-    color: var(--faintLink, $fallback--link);
+    color: var(--linkFaint);
   }
 }
 

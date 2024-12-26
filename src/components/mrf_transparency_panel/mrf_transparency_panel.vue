@@ -227,6 +227,5 @@
 <script src="./mrf_transparency_panel.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-@import './mrf_transparency_panel.scss';
+@import "./mrf_transparency_panel";
 </style>

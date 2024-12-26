@@ -3,7 +3,9 @@
     <!-- Default panel contents -->
 
     <div class="panel-heading">
-      {{ $t('login.login') }}
+      <h1 class="title">
+        {{ $t('login.login') }}
+      </h1>
     </div>
 
     <div class="panel-body">
@@ -18,7 +20,7 @@
               id="username"
               v-model="user.username"
               :disabled="loggingIn"
-              class="form-control"
+              class="input form-control"
               :placeholder="$t('login.placeholder')"
             >
           </div>
@@ -29,7 +31,7 @@
               ref="passwordInput"
               v-model="user.password"
               :disabled="loggingIn"
-              class="form-control"
+              class="input form-control"
               type="password"
             >
           </div>
@@ -93,8 +95,6 @@
 <script src="./login_form.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-
 .login-form {
   display: flex;
   flex-direction: column;
@@ -110,7 +110,7 @@
   }
 
   .login-bottom {
-    margin-top: 1.0em;
+    margin-top: 1em;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -121,7 +121,7 @@
     display: flex;
     flex-direction: column;
     padding: 0.3em 0.5em 0.6em;
-    line-height:24px;
+    line-height: 24px;
   }
 
   .form-bottom {
@@ -142,7 +142,6 @@
 
   .error {
     text-align: center;
-
     animation-name: shakeError;
     animation-duration: 0.4s;
     animation-timing-function: ease-in-out;

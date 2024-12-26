@@ -33,7 +33,7 @@
           <div
             class="media status"
             :class="{ 'without-attachment': !hasAttachment, 'pending': chatViewItem.data.pending, 'error': chatViewItem.data.error }"
-            style="position: relative"
+            style="position: relative;"
             @mouseenter="hovered = true"
             @mouseleave="hovered = false"
           >
@@ -53,7 +53,7 @@
                 <template #content>
                   <div class="dropdown-menu">
                     <button
-                      class="button-default dropdown-item dropdown-item-icon"
+                      class="menu-item dropdown-item dropdown-item-icon"
                       @click="deleteMessage"
                     >
                       <FAIcon icon="times" /> {{ $t("chats.delete") }}
@@ -98,6 +98,6 @@
 
 <script src="./chat_message.js"></script>
 <style lang="scss">
-@import './chat_message.scss';
+@import "./chat_message";
 
 </style>

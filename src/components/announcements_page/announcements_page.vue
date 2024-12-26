@@ -1,9 +1,9 @@
 <template>
   <div class="panel panel-default announcements-page">
     <div class="panel-heading">
-      <span>
+      <h1 class="title">
         {{ $t('announcements.page_header') }}
-      </span>
+      </h1>
     </div>
     <div class="panel-body">
       <section
@@ -61,14 +61,13 @@
 <script src="./announcements_page.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .announcements-page {
   .post-form {
-    padding: var(--status-margin, $status-margin);
+    padding: var(--status-margin);
 
-    .heading, .body {
-      margin-bottom: var(--status-margin, $status-margin);
+    .heading,
+    .body {
+      margin-bottom: var(--status-margin);
     }
 
     .post-button {

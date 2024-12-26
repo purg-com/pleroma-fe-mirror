@@ -42,7 +42,6 @@
 <script src="./flash.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
 .Flash {
   display: inline-block;
   width: 100%;
@@ -78,7 +77,7 @@
 
   .hidden {
     display: none;
-    visibility: 'hidden';
+    visibility: "hidden";
   }
 }
 </style>

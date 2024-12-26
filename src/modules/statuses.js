@@ -12,11 +12,6 @@ import {
   isArray,
   omitBy
 } from 'lodash'
-import {
-  isStatusNotification,
-  isValidNotification,
-  maybeShowNotification
-} from '../services/notification_utils/notification_utils.js'
 import apiService from '../services/api/api.service.js'
 
 const emptyTl = (userId = 0) => ({
@@ -36,21 +31,12 @@ const emptyTl = (userId = 0) => ({
   flushMarker: 0
 })
 
-const emptyNotifications = () => ({
-  desktopNotificationSilence: true,
-  maxId: 0,
-  minId: Number.POSITIVE_INFINITY,
-  data: [],
-  idStore: {},
-  loading: false
-})
-
 export const defaultState = () => ({
   allStatuses: [],
+  scrobblesNextFetch: {},
   allStatusesObject: {},
   conversationsObject: {},
   maxId: 0,
-  notifications: emptyNotifications(),
   favorites: new Set(),
   timelines: {
     mentions: emptyTl(),
@@ -120,8 +106,24 @@ const sortTimeline = (timeline) => {
   return timeline
 }
 
+const getLatestScrobble = (state, user) => {
+  if (state.scrobblesNextFetch[user.id] && state.scrobblesNextFetch[user.id] > Date.now()) {
+    return
+  }
+
+  state.scrobblesNextFetch[user.id] = Date.now() + 24 * 60 * 60 * 1000
+  apiService.fetchScrobbles({ accountId: user.id }).then((scrobbles) => {
+    if (scrobbles.length > 0) {
+      user.latestScrobble = scrobbles[0]
+
+      state.scrobblesNextFetch[user.id] = Date.now() + 60 * 1000
+    }
+  })
+}
+
 // Add status to the global storages (arrays and objects maintaining statuses) except timelines
 const addStatusToGlobalStorage = (state, data) => {
+  getLatestScrobble(state, data.user)
   const result = mergeOrAdd(state.allStatuses, state.allStatusesObject, data)
   if (result.new) {
     // Add to conversation
@@ -135,22 +137,6 @@ const addStatusToGlobalStorage = (state, data) => {
     }
   }
   return result
-}
-
-// Remove status from the global storages (arrays and objects maintaining statuses) except timelines
-const removeStatusFromGlobalStorage = (state, status) => {
-  remove(state.allStatuses, { id: status.id })
-
-  // TODO: Need to remove from allStatusesObject?
-
-  // Remove possible notification
-  remove(state.notifications.data, ({ action: { id } }) => id === status.id)
-
-  // Remove from conversation
-  const conversationId = status.statusnet_conversation_id
-  if (state.conversationsObject[conversationId]) {
-    remove(state.conversationsObject[conversationId], { id: status.id })
-  }
 }
 
 const addNewStatuses = (state, { statuses, showImmediately = false, timeline, user = {}, noIdUpdate = false, userId, pagination = {} }) => {
@@ -229,6 +215,10 @@ const addNewStatuses = (state, { statuses, showImmediately = false, timeline, us
       timelineObject.newStatusCount += 1
     }
 
+    if (status.quote) {
+      addStatus(status.quote, /* showImmediately = */ false, /* addToTimeline = */ false)
+    }
+
     return status
   }
 
@@ -282,20 +272,6 @@ const addNewStatuses = (state, { statuses, showImmediately = false, timeline, us
         favoriteStatus(favorite)
       }
     },
-    deletion: (deletion) => {
-      const uri = deletion.uri
-      const status = find(allStatuses, { uri })
-      if (!status) {
-        return
-      }
-
-      removeStatusFromGlobalStorage(state, status)
-
-      if (timeline) {
-        remove(timelineObject.statuses, { uri })
-        remove(timelineObject.visibleStatuses, { uri })
-      }
-    },
     follow: (follow) => {
       // NOOP, it is known status but we don't do anything about it for now
     },
@@ -317,52 +293,6 @@ const addNewStatuses = (state, { statuses, showImmediately = false, timeline, us
   }
 }
 
-const updateNotificationsMinMaxId = (state, notification) => {
-  state.notifications.maxId = notification.id > state.notifications.maxId
-    ? notification.id
-    : state.notifications.maxId
-  state.notifications.minId = notification.id < state.notifications.minId
-    ? notification.id
-    : state.notifications.minId
-}
-
-const addNewNotifications = (state, { dispatch, notifications, older, visibleNotificationTypes, rootGetters, newNotificationSideEffects }) => {
-  each(notifications, (notification) => {
-    // If invalid notification, update ids but don't add it to store
-    if (!isValidNotification(notification)) {
-      console.error('Invalid notification:', notification)
-      updateNotificationsMinMaxId(state, notification)
-      return
-    }
-
-    if (isStatusNotification(notification.type)) {
-      notification.action = addStatusToGlobalStorage(state, notification.action).item
-      notification.status = notification.status && addStatusToGlobalStorage(state, notification.status).item
-    }
-
-    if (notification.type === 'pleroma:report') {
-      dispatch('addReport', notification.report)
-    }
-
-    if (notification.type === 'pleroma:emoji_reaction') {
-      dispatch('fetchEmojiReactionsBy', notification.status.id)
-    }
-
-    // Only add a new notification if we don't have one for the same action
-    // eslint-disable-next-line no-prototype-builtins
-    if (!state.notifications.idStore.hasOwnProperty(notification.id)) {
-      updateNotificationsMinMaxId(state, notification)
-
-      state.notifications.data.push(notification)
-      state.notifications.idStore[notification.id] = notification
-
-      newNotificationSideEffects(notification)
-    } else if (notification.seen) {
-      state.notifications.idStore[notification.id].seen = true
-    }
-  })
-}
-
 const removeStatus = (state, { timeline, userId }) => {
   const timelineObject = state.timelines[timeline]
   if (userId) {
@@ -375,7 +305,6 @@ const removeStatus = (state, { timeline, userId }) => {
 
 export const mutations = {
   addNewStatuses,
-  addNewNotifications,
   removeStatus,
   showNewStatuses (state, { timeline }) {
     const oldTimeline = (state.timelines[timeline])
@@ -396,9 +325,6 @@ export const mutations = {
   clearTimeline (state, { timeline, excludeUserId = false }) {
     const userId = excludeUserId ? state.timelines[timeline].userId : undefined
     state.timelines[timeline] = emptyTl(userId)
-  },
-  clearNotifications (state) {
-    state.notifications = emptyNotifications()
   },
   setFavorited (state, { status, value }) {
     const newStatus = state.allStatusesObject[status.id]
@@ -459,10 +385,12 @@ export const mutations = {
   setBookmarked (state, { status, value }) {
     const newStatus = state.allStatusesObject[status.id]
     newStatus.bookmarked = value
+    newStatus.bookmark_folder_id = status.bookmark_folder_id
   },
   setBookmarkedConfirm (state, { status }) {
     const newStatus = state.allStatusesObject[status.id]
     newStatus.bookmarked = status.bookmarked
+    if (status.pleroma) newStatus.bookmark_folder_id = status.pleroma.bookmark_folder
   },
   setDeleted (state, { status }) {
     const newStatus = state.allStatusesObject[status.id]
@@ -481,31 +409,6 @@ export const mutations = {
   setNsfw (state, { id, nsfw }) {
     const newStatus = state.allStatusesObject[id]
     newStatus.nsfw = nsfw
-  },
-  setNotificationsLoading (state, { value }) {
-    state.notifications.loading = value
-  },
-  setNotificationsSilence (state, { value }) {
-    state.notifications.desktopNotificationSilence = value
-  },
-  markNotificationsAsSeen (state) {
-    each(state.notifications.data, (notification) => {
-      notification.seen = true
-    })
-  },
-  markSingleNotificationAsSeen (state, { id }) {
-    const notification = find(state.notifications.data, n => n.id === id)
-    if (notification) notification.seen = true
-  },
-  dismissNotification (state, { id }) {
-    state.notifications.data = state.notifications.data.filter(n => n.id !== id)
-  },
-  dismissNotifications (state, { finder }) {
-    state.notifications.data = state.notifications.data.filter(n => finder)
-  },
-  updateNotification (state, { id, updater }) {
-    const notification = find(state.notifications.data, n => n.id === id)
-    notification && updater(notification)
   },
   queueFlush (state, { timeline, id }) {
     state.timelines[timeline].flushMarker = id
@@ -588,22 +491,8 @@ export const mutations = {
 const statuses = {
   state: defaultState(),
   actions: {
-    addNewStatuses ({ rootState, commit }, { statuses, showImmediately = false, timeline = false, noIdUpdate = false, userId, pagination }) {
+    addNewStatuses ({ rootState, commit, dispatch, state }, { statuses, showImmediately = false, timeline = false, noIdUpdate = false, userId, pagination }) {
       commit('addNewStatuses', { statuses, showImmediately, timeline, noIdUpdate, user: rootState.users.currentUser, userId, pagination })
-    },
-    addNewNotifications (store, { notifications, older }) {
-      const { commit, dispatch, rootGetters } = store
-
-      const newNotificationSideEffects = (notification) => {
-        maybeShowNotification(store, notification)
-      }
-      commit('addNewNotifications', { dispatch, notifications, older, rootGetters, newNotificationSideEffects })
-    },
-    setNotificationsLoading ({ rootState, commit }, { value }) {
-      commit('setNotificationsLoading', { value })
-    },
-    setNotificationsSilence ({ rootState, commit }, { value }) {
-      commit('setNotificationsSilence', { value })
     },
     fetchStatus ({ rootState, dispatch }, id) {
       return rootState.api.backendInteractor.fetchStatus({ id })
@@ -615,9 +504,19 @@ const statuses = {
     fetchStatusHistory ({ rootState, dispatch }, status) {
       return apiService.fetchStatusHistory({ status })
     },
-    deleteStatus ({ rootState, commit }, status) {
-      commit('setDeleted', { status })
+    deleteStatus ({ rootState, commit, dispatch }, status) {
       apiService.deleteStatus({ id: status.id, credentials: rootState.users.currentUser.credentials })
+        .then((_) => {
+          commit('setDeleted', { status })
+        })
+        .catch((e) => {
+          dispatch('pushGlobalNotice', {
+            level: 'error',
+            messageKey: 'status.delete_error',
+            messageArgs: [e.message],
+            timeout: 5000
+          })
+        })
     },
     deleteStatusById ({ rootState, commit }, id) {
       const status = rootState.statuses.allStatusesObject[id]
@@ -672,7 +571,7 @@ const statuses = {
     },
     bookmark ({ rootState, commit }, status) {
       commit('setBookmarked', { status, value: true })
-      rootState.api.backendInteractor.bookmarkStatus({ id: status.id })
+      rootState.api.backendInteractor.bookmarkStatus({ id: status.id, folder_id: status.bookmark_folder_id })
         .then(status => {
           commit('setBookmarkedConfirm', { status })
         })
@@ -689,31 +588,6 @@ const statuses = {
     },
     queueFlushAll ({ rootState, commit }) {
       commit('queueFlushAll')
-    },
-    markNotificationsAsSeen ({ rootState, commit }) {
-      commit('markNotificationsAsSeen')
-      apiService.markNotificationsAsSeen({
-        id: rootState.statuses.notifications.maxId,
-        credentials: rootState.users.currentUser.credentials
-      })
-    },
-    markSingleNotificationAsSeen ({ rootState, commit }, { id }) {
-      commit('markSingleNotificationAsSeen', { id })
-      apiService.markNotificationsAsSeen({
-        single: true,
-        id,
-        credentials: rootState.users.currentUser.credentials
-      })
-    },
-    dismissNotificationLocal ({ rootState, commit }, { id }) {
-      commit('dismissNotification', { id })
-    },
-    dismissNotification ({ rootState, commit }, { id }) {
-      commit('dismissNotification', { id })
-      rootState.api.backendInteractor.dismissNotification({ id })
-    },
-    updateNotification ({ rootState, commit }, { id, updater }) {
-      commit('updateNotification', { id, updater })
     },
     fetchFavsAndRepeats ({ rootState, commit }, id) {
       Promise.all([
@@ -747,7 +621,7 @@ const statuses = {
       )
     },
     fetchEmojiReactionsBy ({ rootState, commit }, id) {
-      rootState.api.backendInteractor.fetchEmojiReactions({ id }).then(
+      return rootState.api.backendInteractor.fetchEmojiReactions({ id }).then(
         emojiReactions => {
           commit('addEmojiReactionsBy', { id, emojiReactions, currentUser: rootState.users.currentUser })
         }
@@ -765,6 +639,7 @@ const statuses = {
       return store.rootState.api.backendInteractor.search2({ q, resolve, limit, offset, following, type })
         .then((data) => {
           store.commit('addNewUsers', data.accounts)
+          store.commit('addNewUsers', data.statuses.map(s => s.user).filter(u => u))
           store.commit('addNewStatuses', { statuses: data.statuses })
           return data
         })

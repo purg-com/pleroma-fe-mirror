@@ -1,4 +1,7 @@
 import Popover from '../popover/popover.vue'
+import genRandomSeed from '../../services/random_seed/random_seed.service.js'
+import ConfirmModal from '../confirm_modal/confirm_modal.vue'
+import StatusBookmarkFolderMenu from '../status_bookmark_folder_menu/status_bookmark_folder_menu.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faEllipsisH,
@@ -32,10 +35,16 @@ library.add(
 
 const ExtraButtons = {
   props: ['status'],
-  components: { Popover },
+  components: {
+    Popover,
+    ConfirmModal,
+    StatusBookmarkFolderMenu
+  },
   data () {
     return {
-      expanded: false
+      expanded: false,
+      showingDeleteDialog: false,
+      randomSeed: genRandomSeed()
     }
   },
   methods: {
@@ -46,10 +55,21 @@ const ExtraButtons = {
       this.expanded = false
     },
     deleteStatus () {
-      const confirmed = window.confirm(this.$t('status.delete_confirm'))
-      if (confirmed) {
-        this.$store.dispatch('deleteStatus', { id: this.status.id })
+      if (this.shouldConfirmDelete) {
+        this.showDeleteStatusConfirmDialog()
+      } else {
+        this.doDeleteStatus()
       }
+    },
+    doDeleteStatus () {
+      this.$store.dispatch('deleteStatus', { id: this.status.id })
+      this.hideDeleteStatusConfirmDialog()
+    },
+    showDeleteStatusConfirmDialog () {
+      this.showingDeleteDialog = true
+    },
+    hideDeleteStatusConfirmDialog () {
+      this.showingDeleteDialog = false
     },
     pinStatus () {
       this.$store.dispatch('pinStatus', this.status.id)
@@ -127,13 +147,28 @@ const ExtraButtons = {
     canBookmark () {
       return !!this.currentUser
     },
+    bookmarkFolders () {
+      return this.$store.state.instance.pleromaBookmarkFoldersAvailable
+    },
     statusLink () {
       return `${this.$store.state.instance.server}${this.$router.resolve({ name: 'conversation', params: { id: this.status.id } }).href}`
     },
     isEdited () {
       return this.status.edited_at !== null
     },
-    editingAvailable () { return this.$store.state.instance.editingAvailable }
+    editingAvailable () { return this.$store.state.instance.editingAvailable },
+    shouldConfirmDelete () {
+      return this.$store.getters.mergedConfig.modalOnDelete
+    },
+    triggerAttrs () {
+      return {
+        title: this.$t('status.more_actions'),
+        id: `popup-trigger-${this.randomSeed}`,
+        'aria-controls': `popup-menu-${this.randomSeed}`,
+        'aria-expanded': this.expanded,
+        'aria-haspopup': 'menu'
+      }
+    }
   }
 }
 

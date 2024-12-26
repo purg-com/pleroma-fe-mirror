@@ -90,7 +90,11 @@
     "heading": {
       "totp": "Authentification à double-facteur",
       "recovery": "Récupération de l'authentification à double-facteur"
-    }
+    },
+    "logout_confirm_title": "Confirmation de déconnexion",
+    "logout_confirm": "Souhaitez-vous vous déconnecter ?",
+    "logout_confirm_accept_button": "Déconnexion",
+    "logout_confirm_cancel_button": "Ne pas se déconnecter"
   },
   "media_modal": {
     "previous": "Précédent",
@@ -110,7 +114,7 @@
     "timeline": "Flux personnel",
     "twkn": "Réseau connu",
     "user_search": "Recherche de comptes",
-    "who_to_follow": "Suggestion de suivit",
+    "who_to_follow": "Suggestion de suivi",
     "preferences": "Préférences",
     "search": "Recherche",
     "administration": "Administration",
@@ -124,7 +128,11 @@
     "edit_pinned": "Éditer les éléments agrafés",
     "edit_finish": "Édition terminée",
     "mobile_sidebar": "(Dés)activer le panneau latéral",
-    "mobile_notifications_close": "Fermer les notifications"
+    "mobile_notifications_close": "Fermer les notifications",
+    "search_close": "Fermer la barre de recherche",
+    "announcements": "Annonces",
+    "mobile_notifications_mark_as_seen": "Marquer tout comme vu",
+    "quotes": "Citations"
   },
   "notifications": {
     "broken_favorite": "Message inconnu, recherche en cours…",
@@ -140,7 +148,13 @@
     "follow_request": "veut vous suivre",
     "error": "Erreur de chargement des notifications : {0}",
     "poll_ended": "Sondage terminé",
-    "submitted_report": "Rapport envoyé"
+    "submitted_report": "Rapport envoyé",
+    "unread_announcements": "{num} annonce non lue | {num} annonces non lues",
+    "unread_chats": "{num} message non lu | {num} messages non lus",
+    "configuration_tip_settings": "les préférences",
+    "unread_follow_requests": "{num} nouvelle demande de suivi | {num} nouvelles demandes de suivi",
+    "configuration_tip": "Vous pouvez personnaliser ce qui est affiché ici dans {theSettings}. {dismiss}",
+    "configuration_tip_dismiss": "Ne plus montrer"
   },
   "interactions": {
     "favs_repeats": "Partages et favoris",
@@ -154,7 +168,7 @@
     "new_status": "Poster un nouveau statut",
     "account_not_locked_warning": "Votre compte n'est pas {0}. N'importe qui peut vous suivre pour voir vos billets en Abonné·e·s uniquement.",
     "account_not_locked_warning_link": "verrouillé",
-    "attachments_sensitive": "Marquer les pièce-jointes comme sensible",
+    "attachments_sensitive": "Marquer les pièces jointes comme sensible",
     "content_type": {
       "text/plain": "Texte brut",
       "text/html": "HTML",
@@ -183,9 +197,13 @@
     "preview": "Prévisualisation",
     "media_description": "Description de la pièce-jointe",
     "post": "Post",
-    "edit_status": "Éditer le status",
+    "edit_status": "Éditer le statut",
     "edit_remote_warning": "Des instances distantes pourraient ne pas supporter l'édition et seront incapables de recevoir la nouvelle version de votre post.",
-    "edit_unsupported_warning": "Pleroma ne supporte pas l'édition de mentions ni de sondages."
+    "edit_unsupported_warning": "Pleroma ne supporte pas l'édition de mentions ni de sondages.",
+    "reply_option": "Répondre à ce statut",
+    "quote_option": "Citer ce statut",
+    "scope_notice_dismiss": "Fermer ce message",
+    "content_type_selection": "Format du statut"
   },
   "registration": {
     "bio": "Biographie",
@@ -205,14 +223,18 @@
       "email_required": "ne peut pas être laissé vide",
       "password_required": "ne peut pas être laissé vide",
       "password_confirmation_required": "ne peut pas être laissé vide",
-      "password_confirmation_match": "doit être identique au mot de passe"
+      "password_confirmation_match": "doit être identique au mot de passe",
+      "birthday_min_age": "doit être le ou avant le {date}",
+      "birthday_required": "ne peut pas être vide"
     },
     "reason_placeholder": "Cette instance modère les inscriptions manuellement.\nExpliquer ce qui motive votre inscription à l'administration.",
     "reason": "Motivation d'inscription",
     "register": "Enregistrer",
     "email_language": "Dans quelle langue voulez-vous recevoir les emails du server ?",
     "bio_optional": "Biographie (optionnelle)",
-    "email_optional": "Courriel (optionnel)"
+    "email_optional": "Courriel (optionnel)",
+    "birthday": "Anniversaire :",
+    "birthday_optional": "Anniversaire (optionnel) :"
   },
   "selectable_list": {
     "select_all": "Tout selectionner"
@@ -684,7 +706,64 @@
     "use_websockets": "Utiliser les websockets (mises à jour en temps réel)",
     "user_popover_avatar_action_zoom": "Zoomer sur l'avatar",
     "user_popover_avatar_action_open": "Ouvrir le profil",
-    "conversation_display_tree_quick": "Vue arborescente"
+    "conversation_display_tree_quick": "Vue arborescente",
+    "emoji_reactions_scale": "Taille des réactions",
+    "backup_running": "Cette sauvegarde est en cours, {number} enregistrement effectué. | Cette sauvegarde est en cours, {number} enregistrements effectués.",
+    "backup_failed": "Cette sauvegarde a échoué.",
+    "autocomplete_select_first": "Sélectionner automatiquement la première occurrence lorsque les résultats de l'autocomplétion sont disponibles",
+    "confirm_dialogs_unfollow": "arrête de suivre un utilisateur",
+    "confirm_dialogs_repeat": "reposte un statut",
+    "actor_type": "Ce compte est :",
+    "actor_type_Person": "un utilisateur normal",
+    "actor_type_Service": "un robot",
+    "actor_type_Group": "un groupe",
+    "confirm_dialogs_logout": "à la déconnexion",
+    "confirm_dialogs_approve_follow": "accepte un nouvel abonné",
+    "confirm_dialogs_deny_follow": "refuse un nouvel abonné",
+    "confirm_dialogs_remove_follower": "supprime un abonné",
+    "actor_type_description": "En marquant votre compte comme un groupe, vous répétez automatiquement les statuts qui le mentionnent.",
+    "add_language": "Ajouter une langue de remplacement",
+    "remove_language": "Supprimer",
+    "primary_language": "Langue principale :",
+    "fallback_language": "Langue de remplacement {index} :",
+    "confirm_dialogs": "Demande de confirmation quand",
+    "confirm_dialogs_block": "bloque un utilisateur",
+    "confirm_dialogs_mute": "mute un utilisateur",
+    "confirm_dialogs_delete": "supprime un statut",
+    "url": "URL",
+    "preview": "Aperçu",
+    "reset_value": "Réinitialiser",
+    "hard_reset_value_tooltip": "Supprime le réglage du stockage, force l'utilisation de la valeur par défaut",
+    "reset_value_tooltip": "Réinitialiser le brouillon",
+    "hard_reset_value": "Remise à zéro",
+    "hide_actor_type_indication": "Cacher le type (robots, groupes, etc.) dans les status",
+    "notification_extra_follow_requests": "Afficher les nouvelles demandes de suivi",
+    "user_popover_avatar_action": "Action du clic sur l'avatar",
+    "user_popover_avatar_action_close": "Fermer la fenêtre contextuelle",
+    "notification_setting_ignore_inactionable_seen": "Ignorer les status de lecture des notifications non actionnables (favoris, répétitions, etc)",
+    "notification_setting_ignore_inactionable_seen_tip": "Ceci ne marquera pas ces notifications comme lues, et vous recevrez encore les notifications de bureau si vous le décidez",
+    "notification_setting_unseen_at_top": "Afficher les notifications non lues au-dessus des autres",
+    "notification_setting_filters_chrome_push": "Sur certains navigateurs (chrome), il peut être impossible de filtrer complètement les notifications par type lorsqu'elles arrivent",
+    "enable_web_push_always_show": "Toujours afficher les notifications web",
+    "commit_value": "Sauvegarder",
+    "hide_scrobbles": "Masquer les scrobbles",
+    "notification_setting_annoyance": "Agacement",
+    "notification_setting_drawer_marks_as_seen": "Fermer le tiroir marque toutes les notifications comme lues (mobile)",
+    "commit_value_tooltip": "Les valeurs ne sont pas sauvegardées, appuyez sur ce bouton pour soumettre vos changements",
+    "birthday": {
+      "show_birthday": "Afficher mon anniversaire",
+      "label": "Anniversaire"
+    },
+    "notification_visibility_native_notifications": "Afficher une notification native",
+    "notification_visibility_follow_requests": "Demandes de suivi",
+    "notification_visibility_reports": "Rapports",
+    "notification_extra_chats": "Afficher les discussions non lues",
+    "notification_extra_announcements": "Afficher les annonces non lues",
+    "notification_extra_tip": "Afficher les astuces de personnalisation pour les notifications extras",
+    "enable_web_push_always_show_tip": "Certains navigateurs (Chromium, Chrome) exigent que les messages push donnent toujours lieu à une notification, sinon le message générique \"Le site web a été mis à jour en arrière-plan\" s'affiche ; activez cette option pour empêcher l'affichage de cette notification, car Chrome semble masquer les notifications push si l'onglet est au centre de l'attention. Cela peut entraîner l'affichage de notifications en double sur d'autres navigateurs.",
+    "user_popover_avatar_overlay": "Afficher la fenêtre contextuelle sur l'avatar de l'utilisateur",
+    "notification_visibility_in_column": "Afficher la colonne / le tiroir de notifications",
+    "notification_show_extra": "Afficher les extras dans la colonne de notifications"
   },
   "timeline": {
     "collapse": "Fermer",
@@ -758,7 +837,20 @@
     "show_all_conversation": "Montrer tout le fil ({numStatus} autre message) | Montrer tout le fil ({numStatus} autre messages)",
     "edit": "Éditer le status",
     "edited_at": "(dernière édition {time})",
-    "status_history": "Historique du status"
+    "status_history": "Historique du status",
+    "delete_error": "Erreur de suppression du statut : {0}",
+    "repeat_confirm": "Voulez-vous réellement reposter ce statut ?",
+    "reaction_count_label": "{num} personne a réagi | {num} personnes ont réagi",
+    "repeat_confirm_cancel_button": "Ne pas reposter",
+    "hide_quote": "Masquer les status cités",
+    "display_quote": "Afficher les status cités",
+    "invisible_quote": "Citation de statut non disponible : {link}",
+    "delete_confirm_title": "Confirmer la suppression",
+    "more_actions": "Plus d'action sur ce statut",
+    "delete_confirm_cancel_button": "Conserver",
+    "repeat_confirm_title": "Confirmer reposte",
+    "repeat_confirm_accept_button": "Reposter",
+    "delete_confirm_accept_button": "Supprimer"
   },
   "user_card": {
     "approve": "Accepter",
@@ -828,7 +920,39 @@
     "edit_profile": "Éditer le profil",
     "deactivated": "Désactivé",
     "follow_cancel": "Annuler la requête",
-    "remove_follower": "Retirer l'abonné·e"
+    "remove_follower": "Retirer l'abonné·e",
+    "remove_follower_confirm_accept_button": "Supprimer",
+    "approve_confirm_cancel_button": "Ne pas approuver",
+    "block_confirm_accept_button": "Bloquer",
+    "mute_confirm_title": "Confirmation de mise en sourdine",
+    "block_confirm_cancel_button": "Ne pas bloquer",
+    "unfollow_confirm": "Voulez-vous vraiment arrêter de suivre {user} ?",
+    "unfollow_confirm_accept_button": "Ne plus suivre",
+    "birthday": "Né(e) le {birthday}",
+    "edit_note": "Éditer note",
+    "edit_note_apply": "Appliquer",
+    "edit_note_cancel": "Abandonner",
+    "note": "Note",
+    "group": "Groupe",
+    "unfollow_confirm_title": "Confirmer l'arrêt de suivi",
+    "block_confirm_title": "Confirmer le blocage",
+    "deny_confirm_accept_button": "Refuser",
+    "deny_confirm_cancel_button": "Ne pas refuser",
+    "deny_confirm": "Voulez-vous refuser la demande de suivi de {user} ?",
+    "deny_confirm_title": "Refuser la confirmation",
+    "remove_follower_confirm_cancel_button": "Conserver",
+    "mute_duration_prompt": "Mettre cet utilisateur en sourdine pour (0 pour une durée indéterminée) :",
+    "remove_follower_confirm_title": "Confirmation de suppression d'utilisateur",
+    "note_blank": "(Aucun)",
+    "mute_confirm": "Voulez-vous vraiment mettre {user} en sourdine ?",
+    "mute_confirm_accept_button": "Mettre en sourdine",
+    "mute_confirm_cancel_button": "Ne pas mettre en sourdine",
+    "remove_follower_confirm": "Voulez-vous vraiment supprimer {user} de vos abonnés ?",
+    "approve_confirm_accept_button": "Approuver",
+    "approve_confirm": "Voulez-vous approuver la demande de suivi de {user} ?",
+    "block_confirm": "Voulez-vous vraiment bloquer {user} ?",
+    "approve_confirm_title": "Approuver confirmation",
+    "unfollow_confirm_cancel_button": "Ne pas arrêter le suivi"
   },
   "user_profile": {
     "timeline_title": "Flux du compte",
@@ -857,7 +981,10 @@
     "add_reaction": "Ajouter une réaction",
     "accept_follow_request": "Accepter la demande de suivit",
     "reject_follow_request": "Rejeter la demande de suivit",
-    "bookmark": "Favori"
+    "bookmark": "Favori",
+    "autocomplete_available": "{number} résultat est disponible. Utilisez les touches haut et bas pour naviguer à l'intérieur. | {number} résultats sont disponibles. Utilisez les touches haut et bas pour naviguer à l'intérieur.",
+    "toggle_expand": "Développer ou réduire la notification pour afficher le message dans son intégralité",
+    "toggle_mute": "Développer ou réduire la notification pour révéler le contenu en sourdine"
   },
   "upload": {
     "error": {
@@ -950,7 +1077,9 @@
       "symbols": "Symboles",
       "travel-and-places": "Voyages & lieux"
     },
-    "regional_indicator": "Indicateur régional {letter}"
+    "regional_indicator": "Indicateur régional {letter}",
+    "unpacked": "Émojis non catégorisés",
+    "hide_custom_emoji": "Masquer les émojis personnalisés"
   },
   "remote_user_resolver": {
     "error": "Non trouvé.",
@@ -1012,7 +1141,7 @@
     "person_talking": "{count} personnes discutant",
     "hashtags": "Mot-dièses",
     "people_talking": "{count} personnes discutant",
-    "no_results": "Aucun résultats",
+    "no_results": "Aucun résultat",
     "no_more_results": "Pas de résultats supplémentaires",
     "load_more": "Charger plus de résultats"
   },
@@ -1083,7 +1212,8 @@
     "update_changelog_here": "Liste compète des changements",
     "art_by": "Œuvre par {linkToArtist}",
     "big_update_content": "Nous n'avons pas fait de nouvelle version depuis un moment, les choses peuvent vous paraitre différentes de vos habitudes.",
-    "update_bugs": "Veuillez rapporter les problèmes sur {pleromaGitlab}, comme beaucoup de changements on été fait, même si nous testons entièrement et utilisons la version de dévelopement nous-même, nous avons pu en louper. Les retours et suggestions sont bienvenues sur ce que vous avez pu rencontrer, ou sur comment améliorer Pleroma (BE) et Pleroma-FE."
+    "update_bugs": "Veuillez rapporter les problèmes sur {pleromaGitlab}, comme beaucoup de changements on été fait, même si nous testons entièrement et utilisons la version de dévelopement nous-même, nous avons pu en louper. Les retours et suggestions sont bienvenues sur ce que vous avez pu rencontrer, ou sur comment améliorer Pleroma (BE) et Pleroma-FE.",
+    "big_update_title": "Soyez indulgent avec nous"
   },
   "unicode_domain_indicator": {
     "tooltip": "Ce domaine contient des caractères non ascii."
@@ -1097,5 +1227,158 @@
     "state_open": "Ouvert",
     "state_closed": "Fermé",
     "state_resolved": "Résolut"
+  },
+  "announcements": {
+    "page_header": "Annonces",
+    "title": "Annonce",
+    "mark_as_read_action": "Marquer comme lu",
+    "post_form_header": "Faire une annonce",
+    "post_placeholder": "Écrivez le contenu de l'annonce ici...",
+    "post_action": "Envoyer",
+    "post_error": "Erreur : {error}",
+    "close_error": "Fermer",
+    "delete_action": "Supprimer",
+    "start_time_prompt": "Heure de début : ",
+    "end_time_prompt": "Heure de fin : ",
+    "all_day_prompt": "L'événement dure toute la journée",
+    "inactive_message": "Cette annonce n'est pas active",
+    "published_time_display": "Publié le {time}",
+    "start_time_display": "Démarre à {time}",
+    "end_time_display": "Se termine à {time}",
+    "edit_action": "Modifier",
+    "submit_edit_action": "Envoyer",
+    "cancel_edit_action": "Annuler"
+  },
+  "admin_dash": {
+    "frontend": {
+      "success_installing_frontend": "Installation réussie de l'interface {version}",
+      "failure_installing_frontend": "Échec de l'installation de l'interface {version} : {reason}",
+      "default_frontend_unavail": "Les paramètres de l'interface ne sont pas disponibles, ils doivent être configurés dans la base de données",
+      "build_url": "Construction URL",
+      "reinstall": "Réinstaller",
+      "repository": "Lien du dépôt",
+      "versions": "Versions disponibles",
+      "default_frontend_tip": "L'interface par défaut sera affichée à tous les utilisateurs. Si vous décidez de quitter PleromaFE, vous devrez utiliser l'ancienne AdminFE buguée pour configurer votre instance jusqu'à ce que nous la remplacions.",
+      "is_default": "(Défaut)",
+      "is_default_custom": "(Défaut, version : {version})",
+      "install": "Installation",
+      "install_version": "Installation de la version {version}",
+      "more_install_options": "Plus d'options d'installation",
+      "more_default_options": "Plus d'options de paramétrages par défaut",
+      "set_default": "Définir la valeur par défaut",
+      "set_default_version": "Définir la version {version} comme version par défaut",
+      "wip_notice": "Veuillez noter que cette section est en cours de développement et que certaines fonctionnalités de l'interface ne sont pas implémentées côté serveur.",
+      "default_frontend": "Interface par défaut",
+      "available_frontends": "Disponible pour installation"
+    },
+    "temp_overrides": {
+      ":pleroma": {
+        ":instance": {
+          ":public": {
+            "label": "Cette instance est publique",
+            "description": "En désactivant cette option, toutes les API ne seront accessibles qu'aux utilisateurs connectés, ce qui rendra les chronologies publiques et fédérées inaccessibles aux visiteurs anonymes."
+          },
+          ":limit_to_local_content": {
+            "label": "Limitez la recherche au contenu local",
+            "description": "Désactive la recherche globale sur le réseau pour les utilisateurs non authentifiés (par défaut), tous les utilisateurs ou aucun"
+          },
+          ":description_limit": {
+            "label": "Limite",
+            "description": "Limite de nombre de caractères pour la description des fichiers joints"
+          },
+          ":background_image": {
+            "description": "Image de fond (principalement utilisé par PleromaFE)",
+            "label": "Image de fond d'écran"
+          }
+        }
+      }
+    },
+    "tabs": {
+      "emoji": "Émoji",
+      "limits": "Limites",
+      "frontends": "Interfaces",
+      "instance": "Instance",
+      "nodb": "Pas de configuration de base de données"
+    },
+    "instance": {
+      "kocaptcha": "Réglages KoCaptcha",
+      "access": "Accès à l'instance",
+      "restrict": {
+        "header": "Restreindre l'accès aux visiteurs anonymes",
+        "profiles": "Accès aux profils d'utilisateur",
+        "activities": "Accès aux status/activités",
+        "description": "Paramètre détaillé permettant d'autoriser/interdire l'accès à certains aspects de l'API. Par défaut (état indéterminé), l'accès est interdit si l'instance n'est pas publique ; si la case est cochée, l'accès est interdit même si l'instance est publique ; si la case n'est pas cochée, l'accès est autorisé même si l'instance est privée. Veuillez noter qu'un comportement inattendu peut se produire si certains paramètres sont définis, par exemple si l'accès au profil est désactivé, les messages s'afficheront sans les informations relatives au profil.",
+        "timelines": "Accès aux flux"
+      },
+      "registrations": "Inscription des utilisateurs",
+      "captcha_header": "CAPTCHA",
+      "instance": "Informations sur l'instance"
+    },
+    "emoji": {
+      "global_actions": "Actions globales",
+      "reload": "Recharger les émojis",
+      "importFS": "Importer les émojis depuis le système de fichiers",
+      "error": "Erreur : {0}",
+      "create_pack": "Créer un pack",
+      "delete_pack": "Supprimer un paquet",
+      "new_pack_name": "Renommer le pack",
+      "create": "Créer",
+      "emoji_packs": "Pack d'émojis",
+      "remote_packs": "Packs d'autres instances",
+      "do_list": "Liste",
+      "remote_pack_instance": "Instance du pack",
+      "emoji_pack": "Pack d'émoji",
+      "edit_pack": "Modifier le pack",
+      "description": "Description",
+      "homepage": "Page d'accueil",
+      "fallback_src": "Source de remplacement",
+      "fallback_sha256": "Remplacement SHA256",
+      "share": "Partager",
+      "save": "Sauvegarder",
+      "save_meta": "Sauvegarder les métadonnées",
+      "revert_meta": "Annuler métadonnées",
+      "delete": "Supprimer",
+      "revert": "Revenir en arrière",
+      "add_file": "Ajouter un fichier",
+      "adding_new": "Ajouter un nouvel émoji",
+      "shortcode": "Shortcode",
+      "filename": "Nom du fichier",
+      "new_filename": "Nom de fichier, laisser blanc pour inférer",
+      "delete_confirm": "Êtes-vous sûr de vouloir supprimer {0} ?",
+      "download_pack": "Télécharger pack",
+      "downloading_pack": "Télécharge {0}",
+      "download": "Téléchargement",
+      "download_as_name": "Nouveau nom",
+      "download_as_name_full": "Nouveau nom, laissez blanc pour réutiliser le précédent",
+      "files": "Fichiers",
+      "editing": "Édition de {0}",
+      "delete_title": "Supprimer ?",
+      "metadata_changed": "Métadonnées différentes de celles sauvegardées",
+      "emoji_changed": "Modifications du fichier émoji non sauvegardées, vérifier l'émoji surligné",
+      "replace_warning": "Vous allez REMPLACER le pack local qui porte ce nom"
+    },
+    "window_title": "Administration",
+    "nodb": {
+      "heading": "La configuration de base de données est désactivée",
+      "documentation": "documentation",
+      "text2": "La majorité des options de configuration ne seront pas disponibles.",
+      "text": "Vous devez modifier les fichiers de configuration du serveur pour que {property} soit définie à {value}, plus de détails dans la {documentation}."
+    },
+    "limits": {
+      "arbitrary_limits": "Limites arbitraires",
+      "posts": "Limites des statuts",
+      "uploads": "Limites des pièces jointes",
+      "users": "Limites du profil d'utilisateur",
+      "profile_fields": "Limites des champs du profile",
+      "user_uploads": "Limites des médias du profil"
+    },
+    "captcha": {
+      "native": "Natif",
+      "kocaptcha": "KoCaptcha"
+    },
+    "wip_notice": "Ce tableau de bord d'administration est expérimental et en cours de développement, {adminFeLink}.",
+    "old_ui_link": "L'ancien espace d'administration est disponible ici",
+    "reset_all": "Tout réinitialiser",
+    "commit_all": "Tout sauvegarder"
   }
 }

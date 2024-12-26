@@ -24,6 +24,8 @@ const fetchAndUpdate = ({
   showImmediately = false,
   userId = false,
   listId = false,
+  statusId = false,
+  bookmarkFolderId = false,
   tag = false,
   until,
   since
@@ -47,6 +49,8 @@ const fetchAndUpdate = ({
 
   args.userId = userId
   args.listId = listId
+  args.statusId = statusId
+  args.bookmarkFolderId = bookmarkFolderId
   args.tag = tag
   args.withMuted = !hideMutedPosts
   if (loggedIn && ['friends', 'public', 'publicAndExternal'].includes(timeline)) {
@@ -78,15 +82,16 @@ const fetchAndUpdate = ({
     })
 }
 
-const startFetching = ({ timeline = 'friends', credentials, store, userId = false, listId = false, tag = false }) => {
+const startFetching = ({ timeline = 'friends', credentials, store, userId = false, listId = false, statusId = false, bookmarkFolderId = false, tag = false }) => {
   const rootState = store.rootState || store.state
   const timelineData = rootState.statuses.timelines[camelCase(timeline)]
   const showImmediately = timelineData.visibleStatuses.length === 0
   timelineData.userId = userId
   timelineData.listId = listId
-  fetchAndUpdate({ timeline, credentials, store, showImmediately, userId, listId, tag })
+  timelineData.bookmarkFolderId = bookmarkFolderId
+  fetchAndUpdate({ timeline, credentials, store, showImmediately, userId, listId, statusId, bookmarkFolderId, tag })
   const boundFetchAndUpdate = () =>
-    fetchAndUpdate({ timeline, credentials, store, userId, listId, tag })
+    fetchAndUpdate({ timeline, credentials, store, userId, listId, statusId, bookmarkFolderId, tag })
   return promiseInterval(boundFetchAndUpdate, 10000)
 }
 const timelineFetcher = {

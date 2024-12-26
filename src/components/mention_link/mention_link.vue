@@ -22,7 +22,7 @@
         :class="classnames"
       >
         <a
-          class="short button-unstyled"
+          class="short"
           :class="{ '-with-tooltip': shouldShowTooltip }"
           :href="url"
           @click.prevent="onClick"

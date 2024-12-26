@@ -10,11 +10,11 @@
           <button
             v-for="list in lists"
             :key="list.id"
-            class="button-default dropdown-item"
+            class="menu-item dropdown-item"
             @click="toggleList(list.id)"
           >
             <span
-              class="menu-checkbox"
+              class="input menu-checkbox"
               :class="{ 'menu-checkbox-checked': list.inList }"
             />
             {{ list.title }}
@@ -22,7 +22,7 @@
         </div>
       </template>
       <template #trigger>
-        <button class="btn button-default dropdown-item -has-submenu">
+        <button class="menu-item dropdown-item -has-submenu">
           {{ $t('lists.manage_lists') }}
           <FAIcon
             class="chevron-icon"

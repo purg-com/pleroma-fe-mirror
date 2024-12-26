@@ -1,12 +1,10 @@
-@import '../../_variables.scss';
-
 .chat-message-wrapper {
-
   &.hovered-message-chain {
     .animated.Avatar {
       canvas {
         display: none;
       }
+
       img {
         visibility: visible;
       }
@@ -27,11 +25,6 @@
 
   .menu-icon {
     cursor: pointer;
-
-    &:hover, .extra-button-popover.open & {
-      color: $fallback--text;
-      color: var(--text, $fallback--text);
-    }
   }
 
   .popover {
@@ -54,39 +47,25 @@
     width: 32px;
   }
 
-  .link-preview, .attachments {
+  .link-preview,
+  .attachments {
     margin-bottom: 1em;
   }
 
-  .chat-message-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    max-width: 80%;
-    min-width: 10em;
-    width: 100%;
-
-    &.with-media {
-      width: 100%;
-
-      .status {
-        width: 100%;
-      }
-    }
-  }
-
   .status {
-    border-radius: $fallback--chatMessageRadius;
-    border-radius: var(--chatMessageRadius, $fallback--chatMessageRadius);
+    background-color: var(--background);
+    color: var(--text);
+    border-radius: var(--roundness);
     display: flex;
     padding: 0.75em;
+    border: 1px solid var(--border);
   }
 
   .created-at {
     position: relative;
     float: right;
     font-size: 0.8em;
-    margin: -1em 0 -0.5em 0;
+    margin: -1em 0 -0.5em;
     font-style: italic;
     opacity: 0.8;
   }
@@ -103,56 +82,33 @@
   }
 
   .pending {
-    .status-content.media-body, .created-at {
+    .status-content.media-body,
+    .created-at {
       color: var(--faint);
     }
   }
 
   .error {
-    .status-content.media-body, .created-at {
-      color: $fallback--cRed;
-      color: var(--badgeNotification, $fallback--cRed);
+    .status-content.media-body,
+    .created-at {
+      color: var(--badgeNotification);
     }
   }
 
-  .incoming {
-    a {
-      color: var(--chatMessageIncomingLink, $fallback--link);
-    }
-
-    .status {
-      color: var(--chatMessageIncomingText, $fallback--text);
-      background-color: var(--chatMessageIncomingBg, $fallback--bg);
-      border: 1px solid var(--chatMessageIncomingBorder, --border);
-    }
-
-    .created-at {
-      a {
-        color: var(--chatMessageIncomingText, $fallback--text);
-      }
-    }
-
-    .chat-message-menu {
-      left: 0.4rem;
-    }
+  .chat-message-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 80%;
+    min-width: 10em;
+    width: 100%;
   }
 
   .outgoing {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-flow: row wrap;
     align-content: end;
     justify-content: flex-end;
-
-    a {
-      color: var(--chatMessageOutgoingLink, $fallback--link);
-    }
-
-    .status {
-      color: var(--chatMessageOutgoingText, $fallback--text);
-      background-color: var(--chatMessageOutgoingBg, $fallback--lightBg);
-      border: 1px solid var(--chatMessageOutgoingBorder, --lightBg);
-    }
 
     .chat-message-inner {
       align-items: flex-end;
@@ -163,10 +119,23 @@
     }
   }
 
+  .incoming {
+    .chat-message-menu {
+      left: 0.4rem;
+    }
+  }
+
+  .chat-message-inner.with-media {
+    width: 100%;
+
+    .status {
+      width: 100%;
+    }
+  }
+
   .visible {
     opacity: 1;
   }
-
 }
 
 .chat-message-date-separator {
@@ -174,6 +143,5 @@
   margin: 1.4em 0;
   font-size: 0.9em;
   user-select: none;
-  color: $fallback--text;
-  color: var(--faintedText, $fallback--text);
+  color: var(--textFaint);
 }

@@ -5,7 +5,7 @@
  * @return {String} - tagname, i.e. "div"
  */
 export const getTagName = (tag) => {
-  const result = /(?:<\/(\w+)>|<(\w+)\s?.*?\/?>)/gi.exec(tag)
+  const result = /(?:<\/(\w+)>|<(\w+)\s?.*?\/?>)/gis.exec(tag)
   return result && (result[1] || result[2])
 }
 
@@ -22,7 +22,7 @@ export const getAttrs = (tag, filter) => {
     .replace(new RegExp('^' + getTagName(tag)), '')
     .replace(/\/?$/, '')
     .trim()
-  const attrs = Array.from(innertag.matchAll(/([a-z0-9-]+)(?:=("[^"]+?"|'[^']+?'))?/gi))
+  const attrs = Array.from(innertag.matchAll(/([a-z]+[a-z0-9-]*)(?:=("[^"]+?"|'[^']+?'))?/gi))
     .map(([trash, key, value]) => [key, value])
     .map(([k, v]) => {
       if (!v) return [k, true]

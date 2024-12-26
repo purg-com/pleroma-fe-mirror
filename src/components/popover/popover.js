@@ -45,12 +45,19 @@ const Popover = {
     // Lets hover popover stay when clicking inside of it
     stayOnClick: Boolean,
 
+    // Use styled button (to avoid nested buttons)
+    normalButton: Boolean,
+
     triggerAttrs: {
       type: Object,
       default: {}
     }
   },
-  inject: ['popoversZLayer'], // override popover z layer
+  inject: { // override popover z layer
+    popoversZLayer: {
+      default: ''
+    }
+  },
   data () {
     return {
       // lockReEntry is a flag that is set when mouse cursor is leaving the popover's content

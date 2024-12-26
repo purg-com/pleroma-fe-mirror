@@ -1,6 +1,10 @@
 import SideDrawer from '../side_drawer/side_drawer.vue'
 import Notifications from '../notifications/notifications.vue'
-import { unseenNotificationsFromStore } from '../../services/notification_utils/notification_utils'
+import ConfirmModal from '../confirm_modal/confirm_modal.vue'
+import {
+  unseenNotificationsFromStore,
+  countExtraNotifications
+} from '../../services/notification_utils/notification_utils'
 import GestureService from '../../services/gesture_service/gesture_service'
 import NavigationPins from 'src/components/navigation/navigation_pins.vue'
 import { mapGetters } from 'vuex'
@@ -10,7 +14,8 @@ import {
   faBell,
   faBars,
   faArrowUp,
-  faMinus
+  faMinus,
+  faCheckDouble
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -18,19 +23,22 @@ library.add(
   faBell,
   faBars,
   faArrowUp,
-  faMinus
+  faMinus,
+  faCheckDouble
 )
 
 const MobileNav = {
   components: {
     SideDrawer,
     Notifications,
-    NavigationPins
+    NavigationPins,
+    ConfirmModal
   },
   data: () => ({
     notificationsCloseGesture: undefined,
     notificationsOpen: false,
-    notificationsAtTop: true
+    notificationsAtTop: true,
+    showingConfirmLogout: false
   }),
   created () {
     this.notificationsCloseGesture = GestureService.swipeGesture(
@@ -47,7 +55,13 @@ const MobileNav = {
       return unseenNotificationsFromStore(this.$store)
     },
     unseenNotificationsCount () {
+      return this.unseenNotifications.length + countExtraNotifications(this.$store)
+    },
+    unseenCount () {
       return this.unseenNotifications.length
+    },
+    unseenCountBadgeText () {
+      return `${this.unseenCount ? this.unseenCount : ''}`
     },
     hideSitename () { return this.$store.state.instance.hideSitename },
     sitename () { return this.$store.state.instance.name },
@@ -57,7 +71,14 @@ const MobileNav = {
     ...mapGetters(['unreadChatCount', 'unreadAnnouncementCount']),
     chatsPinned () {
       return new Set(this.$store.state.serverSideStorage.prefsStorage.collections.pinnedNavItems).has('chats')
-    }
+    },
+    shouldConfirmLogout () {
+      return this.$store.getters.mergedConfig.modalOnLogout
+    },
+    closingDrawerMarksAsSeen () {
+      return this.$store.getters.mergedConfig.closingDrawerMarksAsSeen
+    },
+    ...mapGetters(['unreadChatCount'])
   },
   methods: {
     toggleMobileSidebar () {
@@ -71,7 +92,7 @@ const MobileNav = {
         // make sure to mark notifs seen only when the notifs were open and not
         // from close-calls.
         this.notificationsOpen = false
-        if (markRead) {
+        if (markRead && this.closingDrawerMarksAsSeen) {
           this.markNotificationsAsSeen()
         }
       }
@@ -88,12 +109,25 @@ const MobileNav = {
     scrollMobileNotificationsToTop () {
       this.$refs.mobileNotifications.scrollTo(0, 0)
     },
+    showConfirmLogout () {
+      this.showingConfirmLogout = true
+    },
+    hideConfirmLogout () {
+      this.showingConfirmLogout = false
+    },
     logout () {
+      if (!this.shouldConfirmLogout) {
+        this.doLogout()
+      } else {
+        this.showConfirmLogout()
+      }
+    },
+    doLogout () {
       this.$router.replace('/main/public')
       this.$store.dispatch('logout')
+      this.hideConfirmLogout()
     },
     markNotificationsAsSeen () {
-      // this.$refs.notifications.markAsSeen()
       this.$store.dispatch('markNotificationsAsSeen')
     },
     onScroll ({ target: { scrollTop, clientHeight, scrollHeight } }) {

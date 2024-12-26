@@ -8,7 +8,7 @@
       :style="style"
       class="background-image"
     />
-    <div :class="onClose ? '' : panel-heading -flexible-height">
+    <div :class="onClose ? '' : 'panel-heading -flexible-height'">
       <div class="user-info">
         <div class="container">
           <a
@@ -113,21 +113,27 @@
               <template v-if="!hideBio">
                 <span
                   v-if="user.deactivated"
-                  class="alert user-role"
+                  class="alert neutral user-role"
                 >
                   {{ $t('user_card.deactivated') }}
                 </span>
                 <span
                   v-if="!!visibleRole"
-                  class="alert user-role"
+                  class="alert neutral user-role"
                 >
                   {{ $t(`general.role.${visibleRole}`) }}
                 </span>
                 <span
-                  v-if="user.bot"
-                  class="alert user-role"
+                  v-if="user.actor_type === 'Service'"
+                  class="alert neutral user-role"
                 >
                   {{ $t('user_card.bot') }}
+                </span>
+                <span
+                  v-if="user.actor_type === 'Group'"
+                  class="alert user-role"
+                >
+                  {{ $t('user_card.group') }}
                 </span>
               </template>
               <span v-if="user.locked">
@@ -160,14 +166,14 @@
               v-if="userHighlightType !== 'disabled'"
               :id="'userHighlightColorTx'+user.id"
               v-model="userHighlightColor"
-              class="userHighlightText"
+              class="input userHighlightText"
               type="text"
             >
             <input
               v-if="userHighlightType !== 'disabled'"
               :id="'userHighlightColor'+user.id"
               v-model="userHighlightColor"
-              class="userHighlightCl"
+              class="input userHighlightCl"
               type="color"
             >
             {{ ' ' }}
@@ -202,7 +208,7 @@
             />
             <template v-if="relationship.following">
               <ProgressButton
-                v-if="!relationship.subscribing"
+                v-if="!relationship.notifying"
                 class="btn button-default"
                 :click="subscribeUser"
                 :title="$t('user_card.subscribe')"
@@ -276,10 +282,7 @@
         />
       </div>
     </div>
-    <div
-      v-if="!hideBio"
-      class="panel-body"
-    >
+    <div v-if="!hideBio">
       <div
         v-if="!mergedConfig.hideUserStats && switcher"
         class="user-counts"
@@ -314,6 +317,53 @@
         :handle-links="true"
       />
     </div>
+    <teleport to="#modal">
+      <confirm-modal
+        v-if="showingConfirmMute"
+        :title="$t('user_card.mute_confirm_title')"
+        :confirm-text="$t('user_card.mute_confirm_accept_button')"
+        :cancel-text="$t('user_card.mute_confirm_cancel_button')"
+        @accepted="doMuteUser"
+        @cancelled="hideConfirmMute"
+      >
+        <i18n-t
+          keypath="user_card.mute_confirm"
+          tag="div"
+        >
+          <template #user>
+            <span
+              v-text="user.screen_name_ui"
+            />
+          </template>
+        </i18n-t>
+        <div
+          class="mute-expiry"
+        >
+          <label>
+            {{ $t('user_card.mute_duration_prompt') }}
+          </label>
+          <input
+            v-model="muteExpiryAmount"
+            type="number"
+            class="expiry-amount hide-number-spinner"
+            :min="0"
+          >
+          <Select
+            v-model="muteExpiryUnit"
+            unstyled="true"
+            class="expiry-unit"
+          >
+            <option
+              v-for="unit in muteExpiryUnits"
+              :key="unit"
+              :value="unit"
+            >
+              {{ $t(`time.${unit}_short`, ['']) }}
+            </option>
+          </Select>
+        </div>
+      </confirm-modal>
+    </teleport>
   </div>
 </template>
 

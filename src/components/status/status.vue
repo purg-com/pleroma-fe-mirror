@@ -31,16 +31,29 @@
           />
         </small>
         <small
+          v-if="muteSensitiveStatuses && status.nsfw"
+          class="mute-thread"
+        >
+          {{ $t('status.sensitive_muted') }}
+        </small>
+        <small
+          v-if="muteBotStatuses && botStatus"
+          class="mute-thread"
+        >
+          {{ $t('status.bot_muted') }}
+        </small>
+        <small
           v-if="showReasonMutedThread"
           class="mute-thread"
         >
-          {{ $t('status.thread_muted') }}
-        </small>
-        <small
-          v-if="showReasonMutedThread && muteWordHits.length > 0"
-          class="mute-thread"
-        >
-          {{ $t('status.thread_muted_and_words') }}
+          <span>
+            {{ $t('status.thread_muted') }}
+          </span>
+          <span
+            v-if="muteWordHits.length > 0"
+          >
+            {{ $t('status.thread_muted_and_words') }}
+          </span>
         </small>
         <small
           class="mute-words"
@@ -79,12 +92,12 @@
         <UserAvatar
           v-if="retweet"
           class="left-side repeater-avatar"
-          :bot="rtBotIndicator"
+          :show-actor-type-indicator="showActorTypeIndicator"
           :better-shadow="betterShadow"
           :user="statusoid.user"
         />
         <div class="right-side faint">
-          <span
+          <bdi
             class="status-username repeater-name"
             :title="retweeter"
           >
@@ -101,7 +114,7 @@
               v-else
               :to="retweeterProfileLink"
             >{{ retweeter }}</router-link>
-          </span>
+          </bdi>
           {{ ' ' }}
           <FAIcon
             icon="retweet"
@@ -133,7 +146,7 @@
             >
               <UserAvatar
                 class="post-avatar"
-                :bot="botIndicator"
+                :show-actor-type-indicator="showActorTypeIndicator"
                 :compact="compact"
                 :better-shadow="betterShadow"
                 :user="status.user"
@@ -180,7 +193,7 @@
 
               <span class="heading-right">
                 <router-link
-                  class="timeago faint-link"
+                  class="timeago faint"
                   :to="{ name: 'conversation', params: { id: status.id } }"
                 >
                   <Timeago
@@ -247,6 +260,47 @@
                     :icon="'angle-double-right'"
                   />
                 </button>
+              </span>
+            </div>
+            <div
+              v-if="scrobblePresent"
+              class="status-rich-presence"
+            >
+              <a
+                v-if="scrobble.externalLink"
+                :href="scrobble.externalLink"
+                target="_blank"
+              >
+                {{ scrobble.artist }} — {{ scrobble.title }}
+                <FAIcon
+                  class="fa-scale-110 fa-old-padding"
+                  icon="play"
+                />
+                <span class="status-rich-presence-time">
+                  <Timeago
+                    template-key="time.in_past"
+                    :time="scrobble.created_at"
+                    :auto-update="60"
+                  />
+                </span>
+              </a>
+              <span v-if="!scrobble.externalLink">
+                <FAIcon
+                  class="fa-scale-110 fa-old-padding"
+                  icon="music"
+                />
+                {{ scrobble.artist }} — {{ scrobble.title }}
+                <FAIcon
+                  class="fa-scale-110 fa-old-padding"
+                  icon="play"
+                />
+                <span class="status-rich-presence-time">
+                  <Timeago
+                    template-key="time.in_past"
+                    :time="scrobble.created_at"
+                    :auto-update="60"
+                  />
+                </span>
               </span>
             </div>
             <div
@@ -345,6 +399,7 @@
               class="heading-edited-row"
             >
               <i18n-t
+                scope="global"
                 keypath="status.edited_at"
                 tag="span"
               >
@@ -377,13 +432,55 @@
             @parseReady="setHeadTailLinks"
           />
 
+          <article
+            v-if="hasVisibleQuote"
+            class="quoted-status"
+          >
+            <button
+              class="button-unstyled -link display-quoted-status-button"
+              :aria-expanded="shouldDisplayQuote"
+              @click="toggleDisplayQuote"
+            >
+              {{ shouldDisplayQuote ? $t('status.hide_quote') : $t('status.display_quote') }}
+              <FAIcon
+                class="display-quoted-status-button-icon"
+                :icon="shouldDisplayQuote ? 'chevron-up' : 'chevron-down'"
+              />
+            </button>
+            <Status
+              v-if="shouldDisplayQuote"
+              :statusoid="quotedStatus"
+              :in-quote="true"
+            />
+          </article>
+          <p
+            v-else-if="hasInvisibleQuote"
+            class="quoted-status -unavailable-prompt"
+          >
+            <i18n-t
+              scope="global"
+              keypath="status.invisible_quote"
+            >
+              <template #link>
+                <bdi>
+                  <a
+                    :href="status.quote_url"
+                    target="_blank"
+                  >
+                    {{ status.quote_url }}
+                  </a>
+                </bdi>
+              </template>
+            </i18n-t>
+          </p>
+
           <div
             v-if="inConversation && !isPreview && replies && replies.length"
             class="replies"
           >
             <button
               v-if="showOtherRepliesAsButton && replies.length > 1"
-              class="button-unstyled -link faint"
+              class="button-unstyled -link"
               :title="$tc('status.ancestor_follow', replies.length - 1, { numReplies: replies.length - 1 })"
               @click.prevent="dive"
             >
@@ -411,7 +508,7 @@
 
           <transition name="fade">
             <div
-              v-if="!hidePostStats && isFocused && combinedFavsAndRepeatsUsers.length > 0"
+              v-if="shouldDisplayFavsAndRepeats"
               class="favs-repeated-users"
             >
               <div class="stats">
@@ -439,6 +536,19 @@
                     </div>
                   </div>
                 </UserListPopover>
+                <router-link
+                  v-if="statusFromGlobalRepository.quotes_count > 0"
+                  :to="{ name: 'quotes', params: { id: status.id } }"
+                >
+                  <div
+                    class="stat-count"
+                  >
+                    <a class="stat-title">{{ $t('status.quotes') }}</a>
+                    <div class="stat-number">
+                      {{ statusFromGlobalRepository.quotes_count }}
+                    </div>
+                  </div>
+                </router-link>
                 <div class="avatar-row">
                   <AvatarList :users="combinedFavsAndRepeatsUsers" />
                 </div>
@@ -464,14 +574,17 @@
               :visibility="status.visibility"
               :logged-in="loggedIn"
               :status="status"
+              @click="$emit('interacted')"
             />
             <favorite-button
               :logged-in="loggedIn"
               :status="status"
+              @click="$emit('interacted')"
             />
             <ReactButton
               v-if="loggedIn"
               :status="status"
+              @click="$emit('interacted')"
             />
             <extra-buttons
               :status="status"
@@ -489,7 +602,7 @@
           <UserAvatar
             class="post-avatar"
             :compact="compact"
-            :bot="botIndicator"
+            :show-actor-type-indicator="showActorTypeIndicator"
           />
         </div>
         <div class="right-side">

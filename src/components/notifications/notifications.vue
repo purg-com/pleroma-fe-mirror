@@ -14,13 +14,13 @@
           v-if="!noHeading"
           class="notifications-heading panel-heading -sticky"
         >
-          <div class="title">
+          <h1 class="title">
             {{ $t('notifications.notifications') }}
             <span
-              v-if="unseenCount"
-              class="badge badge-notification unseen-count"
-            >{{ unseenCount }}</span>
-          </div>
+              v-if="unseenCountBadgeText"
+              class="badge -notification unseen-count"
+            >{{ unseenCountBadgeText }}</span>
+          </h1>
           <div
             v-if="showScrollTop"
             class="rightside-button"
@@ -55,14 +55,25 @@
           role="feed"
         >
           <div
+            v-if="showExtraNotifications"
+            role="listitem"
+            class="notification"
+          >
+            <extra-notifications />
+          </div>
+          <div
             v-for="notification in notificationsToDisplay"
             :key="notification.id"
             role="listitem"
             class="notification"
-            :class="{unseen: !minimalMode && !notification.seen}"
+            :class="{unseen: !minimalMode && shouldShowUnseen(notification)}"
+            @click="e => notificationClicked(notification)"
           >
             <div class="notification-overlay" />
-            <notification :notification="notification" />
+            <notification
+              :notification="notification"
+              @interacted="e => notificationInteracted(notification)"
+            />
           </div>
         </div>
         <div class="panel-footer">
@@ -74,7 +85,7 @@
           </div>
           <button
             v-else-if="!loading"
-            class="button-unstyled -link -fullwidth"
+            class="button-unstyled -link text-center"
             @click.prevent="fetchOlderNotifications()"
           >
             <div class="new-status-notification text-center">

@@ -20,7 +20,7 @@
           />
           <div
             v-if="(unreadChatCount && !chatsPinned) || unreadAnnouncementCount"
-            class="alert-dot"
+            class="badge -dot -notification"
           />
         </button>
         <NavigationPins class="pins" />
@@ -37,20 +37,26 @@
           />
           <div
             v-if="unseenNotificationsCount"
-            class="alert-dot"
+            class="badge -dot -notification"
           />
         </button>
       </div>
     </nav>
     <aside
       v-if="currentUser"
-      class="mobile-notifications-drawer"
+      class="mobile-notifications-drawer mobile-drawer"
       :class="{ '-closed': !notificationsOpen }"
       @touchstart.stop="notificationsTouchStart"
       @touchmove.stop="notificationsTouchMove"
     >
-      <div class="mobile-notifications-header">
-        <span class="title">{{ $t('notifications.notifications') }}</span>
+      <div class="panel-heading mobile-notifications-header">
+        <h1 class="title">
+          {{ $t('notifications.notifications') }}
+          <span
+            v-if="unseenCountBadgeText"
+            class="badge -notification unseen-count"
+          >{{ unseenCountBadgeText }}</span>
+        </h1>
         <span class="spacer" />
         <button
           v-if="notificationsAtTop"
@@ -65,6 +71,17 @@
               transform="up-7"
             />
           </FALayers>
+        </button>
+        <button
+          v-if="!closingDrawerMarksAsSeen"
+          class="button-unstyled mobile-nav-button"
+          :title="$t('nav.mobile_notifications_mark_as_seen')"
+          @click.stop.prevent="markNotificationsAsSeen()"
+        >
+          <FAIcon
+            class="fa-scale-110 fa-old-padding"
+            icon="check-double"
+          />
         </button>
         <button
           class="button-unstyled mobile-nav-button"
@@ -88,27 +105,37 @@
       ref="sideDrawer"
       :logout="logout"
     />
+    <teleport to="#modal">
+      <confirm-modal
+        v-if="showingConfirmLogout"
+        :title="$t('login.logout_confirm_title')"
+        :confirm-text="$t('login.logout_confirm_accept_button')"
+        :cancel-text="$t('login.logout_confirm_cancel_button')"
+        @accepted="doLogout"
+        @cancelled="hideConfirmLogout"
+      >
+        {{ $t('login.logout_confirm') }}
+      </confirm-modal>
+    </teleport>
   </div>
 </template>
 
 <script src="./mobile_nav.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-
 .MobileNav {
   z-index: var(--ZI_navbar);
 
   .mobile-nav {
     display: grid;
     line-height: var(--navbar-height);
-    grid-template-rows: 50px;
+    grid-template-rows: var(--navbar-height);
     grid-template-columns: 2fr auto;
     width: 100%;
     box-sizing: border-box;
 
     a {
-      color: var(--topBarLink, $fallback--link);
+      color: var(--link);
     }
   }
 
@@ -127,26 +154,13 @@
   }
 
   .site-name {
-    padding: 0 .3em;
+    padding: 0 0.3em;
     display: inline-block;
   }
 
   .item {
     /* moslty just to get rid of extra whitespaces */
     display: flex;
-  }
-
-  .alert-dot {
-    border-radius: 100%;
-    height: 8px;
-    width: 8px;
-    position: absolute;
-    left: calc(50% - 4px);
-    top: calc(50% - 4px);
-    margin-left: 6px;
-    margin-top: -6px;
-    background-color: $fallback--cRed;
-    background-color: var(--badgeNotification, $fallback--cRed);
   }
 
   .mobile-notifications-drawer {
@@ -156,13 +170,13 @@
     position: fixed;
     top: 0;
     left: 0;
-    box-shadow: 1px 1px 4px rgba(0,0,0,.6);
-    box-shadow: var(--panelShadow);
+    box-shadow: var(--shadow);
     transition-property: transform;
     transition-duration: 0.25s;
     transform: translateX(0);
     z-index: var(--ZI_navbar);
     -webkit-overflow-scrolling: touch;
+    background: var(--background);
 
     &.-closed {
       transform: translateX(100%);
@@ -176,14 +190,10 @@
     justify-content: space-between;
     z-index: calc(var(--ZI_navbar) + 100);
     width: 100%;
-    height: 50px;
-    line-height: 50px;
+    height: 3.5em;
+    line-height: 3.5em;
     position: absolute;
-    color: var(--topBarText);
-    background-color: $fallback--fg;
-    background-color: var(--topBar, $fallback--fg);
-    box-shadow: 0px 0px 4px rgba(0,0,0,.6);
-    box-shadow: var(--topBarShadow);
+    box-shadow: var(--shadow);
 
     .spacer {
       flex: 1;
@@ -204,15 +214,11 @@
   }
 
   .mobile-notifications {
-    margin-top: 50px;
+    margin-top: 3.5em;
     width: 100vw;
     height: calc(100vh - var(--navbar-height));
     overflow-x: hidden;
     overflow-y: scroll;
-    color: $fallback--text;
-    color: var(--text, $fallback--text);
-    background-color: $fallback--bg;
-    background-color: var(--bg, $fallback--bg);
 
     .notifications {
       padding: 0;
@@ -233,6 +239,16 @@
         border-radius: 0;
         box-shadow: none;
       }
+    }
+  }
+
+  .confirm-modal.dark-overlay {
+    &::before {
+      z-index: 3000;
+    }
+
+    .dialog-modal.panel {
+      z-index: 3001;
     }
   }
 }

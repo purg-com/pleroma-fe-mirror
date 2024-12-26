@@ -1,5 +1,3 @@
-@import '../../_variables.scss';
-
 .Report {
   .report-content {
     margin: 0.5em 0 1em;
@@ -10,12 +8,8 @@
   }
 
   .reported-status {
-    border: 1px solid $fallback--faint;
-    border-color: var(--faint, $fallback--faint);
-    border-radius: $fallback--inputRadius;
-    border-radius: var(--inputRadius, $fallback--inputRadius);
-    color: $fallback--text;
-    color: var(--text, $fallback--text);
+    border: 1px solid var(--border);
+    border-radius: var(--roundness);
     display: block;
     padding: 0.5em;
     margin: 0.5em 0;

@@ -36,7 +36,7 @@
         />
         <div
           v-if="chat.unread > 0"
-          class="badge badge-notification unread-chat-count"
+          class="badge -notification unread-chat-count"
         >
           {{ chat.unread }}
         </div>
@@ -48,6 +48,5 @@
 <script src="./chat_list_item.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-@import './chat_list_item.scss';
+@import "./chat_list_item";
 </style>

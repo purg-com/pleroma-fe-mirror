@@ -24,10 +24,10 @@
 <script src="./user_popover.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-
 /* popover styles load on-demand, so we need to override */
+/* stylelint-disable block-no-empty */
 .user-popover.popover {
 }
+/* stylelint-enable block-no-empty */
 
 </style>

@@ -6,7 +6,9 @@
   >
     <div class="edit-form-modal-panel panel">
       <div class="panel-heading">
-        {{ $t('post_status.edit_status') }}
+        <h1 class="title">
+          {{ $t('post_status.edit_status') }}
+        </h1>
       </div>
       <PostStatusForm
         class="panel-body"
@@ -26,6 +28,7 @@
 .modal-view.edit-form-modal-view {
   align-items: flex-start;
 }
+
 .edit-form-modal-panel {
   flex-shrink: 0;
   margin-top: 25%;

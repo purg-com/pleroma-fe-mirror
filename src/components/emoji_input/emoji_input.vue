@@ -1,15 +1,22 @@
 <template>
   <div
     ref="root"
-    class="emoji-input"
+    class="input emoji-input"
     :class="{ 'with-picker': !hideEmojiButton }"
   >
-    <slot />
+    <slot
+      :id="'textbox-' + randomSeed"
+      :aria-owns="suggestionListId"
+      aria-autocomplete="both"
+      :aria-expanded="showSuggestions"
+      :aria-activedescendant="(!showSuggestions || highlighted === -1) ? '' : suggestionItemId(highlighted)"
+    />
     <!-- TODO: make the 'x' disappear if at the end maybe? -->
     <div
       ref="hiddenOverlay"
       class="hidden-overlay"
       :style="overlayStyle"
+      :aria-hidden="true"
     >
       <span>{{ preText }}</span>
       <span
@@ -18,11 +25,16 @@
       >x</span>
       <span>{{ postText }}</span>
     </div>
+    <screen-reader-notice
+      ref="screenReaderNotice"
+      aria-live="assertive"
+    />
     <template v-if="enableEmojiPicker">
       <button
         v-if="!hideEmojiButton"
         class="button-unstyled emoji-picker-icon"
         type="button"
+        :title="$t('emoji.add_emoji')"
         @click.prevent="togglePicker"
       >
         <FAIcon :icon="['far', 'smile-beam']" />
@@ -43,17 +55,24 @@
       ref="suggestorPopover"
       class="autocomplete-panel"
       placement="bottom"
+      :trigger-attrs="{ 'aria-hidden': true }"
     >
       <template #content>
         <div
+          :id="suggestionListId"
           ref="panel-body"
           class="autocomplete-panel-body"
+          role="listbox"
         >
           <div
             v-for="(suggestion, index) in suggestions"
+            :id="suggestionItemId(index)"
             :key="index"
-            class="autocomplete-item"
-            :class="{ highlighted: index === highlighted }"
+            class="menu-item autocomplete-item"
+            role="option"
+            :class="{ '-active': index === highlighted }"
+            :aria-label="autoCompleteItemLabel(suggestion)"
+            :aria-selected="index === highlighted"
             @click.stop.prevent="onClick($event, suggestion)"
           >
             <span class="image">
@@ -91,29 +110,23 @@
 <script src="./emoji_input.js"></script>
 
 <style lang="scss">
-@import '../../_variables.scss';
-
-.emoji-input {
+.input.emoji-input {
+  padding: 0;
   display: flex;
   flex-direction: column;
   position: relative;
-
-  &.with-picker input {
-    padding-right: 30px;
-  }
 
   .emoji-picker-icon {
     position: absolute;
     top: 0;
     right: 0;
-    margin: .2em .25em;
+    margin: 0.2em 0.25em;
     font-size: 1.3em;
     cursor: pointer;
     line-height: 24px;
 
     &:hover i {
-      color: $fallback--text;
-      color: var(--text, $fallback--text);
+      color: var(--text);
     }
   }
 
@@ -123,12 +136,23 @@
     margin-top: 2px;
 
     &.hide {
-      display: none
+      display: none;
     }
   }
 
-  input, textarea {
+  input,
+  textarea {
     flex: 1 0 auto;
+    color: inherit;
+    /* stylelint-disable-next-line declaration-no-important */
+    background: none !important;
+    box-shadow: none;
+    border: none;
+    outline: none;
+  }
+
+  &.with-picker input {
+    padding-right: 30px;
   }
 
   .hidden-overlay {
@@ -140,8 +164,10 @@
     right: 0;
     left: 0;
     overflow: hidden;
+
     /* DEBUG STUFF */
     color: red;
+
     /* set opacity to non-zero to see the overlay */
 
     .caret {
@@ -151,31 +177,33 @@
     }
   }
 }
+
 .autocomplete {
   &-panel {
     position: absolute;
   }
 
-  &-item {
+  &-item.menu-item {
     display: flex;
-    cursor: pointer;
-    padding: 0.2em 0.4em;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
-    height: 32px;
+    padding-top: 0;
+    padding-bottom: 0;
 
     .image {
-      width: 32px;
-      height: 32px;
-      line-height: 32px;
+      width: calc(var(--__line-height) + var(--__vertical-gap) * 2);
+      height: calc(var(--__line-height) + var(--__vertical-gap) * 2);
+      line-height: var(--__line-height);
       text-align: center;
-      font-size: 32px;
-
-      margin-right: 4px;
+      margin-right: var(--__horizontal-gap);
 
       img {
-        width: 32px;
-        height: 32px;
+        width: calc(var(--__line-height) + var(--__vertical-gap) * 2);
+        height: calc(var(--__line-height) + var(--__vertical-gap) * 2);
         object-fit: contain;
+      }
+
+      span {
+        font-size: var(--__line-height);
+        line-height: var(--__line-height);
       }
     }
 
@@ -193,16 +221,6 @@
         font-size: 9px;
         line-height: 9px;
       }
-    }
-
-    &.highlighted {
-      background-color: $fallback--fg;
-      background-color: var(--selectedMenuPopover, $fallback--fg);
-      color: var(--selectedMenuPopoverText, $fallback--text);
-      --faint: var(--selectedMenuPopoverFaintText, $fallback--faint);
-      --faintLink: var(--selectedMenuPopoverFaintLink, $fallback--faint);
-      --lightText: var(--selectedMenuPopoverLightText, $fallback--lightText);
-      --icon: var(--selectedMenuPopoverIcon, $fallback--icon);
     }
   }
 }

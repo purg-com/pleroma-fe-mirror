@@ -1,12 +1,16 @@
 <template>
-  <router-link
-    :title="user.screen_name_ui"
-    :to="userProfileLink(user)"
-  >
-    {{ at ? '@' : '' }}{{ user.screen_name_ui }}<UnicodeDomainIndicator
-      :user="user"
-    />
-  </router-link>
+  <div class="user-profile-link">
+    <router-link
+      :title="user.screen_name_ui"
+      :to="userProfileLink(user)"
+    >
+      <slot>
+        {{ at ? '@' : '' }}{{ user.screen_name_ui }}<UnicodeDomainIndicator
+          :user="user"
+        />
+      </slot>
+    </router-link>
+  </div>
 </template>
 
 <script>

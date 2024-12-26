@@ -7,13 +7,16 @@ import TabSwitcher from 'src/components/tab_switcher/tab_switcher.jsx'
 import RichContent from 'src/components/rich_content/rich_content.jsx'
 import List from '../list/list.vue'
 import withLoadMore from '../../hocs/with_load_more/with_load_more'
+import localeService from 'src/services/locale/locale.service.js'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
-  faCircleNotch
+  faCircleNotch,
+  faBirthdayCake
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
-  faCircleNotch
+  faCircleNotch,
+  faBirthdayCake
 )
 
 const FollowerList = withLoadMore({
@@ -76,6 +79,13 @@ const UserProfile = {
     },
     followersTabVisible () {
       return this.isUs || !this.user.hide_followers
+    },
+    favoritesTabVisible () {
+      return this.isUs || !this.user.hide_favorites
+    },
+    formattedBirthday () {
+      const browserLocale = localeService.internalToBrowserLocale(this.$i18n.locale)
+      return this.user.birthday && new Date(Date.parse(this.user.birthday)).toLocaleDateString(browserLocale, { timeZone: 'UTC', day: 'numeric', month: 'long', year: 'numeric' })
     }
   },
   methods: {
@@ -96,6 +106,8 @@ const UserProfile = {
         startFetchingTimeline('user', userId)
         startFetchingTimeline('media', userId)
         if (this.isUs) {
+          startFetchingTimeline('favorites')
+        } else if (!this.user.hide_favorites) {
           startFetchingTimeline('favorites', userId)
         }
         // Fetch all pinned statuses immediately

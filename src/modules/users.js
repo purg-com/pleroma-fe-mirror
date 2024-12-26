@@ -2,7 +2,7 @@ import backendInteractorService from '../services/backend_interactor_service/bac
 import { windowWidth, windowHeight } from '../services/window_utils/window_utils'
 import oauthApi from '../services/new_api/oauth.js'
 import { compact, map, each, mergeWith, last, concat, uniq, isArray } from 'lodash'
-import { registerPushNotifications, unregisterPushNotifications } from '../services/push/push.js'
+import { registerPushNotifications, unregisterPushNotifications } from '../services/sw/sw.js'
 
 // TODO: Unify with mergeOrAdd in statuses.js
 export const mergeOrAdd = (arr, obj, item) => {
@@ -61,13 +61,16 @@ const editUserNote = (store, { id, comment }) => {
     .then((relationship) => store.commit('updateUserRelationship', [relationship]))
 }
 
-const muteUser = (store, id) => {
+const muteUser = (store, args) => {
+  const id = typeof args === 'object' ? args.id : args
+  const expiresIn = typeof args === 'object' ? args.expiresIn : 0
+
   const predictedRelationship = store.state.relationships[id] || { id }
   predictedRelationship.muting = true
   store.commit('updateUserRelationship', [predictedRelationship])
   store.commit('addMuteId', id)
 
-  return store.rootState.api.backendInteractor.muteUser({ id })
+  return store.rootState.api.backendInteractor.muteUser({ id, expiresIn })
     .then((relationship) => {
       store.commit('updateUserRelationship', [relationship])
       store.commit('addMuteId', id)
@@ -192,8 +195,14 @@ export const mutations = {
       state.currentUser.blockIds.push(blockId)
     }
   },
+  setBlockIdsMaxId (state, blockIdsMaxId) {
+    state.currentUser.blockIdsMaxId = blockIdsMaxId
+  },
   saveMuteIds (state, muteIds) {
     state.currentUser.muteIds = muteIds
+  },
+  setMuteIdsMaxId (state, muteIdsMaxId) {
+    state.currentUser.muteIdsMaxId = muteIdsMaxId
   },
   addMuteId (state, muteId) {
     if (state.currentUser.muteIds.indexOf(muteId) === -1) {
@@ -241,6 +250,7 @@ export const mutations = {
   signUpPending (state) {
     state.signUpPending = true
     state.signUpErrors = []
+    state.signUpNotice = {}
   },
   signUpSuccess (state) {
     state.signUpPending = false
@@ -248,6 +258,12 @@ export const mutations = {
   signUpFailure (state, errors) {
     state.signUpPending = false
     state.signUpErrors = errors
+    state.signUpNotice = {}
+  },
+  signUpNotice (state, notice) {
+    state.signUpPending = false
+    state.signUpErrors = []
+    state.signUpNotice = notice
   }
 }
 
@@ -278,6 +294,7 @@ export const defaultState = {
   usersByNameObject: {},
   signUpPending: false,
   signUpErrors: [],
+  signUpNotice: {},
   relationships: {}
 }
 
@@ -317,10 +334,20 @@ const users = {
           .then((inLists) => store.commit('updateUserInLists', { id, inLists }))
       }
     },
-    fetchBlocks (store) {
-      return store.rootState.api.backendInteractor.fetchBlocks()
+    fetchBlocks (store, args) {
+      const { reset } = args || {}
+
+      const maxId = store.state.currentUser.blockIdsMaxId
+      return store.rootState.api.backendInteractor.fetchBlocks({ maxId })
         .then((blocks) => {
-          store.commit('saveBlockIds', map(blocks, 'id'))
+          if (reset) {
+            store.commit('saveBlockIds', map(blocks, 'id'))
+          } else {
+            map(blocks, 'id').map(id => store.commit('addBlockId', id))
+          }
+          if (blocks.length) {
+            store.commit('setBlockIdsMaxId', last(blocks).id)
+          }
           store.commit('addNewUsers', blocks)
           return blocks
         })
@@ -343,10 +370,20 @@ const users = {
     editUserNote (store, args) {
       return editUserNote(store, args)
     },
-    fetchMutes (store) {
-      return store.rootState.api.backendInteractor.fetchMutes()
+    fetchMutes (store, args) {
+      const { reset } = args || {}
+
+      const maxId = store.state.currentUser.muteIdsMaxId
+      return store.rootState.api.backendInteractor.fetchMutes({ maxId })
         .then((mutes) => {
-          store.commit('saveMuteIds', map(mutes, 'id'))
+          if (reset) {
+            store.commit('saveMuteIds', map(mutes, 'id'))
+          } else {
+            map(mutes, 'id').map(id => store.commit('addMuteId', id))
+          }
+          if (mutes.length) {
+            store.commit('setMuteIdsMaxId', last(mutes).id)
+          }
           store.commit('addNewUsers', mutes)
           return mutes
         })
@@ -415,11 +452,11 @@ const users = {
       commit('clearFollowers', userId)
     },
     subscribeUser ({ rootState, commit }, id) {
-      return rootState.api.backendInteractor.subscribeUser({ id })
+      return rootState.api.backendInteractor.followUser({ id, notify: true })
         .then((relationship) => commit('updateUserRelationship', [relationship]))
     },
     unsubscribeUser ({ rootState, commit }, id) {
-      return rootState.api.backendInteractor.unsubscribeUser({ id })
+      return rootState.api.backendInteractor.followUser({ id, notify: false })
         .then((relationship) => commit('updateUserRelationship', [relationship]))
     },
     toggleActivationStatus ({ rootState, commit }, { user }) {
@@ -469,7 +506,7 @@ const users = {
       store.commit('addNewUsers', users)
       store.commit('addNewUsers', targetUsers)
 
-      const notificationsObject = store.rootState.statuses.notifications.idStore
+      const notificationsObject = store.rootState.notifications.idStore
       const relevantNotifications = Object.entries(notificationsObject)
         .filter(([k, val]) => notificationIds.includes(k))
         .map(([k, val]) => val)
@@ -495,9 +532,16 @@ const users = {
         const data = await rootState.api.backendInteractor.register(
           { params: { ...userInfo } }
         )
-        store.commit('signUpSuccess')
-        store.commit('setToken', data.access_token)
-        store.dispatch('loginUser', data.access_token)
+
+        if (data.access_token) {
+          store.commit('signUpSuccess')
+          store.commit('setToken', data.access_token)
+          store.dispatch('loginUser', data.access_token)
+          return 'ok'
+        } else { // Request succeeded, but user cannot login yet.
+          store.commit('signUpNotice', data)
+          return 'request_sent'
+        }
       } catch (e) {
         const errors = e.message
         store.commit('signUpFailure', errors)
@@ -535,6 +579,7 @@ const users = {
           store.commit('setBackendInteractor', backendInteractorService(store.getters.getToken()))
           store.dispatch('stopFetchingNotifications')
           store.dispatch('stopFetchingLists')
+          store.dispatch('stopFetchingBookmarkFolders')
           store.dispatch('stopFetchingFollowRequests')
           store.commit('clearNotifications')
           store.commit('resetStatuses')
@@ -548,6 +593,7 @@ const users = {
     loginUser (store, accessToken) {
       return new Promise((resolve, reject) => {
         const commit = store.commit
+        const dispatch = store.dispatch
         commit('beginLogin')
         store.rootState.api.backendInteractor.verifyCredentials(accessToken)
           .then((data) => {
@@ -562,57 +608,58 @@ const users = {
               commit('setServerSideStorage', user)
               commit('addNewUsers', [user])
 
-              store.dispatch('fetchEmoji')
+              dispatch('fetchEmoji')
 
               getNotificationPermission()
                 .then(permission => commit('setNotificationPermission', permission))
 
               // Set our new backend interactor
               commit('setBackendInteractor', backendInteractorService(accessToken))
-              store.dispatch('pushServerSideStorage')
+              dispatch('pushServerSideStorage')
 
               if (user.token) {
-                store.dispatch('setWsToken', user.token)
+                dispatch('setWsToken', user.token)
 
                 // Initialize the shout socket.
-                store.dispatch('initializeSocket')
+                dispatch('initializeSocket')
               }
 
               const startPolling = () => {
                 // Start getting fresh posts.
-                store.dispatch('startFetchingTimeline', { timeline: 'friends' })
+                dispatch('startFetchingTimeline', { timeline: 'friends' })
 
                 // Start fetching notifications
-                store.dispatch('startFetchingNotifications')
+                dispatch('startFetchingNotifications')
 
                 // Start fetching chats
-                store.dispatch('startFetchingChats')
+                dispatch('startFetchingChats')
               }
 
-              store.dispatch('startFetchingLists')
+              dispatch('startFetchingLists')
+              dispatch('startFetchingBookmarkFolders')
 
               if (user.locked) {
-                store.dispatch('startFetchingFollowRequests')
+                dispatch('startFetchingFollowRequests')
               }
 
               if (store.getters.mergedConfig.useStreamingApi) {
-                store.dispatch('fetchTimeline', { timeline: 'friends', since: null })
-                store.dispatch('fetchNotifications', { since: null })
-                store.dispatch('enableMastoSockets', true).catch((error) => {
+                dispatch('fetchTimeline', { timeline: 'friends', since: null })
+                dispatch('fetchNotifications', { since: null })
+                dispatch('enableMastoSockets', true).catch((error) => {
                   console.error('Failed initializing MastoAPI Streaming socket', error)
                 }).then(() => {
-                  store.dispatch('fetchChats', { latest: true })
-                  setTimeout(() => store.dispatch('setNotificationsSilence', false), 10000)
+                  dispatch('fetchChats', { latest: true })
+                  setTimeout(() => dispatch('setNotificationsSilence', false), 10000)
                 })
               } else {
                 startPolling()
               }
 
               // Get user mutes
-              store.dispatch('fetchMutes')
+              dispatch('fetchMutes')
 
-              store.dispatch('setLayoutWidth', windowWidth())
-              store.dispatch('setLayoutHeight', windowHeight())
+              dispatch('setLayoutWidth', windowWidth())
+              dispatch('setLayoutHeight', windowHeight())
 
               // Fetch our friends
               store.rootState.api.backendInteractor.fetchFriends({ id: user.id })
@@ -621,6 +668,12 @@ const users = {
               const response = data.error
               // Authentication failed
               commit('endLogin')
+
+              // remove authentication token on client/authentication errors
+              if ([400, 401, 403, 422].includes(response.status)) {
+                commit('clearToken')
+              }
+
               if (response.status === 401) {
                 reject(new Error('Wrong username or password'))
               } else {
@@ -631,7 +684,7 @@ const users = {
             resolve()
           })
           .catch((error) => {
-            console.log(error)
+            console.error(error)
             commit('endLogin')
             reject(new Error('Failed to connect to server, try again'))
           })

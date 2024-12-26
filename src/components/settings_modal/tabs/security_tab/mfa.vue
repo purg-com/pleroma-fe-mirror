@@ -99,12 +99,14 @@
                 <input
                   v-model="otpConfirmToken"
                   type="text"
+                  class="input"
                 >
 
                 <p>{{ $t('settings.enter_current_password_to_confirm') }}:</p>
                 <input
                   v-model="currentPassword"
                   type="password"
+                  class="input"
                 >
                 <div class="confirm-otp-actions">
                   <button
@@ -137,9 +139,9 @@
 
 <script src="./mfa.js"></script>
 <style lang="scss">
-@import '../../../../_variables.scss';
 .mfa-settings {
-  .mfa-heading, .method-item {
+  .mfa-heading,
+  .method-item {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -147,26 +149,26 @@
   }
 
   .warning {
-    color: $fallback--cOrange;
-    color: var(--cOrange, $fallback--cOrange);
+    color: var(--cOrange);
   }
 
   .setup-otp {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+
     .qr-code {
       flex: 1;
       padding-right: 10px;
     }
     .verify { flex: 1; }
-    .error { margin: 4px 0 0 0; }
+    .error { margin: 4px 0 0; }
+
     .confirm-otp-actions {
       button {
         width: 15em;
         margin-top: 5px;
       }
-
     }
   }
 }
