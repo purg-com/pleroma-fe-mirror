@@ -7,6 +7,7 @@ import PollForm from '../poll/poll_form.vue'
 import Attachment from '../attachment/attachment.vue'
 import Gallery from 'src/components/gallery/gallery.vue'
 import StatusContent from '../status_content/status_content.vue'
+import Popover from 'src/components/popover/popover.vue'
 import fileTypeService from '../../services/file_type/file_type.service.js'
 import { findOffset } from '../../services/offset_finder/offset_finder.service.js'
 import { propsToNative } from '../../services/attributes_helper/attributes_helper.service.js'
@@ -25,7 +26,10 @@ import {
   faUpload,
   faBan,
   faTimes,
-  faCircleNotch
+  faCircleNotch,
+  faChevronDown,
+  faChevronLeft,
+  faChevronRight
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -34,7 +38,10 @@ library.add(
   faUpload,
   faBan,
   faTimes,
-  faCircleNotch
+  faCircleNotch,
+  faChevronDown,
+  faChevronLeft,
+  faChevronRight
 )
 
 const buildMentionsString = ({ user, attentions = [] }, currentUser) => {
@@ -123,7 +130,8 @@ const PostStatusForm = {
     Attachment,
     StatusContent,
     Gallery,
-    DraftCloser
+    DraftCloser,
+    Popover
   },
   mounted () {
     this.updateIdempotencyKey()
