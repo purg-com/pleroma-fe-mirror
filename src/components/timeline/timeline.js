@@ -56,7 +56,7 @@ const Timeline = {
     // but in case scroll behaviour is overriden it can be anything
     scrollParent () {
       const parentId = 'content'
-      const useWindow = false
+      const useWindow = true
 
       if (useWindow) {
         return window
