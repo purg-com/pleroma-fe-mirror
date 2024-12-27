@@ -52,6 +52,18 @@ const Timeline = {
     QuickViewSettings
   },
   computed: {
+    // scrollParent element. Usually it's window obj,
+    // but in case scroll behaviour is overriden it can be anything
+    scrollParent () {
+      const parentId = 'content'
+      const useWindow = false
+
+      if (useWindow) {
+        return window
+      } else {
+        return document.getElementById(parentId)
+      }
+    },
     filteredVisibleStatuses () {
       return this.timeline.visibleStatuses.filter(status => this.timelineName !== 'user' || (status.id >= this.timeline.minId && status.id <= this.timeline.maxId))
     },
@@ -112,7 +124,7 @@ const Timeline = {
     const credentials = store.state.users.currentUser.credentials
     const showImmediately = this.timeline.visibleStatuses.length === 0
 
-    window.addEventListener('scroll', this.handleScroll)
+    this.scrollParent.addEventListener('scroll', this.handleScroll)
 
     if (store.state.api.fetchers[this.timelineName]) { return false }
 
@@ -133,18 +145,32 @@ const Timeline = {
       document.addEventListener('visibilitychange', this.handleVisibilityChange, false)
       this.unfocused = document.hidden
     }
-    window.addEventListener('keydown', this.handleShortKey)
+
+    this.scrollParent.addEventListener('keydown', this.handleShortKey)
     setTimeout(this.determineVisibleStatuses, 250)
   },
   unmounted () {
-    window.removeEventListener('scroll', this.handleScroll)
-    window.removeEventListener('keydown', this.handleShortKey)
-    if (typeof document.hidden !== 'undefined') document.removeEventListener('visibilitychange', this.handleVisibilityChange, false)
+    this.scrollParent.removeEventListener('scroll', this.handleScroll)
+    this.scrollParent.removeEventListener('keydown', this.handleShortKey)
+
+    if (typeof document.hidden !== 'undefined') {
+      document.removeEventListener('visibilitychange', this.handleVisibilityChange, false)
+    }
     this.$store.commit('setLoading', { timeline: this.timelineName, value: false })
   },
   methods: {
+    getScrollTop () {
+      return this.scrollParent === window ? window.scrollY : this.scrollParent.scrollTop
+    },
+    getClientHeight () {
+      return this.scrollParent === window ? window.innerHeight : this.scrollParent.clientHeight
+    },
+    getBoundingRect () {
+      const containerObj = this.scrollParent === window ? document.body : this.scrollParent
+      return containerObj.getBoundingClientRect()
+    },
     scrollToTop () {
-      window.scrollTo({ top: this.$el.offsetTop })
+      this.scrollParent.scrollTo({ top: this.$el.offsetTop })
     },
     stopBlockingClicks: debounce(function () {
       this.blockingClicks = false
@@ -173,7 +199,7 @@ const Timeline = {
         this.$store.commit('showNewStatuses', { timeline: this.timelineName })
         this.paused = false
       }
-      window.scrollTo({ top: 0 })
+      this.scrollParent.scrollTo({ top: 0 })
     },
     fetchOlderStatuses: throttle(function () {
       const store = this.$store
@@ -199,58 +225,56 @@ const Timeline = {
       )
     }, 1000, this),
     determineVisibleStatuses () {
-      if (!this.$refs.timeline) return
-      if (!this.virtualScrollingEnabled) return
+      const statuses = this.$refs.timeline ? this.$refs.timeline.children : []
+      const centerOfScreen = window.scrollY + (window.innerHeight * 0.5)
 
-      const statuses = this.$refs.timeline.children
-      const cappedScrollIndex = Math.max(0, Math.min(this.virtualScrollIndex, statuses.length - 1))
-
-      if (statuses.length === 0) return
-
-      const height = Math.max(document.body.offsetHeight, window.pageYOffset)
-
-      const centerOfScreen = window.pageYOffset + (window.innerHeight * 0.5)
-
-      // Start from approximating the index of some visible status by using the
-      // the center of the screen on the timeline.
-      let approxIndex = Math.floor(statuses.length * (centerOfScreen / height))
-      let err = statuses[approxIndex].getBoundingClientRect().y
-
-      // if we have a previous scroll index that can be used, test if it's
-      // closer than the previous approximation, use it if so
-
-      const virtualScrollIndexY = statuses[cappedScrollIndex].getBoundingClientRect().y
-      if (Math.abs(err) > virtualScrollIndexY) {
-        approxIndex = cappedScrollIndex
-        err = virtualScrollIndexY
+      if (statuses.length === 0 || !this.virtualScrollingEnabled) {
+        return
       }
 
-      // if the status is too far from viewport, check the next/previous ones if
-      // they happen to be better
-      while (err < -20 && approxIndex < statuses.length - 1) {
-        err += statuses[approxIndex].offsetHeight
-        approxIndex++
-      }
-      while (err > window.innerHeight + 100 && approxIndex > 0) {
-        approxIndex--
-        err -= statuses[approxIndex].offsetHeight
+      // Find the status that is closest to the center of the screen
+      let closestStatus = 0
+      let closestDistance = Infinity
+
+      for (let i = 0; i < statuses.length; i++) {
+        const statusRect = statuses[i].getBoundingClientRect()
+        const statusCenter = statusRect.top + (statusRect.height / 2)
+        const distance = Math.abs(centerOfScreen - statusCenter)
+
+        if (distance < closestDistance) {
+          closestDistance = distance
+          closestStatus = i
+        }
       }
 
-      // this status is now the center point for virtual scrolling and visible
-      // statuses will be nearby statuses before and after it
-      this.virtualScrollIndex = approxIndex
+      this.virtualScrollIndex = closestStatus
     },
     scrollLoad (e) {
-      const bodyBRect = document.body.getBoundingClientRect()
-      const height = Math.max(bodyBRect.height, -(bodyBRect.y))
-      if (this.timeline.loading === false &&
-          this.$el.offsetHeight > 0 &&
-          (window.innerHeight + window.pageYOffset) >= (height - 750)) {
-        this.fetchOlderStatuses()
+      let fetchStatuses = false
+
+      if (this.timeline.loading === false && this.$el.offsetHeight > 0) {
+        if (this.virtualScrollingEnabled) {
+          // When virtual scrolling is enabled, fetch new stuff after ~80% of the timeline is viewed
+          const updateFactor = 0.80
+          const allStatuses = this.$refs.timeline ? this.$refs.timeline.children : []
+          const statusCount = allStatuses.length
+
+          fetchStatuses = statusCount > 0 && (this.virtualScrollIndex / statusCount) >= updateFactor
+        } else {
+          // When virtual scrolling is not in use, refer to the magic number
+          const bodyBRect = this.getBoundingRect()
+          const height = Math.max(bodyBRect.height, -(bodyBRect.y))
+
+          fetchStatuses = (this.getClientHeight() + this.getScrollTop()) >= (height - 750)
+        }
+
+        if (fetchStatuses) {
+          this.fetchOlderStatuses()
+        }
       }
     },
     handleScroll: throttle(function (e) {
-      this.showScrollTop = this.$el.offsetTop < window.scrollY
+      this.showScrollTop = this.$el.offsetTop < this.getScrollTop()
       this.determineVisibleStatuses()
       this.scrollLoad(e)
     }, 200),
@@ -266,7 +290,7 @@ const Timeline = {
       if (count > 0) {
         // only 'stream' them when you're scrolled to the top
         const doc = document.documentElement
-        const top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0)
+        const top = (this.getScrollTop() || doc.scrollTop) - (doc.clientTop || 0)
         if (top < 15 &&
             !this.paused &&
             !(this.unfocused && this.$store.getters.mergedConfig.pauseOnUnfocused)
