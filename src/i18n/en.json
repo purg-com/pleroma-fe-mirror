@@ -1513,6 +1513,7 @@
   },
   "drafts": {
     "drafts": "Drafts",
+    "no_drafts": "You have no drafts",
     "continue": "Continue composing",
     "abandon": "Abandon draft",
     "abandon_confirm_title": "Abandon confirmation",

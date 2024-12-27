@@ -1,21 +1,5 @@
 <template>
   <article class="Draft">
-    <div class="actions">
-      <button
-        class="btn button-default"
-        :class="{ toggled: editing }"
-        :aria-expanded="editing"
-        @click.prevent.stop="toggleEditing"
-      >
-        {{ $t('drafts.continue') }}
-      </button>
-      <button
-        class="btn button-default"
-        @click.prevent.stop="abandon"
-      >
-        {{ $t('drafts.abandon') }}
-      </button>
-    </div>
     <div
       v-if="!editing"
       class="status-content"
@@ -66,6 +50,22 @@
         {{ $t('drafts.abandon_confirm') }}
       </confirm-modal>
     </teleport>
+    <div class="actions">
+      <button
+        class="btn button-default"
+        :class="{ toggled: editing }"
+        :aria-expanded="editing"
+        @click.prevent.stop="toggleEditing"
+      >
+        {{ $t('drafts.continue') }}
+      </button>
+      <button
+        class="btn button-default"
+        @click.prevent.stop="abandon"
+      >
+        {{ $t('drafts.abandon') }}
+      </button>
+    </div>
   </article>
 </template>
 
@@ -73,13 +73,7 @@
 
 <style lang="scss">
 .Draft {
-  margin: 1em;
-
   .status-content {
-    border: 1px solid;
-    border-color: var(--faint);
-    border-radius: var(--inputRadius);
-    color: var(--text);
     padding: 0.5em;
     margin: 0.5em 0;
   }
