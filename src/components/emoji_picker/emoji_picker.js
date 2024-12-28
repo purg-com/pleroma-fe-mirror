@@ -140,14 +140,14 @@ const EmojiPicker = {
     },
     updateEmojiSize () {
       const css = window.getComputedStyle(this.$refs.popover.$el)
-      const fontSize = css.getPropertyValue('font-size')
-      const emojiSize = css.getPropertyValue('--emojiSize')
+      const fontSize = css.getPropertyValue('font-size') || '14px'
+      const emojiSize = css.getPropertyValue('--emojiSize') || '2.2rem'
 
-      const fontSizeUnit = fontSize.replace(/[0-9,.]+/, '') || 'px'
-      const fontSizeValue = Number(fontSize.replace(/[^0-9,.]+/, '')) || 14
+      const fontSizeUnit = fontSize.replace(/[0-9,.]+/, '')
+      const fontSizeValue = Number(fontSize.replace(/[^0-9,.]+/, ''))
 
-      const emojiSizeUnit = emojiSize.replace(/[0-9,.]+/, '') || 'rem'
-      const emojiSizeValue = Number(emojiSize.replace(/[^0-9,.]+/, '')) || 2.2
+      const emojiSizeUnit = emojiSize.replace(/[0-9,.]+/, '')
+      const emojiSizeValue = Number(emojiSize.replace(/[^0-9,.]+/, ''))
 
       let fontSizeMultiplier
       if (fontSizeUnit.endsWith('em')) {
