@@ -143,11 +143,11 @@ const EmojiPicker = {
       const fontSize = css.getPropertyValue('font-size')
       const emojiSize = css.getPropertyValue('--emojiSize')
 
-      const fontSizeUnit = fontSize.replace(/[0-9,.]+/, '')
-      const fontSizeValue = Number(fontSize.replace(/[^0-9,.]+/, ''))
+      const fontSizeUnit = fontSize.replace(/[0-9,.]+/, '') || 'px'
+      const fontSizeValue = Number(fontSize.replace(/[^0-9,.]+/, '')) || 14
 
-      const emojiSizeUnit = emojiSize.replace(/[0-9,.]+/, '')
-      const emojiSizeValue = Number(emojiSize.replace(/[^0-9,.]+/, ''))
+      const emojiSizeUnit = emojiSize.replace(/[0-9,.]+/, '') || 'rem'
+      const emojiSizeValue = Number(emojiSize.replace(/[^0-9,.]+/, '')) || 2.2
 
       let fontSizeMultiplier
       if (fontSizeUnit.endsWith('em')) {
@@ -155,8 +155,6 @@ const EmojiPicker = {
       } else {
         fontSizeMultiplier = fontSizeValue / 14
       }
-      console.log('Multiplier', fontSizeMultiplier)
-      console.log('Result', fontSizeMultiplier * 14)
 
       let emojiSizeReal
       if (emojiSizeUnit.endsWith('em')) {
