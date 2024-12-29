@@ -79,11 +79,14 @@
     border-top: 1px solid var(--border);
     display: grid;
     grid-gap: 0.5em;
-    grid-auto-columns: minmax(max-content, 1fr);
+    grid-template-columns: min-content;
+    grid-auto-columns: min-content;
+    grid-auto-flow: column dense;
     height: auto;
 
     button {
       width: auto;
+      white-space: nowrap;
       padding-left: 2em;
       padding-right: 2em;
     }
@@ -104,8 +107,10 @@
   .dialog-modal-footer {
     flex-direction: column;
     justify-content: flex-end;
-    grid-auto-columns: initial;
-    grid-auto-rows: 1fr;
+    grid-template-columns: 1fr;
+    grid-auto-columns: none;
+    grid-auto-rows: auto;
+    grid-auto-flow: row dense;
 
     button {
       grid-column: 1;
