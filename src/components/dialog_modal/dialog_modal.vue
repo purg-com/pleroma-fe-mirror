@@ -69,12 +69,41 @@
     margin: 0;
     padding: 0.5em;
     border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: flex-end;
+    display: grid;
+    grid-gap: 0.5em;
+    grid-auto-columns: minmax(max-content, 1fr);
+    height: auto;
 
     button {
       width: auto;
-      margin-left: 0.5rem;
+      padding-left: 2em;
+      padding-right: 2em;
+    }
+  }
+}
+
+#modal.-mobile {
+  .dialog-modal.panel {
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-width: none;
+    transform: none;
+    width: 100vw;
+    margin: auto;
+    z-index: 2001;
+
+    .dialog-modal-footer {
+      flex-direction: column;
+      justify-content: flex-end;
+      grid-auto-columns: initial;
+      grid-auto-rows: 1fr;
+
+      button {
+        grid-column: 1;
+        height: 2em;
+      }
     }
   }
 }

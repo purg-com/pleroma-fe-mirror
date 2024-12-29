@@ -47,6 +47,9 @@ export default {
   watch: {
     themeApplied (value) {
       this.removeSplash()
+    },
+    layoutType (value) {
+      document.getElementById('modal').classList = ['-' + this.layoutType]
     }
   },
   created () {
@@ -54,6 +57,7 @@ export default {
     const val = this.$store.getters.mergedConfig.interfaceLanguage
     this.$store.dispatch('setOption', { name: 'interfaceLanguage', value: val })
     window.addEventListener('resize', this.updateMobileState)
+    document.getElementById('modal').classList = ['-' + this.layoutType]
   },
   mounted () {
     if (this.$store.state.interface.themeApplied) {
