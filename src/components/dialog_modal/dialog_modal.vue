@@ -71,6 +71,7 @@
     margin: 0;
     padding: 1rem;
     white-space: normal;
+    text-align: center;
   }
 
   .dialog-modal-footer {
