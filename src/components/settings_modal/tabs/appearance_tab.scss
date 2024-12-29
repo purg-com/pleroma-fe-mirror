@@ -44,14 +44,19 @@
   }
 
   .palette-entry {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto;
     align-items: center;
     justify-content: space-between;
     padding: 0 0.5em;
-    height: 2.5em;
+    height: max-content;
 
-    .palette-label label {
-      text-align: center;
+    .palette-label {
+      height: auto;
+
+      label {
+        text-align: center;
+      }
     }
 
     .palette-square {
@@ -75,15 +80,18 @@
   }
 
   .modal-view.-mobile & {
+    .palettes {
+      grid-template-columns: 1fr;
+    }
+
     .palette-entry {
-      flex-wrap: wrap;
+      grid-column: 1;
       justify-content: center;
     }
 
     .palette-label {
       line-height: 1.5em;
       margin-top: 0.5em;
-      width: 100%;
     }
   }
 
