@@ -1,5 +1,6 @@
 <template>
   <span
+    class="dialog-container"
     :class="{ 'dark-overlay': darkOverlay }"
     @click.self.stop="onCancel()"
   >
@@ -41,14 +42,21 @@
   }
 }
 
-.dialog-modal.panel {
+.dialog-container {
+  display: grid;
+  position: fixed;
   top: 0;
-  left: 50%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+}
+
+.dialog-modal.panel {
   max-height: 80vh;
   max-width: 90vw;
-  margin: 15vh auto;
-  position: fixed;
-  transform: translateX(-50%);
   z-index: 2001;
   cursor: default;
   display: block;
@@ -83,27 +91,25 @@
 }
 
 #modal.-mobile {
+  .dialog-container {
+    justify-content: stretch;
+    align-items: end;
+    justify-items: stretch;
+  }
+
   .dialog-modal.panel {
-    top: auto;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    max-width: none;
-    transform: none;
-    width: 100vw;
-    margin: auto;
-    z-index: 2001;
+    min-width: 100vw;
+  }
 
-    .dialog-modal-footer {
-      flex-direction: column;
-      justify-content: flex-end;
-      grid-auto-columns: initial;
-      grid-auto-rows: 1fr;
+  .dialog-modal-footer {
+    flex-direction: column;
+    justify-content: flex-end;
+    grid-auto-columns: initial;
+    grid-auto-rows: 1fr;
 
-      button {
-        grid-column: 1;
-        height: 2em;
-      }
+    button {
+      grid-column: 1;
+      height: 2em;
     }
   }
 }
