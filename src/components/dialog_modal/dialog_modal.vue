@@ -115,7 +115,7 @@
 
     button {
       grid-column: 1;
-      height: 2em;
+      height: 3em;
     }
   }
 }
