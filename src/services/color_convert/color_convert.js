@@ -197,7 +197,7 @@ export const getTextColor = function (bg, text, preserve) {
 
   const originalColor = convert(text).hex
   const invertedColor = invertLightness(originalColor).hex
-  const invertedContrast = getContrastRatio(bg, invertedColor)
+  const invertedContrast = getContrastRatio(bg, convert(invertedColor).rgb)
   let workColor
 
   if (invertedContrast > originalContrast) {
@@ -210,9 +210,10 @@ export const getTextColor = function (bg, text, preserve) {
   const result = convert(rgb2hex(workColor)).hsl
   const delta = result.l > 50 ? 1 : -1
   const multiplier = 10
-  while (contrast < 4.5) {
+  while (contrast < 4.5 && result.l > 0 && result.l < 100) {
     result.l += delta * multiplier
-    contrast = getContrastRatio(bg, result)
+    contrast = getContrastRatio(bg, convert(result).rgb)
+    console.log(convert(result).hex, result.l, contrast)
   }
 
   const base = typeof text.a !== 'undefined' ? { a: text.a } : {}
