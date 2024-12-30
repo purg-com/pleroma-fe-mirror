@@ -32,6 +32,18 @@ export default {
       directives: {
         textColor: '--text'
       }
+    },
+    {
+      component: 'Icon',
+      parent: {
+        component: 'ButtonUnstyled',
+        parent: {
+          component: 'TopBar'
+        }
+      },
+      directives: {
+        textColor: '--parent--text'
+      }
     }
   ]
 }

@@ -6,10 +6,6 @@
     color: var(--inputTopbarText, var(--inputText));
   }
 
-  a {
-    color: var(--link);
-  }
-
   .inner-nav {
     display: grid;
     grid-template-rows: var(--navbar-height);
@@ -91,10 +87,6 @@
     width: 2em;
     height: 100%;
     text-align: center;
-
-    .svg-inline--fa {
-      color: var(--link);
-    }
   }
 
   .sitename {
