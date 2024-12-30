@@ -1,5 +1,6 @@
 <template>
   <span
+    class="dialog-container"
     :class="{ 'dark-overlay': darkOverlay }"
     @click.self.stop="onCancel()"
   >
@@ -41,14 +42,21 @@
   }
 }
 
-.dialog-modal.panel {
+.dialog-container {
+  display: grid;
+  position: fixed;
   top: 0;
-  left: 50%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+}
+
+.dialog-modal.panel {
   max-height: 80vh;
   max-width: 90vw;
-  margin: 15vh auto;
-  position: fixed;
-  transform: translateX(-50%);
   z-index: 2001;
   cursor: default;
   display: block;
@@ -63,18 +71,51 @@
     margin: 0;
     padding: 1rem;
     white-space: normal;
+    text-align: center;
   }
 
   .dialog-modal-footer {
     margin: 0;
     padding: 0.5em;
     border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: flex-end;
+    display: grid;
+    grid-gap: 0.5em;
+    grid-template-columns: min-content;
+    grid-auto-columns: min-content;
+    grid-auto-flow: column dense;
+    height: auto;
 
     button {
       width: auto;
-      margin-left: 0.5rem;
+      white-space: nowrap;
+      padding-left: 2em;
+      padding-right: 2em;
+    }
+  }
+}
+
+#modal.-mobile {
+  .dialog-container {
+    justify-content: stretch;
+    align-items: end;
+    justify-items: stretch;
+  }
+
+  .dialog-modal.panel {
+    min-width: 100vw;
+  }
+
+  .dialog-modal-footer {
+    flex-direction: column;
+    justify-content: flex-end;
+    grid-template-columns: 1fr;
+    grid-auto-columns: none;
+    grid-auto-rows: auto;
+    grid-auto-flow: row dense;
+
+    button {
+      grid-column: 1;
+      height: 3em;
     }
   }
 }
