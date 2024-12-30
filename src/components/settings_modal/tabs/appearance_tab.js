@@ -43,7 +43,7 @@ const AppearanceTab = {
       bundledPalettes: [],
       compilationCache: {},
       fileImporter: newImporter({
-        accept: '.json, .piss',
+        accept: '.json, .iss',
         validator: this.importValidator,
         onImport: this.onImport,
         parser: this.importParser,
@@ -305,14 +305,14 @@ const AppearanceTab = {
     importParser (file, filename) {
       if (filename.endsWith('.json')) {
         return JSON.parse(file)
-      } else if (filename.endsWith('.piss')) {
+      } else if (filename.endsWith('.iss')) {
         return deserialize(file)
       }
     },
     onImport (parsed, filename) {
       if (filename.endsWith('.json')) {
         this.$store.dispatch('setThemeCustom', parsed.source || parsed.theme)
-      } else if (filename.endsWith('.piss')) {
+      } else if (filename.endsWith('.iss')) {
         this.$store.dispatch('setStyleCustom', parsed)
       }
     },
@@ -324,7 +324,7 @@ const AppearanceTab = {
       if (filename.endsWith('.json')) {
         const version = parsed._pleroma_theme_version
         return version >= 1 || version <= 2
-      } else if (filename.endsWith('.piss')) {
+      } else if (filename.endsWith('.iss')) {
         if (!Array.isArray(parsed)) return false
         if (parsed.length < 1) return false
         if (parsed.find(x => x.component === '@meta') == null) return false

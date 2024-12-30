@@ -604,7 +604,7 @@ export default {
     const styleExporter = newExporter({
       filename: () => exports.name.value ?? 'pleroma_theme',
       mime: 'text/plain',
-      extension: 'piss',
+      extension: 'iss',
       getExportedObject: () => exportStyleData.value
     })
 
@@ -636,7 +636,7 @@ export default {
     }
 
     const styleImporter = newImporter({
-      accept: '.piss',
+      accept: '.iss',
       parser (string) { return deserialize(string) },
       onImportFailure (result) {
         console.error('Failure importing style:', result)
