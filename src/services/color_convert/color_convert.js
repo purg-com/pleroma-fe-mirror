@@ -216,7 +216,7 @@ export const getTextColor = function (bg, text, preserve) {
   }
 
   const base = typeof text.a !== 'undefined' ? { a: text.a } : {}
-  return Object.assign(base, result)
+  return Object.assign(convert(result).rgb, base)
 }
 
 /**
