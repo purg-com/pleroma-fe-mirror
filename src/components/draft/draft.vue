@@ -26,7 +26,20 @@
           :compact="true"
         />
       </div>
-      <p>{{ draft.status }}</p>
+      <div class="status-preview">
+        <p>{{ draft.status }}</p>
+        <gallery
+          v-if="draft.files?.length !== 0"
+          class="attachments media-body"
+          :compact="true"
+          :nsfw="nsfwClickthrough"
+          :attachments="draft.files"
+          :limit="1"
+          size="small"
+          @play="$emit('mediaplay', attachment.id)"
+          @pause="$emit('mediapause', attachment.id)"
+        />
+      </div>
     </div>
     <div v-if="editing">
       <PostStatusForm
@@ -73,9 +86,28 @@
 
 <style lang="scss">
 .Draft {
+  position: relative;
+
+  a {
+    color: var(--link);
+  }
+
   .status-content {
     padding: 0.5em;
     margin: 0.5em 0;
+  }
+
+  .status-preview {
+    display: grid;
+    grid-template-columns: 1fr 10em;
+    grid-gap: 0.5em;
+    max-width: 100%;
+
+    p {
+      word-wrap: break-word;
+      white-space: normal;
+      overflow-x: hidden;
+    }
   }
 
   .actions {
