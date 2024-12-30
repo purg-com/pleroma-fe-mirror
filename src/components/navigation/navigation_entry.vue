@@ -82,8 +82,12 @@
   --__horizontal-gap: 0.5em;
   --__vertical-gap: 0.4em;
 
-  padding: 0;
-  display: flex;
+  padding: var(--__vertical-gap) var(--__horizontal-gap);
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-columns: var(--__line-height);
+  grid-auto-flow: column;
+  grid-gap: var(--__horizontal-gap);
   align-items: baseline;
 
   &[aria-expanded] {
@@ -93,8 +97,6 @@
   .main-link {
     line-height: var(--__line-height);
     box-sizing: border-box;
-    flex: 1;
-    padding: var(--__vertical-gap) var(--__horizontal-gap);
   }
 
   .menu-icon {
@@ -104,26 +106,16 @@
     margin-right: var(--__horizontal-gap);
   }
 
-  .timelines-chevron {
-    line-height: var(--__line-height);
-    padding: 0;
-    width: var(--__line-height);
-    margin-right: 0;
-  }
-
+  .timelines-chevron,
   .extra-button {
     line-height: var(--__line-height);
+    width: 100%;
     padding: 0;
-    width: var(--__line-height);
     text-align: center;
-
-    &:last-child {
-      margin-right: calc(-1 * var(--__horizontal-gap));
-    }
   }
 
   .badge {
-    margin: 0 var(--__horizontal-gap);
+    justify-self: center;
   }
 
   .iconEmoji {
