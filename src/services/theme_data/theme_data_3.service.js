@@ -284,8 +284,11 @@ export const init = ({
       computed[selector] = computed[selector] || {}
       computed[selector].computedRule = computedRule
       computed[selector].dynamicVars = dynamicVars
+
+      // avoid putting more stuff into actual CSS
       computed[selector].virtualDirectives = {}
-      computed[selector].virtualDirectivesRaw = {}
+      // but still be able to access it i.e. from --parent
+      computed[selector].virtualDirectivesRaw = computed[lowerLevelSelector]?.virtualDirectivesRaw || {}
 
       if (virtualComponents.has(combination.component)) {
         const virtualName = [
