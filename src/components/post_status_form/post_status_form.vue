@@ -302,7 +302,7 @@
             <FAIcon icon="poll-h" />
           </button>
         </div>
-        <div class="btn-group">
+        <div class="btn-group post-button-group">
           <button
             class="btn button-default post-button"
             :disabled="isOverLengthLimit || posting || uploadingFiles || disableSubmit"

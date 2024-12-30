@@ -5,28 +5,37 @@
     margin-bottom: 0.5em;
   }
 
+  .more-post-actions {
+    height: 100%;
+
+    .btn {
+      height: 100%;
+    }
+  }
+
   .form-bottom {
     display: flex;
     justify-content: space-between;
     padding: 0.5em;
     height: 2.5em;
 
-    .post-button {
-      width: 7.5em;
+    .post-button-group {
+      width: 10em;
+      display: flex;
+
+      .post-button {
+        flex: 1 0 auto;
+      }
+
+      .more-post-actions {
+        flex: 0 0 auto;
+      }
     }
 
     p {
       margin: 0.35em;
       padding: 0.35em;
       display: flex;
-    }
-  }
-
-  .more-post-actions {
-    height: 100%;
-
-    .btn {
-      height: 100%;
     }
   }
 

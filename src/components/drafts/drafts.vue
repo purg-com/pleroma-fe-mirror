@@ -16,6 +16,7 @@
         >
           <template #item="{ item: draft }">
             <Draft
+              class="draft"
               :draft="draft"
             />
           </template>
@@ -26,3 +27,9 @@
 </template>
 
 <script src="./drafts.js"></script>
+
+<style lang="scss">
+.draft {
+  margin: 1em 0;
+}
+</style>

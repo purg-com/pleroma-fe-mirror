@@ -3,6 +3,7 @@ import EditStatusForm from 'src/components/edit_status_form/edit_status_form.vue
 import ConfirmModal from 'src/components/confirm_modal/confirm_modal.vue'
 import StatusContent from 'src/components/status_content/status_content.vue'
 import Gallery from 'src/components/gallery/gallery.vue'
+import { cloneDeep } from 'lodash'
 
 const Draft = {
   components: {
@@ -19,8 +20,8 @@ const Draft = {
     }
   },
   data () {
-    console.log('DRAFT', this.draft)
     return {
+      referenceDraft: cloneDeep(this.draft),
       editing: false,
       showingConfirmDialog: false
     }
@@ -35,6 +36,11 @@ const Draft = {
         return {}
       }
     },
+    safeToSave () {
+      return this.draft.status ||
+        this.draft.files?.length ||
+        this.draft.hasPoll
+    },
     postStatusFormProps () {
       return {
         draftId: this.draft.id,
@@ -48,7 +54,6 @@ const Draft = {
       return this.$store.getters.mergedConfig.collapseMessageWithSubject
     },
     nsfwClickthrough () {
-      console.log(this.draft)
       if (!this.draft.nsfw) {
         return false
       }
@@ -56,6 +61,16 @@ const Draft = {
         return false
       }
       return true
+    }
+  },
+  watch: {
+    editing (newVal) {
+      if (newVal) return
+      if (this.safeToSave) {
+        this.$store.dispatch('addOrSaveDraft', { draft: this.draft })
+      } else {
+        this.$store.dispatch('addOrSaveDraft', { draft: this.referenceDraft })
+      }
     }
   },
   methods: {

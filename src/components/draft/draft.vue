@@ -44,10 +44,12 @@
     <div v-if="editing">
       <PostStatusForm
         v-if="draft.type !== 'edit'"
+        :disable-draft="true"
         v-bind="postStatusFormProps"
       />
       <EditStatusForm
         v-else
+        :disable-draft="true"
         :params="postStatusFormProps"
       />
     </div>
@@ -66,11 +68,10 @@
     <div class="actions">
       <button
         class="btn button-default"
-        :class="{ toggled: editing }"
         :aria-expanded="editing"
         @click.prevent.stop="toggleEditing"
       >
-        {{ $t('drafts.continue') }}
+        {{ editing ? $t('drafts.save') : $t('drafts.continue') }}
       </button>
       <button
         class="btn button-default"
@@ -87,6 +88,8 @@
 <style lang="scss">
 .Draft {
   position: relative;
+  line-height: 1.1;
+  font-size: initial;
 
   a {
     color: var(--link);
@@ -119,7 +122,6 @@
       flex: 1;
       margin-left: 1em;
       margin-right: 1em;
-      max-width: 10em;
     }
   }
 }
