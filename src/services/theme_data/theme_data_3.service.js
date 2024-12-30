@@ -284,8 +284,8 @@ export const init = ({
       computed[selector] = computed[selector] || {}
       computed[selector].computedRule = computedRule
       computed[selector].dynamicVars = dynamicVars
-      computed[selector].virtualDirectives = computed[lowerLevelSelector]?.virtualDirectives || {}
-      computed[selector].virtualDirectivesRaw = computed[lowerLevelSelector]?.virtualDirectivesRaw || {}
+      computed[selector].virtualDirectives = {}
+      computed[selector].virtualDirectivesRaw = {}
 
       if (virtualComponents.has(combination.component)) {
         const virtualName = [
