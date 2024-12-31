@@ -339,6 +339,8 @@
                   v-if="!disableDraft"
                   class="menu-item dropdown-item dropdown-item-icon"
                   role="menu"
+                  :disabled="!safeToSaveDraft"
+                  :class="{ disabled: !safeToSaveDraft }"
                   @click.prevent="saveDraft"
                   @click="close"
                 >

@@ -352,6 +352,12 @@ const PostStatusForm = {
         return this.$t('post_status.auto_save_nothing_new')
       }
     },
+    safeToSaveDraft () {
+      return this.newStatus.status ||
+        this.newStatus.spoilerText ||
+        this.newStatus.files?.length ||
+        this.newStatus.hasPoll
+    },
     ...mapGetters(['mergedConfig']),
     ...mapState({
       mobileLayout: state => state.interface.mobileLayout
@@ -747,9 +753,7 @@ const PostStatusForm = {
     saveDraft () {
       if (!this.disableDraft &&
           !this.saveInhibited) {
-        if (this.newStatus.status ||
-            this.newStatus.files?.length ||
-            this.newStatus.hasPoll) {
+        if (this.safeToSaveDraft) {
           return this.$store.dispatch('addOrSaveDraft', { draft: this.newStatus })
             .then(id => {
               if (this.newStatus.id !== id) {

@@ -27,8 +27,15 @@
         />
       </div>
       <div class="status-preview">
-        <p v-if="draft.status">{{ draft.status }}</p>
-        <p v-else class="faint">{{ $t('drafts.empty') }}</p>
+        <span class="status_content">
+          <p v-if="draft.spoilerText">
+            <i>
+              {{ draft.spoilerText }}:
+            </i>
+          </p>
+          <p v-if="draft.status">{{ draft.status }}</p>
+          <p v-else class="faint">{{ $t('drafts.empty') }}</p>
+        </span>
         <gallery
           v-if="draft.files?.length !== 0"
           class="attachments media-body"

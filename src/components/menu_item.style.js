@@ -11,8 +11,9 @@ export default {
     'Avatar'
   ],
   states: {
-    hover: ':hover',
-    active: '.-active'
+    hover: ':hover:not(.disabled)',
+    active: '.-active',
+    disabled: '.disabled'
   },
   defaultRules: [
     {
@@ -84,6 +85,28 @@ export default {
       directives: {
         textColor: '--link',
         textAuto: 'no-preserve'
+      }
+    },
+    {
+      component: 'Text',
+      parent: {
+        component: 'MenuItem',
+        state: ['disabled']
+      },
+      directives: {
+        textOpacity: 0.25,
+        textOpacityMode: 'blend'
+      }
+    },
+    {
+      component: 'Icon',
+      parent: {
+        component: 'MenuItem',
+        state: ['disabled']
+      },
+      directives: {
+        textOpacity: 0.25,
+        textOpacityMode: 'blend'
       }
     }
   ]

@@ -402,6 +402,10 @@ nav {
     color: var(--text);
     font-size: 100%;
   }
+
+  &.disabled {
+    cursor: not-allowed;
+  }
 }
 
 .menu-item,
