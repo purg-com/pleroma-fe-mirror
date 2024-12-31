@@ -24,10 +24,7 @@
     margin: 0.5em 0;
   }
 
-  .palettes {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 0.5em;
+  .palettes-container {
     height: 15em;
     overflow-y: auto;
     overflow-x: hidden;
@@ -35,7 +32,14 @@
     border-radius: var(--roundness);
     border: 1px solid var(--border);
     margin: -0.5em;
+  }
+
+  .palettes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 0.5em;
     padding: 0.5em;
+    width: 100%;
 
     h4 {
       margin: 0;

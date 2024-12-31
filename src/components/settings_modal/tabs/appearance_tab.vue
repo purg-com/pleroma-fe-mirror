@@ -93,56 +93,58 @@
         <h2>{{ $t('settings.style.themes3.palette.label') }}</h2>
         <div
           v-if="customThemeVersion === 'v3'"
-          class="palettes"
+          class="palettes-container"
         >
           <h4 v-if="stylePalettes?.length > 0">
             {{ $t('settings.style.themes3.palette.style') }}
           </h4>
-          <button
-            v-for="p in stylePalettes || []"
-            :key="p.name"
-            class="btn button-default palette-entry"
-            :class="{ toggled: isPaletteActive(p.key), disabled: switchInProgress }"
-            :disabled="switchInProgress"
-            @click="() => setPalette(p.key, p)"
-          >
-            <div class="palette-label">
-              <label>
-                {{ p.name ?? $t('settings.style.themes3.palette.user') }}
-              </label>
-            </div>
-            <div class="palette-preview">
-              <span
-                v-for="c in palettesKeys"
-                :key="c"
-                class="palette-square"
-                :style="{ backgroundColor: p[c], border: '1px solid ' + (p[c] ?? 'var(--text)') }"
-              />
-            </div>
-          </button>
-          <h4>{{ $t('settings.style.themes3.palette.bundled') }}</h4>
-          <button
-            v-for="p in bundledPalettes"
-            :key="p.name"
-            class="btn button-default palette-entry"
-            :class="{ toggled: isPaletteActive(p.key), disabled: switchInProgress }"
-            :disabled="switchInProgress"
-            @click="() => setPalette(p.key, p)"
-          >
-            <div class="palette-label">
-              <label>
-                {{ p.name }}
-              </label>
-            </div>
-            <div class="palette-preview">
-              <span
-                v-for="c in palettesKeys"
-                :key="c"
-                class="palette-square"
-                :style="{ backgroundColor: p[c], border: '1px solid ' + (p[c] ?? 'var(--text)') }"
-              />
-            </div>
-          </button>
+          <div class="palettes">
+            <button
+              v-for="p in stylePalettes || []"
+              :key="p.name"
+              class="btn button-default palette-entry"
+              :class="{ toggled: isPaletteActive(p.key), disabled: switchInProgress }"
+              :disabled="switchInProgress"
+              @click="() => setPalette(p.key, p)"
+            >
+              <div class="palette-label">
+                <label>
+                  {{ p.name ?? $t('settings.style.themes3.palette.user') }}
+                </label>
+              </div>
+              <div class="palette-preview">
+                <span
+                  v-for="c in palettesKeys"
+                  :key="c"
+                  class="palette-square"
+                  :style="{ backgroundColor: p[c], border: '1px solid ' + (p[c] ?? 'var(--text)') }"
+                />
+              </div>
+            </button>
+            <h4>{{ $t('settings.style.themes3.palette.bundled') }}</h4>
+            <button
+              v-for="p in bundledPalettes"
+              :key="p.name"
+              class="btn button-default palette-entry"
+              :class="{ toggled: isPaletteActive(p.key), disabled: switchInProgress }"
+              :disabled="switchInProgress"
+              @click="() => setPalette(p.key, p)"
+            >
+              <div class="palette-label">
+                <label>
+                  {{ p.name }}
+                </label>
+              </div>
+              <div class="palette-preview">
+                <span
+                  v-for="c in palettesKeys"
+                  :key="c"
+                  class="palette-square"
+                  :style="{ backgroundColor: p[c], border: '1px solid ' + (p[c] ?? 'var(--text)') }"
+                />
+              </div>
+            </button>
+          </div>
         </div>
         <div>
           <template v-if="customThemeVersion === 'v3'">
