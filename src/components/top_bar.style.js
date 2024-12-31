@@ -23,6 +23,27 @@ export default {
           alpha: 0.6
         }]
       }
+    },
+    {
+      component: 'Link',
+      parent: {
+        component: 'TopBar'
+      },
+      directives: {
+        textColor: '--text'
+      }
+    },
+    {
+      component: 'Icon',
+      parent: {
+        component: 'ButtonUnstyled',
+        parent: {
+          component: 'TopBar'
+        }
+      },
+      directives: {
+        textColor: '--parent--text'
+      }
     }
   ]
 }

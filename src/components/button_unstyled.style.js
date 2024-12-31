@@ -10,14 +10,13 @@ export default {
   },
   validInnerComponents: [
     'Text',
+    'Link',
     'Icon',
     'Badge'
   ],
   defaultRules: [
     {
       directives: {
-        background: '#ffffff',
-        opacity: 0,
         shadow: []
       }
     },

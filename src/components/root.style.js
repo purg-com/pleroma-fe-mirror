@@ -3,6 +3,11 @@ export default {
   selector: ':root',
   notEditable: true,
   validInnerComponents: [
+    // These are purely for --parent--text et such to work
+    'Text',
+    'Link',
+    'Border',
+
     'Underlay',
     'Modals',
     'Popover',

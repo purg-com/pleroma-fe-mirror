@@ -20,26 +20,47 @@
     }
   }
 
+  h4 {
+    margin: 0.5em 0;
+  }
+
+  .palettes-container {
+    height: 15em;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-gutter: stable;
+    border-radius: var(--roundness);
+    border: 1px solid var(--border);
+    margin: -0.5em;
+  }
+
   .palettes {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 0.5em;
+    padding: 0.5em;
+    width: 100%;
 
-    h4,
-    .unsupported-theme-v2,
-    .userPalette {
+    h4 {
+      margin: 0;
       grid-column: 1 / span 2;
     }
   }
 
   .palette-entry {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto;
     align-items: center;
     justify-content: space-between;
     padding: 0 0.5em;
+    height: max-content;
 
-    .palette-label label {
-      text-align: center;
+    .palette-label {
+      height: auto;
+
+      label {
+        text-align: center;
+      }
     }
 
     .palette-square {
@@ -63,23 +84,26 @@
   }
 
   .modal-view.-mobile & {
+    .palettes {
+      grid-template-columns: 1fr;
+    }
+
     .palette-entry {
-      flex-wrap: wrap;
+      grid-column: 1;
       justify-content: center;
     }
 
     .palette-label {
       line-height: 1.5em;
       margin-top: 0.5em;
-      width: 100%;
     }
+  }
 
-    .palette-preview {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      grid-template-rows: 1em 1em;
-      margin-bottom: 0.5em;
-    }
+  .palette-preview {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1em 1em;
+    margin: 0.5em 0;
   }
 
   .theme-list {

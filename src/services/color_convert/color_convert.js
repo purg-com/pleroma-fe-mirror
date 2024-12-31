@@ -1,4 +1,4 @@
-import { invertLightness, contrastRatio } from 'chromatism'
+import { invertLightness, contrastRatio, convert } from 'chromatism'
 
 // useful for visualizing color when debugging
 export const consoleColor = (color) => console.log('%c##########', 'background: ' + color + '; color: ' + color)
@@ -215,19 +215,37 @@ export const rgba2css = function (rgba) {
  * @param {Boolean} preserve - try to preserve intended text color's hue/saturation (i.e. no BW)
  */
 export const getTextColor = function (bg, text, preserve) {
-  const contrast = getContrastRatio(bg, text)
-
-  if (contrast < 4.5) {
-    const base = typeof text.a !== 'undefined' ? { a: text.a } : {}
-    const result = Object.assign(base, invertLightness(text).rgb)
-    if (!preserve && getContrastRatio(bg, result) < 4.5) {
+  const originalContrast = getContrastRatio(bg, text)
+  if (!preserve) {
+    if (originalContrast < 4.5) {
       // B&W
       return contrastRatio(bg, text).rgb
     }
-    // Inverted color
-    return result
   }
-  return text
+
+  const originalColor = convert(text).hex
+  const invertedColor = invertLightness(originalColor).hex
+  const invertedContrast = getContrastRatio(bg, convert(invertedColor).rgb)
+  let workColor
+
+  if (invertedContrast > originalContrast) {
+    workColor = invertedColor
+  } else {
+    workColor = originalColor
+  }
+
+  let contrast = getContrastRatio(bg, text)
+  const result = convert(rgb2hex(workColor)).hsl
+  const delta = result.l > 50 ? 1 : -1
+  const multiplier = 10
+  while (contrast < 4.5 && result.l > 20 && result.l < 80) {
+    result.l += delta * multiplier
+    result.l = Math.min(100, Math.max(0, result.l))
+    contrast = getContrastRatio(bg, convert(result).rgb)
+  }
+
+  const base = typeof text.a !== 'undefined' ? { a: text.a } : {}
+  return Object.assign(convert(result).rgb, base)
 }
 
 /**

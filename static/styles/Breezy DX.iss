@@ -31,14 +31,26 @@
   link: #1CA4F3;
 }
 
+@palette.Panda {
+  bg: #EFF0F2;
+  fg: #292C32;
+  text: #1B1F22;
+  link: #1CA4F3;
+  accent: #1CA4F3;
+  cRed: #f41a51;
+  cBlue: #1CA4F3;
+  cGreen: #1af46e;
+  cOrange: #f4af1a;
+}
+
 Root {
   --badgeNotification: color | --cRed;
   --buttonDefaultHoverGlow: shadow | inset 0 0 0 1 --accent / 1;
   --buttonDefaultFocusGlow: shadow | inset 0 0 0 1 --accent / 1;
-  --buttonDefaultShadow: shadow | inset 0 0 0 1 --text / 0.35, 0 5 5 -5 #000000 / 0.35;
+  --buttonDefaultShadow: shadow | inset 0 0 0 1 --parent--text / 0.35, 0 5 5 -5 #000000 / 0.35;
   --buttonDefaultBevel: shadow | inset 0 14 14 -14 #FFFFFF / 0.1;
   --buttonPressedBevel: shadow | inset 0 -20 20 -20 #000000 / 0.05;
-  --defaultInputBevel: shadow | inset 0 0 0 1 --text / 0.35;
+  --defaultInputBevel: shadow | inset 0 0 0 1 --parent--text / 0.35;
   --defaultInputHoverGlow: shadow | 0 0 0 1 --accent / 1;
   --defaultInputFocusGlow: shadow | 0 0 0 1 --link / 1;
 }
@@ -67,8 +79,13 @@ Button:toggled:hover {
   background: $blend(--bg 0.3 --accent)
 }
 
+Button {
+  background: --parent;
+}
+
 Input {
-  shadow: --defaultInputBevel
+  shadow: --defaultInputBevel;
+  background: --parent;
 }
 
 PanelHeader {
@@ -77,4 +94,8 @@ PanelHeader {
 
 Tab:hover {
   shadow: --buttonDefaultHoverGlow, --buttonDefaultBevel, --buttonDefaultShadow
+}
+
+Tab {
+  background: --parent;
 }
