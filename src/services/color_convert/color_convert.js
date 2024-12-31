@@ -212,6 +212,7 @@ export const getTextColor = function (bg, text, preserve) {
   const multiplier = 10
   while (contrast < 4.5 && result.l > 20 && result.l < 80) {
     result.l += delta * multiplier
+    result.l = Math.min(100, Math.max(0, result.l))
     contrast = getContrastRatio(bg, convert(result).rgb)
     console.log(convert(result).hex, result.l, contrast)
   }
