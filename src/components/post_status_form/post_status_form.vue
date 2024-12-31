@@ -336,11 +336,11 @@
                 role="menu"
               >
                 <button
+                  v-if="!disableDraft"
                   class="menu-item dropdown-item dropdown-item-icon"
                   role="menu"
                   @click.prevent="saveDraft"
                   @click="close"
-                  v-if="!disableDraft"
                 >
                   {{ $t('post_status.save_to_drafts_button') }}
                 </button>
