@@ -154,11 +154,6 @@
     font-size: 1.1em;
   }
 
-  .timelines-chevron {
-    margin-left: 0.8em;
-    font-size: 1.1em;
-  }
-
   .timelines-background {
     padding: 0 0 0 0.6em;
   }

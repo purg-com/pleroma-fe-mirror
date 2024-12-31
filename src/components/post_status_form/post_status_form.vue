@@ -264,6 +264,12 @@
         :visible="pollFormVisible"
         :params="newStatus.poll"
       />
+      <span
+        v-if="!disableDraft && shouldAutoSaveDraft"
+        class="auto-save-status"
+      >
+        {{ autoSaveState }}
+      </span>
       <div
         ref="bottom"
         class="form-bottom"
@@ -296,41 +302,54 @@
             <FAIcon icon="poll-h" />
           </button>
         </div>
-        <span
-          v-if="!disableDraft && shouldAutoSaveDraft"
-          class="auto-save-status"
-        >
-          {{ autoSaveState }}
-        </span>
-        <button
-          v-else-if="!disableDraft"
-          class="btn button-default"
-          @click="saveDraft"
-        >
-          {{ $t('post_status.save_to_drafts_button') }}
-        </button>
-        <button
-          v-if="posting"
-          disabled
-          class="btn button-default"
-        >
-          {{ $t('post_status.posting') }}
-        </button>
-        <button
-          v-else-if="isOverLengthLimit"
-          disabled
-          class="btn button-default"
-        >
-          {{ $t('post_status.post') }}
-        </button>
-        <button
-          v-else
-          :disabled="uploadingFiles || disableSubmit"
-          class="btn button-default"
-          @click.stop.prevent="postStatus($event, newStatus)"
-        >
-          {{ $t('post_status.post') }}
-        </button>
+        <div class="btn-group post-button-group">
+          <button
+            class="btn button-default post-button"
+            :disabled="isOverLengthLimit || posting || uploadingFiles || disableSubmit"
+            @click.stop.prevent="postStatus($event, newStatus)"
+          >
+            <template v-if="posting">
+              {{ $t('post_status.posting') }}
+            </template>
+            <template v-else>
+              {{ $t('post_status.post') }}
+            </template>
+          </button>
+          <Popover
+            v-if="!disableDraft"
+            class="more-post-actions"
+            :normal-button="true"
+            trigger="click"
+            placement="bottom"
+            :offset="{ y: 5 }"
+            :bound-to="{ x: 'container' }"
+          >
+            <template #trigger>
+              <FAIcon
+                class="fa-scale-110 fa-old-padding"
+                icon="chevron-down"
+              />
+            </template>
+            <template #content="{close}">
+              <div
+                class="dropdown-menu"
+                role="menu"
+              >
+                <button
+                  v-if="!disableDraft"
+                  class="menu-item dropdown-item dropdown-item-icon"
+                  role="menu"
+                  :disabled="!safeToSaveDraft"
+                  :class="{ disabled: !safeToSaveDraft }"
+                  @click.prevent="saveDraft"
+                  @click="close"
+                >
+                  {{ $t('post_status.save_to_drafts_button') }}
+                </button>
+              </div>
+            </template>
+          </Popover>
+        </div>
       </div>
       <div
         v-show="showDropIcon !== 'hide'"
@@ -391,246 +410,4 @@
 
 <script src="./post_status_form.js"></script>
 
-<style lang="scss">
-.post-status-form {
-  position: relative;
-
-  .attachments {
-    margin-bottom: 0.5em;
-  }
-
-  .form-bottom {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5em;
-    height: 2.5em;
-
-    button {
-      width: 10em;
-    }
-
-    p {
-      margin: 0.35em;
-      padding: 0.35em;
-      display: flex;
-    }
-  }
-
-  .form-bottom-left {
-    display: flex;
-    flex: 1;
-    padding-right: 7px;
-    margin-right: 7px;
-    max-width: 10em;
-  }
-
-  .preview-heading {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .preview-toggle {
-    flex: 10 0 auto;
-    cursor: pointer;
-    user-select: none;
-    padding-left: 0.5em;
-
-    &:hover {
-      text-decoration: underline;
-    }
-
-    svg,
-    i {
-      margin-left: 0.2em;
-      font-size: 0.8em;
-      transform: rotate(90deg);
-    }
-  }
-
-  .preview-container {
-    margin-bottom: 1em;
-  }
-
-  .preview-error {
-    font-style: italic;
-    color: var(--textFaint);
-  }
-
-  .preview-status {
-    border: 1px solid var(--border);
-    border-radius: var(--roundness);
-    padding: 0.5em;
-    margin: 0;
-  }
-
-  .reply-or-quote-selector {
-    flex: 1 0 auto;
-    margin-bottom: 0.5em;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .text-format {
-    .only-format {
-      color: var(--textFaint);
-    }
-  }
-
-  .visibility-tray {
-    display: flex;
-    justify-content: space-between;
-    padding-top: 5px;
-    align-items: baseline;
-  }
-
-  .visibility-notice.edit-warning {
-    > :first-child {
-      margin-top: 0;
-    }
-
-    > :last-child {
-      margin-bottom: 0;
-    }
-  }
-
-  // Order is not necessary but a good indicator
-  .media-upload-icon {
-    order: 1;
-    justify-content: left;
-  }
-
-  .emoji-icon {
-    order: 2;
-    justify-content: center;
-  }
-
-  .poll-icon {
-    order: 3;
-    justify-content: right;
-  }
-
-  .media-upload-icon,
-  .poll-icon,
-  .emoji-icon {
-    font-size: 1.85em;
-    line-height: 1.1;
-    flex: 1;
-    padding: 0 0.1em;
-    display: flex;
-    align-items: center;
-  }
-
-  .error {
-    text-align: center;
-  }
-
-  .media-upload-wrapper {
-    margin-right: 0.2em;
-    margin-bottom: 0.5em;
-    width: 18em;
-
-    img,
-    video {
-      object-fit: contain;
-      max-height: 10em;
-    }
-
-    .video {
-      max-height: 10em;
-    }
-
-    input {
-      flex: 1;
-      width: 100%;
-    }
-  }
-
-  .status-input-wrapper {
-    display: flex;
-    position: relative;
-    width: 100%;
-    flex-direction: column;
-  }
-
-  .btn[disabled] {
-    cursor: not-allowed;
-  }
-
-  form {
-    display: flex;
-    flex-direction: column;
-    margin: 0.6em;
-    position: relative;
-  }
-
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    padding: 0.25em 0.5em 0.5em;
-    line-height: 1.85;
-  }
-
-  .input.form-post-body {
-    // TODO: make a resizable textarea component?
-    box-sizing: content-box; // needed for easier computation of dynamic size
-    overflow: hidden;
-    transition: min-height 200ms 100ms;
-    // stock padding + 1 line of text (for counter)
-    padding-bottom: calc(var(--_padding) + var(--post-line-height) * 1em);
-    // two lines of text
-    height: calc(var(--post-line-height) * 1em);
-    min-height: calc(var(--post-line-height) * 1em);
-    resize: none;
-    background: transparent;
-
-    &.scrollable-form {
-      overflow-y: auto;
-    }
-  }
-
-  .main-input {
-    position: relative;
-  }
-
-  .character-counter {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    padding: 0;
-    margin: 0 0.5em;
-
-    &.error {
-      color: var(--cRed);
-    }
-  }
-
-  @keyframes fade-in {
-    from { opacity: 0; }
-    to { opacity: 0.6; }
-  }
-
-  @keyframes fade-out {
-    from { opacity: 0.6; }
-    to { opacity: 0; }
-  }
-
-  .drop-indicator {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    font-size: 5em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.6;
-    color: var(--text);
-    background-color: var(--bg);
-    border-radius: var(--roundness);
-    border: 2px dashed var(--text);
-  }
-
-  .auto-save-status {
-    align-self: center;
-  }
-}
-</style>
+<style src="./post_status_form.scss" lang="scss"></style>

@@ -202,6 +202,9 @@
     .title {
       font-size: 1.3em;
       margin-left: 0.6em;
+      white-space: nowrap;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
     }
   }
 

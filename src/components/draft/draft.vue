@@ -1,21 +1,5 @@
 <template>
   <article class="Draft">
-    <div class="actions">
-      <button
-        class="btn button-default"
-        :class="{ toggled: editing }"
-        :aria-expanded="editing"
-        @click.prevent.stop="toggleEditing"
-      >
-        {{ $t('drafts.continue') }}
-      </button>
-      <button
-        class="btn button-default"
-        @click.prevent.stop="abandon"
-      >
-        {{ $t('drafts.abandon') }}
-      </button>
-    </div>
     <div
       v-if="!editing"
       class="status-content"
@@ -42,15 +26,50 @@
           :compact="true"
         />
       </div>
-      <p>{{ draft.status }}</p>
+      <div class="status-preview">
+        <span class="status_content">
+          <p v-if="draft.spoilerText">
+            <i>
+              {{ draft.spoilerText }}:
+            </i>
+          </p>
+          <p v-if="draft.status">{{ draft.status }}</p>
+          <p v-else class="faint">{{ $t('drafts.empty') }}</p>
+        </span>
+        <gallery
+          v-if="draft.files?.length !== 0"
+          class="attachments media-body"
+          :compact="true"
+          :nsfw="nsfwClickthrough"
+          :attachments="draft.files"
+          :limit="1"
+          size="small"
+          @play="$emit('mediaplay', attachment.id)"
+          @pause="$emit('mediapause', attachment.id)"
+        />
+        <div
+          v-if="draft.poll.options"
+          class="poll-indicator-container"
+          :title="$t('drafts.poll_tooltip')"
+        >
+          <div class="poll-indicator">
+            <FAIcon
+              icon="poll-h"
+              size="3x"
+            />
+          </div>
+        </div>
+      </div>
     </div>
     <div v-if="editing">
       <PostStatusForm
         v-if="draft.type !== 'edit'"
+        :disable-draft="true"
         v-bind="postStatusFormProps"
       />
       <EditStatusForm
         v-else
+        :disable-draft="true"
         :params="postStatusFormProps"
       />
     </div>
@@ -66,6 +85,21 @@
         {{ $t('drafts.abandon_confirm') }}
       </confirm-modal>
     </teleport>
+    <div class="actions">
+      <button
+        class="btn button-default"
+        :aria-expanded="editing"
+        @click.prevent.stop="toggleEditing"
+      >
+        {{ editing ? $t('drafts.save') : $t('drafts.continue') }}
+      </button>
+      <button
+        class="btn button-default"
+        @click.prevent.stop="abandon"
+      >
+        {{ $t('drafts.abandon') }}
+      </button>
+    </div>
   </article>
 </template>
 
@@ -73,15 +107,53 @@
 
 <style lang="scss">
 .Draft {
-  margin: 1em;
+  position: relative;
 
   .status-content {
-    border: 1px solid;
-    border-color: var(--faint);
-    border-radius: var(--inputRadius);
-    color: var(--text);
     padding: 0.5em;
     margin: 0.5em 0;
+  }
+
+  .status-preview {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-columns: 10em;
+    grid-auto-flow: column;
+    grid-gap: 0.5em;
+    align-items: start;
+    max-width: 100%;
+
+    p {
+      word-wrap: break-word;
+      white-space: normal;
+      overflow-x: hidden;
+    }
+
+    .poll-indicator-container {
+      border-radius: var(--roundness);
+      display: grid;
+      justify-items: center;
+      align-items: center;
+      align-self: start;
+      height: 0;
+      padding-bottom: 62.5%;
+      position: relative;
+    }
+
+    .poll-indicator {
+      box-sizing: border-box;
+      border: 1px solid var(--border);
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: grid;
+      justify-items: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
   }
 
   .actions {
@@ -93,7 +165,6 @@
       flex: 1;
       margin-left: 1em;
       margin-right: 1em;
-      max-width: 10em;
     }
   }
 }

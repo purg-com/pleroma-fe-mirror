@@ -7,6 +7,7 @@ import PollForm from '../poll/poll_form.vue'
 import Attachment from '../attachment/attachment.vue'
 import Gallery from 'src/components/gallery/gallery.vue'
 import StatusContent from '../status_content/status_content.vue'
+import Popover from 'src/components/popover/popover.vue'
 import fileTypeService from '../../services/file_type/file_type.service.js'
 import { findOffset } from '../../services/offset_finder/offset_finder.service.js'
 import { propsToNative } from '../../services/attributes_helper/attributes_helper.service.js'
@@ -25,7 +26,10 @@ import {
   faUpload,
   faBan,
   faTimes,
-  faCircleNotch
+  faCircleNotch,
+  faChevronDown,
+  faChevronLeft,
+  faChevronRight
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -34,7 +38,10 @@ library.add(
   faUpload,
   faBan,
   faTimes,
-  faCircleNotch
+  faCircleNotch,
+  faChevronDown,
+  faChevronLeft,
+  faChevronRight
 )
 
 const buildMentionsString = ({ user, attentions = [] }, currentUser) => {
@@ -111,7 +118,8 @@ const PostStatusForm = {
     'resize',
     'mediaplay',
     'mediapause',
-    'can-close'
+    'can-close',
+    'update'
   ],
   components: {
     MediaUpload,
@@ -123,7 +131,8 @@ const PostStatusForm = {
     Attachment,
     StatusContent,
     Gallery,
-    DraftCloser
+    DraftCloser,
+    Popover
   },
   mounted () {
     this.updateIdempotencyKey()
@@ -210,7 +219,7 @@ const PostStatusForm = {
       emojiInputShown: false,
       idempotencyKey: '',
       saveInhibited: true,
-      savable: false
+      saveable: false
     }
   },
   computed: {
@@ -335,13 +344,19 @@ const PostStatusForm = {
       return this.$store.getters.mergedConfig.autoSaveDraft
     },
     autoSaveState () {
-      if (this.savable) {
+      if (this.saveable) {
         return this.$t('post_status.auto_save_saving')
       } else if (this.newStatus.id) {
         return this.$t('post_status.auto_save_saved')
       } else {
         return this.$t('post_status.auto_save_nothing_new')
       }
+    },
+    safeToSaveDraft () {
+      return this.newStatus.status ||
+        this.newStatus.spoilerText ||
+        this.newStatus.files?.length ||
+        this.newStatus.hasPoll
     },
     ...mapGetters(['mergedConfig']),
     ...mapState({
@@ -355,7 +370,7 @@ const PostStatusForm = {
         this.statusChanged()
       }
     },
-    savable (val) {
+    saveable (val) {
       // https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event#usage_notes
       // MDN says we'd better add the beforeunload event listener only when needed, and remove it when it's no longer needed
       if (val) {
@@ -374,7 +389,7 @@ const PostStatusForm = {
       this.autoPreview()
       this.updateIdempotencyKey()
       this.debouncedMaybeAutoSaveDraft()
-      this.savable = true
+      this.saveable = true
       this.saveInhibited = false
     },
     clearStatus () {
@@ -403,7 +418,7 @@ const PostStatusForm = {
       el.style.height = undefined
       this.error = null
       if (this.preview) this.previewStatus()
-      this.savable = false
+      this.saveable = false
     },
     async postStatus (event, newStatus, opts = {}) {
       if (this.posting && !this.optimisticPosting) { return }
@@ -738,21 +753,19 @@ const PostStatusForm = {
     saveDraft () {
       if (!this.disableDraft &&
           !this.saveInhibited) {
-        if (this.newStatus.status ||
-            this.newStatus.files?.length ||
-            this.newStatus.hasPoll) {
+        if (this.safeToSaveDraft) {
           return this.$store.dispatch('addOrSaveDraft', { draft: this.newStatus })
             .then(id => {
               if (this.newStatus.id !== id) {
                 this.newStatus.id = id
               }
-              this.savable = false
+              this.saveable = false
             })
         } else if (this.newStatus.id) {
           // There is a draft, but there is nothing in it, clear it
           return this.abandonDraft()
             .then(() => {
-              this.savable = false
+              this.saveable = false
             })
         }
       }
@@ -780,7 +793,7 @@ const PostStatusForm = {
       // No draft available, fall back
     },
     requestClose () {
-      if (!this.savable) {
+      if (!this.saveable) {
         this.$emit('can-close')
       } else {
         this.$refs.draftCloser.requestClose()

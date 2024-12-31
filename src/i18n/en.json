@@ -1513,7 +1513,11 @@
   },
   "drafts": {
     "drafts": "Drafts",
+    "no_drafts": "You have no drafts",
+    "empty": "(No content)",
+    "poll_tooltip": "Draft contains a poll",
     "continue": "Continue composing",
+    "save": "Save without posting",
     "abandon": "Abandon draft",
     "abandon_confirm_title": "Abandon confirmation",
     "abandon_confirm": "Do you really want to abandon this draft?",
