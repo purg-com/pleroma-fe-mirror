@@ -1514,6 +1514,8 @@
   "drafts": {
     "drafts": "Drafts",
     "no_drafts": "You have no drafts",
+    "empty": "(No content)",
+    "poll_tooltip": "Draft contains a poll",
     "continue": "Continue composing",
     "save": "Save without posting",
     "abandon": "Abandon draft",

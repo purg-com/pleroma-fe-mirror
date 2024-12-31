@@ -13,6 +13,7 @@
         <List
           v-else
           :items="drafts"
+          :non-interactive="true"
         >
           <template #item="{ item: draft }">
             <Draft

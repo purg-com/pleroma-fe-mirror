@@ -27,7 +27,8 @@
         />
       </div>
       <div class="status-preview">
-        <p>{{ draft.status }}</p>
+        <p v-if="draft.status">{{ draft.status }}</p>
+        <p v-else class="faint">{{ $t('drafts.empty') }}</p>
         <gallery
           v-if="draft.files?.length !== 0"
           class="attachments media-body"
@@ -39,6 +40,18 @@
           @play="$emit('mediaplay', attachment.id)"
           @pause="$emit('mediapause', attachment.id)"
         />
+        <div
+          v-if="draft.poll.options"
+          class="poll-indicator-container"
+          :title="$t('drafts.poll_tooltip')"
+        >
+          <div class="poll-indicator">
+            <FAIcon
+              icon="poll-h"
+              size="3x"
+            />
+          </div>
+        </div>
       </div>
     </div>
     <div v-if="editing">
@@ -88,12 +101,6 @@
 <style lang="scss">
 .Draft {
   position: relative;
-  line-height: 1.1;
-  font-size: initial;
-
-  a {
-    color: var(--link);
-  }
 
   .status-content {
     padding: 0.5em;
@@ -102,14 +109,43 @@
 
   .status-preview {
     display: grid;
-    grid-template-columns: 1fr 10em;
+    grid-template-columns: 1fr;
+    grid-auto-columns: 10em;
+    grid-auto-flow: column;
     grid-gap: 0.5em;
+    align-items: start;
     max-width: 100%;
 
     p {
       word-wrap: break-word;
       white-space: normal;
       overflow-x: hidden;
+    }
+
+    .poll-indicator-container {
+      border-radius: var(--roundness);
+      display: grid;
+      justify-items: center;
+      align-items: center;
+      align-self: start;
+      height: 0;
+      padding-bottom: 62.5%;
+      position: relative;
+    }
+
+    .poll-indicator {
+      box-sizing: border-box;
+      border: 1px solid var(--border);
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: grid;
+      justify-items: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
     }
   }
 

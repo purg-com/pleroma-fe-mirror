@@ -5,6 +5,15 @@ import StatusContent from 'src/components/status_content/status_content.vue'
 import Gallery from 'src/components/gallery/gallery.vue'
 import { cloneDeep } from 'lodash'
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import {
+  faPollH
+} from '@fortawesome/free-solid-svg-icons'
+
+library.add(
+  faPollH
+)
+
 const Draft = {
   components: {
     PostStatusForm,
