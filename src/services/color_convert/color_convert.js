@@ -214,7 +214,6 @@ export const getTextColor = function (bg, text, preserve) {
     result.l += delta * multiplier
     result.l = Math.min(100, Math.max(0, result.l))
     contrast = getContrastRatio(bg, convert(result).rgb)
-    console.log(convert(result).hex, result.l, contrast)
   }
 
   const base = typeof text.a !== 'undefined' ? { a: text.a } : {}
