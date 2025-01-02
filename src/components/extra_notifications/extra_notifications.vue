@@ -14,7 +14,7 @@
           class="fa-scale-110 icon"
           icon="comments"
         />
-        {{ $tc('notifications.unread_chats', unreadChatCount, { num: unreadChatCount }) }}
+        {{ $t('notifications.unread_chats', { num: unreadChatCount }, unreadChatCount) }}
       </router-link>
     </div>
     <div
@@ -31,7 +31,7 @@
           class="fa-scale-110 icon"
           icon="bullhorn"
         />
-        {{ $tc('notifications.unread_announcements', unreadAnnouncementCount, { num: unreadAnnouncementCount }) }}
+        {{ $t('notifications.unread_announcements', { num: unreadAnnouncementCount }, unreadAnnouncementCount) }}
       </router-link>
     </div>
     <div
@@ -48,7 +48,7 @@
           class="fa-scale-110 icon"
           icon="user-plus"
         />
-        {{ $tc('notifications.unread_follow_requests', followRequestCount, { num: followRequestCount }) }}
+        {{ $t('notifications.unread_follow_requests', { num: followRequestCount }, followRequestCount) }}
       </router-link>
     </div>
     <i18n-t

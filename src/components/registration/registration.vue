@@ -201,7 +201,7 @@
                   <span>{{ $t('registration.validations.birthday_required') }}</span>
                 </li>
                 <li v-if="v$.user.birthday.maxValue.$invalid">
-                  <span>{{ $tc('registration.validations.birthday_min_age', { date: birthdayMinFormatted }) }}</span>
+                  <span>{{ $t('registration.validations.birthday_min_age', { date: birthdayMinFormatted }) }}</span>
                 </li>
               </ul>
             </div>

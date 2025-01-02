@@ -9,7 +9,7 @@
         :key="index"
       >
         <label>
-          {{ index === 0 ? $t('settings.primary_language') : $tc('settings.fallback_language', index, { index }) }}
+          {{ index === 0 ? $t('settings.primary_language') : $t('settings.fallback_language', { index }, index) }}
           <Select
             class="language-select"
             :model-value="controlledLanguage[index]"
