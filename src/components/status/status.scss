@@ -284,15 +284,10 @@
     gap: 1ex;
 
     & .status-username,
-    & .mute-thread,
-    & .mute-words {
+    & .mute-reason {
       word-wrap: normal;
       word-break: normal;
       white-space: nowrap;
-    }
-
-    & .status-username,
-    & .mute-words {
       text-overflow: ellipsis;
       overflow: hidden;
     }
@@ -302,19 +297,7 @@
       flex: 0 1 auto;
       margin-right: 0.2em;
       font-size: smaller;
-    }
-
-    .mute-thread {
-      flex: 0 0 auto;
-    }
-
-    .mute-words {
-      flex: 1 0 5em;
-      margin-left: 0.2em;
-
-      &::before {
-        content: " ";
-      }
+      display: flex;
     }
 
     .unmute {

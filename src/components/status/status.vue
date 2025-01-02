@@ -30,36 +30,8 @@
             :at="false"
           />
         </small>
-        <small
-          v-if="muteSensitiveStatuses && status.nsfw"
-          class="mute-thread"
-        >
-          {{ $t('status.sensitive_muted') }}
-        </small>
-        <small
-          v-if="muteBotStatuses && botStatus"
-          class="mute-thread"
-        >
-          {{ $t('status.bot_muted') }}
-        </small>
-        <small
-          v-if="showReasonMutedThread"
-          class="mute-thread"
-        >
-          <span>
-            {{ $t('status.thread_muted') }}
-          </span>
-          <span
-            v-if="muteWordHits.length > 0"
-          >
-            {{ $t('status.thread_muted_and_words') }}
-          </span>
-        </small>
-        <small
-          class="mute-words"
-          :title="muteWordHits.join(', ')"
-        >
-          {{ muteWordHits.join(', ') }}
+        <small class="mute-reason">
+          {{ muteLocalized }}
         </small>
         <button
           class="unmute button-unstyled"
@@ -313,13 +285,14 @@
               >
                 <i18n-t
                   keypath="status.reply_to_with_arg"
+                  scope="global"
                 >
                   <template #replyToWithIcon>
                     <StatusPopover
                       v-if="!isPreview"
                       :status-id="status.parent_visible && status.in_reply_to_status_id"
                       class="reply-to-popover"
-                      style="min-width: 0;"
+                      style="min-width: 0"
                       :class="{ '-strikethrough': !status.parent_visible }"
                     >
                       <button
@@ -327,7 +300,10 @@
                         :aria-label="$t('tool_tip.reply')"
                         @click.prevent="gotoOriginal(status.in_reply_to_status_id)"
                       >
-                        <i18n-t keypath="status.reply_to_with_icon">
+                        <i18n-t
+                          keypath="status.reply_to_with_icon"
+                          scope="global"
+                        >
                           <template #icon>
                             <FAIcon
                               class="fa-scale-110 fa-old-padding"
@@ -622,15 +598,13 @@
         class="status-container reply-form"
       >
         <PostStatusForm
-          ref="postStatusForm"
           class="reply-body"
           :reply-to="status.id"
           :attentions="status.attentions"
           :replied-user="status.user"
           :copy-message-scope="status.visibility"
           :subject="replySubject"
-          @posted="doToggleReplying"
-          @can-close="doToggleReplying"
+          @posted="toggleReplying"
         />
       </div>
     </template>
