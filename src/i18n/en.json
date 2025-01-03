@@ -1407,6 +1407,7 @@
   },
   "tool_tip": {
     "media_upload": "Upload media",
+    "mentions": "Mentions",
     "repeat": "Repeat",
     "reply": "Reply",
     "favorite": "Favorite",
