@@ -40,7 +40,7 @@ export default {
       return this.timeAsDate.toLocaleString(this.browserLocale)
     },
     relativeTimeString () {
-      const timeString = this.$i18n.tc(this.relativeTime.key, this.relativeTime.num, [this.relativeTime.num])
+      const timeString = this.$i18n.t(this.relativeTime.key, [this.relativeTime.num], this.relativeTime.num)
 
       if (typeof this.templateKey === 'string' && this.relativeTime.key !== 'time.now') {
         return this.$i18n.t(this.templateKey, [timeString])

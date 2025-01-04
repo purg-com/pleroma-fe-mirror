@@ -92,7 +92,7 @@ const EmojiReactions = {
             toggled: this.reactedWith(reaction.name)
           }
         ],
-        'aria-label': this.$tc('status.reaction_count_label', reaction.count, { num: reaction.count })
+        'aria-label': this.$t('status.reaction_count_label', { num: reaction.count }, reaction.count)
       }
     }
   }

@@ -73,7 +73,7 @@
             </template>
             <template #text>
               <span>
-                {{ $tc('status.show_all_conversation', otherTopLevelCount, { numStatus: otherTopLevelCount }) }}
+                {{ $t('status.show_all_conversation', { numStatus: otherTopLevelCount }, otherTopLevelCount) }}
               </span>
             </template>
           </i18n-t>
@@ -146,7 +146,7 @@
                   </template>
                   <template #text>
                     <span>
-                      {{ $tc('status.ancestor_follow', getReplies(status.id).length - 1, { numReplies: getReplies(status.id).length - 1 }) }}
+                      {{ $t('status.ancestor_follow', { numReplies: getReplies(status.id, getReplies(status.id).length - 1).length - 1 }) }}
                     </span>
                   </template>
                 </i18n-t>

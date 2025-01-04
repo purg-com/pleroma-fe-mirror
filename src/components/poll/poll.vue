@@ -85,10 +85,10 @@
       </span>
       <div class="total">
         <template v-if="typeof poll.voters_count === 'number'">
-          {{ $tc("polls.people_voted_count", poll.voters_count, { count: poll.voters_count }) }}
+          {{ $t("polls.people_voted_count", { count: poll.voters_count }, poll.voters_count) }}
         </template>
         <template v-else>
-          {{ $tc("polls.votes_count", poll.votes_count, { count: poll.votes_count }) }}
+          {{ $t("polls.votes_count", { count: poll.votes_count }, poll.votes_count) }}
         </template>
         <span v-if="expiresAt !== null">
           &nbsp;·&nbsp;

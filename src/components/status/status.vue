@@ -30,36 +30,8 @@
             :at="false"
           />
         </small>
-        <small
-          v-if="muteSensitiveStatuses && status.nsfw"
-          class="mute-thread"
-        >
-          {{ $t('status.sensitive_muted') }}
-        </small>
-        <small
-          v-if="muteBotStatuses && botStatus"
-          class="mute-thread"
-        >
-          {{ $t('status.bot_muted') }}
-        </small>
-        <small
-          v-if="showReasonMutedThread"
-          class="mute-thread"
-        >
-          <span>
-            {{ $t('status.thread_muted') }}
-          </span>
-          <span
-            v-if="muteWordHits.length > 0"
-          >
-            {{ $t('status.thread_muted_and_words') }}
-          </span>
-        </small>
-        <small
-          class="mute-words"
-          :title="muteWordHits.join(', ')"
-        >
-          {{ muteWordHits.join(', ') }}
+        <small class="mute-reason">
+          {{ muteLocalized }}
         </small>
         <button
           class="unmute button-unstyled"
@@ -313,6 +285,7 @@
               >
                 <i18n-t
                   keypath="status.reply_to_with_arg"
+                  scope="global"
                 >
                   <template #replyToWithIcon>
                     <StatusPopover
@@ -327,7 +300,10 @@
                         :aria-label="$t('tool_tip.reply')"
                         @click.prevent="gotoOriginal(status.in_reply_to_status_id)"
                       >
-                        <i18n-t keypath="status.reply_to_with_icon">
+                        <i18n-t
+                          keypath="status.reply_to_with_icon"
+                          scope="global"
+                        >
                           <template #icon>
                             <FAIcon
                               class="fa-scale-110 fa-old-padding"
@@ -481,10 +457,10 @@
             <button
               v-if="showOtherRepliesAsButton && replies.length > 1"
               class="button-unstyled -link"
-              :title="$tc('status.ancestor_follow', replies.length - 1, { numReplies: replies.length - 1 })"
+              :title="$t('status.ancestor_follow', { numReplies: replies.length - 1 }, replies.length - 1)"
               @click.prevent="dive"
             >
-              {{ $tc('status.replies_list_with_others', replies.length - 1, { numReplies: replies.length - 1 }) }}
+              {{ $t('status.replies_list_with_others', { numReplies: replies.length - 1 }, replies.length - 1) }}
             </button>
             <span
               v-else

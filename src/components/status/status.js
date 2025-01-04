@@ -260,18 +260,46 @@ const Status = {
     hasMentionsLine () {
       return this.mentionsLine.length > 0
     },
+    muteReasons () {
+      return [
+        this.userIsMuted ? 'user' : null,
+        status.thread_muted ? 'thread' : null,
+        (this.muteWordHits.length > 0) ? 'wordfilter' : null,
+        (this.muteBotStatuses && this.botStatus) ? 'bot' : null,
+        (this.muteSensitiveStatuses && this.sensitiveStatus) ? 'nsfw' : null
+      ].filter(_ => _)
+    },
+    muteLocalized () {
+      if (this.muteReasons.length === 0) return null
+      const mainReason = () => {
+        switch (this.muteReasons[0]) {
+          case 'user': return this.$t('status.muted_user')
+          case 'thread': return this.$t('status.thread_muted')
+          case 'wordfilter':
+            return this.$t(
+              'status.muted_words',
+              {
+                word: this.muteWordHits[0],
+                numWordsMore: this.muteWordHits.length - 1
+              },
+              this.muteWordHits.length
+            )
+          case 'bot': return this.$t('status.bot_muted')
+          case 'nsfw': return this.$t('status.sensitive_muted')
+        }
+      }
+      return this.$t(
+        'status.multi_reason_mute',
+        {
+          main: mainReason(),
+          numReasonsMore: this.muteReasons.length - 1
+        },
+        this.muteReasons.length - 1
+      )
+    },
     muted () {
       if (this.statusoid.user.id === this.currentUser.id) return false
-      const reasonsToMute = this.userIsMuted ||
-        // Thread is muted
-        status.thread_muted ||
-        // Wordfiltered
-        this.muteWordHits.length > 0 ||
-        // bot status
-        (this.muteBotStatuses && this.botStatus && !this.compact) ||
-        // sensitive status
-        (this.muteSensitiveStatuses && this.sensitiveStatus && !this.compact)
-      return !this.unmuted && !this.shouldNotMute && reasonsToMute
+      return !this.unmuted && !this.shouldNotMute && this.muteReasons.length > 0
     },
     userIsMuted () {
       if (this.statusoid.user.id === this.currentUser.id) return false
