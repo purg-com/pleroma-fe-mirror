@@ -288,7 +288,6 @@ const Status = {
           case 'nsfw': return this.$t('status.sensitive_muted')
         }
       }
-      console.log(this.muteReasons, mainReason())
       return this.$t(
         'status.multi_reason_mute',
         {
