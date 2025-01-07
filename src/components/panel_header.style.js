@@ -17,7 +17,24 @@ export default {
       directives: {
         backgroundNoCssColor: 'yes',
         background: '--fg',
-        shadow: []
+        shadow: [{
+          x: 0,
+          y: 1,
+          blur: 3,
+          spread: 0,
+          inset: false,
+          color: '#000000',
+          alpha: 0.4
+        },
+        {
+          x: 0,
+          y: 1,
+          blur: 0,
+          spread: 0,
+          inset: true,
+          color: '#ffffff',
+          alpha: 0.2
+        }]
       }
     }
   ]

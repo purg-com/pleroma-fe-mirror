@@ -127,6 +127,7 @@ export const shadowFunctions = {
     args: [
       'color: border color',
       'side: string indicating on which side border should be, takes either one word or two words joined by dash (i.e. "left" or "bottom-right")',
+      'width: border width (thickness)',
       '[alpha]: (Optional) border opacity, defaults to 1 (fully opaque)',
       '[inset]: (Optional) whether border should be on the inside or outside, defaults to inside'
     ],
