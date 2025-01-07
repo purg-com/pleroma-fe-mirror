@@ -316,7 +316,7 @@
             </template>
           </button>
           <Popover
-            v-if="!disableDraft"
+            v-if="!hideDraft"
             class="more-post-actions"
             :normal-button="true"
             trigger="click"
@@ -336,7 +336,7 @@
                 role="menu"
               >
                 <button
-                  v-if="!disableDraft"
+                  v-if="!hideDraft"
                   class="menu-item dropdown-item dropdown-item-icon"
                   role="menu"
                   :disabled="!safeToSaveDraft"

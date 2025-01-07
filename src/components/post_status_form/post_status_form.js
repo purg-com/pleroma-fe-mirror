@@ -101,6 +101,7 @@ const PostStatusForm = {
     'disableSubmit',
     'disablePreview',
     'disableDraft',
+    'hideDraft',
     'placeholder',
     'maxHeight',
     'postHandler',
