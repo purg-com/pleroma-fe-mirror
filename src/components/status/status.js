@@ -416,9 +416,6 @@ const Status = {
     currentUser () {
       return this.$store.state.users.currentUser
     },
-    betterShadow () {
-      return this.$store.state.interface.browserSupport.cssFilter
-    },
     mergedConfig () {
       return this.$store.getters.mergedConfig
     },

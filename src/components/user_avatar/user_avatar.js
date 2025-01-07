@@ -15,14 +15,14 @@ library.add(
 const UserAvatar = {
   props: [
     'user',
-    'betterShadow',
     'compact',
     'showActorTypeIndicator'
   ],
   data () {
     return {
       showPlaceholder: false,
-      defaultAvatar: `${this.$store.state.instance.server + this.$store.state.instance.defaultAvatar}`
+      defaultAvatar: `${this.$store.state.instance.server + this.$store.state.instance.defaultAvatar}`,
+      betterShadow: this.$store.state.interface.browserSupport.cssFilter
     }
   },
   components: {

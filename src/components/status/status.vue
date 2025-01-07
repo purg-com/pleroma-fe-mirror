@@ -65,7 +65,6 @@
           v-if="retweet"
           class="left-side repeater-avatar"
           :show-actor-type-indicator="showActorTypeIndicator"
-          :better-shadow="betterShadow"
           :user="statusoid.user"
         />
         <div class="right-side faint">
@@ -120,7 +119,6 @@
                 class="post-avatar"
                 :show-actor-type-indicator="showActorTypeIndicator"
                 :compact="compact"
-                :better-shadow="betterShadow"
                 :user="status.user"
               />
             </UserPopover>

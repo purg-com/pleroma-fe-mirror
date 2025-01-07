@@ -16,10 +16,7 @@
             class="user-info-avatar -link"
             @click="zoomAvatar"
           >
-            <UserAvatar
-              :better-shadow="betterShadow"
-              :user="user"
-            />
+            <UserAvatar :user="user" />
             <div class="user-info-avatar -link -overlay">
               <FAIcon
                 class="fa-scale-110 fa-old-padding"
@@ -30,7 +27,6 @@
           <UserAvatar
             v-else-if="typeof avatarAction === 'function'"
             class="user-info-avatar"
-            :better-shadow="betterShadow"
             :user="user"
             @click="avatarAction"
           />
@@ -38,10 +34,7 @@
             v-else
             :to="userProfileLink(user)"
           >
-            <UserAvatar
-              :better-shadow="betterShadow"
-              :user="user"
-            />
+            <UserAvatar :user="user" />
           </router-link>
           <div class="user-summary">
             <div class="top-line">

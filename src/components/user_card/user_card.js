@@ -48,7 +48,6 @@ export default {
   data () {
     return {
       followRequestInProgress: false,
-      betterShadow: this.$store.state.interface.browserSupport.cssFilter,
       showingConfirmMute: false,
       muteExpiryAmount: 0,
       muteExpiryUnit: 'minutes'

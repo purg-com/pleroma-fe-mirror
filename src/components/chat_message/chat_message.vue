@@ -20,7 +20,6 @@
         >
           <UserAvatar
             :compact="true"
-            :better-shadow="betterShadow"
             :user="author"
           />
         </UserPopover>

@@ -48,7 +48,6 @@
           <UserAvatar
             class="post-avatar"
             :compact="true"
-            :better-shadow="betterShadow"
             :user="notification.from_profile"
           />
         </UserPopover>
