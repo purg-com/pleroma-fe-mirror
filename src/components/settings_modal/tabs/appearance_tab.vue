@@ -346,6 +346,11 @@
       <h2>{{ $t('settings.visual_tweaks') }}</h2>
       <ul class="setting-list">
         <li>
+          <BooleanSetting path="modalMobileCenter">
+            {{ $t('settings.mobile_center_dialog') }}
+          </BooleanSetting>
+        </li>
+        <li>
           <ChoiceSetting
             id="forcedRoundness"
             path="forcedRoundness"

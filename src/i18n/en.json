@@ -381,6 +381,7 @@
     "actor_type_Person": "a normal user",
     "actor_type_Service": "a bot",
     "actor_type_Group": "a group",
+    "mobile_center_dialog": "Vertically center dialogs on mobile",
     "app_name": "App name",
     "expert_mode": "Show advanced",
     "save": "Save changes",

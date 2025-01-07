@@ -1,7 +1,7 @@
 <template>
   <span
     class="dialog-container"
-    :class="{ 'dark-overlay': darkOverlay }"
+    :class="{ 'dark-overlay': darkOverlay, '-center-mobile': mobileCenter }"
     @click.self.stop="onCancel()"
   >
     <div
@@ -100,6 +100,10 @@
     justify-content: stretch;
     align-items: end;
     justify-items: stretch;
+
+    &.-center-mobile {
+      align-items: center;
+    }
   }
 
   .dialog-modal.panel {
