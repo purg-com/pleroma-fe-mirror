@@ -79,6 +79,7 @@
     padding: 0.5em;
     border-top: 1px solid var(--border);
     display: grid;
+    justify-content: end;
     grid-gap: 0.5em;
     grid-template-columns: min-content;
     grid-auto-columns: min-content;
