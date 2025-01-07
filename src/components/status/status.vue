@@ -606,6 +606,7 @@
           :copy-message-scope="status.visibility"
           :subject="replySubject"
           @posted="doToggleReplying"
+          @draft-done="doToggleReplying"
           @can-close="doToggleReplying"
         />
       </div>

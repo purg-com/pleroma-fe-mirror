@@ -116,6 +116,7 @@ const PostStatusForm = {
   ],
   emits: [
     'posted',
+    'draft-done',
     'resize',
     'mediaplay',
     'mediapause',
@@ -761,12 +762,14 @@ const PostStatusForm = {
                 this.newStatus.id = id
               }
               this.saveable = false
+              this.$emit('draft-done')
             })
         } else if (this.newStatus.id) {
           // There is a draft, but there is nothing in it, clear it
           return this.abandonDraft()
             .then(() => {
               this.saveable = false
+              this.$emit('draft-done')
             })
         }
       }

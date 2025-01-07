@@ -15,6 +15,7 @@
         class="panel-body"
         v-bind="params"
         @posted="resetAndClose"
+        @draft-done="resetAndClose"
       />
     </div>
   </Modal>

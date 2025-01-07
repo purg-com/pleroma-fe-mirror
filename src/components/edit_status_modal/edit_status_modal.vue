@@ -15,6 +15,7 @@
         class="panel-body"
         :params="params"
         @posted="doCloseModal"
+        @draft-done="doCloseModal"
         @can-close="doCloseModal"
       />
     </div>
