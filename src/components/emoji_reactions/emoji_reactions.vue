@@ -99,11 +99,6 @@
         display: inline-flex;
         justify-content: center;
         align-items: center;
-
-        &.-picked-reaction {
-          border: 1px solid var(--accent);
-          margin-right: -1px;
-        }
       }
     }
   }
@@ -154,10 +149,6 @@
     }
 
     &.-picked-reaction {
-      border: 1px solid var(--accent);
-      margin-left: -1px; // offset the border, can't use inset shadows either
-      margin-right: -1px;
-
       .svg-inline--fa {
         color: var(--accent);
       }
