@@ -50,7 +50,6 @@ export default {
           y: 4,
           blur: 6,
           spread: 3,
-          inset: false,
           color: '#000000',
           alpha: 0.3
         }]

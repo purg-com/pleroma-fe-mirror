@@ -22,7 +22,6 @@ export default {
           y: 1,
           blur: 3,
           spread: 0,
-          inset: false,
           color: '#000000',
           alpha: 0.4
         },
@@ -31,9 +30,9 @@ export default {
           y: 1,
           blur: 0,
           spread: 0,
-          inset: true,
           color: '#ffffff',
-          alpha: 0.2
+          alpha: 0.2,
+          inset: true
         }]
       }
     }

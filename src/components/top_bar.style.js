@@ -27,7 +27,6 @@ export default {
           y: 2,
           blur: 7,
           spread: 0,
-          inset: false,
           color: '#000000',
           alpha: 0.3
         }]
