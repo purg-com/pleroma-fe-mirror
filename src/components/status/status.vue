@@ -598,6 +598,7 @@
         <PostStatusForm
           ref="postStatusForm"
           class="reply-body"
+          :closeable="true"
           :reply-to="status.id"
           :attentions="status.attentions"
           :replied-user="status.user"

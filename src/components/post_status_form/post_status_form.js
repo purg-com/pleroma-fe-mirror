@@ -102,6 +102,7 @@ const PostStatusForm = {
     'disablePreview',
     'disableDraft',
     'hideDraft',
+    'closeable',
     'placeholder',
     'maxHeight',
     'postHandler',
@@ -234,6 +235,9 @@ const PostStatusForm = {
     showAllScopes () {
       return !this.mergedConfig.minimalScopesMode
     },
+    hideExtraActions () {
+      return this.disableDraft || this.hideDraft
+    },
     emojiUserSuggestor () {
       return suggestor({
         emoji: [
@@ -355,10 +359,12 @@ const PostStatusForm = {
       }
     },
     safeToSaveDraft () {
-      return this.newStatus.status ||
+      return (
+        this.newStatus.status ||
         this.newStatus.spoilerText ||
         this.newStatus.files?.length ||
         this.newStatus.hasPoll
+      ) && this.saveable
     },
     ...mapGetters(['mergedConfig']),
     ...mapState({
@@ -762,6 +768,7 @@ const PostStatusForm = {
                 this.newStatus.id = id
               }
               this.saveable = false
+              this.clearStatus()
               this.$emit('draft-done')
             })
         } else if (this.newStatus.id) {
@@ -769,6 +776,7 @@ const PostStatusForm = {
           return this.abandonDraft()
             .then(() => {
               this.saveable = false
+              this.clearStatus()
               this.$emit('draft-done')
             })
         }
