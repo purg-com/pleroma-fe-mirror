@@ -57,7 +57,7 @@
           :key="style.key"
           :data-theme-key="style.key"
           class="button-default theme-preview"
-          :class="{ toggled: isStyleActive(style.key), disabled: switchInProgress }"
+          :class="{ toggled: isThemeActive(style.key), disabled: switchInProgress }"
           @click="style.version === 'v2' ? setTheme(style.key) : setStyle(style.key)"
           :disabled="switchInProgress"
         >
