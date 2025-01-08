@@ -769,7 +769,9 @@ const PostStatusForm = {
               }
               this.saveable = false
               this.clearStatus()
-              this.$emit('draft-done')
+              if (!this.shouldAutoSaveDraft) {
+                this.$emit('draft-done')
+              }
             })
         } else if (this.newStatus.id) {
           // There is a draft, but there is nothing in it, clear it
@@ -777,7 +779,9 @@ const PostStatusForm = {
             .then(() => {
               this.saveable = false
               this.clearStatus()
-              this.$emit('draft-done')
+              if (!this.shouldAutoSaveDraft) {
+                this.$emit('draft-done')
+              }
             })
         }
       }
