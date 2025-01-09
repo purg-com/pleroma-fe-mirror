@@ -28,7 +28,8 @@ const BUTTONS = [{
   anonLink: true,
   toggleable: true,
   action ({ emit }) {
-    emit('toggle')
+    emit('toggleReplying')
+    return Promise.resolve()
   }
 }, {
   // =========
@@ -44,11 +45,16 @@ const BUTTONS = [{
   },
   animated: true,
   active: ({ status }) => status.repeated,
-  counter: ({ status }) => status.replies_count,
+  counter: ({ status }) => status.repeat_num,
   anonLink: true,
   interactive: ({ status }) => !PRIVATE_SCOPES.has(status.visibility),
   toggleable: true,
   confirm: ({ status, getters }) => !status.repeated && getters.mergedConfig.modalOnRepeat,
+  confirmStrings: {
+    title: 'status.repeat_confirm_title',
+    confirm: 'status.repeat_confirm_accept_button',
+    cancel: 'status.repeat_confirm_cancel_button'
+  },
   action ({ status, store }) {
     if (!status.repeated) {
       return store.dispatch('retweet', { id: status.id })
@@ -62,10 +68,12 @@ const BUTTONS = [{
   // =========
   name: 'favorite',
   label: 'tool_tip.favorite',
-  icon: 'star',
+  icon: ({ status }) => status.favorited
+    ? ['fas', 'star']
+    : ['far', 'star'],
   animated: true,
   active: ({ status }) => status.favorited,
-  counter: ({ status }) => status.fave_count,
+  counter: ({ status }) => status.fave_num,
   anonLink: true,
   toggleable: true,
   action ({ status, store }) {
@@ -81,11 +89,9 @@ const BUTTONS = [{
   // =========
   name: 'emoji',
   label: 'tool_lip.add_reaction',
-  icon: 'smile-beam',
+  icon: ['far', 'smile-beam'],
   anonLink: true,
-  action ({ emojiPicker }) {
-    emojiPicker.show()
-  }
+  popover: 'emoji-picker'
 }, {
   // =========
   // MUTE CONVERSATION, my beloved
@@ -141,7 +147,8 @@ const BUTTONS = [{
     } else {
       return dispatch('bookmark', { id: status.id })
     }
-  }
+  },
+  popover: 'bookmark-folders'
 }, {
   // =========
   // EDIT
@@ -180,8 +187,13 @@ const BUTTONS = [{
         currentUser.privileges.includes('messages_delete')
     )
   },
+  confirmStrings: {
+    title: 'status.delete_confirm_title',
+    confirm: 'status.delete_confirm_cancel_button',
+    cancel: 'status.delete_confirm_accept_button'
+  },
   action ({ dispatch, status }) {
-    dispatch('deleteStatus', { id: status.id })
+    return dispatch('deleteStatus', { id: status.id })
   }
 }, {
   // =========
@@ -195,6 +207,7 @@ const BUTTONS = [{
       state.instance.server,
       router.resolve({ name: 'conversation', params: { id: status.id } }).href
     ].join(''))
+    return Promise.resolve()
   }
 }, {
   // =========
@@ -210,58 +223,74 @@ const BUTTONS = [{
   // =========
   name: 'report',
   icon: 'flag',
-  label: 'status.report',
+  label: 'user_card.report',
   if: ({ loggedIn }) => loggedIn,
   action ({ dispatch, status }) {
     dispatch('openUserReportingModal', { userId: status.user.id, statusIds: [status.id] })
   }
-}]
+}].map(button => {
+  return Object.fromEntries(
+    Object.entries(button).map(([k, v]) => [k, typeof v === 'function' ? v : () => v])
+  )
+})
+console.log(BUTTONS)
 
 const StatusActionButtons = {
-  props: ['status'],
+  props: ['status', 'replying'],
+  emits: ['toggleReplying'],
+  data () {
+    return {
+      buttons: BUTTONS,
+      showingConfirmDialog: false,
+      currentConfirmTitle: '',
+      currentConfirmOkText: '',
+      currentConfirmCancelText: '',
+      currentConfirmAction: () => {}
+    }
+  },
   components: {
     ConfirmModal
   },
-  data () {
-    return {
-    }
-  },
   methods: {
-    retweet () {
-      if (!this.status.repeated && this.shouldConfirmRepeat) {
-        this.showConfirmDialog()
+    doAction (button) {
+      this.doActionReal(button)
+    },
+    doActionReal (button) {
+      button.action(this.funcArg(button))
+        .then(() => this.$emit('onSuccess'))
+        .catch(err => this.$emit('onError', err.error.error))
+    },
+    component (button) {
+      if (!this.$store.state.users.currentUser && button.anonLink) {
+        return 'a'
+      } else if (button.action == null && button.link != null) {
+        return 'a'
       } else {
-        this.doRetweet()
+        return 'button'
       }
     },
-    doRetweet () {
-      if (!this.status.repeated) {
-        this.$store.dispatch('retweet', { id: this.status.id })
-      } else {
-        this.$store.dispatch('unretweet', { id: this.status.id })
+    funcArg () {
+      return {
+        status: this.status,
+        replying: this.replying,
+        emit: this.$emit,
+        dispatch: this.$store.dispatch,
+        state: this.$store.state,
+        getters: this.$store.getters,
+        router: this.$router,
+        currentUser: this.$store.state.users.currentUser,
+        loggedIn: !!this.$store.state.users.currentUser
       }
-      this.animated = true
-      setTimeout(() => {
-        this.animated = false
-      }, 500)
-      this.hideConfirmDialog()
     },
-    showConfirmDialog () {
-      this.showingConfirmDialog = true
+    getClass (button) {
+      return {
+        [button.name() + '-button']: true,
+        '-active': button.active?.(this.funcArg()),
+        '-interactive': !!this.$store.state.users.currentUser
+      }
     },
-    hideConfirmDialog () {
-      this.showingConfirmDialog = false
-    }
-  },
-  computed: {
-    mergedConfig () {
-      return this.$store.getters.mergedConfig
-    },
-    remoteInteractionLink () {
+    getRemoteInteractionLink () {
       return this.$store.getters.remoteInteractionLink({ statusId: this.status.id })
-    },
-    shouldConfirmRepeat () {
-      return this.mergedConfig.modalOnRepeat
     }
   }
 }

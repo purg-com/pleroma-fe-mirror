@@ -16,6 +16,7 @@ import EmojiReactions from '../emoji_reactions/emoji_reactions.vue'
 import UserLink from '../user_link/user_link.vue'
 import MentionsLine from 'src/components/mentions_line/mentions_line.vue'
 import MentionLink from 'src/components/mention_link/mention_link.vue'
+import StatusActionButtons from 'src/components/status_action_buttons/status_action_buttons.vue'
 import generateProfileLink from 'src/services/user_profile_link_generator/user_profile_link_generator'
 import { highlightClass, highlightStyle } from '../../services/user_highlighter/user_highlighter.js'
 import { muteWordHits } from '../../services/status_parser/status_parser.js'
@@ -119,7 +120,8 @@ const Status = {
     MentionLink,
     MentionsLine,
     UserPopover,
-    UserLink
+    UserLink,
+    StatusActionButtons
   },
   props: [
     'statusoid',
