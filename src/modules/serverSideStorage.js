@@ -1,5 +1,17 @@
 import { toRaw } from 'vue'
-import { isEqual, cloneDeep, set, get, clamp, flatten, groupBy, findLastIndex, takeRight, uniqWith } from 'lodash'
+import {
+  isEqual,
+  cloneDeep,
+  set,
+  get,
+  clamp,
+  flatten,
+  groupBy,
+  findLastIndex,
+  takeRight,
+  uniqWith,
+  merge
+} from 'lodash'
 import { CURRENT_UPDATE_COUNTER } from 'src/components/update_notification/update_notification.js'
 
 export const VERSION = 1
@@ -26,6 +38,7 @@ export const defaultState = {
       collapseNav: false
     },
     collections: {
+      pinnedStatusActions: ['reply', 'retweet', 'favorite', 'emoji'],
       pinnedNavItems: ['home', 'dms', 'chats']
     }
   },
@@ -110,7 +123,11 @@ export const _getRecentData = (cache, live) => {
     console.debug('Both sources are invalid, start from scratch')
     result.needUpload = true
   }
-  return result
+
+  result.recent = merge(defaultState, result.recent)
+  result.stale = merge(defaultState, result.stale)
+
+  return merge(defaultState, result)
 }
 
 export const _getAllFlags = (recent, stale) => {

@@ -1,17 +1,52 @@
-import ConfirmModal from '../confirm_modal/confirm_modal.vue'
+import { mapState } from 'vuex'
+
+import ConfirmModal from 'src/components/confirm_modal/confirm_modal.vue'
+import Popover from 'src/components/popover/popover.vue'
+import genRandomSeed from 'src/services/random_seed/random_seed.service.js'
+
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
-  faRetweet,
   faPlus,
   faMinus,
-  faCheck
+  faCheck,
+  faTimes,
+
+  faReply,
+  faRetweet,
+  faStar,
+  faSmileBeam,
+
+  faEllipsisH,
+  faBookmark,
+  faEyeSlash,
+  faThumbtack,
+  faShareAlt,
+  faExternalLinkAlt,
+  faHistory
 } from '@fortawesome/free-solid-svg-icons'
+import {
+  faStar as faStarRegular
+} from '@fortawesome/free-regular-svg-icons'
 
 library.add(
-  faRetweet,
   faPlus,
   faMinus,
-  faCheck
+  faCheck,
+  faTimes,
+
+  faReply,
+  faRetweet,
+  faStar,
+  faStarRegular,
+  faSmileBeam,
+
+  faEllipsisH,
+  faBookmark,
+  faEyeSlash,
+  faThumbtack,
+  faShareAlt,
+  faExternalLinkAlt,
+  faHistory
 )
 const PRIVATE_SCOPES = new Set(['private', 'direct'])
 const PUBLIC_SCOPES = new Set(['public', 'unlisted'])
@@ -27,6 +62,8 @@ const BUTTONS = [{
   anon: true,
   anonLink: true,
   toggleable: true,
+  closeIndicator: 'times',
+  activeIndicator: 'none',
   action ({ emit }) {
     emit('toggleReplying')
     return Promise.resolve()
@@ -230,7 +267,10 @@ const BUTTONS = [{
   }
 }].map(button => {
   return Object.fromEntries(
-    Object.entries(button).map(([k, v]) => [k, typeof v === 'function' ? v : () => v])
+    Object.entries(button).map(([k, v]) => [
+      k,
+      (typeof v === 'function' || k === 'name') ? v : () => v
+    ])
   )
 })
 
@@ -243,15 +283,26 @@ const StatusActionButtons = {
       currentConfirmTitle: '',
       currentConfirmOkText: '',
       currentConfirmCancelText: '',
-      currentConfirmAction: () => {}
+      currentConfirmAction: () => {},
+      randomSeed: genRandomSeed()
     }
   },
   components: {
+    Popover,
     ConfirmModal
   },
   computed: {
+    ...mapState({
+      pinnedItems: state => new Set(state.serverSideStorage.prefsStorage.collections.pinnedStatusActions)
+    }),
     buttons () {
-      return BUTTONS.filter(x => x.if(this.funcArg))
+      return BUTTONS.filter(x => x.if ? x.if(this.funcArg) : true)
+    },
+    quickButtons () {
+      return this.buttons.filter(x => this.pinnedItems.has(x.name))
+    },
+    extraButtons () {
+      return this.buttons.filter(x => !this.pinnedItems.has(x.name))
     },
     funcArg () {
       return {
@@ -265,6 +316,15 @@ const StatusActionButtons = {
         currentUser: this.$store.state.users.currentUser,
         loggedIn: !!this.$store.state.users.currentUser
       }
+    },
+    triggerAttrs () {
+      return {
+        title: this.$t('status.more_actions'),
+        id: `popup-trigger-${this.randomSeed}`,
+        'aria-controls': `popup-menu-${this.randomSeed}`,
+        'aria-expanded': this.expanded,
+        'aria-haspopup': 'menu'
+      }
     }
   },
   methods: {
@@ -272,7 +332,7 @@ const StatusActionButtons = {
       this.doActionReal(button)
     },
     doActionReal (button) {
-      button.action(this.funcArg(button))
+      button.action(this.funcArg)
         .then(() => this.$emit('onSuccess'))
         .catch(err => this.$emit('onError', err.error.error))
     },
@@ -287,8 +347,8 @@ const StatusActionButtons = {
     },
     getClass (button) {
       return {
-        [button.name() + '-button']: true,
-        '-active': button.active?.(this.funcArg()),
+        [button.name + '-button']: true,
+        '-active': button.active?.(this.funcArg),
         '-interactive': !!this.$store.state.users.currentUser
       }
     },

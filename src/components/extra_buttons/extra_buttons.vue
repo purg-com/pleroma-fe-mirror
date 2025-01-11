@@ -166,26 +166,24 @@
       </div>
     </template>
     <template #trigger>
-      <span class="button-unstyled popover-trigger">
-        <FALayers class="fa-old-padding-layer">
-          <FAIcon
-            class="fa-scale-110 "
-            icon="ellipsis-h"
-          />
-          <FAIcon
-            v-show="!expanded"
-            class="focus-marker"
-            transform="shrink-6 up-8 right-16"
-            icon="plus"
-          />
-          <FAIcon
-            v-show="expanded"
-            class="focus-marker"
-            transform="shrink-6 up-8 right-16"
-            icon="times"
-          />
-        </FALayers>
-      </span>
+      <FALayers class="fa-old-padding-layer">
+        <FAIcon
+          class="fa-scale-110 "
+          icon="ellipsis-h"
+        />
+        <FAIcon
+          v-show="!expanded"
+          class="focus-marker"
+          transform="shrink-6 up-8 right-16"
+          icon="plus"
+        />
+        <FAIcon
+          v-show="expanded"
+          class="focus-marker"
+          transform="shrink-6 up-8 right-16"
+          icon="times"
+        />
+      </FALayers>
       <teleport to="#modal">
         <ConfirmModal
           v-if="showingDeleteDialog"

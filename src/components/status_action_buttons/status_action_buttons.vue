@@ -3,7 +3,7 @@
     <span class="quick-action-buttons">
       <span
         class="quick-action"
-        v-for="button in buttons"
+        v-for="button in quickButtons"
         :key="button.name"
       >
         <component
@@ -23,16 +23,22 @@
             />
             <template v-if="button.toggleable?.(funcArg) && button.active">
               <FAIcon
-                v-show="!button.active(funcArg)"
-                class="focus-marker"
-                transform="shrink-6 up-9 right-17"
-                icon="plus"
+                v-if="button.active(funcArg)"
+                class="active-marker"
+                transform="shrink-6 up-9 right-12"
+                :icon="button.activeIndicator?.(funcArg) || 'check'"
               />
               <FAIcon
-                v-show="button.active(funcArg)"
+                v-if="!button.active(funcArg)"
                 class="focus-marker"
-                transform="shrink-6 up-9 right-17"
-                icon="times"
+                transform="shrink-6 up-9 right-12"
+                :icon="button.openIndicator?.(funcArg) || 'plus'"
+              />
+              <FAIcon
+                v-else
+                class="focus-marker"
+                transform="shrink-6 up-9 right-12"
+                :icon="button.closeIndicator?.(funcArg) || 'minus'"
               />
             </template>
           </FALayers>
@@ -44,7 +50,55 @@
           {{ button.counter?.(funcArg) }}
         </span>
       </span>
+      <Popover
+        trigger="click"
+        :trigger-attrs="triggerAttrs"
+        :tabindex="0"
+        placement="top"
+        :offset="{ y: 5 }"
+        :bound-to="{ x: 'container2' }"
+        remove-padding
+        @show="onShow"
+        @close="onClose"
+      >
+        <template #trigger>
+          <span class="popover-trigger">
+            <FALayers class="fa-old-padding-layer">
+              <FAIcon
+                class="fa-scale-110 "
+                icon="ellipsis-h"
+              />
+            </FALayers>
+          </span>
+        </template>
+        <template #content="{close}">
+          <div
+            :id="`popup-menu-${randomSeed}`"
+            class="dropdown-menu"
+            role="menu"
+          >
+            <component
+              v-for="button in extraButtons"
+              :key="button.name"
+              :is="component(button)"
+              class="menu-item dropdown-item dropdown-item-icon"
+              role="menuitem"
+              :class="getClass(button)"
+              :tabindex="0"
+              @click.stop="component(button) === 'button' && doAction(button)"
+              @click="close"
+              :href="component(button) == 'a' ? button.link?.(funcArg) || getRemoteInteractionLink : undefined"
+            >
+              <FAIcon
+                class="fa-scale-110"
+                :icon="button.icon(funcArg)"
+              /><span>{{ $t(button.label(funcArg)) }}</span>
+            </component>
+          </div>
+        </template>
+      </Popover>
     </span>
+
     <teleport to="#modal">
       <confirm-modal
         v-if="showingConfirmDialog"
@@ -66,11 +120,7 @@
 @import "../../mixins";
 
 .StatusActionButtons {
-  width: 100%;
-
   .quick-action-buttons {
-    position: relative;
-    width: 100%;
     display: grid;
     grid-template-columns: 1fr;
     grid-auto-flow: column;
@@ -121,11 +171,19 @@
         .focus-marker {
           visibility: hidden;
         }
+
+        .active-marker {
+          visibility: visible;
+        }
       }
 
       @include focused-style {
         .focus-marker {
           visibility: visible;
+        }
+
+        .active-marker {
+          visibility: hidden;
         }
       }
     }
