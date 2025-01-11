@@ -4,7 +4,7 @@
       <span
         class="quick-action"
         v-for="button in buttons"
-        :key="button.name()"
+        :key="button.name"
       >
         <component
           :is="component(button)"
@@ -12,24 +12,24 @@
           :class="getClass(button)"
           role="button"
           :tabindex="0"
-          :title="$t(button.label(funcArg()))"
+          :title="$t(button.label(funcArg))"
           @click.stop="component(button) === 'button' && doAction(button)"
-          :href="component(button) == 'a' ? button.link?.(funcArg()) || getRemoteInteractionLink : undefined"
+          :href="component(button) == 'a' ? button.link?.(funcArg) || getRemoteInteractionLink : undefined"
         >
           <FALayers class="fa-old-padding">
             <FAIcon
               class="fa-scale-110"
-              :icon="button.icon(funcArg())"
+              :icon="button.icon(funcArg)"
             />
-            <template v-if="button.toggleable?.(funcArg()) && button.active">
+            <template v-if="button.toggleable?.(funcArg) && button.active">
               <FAIcon
-                v-show="!button.active(funcArg())"
+                v-show="!button.active(funcArg)"
                 class="focus-marker"
                 transform="shrink-6 up-9 right-17"
                 icon="plus"
               />
               <FAIcon
-                v-show="button.active(funcArg())"
+                v-show="button.active(funcArg)"
                 class="focus-marker"
                 transform="shrink-6 up-9 right-17"
                 icon="times"
@@ -39,9 +39,9 @@
         </component>
         <span
           class="action-counter"
-          v-if="button.counter?.(funcArg()) > 0"
+          v-if="button.counter?.(funcArg) > 0"
         >
-          {{ button.counter?.(funcArg()) }}
+          {{ button.counter?.(funcArg) }}
         </span>
       </span>
     </span>

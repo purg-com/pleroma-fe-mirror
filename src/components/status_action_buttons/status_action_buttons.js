@@ -233,14 +233,12 @@ const BUTTONS = [{
     Object.entries(button).map(([k, v]) => [k, typeof v === 'function' ? v : () => v])
   )
 })
-console.log(BUTTONS)
 
 const StatusActionButtons = {
   props: ['status', 'replying'],
   emits: ['toggleReplying'],
   data () {
     return {
-      buttons: BUTTONS,
       showingConfirmDialog: false,
       currentConfirmTitle: '',
       currentConfirmOkText: '',
@@ -250,6 +248,24 @@ const StatusActionButtons = {
   },
   components: {
     ConfirmModal
+  },
+  computed: {
+    buttons () {
+      return BUTTONS.filter(x => x.if(this.funcArg))
+    },
+    funcArg () {
+      return {
+        status: this.status,
+        replying: this.replying,
+        emit: this.$emit,
+        dispatch: this.$store.dispatch,
+        state: this.$store.state,
+        getters: this.$store.getters,
+        router: this.$router,
+        currentUser: this.$store.state.users.currentUser,
+        loggedIn: !!this.$store.state.users.currentUser
+      }
+    }
   },
   methods: {
     doAction (button) {
@@ -267,19 +283,6 @@ const StatusActionButtons = {
         return 'a'
       } else {
         return 'button'
-      }
-    },
-    funcArg () {
-      return {
-        status: this.status,
-        replying: this.replying,
-        emit: this.$emit,
-        dispatch: this.$store.dispatch,
-        state: this.$store.state,
-        getters: this.$store.getters,
-        router: this.$router,
-        currentUser: this.$store.state.users.currentUser,
-        loggedIn: !!this.$store.state.users.currentUser
       }
     },
     getClass (button) {
