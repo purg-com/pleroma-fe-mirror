@@ -3,12 +3,13 @@
     <span class="quick-action-buttons">
       <span
         class="quick-action"
+        :class="{ '-pin': showPin, '-toggle': button.dropdown?.() }"
         v-for="button in quickButtons"
         :key="button.name"
       >
         <component
           :is="component(button)"
-          class="button-unstyled"
+          class="button-unstyled action-button"
           :class="getClass(button)"
           role="button"
           :tabindex="0"
@@ -16,7 +17,7 @@
           @click.stop="component(button) === 'button' && doAction(button)"
           :href="component(button) == 'a' ? button.link?.(funcArg) || getRemoteInteractionLink : undefined"
         >
-          <FALayers class="fa-old-padding">
+          <FALayers>
             <FAIcon
               class="fa-scale-110"
               :icon="button.icon(funcArg)"
@@ -42,13 +43,28 @@
               />
             </template>
           </FALayers>
+          <span
+            class="action-counter"
+            v-if="button.counter?.(funcArg) > 0"
+          >
+            {{ button.counter?.(funcArg) }}
+          </span>
         </component>
-        <span
-          class="action-counter"
-          v-if="button.counter?.(funcArg) > 0"
+        <button
+          v-if="showPin && currentUser"
+          type="button"
+          class="button-unstyled pin-action-button"
+          :title="$t('general.unpin')"
+          :aria-pressed="true"
+          @click.stop.prevent="unpin(button)"
         >
-          {{ button.counter?.(funcArg) }}
-        </span>
+          <FAIcon
+            v-if="showPin && currentUser"
+            fixed-width
+            class="fa-scale-110"
+            icon="thumbtack"
+          />
+        </button>
       </span>
       <Popover
         trigger="click"
@@ -56,44 +72,61 @@
         :tabindex="0"
         placement="top"
         :offset="{ y: 5 }"
-        :bound-to="{ x: 'container2' }"
+        :bound-to="{ x: 'container' }"
         remove-padding
         @show="onShow"
         @close="onClose"
       >
         <template #trigger>
-          <span class="popover-trigger">
-            <FALayers class="fa-old-padding-layer">
-              <FAIcon
-                class="fa-scale-110 "
-                icon="ellipsis-h"
-              />
-            </FALayers>
-          </span>
+          <FAIcon
+            class="fa-scale-110 "
+            icon="ellipsis-h"
+          />
         </template>
         <template #content="{close}">
           <div
             :id="`popup-menu-${randomSeed}`"
-            class="dropdown-menu"
+            class="dropdown-menu extra-action-buttons"
             role="menu"
           >
-            <component
+            <div
               v-for="button in extraButtons"
               :key="button.name"
-              :is="component(button)"
-              class="menu-item dropdown-item dropdown-item-icon"
-              role="menuitem"
-              :class="getClass(button)"
-              :tabindex="0"
-              @click.stop="component(button) === 'button' && doAction(button)"
-              @click="close"
-              :href="component(button) == 'a' ? button.link?.(funcArg) || getRemoteInteractionLink : undefined"
+              class="menu-item dropdown-item extra-action dropdown-item-icon"
             >
-              <FAIcon
-                class="fa-scale-110"
-                :icon="button.icon(funcArg)"
-              /><span>{{ $t(button.label(funcArg)) }}</span>
-            </component>
+              <component
+                :is="component(button)"
+                class="main-button"
+                role="menuitem"
+                :class="getClass(button)"
+                :tabindex="0"
+                @click.stop="component(button) === 'button' && doAction(button)"
+                @click="close"
+                :href="component(button) == 'a' ? button.link?.(funcArg) || getRemoteInteractionLink : undefined"
+              >
+                <FAIcon
+                  class="fa-scale-110"
+                  fixed-width
+                  :icon="button.icon(funcArg)"
+                /><span>{{ $t(button.label(funcArg)) }}</span>
+              </component>
+              <button
+                v-if="showPin && currentUser"
+                type="button"
+                class="button-unstyled pin-action-button"
+                :title="$t('general.pin' )"
+                :aria-pressed="false"
+                @click.stop.prevent="pin(button)"
+              >
+                <FAIcon
+                  v-if="showPin && currentUser"
+                  fixed-width
+                  class="fa-scale-110 veryfaint"
+                  transform="rotate-45"
+                  icon="thumbtack"
+                />
+              </button>
+            </div>
           </div>
         </template>
       </Popover>
@@ -116,78 +149,4 @@
 
 <script src="./status_action_buttons.js"></script>
 
-<style lang="scss">
-@import "../../mixins";
-
-.StatusActionButtons {
-  .quick-action-buttons {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-auto-flow: column;
-    grid-auto-columns: 1fr;
-    grid-gap: 1em;
-    margin-top: var(--status-margin);
-
-    .quick-action {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      grid-gap: 0.5em;
-      max-width: 4em;
-
-      .reply-button {
-        &:hover,
-        &.-active {
-          .svg-inline--fa {
-            color: var(--cBlue);
-          }
-        }
-      }
-
-      .retweet-button {
-        &:hover,
-        &.-active {
-          .svg-inline--fa {
-            color: var(--cGreen);
-          }
-        }
-      }
-
-      .favorite-button {
-        &:hover,
-        &.-active {
-          .svg-inline--fa {
-            color: var(--cOrange);
-          }
-        }
-      }
-
-      > button,
-      > a {
-        padding: 0.5em;
-        margin: -0.5em;
-      }
-
-      @include unfocused-style {
-        .focus-marker {
-          visibility: hidden;
-        }
-
-        .active-marker {
-          visibility: visible;
-        }
-      }
-
-      @include focused-style {
-        .focus-marker {
-          visibility: visible;
-        }
-
-        .active-marker {
-          visibility: hidden;
-        }
-      }
-    }
-  }
-}
-
-</style>
+<style lang="scss" src="./status_action_buttons.scss"></style>

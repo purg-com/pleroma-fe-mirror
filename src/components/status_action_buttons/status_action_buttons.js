@@ -113,11 +113,11 @@ const BUTTONS = [{
   counter: ({ status }) => status.fave_num,
   anonLink: true,
   toggleable: true,
-  action ({ status, store }) {
+  action ({ status, dispatch }) {
     if (!status.favorited) {
-      return store.dispatch('favorite', { id: status.id })
+      return dispatch('favorite', { id: status.id })
     } else {
-      return store.dispatch('unfavorite', { id: status.id })
+      return dispatch('unfavorite', { id: status.id })
     }
   }
 }, {
@@ -125,7 +125,7 @@ const BUTTONS = [{
   // EMOJI REACTIONS
   // =========
   name: 'emoji',
-  label: 'tool_lip.add_reaction',
+  label: 'tool_tip.add_reaction',
   icon: ['far', 'smile-beam'],
   anonLink: true,
   popover: 'emoji-picker'
@@ -279,6 +279,7 @@ const StatusActionButtons = {
   emits: ['toggleReplying'],
   data () {
     return {
+      showPin: true,
       showingConfirmDialog: false,
       currentConfirmTitle: '',
       currentConfirmOkText: '',
@@ -304,6 +305,9 @@ const StatusActionButtons = {
     extraButtons () {
       return this.buttons.filter(x => !this.pinnedItems.has(x.name))
     },
+    currentUser () {
+      return this.$store.state.users.currentUser
+    },
     funcArg () {
       return {
         status: this.status,
@@ -313,8 +317,8 @@ const StatusActionButtons = {
         state: this.$store.state,
         getters: this.$store.getters,
         router: this.$router,
-        currentUser: this.$store.state.users.currentUser,
-        loggedIn: !!this.$store.state.users.currentUser
+        currentUser: this.currentUser,
+        loggedIn: !!this.currentUser
       }
     },
     triggerAttrs () {
@@ -336,6 +340,18 @@ const StatusActionButtons = {
         .then(() => this.$emit('onSuccess'))
         .catch(err => this.$emit('onError', err.error.error))
     },
+    isPinned (button) {
+      console.log(this.pinnedItems, button.name)
+      return this.pinnedItems.has(button.name)
+    },
+    unpin (button) {
+      this.$store.commit('removeCollectionPreference', { path: 'collections.pinnedStatusActions', value: button.name })
+      this.$store.dispatch('pushServerSideStorage')
+    },
+    pin (button) {
+      this.$store.commit('addCollectionPreference', { path: 'collections.pinnedStatusActions', value: button.name })
+      this.$store.dispatch('pushServerSideStorage')
+    },
     component (button) {
       if (!this.$store.state.users.currentUser && button.anonLink) {
         return 'a'
@@ -348,6 +364,8 @@ const StatusActionButtons = {
     getClass (button) {
       return {
         [button.name + '-button']: true,
+        '-pin-edit': this.showPin,
+        '-dropdown': button.dropdown?.(),
         '-active': button.active?.(this.funcArg),
         '-interactive': !!this.$store.state.users.currentUser
       }

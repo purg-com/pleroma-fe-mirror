@@ -3,6 +3,7 @@
     <Popover
       trigger="hover"
       placement="left"
+      :trigger-attrs="triggerAttrs"
       remove-padding
     >
       <template #content>
@@ -10,7 +11,7 @@
           <button
             v-for="list in lists"
             :key="list.id"
-            class="menu-item dropdown-item"
+            class="menu-item dropdown-item dropdown-item-icon"
             @click="toggleList(list.id)"
           >
             <span
@@ -22,14 +23,14 @@
         </div>
       </template>
       <template #trigger>
-        <button class="menu-item dropdown-item -has-submenu">
+        <span>
           {{ $t('lists.manage_lists') }}
-          <FAIcon
-            class="chevron-icon"
-            size="lg"
-            icon="chevron-right"
-          />
-        </button>
+        </span>
+        <FAIcon
+          class="chevron-icon"
+          size="lg"
+          icon="chevron-right"
+        />
       </template>
     </Popover>
   </div>

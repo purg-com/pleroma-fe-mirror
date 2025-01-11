@@ -9,8 +9,7 @@ import {
   groupBy,
   findLastIndex,
   takeRight,
-  uniqWith,
-  merge
+  uniqWith
 } from 'lodash'
 import { CURRENT_UPDATE_COUNTER } from 'src/components/update_notification/update_notification.js'
 
@@ -124,10 +123,21 @@ export const _getRecentData = (cache, live) => {
     result.needUpload = true
   }
 
-  result.recent = merge(defaultState, result.recent)
-  result.stale = merge(defaultState, result.stale)
+  const merge = (a, b) => ({
+    needUpload: b.needUpload ?? a.needUpload,
+    prefsStorage: {
+      ...a.prefsStorage,
+      ...b.prefsStorage
+    },
+    flagStorage: {
+      ...a.flagStorage,
+      ...b.flagStorage
+    }
+  })
+  result.recent = result.recent && merge(defaultState, result.recent)
+  result.stale = result.stale && merge(defaultState, result.stale)
 
-  return merge(defaultState, result)
+  return result
 }
 
 export const _getAllFlags = (recent, stale) => {
@@ -309,7 +319,7 @@ export const mutations = {
 
     cache = _doMigrations(cache)
 
-    let { recent, stale, needsUpload } = _getRecentData(cache, live)
+    let { recent, stale, needUpload } = _getRecentData(cache, live)
 
     const userNew = userData.created_at > NEW_USER_DATE
     const flagsTemplate = userNew ? newUserFlags : defaultState.flagStorage
@@ -323,7 +333,7 @@ export const mutations = {
       })
     }
 
-    if (!needsUpload && recent && stale) {
+    if (!needUpload && recent && stale) {
       console.debug('Checking if data needs merging...')
       // discarding timestamps and versions
       const { _timestamp: _0, _version: _1, ...recentData } = recent
@@ -352,7 +362,7 @@ export const mutations = {
     recent.flagStorage = { ...flagsTemplate, ...totalFlags }
     recent.prefsStorage = { ...defaultState.prefsStorage, ...totalPrefs }
 
-    state.dirty = dirty || needsUpload
+    state.dirty = dirty || needUpload
     state.cache = recent
     // set local timestamp to smaller one if we don't have any changes
     if (stale && recent && !state.dirty) {
