@@ -2070,10 +2070,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@ruffle-rs/ruffle@0.1.0-nightly.2024.8.21":
-  version "0.1.0-nightly.2024.8.21"
-  resolved "https://registry.yarnpkg.com/@ruffle-rs/ruffle/-/ruffle-0.1.0-nightly.2024.8.21.tgz#e4bdb6386b487dc12471681c7265f565d813e1cf"
-  integrity sha512-nfTPJEPJPo4MrUACuLoW19wNKgF1rrbxCO5if1MZfsWcUxZ6+pwlQWq1JxXalxEjYg8VwJtWzWEchWJQkMckwA==
+"@ruffle-rs/ruffle@0.1.0-nightly.2025.1.11":
+  version "0.1.0-nightly.2025.1.11"
+  resolved "https://registry.yarnpkg.com/@ruffle-rs/ruffle/-/ruffle-0.1.0-nightly.2025.1.11.tgz#99df389836ec0d3ddef583cd19321a8687df5dad"
+  integrity sha512-Mfk8vN6XMR91avNSP7L2p5xeOJYHt2F8DEV3Hmz1WP63JnxxNhFLLLQhCqGtauHVK5S8Eo7NVwrM97HK0wGe+g==
 
 "@sinclair/typebox@^0.24.1":
   version "0.24.51"
