@@ -10,6 +10,7 @@ import {
   faMinus,
   faCheck,
   faTimes,
+  faWrench,
 
   faReply,
   faRetweet,
@@ -33,6 +34,7 @@ library.add(
   faMinus,
   faCheck,
   faTimes,
+  faWrench,
 
   faReply,
   faRetweet,
@@ -279,7 +281,7 @@ const StatusActionButtons = {
   emits: ['toggleReplying'],
   data () {
     return {
-      showPin: true,
+      showPin: false,
       showingConfirmDialog: false,
       currentConfirmTitle: '',
       currentConfirmOkText: '',

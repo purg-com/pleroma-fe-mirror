@@ -99,14 +99,6 @@
     .pin-action-button {
       margin: 0;
       padding: var(--__horizontal-gap) var(--__horizontal-gap);
-
-      &::before {
-        content: "";
-        height: 1em;
-        width: 1px;
-        border-left: 1px solid var(--icon);
-        margin-right: 0.5em;
-      }
     }
   }
 }
