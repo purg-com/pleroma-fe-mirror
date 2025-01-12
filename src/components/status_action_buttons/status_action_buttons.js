@@ -91,14 +91,15 @@ const BUTTONS = [{
   confirm: ({ status, getters }) => !status.repeated && getters.mergedConfig.modalOnRepeat,
   confirmStrings: {
     title: 'status.repeat_confirm_title',
+    body: 'status.repeat_confirm',
     confirm: 'status.repeat_confirm_accept_button',
     cancel: 'status.repeat_confirm_cancel_button'
   },
-  action ({ status, store }) {
+  action ({ status, dispatch }) {
     if (!status.repeated) {
-      return store.dispatch('retweet', { id: status.id })
+      return dispatch('retweet', { id: status.id })
     } else {
-      return store.dispatch('unretweet', { id: status.id })
+      return dispatch('unretweet', { id: status.id })
     }
   }
 }, {
@@ -226,10 +227,12 @@ const BUTTONS = [{
         currentUser.privileges.includes('messages_delete')
     )
   },
+  confirm: ({ status, getters }) => getters.mergedConfig.modalOnDelete,
   confirmStrings: {
     title: 'status.delete_confirm_title',
-    confirm: 'status.delete_confirm_cancel_button',
-    cancel: 'status.delete_confirm_accept_button'
+    body: 'status.delete_confirm',
+    confirm: 'status.delete_confirm_accept_button',
+    cancel: 'status.delete_confirm_cancel_button'
   },
   action ({ dispatch, status }) {
     return dispatch('deleteStatus', { id: status.id })
@@ -335,7 +338,19 @@ const StatusActionButtons = {
   },
   methods: {
     doAction (button) {
-      this.doActionReal(button)
+      if (button.confirm?.(this.funcArg)) {
+        this.currentConfirmTitle = this.$t(button.confirmStrings(this.funcArg).title)
+        this.currentConfirmOkText = this.$t(button.confirmStrings(this.funcArg).confirm)
+        this.currentConfirmCancelText = this.$t(button.confirmStrings(this.funcArg).cancel)
+        this.currentConfirmBody = this.$t(button.confirmStrings(this.funcArg).body)
+        this.currentConfirmAction = () => {
+          this.showingConfirmDialog = false
+          this.doActionReal(button)
+        }
+        this.showingConfirmDialog = true
+      } else {
+        this.doActionReal(button)
+      }
     },
     doActionReal (button) {
       button.action(this.funcArg)

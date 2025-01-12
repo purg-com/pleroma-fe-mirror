@@ -153,9 +153,9 @@
         :confirm-text="currentConfirmOkText"
         :cancel-text="currentConfirmCancelText"
         @accepted="currentConfirmAction"
-        @cancelled="hideConfirmDialog"
+        @cancelled="showingConfirmDialog = false"
       >
-        {{ $t('status.repeat_confirm') }}
+        {{ currentConfirmBody }}
       </confirm-modal>
     </teleport>
   </div>
