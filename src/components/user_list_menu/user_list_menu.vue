@@ -11,7 +11,7 @@
           <button
             v-for="list in lists"
             :key="list.id"
-            class="menu-item dropdown-item dropdown-item-icon"
+            class="menu-item dropdown-item -icon"
             @click="toggleList(list.id)"
           >
             <span
@@ -23,14 +23,14 @@
         </div>
       </template>
       <template #trigger>
-        <span>
+        <span class="main-button">
           {{ $t('lists.manage_lists') }}
+          <FAIcon
+            class="chevron-icon"
+            size="lg"
+            icon="chevron-right"
+          />
         </span>
-        <FAIcon
-          class="chevron-icon"
-          size="lg"
-          icon="chevron-right"
-        />
       </template>
     </Popover>
   </div>

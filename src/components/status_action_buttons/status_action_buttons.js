@@ -1,6 +1,8 @@
 import { mapState } from 'vuex'
 
 import ConfirmModal from 'src/components/confirm_modal/confirm_modal.vue'
+import ActionButton from './action_button.vue'
+import StatusBookmarkFolderMenu from 'src/components/status_bookmark_folder_menu/status_bookmark_folder_menu.vue'
 import Popover from 'src/components/popover/popover.vue'
 import genRandomSeed from 'src/services/random_seed/random_seed.service.js'
 
@@ -187,8 +189,7 @@ const BUTTONS = [{
     } else {
       return dispatch('bookmark', { id: status.id })
     }
-  },
-  popover: 'bookmark-folders'
+  }
 }, {
   // =========
   // EDIT
@@ -299,7 +300,9 @@ const StatusActionButtons = {
   },
   components: {
     Popover,
-    ConfirmModal
+    ConfirmModal,
+    ActionButton,
+    StatusBookmarkFolderMenu
   },
   computed: {
     ...mapState({
@@ -333,7 +336,6 @@ const StatusActionButtons = {
     triggerAttrs () {
       return {
         title: this.$t('status.more_actions'),
-        id: `popup-trigger-${this.randomSeed}`,
         'aria-controls': `popup-menu-${this.randomSeed}`,
         'aria-expanded': this.expanded,
         'aria-haspopup': 'menu'
@@ -375,7 +377,7 @@ const StatusActionButtons = {
       this.$store.commit('addCollectionPreference', { path: 'collections.pinnedStatusActions', value: button.name })
       this.$store.dispatch('pushServerSideStorage')
     },
-    component (button) {
+    getComponent (button) {
       if (!this.$store.state.users.currentUser && button.anonLink) {
         return 'a'
       } else if (button.action == null && button.link != null) {

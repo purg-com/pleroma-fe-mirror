@@ -85,7 +85,7 @@
           />{{ $t('settings.collapse_subject') }}
         </button>
         <button
-          class="menu-item dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item -icon"
           role="menuitem"
           @click="openTab('general')"
         >

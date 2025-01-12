@@ -54,65 +54,59 @@
 
   a.dropdown-item,
   button.dropdown-item,
-  .dropdown-item:not(button, a) > button:first-child,
-  .dropdown-item:not(button, a) > a:first-child {
-    box-sizing: border-box;
-    padding: var(--__horizontal-gap) var(--__horizontal-gap);
-    grid-gap: var(--__horizontal-gap);
-    display: grid;
-    border: none;
-    align-items: center;
-    grid-template-columns: 1fr var(--__line-height);
-    grid-auto-flow: column;
-    grid-auto-columns: auto;
+  .dropdown-item:not(button, a) {
+    &.disabled {
+      cursor: not-allowed;
+    }
 
-    .menu-checkbox {
-      display: inline-block;
-      vertical-align: middle;
-      min-width: calc(var(--__line-height) + 1px);
-      max-width: calc(var(--__line-height) + 1px);
-      min-height: calc(var(--__line-height) + 1px);
-      max-height: calc(var(--__line-height) + 1px);
-      line-height: var(--__line-height);
-      text-align: center;
-      border-radius: 0;
-      box-shadow: var(--shadow);
-      margin-right: var(--__horizontal-gap);
+    &:not(.disabled) {
+      cursor: pointer;
+    }
 
-      &.menu-checkbox-checked::after {
-        font-size: 1.25em;
-        content: "✓";
-      }
+    .main-button {
+      box-sizing: border-box;
+      padding: var(--__horizontal-gap) var(--__horizontal-gap);
+      grid-gap: var(--__horizontal-gap);
+      display: grid;
+      border: none;
+      align-items: center;
+      grid-template-columns: 1fr var(--__line-height);
+      grid-auto-flow: column;
+      grid-auto-columns: auto;
 
-      &.-radio {
-        border-radius: 9999px;
+      .menu-checkbox {
+        display: inline-block;
+        vertical-align: middle;
+        min-width: calc(var(--__line-height) + 1px);
+        max-width: calc(var(--__line-height) + 1px);
+        min-height: calc(var(--__line-height) + 1px);
+        max-height: calc(var(--__line-height) + 1px);
+        line-height: var(--__line-height);
+        text-align: center;
+        border-radius: 0;
+        box-shadow: var(--shadow);
+        margin-right: var(--__horizontal-gap);
 
         &.menu-checkbox-checked::after {
-          font-size: 2em;
-          content: "•";
+          font-size: 1.25em;
+          content: "✓";
+        }
+
+        &.-radio {
+          border-radius: 9999px;
+
+          &.menu-checkbox-checked::after {
+            font-size: 2em;
+            content: "•";
+          }
         }
       }
     }
-  }
 
-  a.dropdown-item-icon,
-  button.dropdown-item-icon,
-  .dropdown-item-icon:not(button, a) > button:first-child,
-  .dropdown-item-icon:not(button, a) > a:first-child {
-    grid-template-columns: var(--__line-height) 1fr;
-  }
-
-  a.dropdown-item:not(.disabled),
-  button.dropdown:not(.disabled),
-  .dropdown-item:not(.disabled, button, a) > button:first-child,
-  .dropdown-item:not(.disabled, button, a) > a:first-child {
-    cursor: pointer;
-  }
-
-  a.dropdown-item.disabled,
-  button.dropdown.disabled,
-  .dropdown-item.disabled:not(button, a) > button:first-child,
-  .dropdown-item.disabled:not(button, a) > a:first-child {
-    cursor: not-allowed;
+    &.-icon {
+      .main-button {
+        grid-template-columns: var(--__line-height) 1fr;
+      }
+    }
   }
 }

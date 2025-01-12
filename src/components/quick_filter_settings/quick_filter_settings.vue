@@ -108,7 +108,7 @@
           />{{ $t('settings.hide_all_muted_posts') }}
         </button>
         <button
-          class="menu-item dropdown-item dropdown-item-icon"
+          class="menu-item dropdown-item -icon"
           role="menuitem"
           @click="openTab('filtering')"
         >
