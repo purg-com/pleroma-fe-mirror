@@ -198,7 +198,7 @@ const Popover = {
         let usingTop = this.placement !== 'bottom'
 
         // Handle special cases, first force to displaying on top if there's not space on bottom,
-        // regardless of what placement value was. Then check if there's not space on top, and
+        // regardless of what placement value was. Then check if there's no space on top, and
         // force to bottom, again regardless of what placement value was.
         const topBoundary = origin.y - anchorHeight * 0.5 + (this.removePadding ? topPadding : 0)
         const bottomBoundary = origin.y + anchorHeight * 0.5 - (this.removePadding ? bottomPadding : 0)
@@ -214,20 +214,20 @@ const Popover = {
         translateX = origin.x + horizOffset + xOffset
       } else {
         // Default to whatever user wished with placement prop
-        let usingRight = this.placement !== 'left'
+        let usingLeft = this.placement !== 'right'
 
-        // Handle special cases, first force to displaying on top if there's not space on bottom,
-        // regardless of what placement value was. Then check if there's not space on top, and
+        // Handle special cases, first force to displaying on left if there's not space on right,
+        // regardless of what placement value was. Then check if there's no space on right, and
         // force to bottom, again regardless of what placement value was.
-        const rightBoundary = origin.x - anchorWidth * 0.5 + (this.removePadding ? rightPadding : 0)
-        const leftBoundary = origin.x + anchorWidth * 0.5 - (this.removePadding ? leftPadding : 0)
-        if (leftBoundary + content.offsetWidth > xBounds.max) usingRight = true
-        if (rightBoundary - content.offsetWidth < xBounds.min) usingRight = false
+        const leftBoundary = origin.x - anchorWidth * 0.5 + (this.removePadding ? leftPadding : 0)
+        const rightBoundary = origin.x + anchorWidth * 0.5 - (this.removePadding ? rightPadding : 0)
+        if (leftBoundary - content.offsetWidth > xBounds.max) usingLeft = true
+        if (rightBoundary + content.offsetWidth < xBounds.min) usingLeft = false
 
         const xOffset = (this.offset && this.offset.x) || 0
-        translateX = usingRight
-          ? rightBoundary - xOffset - content.offsetWidth
-          : leftBoundary + xOffset
+        translateX = usingLeft
+          ? leftBoundary - xOffset - content.offsetWidth
+          : rightBoundary + xOffset
 
         const yOffset = (this.offset && this.offset.y) || 0
         translateY = origin.y + vertOffset + yOffset
