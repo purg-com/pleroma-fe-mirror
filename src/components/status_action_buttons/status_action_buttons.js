@@ -138,7 +138,7 @@ const BUTTONS = [{
   // =========
   // MUTE CONVERSATION, my beloved
   // =========
-  name: 'mute-conversation',
+  name: 'mute',
   icon: 'eye-slash',
   label: ({ status }) => status.thread_muted
     ? 'status.unmute_conversation'

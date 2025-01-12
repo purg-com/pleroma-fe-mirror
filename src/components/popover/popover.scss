@@ -63,13 +63,21 @@
       cursor: pointer;
     }
 
-    .main-button {
+    .main-button,
+    .extra-button {
+      display: grid;
       box-sizing: border-box;
       padding: var(--__horizontal-gap) var(--__horizontal-gap);
-      grid-gap: var(--__horizontal-gap);
-      display: grid;
       border: none;
       align-items: center;
+    }
+
+    .extra-button {
+      border-left: 1px solid var(--icon);
+    }
+
+    .main-button {
+      grid-gap: var(--__horizontal-gap);
       grid-template-columns: 1fr var(--__line-height);
       grid-auto-flow: column;
       grid-auto-columns: auto;

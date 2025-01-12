@@ -39,7 +39,7 @@
         </template>
       </FALayers><span>{{ $t(button.label(funcArg)) }}</span>
       <FAIcon
-        v-if="button.name === 'bookmark'"
+        v-if="button.name === 'mute'"
         class="chevron-icon"
         size="lg"
         icon="chevron-right"

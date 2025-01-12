@@ -2,7 +2,7 @@
   <div class="UserListMenu">
     <Popover
       trigger="hover"
-      placement="left"
+      placement="right"
       :trigger-attrs="triggerAttrs"
       remove-padding
     >

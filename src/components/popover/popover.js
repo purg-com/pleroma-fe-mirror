@@ -197,7 +197,7 @@ const Popover = {
         // Default to whatever user wished with placement prop
         let usingTop = this.placement !== 'bottom'
 
-        // Handle special cases, first force to displaying on top if there's not space on bottom,
+        // Handle special cases, first force to displaying on top if there's no space on bottom,
         // regardless of what placement value was. Then check if there's no space on top, and
         // force to bottom, again regardless of what placement value was.
         const topBoundary = origin.y - anchorHeight * 0.5 + (this.removePadding ? topPadding : 0)
@@ -216,13 +216,13 @@ const Popover = {
         // Default to whatever user wished with placement prop
         let usingLeft = this.placement !== 'right'
 
-        // Handle special cases, first force to displaying on left if there's not space on right,
+        // Handle special cases, first force to displaying on left if there's no space on right,
         // regardless of what placement value was. Then check if there's no space on right, and
-        // force to bottom, again regardless of what placement value was.
+        // force to left, again regardless of what placement value was.
         const leftBoundary = origin.x - anchorWidth * 0.5 + (this.removePadding ? leftPadding : 0)
         const rightBoundary = origin.x + anchorWidth * 0.5 - (this.removePadding ? rightPadding : 0)
-        if (leftBoundary - content.offsetWidth > xBounds.max) usingLeft = true
-        if (rightBoundary + content.offsetWidth < xBounds.min) usingLeft = false
+        if (rightBoundary + content.offsetWidth > xBounds.max) usingLeft = true
+        if (leftBoundary - content.offsetWidth < xBounds.min) usingLeft = false
 
         const xOffset = (this.offset && this.offset.x) || 0
         translateX = usingLeft

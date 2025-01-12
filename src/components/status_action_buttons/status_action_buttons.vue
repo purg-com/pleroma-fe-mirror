@@ -130,6 +130,23 @@
                   />
                 </template>
                 <template #content>
+                  <StatusBookmarkFolderMenu v-if="button.name === 'mute'" :status="funcArg.status" />
+                </template>
+              </Popover>
+              <Popover
+                trigger="hover"
+                placement="right"
+                :trigger-attrs="{ class: 'extra-button' }"
+                v-if="button.name === 'bookmark'"
+              >
+                <template #trigger>
+                  <FAIcon
+                    class="chevron-icon"
+                    size="lg"
+                    icon="chevron-right"
+                  />
+                </template>
+                <template #content>
                   <StatusBookmarkFolderMenu v-if="button.name === 'bookmark'" :status="funcArg.status" />
                 </template>
               </Popover>
