@@ -88,6 +88,7 @@
   }
 }
 // popover
+/* stylelint-disable no-descending-specificity */
 .extra-action-buttons {
   .extra-action {
     display: grid;
@@ -101,4 +102,33 @@
       padding: var(--__horizontal-gap) var(--__horizontal-gap);
     }
   }
+
+  .reply-button {
+    &:hover,
+    &.-active {
+      .svg-inline--fa {
+        color: var(--cBlue);
+      }
+    }
+  }
+
+  .retweet-button {
+    &:hover,
+    &.-active {
+      .svg-inline--fa {
+        color: var(--cGreen);
+      }
+    }
+  }
+
+  .favorite-button {
+    &:hover,
+    &.-active {
+      .svg-inline--fa {
+        color: var(--cOrange);
+      }
+    }
+  }
 }
+
+/* stylelint-enable no-descending-specificity */

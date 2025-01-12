@@ -118,11 +118,33 @@
                 @click="close"
                 :href="component(button) == 'a' ? button.link?.(funcArg) || getRemoteInteractionLink : undefined"
               >
-                <FAIcon
-                  class="fa-scale-110"
-                  fixed-width
-                  :icon="button.icon(funcArg)"
-                /><span>{{ $t(button.label(funcArg)) }}</span>
+                <FALayers>
+                  <FAIcon
+                    class="fa-scale-110"
+                    :icon="button.icon(funcArg)"
+                    fixed-width
+                  />
+                  <template v-if="button.toggleable?.(funcArg) && button.active">
+                    <FAIcon
+                      v-if="button.active(funcArg)"
+                      class="active-marker"
+                      transform="shrink-6 up-9 right-12"
+                      :icon="button.activeIndicator?.(funcArg) || 'check'"
+                    />
+                    <FAIcon
+                      v-if="!button.active(funcArg)"
+                      class="focus-marker"
+                      transform="shrink-6 up-9 right-12"
+                      :icon="button.openIndicator?.(funcArg) || 'plus'"
+                    />
+                    <FAIcon
+                      v-else
+                      class="focus-marker"
+                      transform="shrink-6 up-9 right-12"
+                      :icon="button.closeIndicator?.(funcArg) || 'minus'"
+                    />
+                  </template>
+                </FALayers><span>{{ $t(button.label(funcArg)) }}</span>
               </component>
               <button
                 v-if="showPin && currentUser"
