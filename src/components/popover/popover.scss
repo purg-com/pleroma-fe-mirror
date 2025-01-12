@@ -67,16 +67,20 @@
     .extra-button {
       display: grid;
       box-sizing: border-box;
-      padding: var(--__horizontal-gap) var(--__horizontal-gap);
       border: none;
       align-items: center;
     }
 
     .extra-button {
       border-left: 1px solid var(--icon);
+      padding-left: calc(var(--__horizontal-gap) - 1px);
+      border-right: var(--__horizontal-gap) solid transparent;
+      border-top: var(--__horizontal-gap) solid transparent;
+      border-bottom: var(--__horizontal-gap) solid transparent;
     }
 
     .main-button {
+      padding: var(--__horizontal-gap) var(--__horizontal-gap);
       grid-gap: var(--__horizontal-gap);
       grid-template-columns: 1fr var(--__line-height);
       grid-auto-flow: column;

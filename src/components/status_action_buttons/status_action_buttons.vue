@@ -144,6 +144,7 @@
                     class="chevron-icon"
                     size="lg"
                     icon="chevron-right"
+                    fixed-width
                   />
                 </template>
                 <template #content>

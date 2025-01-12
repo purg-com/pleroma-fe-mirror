@@ -43,6 +43,7 @@
         class="chevron-icon"
         size="lg"
         icon="chevron-right"
+        fixed-width
       />
     </component>
   </div>
