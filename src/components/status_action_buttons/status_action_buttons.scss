@@ -18,6 +18,10 @@
         grid-template-columns: max-content auto;
         grid-gap: 1em;
         align-items: center;
+
+        &.disabled {
+          cursor: not-allowed;
+        }
       }
 
       &.-pin {
@@ -32,7 +36,7 @@
         grid-template-columns: 1fr max-content;
       }
 
-      .reply-button {
+      .reply-button:not(.disabled) {
         &:hover,
         &.-active {
           .svg-inline--fa {
@@ -41,7 +45,7 @@
         }
       }
 
-      .retweet-button {
+      .retweet-button:not(.disabled) {
         &:hover,
         &.-active {
           .svg-inline--fa {
@@ -50,7 +54,7 @@
         }
       }
 
-      .favorite-button {
+      .favorite-button:not(.disabled) {
         &:hover,
         &.-active {
           .svg-inline--fa {
@@ -103,7 +107,30 @@
     }
   }
 
-  .reply-button {
+  > a,
+  > button {
+    @include unfocused-style {
+      .focus-marker {
+        visibility: hidden;
+      }
+
+      .active-marker {
+        visibility: visible;
+      }
+    }
+
+    @include focused-style {
+      .focus-marker {
+        visibility: visible;
+      }
+
+      .active-marker {
+        visibility: hidden;
+      }
+    }
+  }
+
+  .reply-button:not(.disabled) {
     &:hover,
     &.-active {
       .svg-inline--fa {
@@ -112,7 +139,7 @@
     }
   }
 
-  .retweet-button {
+  .retweet-button:not(.disabled) {
     &:hover,
     &.-active {
       .svg-inline--fa {
@@ -121,7 +148,7 @@
     }
   }
 
-  .favorite-button {
+  .favorite-button:not(.disabled) {
     &:hover,
     &.-active {
       .svg-inline--fa {

@@ -65,7 +65,6 @@
     grid-template-columns: 1fr var(--__line-height);
     grid-auto-flow: column;
     grid-auto-columns: auto;
-    cursor: pointer;
 
     .menu-checkbox {
       display: inline-block;
@@ -101,5 +100,19 @@
   .dropdown-item-icon:not(button, a) > button:first-child,
   .dropdown-item-icon:not(button, a) > a:first-child {
     grid-template-columns: var(--__line-height) 1fr;
+  }
+
+  a.dropdown-item:not(.disabled),
+  button.dropdown:not(.disabled),
+  .dropdown-item:not(.disabled, button, a) > button:first-child,
+  .dropdown-item:not(.disabled, button, a) > a:first-child {
+    cursor: pointer;
+  }
+
+  a.dropdown-item.disabled,
+  button.dropdown.disabled,
+  .dropdown-item.disabled:not(button, a) > button:first-child,
+  .dropdown-item.disabled:not(button, a) > a:first-child {
+    cursor: not-allowed;
   }
 }

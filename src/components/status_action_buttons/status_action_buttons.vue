@@ -11,6 +11,7 @@
           :is="component(button)"
           class="button-unstyled action-button"
           :class="getClass(button)"
+          :disabled="getClass(button).disabled"
           role="button"
           :tabindex="0"
           :title="$t(button.label(funcArg))"
@@ -22,7 +23,7 @@
               class="fa-scale-110"
               :icon="button.icon(funcArg)"
             />
-            <template v-if="button.toggleable?.(funcArg) && button.active">
+            <template v-if="!getClass(button).disabled && button.toggleable?.(funcArg) && button.active">
               <FAIcon
                 v-if="button.active(funcArg)"
                 class="active-marker"
@@ -107,6 +108,8 @@
               v-for="button in extraButtons"
               :key="button.name"
               class="menu-item dropdown-item extra-action dropdown-item-icon"
+              :disabled="getClass(button).disabled"
+              :class="{ disabled: getClass(button).disabled }"
             >
               <component
                 :is="component(button)"
@@ -114,6 +117,7 @@
                 role="menuitem"
                 :class="getClass(button)"
                 :tabindex="0"
+                :disabled="getClass(button).disabled"
                 @click.stop="component(button) === 'button' && doAction(button)"
                 @click="close"
                 :href="component(button) == 'a' ? button.link?.(funcArg) || getRemoteInteractionLink : undefined"
@@ -122,9 +126,10 @@
                   <FAIcon
                     class="fa-scale-110"
                     :icon="button.icon(funcArg)"
+                    :spin="button.animated?.() && animationState[button.name]"
                     fixed-width
                   />
-                  <template v-if="button.toggleable?.(funcArg) && button.active">
+                  <template v-if="!getClass(button).disabled && button.toggleable?.(funcArg) && button.active">
                     <FAIcon
                       v-if="button.active(funcArg)"
                       class="active-marker"
@@ -150,7 +155,7 @@
                 v-if="showPin && currentUser"
                 type="button"
                 class="button-unstyled pin-action-button"
-                :title="$t('general.pin' )"
+                :title="$t('general.pin')"
                 :aria-pressed="false"
                 @click.stop.prevent="pin(button)"
               >

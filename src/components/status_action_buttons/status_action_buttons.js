@@ -86,7 +86,7 @@ const BUTTONS = [{
   active: ({ status }) => status.repeated,
   counter: ({ status }) => status.repeat_num,
   anonLink: true,
-  interactive: ({ status }) => !PRIVATE_SCOPES.has(status.visibility),
+  interactive: ({ status, loggedIn }) => loggedIn && !PRIVATE_SCOPES.has(status.visibility),
   toggleable: true,
   confirm: ({ status, getters }) => !status.repeated && getters.mergedConfig.modalOnRepeat,
   confirmStrings: {
@@ -284,6 +284,10 @@ const StatusActionButtons = {
   emits: ['toggleReplying'],
   data () {
     return {
+      animationState: {
+        retweet: false,
+        favorite: false
+      },
       showPin: false,
       showingConfirmDialog: false,
       currentConfirmTitle: '',
@@ -353,9 +357,11 @@ const StatusActionButtons = {
       }
     },
     doActionReal (button) {
+      this.animationState[button.name] = true
       button.action(this.funcArg)
         .then(() => this.$emit('onSuccess'))
         .catch(err => this.$emit('onError', err.error.error))
+        .finally(() => setTimeout(() => { this.animationState[button.name] = false }))
     },
     isPinned (button) {
       console.log(this.pinnedItems, button.name)
@@ -381,10 +387,10 @@ const StatusActionButtons = {
     getClass (button) {
       return {
         [button.name + '-button']: true,
+        disabled: button.interactive ? !button.interactive(this.funcArg) : false,
         '-pin-edit': this.showPin,
         '-dropdown': button.dropdown?.(),
-        '-active': button.active?.(this.funcArg),
-        '-interactive': !!this.$store.state.users.currentUser
+        '-active': button.active?.(this.funcArg)
       }
     },
     getRemoteInteractionLink () {
