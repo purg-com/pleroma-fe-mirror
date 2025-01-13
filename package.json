@@ -37,7 +37,7 @@
     "localforage": "1.10.0",
     "pako": "^2.1.0",
     "parse-link-header": "2.0.0",
-    "phoenix": "1.7.7",
+    "phoenix": "1.7.18",
     "punycode.js": "2.3.0",
     "qrcode": "1.5.3",
     "querystring-es3": "0.2.1",
