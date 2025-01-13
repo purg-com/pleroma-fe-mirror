@@ -9,60 +9,80 @@
       <template #content>
         <div class="dropdown-menu">
           <template v-if="relationship.following">
-            <button
+            <div
               v-if="relationship.showing_reblogs"
-              class="dropdown-item menu-item"
-              @click="hideRepeats"
+              class="menu-item dropdown-item"
             >
-              {{ $t('user_card.hide_repeats') }}
-            </button>
-            <button
+              <button
+                class="main-button"
+                @click="hideRepeats"
+              >
+                {{ $t('user_card.hide_repeats') }}
+              </button>
+            </div>
+            <div
               v-if="!relationship.showing_reblogs"
-              class="dropdown-item menu-item"
-              @click="showRepeats"
+              class="menu-item dropdown-item"
             >
-              {{ $t('user_card.show_repeats') }}
-            </button>
+              <button
+                class="main-button"
+                @click="showRepeats"
+              >
+                {{ $t('user_card.show_repeats') }}
+              </button>
+            </div>
             <div
               role="separator"
               class="dropdown-divider"
             />
           </template>
           <UserListMenu :user="user" />
-          <button
+          <div
             v-if="relationship.followed_by"
-            class="dropdown-item menu-item"
-            @click="removeUserFromFollowers"
+            class="menu-item dropdown-item"
           >
-            {{ $t('user_card.remove_follower') }}
-          </button>
-          <button
-            v-if="relationship.blocking"
-            class="dropdown-item menu-item"
-            @click="unblockUser"
-          >
-            {{ $t('user_card.unblock') }}
-          </button>
-          <button
-            v-else
-            class="dropdown-item menu-item"
-            @click="blockUser"
-          >
-            {{ $t('user_card.block') }}
-          </button>
-          <button
-            class="dropdown-item menu-item"
-            @click="reportUser"
-          >
-            {{ $t('user_card.report') }}
-          </button>
-          <button
+            <button
+              class="main-button"
+              @click="removeUserFromFollowers"
+            >
+              {{ $t('user_card.remove_follower') }}
+            </button>
+          </div>
+          <div class="menu-item dropdown-item">
+            <button
+              v-if="relationship.blocking"
+              class="main-button"
+              @click="unblockUser"
+            >
+              {{ $t('user_card.unblock') }}
+            </button>
+            <button
+              v-else
+              class="main-button"
+              @click="blockUser"
+            >
+              {{ $t('user_card.block') }}
+            </button>
+          </div>
+          <div class="menu-item dropdown-item">
+            <button
+              class="main-button"
+              @click="reportUser"
+            >
+              {{ $t('user_card.report') }}
+            </button>
+          </div>
+          <div
             v-if="pleromaChatMessagesAvailable"
-            class="dropdown-item menu-item"
-            @click="openChat"
+            class="menu-item dropdown-item"
           >
-            {{ $t('user_card.message') }}
-          </button>
+            <button
+              class="main-button"
+              @click="openChat"
+            >
+              {{ $t('user_card.message') }}
+            </button>
+          </div>
         </div>
       </template>
       <template #trigger>

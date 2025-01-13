@@ -1,17 +1,21 @@
 <template>
   <div class="dropdown-menu">
-    <button
+    <div
       v-for="folder in folders"
       :key="folder.id"
       class="menu-item dropdown-item -icon"
-      @click="toggleFolder(folder.id)"
     >
-      <span
-        class="input menu-checkbox -radio"
-        :class="{ 'menu-checkbox-checked': status.bookmark_folder_id == folder.id }"
-      />
-      {{ folder.name }}
-    </button>
+      <button
+        class="main-button"
+        @click="toggleFolder(folder.id)"
+      >
+        <span
+          class="input menu-checkbox -radio"
+          :class="{ 'menu-checkbox-checked': status.bookmark_folder_id == folder.id }"
+        />
+        {{ folder.name }}
+      </button>
+    </div>
   </div>
 </template>
 

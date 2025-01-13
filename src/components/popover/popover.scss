@@ -55,22 +55,6 @@
   a.dropdown-item,
   button.dropdown-item,
   .dropdown-item:not(button, a) {
-    &.disabled {
-      cursor: not-allowed;
-    }
-
-    &:not(.disabled) {
-      cursor: pointer;
-    }
-
-    .main-button,
-    .extra-button {
-      display: grid;
-      box-sizing: border-box;
-      border: none;
-      align-items: center;
-    }
-
     .extra-button {
       border-left: 1px solid var(--icon);
       padding-left: calc(var(--__horizontal-gap) - 1px);
@@ -115,9 +99,30 @@
       }
     }
 
+    .main-button,
+    .extra-button {
+      display: grid;
+      box-sizing: border-box;
+      align-items: center;
+
+      &.disabled {
+        cursor: not-allowed;
+      }
+
+      &:not(.disabled) {
+        cursor: pointer;
+      }
+    }
+
     &.-icon {
       .main-button {
         grid-template-columns: var(--__line-height) 1fr;
+      }
+    }
+
+    &.-icon-space {
+      .main-button {
+        padding-left: calc(var(--__line-height) + var(--__horizontal-gap) * 2);
       }
     }
   }

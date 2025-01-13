@@ -8,18 +8,22 @@
     >
       <template #content>
         <div class="dropdown-menu">
-          <button
+          <div
             v-for="list in lists"
             :key="list.id"
             class="menu-item dropdown-item -icon"
-            @click="toggleList(list.id)"
           >
-            <span
-              class="input menu-checkbox"
-              :class="{ 'menu-checkbox-checked': list.inList }"
-            />
-            {{ list.title }}
-          </button>
+            <button
+              class="main-button"
+              @click="toggleList(list.id)"
+            >
+              <span
+                class="input menu-checkbox"
+                :class="{ 'menu-checkbox-checked': list.inList }"
+              />
+              {{ list.title }}
+            </button>
+          </div>
         </div>
       </template>
       <template #trigger>

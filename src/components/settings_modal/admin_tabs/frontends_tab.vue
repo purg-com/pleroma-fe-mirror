@@ -115,22 +115,28 @@
                 >
                   <template #content="{close}">
                     <div class="dropdown-menu">
-                      <button
+                      <div
                         v-for="ref in frontend.refs"
                         :key="ref"
                         class="menu-item dropdown-item"
-                        @click.prevent="update(frontend, ref)"
-                        @click="close"
                       >
-                        <i18n-t
-                          keypath="admin_dash.frontend.install_version"
-                          scope="global"
+                        <button
+                          class="main-button"
+                          @click.prevent="update(frontend, ref)"
+                          @click="close"
                         >
-                          <template #version>
-                            <code>{{ ref }}</code>
-                          </template>
-                        </i18n-t>
-                      </button>
+                          <span>
+                            <i18n-t
+                              keypath="admin_dash.frontend.install_version"
+                              scope="global"
+                            >
+                              <template #version>
+                                <code>{{ ref }}</code>
+                              </template>
+                            </i18n-t>
+                          </span>
+                        </button>
+                      </div>
                     </div>
                   </template>
                   <template #trigger>
@@ -175,22 +181,28 @@
                 >
                   <template #content="{close}">
                     <div class="dropdown-menu">
-                      <button
+                      <div
+                        class="menu-item dropdown-item"
                         v-for="ref in frontend.installedRefs || frontend.refs"
                         :key="ref"
-                        class="menu-item dropdown-item"
-                        @click.prevent="setDefault(frontend, ref)"
-                        @click="close"
                       >
-                        <i18n-t
-                          keypath="admin_dash.frontend.set_default_version"
-                          scope="global"
+                        <button
+                          class="main-button"
+                          @click.prevent="setDefault(frontend, ref)"
+                          @click="close"
                         >
-                          <template #version>
-                            <code>{{ ref }}</code>
-                          </template>
-                        </i18n-t>
-                      </button>
+                          <span>
+                            <i18n-t
+                              keypath="admin_dash.frontend.set_default_version"
+                              scope="global"
+                            >
+                              <template #version>
+                                <code>{{ ref }}</code>
+                              </template>
+                            </i18n-t>
+                          </span>
+                        </button>
+                      </div>
                     </div>
                   </template>
                   <template #trigger>
