@@ -1,8 +1,11 @@
 <template>
-  <div>
+  <div
+    class="action-button"
+    :class="{ '-with-extra': button.name === 'bookmark' }"
+  >
     <component
       :is="getComponent(button)"
-      class="main-button action-button"
+      class="action-button-inner"
       :class="buttonClass"
       role="menuitem"
       :tabindex="0"
@@ -38,90 +41,48 @@
             :icon="button.closeIndicator?.(funcArg) || 'minus'"
           />
         </template>
-      </FALayers><span>{{ $t(button.label(funcArg)) }}</span>
+      </FALayers>
+      <span
+        v-if="extra"
+        class="action-label"
+      >
+        {{ $t(button.label(funcArg)) }}
+      </span>
+      <span
+        v-if="!extra && button.counter?.(funcArg) > 0"
+        class="action-counter"
+      >
+        {{ button.counter?.(funcArg) }}
+      </span>
       <FAIcon
-        v-if="button.name === 'mute'"
+        v-if="button.dropdown?.()"
         class="chevron-icon"
         size="lg"
         icon="chevron-right"
         fixed-width
       />
     </component>
+    <Popover
+      trigger="hover"
+      placement="right"
+      :trigger-attrs="{ class: 'extra-button' }"
+      v-if="button.name === 'bookmark'"
+    >
+      <template #trigger>
+        <FAIcon
+          class="chevron-icon"
+          size="lg"
+          icon="chevron-right"
+          fixed-width
+        />
+      </template>
+      <template #content>
+        <StatusBookmarkFolderMenu v-if="button.name === 'bookmark'" :status="$attrs.status" />
+      </template>
+    </Popover>
   </div>
 </template>
 
-<script>
-import { library } from '@fortawesome/fontawesome-svg-core'
-import {
-  faPlus,
-  faMinus,
-  faCheck,
-  faTimes,
-  faWrench,
-
-  faReply,
-  faRetweet,
-  faStar,
-  faSmileBeam,
-
-  faEllipsisH,
-  faBookmark,
-  faEyeSlash,
-  faThumbtack,
-  faShareAlt,
-  faExternalLinkAlt,
-  faHistory
-} from '@fortawesome/free-solid-svg-icons'
-import {
-  faStar as faStarRegular
-} from '@fortawesome/free-regular-svg-icons'
-
-library.add(
-  faPlus,
-  faMinus,
-  faCheck,
-  faTimes,
-  faWrench,
-
-  faReply,
-  faRetweet,
-  faStar,
-  faStarRegular,
-  faSmileBeam,
-
-  faEllipsisH,
-  faBookmark,
-  faEyeSlash,
-  faThumbtack,
-  faShareAlt,
-  faExternalLinkAlt,
-  faHistory
-)
-
-export default {
-  props: [
-    'button',
-    'extra',
-    'status',
-    'funcArg',
-    'animationState',
-    'getClass',
-    'getComponent',
-    'doAction',
-    'close'
-  ],
-  computed: {
-    buttonClass () {
-      return {
-        [this.button.name + '-button']: true,
-        '-extra': this.extra,
-        '-quick': !this.extra,
-        '-active': this.button.active?.(this.funcArg),
-        disabled: this.button.interactive ? !this.button.interactive(this.funcArg) : false
-      }
-    }
-  }
-}
-</script>
+<script src="./action_button.js"/>
 
 <style lang="scss" src="./action_button.scss"/>

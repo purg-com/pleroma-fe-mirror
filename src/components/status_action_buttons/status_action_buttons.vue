@@ -7,50 +7,17 @@
         v-for="button in quickButtons"
         :key="button.name"
       >
-        <component
-          :is="getComponent(button)"
-          class="button-unstyled action-button"
-          :class="getClass(button)"
-          :disabled="getClass(button).disabled"
-          role="button"
-          :tabindex="0"
-          :title="$t(button.label(funcArg))"
-          @click.stop="getComponent(button) === 'button' && doAction(button)"
-          :href="getComponent(button) == 'a' ? button.link?.(funcArg) || getRemoteInteractionLink : undefined"
-        >
-          <FALayers>
-            <FAIcon
-              class="fa-scale-110"
-              :icon="button.icon(funcArg)"
-            />
-            <template v-if="!getClass(button).disabled && button.toggleable?.(funcArg) && button.active">
-              <FAIcon
-                v-if="button.active(funcArg)"
-                class="active-marker"
-                transform="shrink-6 up-9 right-12"
-                :icon="button.activeIndicator?.(funcArg) || 'check'"
-              />
-              <FAIcon
-                v-if="!button.active(funcArg)"
-                class="focus-marker"
-                transform="shrink-6 up-9 right-12"
-                :icon="button.openIndicator?.(funcArg) || 'plus'"
-              />
-              <FAIcon
-                v-else
-                class="focus-marker"
-                transform="shrink-6 up-9 right-12"
-                :icon="button.closeIndicator?.(funcArg) || 'minus'"
-              />
-            </template>
-          </FALayers>
-          <span
-            class="action-counter"
-            v-if="button.counter?.(funcArg) > 0"
-          >
-            {{ button.counter?.(funcArg) }}
-          </span>
-        </component>
+        <ActionButtonContainer
+          :button="button"
+          :status="status"
+          :extra="false"
+          :funcArg="funcArg"
+          :get-class="getClass"
+          :get-component="getComponent"
+          :animation-state="animationState"
+          :close="close"
+          :do-action="doAction"
+        />
         <button
           v-if="showPin && currentUser"
           type="button"
@@ -111,63 +78,17 @@
               :disabled="getClass(button).disabled"
               :class="{ disabled: getClass(button).disabled }"
             >
-              <Popover
-                v-if="getComponent(button) === 'button'"
-                trigger="hover"
-                placement="right"
-              >
-                <template #trigger>
-                  <ActionButton
-                    :button="button"
-                    :status="status"
-                    :extra="true"
-                    :funcArg="funcArg"
-                    :get-class="getClass"
-                    :get-component="getComponent"
-                    :animation-state="animationState"
-                    :close="close"
-                    :do-action="doAction"
-                  />
-                </template>
-                <template #content>
-                  <template v-if="button.name === 'mute'">
-                    <div
-                      v-for="folder in folders"
-                      :key="folder.id"
-                      class="menu-item dropdown-item -icon"
-                    >
-                      <button
-                        class="main-button"
-                        @click="toggleFolder(folder.id)"
-                      >
-                        <span
-                          class="input menu-checkbox -radio"
-                          :class="{ 'menu-checkbox-checked': status.bookmark_folder_id == folder.id }"
-                        />
-                        {{ folder.name }}
-                      </button>
-                    </div>
-                  </template>
-                </template>
-              </Popover>
-              <Popover
-                trigger="hover"
-                placement="right"
-                :trigger-attrs="{ class: 'extra-button' }"
-                v-if="button.name === 'bookmark'"
-              >
-                <template #trigger>
-                  <FAIcon
-                    class="chevron-icon"
-                    size="lg"
-                    icon="chevron-right"
-                    fixed-width
-                  />
-                </template>
-                <template #content>
-                  <StatusBookmarkFolderMenu v-if="button.name === 'bookmark'" :status="funcArg.status" />
-                </template>
-              </Popover>
+              <ActionButtonContainer
+                :button="button"
+                :status="status"
+                :extra="true"
+                :funcArg="funcArg"
+                :get-class="getClass"
+                :get-component="getComponent"
+                :animation-state="animationState"
+                :close="close"
+                :do-action="doAction"
+              />
               <button
                 v-if="showPin && currentUser"
                 type="button"

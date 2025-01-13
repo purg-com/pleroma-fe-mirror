@@ -1,8 +1,7 @@
 import { mapState } from 'vuex'
 
 import ConfirmModal from 'src/components/confirm_modal/confirm_modal.vue'
-import ActionButton from './action_button.vue'
-import StatusBookmarkFolderMenu from 'src/components/status_bookmark_folder_menu/status_bookmark_folder_menu.vue'
+import ActionButtonContainer from './action_button_container.vue'
 import Popover from 'src/components/popover/popover.vue'
 import genRandomSeed from 'src/services/random_seed/random_seed.service.js'
 
@@ -136,22 +135,21 @@ const BUTTONS = [{
   popover: 'emoji-picker'
 }, {
   // =========
-  // MUTE CONVERSATION, my beloved
+  // MUTE
   // =========
   name: 'mute',
   icon: 'eye-slash',
-  label: ({ status }) => status.thread_muted
-    ? 'status.unmute_conversation'
-    : 'status.mute_conversation',
+  label: 'status.mute_ellipsis',
   if: ({ loggedIn }) => loggedIn,
   toggleable: true,
-  action ({ status, dispatch, emit }) {
-    if (status.thread_muted) {
-      return dispatch('unmuteConversation', { id: status.id })
-    } else {
-      return dispatch('muteConversation', { id: status.id })
-    }
-  }
+  dropdown: true
+  // action ({ status, dispatch, emit }) {
+  //   if (status.thread_muted) {
+  //     return dispatch('unmuteConversation', { id: status.id })
+  //   } else {
+  //     return dispatch('muteConversation', { id: status.id })
+  //   }
+  // }
 }, {
   // =========
   // PIN STATUS
@@ -287,6 +285,7 @@ const StatusActionButtons = {
   emits: ['toggleReplying'],
   data () {
     return {
+      Popover,
       animationState: {
         retweet: false,
         favorite: false
@@ -303,8 +302,7 @@ const StatusActionButtons = {
   components: {
     Popover,
     ConfirmModal,
-    ActionButton,
-    StatusBookmarkFolderMenu
+    ActionButtonContainer
   },
   computed: {
     ...mapState({

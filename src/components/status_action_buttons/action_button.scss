@@ -2,6 +2,12 @@
 /* stylelint-disable declaration-no-important */
 
 .action-button {
+  display: grid;
+
+  &.-with-extra {
+    grid-template-columns: 1fr calc(var(--__line-height) + 2 * var(--__horizontal-gap));
+  }
+
   &.-quick {
     display: grid;
     grid-template-columns: max-content auto;
