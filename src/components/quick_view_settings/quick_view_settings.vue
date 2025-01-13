@@ -11,7 +11,7 @@
         role="menu"
       >
         <div role="group">
-          <div class="menu-item dropdown-item -icon">
+          <div class="menu-item dropdown-item -icon-double">
             <button
               class="main-button"
               :aria-checked="conversationDisplay === 'tree'"
@@ -29,7 +29,7 @@
               /> {{ $t('settings.conversation_display_tree_quick') }}
             </button>
           </div>
-          <div class="menu-item dropdown-item -icon">
+          <div class="menu-item dropdown-item -icon-double">
             <button
               class="main-button"
               :aria-checked="conversationDisplay === 'linear'"

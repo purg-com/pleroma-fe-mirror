@@ -2,10 +2,11 @@
   <div>
     <component
       :is="getComponent(button)"
-      class="main-button"
+      class="main-button action-button"
+      :class="buttonClass"
       role="menuitem"
       :tabindex="0"
-      :disabled="getClass(button).disabled"
+      :disabled="buttonClass.disabled"
       :href="getComponent(button) == 'a' ? button.link?.(funcArg) || getRemoteInteractionLink : undefined"
       @click.stop="getComponent(button) === 'button' && doAction(button)"
       @click="close"
@@ -15,25 +16,25 @@
           class="fa-scale-110"
           :icon="button.icon(funcArg)"
           :spin="!extra && button.animated?.() && animationState[button.name]"
-          :fixed-width="extra"
+          fixed-width
         />
-        <template v-if="!getClass(button).disabled && button.toggleable?.(funcArg) && button.active">
+        <template v-if="!buttonClass.disabled && button.toggleable?.(funcArg) && button.active">
           <FAIcon
             v-if="button.active(funcArg)"
             class="active-marker"
-            transform="shrink-6 up-9 right-12"
+            transform="shrink-6 up-9 right-15"
             :icon="button.activeIndicator?.(funcArg) || 'check'"
           />
           <FAIcon
             v-if="!button.active(funcArg)"
             class="focus-marker"
-            transform="shrink-6 up-9 right-12"
+            transform="shrink-6 up-9 right-15"
             :icon="button.openIndicator?.(funcArg) || 'plus'"
           />
           <FAIcon
             v-else
             class="focus-marker"
-            transform="shrink-6 up-9 right-12"
+            transform="shrink-6 up-9 right-15"
             :icon="button.closeIndicator?.(funcArg) || 'minus'"
           />
         </template>
@@ -108,6 +109,19 @@ export default {
     'getComponent',
     'doAction',
     'close'
-  ]
+  ],
+  computed: {
+    buttonClass () {
+      return {
+        [this.button.name + '-button']: true,
+        '-extra': this.extra,
+        '-quick': !this.extra,
+        '-active': this.button.active?.(this.funcArg),
+        disabled: this.button.interactive ? !this.button.interactive(this.funcArg) : false
+      }
+    }
+  }
 }
 </script>
+
+<style lang="scss" src="./action_button.scss"/>

@@ -159,8 +159,8 @@ const BUTTONS = [{
   name: 'pin',
   icon: 'thumbtack',
   label: ({ status }) => status.pinned
-    ? 'status.pin'
-    : 'status.unpin',
+    ? 'status.unpin'
+    : 'status.pin',
   if ({ status, loggedIn, currentUser }) {
     return loggedIn &&
       status.user.id === currentUser.id &&
@@ -179,9 +179,11 @@ const BUTTONS = [{
   // =========
   name: 'bookmark',
   icon: 'bookmark',
+  toggleable: true,
+  active: ({ status }) => status.bookmarked,
   label: ({ status }) => status.bookmarked
-    ? 'status.bookmark'
-    : 'status.unbookmark',
+    ? 'status.unbookmark'
+    : 'status.bookmark',
   if: ({ loggedIn }) => loggedIn,
   action ({ status, dispatch, emit }) {
     if (status.bookmarked) {

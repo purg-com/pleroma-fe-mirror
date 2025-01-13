@@ -1,0 +1,56 @@
+@import "../../mixins";
+/* stylelint-disable declaration-no-important */
+
+.action-button {
+  &.-quick {
+    display: grid;
+    grid-template-columns: max-content auto;
+    grid-gap: 1em;
+    align-items: center;
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+  }
+
+  &:hover,
+  &.-active {
+    &.reply-button:not(.disabled) {
+      .svg-inline--fa {
+        color: var(--cBlue);
+      }
+    }
+
+    &.retweet-button:not(.disabled) {
+      .svg-inline--fa {
+        color: var(--cGreen);
+      }
+    }
+
+    &.favorite-button:not(.disabled) {
+      .svg-inline--fa {
+        color: var(--cOrange);
+      }
+    }
+  }
+
+  @include unfocused-style {
+    .focus-marker {
+      visibility: hidden;
+    }
+
+    .active-marker {
+      visibility: visible;
+    }
+  }
+
+  @include focused-style {
+    .focus-marker {
+      visibility: visible;
+    }
+
+    .active-marker {
+      visibility: hidden;
+    }
+  }
+}

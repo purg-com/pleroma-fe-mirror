@@ -13,17 +13,6 @@
       display: grid;
       grid-template-columns: 1fr auto;
 
-      .action-button {
-        display: grid;
-        grid-template-columns: max-content auto;
-        grid-gap: 1em;
-        align-items: center;
-
-        &.disabled {
-          cursor: not-allowed;
-        }
-      }
-
       &.-pin {
         margin: calc(-2px - 0.25em);
         padding: 0.25em;
@@ -104,56 +93,6 @@
     .pin-action-button {
       margin: 0;
       padding: var(--__horizontal-gap) var(--__horizontal-gap);
-    }
-  }
-
-  > a,
-  > button {
-    @include unfocused-style {
-      .focus-marker {
-        visibility: hidden;
-      }
-
-      .active-marker {
-        visibility: visible;
-      }
-    }
-
-    @include focused-style {
-      .focus-marker {
-        visibility: visible;
-      }
-
-      .active-marker {
-        visibility: hidden;
-      }
-    }
-  }
-
-  .reply-button:not(.disabled) {
-    &:hover,
-    &.-active {
-      .svg-inline--fa {
-        color: var(--cBlue);
-      }
-    }
-  }
-
-  .retweet-button:not(.disabled) {
-    &:hover,
-    &.-active {
-      .svg-inline--fa {
-        color: var(--cGreen);
-      }
-    }
-  }
-
-  .favorite-button:not(.disabled) {
-    &:hover,
-    &.-active {
-      .svg-inline--fa {
-        color: var(--cOrange);
-      }
     }
   }
 }

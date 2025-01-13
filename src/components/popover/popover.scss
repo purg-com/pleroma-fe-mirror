@@ -48,13 +48,15 @@
     border-top: 1px solid var(--border);
   }
 
-  .dropdown-item:not(button, a) {
+  .dropdown-item {
     padding: 0;
-  }
 
-  a.dropdown-item,
-  button.dropdown-item,
-  .dropdown-item:not(button, a) {
+    .popover-wrapper {
+      box-sizing: border-box;
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
     .extra-button {
       border-left: 1px solid var(--icon);
       padding-left: calc(var(--__horizontal-gap) - 1px);
@@ -64,6 +66,7 @@
     }
 
     .main-button {
+      width: 100%;
       padding: var(--__horizontal-gap) var(--__horizontal-gap);
       grid-gap: var(--__horizontal-gap);
       grid-template-columns: 1fr var(--__line-height);
@@ -123,6 +126,12 @@
     &.-icon-space {
       .main-button {
         padding-left: calc(var(--__line-height) + var(--__horizontal-gap) * 2);
+      }
+    }
+
+    &.-icon-double {
+      .main-button {
+        grid-template-columns: var(--__line-height) var(--__line-height) 1fr;
       }
     }
   }

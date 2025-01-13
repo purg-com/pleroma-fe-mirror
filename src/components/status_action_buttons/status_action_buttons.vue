@@ -130,7 +130,24 @@
                   />
                 </template>
                 <template #content>
-                  <StatusBookmarkFolderMenu v-if="button.name === 'mute'" :status="funcArg.status" />
+                  <template v-if="button.name === 'mute'">
+                    <div
+                      v-for="folder in folders"
+                      :key="folder.id"
+                      class="menu-item dropdown-item -icon"
+                    >
+                      <button
+                        class="main-button"
+                        @click="toggleFolder(folder.id)"
+                      >
+                        <span
+                          class="input menu-checkbox -radio"
+                          :class="{ 'menu-checkbox-checked': status.bookmark_folder_id == folder.id }"
+                        />
+                        {{ folder.name }}
+                      </button>
+                    </div>
+                  </template>
                 </template>
               </Popover>
               <Popover
