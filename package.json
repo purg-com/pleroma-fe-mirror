@@ -24,7 +24,7 @@
     "@fortawesome/vue-fontawesome": "3.0.3",
     "@kazvmoe-infra/pinch-zoom-element": "1.2.0",
     "@kazvmoe-infra/unicode-emoji-json": "0.4.0",
-    "@ruffle-rs/ruffle": "0.1.0-nightly.2025.1.11",
+    "@ruffle-rs/ruffle": "0.1.0-nightly.2025.1.13",
     "@vuelidate/core": "2.0.3",
     "@vuelidate/validators": "2.0.4",
     "body-scroll-lock": "3.1.5",
