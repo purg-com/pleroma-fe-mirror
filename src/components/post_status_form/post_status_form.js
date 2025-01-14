@@ -768,8 +768,8 @@ const PostStatusForm = {
                 this.newStatus.id = id
               }
               this.saveable = false
-              this.clearStatus()
               if (!this.shouldAutoSaveDraft) {
+                this.clearStatus()
                 this.$emit('draft-done')
               }
             })
@@ -778,8 +778,8 @@ const PostStatusForm = {
           return this.abandonDraft()
             .then(() => {
               this.saveable = false
-              this.clearStatus()
               if (!this.shouldAutoSaveDraft) {
+                this.clearStatus()
                 this.$emit('draft-done')
               }
             })
@@ -789,7 +789,7 @@ const PostStatusForm = {
     },
     maybeAutoSaveDraft () {
       if (this.shouldAutoSaveDraft) {
-        this.saveDraft()
+        this.saveDraft(false)
       }
     },
     abandonDraft () {
