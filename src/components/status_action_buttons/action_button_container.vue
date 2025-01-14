@@ -1,14 +1,14 @@
 <template>
   <Popover
     trigger="hover"
-    placement="right"
+    :placement="$attrs.extra ? 'right' : 'top'"
     v-if="button.dropdown?.()"
   >
     <template #trigger>
       {{ props }}
       <ActionButton
         :button="button"
-        v-bind="$attrs"
+        v-bind.prop="$attrs"
       />
     </template>
     <template #content>

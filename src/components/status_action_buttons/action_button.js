@@ -9,12 +9,14 @@ import {
   faTimes,
   faWrench,
 
+  faChevronRight,
+  faChevronUp,
+
   faReply,
   faRetweet,
   faStar,
   faSmileBeam,
 
-  faEllipsisH,
   faBookmark,
   faEyeSlash,
   faThumbtack,
@@ -33,13 +35,15 @@ library.add(
   faTimes,
   faWrench,
 
+  faChevronRight,
+  faChevronUp,
+
   faReply,
   faRetweet,
   faStar,
   faStarRegular,
   faSmileBeam,
 
-  faEllipsisH,
   faBookmark,
   faEyeSlash,
   faThumbtack,
@@ -71,10 +75,19 @@ export default {
       return [
         this.button.name + '-button',
         {
+          '-with-extra': this.button.name === 'bookmark',
+          '-extra': this.extra,
+          '-quick': !this.extra
+        }
+      ]
+    },
+    buttonInnerClass () {
+      if (!this.extra) console.log(this.button.name)
+      return [
+        this.button.name + '-button',
+        {
           'main-button': this.extra,
           'button-unstyled': !this.extra,
-          '-extra': this.extra,
-          '-quick': !this.extra,
           '-active': this.button.active?.(this.funcArg),
           disabled: this.button.interactive ? !this.button.interactive(this.funcArg) : false
         }

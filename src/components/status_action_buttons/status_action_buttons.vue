@@ -8,6 +8,7 @@
         :key="button.name"
       >
         <ActionButtonContainer
+          :class="{ '-pin': showPin }"
           :button="button"
           :status="status"
           :extra="false"
@@ -92,7 +93,7 @@
               <button
                 v-if="showPin && currentUser"
                 type="button"
-                class="button-unstyled pin-action-button"
+                class="button-unstyled pin-action-button extra-button"
                 :title="$t('general.pin')"
                 :aria-pressed="false"
                 @click.stop.prevent="pin(button)"

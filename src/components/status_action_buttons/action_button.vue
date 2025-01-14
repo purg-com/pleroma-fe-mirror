@@ -1,12 +1,12 @@
 <template>
   <div
     class="action-button"
-    :class="{ '-with-extra': button.name === 'bookmark' }"
+    :class="buttonClass"
   >
     <component
       :is="getComponent(button)"
       class="action-button-inner"
-      :class="buttonClass"
+      :class="buttonInnerClass"
       role="menuitem"
       :tabindex="0"
       :disabled="buttonClass.disabled"
@@ -58,13 +58,13 @@
         v-if="button.dropdown?.()"
         class="chevron-icon"
         size="lg"
-        icon="chevron-right"
+        :icon="extra ? 'chevron-right' : 'chevron-up'"
         fixed-width
       />
     </component>
     <Popover
       trigger="hover"
-      placement="right"
+      :placement="extra ? 'right' : 'top'"
       :trigger-attrs="{ class: 'extra-button' }"
       v-if="button.name === 'bookmark'"
     >
@@ -72,7 +72,7 @@
         <FAIcon
           class="chevron-icon"
           size="lg"
-          icon="chevron-right"
+          :icon="extra ? 'chevron-right' : 'chevron-up'"
           fixed-width
         />
       </template>

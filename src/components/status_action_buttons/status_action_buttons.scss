@@ -11,14 +11,11 @@
   }
 }
 // popover
-/* stylelint-disable no-descending-specificity */
 .extra-action-buttons {
   .extra-action {
-    .pin-action-button {
-      margin: 0;
-      padding: var(--__horizontal-gap) var(--__horizontal-gap);
-    }
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-right: 0;
   }
 }
-
-/* stylelint-enable no-descending-specificity */
