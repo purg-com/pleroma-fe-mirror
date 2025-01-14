@@ -1,4 +1,5 @@
 import StatusBookmarkFolderMenu from 'src/components/status_bookmark_folder_menu/status_bookmark_folder_menu.vue'
+import EmojiPicker from 'src/components/emoji_picker/emoji_picker.vue'
 import Popover from 'src/components/popover/popover.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -67,11 +68,11 @@ export default {
   ],
   components: {
     StatusBookmarkFolderMenu,
+    EmojiPicker,
     Popover
   },
   computed: {
     buttonClass () {
-      if (!this.extra) console.log(this.button.name)
       return [
         this.button.name + '-button',
         {
@@ -92,6 +93,15 @@ export default {
           disabled: this.button.interactive ? !this.button.interactive(this.funcArg) : false
         }
       ]
+    }
+  },
+  methods: {
+    doActionWrap (button) {
+      if (button.name === 'emoji') {
+        this.$refs.picker.showPicker()
+      } else {
+        this.getComponent(button) === 'button' && this.doAction(button)
+      }
     }
   }
 }

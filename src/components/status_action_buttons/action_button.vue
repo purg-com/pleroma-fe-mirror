@@ -11,7 +11,7 @@
       :tabindex="0"
       :disabled="buttonClass.disabled"
       :href="getComponent(button) == 'a' ? button.link?.(funcArg) || getRemoteInteractionLink : undefined"
-      @click.stop="getComponent(button) === 'button' && doAction(button)"
+      @click.stop="doActionWrap(button)"
       @click="close"
     >
       <FALayers>
@@ -80,6 +80,15 @@
         <StatusBookmarkFolderMenu v-if="button.name === 'bookmark'" :status="status" />
       </template>
     </Popover>
+
+    <EmojiPicker
+      ref="picker"
+      v-if="button.name === 'emoji'"
+      :enable-sticker-picker="false"
+      :hide-custom-emoji="hideCustomEmoji"
+      class="emoji-picker-panel"
+      @emoji="addReaction"
+    />
   </div>
 </template>
 
