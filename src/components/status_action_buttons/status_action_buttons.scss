@@ -14,10 +14,6 @@
 /* stylelint-disable no-descending-specificity */
 .extra-action-buttons {
   .extra-action {
-    grid-auto-flow: column;
-    grid-auto-columns: auto;
-    grid-gap: 1em;
-
     .pin-action-button {
       margin: 0;
       padding: var(--__horizontal-gap) var(--__horizontal-gap);
