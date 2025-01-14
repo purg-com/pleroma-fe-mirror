@@ -77,7 +77,7 @@
         />
       </template>
       <template #content>
-        <StatusBookmarkFolderMenu v-if="button.name === 'bookmark'" :status="$attrs.status" />
+        <StatusBookmarkFolderMenu v-if="button.name === 'bookmark'" :status="status" />
       </template>
     </Popover>
   </div>

@@ -51,6 +51,7 @@ library.add(
 export default {
   props: [
     'button',
+    'status',
     'extra',
     'status',
     'funcArg',
