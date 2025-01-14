@@ -57,7 +57,7 @@
           :key="style.key"
           :data-theme-key="style.key"
           class="button-default theme-preview"
-          :class="{ toggled: isStyleActive(style.key), disabled: switchInProgress }"
+          :class="{ toggled: isThemeActive(style.key), disabled: switchInProgress }"
           @click="style.version === 'v2' ? setTheme(style.key) : setStyle(style.key)"
           :disabled="switchInProgress"
         >
@@ -207,51 +207,6 @@
           </div>
         </li>
         <li>
-          <h3>{{ $t('settings.style.interface_font_user_override') }}</h3>
-          <ul class="setting-list">
-            <li>
-              <FontControl
-                :model-value="mergedConfig.theme3hacks.fonts.interface"
-                name="ui"
-                :label="$t('settings.style.fonts.components.interface')"
-                :fallback="{ family: 'sans-serif' }"
-                no-inherit="1"
-                @update:modelValue="v => updateFont('interface', v)"
-              />
-            </li>
-            <li>
-              <FontControl
-                v-if="expertLevel > 0"
-                :model-value="mergedConfig.theme3hacks.fonts.input"
-                name="input"
-                :fallback="{ family: 'inherit' }"
-                :label="$t('settings.style.fonts.components.input')"
-                @update:modelValue="v => updateFont('input', v)"
-              />
-            </li>
-            <li>
-              <FontControl
-                v-if="expertLevel > 0"
-                :model-value="mergedConfig.theme3hacks.fonts.post"
-                name="post"
-                :fallback="{ family: 'inherit' }"
-                :label="$t('settings.style.fonts.components.post')"
-                @update:modelValue="v => updateFont('post', v)"
-              />
-            </li>
-            <li>
-              <FontControl
-                v-if="expertLevel > 0"
-                :model-value="mergedConfig.theme3hacks.fonts.monospace"
-                name="postCode"
-                :fallback="{ family: 'monospace' }"
-                :label="$t('settings.style.fonts.components.monospace')"
-                @update:modelValue="v => updateFont('monospace', v)"
-              />
-            </li>
-          </ul>
-        </li>
-        <li>
           <UnitSetting
             path="emojiSize"
             :step="0.1"
@@ -283,6 +238,47 @@
           >
             {{ $t('settings.navbar_size') }}
           </UnitSetting>
+        </li>
+        <h3>{{ $t('settings.style.interface_font_user_override') }}</h3>
+        <li>
+          <FontControl
+            :model-value="mergedConfig.theme3hacks.fonts.interface"
+            name="ui"
+            :label="$t('settings.style.fonts.components.interface')"
+            :fallback="{ family: 'sans-serif' }"
+            no-inherit="1"
+            @update:modelValue="v => updateFont('interface', v)"
+          />
+        </li>
+        <li>
+          <FontControl
+            v-if="expertLevel > 0"
+            :model-value="mergedConfig.theme3hacks.fonts.input"
+            name="input"
+            :fallback="{ family: 'inherit' }"
+            :label="$t('settings.style.fonts.components.input')"
+            @update:modelValue="v => updateFont('input', v)"
+          />
+        </li>
+        <li>
+          <FontControl
+            v-if="expertLevel > 0"
+            :model-value="mergedConfig.theme3hacks.fonts.post"
+            name="post"
+            :fallback="{ family: 'inherit' }"
+            :label="$t('settings.style.fonts.components.post')"
+            @update:modelValue="v => updateFont('post', v)"
+          />
+        </li>
+        <li>
+          <FontControl
+            v-if="expertLevel > 0"
+            :model-value="mergedConfig.theme3hacks.fonts.monospace"
+            name="postCode"
+            :fallback="{ family: 'monospace' }"
+            :label="$t('settings.style.fonts.components.monospace')"
+            @update:modelValue="v => updateFont('monospace', v)"
+          />
         </li>
         <h3>{{ $t('settings.columns') }}</h3>
         <li>
@@ -345,6 +341,11 @@
     <div class="setting-item">
       <h2>{{ $t('settings.visual_tweaks') }}</h2>
       <ul class="setting-list">
+        <li>
+          <BooleanSetting path="modalMobileCenter">
+            {{ $t('settings.mobile_center_dialog') }}
+          </BooleanSetting>
+        </li>
         <li>
           <ChoiceSetting
             id="forcedRoundness"

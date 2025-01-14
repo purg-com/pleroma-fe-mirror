@@ -94,7 +94,7 @@ Button:toggled:pressed {
 }
 
 Input {
-  background: $mod(--bg -80);
+  background: $boost(--bg 20);
   shadow: --defaultInputBevel;
   roundness: 0
 }

@@ -11,10 +11,10 @@ export default {
         shadow: [{
           x: 0,
           y: 1,
-          blur: 8,
+          blur: 4,
           spread: 0,
           color: '#000000',
-          alpha: 0.7
+          alpha: 0.2
         }]
       }
     }

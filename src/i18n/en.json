@@ -321,7 +321,8 @@
     "auto_save_nothing_new": "Nothing new to save.",
     "auto_save_saved": "Saved.",
     "auto_save_saving": "Saving...",
-    "save_to_drafts_button": "Save to drafts"
+    "save_to_drafts_button": "Save to drafts",
+    "save_to_drafts_and_close_button": "Save to drafts and close"
   },
   "registration": {
     "bio_optional": "Bio (optional)",
@@ -381,6 +382,7 @@
     "actor_type_Person": "a normal user",
     "actor_type_Service": "a bot",
     "actor_type_Group": "a group",
+    "mobile_center_dialog": "Vertically center dialogs on mobile",
     "app_name": "App name",
     "expert_mode": "Show advanced",
     "save": "Save changes",
@@ -867,7 +869,8 @@
           "lookup_local_fonts": "Load list of fonts installed on this computer",
           "enter_manually": "Enter font name family manually",
           "entry": "Enter {fontFamily}",
-          "select": "Select font"
+          "select": "Select font",
+          "label": "{label} font"
         }
       },
       "interface_font_user_override": "Override theme/browser font used",

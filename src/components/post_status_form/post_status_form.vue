@@ -316,13 +316,12 @@
             </template>
           </button>
           <Popover
-            v-if="!disableDraft"
+            v-if="!hideExtraActions"
             class="more-post-actions"
             :normal-button="true"
             trigger="click"
             placement="bottom"
             :offset="{ y: 5 }"
-            :bound-to="{ x: 'container' }"
           >
             <template #trigger>
               <FAIcon
@@ -336,15 +335,20 @@
                 role="menu"
               >
                 <button
-                  v-if="!disableDraft"
+                  v-if="!hideDraft || !disableDraft"
                   class="menu-item dropdown-item dropdown-item-icon"
                   role="menu"
-                  :disabled="!safeToSaveDraft"
+                  :disabled="!safeToSaveDraft && saveable"
                   :class="{ disabled: !safeToSaveDraft }"
                   @click.prevent="saveDraft"
                   @click="close"
                 >
-                  {{ $t('post_status.save_to_drafts_button') }}
+                  <template v-if="closeable">
+                    {{ $t('post_status.save_to_drafts_and_close_button') }}
+                  </template>
+                  <template v-else>
+                    {{ $t('post_status.save_to_drafts_button') }}
+                  </template>
                 </button>
               </div>
             </template>

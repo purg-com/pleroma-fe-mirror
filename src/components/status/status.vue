@@ -65,7 +65,6 @@
           v-if="retweet"
           class="left-side repeater-avatar"
           :show-actor-type-indicator="showActorTypeIndicator"
-          :better-shadow="betterShadow"
           :user="statusoid.user"
         />
         <div class="right-side faint">
@@ -120,7 +119,6 @@
                 class="post-avatar"
                 :show-actor-type-indicator="showActorTypeIndicator"
                 :compact="compact"
-                :better-shadow="betterShadow"
                 :user="status.user"
               />
             </UserPopover>
@@ -600,12 +598,14 @@
         <PostStatusForm
           ref="postStatusForm"
           class="reply-body"
+          :closeable="true"
           :reply-to="status.id"
           :attentions="status.attentions"
           :replied-user="status.user"
           :copy-message-scope="status.visibility"
           :subject="replySubject"
           @posted="doToggleReplying"
+          @draft-done="doToggleReplying"
           @can-close="doToggleReplying"
         />
       </div>

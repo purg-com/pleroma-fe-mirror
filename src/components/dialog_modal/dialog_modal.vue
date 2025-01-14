@@ -1,7 +1,7 @@
 <template>
   <span
     class="dialog-container"
-    :class="{ 'dark-overlay': darkOverlay }"
+    :class="{ 'dark-overlay': darkOverlay, '-center-mobile': mobileCenter }"
     @click.self.stop="onCancel()"
   >
     <div
@@ -79,6 +79,7 @@
     padding: 0.5em;
     border-top: 1px solid var(--border);
     display: grid;
+    justify-content: end;
     grid-gap: 0.5em;
     grid-template-columns: min-content;
     grid-auto-columns: min-content;
@@ -99,6 +100,10 @@
     justify-content: stretch;
     align-items: end;
     justify-items: stretch;
+
+    &.-center-mobile {
+      align-items: center;
+    }
   }
 
   .dialog-modal.panel {

@@ -35,11 +35,11 @@ export default {
     {
       component: 'Root',
       directives: {
-        '--buttonDefaultHoverGlow': 'shadow | 0 0 4 --text / 0.5',
-        '--buttonDefaultFocusGlow': 'shadow | 0 0 4 4 --link / 0.5',
+        '--buttonDefaultHoverGlow': 'shadow | 0 0 1 2 --text / 0.4',
+        '--buttonDefaultFocusGlow': 'shadow | 0 0 1 2 --link / 0.5',
         '--buttonDefaultShadow': 'shadow | 0 0 2 #000000',
-        '--buttonDefaultBevel': 'shadow | $borderSide(#FFFFFF top 0.2 2), $borderSide(#000000 bottom 0.2 2)',
-        '--buttonPressedBevel': 'shadow | $borderSide(#FFFFFF bottom 0.2 2), $borderSide(#000000 top 0.2 2)'
+        '--buttonDefaultBevel': 'shadow | $borderSide(#FFFFFF top 0.2 1), $borderSide(#000000 bottom 0.2 1)',
+        '--buttonPressedBevel': 'shadow | inset 0 0 4 #000000, $borderSide(#FFFFFF bottom 0.2 1), $borderSide(#000000 top 0.2 1)'
       }
     },
     {
@@ -78,28 +78,28 @@ export default {
     {
       state: ['toggled'],
       directives: {
-        background: '--inheritedBackground,-14.2',
+        background: '--accent,-24.2',
         shadow: ['--buttonDefaultShadow', '--buttonPressedBevel']
       }
     },
     {
       state: ['toggled', 'hover'],
       directives: {
-        background: '--inheritedBackground,-14.2',
+        background: '--accent,-24.2',
         shadow: ['--buttonDefaultHoverGlow', '--buttonPressedBevel']
       }
     },
     {
       state: ['toggled', 'disabled'],
       directives: {
-        background: '$blend(--inheritedBackground 0.25 --parent)',
+        background: '$blend(--accent 0.25 --parent)',
         shadow: ['--buttonPressedBevel']
       }
     },
     {
       state: ['disabled'],
       directives: {
-        background: '$blend(--inheritedBackground 0.25 --parent)',
+        background: '$blend(--accent 0.25 --parent)',
         shadow: ['--buttonDefaultBevel']
       }
     },

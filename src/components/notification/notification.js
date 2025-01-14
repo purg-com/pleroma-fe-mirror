@@ -43,7 +43,6 @@ const Notification = {
   data () {
     return {
       statusExpanded: false,
-      betterShadow: this.$store.state.interface.browserSupport.cssFilter,
       unmuted: false,
       showingApproveConfirmDialog: false,
       showingDenyConfirmDialog: false

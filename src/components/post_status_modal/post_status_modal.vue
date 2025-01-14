@@ -14,7 +14,9 @@
       <PostStatusForm
         class="panel-body"
         v-bind="params"
+        :closeable="true"
         @posted="resetAndClose"
+        @draft-done="resetAndClose"
       />
     </div>
   </Modal>

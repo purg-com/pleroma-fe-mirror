@@ -82,6 +82,7 @@ const defaultState = {
   modalOnApproveFollow: false,
   modalOnDenyFollow: false,
   modalOnRemoveUserFromFollowers: false,
+  modalMobileCenter: false,
   loginMethod: 'password',
   logo: '/static/logo.svg',
   logoMargin: '.2em',

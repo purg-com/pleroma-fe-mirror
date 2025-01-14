@@ -5,18 +5,22 @@
       :for="manualEntry ? name : name + '-font-switcher'"
       class="label"
     >
-      {{ label }}
+      {{ $t('settings.style.themes3.font.label', { label }) }}
     </label>
     {{ ' ' }}
     <Checkbox
       v-if="typeof fallback !== 'undefined'"
+      class="font-checkbox"
       :id="name + '-o'"
       :model-value="present"
       @change="$emit('update:modelValue', typeof modelValue === 'undefined' ? fallback : undefined)"
     >
       {{ $t('settings.style.themes3.define') }}
     </Checkbox>
-    <p v-if="modelValue?.family">
+    <div
+      v-if="modelValue?.family"
+      class="font-input"
+    >
       <label
         v-if="manualEntry"
         :id="name + '-label'"
@@ -122,7 +126,7 @@
           </optgroup>
         </Select>
       </span>
-    </p>
+    </div>
   </div>
 </template>
 
@@ -133,6 +137,15 @@
   .custom-font {
     min-width: 20em;
     max-width: 20em;
+  }
+
+  .font-input {
+    margin-left: 2em;
+    margin-top: 0.5em;
+  }
+
+  .font-checkbox {
+    margin-left: 1em;
   }
 }
 
