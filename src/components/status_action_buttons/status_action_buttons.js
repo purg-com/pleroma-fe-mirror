@@ -5,7 +5,7 @@ import ActionButtonContainer from './action_button_container.vue'
 import Popover from 'src/components/popover/popover.vue'
 import genRandomSeed from 'src/services/random_seed/random_seed.service.js'
 
-import { BUTTONS } from './buttons_definitions.vue'
+import { BUTTONS } from './buttons_definitions.js'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {

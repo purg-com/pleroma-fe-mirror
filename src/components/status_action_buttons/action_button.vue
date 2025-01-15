@@ -62,6 +62,11 @@
         fixed-width
       />
     </component>
+    <span
+      v-if="!extra && button.name === 'bookmark'"
+      class="separator"
+    >
+    </span>
     <Popover
       trigger="hover"
       :placement="extra ? 'right' : 'top'"

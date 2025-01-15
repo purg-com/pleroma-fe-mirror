@@ -23,7 +23,9 @@ export const BUTTONS = [{
   // REPEAT
   // =========
   name: 'retweet',
-  label: 'tool_tip.repeat',
+  label: ({ status }) => status.repeated
+    ? 'tool_tip.unrepeat'
+    : 'tool_tip.repeat',
   icon ({ status }) {
     if (PRIVATE_SCOPES.has(status.visibility)) {
       return 'lock'
@@ -55,7 +57,9 @@ export const BUTTONS = [{
   // FAVORITE
   // =========
   name: 'favorite',
-  label: 'tool_tip.favorite',
+  label: ({ status }) => status.favorited
+    ? 'tool_tip.unfavorite'
+    : 'tool_tip.favorite',
   icon: ({ status }) => status.favorited
     ? ['fas', 'star']
     : ['far', 'star'],
@@ -122,7 +126,9 @@ export const BUTTONS = [{
   // BOOKMARK
   // =========
   name: 'bookmark',
-  icon: 'bookmark',
+  icon: ({ status }) => status.bookmarked
+    ? ['fas', 'bookmark']
+    : ['far', 'bookmark'],
   toggleable: true,
   active: ({ status }) => status.bookmarked,
   label: ({ status }) => status.bookmarked

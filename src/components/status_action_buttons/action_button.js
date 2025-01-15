@@ -26,7 +26,8 @@ import {
   faHistory
 } from '@fortawesome/free-solid-svg-icons'
 import {
-  faStar as faStarRegular
+  faStar as faStarRegular,
+  faBookmark as faBookmarkRegular
 } from '@fortawesome/free-regular-svg-icons'
 
 library.add(
@@ -46,6 +47,7 @@ library.add(
   faSmileBeam,
 
   faBookmark,
+  faBookmarkRegular,
   faEyeSlash,
   faThumbtack,
   faShareAlt,
