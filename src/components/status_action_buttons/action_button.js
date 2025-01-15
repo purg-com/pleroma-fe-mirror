@@ -98,6 +98,15 @@ export default {
     }
   },
   methods: {
+    addReaction (event) {
+      const emoji = event.insertion
+      const existingReaction = this.status.emoji_reactions.find(r => r.name === emoji)
+      if (existingReaction && existingReaction.me) {
+        this.$store.dispatch('unreactWithEmoji', { id: this.status.id, emoji })
+      } else {
+        this.$store.dispatch('reactWithEmoji', { id: this.status.id, emoji })
+      }
+    },
     doActionWrap (button) {
       if (button.name === 'emoji') {
         this.$refs.picker.showPicker()
