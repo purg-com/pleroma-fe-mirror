@@ -1,8 +1,3 @@
-import ReplyButton from '../reply_button/reply_button.vue'
-import FavoriteButton from '../favorite_button/favorite_button.vue'
-import ReactButton from '../react_button/react_button.vue'
-import RetweetButton from '../retweet_button/retweet_button.vue'
-import ExtraButtons from '../extra_buttons/extra_buttons.vue'
 import PostStatusForm from '../post_status_form/post_status_form.vue'
 import UserAvatar from '../user_avatar/user_avatar.vue'
 import AvatarList from '../avatar_list/avatar_list.vue'
@@ -103,11 +98,6 @@ const controlledOrUncontrolledSet = (obj, name, val) => {
 const Status = {
   name: 'Status',
   components: {
-    ReplyButton,
-    FavoriteButton,
-    ReactButton,
-    RetweetButton,
-    ExtraButtons,
     PostStatusForm,
     UserAvatar,
     AvatarList,

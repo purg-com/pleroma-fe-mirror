@@ -541,37 +541,6 @@
             :replying="replying"
             @toggleReplying="toggleReplying"
           />
-          <div
-            v-if="!noHeading && !isPreview"
-            class="status-actions"
-          >
-            <reply-button
-              :replying="replying"
-              :status="status"
-              @toggle="toggleReplying"
-            />
-            <retweet-button
-              :visibility="status.visibility"
-              :logged-in="loggedIn"
-              :status="status"
-              @click="$emit('interacted')"
-            />
-            <favorite-button
-              :logged-in="loggedIn"
-              :status="status"
-              @click="$emit('interacted')"
-            />
-            <ReactButton
-              v-if="loggedIn"
-              :status="status"
-              @click="$emit('interacted')"
-            />
-            <extra-buttons
-              :status="status"
-              @onError="showError"
-              @onSuccess="clearError"
-            />
-          </div>
         </div>
       </div>
       <div
