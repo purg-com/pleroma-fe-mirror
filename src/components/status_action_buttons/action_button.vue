@@ -12,7 +12,7 @@
       :disabled="buttonClass.disabled"
       :href="getComponent(button) == 'a' ? button.link?.(funcArg) || getRemoteInteractionLink : undefined"
       @click.stop="doActionWrap(button)"
-      @click="close"
+      @click="button.name === 'emoji' ? () => {} : close()"
     >
       <FALayers>
         <FAIcon
