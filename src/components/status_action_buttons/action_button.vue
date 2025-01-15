@@ -11,7 +11,7 @@
       :tabindex="0"
       :disabled="buttonClass.disabled"
       :href="getComponent(button) == 'a' ? button.link?.(funcArg) || getRemoteInteractionLink : undefined"
-      @click.stop="doActionWrap(button)"
+      @click.prevent="doActionWrap(button)"
       @click="button.name === 'emoji' ? () => {} : close()"
     >
       <FALayers>
