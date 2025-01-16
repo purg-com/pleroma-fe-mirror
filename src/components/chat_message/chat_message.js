@@ -66,7 +66,6 @@ const ChatMessage = {
       return this.message.attachments.length > 0
     },
     ...mapState({
-      betterShadow: state => state.interface.browserSupport.cssFilter,
       currentUser: state => state.users.currentUser,
       restrictedNicknames: state => state.instance.restrictedNicknames
     }),

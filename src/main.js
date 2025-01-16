@@ -131,6 +131,9 @@ const persistedStateOptions = {
         bookmarkFolders: bookmarkFoldersModule
       },
       plugins,
+      options: {
+        devtools: process.env.NODE_ENV !== 'production'
+      },
       strict: false // Socket modifies itself, let's ignore this for now.
       // strict: process.env.NODE_ENV !== 'production'
     })

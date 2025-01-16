@@ -8,6 +8,11 @@ const DialogModal = {
       default: () => {},
       type: Function
     }
+  },
+  computed: {
+    mobileCenter () {
+      return this.$store.getters.mergedConfig.modalMobileCenter
+    }
   }
 }
 

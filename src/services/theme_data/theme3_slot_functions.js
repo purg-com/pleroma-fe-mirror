@@ -81,9 +81,27 @@ export const colorFunctions = {
       return alphaBlend(background, amount, foreground)
     }
   },
+  boost: {
+    argsNeeded: 2,
+    documentation: 'If given color is dark makes it darker, if color is light - makes it lighter',
+    args: [
+      'color: source color',
+      'amount: how much darken/brighten the color'
+    ],
+    exec: (args, { findColor }, { dynamicVars, staticVars }) => {
+      const [colorArg, amountArg] = args
+
+      const color = convert(findColor(colorArg, { dynamicVars, staticVars })).rgb
+      const amount = Number(amountArg)
+
+      const isLight = relativeLuminance(color) < 0.5
+      const mod = isLight ? -1 : 1
+      return brightness(amount * mod, color).rgb
+    }
+  },
   mod: {
     argsNeeded: 2,
-    documentation: 'Old function that increases or decreases brightness depending if color is dark or light. Advised against using it as it might give unexpected results.',
+    documentation: 'Old function that increases or decreases brightness depending if background color is dark or light. Advised against using it as it might give unexpected results.',
     args: [
       'color: source color',
       'amount: how much darken/brighten the color'
@@ -109,6 +127,7 @@ export const shadowFunctions = {
     args: [
       'color: border color',
       'side: string indicating on which side border should be, takes either one word or two words joined by dash (i.e. "left" or "bottom-right")',
+      'width: border width (thickness)',
       '[alpha]: (Optional) border opacity, defaults to 1 (fully opaque)',
       '[inset]: (Optional) whether border should be on the inside or outside, defaults to inside'
     ],

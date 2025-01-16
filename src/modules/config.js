@@ -142,6 +142,7 @@ export const defaultState = {
   modalOnApproveFollow: undefined, // instance default
   modalOnDenyFollow: undefined, // instance default
   modalOnRemoveUserFromFollowers: undefined, // instance default
+  modalMobileCenter: undefined,
   playVideosInModal: false,
   useOneClickNsfw: false,
   useContainFit: true,
