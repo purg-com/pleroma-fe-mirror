@@ -94,11 +94,6 @@ export const BUTTONS = [{
   toggleable: true,
   dropdown: true
   // action ({ status, dispatch, emit }) {
-  //   if (status.thread_muted) {
-  //     return dispatch('unmuteConversation', { id: status.id })
-  //   } else {
-  //     return dispatch('muteConversation', { id: status.id })
-  //   }
   // }
 }, {
   // =========

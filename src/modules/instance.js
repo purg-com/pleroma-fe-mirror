@@ -77,6 +77,8 @@ const defaultState = {
   modalOnUnfollow: false,
   modalOnBlock: true,
   modalOnMute: false,
+  modalOnMuteConversation: false,
+  modalOnMuteDomain: true,
   modalOnDelete: true,
   modalOnLogout: true,
   modalOnApproveFollow: false,

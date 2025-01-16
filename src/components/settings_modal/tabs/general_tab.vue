@@ -117,6 +117,16 @@
               </BooleanSetting>
             </li>
             <li>
+              <BooleanSetting path="modalOnMuteConversation">
+                {{ $t('settings.confirm_dialogs_mute_conversation') }}
+              </BooleanSetting>
+            </li>
+            <li>
+              <BooleanSetting path="modalOnMuteDomain">
+                {{ $t('settings.confirm_dialogs_mute_domain') }}
+              </BooleanSetting>
+            </li>
+            <li>
               <BooleanSetting path="modalOnDelete">
                 {{ $t('settings.confirm_dialogs_delete') }}
               </BooleanSetting>

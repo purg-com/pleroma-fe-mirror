@@ -84,8 +84,13 @@ export default {
         }
       ]
     },
+    userIsMuted () {
+      return this.$store.getters.relationship(this.status.user.id).muting
+    },
+    threadIsMuted () {
+      return this.status.thread_muted
+    },
     buttonInnerClass () {
-      if (!this.extra) console.log(this.button.name)
       return [
         this.button.name + '-button',
         {

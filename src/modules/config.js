@@ -137,6 +137,8 @@ export const defaultState = {
   modalOnUnfollow: undefined, // instance default
   modalOnBlock: undefined, // instance default
   modalOnMute: undefined, // instance default
+  modalOnMuteConversation: undefined, // instance default
+  modalOnMuteDomain: undefined, // instance default
   modalOnDelete: undefined, // instance default
   modalOnLogout: undefined, // instance default
   modalOnApproveFollow: undefined, // instance default

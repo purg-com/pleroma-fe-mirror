@@ -490,6 +490,8 @@
     "confirm_dialogs_unfollow": "unfollowing a user",
     "confirm_dialogs_block": "blocking a user",
     "confirm_dialogs_mute": "muting a user",
+    "confirm_dialogs_mute_domain": "muting domains",
+    "confirm_dialogs_mute_conversation": "muting conversations",
     "confirm_dialogs_delete": "deleting a status",
     "confirm_dialogs_logout": "logging out",
     "confirm_dialogs_approve_follow": "approving a follower",
