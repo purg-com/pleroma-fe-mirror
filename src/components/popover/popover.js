@@ -275,6 +275,11 @@ const Popover = {
       this.scrollable.removeEventListener('scroll', this.onScroll)
       this.scrollable.removeEventListener('resize', this.onResize)
     },
+    resizePopover () {
+      setTimeout(() => {
+        this.updateStyles()
+      }, 1)
+    },
     onMouseenter (e) {
       if (this.trigger === 'hover') {
         this.lockReEntry = false
@@ -323,7 +328,12 @@ const Popover = {
       this.updateStyles()
     },
     onResize (e) {
-      this.updateStyles()
+      const content = this.$refs.content
+      if (!content) return
+      if (this.oldSize.width !== content.offsetWidth || this.oldSize.height !== content.offsetHeight) {
+        this.updateStyles()
+        this.oldSize = { width: content.offsetWidth, height: content.offsetHeight }
+      }
     },
     onChildPopoverState (childRef, state) {
       if (state) {
@@ -337,12 +347,7 @@ const Popover = {
     // Monitor changes to content size, update styles only when content sizes have changed,
     // that should be the only time we need to move the popover box if we don't care about scroll
     // or resize
-    const content = this.$refs.content
-    if (!content) return
-    if (this.oldSize.width !== content.offsetWidth || this.oldSize.height !== content.offsetHeight) {
-      this.updateStyles()
-      this.oldSize = { width: content.offsetWidth, height: content.offsetHeight }
-    }
+    this.onResize()
   },
   mounted () {
     this.teleport = true

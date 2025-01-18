@@ -33,6 +33,7 @@
             name="content"
             class="popover-inner"
             :close="hidePopover"
+            :resize="resizePopover"
           />
         </div>
       </transition>

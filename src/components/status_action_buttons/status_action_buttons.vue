@@ -41,7 +41,6 @@
         :tabindex="0"
         placement="top"
         :offset="{ y: 5 }"
-        :bound-to="{ x: 'container' }"
         remove-padding
         @show="onShow"
         @close="onClose"
@@ -52,7 +51,7 @@
             icon="ellipsis-h"
           />
         </template>
-        <template #content="{close}">
+        <template #content="{close, resize}">
           <div
             :id="`popup-menu-${randomSeed}`"
             class="dropdown-menu extra-action-buttons"
@@ -63,7 +62,7 @@
                 class="main-button"
                 role="menuitem"
                 :tabindex="0"
-                @click.stop="showPin = !showPin"
+                @click.stop="() => { resize(); showPin = !showPin }"
               >
                 <FAIcon
                   class="fa-scale-110"
