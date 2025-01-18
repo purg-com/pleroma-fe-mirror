@@ -3,21 +3,15 @@
 
 .quick-action {
   display: grid;
-  grid-template-columns: max-content;
+  grid-template-columns: minmax(max-content, 1fr);
   grid-gap: 0.25em;
+  align-items: center;
+  height: 1.5em;
 
   .action-counter {
     overflow-x: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-
-  &.-pin {
-    margin: calc(-2px - 0.25em);
-    padding: 0.25em;
-    border: 2px dashed var(--icon);
-    border-radius: var(--roundness);
-    grid-template-columns: 1fr auto;
   }
 
   .action-button-inner,
@@ -27,14 +21,23 @@
   }
 
   .separator {
-    width: 0.5em;
+    display: block;
+    align-self: stretch;
+    width: 1px;
+    background-color: var(--icon);
+    margin-right: 0.5em;
+  }
 
-    &::before {
-      content: "";
-      display: block;
-      width: 1px;
-      height: 1.5em;
-      background-color: var(--icon);
+  &.-pin {
+    margin: calc(-2px - 0.25em);
+    padding: 0.25em;
+    border: 2px dashed var(--icon);
+    border-radius: var(--roundness);
+    grid-template-columns: minmax(max-content, 1fr) auto;
+
+    .extra-button,
+    .separator {
+      display: none;
     }
   }
 
@@ -51,6 +54,7 @@
 .action-button {
   display: grid;
   grid-auto-flow: column;
+  align-items: center;
   padding: 0;
 
   .action-button-inner {
