@@ -6,7 +6,6 @@
       v-if="button.dropdown?.()"
     >
       <template #trigger>
-        {{ props }}
         <ActionButton
           :button="button"
           :status="status"

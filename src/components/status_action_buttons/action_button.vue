@@ -8,11 +8,12 @@
       class="action-button-inner"
       :class="buttonInnerClass"
       role="menuitem"
+      type="button"
+      target="_blank"
       :tabindex="0"
       :disabled="buttonClass.disabled"
       :href="getComponent(button) == 'a' ? button.link?.(funcArg) || getRemoteInteractionLink : undefined"
-      @click.prevent="doActionWrap(button)"
-      @click="button.name === 'emoji' ? () => {} : close()"
+      @click="doActionWrap(button, close)"
     >
       <FALayers>
         <FAIcon
