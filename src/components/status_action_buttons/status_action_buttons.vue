@@ -16,7 +16,7 @@
           :get-class="getClass"
           :get-component="getComponent"
           :animation-state="animationState"
-          :close="close"
+          :close="() => {}"
           :do-action="doAction"
         />
         <button
