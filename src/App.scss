@@ -339,8 +339,6 @@ nav {
     grid-template-areas: "content";
     padding: 0;
 
-    --_actionsColumnCount: 3;
-
     .column {
       padding-top: 0;
       margin: var(--navbar-height) 0 0 0;
