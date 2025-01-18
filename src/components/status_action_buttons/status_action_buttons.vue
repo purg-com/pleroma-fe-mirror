@@ -42,8 +42,7 @@
         placement="top"
         :offset="{ y: 5 }"
         remove-padding
-        @show="onShow"
-        @close="onClose"
+        @close="onExtraClose"
       >
         <template #trigger>
           <FAIcon

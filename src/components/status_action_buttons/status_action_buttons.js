@@ -105,6 +105,9 @@ const StatusActionButtons = {
         .catch(err => this.$emit('onError', err.error.error))
         .finally(() => setTimeout(() => { this.animationState[button.name] = false }))
     },
+    onExtraClose () {
+      this.showPin = false
+    },
     isPinned (button) {
       return this.pinnedItems.has(button.name)
     },
