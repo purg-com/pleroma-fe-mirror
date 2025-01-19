@@ -18,7 +18,7 @@ export default {
     {
       component: 'Root',
       directives: {
-        '--defaultInputBevel': 'shadow | $borderSide(#FFFFFF bottom 0.2), $borderSide(#000000 top 0.2), inset 0 0 2 #000000 / 0.15',
+        '--defaultInputBevel': 'shadow | $borderSide(#FFFFFF bottom 0.2), $borderSide(#000000 top 0.2), inset 0 0 2 #000000 / 0.15, 1 0 1 1 --text / 0.15, -1 0 1 1 --text / 0.15',
         '--defaultInputHoverGlow': 'shadow | 0 0 4 --text / 0.5',
         '--defaultInputFocusGlow': 'shadow | 0 0 4 4 --link / 0.5'
       }

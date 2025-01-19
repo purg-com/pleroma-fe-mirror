@@ -60,7 +60,7 @@
             @click="showUserAvatars = !showUserAvatars"
           >
             <span
-              class="main-button"
+              class="input menu-checkbox"
               :class="{ 'menu-checkbox-checked': showUserAvatars }"
               :aria-hidden="true"
             />{{ $t('settings.mention_link_show_avatar_quick') }}
