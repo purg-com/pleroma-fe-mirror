@@ -3,13 +3,24 @@
     trigger="click"
     class="QuickViewSettings"
     :bound-to="{ x: 'container' }"
-    :trigger-attrs="{ title: $t('timeline.quick_view_settings') }"
+    :trigger-attrs="triggerAttrs"
   >
     <template #content>
       <div
         class="dropdown-menu"
         role="menu"
       >
+        <div
+          v-if="mobileLayout"
+          class="menu-item dropdown-item -icon"
+        >
+          <QuickFilterSettings :nested="true" />
+        </div>
+        <div
+          v-if="mobileLayout"
+          role="separator"
+          class="dropdown-divider"
+        />
         <div role="group">
           <div class="menu-item dropdown-item -icon-double">
             <button

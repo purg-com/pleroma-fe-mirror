@@ -1,5 +1,6 @@
-import Popover from '../popover/popover.vue'
-import { mapGetters } from 'vuex'
+import Popover from 'src/components/popover/popover.vue'
+import QuickFilterSettings from 'src/components/quick_filter_settings/quick_filter_settings.vue'
+import { mapGetters, mapState } from 'vuex'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faList, faFolderTree, faBars, faWrench } from '@fortawesome/free-solid-svg-icons'
 
@@ -15,7 +16,8 @@ const QuickViewSettings = {
     conversation: Boolean
   },
   components: {
-    Popover
+    Popover,
+    QuickFilterSettings
   },
   methods: {
     setConversationDisplay (visibility) {
@@ -27,6 +29,9 @@ const QuickViewSettings = {
   },
   computed: {
     ...mapGetters(['mergedConfig']),
+    ...mapState({
+      mobileLayout: state => state.interface.layoutType === 'mobile'
+    }),
     loggedIn () {
       return !!this.$store.state.users.currentUser
     },

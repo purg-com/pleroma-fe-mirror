@@ -350,6 +350,7 @@ const conversation = {
     },
     ...mapGetters(['mergedConfig']),
     ...mapState({
+      mobileLayout: state => state.interface.layoutType === 'mobile',
       mastoUserSocketStatus: state => state.api.mastoUserSocketStatus
     })
   },

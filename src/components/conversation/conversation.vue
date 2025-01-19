@@ -20,7 +20,7 @@
         {{ $t('timeline.collapse') }}
       </button>
       <QuickFilterSettings
-        v-if="!collapsable"
+        v-if="!collapsable && mobileLayout"
         :conversation="true"
         class="rightside-button"
       />

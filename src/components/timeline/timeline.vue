@@ -77,6 +77,7 @@
       </template>
       <QuickFilterSettings
         class="rightside-button"
+        v-if="!mobileLayout"
       />
       <QuickViewSettings
         class="rightside-button"

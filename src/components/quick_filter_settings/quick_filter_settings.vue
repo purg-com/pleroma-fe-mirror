@@ -1,9 +1,10 @@
 <template>
   <Popover
-    trigger="click"
+    :trigger="nested ? 'hover' : 'click'"
     class="QuickFilterSettings"
     :bound-to="{ x: 'container' }"
-    :trigger-attrs="{ title: $t('timeline.quick_filter_settings') }"
+    :position="nested ? 'right' : 'top'"
+    :trigger-attrs="triggerAttrs"
   >
     <template #content>
       <div
@@ -137,7 +138,19 @@
       </div>
     </template>
     <template #trigger>
-      <FAIcon icon="filter" />
+      <div :class="mobileLayout ? 'main-button' : ''">
+        <FAIcon icon="filter" :fixed-width="nested"/>
+        <template v-if="nested">
+          {{$t('timeline.filter_settings')}}
+        </template>
+        <FAIcon
+          v-if="nested"
+          class="chevron-icon"
+          size="lg"
+          icon="chevron-right"
+          fixed-width
+        />
+      </div>
     </template>
   </Popover>
 </template>
