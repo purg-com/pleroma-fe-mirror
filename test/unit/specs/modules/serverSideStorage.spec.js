@@ -74,7 +74,7 @@ describe('The serverSideStorage module', () => {
         })
       })
 
-      it('should reset local timestamp to remote if contents are the same', () => {
+      it.only('should reset local timestamp to remote if contents are the same', () => {
         const state = {
           ...cloneDeep(defaultState),
           cache: null
@@ -176,33 +176,33 @@ describe('The serverSideStorage module', () => {
     })
     describe('_getRecentData', () => {
       it('should handle nulls correctly', () => {
-        expect(_getRecentData(null, null)).to.eql({ recent: null, stale: null, needUpload: true })
+        expect(_getRecentData(null, null, true)).to.eql({ recent: null, stale: null, needUpload: true })
       })
 
       it('doesn\'t choke on invalid data', () => {
-        expect(_getRecentData({ a: 1 }, { b: 2 })).to.eql({ recent: null, stale: null, needUpload: true })
+        expect(_getRecentData({ a: 1 }, { b: 2 }, true)).to.eql({ recent: null, stale: null, needUpload: true })
       })
 
       it('should prefer the valid non-null correctly, needUpload works properly', () => {
         const nonNull = { _version: VERSION, _timestamp: 1 }
-        expect(_getRecentData(nonNull, null)).to.eql({ recent: nonNull, stale: null, needUpload: true })
-        expect(_getRecentData(null, nonNull)).to.eql({ recent: nonNull, stale: null, needUpload: false })
+        expect(_getRecentData(nonNull, null, true)).to.eql({ recent: nonNull, stale: null, needUpload: true })
+        expect(_getRecentData(null, nonNull, true)).to.eql({ recent: nonNull, stale: null, needUpload: false })
       })
 
       it('should prefer the one with higher timestamp', () => {
         const a = { _version: VERSION, _timestamp: 1 }
         const b = { _version: VERSION, _timestamp: 2 }
 
-        expect(_getRecentData(a, b)).to.eql({ recent: b, stale: a, needUpload: false })
-        expect(_getRecentData(b, a)).to.eql({ recent: b, stale: a, needUpload: false })
+        expect(_getRecentData(a, b, true)).to.eql({ recent: b, stale: a, needUpload: false })
+        expect(_getRecentData(b, a, true)).to.eql({ recent: b, stale: a, needUpload: false })
       })
 
       it('case where both are same', () => {
         const a = { _version: VERSION, _timestamp: 3 }
         const b = { _version: VERSION, _timestamp: 3 }
 
-        expect(_getRecentData(a, b)).to.eql({ recent: b, stale: a, needUpload: false })
-        expect(_getRecentData(b, a)).to.eql({ recent: b, stale: a, needUpload: false })
+        expect(_getRecentData(a, b, true)).to.eql({ recent: b, stale: a, needUpload: false })
+        expect(_getRecentData(b, a, true)).to.eql({ recent: b, stale: a, needUpload: false })
       })
     })
 

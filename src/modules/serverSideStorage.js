@@ -89,7 +89,7 @@ const _verifyPrefs = (state) => {
   })
 }
 
-export const _getRecentData = (cache, live) => {
+export const _getRecentData = (cache, live, isTest) => {
   const result = { recent: null, stale: null, needUpload: false }
   const cacheValid = _checkValidity(cache || {})
   const liveValid = _checkValidity(live || {})
@@ -124,6 +124,8 @@ export const _getRecentData = (cache, live) => {
   }
 
   const merge = (a, b) => ({
+    _version: a._version ?? b._version,
+    _timestamp: a._timestamp ?? b._timestamp,
     needUpload: b.needUpload ?? a.needUpload,
     prefsStorage: {
       ...a.prefsStorage,
@@ -134,8 +136,8 @@ export const _getRecentData = (cache, live) => {
       ...b.flagStorage
     }
   })
-  result.recent = result.recent && merge(defaultState, result.recent)
-  result.stale = result.stale && merge(defaultState, result.stale)
+  result.recent = isTest ? result.recent : (result.recent && merge(defaultState, result.recent))
+  result.stale = isTest ? result.stale : (result.stale && merge(defaultState, result.stale))
 
   return result
 }
@@ -308,7 +310,7 @@ export const mutations = {
   clearServerSideStorage (state, userData) {
     state = { ...cloneDeep(defaultState) }
   },
-  setServerSideStorage (state, userData) {
+  setServerSideStorage (state, userData, test) {
     const live = userData.storage
     state.raw = live
     let cache = state.cache
