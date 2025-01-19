@@ -21,11 +21,6 @@ const StatusActionButtons = {
   emits: ['toggleReplying'],
   data () {
     return {
-      Popover,
-      animationState: {
-        retweet: false,
-        favorite: false
-      },
       showPin: false,
       showingConfirmDialog: false,
       currentConfirmTitle: '',
@@ -99,11 +94,9 @@ const StatusActionButtons = {
       }
     },
     doActionReal (button) {
-      this.animationState[button.name] = true
       button.action(this.funcArg)
         .then(() => this.$emit('onSuccess'))
         .catch(err => this.$emit('onError', err.error.error))
-        .finally(() => setTimeout(() => { this.animationState[button.name] = false }))
     },
     onExtraClose () {
       this.showPin = false

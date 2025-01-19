@@ -19,7 +19,8 @@
         <FAIcon
           class="fa-scale-110"
           :icon="button.icon(funcArg)"
-          :spin="!extra && button.animated?.() && animationState[button.name]"
+          :spin="!extra && button.animated?.() && animationState"
+          style="--fa-animation-duration: 750ms;"
           fixed-width
         />
         <template v-if="!buttonClass.disabled && button.toggleable?.(funcArg) && button.active">

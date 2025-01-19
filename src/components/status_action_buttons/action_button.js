@@ -62,7 +62,6 @@ export default {
     'extra',
     'status',
     'funcArg',
-    'animationState',
     'getClass',
     'getComponent',
     'doAction',
@@ -73,6 +72,9 @@ export default {
     EmojiPicker,
     Popover
   },
+  data: () => ({
+    animationState: false
+  }),
   computed: {
     buttonClass () {
       return [
@@ -116,7 +118,11 @@ export default {
       if (button.name === 'emoji') {
         this.$refs.picker.showPicker()
       } else {
+        this.animationState = true
         this.getComponent(button) === 'button' && this.doAction(button)
+        setTimeout(() => {
+          this.animationState = false
+        }, 500)
         close()
       }
     }

@@ -15,7 +15,6 @@
           :funcArg="funcArg"
           :get-class="getClass"
           :get-component="getComponent"
-          :animation-state="animationState"
           :close="() => {}"
           :do-action="doAction"
         />
@@ -84,7 +83,6 @@
                 :funcArg="funcArg"
                 :get-class="getClass"
                 :get-component="getComponent"
-                :animation-state="animationState"
                 :close="close"
                 :do-action="doAction"
               />
