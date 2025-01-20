@@ -10,8 +10,8 @@
     {{ ' ' }}
     <Checkbox
       v-if="typeof fallback !== 'undefined'"
-      class="font-checkbox"
       :id="name + '-o'"
+      class="font-checkbox"
       :model-value="present"
       @change="$emit('update:modelValue', typeof modelValue === 'undefined' ? fallback : undefined)"
     >

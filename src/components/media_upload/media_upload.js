@@ -80,7 +80,7 @@ const mediaUpload = {
 
           canvas.toBlob((blob) => {
             resolve(new File([blob], newFileName, {
-              type: type,
+              type,
               lastModified: Date.now()
             }))
           }, type, 0.85)

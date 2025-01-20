@@ -1,4 +1,3 @@
-
 // promiseInterval - replacement for setInterval for promises, starts counting
 // the interval only after a promise is done instead of immediately.
 // - promiseCall is a function that returns a promise, it's called the first
