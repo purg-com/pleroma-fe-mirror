@@ -3,6 +3,7 @@
     <Popover
       v-if="button.dropdown?.()"
       trigger="hover"
+      :offset="{ y: 5 }"
       :placement="$attrs.extra ? 'right' : 'top'"
     >
       <template #trigger>

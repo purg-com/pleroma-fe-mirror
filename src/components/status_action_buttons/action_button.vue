@@ -74,6 +74,7 @@
       v-if="button.name === 'bookmark'"
       trigger="hover"
       :placement="extra ? 'right' : 'top'"
+      :offset="{ y: 5 }"
       :trigger-attrs="{ class: 'extra-button' }"
     >
       <template #trigger>
