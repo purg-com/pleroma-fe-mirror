@@ -29,9 +29,9 @@
     <button
       v-if="apply"
       class="btn button-default palette-apply-button"
-      @click="applyPalette"
       :disabled="disabled"
       :class="{ disabled }"
+      @click="applyPalette"
     >
       {{ $t('settings.style.themes3.palette.apply') }}
     </button>
