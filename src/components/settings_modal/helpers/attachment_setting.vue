@@ -29,7 +29,7 @@
         <label for="path">{{ $t('settings.url') }}</label>
         <input
           :id="path"
-          class="string-input"
+          class="input string-input"
           :disabled="shouldBeDisabled"
           :value="realDraftMode ? draft : state"
           @change="update"
@@ -48,18 +48,14 @@
         :attachment="attachment"
         size="small"
         hide-description
-        @setMedia="onMedia"
-        @naturalSizeLoad="onNaturalSizeLoad"
       />
       <div class="controls control-upload">
         <MediaUpload
           ref="mediaUpload"
           class="media-upload-icon"
-          :drop-files="dropFiles"
           normal-button
           :accept-types="acceptTypes"
           @uploaded="setMediaFile"
-          @upload-failed="uploadFailed"
         />
       </div>
     </div>

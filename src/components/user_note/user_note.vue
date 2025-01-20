@@ -33,7 +33,7 @@
     <textarea
       v-show="editing"
       v-model="localNote"
-      class="note-text"
+      class="input note-text"
     />
     <span
       v-show="!editing"
@@ -48,8 +48,6 @@
 <script src="./user_note.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .user-note {
   display: flex;
   flex-direction: column;
@@ -82,7 +80,7 @@
 
   .note-text.-blank {
     font-style: italic;
-    color: var(--faint, $fallback--faint);
+    color: var(--textFaint);
   }
 }
 </style>

@@ -37,7 +37,8 @@
         </NavigationEntry>
         <div
           v-show="showTimelines"
-          class="timelines-background"
+          class="timelines-background menu-item-collapsible"
+          :class="{ '-expanded': showTimelines }"
         >
           <div class="timelines">
             <NavigationEntry
@@ -57,12 +58,11 @@
         >
           <router-link
             :title="$t('lists.manage_lists')"
-            class="extra-button"
+            class="button-unstyled extra-button"
             :to="{ name: 'lists' }"
             @click.stop
           >
             <FAIcon
-              class="extra-button"
               fixed-width
               icon="wrench"
             />
@@ -75,10 +75,44 @@
         </NavigationEntry>
         <div
           v-show="showLists"
-          class="timelines-background"
+          class="timelines-background menu-item-collapsible"
+          :class="{ '-expanded': showLists }"
         >
           <ListsMenuContent
             :show-pin="editMode || forceEditMode"
+            class="timelines"
+          />
+        </div>
+        <NavigationEntry
+          v-if="currentUser && bookmarkFolders"
+          :show-pin="false"
+          :item="{ icon: 'bookmark', label: 'nav.bookmarks' }"
+          :aria-expanded="showBookmarkFolders ? 'true' : 'false'"
+          @click="toggleBookmarkFolders"
+        >
+          <router-link
+            :title="$t('bookmarks.manage_bookmark_folders')"
+            class="button-unstyled extra-button"
+            :to="{ name: 'bookmark-folders' }"
+            @click.stop
+          >
+            <FAIcon
+              fixed-width
+              icon="wrench"
+            />
+          </router-link>
+          <FAIcon
+            class="timelines-chevron"
+            fixed-width
+            :icon="showBookmarkFolders ? 'chevron-up' : 'chevron-down'"
+          />
+        </NavigationEntry>
+        <div
+          v-show="showBookmarkFolders"
+          class="timelines-background menu-item-collapsible"
+          :class="{ '-expanded': showBookmarkFolders }"
+        >
+          <BookmarkFoldersMenuContent
             class="timelines"
           />
         </div>
@@ -91,7 +125,7 @@
         <NavigationEntry
           v-if="!forceEditMode && currentUser"
           :show-pin="false"
-          :item="{ label: editMode ? $t('nav.edit_finish') : $t('nav.edit_pinned'), icon: editMode ? 'check' : 'wrench' }"
+          :item="{ labelRaw: editMode ? $t('nav.edit_finish') : $t('nav.edit_pinned'), icon: editMode ? 'check' : 'wrench' }"
           @click="toggleEditMode"
         />
       </ul>
@@ -102,12 +136,10 @@
 <script src="./nav_panel.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .NavPanel {
   .panel {
     overflow: hidden;
-    box-shadow: var(--panelShadow);
+    box-shadow: var(--shadow);
   }
 
   ul {
@@ -116,56 +148,14 @@
     padding: 0;
   }
 
-  li {
-    position: relative;
-    border-bottom: 1px solid;
-    border-color: $fallback--border;
-    border-color: var(--border, $fallback--border);
-  }
-
-  > li {
-    &:first-child .menu-item {
-      border-top-right-radius: $fallback--panelRadius;
-      border-top-right-radius: var(--panelRadius, $fallback--panelRadius);
-      border-top-left-radius: $fallback--panelRadius;
-      border-top-left-radius: var(--panelRadius, $fallback--panelRadius);
-    }
-
-    &:last-child .menu-item {
-      border-bottom-right-radius: $fallback--panelRadius;
-      border-bottom-right-radius: var(--panelRadius, $fallback--panelRadius);
-      border-bottom-left-radius: $fallback--panelRadius;
-      border-bottom-left-radius: var(--panelRadius, $fallback--panelRadius);
-    }
-  }
-
-  li:last-child {
-    border: none;
-  }
-
   .navigation-chevron {
     margin-left: 0.8em;
     margin-right: 0.8em;
     font-size: 1.1em;
   }
 
-  .timelines-chevron {
-    margin-left: 0.8em;
-    font-size: 1.1em;
-  }
-
   .timelines-background {
     padding: 0 0 0 0.6em;
-    background-color: $fallback--lightBg;
-    background-color: var(--selectedMenu, $fallback--lightBg);
-    border-bottom: 1px solid;
-    border-color: $fallback--border;
-    border-color: var(--border, $fallback--border);
-  }
-
-  .timelines {
-    background-color: $fallback--bg;
-    background-color: var(--bg, $fallback--bg);
   }
 
   .nav-panel-heading {

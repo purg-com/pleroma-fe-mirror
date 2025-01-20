@@ -28,7 +28,81 @@ const mediaUpload = {
         this.$refs.input.click()
       }
     },
-    uploadFile (file) {
+    async resizeImage (file) {
+      // Skip if not an image or if it's a GIF
+      if (!file.type.startsWith('image/') || file.type === 'image/gif') {
+        return file
+      }
+
+      // For PNGs, check if animated
+      if (file.type === 'image/png') {
+        const isAnimated = await this.isAnimatedPng(file)
+        if (isAnimated) {
+          return file
+        }
+      }
+
+      return new Promise((resolve) => {
+        const img = new Image()
+        img.onload = () => {
+          // Calculate new dimensions
+          let width = img.width
+          let height = img.height
+          const maxSize = 2048
+
+          if (width > maxSize || height > maxSize) {
+            if (width > height) {
+              height = Math.round((height * maxSize) / width)
+              width = maxSize
+            } else {
+              width = Math.round((width * maxSize) / height)
+              height = maxSize
+            }
+          }
+
+          // Create canvas and resize
+          const canvas = document.createElement('canvas')
+          canvas.width = width
+          canvas.height = height
+          const ctx = canvas.getContext('2d')
+          ctx.drawImage(img, 0, 0, width, height)
+
+          // Check WebP support by trying to create a WebP canvas
+          const testCanvas = document.createElement('canvas')
+          const supportsWebP = testCanvas.toDataURL('image/webp').startsWith('data:image/webp')
+
+          // Convert to WebP if supported, otherwise JPEG
+          const type = supportsWebP ? 'image/webp' : 'image/jpeg'
+          const extension = supportsWebP ? '.webp' : '.jpg'
+
+          // Remove the original extension and add new one
+          const newFileName = file.name.replace(/\.[^/.]+$/, '') + extension
+
+          canvas.toBlob((blob) => {
+            resolve(new File([blob], newFileName, {
+              type: type,
+              lastModified: Date.now()
+            }))
+          }, type, 0.85)
+        }
+        img.src = URL.createObjectURL(file)
+      })
+    },
+    async isAnimatedPng (file) {
+      const buffer = await file.arrayBuffer()
+      const view = new Uint8Array(buffer)
+      // Look for animated PNG chunks (acTL)
+      for (let i = 0; i < view.length - 8; i++) {
+        if (view[i] === 0x61 && // a
+            view[i + 1] === 0x63 && // c
+            view[i + 2] === 0x54 && // T
+            view[i + 3] === 0x4C) { // L
+          return true
+        }
+      }
+      return false
+    },
+    async uploadFile (file) {
       const self = this
       const store = this.$store
       if (file.size > store.state.instance.uploadlimit) {
@@ -37,8 +111,11 @@ const mediaUpload = {
         self.$emit('upload-failed', 'file_too_big', { filesize: filesize.num, filesizeunit: filesize.unit, allowedsize: allowedsize.num, allowedsizeunit: allowedsize.unit })
         return
       }
+
+      // Resize image if needed
+      const processedFile = await this.resizeImage(file)
       const formData = new FormData()
-      formData.append('file', file)
+      formData.append('file', processedFile)
 
       self.$emit('uploading')
       self.uploadCount++

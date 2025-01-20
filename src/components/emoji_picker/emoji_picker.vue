@@ -8,7 +8,19 @@
     @close="onPopoverClosed"
   >
     <template #content>
-      <div class="heading">
+      <div
+        class="heading"
+      >
+        <div class="emoji-search">
+          <input
+            ref="search"
+            v-model="keyword"
+            type="text"
+            class="input form-control"
+            :placeholder="$t('emoji.search_emoji')"
+            @input="$event.target.composing = false"
+          >
+        </div>
         <!--
           Body scroll lock needs to be on every scrollable element on safari iOS.
           Here we tell it to enable scrolling for this element.
@@ -18,14 +30,15 @@
           ref="header"
           v-body-scroll-lock="isInModal"
           class="emoji-tabs"
+          @wheel.prevent="groupScroll"
         >
           <span
             v-for="group in filteredEmojiGroups"
             :ref="setGroupRef('group-header-' + group.id)"
             :key="group.id"
-            class="emoji-tabs-item"
+            class="button-unstyled emoji-tabs-item"
             :class="{
-              active: activeGroupView === group.id
+              toggled: activeGroupView === group.id
             }"
             :title="group.text"
             role="button"
@@ -52,8 +65,8 @@
           class="additional-tabs"
         >
           <span
-            class="stickers-tab-icon additional-tabs-item"
-            :class="{active: showingStickers}"
+            class="button-unstyled stickers-tab-icon additional-tabs-item"
+            :class="{toggled: showingStickers}"
             :title="$t('emoji.stickers')"
             @click.prevent="toggleStickers"
           >
@@ -72,16 +85,6 @@
           class="emoji-content"
           :class="{hidden: showingStickers}"
         >
-          <div class="emoji-search">
-            <input
-              ref="search"
-              v-model="keyword"
-              type="text"
-              class="form-control"
-              :placeholder="$t('emoji.search_emoji')"
-              @input="$event.target.composing = false"
-            >
-          </div>
           <!-- Enables scrolling for this element on safari iOS. See comments for header. -->
           <DynamicScroller
             ref="emoji-groups"
@@ -89,6 +92,7 @@
             class="emoji-groups"
             :class="groupsScrolledClass"
             :min-item-size="minItemSize"
+            :buffer="minItemSize"
             :items="emojiItems"
             :emit-update="true"
             @update="onScroll"
@@ -105,6 +109,8 @@
               >
                 <div
                   class="emoji-group"
+                  :class="{ ['first-row']: group.isFirstRow }"
+                  :style="{ '--__amount': itemPerRow }"
                 >
                   <h6
                     v-if="group.isFirstRow"

@@ -293,9 +293,12 @@ const EmojiInput = {
         }))
       this.highlighted = this.defaultCandidateIndex
       this.$refs.screenReaderNotice.announce(
-        this.$tc('tool_tip.autocomplete_available',
-          this.suggestions.length,
-          { number: this.suggestions.length }))
+        this.$t(
+          'tool_tip.autocomplete_available',
+          { number: this.suggestions.length },
+          this.suggestions.length
+        )
+      )
     }
   },
   methods: {

@@ -97,7 +97,7 @@ export default {
       .map((slot, index) => {
         const props = slot.props
         if (!props) return
-        const classesTab = ['tab', 'button-default']
+        const classesTab = ['tab']
         const classesWrapper = ['tab-wrapper']
         if (this.activeIndex === index) {
           classesTab.push('active')
@@ -145,7 +145,12 @@ export default {
       if (props.fullHeight) {
         classes.push('full-height')
       }
-      const renderSlot = (!this.renderOnlyFocused || active)
+      let delayRender = slot.props['delay-render']
+      if (delayRender && active) {
+        slot.props['delay-render'] = false
+        delayRender = false
+      }
+      const renderSlot = (!delayRender && (!this.renderOnlyFocused || active))
         ? slot
         : ''
 

@@ -2,7 +2,7 @@ const ScreenReaderNotice = {
   props: {
     ariaLive: {
       type: String,
-      defualt: 'assertive'
+      default: 'assertive'
     }
   },
   data () {

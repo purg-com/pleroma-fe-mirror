@@ -1,14 +1,16 @@
-@import "../../variables";
-
 // TODO Copypaste from Status, should unify it somehow
 .Notification {
   border-bottom: 1px solid;
-  border-color: $fallback--border;
-  border-color: var(--border, $fallback--border);
+  border-color: var(--border);
   word-wrap: break-word;
   word-break: break-word;
 
-  --emoji-size: 14px;
+  &.Status {
+    /* stylelint-disable-next-line declaration-no-important */
+    background-color: transparent !important;
+  }
+
+  --emoji-size: 1em;
 
   &:hover {
     --_still-image-img-visibility: visible;
@@ -24,6 +26,7 @@
     overflow: hidden;
     display: flex;
     flex-wrap: nowrap;
+    gap: 1ex;
 
     & .status-username,
     & .mute-thread,
@@ -71,28 +74,22 @@
   }
 
   &.-type--repeat .type-icon {
-    color: $fallback--cGreen;
-    color: var(--cGreen, $fallback--cGreen);
+    color: var(--cGreen);
   }
 
   &.-type--follow .type-icon {
-    color: $fallback--cBlue;
-    color: var(--cBlue, $fallback--cBlue);
+    color: var(--cBlue);
   }
 
   &.-type--follow-request .type-icon {
-    color: $fallback--cBlue;
-    color: var(--cBlue, $fallback--cBlue);
+    color: var(--cBlue);
   }
 
   &.-type--like .type-icon {
-    color: orange;
-    color: $fallback--cOrange;
-    color: var(--cOrange, $fallback--cOrange);
+    color: var(--cOrange);
   }
 
   &.-type--move .type-icon {
-    color: $fallback--cBlue;
-    color: var(--cBlue, $fallback--cBlue);
+    color: var(--cBlue);
   }
 }

@@ -10,7 +10,7 @@
         v-bind="!loggedIn ? { href: remoteInteractionLink } : {}"
         role="button"
         class="emoji-reaction btn button-default"
-        :class="{ '-picked-reaction': reactedWith(reaction.name) }"
+        :class="{ '-picked-reaction': reactedWith(reaction.name), toggled: reactedWith(reaction.name) }"
         :title="reaction.url ? reaction.name : undefined"
         :aria-pressed="reactedWith(reaction.name)"
         @click="emojiOnClick(reaction.name, $event)"
@@ -18,12 +18,11 @@
         <span
           class="reaction-emoji"
         >
-          <img
+          <StillImage
             v-if="reaction.url"
             :src="reaction.url"
             class="reaction-emoji-content"
-            width="1em"
-          >
+          />
           <span
             v-else
             class="reaction-emoji reaction-emoji-content"
@@ -72,7 +71,6 @@
 
 <script src="./emoji_reactions.js"></script>
 <style lang="scss">
-@import "../../variables";
 @import "../../mixins";
 
 .EmojiReactions {
@@ -80,7 +78,7 @@
   margin-top: 0.25em;
   flex-wrap: wrap;
 
-  --emoji-size: calc(1.25em * var(--emojiReactionsScale, 1));
+  --emoji-size: calc(var(--emojiSize, 1.25em) * var(--emojiReactionsScale, 1));
 
   .emoji-reaction-container {
     display: flex;
@@ -92,7 +90,6 @@
       padding: 0;
 
       .emoji-reaction-count-button {
-        background-color: var(--btn);
         margin: 0;
         height: 100%;
         border-top-left-radius: 0;
@@ -102,13 +99,6 @@
         display: inline-flex;
         justify-content: center;
         align-items: center;
-        color: $fallback--text;
-        color: var(--btnText, $fallback--text);
-
-        &.-picked-reaction {
-          border: 1px solid var(--accent, $fallback--link);
-          margin-right: -1px;
-        }
       }
     }
   }
@@ -131,17 +121,23 @@
       display: flex;
       justify-content: center;
       align-items: center;
+
+      --_still_image-label-scale: 0.3;
     }
 
     .reaction-emoji-content {
       max-width: 100%;
       max-height: 100%;
-      width: auto;
-      height: auto;
+      width: var(--emoji-size);
+      height: var(--emoji-size);
       line-height: inherit;
       overflow: hidden;
       font-size: calc(var(--emoji-size) * 0.8);
       margin: 0;
+
+      img {
+        object-fit: contain;
+      }
     }
 
     &:focus {
@@ -149,18 +145,12 @@
     }
 
     .svg-inline--fa {
-      color: $fallback--text;
-      color: var(--btnText, $fallback--text);
+      color: var(--text);
     }
 
     &.-picked-reaction {
-      border: 1px solid var(--accent, $fallback--link);
-      margin-left: -1px; // offset the border, can't use inset shadows either
-      margin-right: -1px;
-
       .svg-inline--fa {
-        color: $fallback--link;
-        color: var(--accent, $fallback--link);
+        color: var(--accent);
       }
     }
 
@@ -176,8 +166,7 @@
 
     @include focused-style {
       .svg-inline--fa {
-        color: $fallback--link;
-        color: var(--accent, $fallback--link);
+        color: var(--accent);
       }
 
       .focus-marker {

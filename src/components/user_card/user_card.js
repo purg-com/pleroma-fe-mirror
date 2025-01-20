@@ -48,7 +48,6 @@ export default {
   data () {
     return {
       followRequestInProgress: false,
-      betterShadow: this.$store.state.interface.browserSupport.cssFilter,
       showingConfirmMute: false,
       muteExpiryAmount: 0,
       muteExpiryUnit: 'minutes'
@@ -225,7 +224,7 @@ export default {
       this.$store.dispatch('setCurrentMedia', attachment)
     },
     mentionUser () {
-      this.$store.dispatch('openPostStatusModal', { replyTo: true, repliedUser: this.user })
+      this.$store.dispatch('openPostStatusModal', { profileMention: true, repliedUser: this.user })
     },
     onAvatarClickHandler (e) {
       if (this.onAvatarClick) {

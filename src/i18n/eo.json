@@ -121,7 +121,9 @@
     "mobile_notifications_close": "Fermi sciigojn",
     "announcements": "Anoncoj",
     "search_close": "Fermi serĉujon",
-    "mobile_sidebar": "(Mal)ŝalti flankan breton por telefonoj"
+    "mobile_sidebar": "(Mal)ŝalti flankan breton por telefonoj",
+    "mobile_notifications_mark_as_seen": "Marki ĉion vidita",
+    "quotes": "Citoj"
   },
   "notifications": {
     "broken_favorite": "Nekonata afiŝo, serĉante ĝin…",
@@ -137,7 +139,13 @@
     "follow_request": "volas vin aboni",
     "error": "Eraris akirado de sciigoj: {0}",
     "submitted_report": "sendis raporton",
-    "poll_ended": "enketo finiĝis"
+    "poll_ended": "enketo finiĝis",
+    "unread_chats": "{num} nelegita babilo | {num} nelegitaj babiloj",
+    "unread_follow_requests": "{num} nova abonpeto | {num} novaj abonpetoj",
+    "configuration_tip": "Vi povas ŝanĝi, kio montriĝos ĉi tie en {theSettings}. {dismiss}",
+    "configuration_tip_settings": "la agordoj",
+    "unread_announcements": "{num} nelegita anonco | {num} nelegitaj anoncoj",
+    "configuration_tip_dismiss": "Ne remontri plu"
   },
   "post_status": {
     "new_status": "Afiŝi",
@@ -467,7 +475,8 @@
           "interface": "Fasado",
           "input": "Enigaj kampoj",
           "post": "Teksto de afiŝo",
-          "postCode": "Egallarĝa teksto en afiŝo (riĉteksto)"
+          "postCode": "Egallarĝa teksto en afiŝo (riĉteksto)",
+          "monospace": "Egallarĝa teksto"
         },
         "family": "Nomo de tiparo",
         "size": "Grando (en bilderoj)",
@@ -487,6 +496,27 @@
         "header_faint": "Tio estas en ordo",
         "checkbox": "Mi legetis la kondiĉojn de uzado",
         "link": "bela eta ligil’"
+      },
+      "custom_theme_used": "(Propra haŭto)",
+      "themes3": {
+        "hacks": {
+          "underlay_override_mode_transparent": "Tute forigi (povus rompi iujn haŭtojn)",
+          "forced_roundness_mode_disabled": "Uzi implicitajn valorojn de haŭto",
+          "forced_roundness_mode_sharp": "Devigi akrajn randojn",
+          "forced_roundness_mode_nonsharp": "Devigi ne tiom akrajn randojn (rondigo je 1 bildero)",
+          "forced_roundness_mode_round": "Devigi rondajn randojn"
+        },
+        "font": {
+          "builtin": {
+            "serif": "Kalkana",
+            "sans-serif": "Senkalkana",
+            "monospace": "Egallarĝa",
+            "inherit": "Senŝanĝe"
+          },
+          "group-local": "Loke instalitaj signoformoj",
+          "local-unavailable1": "Listo de loke instalitaj signoformoj ne estas disponebla",
+          "font_list_unavailable": "Ne povis akiri loke instalitajn signoformojn: {error}"
+        }
       }
     },
     "discoverable": "Permesi trovon de ĉi tiu konto en serĉrezultoj kaj aliaj servoj",
@@ -701,7 +731,50 @@
     "confirm_dialogs_approve_follow": "aprobo de abonanto",
     "confirm_dialogs_deny_follow": "malaprobo de abonanto",
     "confirm_dialogs_remove_follower": "forigo de abonanto",
-    "tree_fade_ancestors": "Montri responditojn de la nuna afiŝo per teksto malvigla"
+    "tree_fade_ancestors": "Montri responditojn de la nuna afiŝo per teksto malvigla",
+    "units": {
+      "time": {
+        "m": "minutoj",
+        "s": "sekundoj",
+        "h": "horoj",
+        "d": "tagoj"
+      }
+    },
+    "url": "URL",
+    "emoji_reactions_scale": "Grandeco de reagoj",
+    "actor_type_Person": "ordinara uzanto",
+    "actor_type": "Ĉi tiu konto estas:",
+    "actor_type_description": "Se vi markos vian konton grupo, ĝi memage ripetos afiŝojn, kiuj mencios ĝin.",
+    "actor_type_Service": "roboto",
+    "actor_type_Group": "grupo",
+    "hide_actor_type_indication": "Kaŝi specon de aganto (roboto, grupo, ktp.) en afiŝoj",
+    "commit_value_tooltip": "Valoro ne estas konservita; premu ĉi tiun butonon por konfirmi viajn ŝanĝojn",
+    "add_language": "Aldoni rezervan lingvon",
+    "commit_value": "Konservi",
+    "force_theme_recompilation_debug": "Malŝalti haŭtan kaŝmemoron, devigi retradukon post ĉiu enlego (POR ERARSERĈADO)",
+    "fallback_language": "Rezerva lingvo {index}:",
+    "notification_extra_follow_requests": "Montri novajn abonpetojn",
+    "notification_extra_tip": "Montri agordan konsileton por ekstraj sciigoj",
+    "notification_show_extra": "Montri ekstrajn sciigojn en la sciiga kolumno",
+    "notification_extra_chats": "Montri nelegitajn babilojn",
+    "notification_extra_announcements": "Montri nelegitajn anoncojn",
+    "notification_setting_annoyance": "Ĝeno",
+    "mute_sensitive_posts": "Silentigi konsternajn afiŝojn",
+    "preview": "Antaŭrigardo",
+    "notification_visibility_native_notifications": "Montri indiĝenan sciigon",
+    "notification_visibility_follow_requests": "Abonpetoj",
+    "notification_visibility_reports": "Raportoj",
+    "notification_setting_ignore_inactionable_seen": "Malatenti legitecon de nereageblaj sciigoj (ŝatoj, ripetoj, ktp.)",
+    "notification_setting_ignore_inactionable_seen_tip": "Ĉi tio ne markos la sciigojn legitaj, kaj vi ankoraŭ ricevos labortablajn sciigojn pri ili, se vi elektis ricevi tiujn",
+    "notification_setting_unseen_at_top": "Montri nelegitajn sciigojn super aliaj",
+    "appearance": "Aspekto",
+    "confirm_new_setting": "Ĉu konfirmi novan agordon?",
+    "confirm_new_question": "Ĉu tio ĉi aspektas ĝuste? La ŝanĝo malfariĝos post 10 sekundoj.",
+    "revert": "Malfari",
+    "confirm": "Konfirmi",
+    "text_size": "Grandeco de teksto kaj fasado",
+    "emoji_size": "Grandeco de bildosignoj",
+    "navbar_size": "Grandeco de supra breto"
   },
   "timeline": {
     "collapse": "Maletendi",
@@ -876,7 +949,8 @@
       "travel-and-places": "Vojaĝoj kaj lokoj"
     },
     "regional_indicator": "Regiona marko {letter}",
-    "unpacked": "Malpakitaj bildosignoj"
+    "unpacked": "Malpakitaj bildosignoj",
+    "hide_custom_emoji": "Kaŝi proprajn bildosignojn"
   },
   "polls": {
     "not_enough_options": "Tro malmultaj unikaj elektebloj en la enketo",
@@ -955,7 +1029,8 @@
     "follows": "Novaj abonoj",
     "favs_repeats": "Ripetoj kaj ŝatoj",
     "emoji_reactions": "Bildosignaj reagoj",
-    "reports": "Raportoj"
+    "reports": "Raportoj",
+    "statuses": "Abonoj"
   },
   "errors": {
     "storage_unavailable": "Pleroma ne povis aliri deponejon de la foliumilo. Via saluto kaj viaj lokaj agordoj ne estos konservitaj, kaj vi eble renkontos neatenditajn problemojn. Provu permesi kuketojn."
@@ -1021,7 +1096,13 @@
     "repeat_confirm_title": "Konfirmo de ripeto",
     "repeat_confirm_accept_button": "Ripeti",
     "repeat_confirm_cancel_button": "Ne ripeti",
-    "delete_confirm_cancel_button": "Ne forigi"
+    "delete_confirm_cancel_button": "Ne forigi",
+    "delete_error": "Eraris forigo de afiŝo: {0}",
+    "hide_quote": "Kaŝi la cititan afiŝon",
+    "display_quote": "Montri la cititan afiŝon",
+    "reaction_count_label": "{num} persono reagis | {num} personoj reagis",
+    "invisible_quote": "Citita afiŝo ne disponeblas: {link}",
+    "quotes": "Citaĵoj"
   },
   "time": {
     "years_short": "{0}j",
@@ -1191,5 +1272,93 @@
     "cancel_edit_action": "Nuligi",
     "inactive_message": "Ĉi tiu anonco estas neaktiva",
     "post_form_header": "Afiŝi anoncon"
+  },
+  "admin_dash": {
+    "frontend": {
+      "default_frontend": "Implicita fasado",
+      "install": "Instali",
+      "versions": "Disponeblaj versioj",
+      "install_version": "Instali version {version}",
+      "more_install_options": "Pli da elektebloj je instalo",
+      "more_default_options": "Pli da elektebloj je implicitaj agordoj",
+      "set_default": "Agordi implicita",
+      "reinstall": "Reinstali",
+      "default_frontend_tip": "Implicita fasado montriĝos al ĉiuj uzantoj. Ankoraŭ ne ekzistas maniero, kiel uzanto povas elekti propran fasadon. Se vi ŝaltos ion alian, ol [PleromaFE], vi verŝajne devos uzadi la malnovan kaj erareman [AdminFE] por agordi la nodon, ĝis ni anstataŭigos ĝin.",
+      "repository": "Ligilo al deponejo",
+      "is_default": "(Implicita)",
+      "is_default_custom": "(Implicita, versio: {version})",
+      "set_default_version": "Agordi version {version} implicita"
+    },
+    "emoji": {
+      "download_as_name_full": "Nova nomo; lasu malplena por reuzi",
+      "download_as_name": "Nova nomo",
+      "reload": "Re-enlegi bildosignojn",
+      "importFS": "Enporti bildosignojn de dosiersistemo",
+      "error": "Eraro: {0}",
+      "create": "Krei",
+      "do_list": "Listo",
+      "delete": "Forigi",
+      "add_file": "Aldoni dosieron",
+      "filename": "Dosiernomo",
+      "files": "Dosieroj",
+      "save_meta": "Konservi pridatumojn",
+      "description": "Priskribo",
+      "homepage": "Hejmpaĝo",
+      "save": "Konservi",
+      "revert": "Malfari",
+      "share": "Kunhavigi"
+    },
+    "tabs": {
+      "emoji": "Bildosignoj",
+      "frontends": "Fasadoj",
+      "instance": "Nodo",
+      "limits": "Limoj"
+    },
+    "instance": {
+      "registrations": "Registriĝoj de uzantoj",
+      "instance": "Informoj pri nodo",
+      "restrict": {
+        "profiles": "Aliro al profiloj de uzantoj",
+        "header": "Limigi aliron por sennomaj vizitantoj",
+        "timelines": "Aliro al historioj"
+      },
+      "access": "Aliro al nodo",
+      "kocaptcha": "Agordo de KoCaptcha"
+    },
+    "limits": {
+      "users": "Limoj de profiloj de uzantoj",
+      "profile_fields": "Limoj de kampoj de profiloj",
+      "user_uploads": "Limoj de vidaŭdaĵoj de profiloj",
+      "posts": "Limoj de afiŝoj",
+      "uploads": "Limoj de kunsendaĵoj",
+      "arbitrary_limits": "Arbitraj limoj"
+    },
+    "nodb": {
+      "documentation": "dokumentaĵo"
+    },
+    "window_title": "Administrado",
+    "wip_notice": "Ĉi tiu administra fasado estas eksperimenta kaj ankoraŭ prilaborata, {adminFeLink}.",
+    "old_ui_link": "malnova administra fasado disponeblas tie ĉi",
+    "temp_overrides": {
+      ":pleroma": {
+        ":instance": {
+          ":public": {
+            "label": "Nodo estas publika"
+          },
+          ":background_image": {
+            "label": "Fonbildo",
+            "description": "Fonbildo (uzota ĉefe de PleromaFE)"
+          },
+          ":description_limit": {
+            "description": "Limo de signoj por priskriboj de kunsendaĵoj",
+            "label": "Limo"
+          }
+        }
+      }
+    },
+    "commit_all": "Konservi ĉion",
+    "captcha": {
+      "kocaptcha": "KoCaptcha"
+    }
   }
 }

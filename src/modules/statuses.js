@@ -385,10 +385,12 @@ export const mutations = {
   setBookmarked (state, { status, value }) {
     const newStatus = state.allStatusesObject[status.id]
     newStatus.bookmarked = value
+    newStatus.bookmark_folder_id = status.bookmark_folder_id
   },
   setBookmarkedConfirm (state, { status }) {
     const newStatus = state.allStatusesObject[status.id]
     newStatus.bookmarked = status.bookmarked
+    if (status.pleroma) newStatus.bookmark_folder_id = status.pleroma.bookmark_folder
   },
   setDeleted (state, { status }) {
     const newStatus = state.allStatusesObject[status.id]
@@ -569,7 +571,7 @@ const statuses = {
     },
     bookmark ({ rootState, commit }, status) {
       commit('setBookmarked', { status, value: true })
-      rootState.api.backendInteractor.bookmarkStatus({ id: status.id })
+      rootState.api.backendInteractor.bookmarkStatus({ id: status.id, folder_id: status.bookmark_folder_id })
         .then(status => {
           commit('setBookmarkedConfirm', { status })
         })

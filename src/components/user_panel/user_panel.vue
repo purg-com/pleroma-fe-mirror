@@ -22,8 +22,15 @@
 <script src="./user_panel.js"></script>
 
 <style lang="scss">
-.user-panel .signed-in {
-  overflow: visible;
-  z-index: 10;
+.user-panel {
+  .panel {
+    background: var(--background);
+    backdrop-filter: var(--backdrop-filter);
+  }
+
+  .signed-in {
+    overflow: visible;
+    z-index: 10;
+  }
 }
 </style>

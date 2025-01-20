@@ -331,6 +331,8 @@ export const parseStatus = (data) => {
       output.quote_id = pleroma.quote_id ? pleroma.quote_id : (output.quote ? output.quote.id : undefined)
       output.quote_url = pleroma.quote_url
       output.quote_visible = pleroma.quote_visible
+      output.quotes_count = pleroma.quotes_count
+      output.bookmark_folder_id = pleroma.bookmark_folder
     } else {
       output.text = data.content
       output.summary = data.spoiler_text
@@ -440,7 +442,9 @@ export const parseNotification = (data) => {
   if (masto) {
     output.type = mastoDict[data.type] || data.type
     output.seen = data.pleroma.is_seen
-    output.status = isStatusNotification(output.type) ? parseStatus(data.status) : null
+    // TODO: null check should be a temporary fix, I guess.
+    // Investigate why backend does this.
+    output.status = isStatusNotification(output.type) && data.status !== null ? parseStatus(data.status) : null
     output.target = output.type !== 'move'
       ? null
       : parseUser(data.target)

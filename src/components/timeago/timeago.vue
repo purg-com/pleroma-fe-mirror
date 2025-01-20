@@ -3,7 +3,7 @@
     :datetime="time"
     :title="localeDateString"
   >
-    {{ relativeTimeString }}
+    {{ relativeOrAbsoluteTimeString }}
   </time>
 </template>
 
@@ -16,25 +16,71 @@ export default {
   props: ['time', 'autoUpdate', 'longFormat', 'nowThreshold', 'templateKey'],
   data () {
     return {
+      relativeTimeMs: 0,
       relativeTime: { key: 'time.now', num: 0 },
       interval: null
     }
   },
   computed: {
-    localeDateString () {
-      const browserLocale = localeService.internalToBrowserLocale(this.$i18n.locale)
+    shouldUseAbsoluteTimeFormat () {
+      if (!this.$store.getters.mergedConfig.useAbsoluteTimeFormat) {
+        return false
+      }
+      return DateUtils.durationStrToMs(this.$store.getters.mergedConfig.absoluteTimeFormatMinAge) <= this.relativeTimeMs
+    },
+    browserLocale () {
+      return localeService.internalToBrowserLocale(this.$i18n.locale)
+    },
+    timeAsDate () {
       return typeof this.time === 'string'
-        ? new Date(Date.parse(this.time)).toLocaleString(browserLocale)
-        : this.time.toLocaleString(browserLocale)
+        ? new Date(Date.parse(this.time))
+        : this.time
+    },
+    localeDateString () {
+      return this.timeAsDate.toLocaleString(this.browserLocale)
     },
     relativeTimeString () {
-      const timeString = this.$i18n.tc(this.relativeTime.key, this.relativeTime.num, [this.relativeTime.num])
+      const timeString = this.$i18n.t(this.relativeTime.key, [this.relativeTime.num], this.relativeTime.num)
 
       if (typeof this.templateKey === 'string' && this.relativeTime.key !== 'time.now') {
         return this.$i18n.t(this.templateKey, [timeString])
       }
 
       return timeString
+    },
+    absoluteTimeString () {
+      if (this.longFormat) {
+        return this.localeDateString
+      }
+      const now = new Date()
+      const formatter = (() => {
+        if (DateUtils.isSameDay(this.timeAsDate, now)) {
+          return new Intl.DateTimeFormat(this.browserLocale, {
+            minute: 'numeric',
+            hour: 'numeric'
+          })
+        } else if (DateUtils.isSameMonth(this.timeAsDate, now)) {
+          return new Intl.DateTimeFormat(this.browserLocale, {
+            month: 'short',
+            day: 'numeric'
+          })
+        } else if (DateUtils.isSameYear(this.timeAsDate, now)) {
+          return new Intl.DateTimeFormat(this.browserLocale, {
+            month: 'short',
+            day: 'numeric'
+          })
+        } else {
+          return new Intl.DateTimeFormat(this.browserLocale, {
+            year: 'numeric',
+            month: 'short'
+          })
+        }
+      })()
+
+      return formatter.format(this.timeAsDate)
+    },
+    relativeOrAbsoluteTimeString () {
+      return this.shouldUseAbsoluteTimeFormat ? this.absoluteTimeString : this.relativeTimeString
     }
   },
   watch: {
@@ -54,6 +100,7 @@ export default {
   methods: {
     refreshRelativeTimeObject () {
       const nowThreshold = typeof this.nowThreshold === 'number' ? this.nowThreshold : 1
+      this.relativeTimeMs = DateUtils.relativeTimeMs(this.time)
       this.relativeTime = this.longFormat
         ? DateUtils.relativeTime(this.time, nowThreshold)
         : DateUtils.relativeTimeShort(this.time, nowThreshold)

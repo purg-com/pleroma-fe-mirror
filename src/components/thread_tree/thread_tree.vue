@@ -89,7 +89,7 @@
         </template>
         <template #text>
           <span>
-            {{ $tc('status.thread_follow', totalReplyCount[status.id], { numStatus: totalReplyCount[status.id] }) }}
+            {{ $t('status.thread_follow', { numStatus: totalReplyCount[status.id] }, totalReplyCount[status.id]) }}
           </span>
         </template>
       </i18n-t>
@@ -108,7 +108,7 @@
         </template>
         <template #text>
           <span>
-            {{ $tc('status.thread_show_full', totalReplyCount[status.id], { numStatus: totalReplyCount[status.id], depth: totalReplyDepth[status.id] }) }}
+            {{ $t('status.thread_show_full', { numStatus: totalReplyCount[status.id], depth: totalReplyDepth[status.id] }, totalReplyCount[status.id]) }}
           </span>
         </template>
       </i18n-t>
@@ -119,15 +119,13 @@
 <script src="./thread_tree.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .thread-tree-replies {
-  margin-left: var(--status-margin, $status-margin);
-  border-left: 2px solid var(--border, $fallback--border);
+  margin-left: var(--status-margin);
+  border-left: 2px solid var(--border);
 }
 
 .thread-tree-replies-hidden {
-  padding: var(--status-margin, $status-margin);
+  padding: var(--status-margin);
 
   /* Make the button stretch along the whole row */
   display: flex;

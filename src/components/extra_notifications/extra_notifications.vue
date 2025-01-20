@@ -14,7 +14,7 @@
           class="fa-scale-110 icon"
           icon="comments"
         />
-        {{ $tc('notifications.unread_chats', unreadChatCount, { num: unreadChatCount }) }}
+        {{ $t('notifications.unread_chats', { num: unreadChatCount }, unreadChatCount) }}
       </router-link>
     </div>
     <div
@@ -31,7 +31,7 @@
           class="fa-scale-110 icon"
           icon="bullhorn"
         />
-        {{ $tc('notifications.unread_announcements', unreadAnnouncementCount, { num: unreadAnnouncementCount }) }}
+        {{ $t('notifications.unread_announcements', { num: unreadAnnouncementCount }, unreadAnnouncementCount) }}
       </router-link>
     </div>
     <div
@@ -48,7 +48,7 @@
           class="fa-scale-110 icon"
           icon="user-plus"
         />
-        {{ $tc('notifications.unread_follow_requests', followRequestCount, { num: followRequestCount }) }}
+        {{ $t('notifications.unread_follow_requests', { num: followRequestCount }, followRequestCount) }}
       </router-link>
     </div>
     <i18n-t
@@ -56,6 +56,7 @@
       tag="span"
       class="notification tip extra-notification"
       keypath="notifications.configuration_tip"
+      scope="global"
     >
       <template #theSettings>
         <button
@@ -80,8 +81,6 @@
 <script src="./extra_notifications.js" />
 
 <style lang="scss">
-@import "../../variables";
-
 .ExtraNotifications {
   width: 100%;
   display: flex;
@@ -91,8 +90,7 @@
   .notification {
     width: 100%;
     border-bottom: 1px solid;
-    border-color: $fallback--border;
-    border-color: var(--border, $fallback--border);
+    border-color: var(--border);
     display: flex;
     flex-direction: column;
     align-items: stretch;

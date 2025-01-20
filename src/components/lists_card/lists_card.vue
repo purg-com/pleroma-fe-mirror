@@ -21,8 +21,6 @@
 <script src="./lists_card.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .list-card {
   display: flex;
 }
@@ -35,18 +33,6 @@
 .button-list-edit {
   margin: 0;
   padding: 1em;
-  color: $fallback--link;
-  color: var(--link, $fallback--link);
-
-  &:hover {
-    background-color: $fallback--lightBg;
-    background-color: var(--selectedMenu, $fallback--lightBg);
-    color: $fallback--link;
-    color: var(--selectedMenuText, $fallback--link);
-
-    --faint: var(--selectedMenuFaintText, $fallback--faint);
-    --faintLink: var(--selectedMenuFaintLink, $fallback--faint);
-    --lightText: var(--selectedMenuLightText, $fallback--lightText);
-  }
+  color: var(--link);
 }
 </style>

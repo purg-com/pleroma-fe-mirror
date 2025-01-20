@@ -9,9 +9,9 @@
       :class="{ '-peek': !showingMore }"
     >
       <div class="panel-heading">
-        <span class="title">
+        <h1 class="title">
           {{ $t('update.big_update_title') }}
-        </span>
+        </h1>
       </div>
       <div class="panel-body">
         <div
@@ -34,6 +34,7 @@
               class="extra-info-group"
             >
               <i18n-t
+                scope="global"
                 keypath="update.update_bugs"
                 tag="p"
               >
@@ -45,6 +46,7 @@
                 </template>
               </i18n-t>
               <i18n-t
+                scope="global"
                 keypath="update.update_changelog"
                 tag="p"
               >
@@ -57,6 +59,7 @@
               </i18n-t>
               <p class="art-credit">
                 <i18n-t
+                  scope="global"
                   keypath="update.art_by"
                   tag="small"
                 >

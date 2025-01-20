@@ -190,7 +190,8 @@
     "mobile_notifications_close": "關掉通知",
     "announcements": "公告",
     "search": "Tshuē",
-    "mobile_notifications_mark_as_seen": "Lóng 標做有讀"
+    "mobile_notifications_mark_as_seen": "Lóng 標做有讀",
+    "quotes": "引用"
   },
   "notifications": {
     "broken_favorite": "狀態毋知影，leh tshiau-tshuē……",
@@ -212,7 +213,8 @@
     "unread_follow_requests": "{num}ê新ê跟tuè請求",
     "configuration_tip": "用{theSettings}，lí通自訂siánn物佇tsia顯示。{dismiss}",
     "configuration_tip_settings": "設定",
-    "configuration_tip_dismiss": "Mài koh顯示"
+    "configuration_tip_dismiss": "Mài koh顯示",
+    "subscribed_status": "有發送ê"
   },
   "polls": {
     "add_poll": "開投票",
@@ -233,7 +235,7 @@
   "emoji": {
     "stickers": "貼圖",
     "emoji": "繪文字",
-    "keep_open": "Hōo 揀選仔開 leh",
+    "keep_open": "Hōo 揀選器開 leh",
     "search_emoji": "Tshuē 繪文字",
     "add_emoji": "插繪文字",
     "custom": "定製 ê 繪文字",
@@ -252,7 +254,8 @@
     },
     "load_all_hint": "載入頭前 {saneAmount} ê 繪文字，規个攏載入效能可能 ē khah 食力。",
     "load_all": "Kā {emojiAmount} ê 繪文字攏載入",
-    "regional_indicator": "地區指引 {letter}"
+    "regional_indicator": "地區指引 {letter}",
+    "hide_custom_emoji": "Khàm掉自訂ê繪文字"
   },
   "errors": {
     "storage_unavailable": "Pleroma buē-tàng the̍h 著瀏覽器儲存 ê。Lí ê 登入狀態抑是局部設定 buē 儲存，mā 凡勢 tú 著意料外 ê 問題。拍開 cookie 看māi。"
@@ -263,7 +266,8 @@
     "emoji_reactions": "繪文字 ê 反應",
     "reports": "檢舉",
     "moves": "用者 ê 移民",
-    "load_older": "載入 koh khah 早 ê 互動"
+    "load_older": "載入 koh khah 早 ê 互動",
+    "statuses": "訂ê"
   },
   "post_status": {
     "edit_status": "編輯狀態",
@@ -935,7 +939,34 @@
     "notification_extra_chats": "顯示bô讀ê開講",
     "notification_extra_announcements": "顯示bô讀ê公告",
     "notification_extra_follow_requests": "顯示新ê跟tuè請求",
-    "notification_extra_tip": "顯示自訂其他通知ê撇步"
+    "notification_extra_tip": "顯示自訂其他通知ê撇步",
+    "confirm_new_setting": "Lí敢確認新ê設定？",
+    "text_size_tip": "用 {0} 做絕對值，{1} ē根據瀏覽器ê標準文字sài-suh放大縮小。",
+    "theme_debug": "佇處理透明ê時，顯示背景主題ia̋n-jín 所假使ê（DEBUG）",
+    "units": {
+      "time": {
+        "s": "秒鐘",
+        "m": "分鐘",
+        "h": "點鐘",
+        "d": "工"
+      }
+    },
+    "actor_type": "Tsit ê口座是：",
+    "actor_type_Person": "一般ê用者",
+    "actor_type_description": "標記lí ê口座做群組，ē hōo自動轉送提起伊ê狀態。",
+    "actor_type_Group": "群組",
+    "actor_type_Service": "機器lâng",
+    "appearance": "外觀",
+    "confirm_new_question": "Tse看起來kám好？設定ē佇10秒鐘後改轉去。",
+    "revert": "改轉去",
+    "confirm": "確認",
+    "text_size": "文字kap界面ê sài-suh",
+    "text_size_tip2": "毋是 {0} ê值可能ē破壞一寡物件kap主題",
+    "emoji_size": "繪文字ê sài-suh",
+    "navbar_size": "頂 liâu-á êsài-suh",
+    "panel_header_size": "面pang標題ê sài-suh",
+    "visual_tweaks": "細細ê外觀調整",
+    "scale_and_layout": "界面ê sài-suh kap排列"
   },
   "status": {
     "favorites": "收藏",
@@ -957,7 +988,7 @@
     "repeat_confirm_accept_button": "轉送",
     "repeat_confirm_title": "轉送ê確認",
     "repeat_confirm": "Lí kám真ê beh轉送tsit ê狀態？",
-    "delete": "Thâi掉身份",
+    "delete": "Thâi掉狀態",
     "delete_error": "Thâi狀態ê時出tshê：{0}",
     "mentions": "提起",
     "move_down": "Kā附件suá kàu正pîng",
@@ -1001,7 +1032,7 @@
     "show_only_conversation_under_this": "Kan-ta顯示tsit ê狀態ê回應",
     "status_history": "狀態ê歷史",
     "reaction_count_label": "{num}ê lâng用表情反應",
-    "hide_quote": "Khàm條引用ê狀態",
+    "hide_quote": "Khàm掉引用ê狀態",
     "display_quote": "顯示引用ê狀態",
     "invisible_quote": "引用ê狀態bē當用：{link}",
     "more_actions": "佇tsit ê狀態ê其他動作"

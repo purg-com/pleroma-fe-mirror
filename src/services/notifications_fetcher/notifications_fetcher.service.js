@@ -5,11 +5,15 @@ import { promiseInterval } from '../promise_interval/promise_interval.js'
 // Note: chat_mention excluded as pleroma-fe polls them separately
 const mastoApiNotificationTypes = [
   'mention',
+  'status',
   'favourite',
   'reblog',
   'follow',
+  'follow_request',
   'move',
+  'poll',
   'pleroma:emoji_reaction',
+  'pleroma:chat_mention',
   'pleroma:report'
 ]
 

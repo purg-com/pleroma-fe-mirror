@@ -42,8 +42,6 @@
 <script src="./flash.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .Flash {
   display: inline-block;
   width: 100%;

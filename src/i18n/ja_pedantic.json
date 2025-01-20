@@ -130,7 +130,11 @@
     "edit_finish": "完了",
     "mobile_notifications": "通知を開く (未読あり)",
     "mobile_notifications_close": "通知を閉じる",
-    "announcements": "お知らせ"
+    "announcements": "お知らせ",
+    "all_bookmarks": "全てのブックマーク",
+    "bookmark_folders": "ブックマークフォルダ",
+    "mobile_sidebar": "モバイルのサイドバーを開く",
+    "quotes": "引用"
   },
   "notifications": {
     "broken_favorite": "ステータスが見つかりません。探しています…",
@@ -152,7 +156,8 @@
     "unread_follow_requests": "フォローリクエストが{num}件来ています | フォローリクエストが{num}件来ています",
     "configuration_tip": "ここに表示する通知の種類は{theSettings}にて変更することができます。 {dismiss}",
     "submitted_report": "通報が送信されました",
-    "configuration_tip_settings": "設定"
+    "configuration_tip_settings": "設定",
+    "subscribed_status": "投稿しました"
   },
   "polls": {
     "add_poll": "投票を追加",
@@ -192,7 +197,8 @@
     "load_older": "古い通知を読み込む",
     "moves": "ユーザーの引っ越し",
     "emoji_reactions": "絵文字リアクション",
-    "reports": "通報"
+    "reports": "通報",
+    "statuses": "購読"
   },
   "post_status": {
     "new_status": "投稿する",
@@ -401,9 +407,9 @@
     "profile_tab": "プロフィール",
     "radii_help": "インターフェースの角丸を設定する (ピクセル単位)",
     "replies_in_timeline": "タイムライン上の返信",
-    "reply_visibility_all": "すべての返信を表示",
-    "reply_visibility_following": "自分、もしくはフォローしているユーザー宛ての返信のみを表示",
-    "reply_visibility_self": "自分に宛てられた返信のみを表示",
+    "reply_visibility_all": "すべての返信を表示する",
+    "reply_visibility_following": "自分、もしくはフォローしているユーザー宛ての返信のみを表示する",
+    "reply_visibility_self": "自分に宛てられた返信のみを表示する",
     "autohide_floating_post_button": "投稿ボタンを自動的に隠す (モバイル)",
     "saving_err": "設定を保存できませんでした",
     "saving_ok": "設定を保存しました",
@@ -416,7 +422,7 @@
     "set_new_profile_background": "プロフィールの背景を設定する",
     "set_new_profile_banner": "プロフィールのバナーを設定する",
     "settings": "設定",
-    "subject_input_always_show": "注釈欄をいつでも表示する",
+    "subject_input_always_show": "注釈欄を常に表示する",
     "subject_line_behavior": "返信するとき、返信先の注釈をコピーする",
     "subject_line_email": "メール風: \"re: 注釈\"",
     "subject_line_mastodon": "Mastodon風: そのままコピー",
@@ -537,18 +543,18 @@
         "inset": "内側",
         "hint": "影の設定では、色の値として --variable を使うことができます。これはCSS3変数です。ただし、透明度の設定は、効かなくなります。",
         "filter_hint": {
-          "always_drop_shadow": "ブラウザーがサポートしていれば、常に {0} が使われます。",
+          "always_drop_shadow": "注意: この影には、ブラウザーがサポートしている場合、常に {0} が使われます。",
           "drop_shadow_syntax": "{0} は、{1} パラメーターと {2} キーワードをサポートしていません。",
-          "avatar_inset": "内側の影と外側の影を同時に使うと、透明なアバターの表示が乱れます。",
-          "spread_zero": "広がりが 0 よりも大きな影は、0 と同じです",
-          "inset_classic": "内側の影は {0} を使います"
+          "avatar_inset": "内側の影と外側の影を同時に使うと、透明なアイコンの表示が変になる場合があることに注意してください。",
+          "spread_zero": "広がりを 0 より大きくしても、表示は 0 と変わりません",
+          "inset_classic": "内側の影には {0} が使われます"
         },
         "components": {
           "panel": "パネル",
           "panelHeader": "パネルヘッダー",
           "topBar": "トップバー",
-          "avatar": "ユーザーアバター (プロフィール)",
-          "avatarStatus": "ユーザーアバター (投稿)",
+          "avatar": "ユーザーアイコン (プロフィール)",
+          "avatarStatus": "ユーザーアイコン (投稿)",
           "popup": "ポップアップとツールチップ",
           "button": "ボタン",
           "buttonHover": "ボタン (ホバー)",
@@ -556,7 +562,10 @@
           "buttonPressedHover": "ボタン (ホバー、かつ、押されているとき)",
           "input": "入力欄"
         },
-        "hintV3": "影の場合は、 {0} 表記を使って他の色スロットを使うこともできます。"
+        "hintV3": "影の色には、 {0} 表記を使って他の色スロットに指定した色を再利用することもできます。",
+        "offset": "影のオフセット",
+        "name": "名前",
+        "light_grid": "背景のチェック模様を明るくする"
       },
       "fonts": {
         "_tab_label": "フォント",
@@ -565,7 +574,8 @@
           "interface": "インターフェース",
           "input": "入力欄",
           "post": "投稿",
-          "postCode": "等幅 (投稿がリッチテキストであるとき)"
+          "postCode": "等幅 (投稿がリッチテキストであるとき)",
+          "monospace": "等幅テキスト"
         },
         "family": "フォント名",
         "size": "大きさ (px)",
@@ -585,7 +595,43 @@
         "header_faint": "エラーではありません",
         "checkbox": "利用規約を読みました",
         "link": "ハイパーリンク"
-      }
+      },
+      "themes2_outdated": "V2テーマのエディタは徐々に廃止され、最終的には新しいV3テーマのものに置き換えられる予定です。現状はまだ動作するはずですが、正しく動作する保証はありません。",
+      "themes3": {
+        "font": {
+          "group-local": "端末上にインストールされたフォント",
+          "local-unavailable2": "フォント名を直接指定してください",
+          "lookup_local_fonts": "端末上のフォントの一覧から選ぶ",
+          "group-builtin": "ブラウザのデフォルトフォント",
+          "builtin": {
+            "serif": "明朝体 (Serif)",
+            "sans-serif": "ゴシック体 (Sans-serif)",
+            "monospace": "等幅 (Monospace)",
+            "inherit": "変更しない"
+          },
+          "local-unavailable1": "端末上のフォントの一覧が取得できません",
+          "font_list_unavailable": "端末上のフォントの一覧が取得できません: {error}",
+          "enter_manually": "フォント名を直接入力する",
+          "entry": "{fontFamily}を入力",
+          "select": "フォントを選択"
+        },
+        "hacks": {
+          "underlay_overrides": "背景表示",
+          "underlay_override_mode_none": "テーマのデフォルトを使用する",
+          "underlay_override_mode_opaque": "単色に置き換える",
+          "underlay_override_mode_transparent": "非表示にする (テーマによっては表示が壊れる可能性があります)",
+          "force_interface_roundness": "インターフェースの角丸設定",
+          "forced_roundness_mode_disabled": "テーマのデフォルトを使用する",
+          "forced_roundness_mode_sharp": "角ばったデザインを強制する",
+          "forced_roundness_mode_nonsharp": "若干の角丸(1px分丸める)デザインを強制する",
+          "forced_roundness_mode_round": "角丸デザインを強制する"
+        },
+        "define": "上書き"
+      },
+      "custom_theme_used": "(カスタムテーマ)",
+      "appearance_tab_note": "以下の設定はテーマには反映されないため、エクスポートしたテーマの見た目は今見えているものと異なる可能性があります",
+      "update_preview": "プレビューを更新",
+      "interface_font_user_override": "フォント設定の上書き"
     },
     "version": {
       "title": "バージョン",
@@ -620,7 +666,7 @@
     },
     "accent": "アクセント",
     "mutes_imported": "ミュートがインポートされました。処理には時間がかかる場合があります。",
-    "emoji_reactions_on_timeline": "絵文字リアクションをタイムラインに表示",
+    "emoji_reactions_on_timeline": "絵文字リアクションをタイムラインに表示する",
     "domain_mutes": "ドメイン",
     "mutes_and_blocks": "ミュートとブロック",
     "chatMessageRadius": "チャットメッセージ",
@@ -635,7 +681,7 @@
     "mute_export": "ミュートのエクスポート",
     "allow_following_move": "フォローしているアカウントが引っ越したとき、引っ越し先を自動でフォローする",
     "setting_changed": "デフォルトから変更された設定",
-    "greentext": ">記号から始まる行を「リピート」の色で表示 (Meme Arrows)",
+    "greentext": "Meme arrows",
     "sensitive_by_default": "デフォルトで投稿を閲覧注意として設定",
     "more_settings": "その他の設定",
     "reply_visibility_self_short": "自分宛ての返信のみ表示",
@@ -657,8 +703,8 @@
     },
     "save": "変更を保存",
     "hide_shoutbox": "Shoutboxを表示しない",
-    "always_show_post_button": "投稿ボタンを常に表示",
-    "right_sidebar": "サイドバーを右に表示",
+    "always_show_post_button": "投稿ボタンを常に表示する",
+    "right_sidebar": "サイドバーを右側に表示する",
     "email_language": "このサーバーから受け取るメールの言語",
     "confirm_dialogs": "以下のとき確認ダイアログを表示する:",
     "confirm_dialogs_repeat": "ステータスをリピートするとき",
@@ -697,7 +743,7 @@
     "mention_link_bolden_you": "自分宛てのメンションを強調表示する",
     "user_popover_avatar_action": "ユーザーカード内のユーザーアイコンをクリックした際の挙動",
     "user_popover_avatar_overlay": "ユーザーカードをユーザーアイコンに被せて表示する",
-    "show_yous": "自分宛てのメンションの横に「(あなた)」を表示",
+    "show_yous": "自分宛てのメンションの横に「(あなた)」と表示する",
     "preview": "プレビュー",
     "url": "URL",
     "conversation_display": "スレッドの表示形式",
@@ -791,7 +837,35 @@
     "notification_setting_ignore_inactionable_seen_tip": "この設定は通知を自動的に既読にするわけではなく、この設定を有効にしてもプッシュ通知などは届きます",
     "notification_setting_ignore_inactionable_seen": "お気に入りやリピートの通知など、アクション不可な通知を未読として扱わない",
     "notification_extra_tip": "通知カラムをカスマイズするためのヒントを表示する",
-    "use_at_icon": "メンションリンク内の{'@'}記号を画像にする"
+    "use_at_icon": "メンションリンク内の{'@'}記号を画像にする",
+    "mute_sensitive_posts": "閲覧注意な投稿をミュートする",
+    "units": {
+      "time": {
+        "m": "分",
+        "s": "秒",
+        "h": "時間",
+        "d": "日"
+      }
+    },
+    "hide_scrobbles_after": "これより古いScrobbleを表示しない:",
+    "force_theme_recompilation_debug": "テーマのキャッシュを無効化し、起動の度にコンパイルし直す (デバッグ用)",
+    "scale_and_layout": "インターフェースの表示サイズとレイアウト",
+    "appearance": "見た目",
+    "confirm_new_setting": "設定を適用しますか？",
+    "confirm_new_question": "これで問題ありませんか？10秒間操作がない場合、元の設定に戻ります。",
+    "revert": "元に戻す",
+    "confirm": "適用",
+    "text_size": "フォントサイズ",
+    "text_size_tip2": "{0}以外に設定すると見た目が壊れてしまう場合があります",
+    "emoji_size": "絵文字のサイズ",
+    "navbar_size": "トップバーのサイズ",
+    "panel_header_size": "パネルヘッダーのサイズ",
+    "notification_visibility_statuses": "購読",
+    "text_size_tip": "絶対的な値には{0}を使用してください。{1}はブラウザのデフォルトのフォントサイズを基準にスケールされます。",
+    "visual_tweaks": "細かい外観の変更",
+    "absolute_time_format": "時間の表示に絶対表記を使用する",
+    "absolute_time_format_min_age": "これより古い日時に対してのみ使用する:",
+    "theme_debug": "テーマエンジンが透明度を処理する際に見ているものを表示する (デバッグ用)"
   },
   "time": {
     "day": "{0}日",
@@ -868,7 +942,7 @@
     "pin": "プロフィールにピン留め",
     "unpin": "プロフィールのピン留めを外す",
     "pinned": "ピン留め",
-    "delete_confirm": "本当にこの削除しますか？",
+    "delete_confirm": "本当に削除しますか？",
     "reply_to": "返信先:",
     "replies_list": "返信:",
     "mute_conversation": "スレッドをミュート",
@@ -928,7 +1002,12 @@
     "thread_hide": "このスレッドをたたむ",
     "thread_show": "このスレッドを開く",
     "open_gallery": "メディアビューアで開く",
-    "status_history": "編集履歴"
+    "status_history": "編集履歴",
+    "sensitive_muted": "閲覧注意な投稿のためミュートされています",
+    "load_error": "投稿の読み込みに失敗しました: {error}",
+    "loading": "読み込み中…",
+    "quotes": "引用",
+    "bot_muted": "BOTによる投稿のためミュートされています"
   },
   "user_card": {
     "approve": "承認",
@@ -937,8 +1016,8 @@
     "deny": "拒否",
     "favorites": "お気に入り",
     "follow": "フォロー",
-    "follow_sent": "リクエストを送信しました！",
-    "follow_progress": "リクエストしています…",
+    "follow_sent": "リクエスト完了！",
+    "follow_progress": "リクエスト中…",
     "follow_unfollow": "フォロー解除",
     "followees": "フォロー",
     "followers": "フォロワー",
@@ -987,7 +1066,7 @@
     "show_repeats": "リピートを見る",
     "hide_repeats": "リピートを隠す",
     "message": "メッセージ",
-    "hidden": "隠す",
+    "hidden": "非公開",
     "bot": "bot",
     "highlight": {
       "solid": "背景を単色にする",
@@ -1029,7 +1108,8 @@
     "remove_follower_confirm_accept_button": "解除する",
     "mute_confirm_title": "ミュートの確認",
     "deactivated": "無効化済み",
-    "group": "グループ"
+    "group": "グループ",
+    "mute_duration_prompt": "ミュート期間 (0で無期限):"
   },
   "user_profile": {
     "timeline_title": "ユーザータイムライン",
@@ -1243,15 +1323,60 @@
     "tabs": {
       "limits": "制限",
       "instance": "インスタンス",
-      "frontends": "フロントエンド"
+      "frontends": "フロントエンド",
+      "emoji": "絵文字"
     },
     "limits": {
-      "arbitrary_limits": "変更可能な制限",
+      "arbitrary_limits": "任意の制限",
       "posts": "投稿の制限",
       "uploads": "ファイルの制限",
       "profile_fields": "追加情報欄の制限",
       "user_uploads": "プロフィール画像の制限",
       "users": "ユーザープロフィールの設定"
+    },
+    "emoji": {
+      "create_pack": "パックを作成",
+      "delete_pack": "パックを削除",
+      "create": "作成",
+      "emoji_packs": "絵文字パック",
+      "remote_packs": "リモートのパック",
+      "emoji_pack": "絵文字パック",
+      "edit_pack": "パックを編集",
+      "homepage": "ホームページ",
+      "save": "保存",
+      "save_meta": "メタデータを保存",
+      "shortcode": "ショートコード",
+      "filename": "ファイル名",
+      "delete_confirm": "{0}を削除してもよろしいですか？",
+      "download_pack": "パックをダウンロード",
+      "downloading_pack": "{0}をダウンロード中",
+      "download": "ダウンロード",
+      "editing": "{0}を編集中",
+      "error": "エラー: {0}",
+      "delete": "削除",
+      "global_actions": "グローバルアクション",
+      "reload": "絵文字を再読み込み",
+      "new_pack_name": "新規パック名",
+      "fallback_sha256": "代替ソースのSHA256ハッシュ",
+      "description": "説明",
+      "fallback_src": "代替ソース",
+      "share": "共有",
+      "add_file": "ファイルを追加",
+      "adding_new": "新規絵文字を追加",
+      "revert_meta": "メタデータを元に戻す",
+      "revert": "元に戻す",
+      "new_shortcode": "ショートコード (任意)",
+      "new_filename": "ファイル名 (任意)",
+      "files": "ファイル",
+      "delete_title": "削除しますか？",
+      "metadata_changed": "変更されたメタデータ",
+      "emoji_changed": "保存されていない変更点があります。ハイライトされた絵文字を確認してください",
+      "importFS": "ファイルシステムから絵文字をインポート",
+      "do_list": "一覧を取得",
+      "remote_pack_instance": "リモートパックを取得するインスタンス",
+      "download_as_name": "パック名",
+      "download_as_name_full": "名前を入力 (空にするとリモートの名前を使用)",
+      "replace_warning": "続行するとローカルにある同名のパックが上書きされます"
     }
   },
   "lists": {
@@ -1314,6 +1439,30 @@
     "edit_action": "編集",
     "start_time_prompt": "開始日時: ",
     "end_time_prompt": "終了日時: ",
-    "all_day_prompt": "終日"
+    "all_day_prompt": "終日",
+    "inactive_message": "このお知らせは無効です"
+  },
+  "splash": {
+    "loading": "読み込み中…",
+    "theme": "テーマを適用中です。お待ちください…",
+    "instance": "インスタンス情報を取得中…",
+    "settings": "設定を適用中…",
+    "fun_2": "ゆっくりしていってね！",
+    "error": "問題が発生しました",
+    "fun_3": "( ˘ω˘)ｽﾔｧ…",
+    "almost": "少女祈祷中…",
+    "fun_4": "俺のPleromaが火を吹くぜ！"
+  },
+  "bookmark_folders": {
+    "emoji": "絵文字",
+    "update_folder": "変更を保存",
+    "really_delete": "本当にフォルダを削除しますか？",
+    "name": "フォルダ名",
+    "editing_folder": "{folderName}フォルダの編集",
+    "creating_folder": "新規ブックマークフォルダの作成",
+    "create": "フォルダを作成",
+    "delete": "フォルダを削除",
+    "error": "ブックマークフォルダの処理中にエラーが発生しました: {0}",
+    "new": "新規フォルダ"
   }
 }

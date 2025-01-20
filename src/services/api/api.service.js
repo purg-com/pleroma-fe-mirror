@@ -68,8 +68,6 @@ const MASTODON_UNBLOCK_USER_URL = id => `/api/v1/accounts/${id}/unblock`
 const MASTODON_MUTE_USER_URL = id => `/api/v1/accounts/${id}/mute`
 const MASTODON_UNMUTE_USER_URL = id => `/api/v1/accounts/${id}/unmute`
 const MASTODON_REMOVE_USER_FROM_FOLLOWERS = id => `/api/v1/accounts/${id}/remove_from_followers`
-const MASTODON_SUBSCRIBE_USER = id => `/api/v1/pleroma/accounts/${id}/subscribe`
-const MASTODON_UNSUBSCRIBE_USER = id => `/api/v1/pleroma/accounts/${id}/unsubscribe`
 const MASTODON_USER_NOTE_URL = id => `/api/v1/accounts/${id}/note`
 const MASTODON_BOOKMARK_STATUS_URL = id => `/api/v1/statuses/${id}/bookmark`
 const MASTODON_UNBOOKMARK_STATUS_URL = id => `/api/v1/statuses/${id}/unbookmark`
@@ -108,7 +106,10 @@ const PLEROMA_POST_ANNOUNCEMENT_URL = '/api/v1/pleroma/admin/announcements'
 const PLEROMA_EDIT_ANNOUNCEMENT_URL = id => `/api/v1/pleroma/admin/announcements/${id}`
 const PLEROMA_DELETE_ANNOUNCEMENT_URL = id => `/api/v1/pleroma/admin/announcements/${id}`
 const PLEROMA_SCROBBLES_URL = id => `/api/v1/pleroma/accounts/${id}/scrobbles`
+const PLEROMA_STATUS_QUOTES_URL = id => `/api/v1/pleroma/statuses/${id}/quotes`
 const PLEROMA_USER_FAVORITES_TIMELINE_URL = id => `/api/v1/pleroma/accounts/${id}/favourites`
+const PLEROMA_BOOKMARK_FOLDERS_URL = '/api/v1/pleroma/bookmark_folders'
+const PLEROMA_BOOKMARK_FOLDER_URL = id => `/api/v1/pleroma/bookmark_folders/${id}`
 
 const PLEROMA_ADMIN_CONFIG_URL = '/api/pleroma/admin/config'
 const PLEROMA_ADMIN_DESCRIPTIONS_URL = '/api/pleroma/admin/config/descriptions'
@@ -272,6 +273,7 @@ const followUser = ({ id, credentials, ...options }) => {
   const url = MASTODON_FOLLOW_URL(id)
   const form = {}
   if (options.reblogs !== undefined) { form.reblogs = options.reblogs }
+  if (options.notify !== undefined) { form.notify = options.notify }
   return fetch(url, {
     body: JSON.stringify(form),
     headers: {
@@ -685,10 +687,12 @@ const fetchTimeline = ({
   until = false,
   userId = false,
   listId = false,
+  statusId = false,
   tag = false,
   withMuted = false,
   replyVisibility = 'all',
-  includeTypes = []
+  includeTypes = [],
+  bookmarkFolderId = false
 }) => {
   const timelineUrls = {
     public: MASTODON_PUBLIC_TIMELINE,
@@ -702,7 +706,8 @@ const fetchTimeline = ({
     favorites: MASTODON_USER_FAVORITES_TIMELINE_URL,
     publicFavorites: PLEROMA_USER_FAVORITES_TIMELINE_URL,
     tag: MASTODON_TAG_TIMELINE_URL,
-    bookmarks: MASTODON_BOOKMARK_TIMELINE_URL
+    bookmarks: MASTODON_BOOKMARK_TIMELINE_URL,
+    quotes: PLEROMA_STATUS_QUOTES_URL
   }
   const isNotifications = timeline === 'notifications'
   const params = []
@@ -719,6 +724,10 @@ const fetchTimeline = ({
 
   if (timeline === 'list') {
     url = url(listId)
+  }
+
+  if (timeline === 'quotes') {
+    url = url(statusId)
   }
 
   if (minId) {
@@ -752,6 +761,9 @@ const fetchTimeline = ({
     includeTypes.forEach(type => {
       params.push(['include_types[]', type])
     })
+  }
+  if (timeline === 'bookmarks' && bookmarkFolderId) {
+    params.push(['folder_id', bookmarkFolderId])
   }
 
   params.push(['limit', 20])
@@ -822,11 +834,14 @@ const unretweet = ({ id, credentials }) => {
     .then((data) => parseStatus(data))
 }
 
-const bookmarkStatus = ({ id, credentials }) => {
+const bookmarkStatus = ({ id, credentials, ...options }) => {
   return promisedRequest({
     url: MASTODON_BOOKMARK_STATUS_URL(id),
     headers: authHeaders(credentials),
-    method: 'POST'
+    method: 'POST',
+    payload: {
+      folder_id: options.folder_id
+    }
   })
 }
 
@@ -1164,14 +1179,6 @@ const unmuteUser = ({ id, credentials }) => {
   return promisedRequest({ url: MASTODON_UNMUTE_USER_URL(id), credentials, method: 'POST' })
 }
 
-const subscribeUser = ({ id, credentials }) => {
-  return promisedRequest({ url: MASTODON_SUBSCRIBE_USER(id), credentials, method: 'POST' })
-}
-
-const unsubscribeUser = ({ id, credentials }) => {
-  return promisedRequest({ url: MASTODON_UNSUBSCRIBE_USER(id), credentials, method: 'POST' })
-}
-
 const fetchBlocks = ({ maxId, credentials }) => {
   const query = new URLSearchParams({ with_relationships: true })
   if (maxId) {
@@ -1477,17 +1484,18 @@ const deleteAnnouncement = ({ id, credentials }) => {
   })
 }
 
-export const getMastodonSocketURI = ({ credentials, stream, args = {} }) => {
-  return Object.entries({
-    ...(credentials
-      ? { access_token: credentials }
-      : {}
-    ),
-    stream,
-    ...args
-  }).reduce((acc, [key, val]) => {
-    return acc + `${key}=${val}&`
-  }, MASTODON_STREAMING + '?')
+export const getMastodonSocketURI = ({ credentials, stream, args = {} }, base) => {
+  const url = new URL(MASTODON_STREAMING, base)
+  if (credentials) {
+    url.searchParams.append('access_token', credentials)
+  }
+  if (stream) {
+    url.searchParams.append('stream', stream)
+  }
+  Object.entries(args).forEach(([key, val]) => {
+    url.searchParams.append(key, val)
+  })
+  return url
 }
 
 const MASTODON_STREAMING_EVENTS = new Set([
@@ -1499,7 +1507,8 @@ const MASTODON_STREAMING_EVENTS = new Set([
 ])
 
 const PLEROMA_STREAMING_EVENTS = new Set([
-  'pleroma:chat_update'
+  'pleroma:chat_update',
+  'pleroma:respond'
 ])
 
 // A thin wrapper around WebSocket API that allows adding a pre-processor to it
@@ -1507,7 +1516,8 @@ const PLEROMA_STREAMING_EVENTS = new Set([
 export const ProcessedWS = ({
   url,
   preprocessor = handleMastoWS,
-  id = 'Unknown'
+  id = 'Unknown',
+  credentials
 }) => {
   const eventTarget = new EventTarget()
   const socket = new WebSocket(url)
@@ -1522,6 +1532,12 @@ export const ProcessedWS = ({
   }
   socket.addEventListener('open', (wsEvent) => {
     console.debug(`[WS][${id}] Socket connected`, wsEvent)
+    if (credentials) {
+      socket.send(JSON.stringify({
+        type: 'pleroma:authenticate',
+        token: credentials
+      }))
+    }
   })
   socket.addEventListener('error', (wsEvent) => {
     console.debug(`[WS][${id}] Socket errored`, wsEvent)
@@ -1542,19 +1558,47 @@ export const ProcessedWS = ({
   })
   /**/
 
+  const onAuthenticated = () => {
+    eventTarget.dispatchEvent(new CustomEvent('pleroma:authenticated'))
+  }
+
   proxy(socket, 'open')
   proxy(socket, 'close')
-  proxy(socket, 'message', preprocessor)
+  proxy(socket, 'message', (event) => preprocessor(event, { onAuthenticated }))
   proxy(socket, 'error')
 
   // 1000 = Normal Closure
   eventTarget.close = () => { socket.close(1000, 'Shutting down socket') }
   eventTarget.getState = () => socket.readyState
+  eventTarget.subscribe = (stream, args = {}) => {
+    console.debug(
+      `[WS][${id}] Subscribing to stream ${stream} with args`,
+      args
+    )
+    socket.send(JSON.stringify({
+      type: 'subscribe',
+      stream,
+      ...args
+    }))
+  }
+  eventTarget.unsubscribe = (stream, args = {}) => {
+    console.debug(
+      `[WS][${id}] Unsubscribing from stream ${stream} with args`,
+      args
+    )
+    socket.send(JSON.stringify({
+      type: 'unsubscribe',
+      stream,
+      ...args
+    }))
+  }
 
   return eventTarget
 }
 
-export const handleMastoWS = (wsEvent) => {
+export const handleMastoWS = (wsEvent, {
+  onAuthenticated = () => {}
+} = {}) => {
   const { data } = wsEvent
   if (!data) return
   const parsedEvent = JSON.parse(data)
@@ -1565,7 +1609,18 @@ export const handleMastoWS = (wsEvent) => {
       return { event, id: payload }
     }
     const data = payload ? JSON.parse(payload) : null
-    if (event === 'update') {
+    if (event === 'pleroma:respond') {
+      if (data.type === 'pleroma:authenticate') {
+        if (data.result === 'success') {
+          console.debug('[WS] Successfully authenticated')
+          onAuthenticated()
+        } else {
+          console.error('[WS] Unable to authenticate:', data.error)
+          wsEvent.target.close()
+        }
+      }
+      return null
+    } else if (event === 'update') {
       return { event, status: parseStatus(data) }
     } else if (event === 'status.update') {
       return { event, status: parseStatus(data) }
@@ -1886,6 +1941,44 @@ const deleteEmojiFile = ({ packName, shortcode }) => {
   return fetch(`${PLEROMA_EMOJI_UPDATE_FILE_URL(packName)}&shortcode=${shortcode}`, { method: 'DELETE' })
 }
 
+const fetchBookmarkFolders = ({ credentials }) => {
+  const url = PLEROMA_BOOKMARK_FOLDERS_URL
+  return fetch(url, { headers: authHeaders(credentials) })
+    .then((data) => data.json())
+}
+
+const createBookmarkFolder = ({ name, emoji, credentials }) => {
+  const url = PLEROMA_BOOKMARK_FOLDERS_URL
+  const headers = authHeaders(credentials)
+  headers['Content-Type'] = 'application/json'
+
+  return fetch(url, {
+    headers,
+    method: 'POST',
+    body: JSON.stringify({ name, emoji })
+  }).then((data) => data.json())
+}
+
+const updateBookmarkFolder = ({ folderId, name, emoji, credentials }) => {
+  const url = PLEROMA_BOOKMARK_FOLDER_URL(folderId)
+  const headers = authHeaders(credentials)
+  headers['Content-Type'] = 'application/json'
+
+  return fetch(url, {
+    headers,
+    method: 'PATCH',
+    body: JSON.stringify({ name, emoji })
+  }).then((data) => data.json())
+}
+
+const deleteBookmarkFolder = ({ folderId, credentials }) => {
+  const url = PLEROMA_BOOKMARK_FOLDER_URL(folderId)
+  return fetch(url, {
+    method: 'DELETE',
+    headers: authHeaders(credentials)
+  })
+}
+
 const apiService = {
   verifyCredentials,
   fetchTimeline,
@@ -1924,8 +2017,6 @@ const apiService = {
   fetchMutes,
   muteUser,
   unmuteUser,
-  subscribeUser,
-  unsubscribeUser,
   fetchBlocks,
   fetchOAuthTokens,
   revokeOAuthToken,
@@ -2016,7 +2107,11 @@ const apiService = {
   updateEmojiFile,
   deleteEmojiFile,
   listRemoteEmojiPacks,
-  downloadRemoteEmojiPack
+  downloadRemoteEmojiPack,
+  fetchBookmarkFolders,
+  createBookmarkFolder,
+  updateBookmarkFolder,
+  deleteBookmarkFolder
 }
 
 export default apiService

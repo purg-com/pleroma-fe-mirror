@@ -1,6 +1,7 @@
 <template>
   <span
-    :class="{ 'dark-overlay': darkOverlay }"
+    class="dialog-container"
+    :class="{ 'dark-overlay': darkOverlay, '-center-mobile': mobileCenter }"
     @click.self.stop="onCancel()"
   >
     <div
@@ -8,11 +9,11 @@
       @click.stop=""
     >
       <div class="panel-heading dialog-modal-heading">
-        <div class="title">
+        <h1 class="title">
           <slot name="header" />
-        </div>
+        </h1>
       </div>
-      <div class="dialog-modal-content">
+      <div class="panel-body dialog-modal-content">
         <slot name="default" />
       </div>
       <div class="dialog-modal-footer user-interactions panel-footer">
@@ -25,8 +26,6 @@
 <script src="./dialog_modal.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 // TODO: unify with other modals.
 .dark-overlay {
   &::before {
@@ -43,19 +42,24 @@
   }
 }
 
-.dialog-modal.panel {
+.dialog-container {
+  display: grid;
+  position: fixed;
   top: 0;
-  left: 50%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+}
+
+.dialog-modal.panel {
   max-height: 80vh;
   max-width: 90vw;
-  margin: 15vh auto;
-  position: fixed;
-  transform: translateX(-50%);
   z-index: 2001;
   cursor: default;
   display: block;
-  background-color: $fallback--bg;
-  background-color: var(--bg, $fallback--bg);
 
   .dialog-modal-heading {
     .title {
@@ -66,24 +70,57 @@
   .dialog-modal-content {
     margin: 0;
     padding: 1rem;
-    background-color: $fallback--bg;
-    background-color: var(--bg, $fallback--bg);
     white-space: normal;
+    text-align: center;
   }
 
   .dialog-modal-footer {
     margin: 0;
     padding: 0.5em;
-    background-color: $fallback--bg;
-    background-color: var(--bg, $fallback--bg);
-    border-top: 1px solid $fallback--border;
-    border-top: 1px solid var(--border, $fallback--border);
-    display: flex;
-    justify-content: flex-end;
+    border-top: 1px solid var(--border);
+    display: grid;
+    justify-content: end;
+    grid-gap: 0.5em;
+    grid-template-columns: min-content;
+    grid-auto-columns: min-content;
+    grid-auto-flow: column dense;
+    height: auto;
 
     button {
       width: auto;
-      margin-left: 0.5rem;
+      white-space: nowrap;
+      padding-left: 2em;
+      padding-right: 2em;
+    }
+  }
+}
+
+#modal.-mobile {
+  .dialog-container {
+    justify-content: stretch;
+    align-items: end;
+    justify-items: stretch;
+
+    &.-center-mobile {
+      align-items: center;
+    }
+  }
+
+  .dialog-modal.panel {
+    min-width: 100vw;
+  }
+
+  .dialog-modal-footer {
+    flex-direction: column;
+    justify-content: flex-end;
+    grid-template-columns: 1fr;
+    grid-auto-columns: none;
+    grid-auto-rows: auto;
+    grid-auto-flow: row dense;
+
+    button {
+      grid-column: 1;
+      height: 3em;
     }
   }
 }

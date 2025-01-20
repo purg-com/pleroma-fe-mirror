@@ -8,7 +8,7 @@
       :style="style"
       class="background-image"
     />
-    <div :class="onClose ? '' : panel-heading -flexible-height">
+    <div :class="onClose ? '' : 'panel-heading -flexible-height'">
       <div class="user-info">
         <div class="container">
           <a
@@ -16,10 +16,7 @@
             class="user-info-avatar -link"
             @click="zoomAvatar"
           >
-            <UserAvatar
-              :better-shadow="betterShadow"
-              :user="user"
-            />
+            <UserAvatar :user="user" />
             <div class="user-info-avatar -link -overlay">
               <FAIcon
                 class="fa-scale-110 fa-old-padding"
@@ -30,7 +27,6 @@
           <UserAvatar
             v-else-if="typeof avatarAction === 'function'"
             class="user-info-avatar"
-            :better-shadow="betterShadow"
             :user="user"
             @click="avatarAction"
           />
@@ -38,10 +34,7 @@
             v-else
             :to="userProfileLink(user)"
           >
-            <UserAvatar
-              :better-shadow="betterShadow"
-              :user="user"
-            />
+            <UserAvatar :user="user" />
           </router-link>
           <div class="user-summary">
             <div class="top-line">
@@ -113,19 +106,19 @@
               <template v-if="!hideBio">
                 <span
                   v-if="user.deactivated"
-                  class="alert user-role"
+                  class="alert neutral user-role"
                 >
                   {{ $t('user_card.deactivated') }}
                 </span>
                 <span
                   v-if="!!visibleRole"
-                  class="alert user-role"
+                  class="alert neutral user-role"
                 >
                   {{ $t(`general.role.${visibleRole}`) }}
                 </span>
                 <span
                   v-if="user.actor_type === 'Service'"
-                  class="alert user-role"
+                  class="alert neutral user-role"
                 >
                   {{ $t('user_card.bot') }}
                 </span>
@@ -166,14 +159,14 @@
               v-if="userHighlightType !== 'disabled'"
               :id="'userHighlightColorTx'+user.id"
               v-model="userHighlightColor"
-              class="userHighlightText"
+              class="input userHighlightText"
               type="text"
             >
             <input
               v-if="userHighlightType !== 'disabled'"
               :id="'userHighlightColor'+user.id"
               v-model="userHighlightColor"
-              class="userHighlightCl"
+              class="input userHighlightCl"
               type="color"
             >
             {{ ' ' }}
@@ -208,7 +201,7 @@
             />
             <template v-if="relationship.following">
               <ProgressButton
-                v-if="!relationship.subscribing"
+                v-if="!relationship.notifying"
                 class="btn button-default"
                 :click="subscribeUser"
                 :title="$t('user_card.subscribe')"
@@ -282,10 +275,7 @@
         />
       </div>
     </div>
-    <div
-      v-if="!hideBio"
-      class="panel-body"
-    >
+    <div v-if="!hideBio">
       <div
         v-if="!mergedConfig.hideUserStats && switcher"
         class="user-counts"

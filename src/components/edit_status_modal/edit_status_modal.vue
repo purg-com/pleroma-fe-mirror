@@ -6,15 +6,17 @@
   >
     <div class="edit-form-modal-panel panel">
       <div class="panel-heading">
-        {{ $t('post_status.edit_status') }}
+        <h1 class="title">
+          {{ $t('post_status.edit_status') }}
+        </h1>
       </div>
-      <PostStatusForm
+      <EditStatusForm
+        ref="editStatusForm"
         class="panel-body"
-        v-bind="params"
-        :post-handler="doEditStatus"
-        :disable-polls="true"
-        :disable-visibility-selector="true"
-        @posted="closeModal"
+        :params="params"
+        @posted="doCloseModal"
+        @draft-done="doCloseModal"
+        @can-close="doCloseModal"
       />
     </div>
   </Modal>

@@ -1,15 +1,15 @@
 <template>
-  <div class="panel panel-default">
+  <div class="Search panel panel-default">
     <div class="panel-heading">
-      <div class="title">
+      <h1 class="title">
         {{ $t('nav.search') }}
-      </div>
+      </h1>
     </div>
-    <div class="search-input-container">
+    <div class="panel-body search-input-container">
       <input
         ref="searchInput"
         v-model="searchTerm"
-        class="search-input"
+        class="input search-input"
         :placeholder="$t('nav.search')"
         @keyup.enter="newQuery(searchTerm)"
       >
@@ -23,7 +23,7 @@
     </div>
     <div
       v-if="loading && statusesOffset == 0"
-      class="text-center loading-icon"
+      class="panel-body text-center loading-icon"
     >
       <FAIcon
         icon="circle-notch"
@@ -67,7 +67,7 @@
         />
         <button
           v-if="!loading && loaded && lastStatusFetchCount > 0"
-          class="more-statuses-button button-unstyled -link -fullwidth"
+          class="more-statuses-button button-unstyled -link"
           @click.prevent="search(searchTerm, 'statuses')"
         >
           <div class="new-status-notification text-center">
@@ -148,11 +148,8 @@
 <script src="./search.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .search-result-heading {
-  color: $fallback--faint;
-  color: var(--faint, $fallback--faint);
+  color: var(--faint);
   padding: 0.75rem;
   text-align: center;
 }
@@ -171,17 +168,7 @@
 .search-result {
   box-sizing: border-box;
   border-bottom: 1px solid;
-  border-color: $fallback--border;
-  border-color: var(--border, $fallback--border);
-}
-
-.search-result-footer {
-  border-width: 1px 0 0;
-  border-style: solid;
-  border-color: var(--border, $fallback--border);
-  padding: 10px;
-  background-color: $fallback--fg;
-  background-color: var(--panel, $fallback--fg);
+  border-color: var(--border);
 }
 
 .search-input-container {
@@ -212,8 +199,7 @@
 
   .hashtag {
     flex: 1 1 auto;
-    color: $fallback--text;
-    color: var(--text, $fallback--text);
+    color: var(--text);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -226,14 +212,14 @@
     line-height: 2.25rem;
     font-weight: 500;
     text-align: center;
-    color: $fallback--text;
-    color: var(--text, $fallback--text);
+    color: var(--text);
   }
 }
 
 .more-statuses-button {
   height: 3.5em;
   line-height: 3.5em;
+  width: 100%;
 }
 
 </style>

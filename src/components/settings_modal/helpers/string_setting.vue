@@ -5,6 +5,7 @@
   >
     <label
       :for="path"
+      class="setting-label"
       :class="{ 'faint': shouldBeDisabled }"
     >
       <template v-if="backendDescriptionLabel">
@@ -15,9 +16,10 @@
       </template>
       <slot v-else />
     </label>
+    {{ ' ' }}
     <input
       :id="path"
-      class="string-input"
+      class="input string-input"
       :disabled="shouldBeDisabled"
       :value="realDraftMode ? draft : state"
       @change="update"

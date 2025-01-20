@@ -11,7 +11,8 @@
     "title": "Características",
     "who_to_follow": "Quem seguir",
     "upload_limit": "Limite de carregamento",
-    "pleroma_chat_messages": "Chat do Pleroma"
+    "pleroma_chat_messages": "Chat do Pleroma",
+    "shout": "Shoutbox"
   },
   "finder": {
     "error_fetching_user": "Erro ao pesquisar utilizador",
@@ -36,11 +37,27 @@
     "error_retry": "Por favor, tenta novamente",
     "loading": "A carregar…",
     "dismiss": "Ignorar",
-    "role":
-    {
+    "role": {
       "moderator": "Moderador",
       "admin": "Admin"
-    }
+    },
+    "undo": "Refazer",
+    "yes": "Sim",
+    "no": "Não",
+    "unpin": "Desafixar o item",
+    "scroll_to_top": "Rolar para o topo",
+    "flash_content": "Clique para mostrar conteúdo Flash usando o Ruffle (Experimental, talvez não funcione).",
+    "flash_security": "Note que isso pode ser potencialmente perigoso dado que o conteúdo Flash ainda é código arbitrário.",
+    "flash_fail": "Falha ao carregar conteúdo flash, veja o console para detalhes.",
+    "scope_in_timeline": {
+      "direct": "Direct",
+      "private": "Apenas-seguidores",
+      "public": "Público",
+      "unlisted": "Não-listado"
+    },
+    "pin": "Fixar o item",
+    "generic_error_message": "Um erro ocorreu: {0}",
+    "never_show_again": "Não mostrar mais"
   },
   "image_cropper": {
     "crop_picture": "Cortar imagem",
@@ -64,11 +81,17 @@
     "recovery_code": "Código de recuperação",
     "authentication_code": "Código de autenticação",
     "enter_two_factor_code": "Introduza o código de dois fatores",
-    "enter_recovery_code": "Introduza um código de recuperação"
+    "enter_recovery_code": "Introduza um código de recuperação",
+    "logout_confirm_title": "Confirmação de logoff",
+    "logout_confirm": "Você realmente quer sair?",
+    "logout_confirm_accept_button": "Sair",
+    "logout_confirm_cancel_button": "Não sair"
   },
   "media_modal": {
     "previous": "Anterior",
-    "next": "Próximo"
+    "next": "Próximo",
+    "counter": "{current} / {total}",
+    "hide": "Fechar visualizador de mídia"
   },
   "nav": {
     "about": "Sobre",
@@ -88,7 +111,18 @@
     "administration": "Administração",
     "chats": "Salas de Chat",
     "timelines": "Cronologias",
-    "bookmarks": "Itens Guardados"
+    "bookmarks": "Itens Guardados",
+    "home_timeline": "Timeline da home",
+    "lists": "Listas",
+    "edit_pinned": "Editar itens fixados",
+    "edit_nav_mobile": "Customizar barra de navegação",
+    "mobile_notifications_mark_as_seen": "Marcar todas como vistas",
+    "search_close": "Fechar barra de busca",
+    "mobile_notifications_close": "Fechar notificações",
+    "announcements": "Anúncios",
+    "edit_finish": "Edição finalizada",
+    "mobile_sidebar": "Alternar barra lateral móvel",
+    "mobile_notifications": "Abrir notificações (há notificações não lidas)"
   },
   "notifications": {
     "broken_favorite": "Publicação desconhecida, a procurar…",
@@ -102,7 +136,15 @@
     "reacted_with": "reagiu com {0}",
     "migrated_to": "migrou para",
     "follow_request": "quer seguir-te",
-    "error": "Erro ao obter notificações: {0}"
+    "error": "Erro ao obter notificações: {0}",
+    "unread_announcements": "{num} anúncio não lido | {num} anúncios não lidos",
+    "unread_chats": "{num} mensagem não lida | {num} mensagens não lidas",
+    "configuration_tip": "Você pode customizar o que você deseja mostrar aqui em {theSettings}. {dismiss}",
+    "unread_follow_requests": "{num} novo pedido de seguidor | {num} novos pedidos de seguidores",
+    "configuration_tip_settings": "as configurações",
+    "configuration_tip_dismiss": "Não mostrar novamente",
+    "poll_ended": "enquete finalizada",
+    "submitted_report": "enviado um relatório"
   },
   "post_status": {
     "new_status": "Publicar nova publicação",
@@ -136,7 +178,14 @@
     "media_description": "Descrição da multimédia",
     "media_description_error": "Falha ao atualizar ficheiro, tente novamente",
     "direct_warning_to_first_only": "Esta publicação só será visível para os utilizadores mencionados no início da mensagem.",
-    "direct_warning_to_all": "Esta publicação será visível para todos os utilizadores mencionados."
+    "direct_warning_to_all": "Esta publicação será visível para todos os utilizadores mencionados.",
+    "edit_status": "Editar status",
+    "reply_option": "Responder a esse status",
+    "quote_option": "Citar esse status",
+    "edit_remote_warning": "Outras instâncias remotas talvez não suportem edição e sejam incapazes de receber a última versão do seu post.",
+    "content_type_selection": "Formato do post",
+    "scope_notice_dismiss": "Fechar essa notificação",
+    "edit_unsupported_warning": "Pleroma não suporta editar menções ou enquetes."
   },
   "registration": {
     "bio": "Biografia",
@@ -156,8 +205,18 @@
       "email_required": "não pode ser deixado em branco",
       "password_required": "não pode ser deixado em branco",
       "password_confirmation_required": "não pode ser deixado em branco",
-      "password_confirmation_match": "deve corresponder à palavra-passe"
-    }
+      "password_confirmation_match": "deve corresponder à palavra-passe",
+      "birthday_required": "não pode ser deixado em branco",
+      "birthday_min_age": "deve ser em ou antes de {date}"
+    },
+    "birthday": "Data de nascimento:",
+    "reason": "Razão para registrar",
+    "register": "Registrar",
+    "reason_placeholder": "Essa instância aprova os registros manualmente.\nPermita ao administrador saber o porquê do seu registro.",
+    "birthday_optional": "Data de nascimento (opcional):",
+    "bio_optional": "Bio (opcional)",
+    "email_optional": "Email (opcional)",
+    "email_language": "Em qual linguagem você deseja receber emails do servidor?"
   },
   "settings": {
     "app_name": "Nome da aplicação",
@@ -523,7 +582,56 @@
     "autohide_floating_post_button": "Automaticamente ocultar o botão 'Nova Publicação' (telemóvel)",
     "notification_visibility_moves": "Utilizador Migrado",
     "accent": "Destaque",
-    "pad_emoji": "Preencher espaços ao adicionar emojis do seletor"
+    "pad_emoji": "Preencher espaços ao adicionar emojis do seletor",
+    "confirm_dialogs_logout": "saindo",
+    "move_account_error": "Erro ao mover conta: {error}",
+    "confirm_dialogs_delete": "excluindo um status",
+    "save": "Salvar mudanças",
+    "lists_navigation": "Mostrar listas na navegação",
+    "email_language": "Linguagem para receber emails do servidor",
+    "account_backup_description": "Isso permite a você baixar um arquivo das informações da sua conta e os seus posts, mas eles ainda não podem ser importados para uma conta do Pleroma.",
+    "add_backup_error": "Erro ao adicionar um novo backup: {error}",
+    "confirm_dialogs": "Pedir por confirmação quando",
+    "confirm_dialogs_repeat": "repetindo um status",
+    "account_alias": "Apelidos de conta",
+    "account_alias_table_head": "Apelido",
+    "list_aliases_error": "Erro ao buscar por apelidos: {error}",
+    "hide_list_aliases_error_action": "Fechar",
+    "confirm_dialogs_deny_follow": "negando um seguidor",
+    "confirm_dialogs_approve_follow": "aprovando um seguidor",
+    "backup_running": "Esse backup está em andamento, {number} registro processado. | Esse backup está em progresso, {number} registros processados.",
+    "add_backup": "Criar um novo backup",
+    "added_backup": "Adicionado um novo backup.",
+    "backup_failed": "Esse backup falhou.",
+    "list_backups_error": "Erro ao buscar a lista de backup: {error}",
+    "move_account_notes": "Se você deseja mover a conta para outro lugar, você deve ir para sua conta de destino e adicionar um apelido apontando para cá.",
+    "add_alias_error": "Erro ao adicionar apelido: {error}",
+    "move_account": "Mover conta",
+    "actor_type": "Essa conta é:",
+    "actor_type_description": "Marcando a sua conta como um grupo irá fazer com que ela automaticamente repita os status que a mencionam.",
+    "actor_type_Person": "um usuário normal",
+    "actor_type_Service": "um bot",
+    "actor_type_Group": "um grupo",
+    "account_backup": "Backup da conta",
+    "confirm_dialogs_unfollow": "deixando de seguir usuário",
+    "confirm_dialogs_block": "bloqueando um usuário",
+    "confirm_dialogs_remove_follower": "removendo um seguidor",
+    "remove_alias": "Remover esse apelido",
+    "new_alias_target": "Adicionar um novo apelido (e.g. {example})",
+    "added_alias": "Apelido adicionado.",
+    "move_account_target": "Conta de destino (e.g. {example})",
+    "moved_account": "Conta movida.",
+    "remove_language": "Remover",
+    "primary_language": "Linguagem primária:",
+    "fallback_language": "Linguagem de reserva {index}:",
+    "add_language": "Adicionar linguagem de reserva",
+    "expert_mode": "Mostrar avançados",
+    "setting_changed": "As configurações são diferentes do padrão",
+    "setting_server_side": "Essas configurações estão atreladas ao seu perfil e afetarão todas as sessões e clientes",
+    "mention_links": "Links de menção",
+    "confirm_dialogs_mute": "mutando um usuário",
+    "backup_not_ready": "Esse backup não está pronto ainda.",
+    "remove_backup": "Remover"
   },
   "timeline": {
     "collapse": "Esconder",
@@ -699,7 +807,20 @@
     "load_all": "A carregar todos os {emojiAmount} emojis",
     "load_all_hint": "Carregado o primeiro emoji {saneAmount}, carregar todos os emojis pode causar problemas de desempenho.",
     "keep_open": "Manter o seletor aberto",
-    "stickers": "Autocolantes"
+    "stickers": "Autocolantes",
+    "hide_custom_emoji": "Ocultar emojis customizados",
+    "unicode_groups": {
+      "symbols": "Símbolos",
+      "activities": "Atividades",
+      "animals-and-nature": "Animais & Natureza",
+      "people-and-body": "Pessoas & Corpo",
+      "smileys-and-emotion": "Sorriso & Emoção",
+      "travel-and-places": "Viagem & Lugares",
+      "food-and-drink": "Comida & Bebidas",
+      "objects": "Objetos"
+    },
+    "regional_indicator": "Indicador regional {letter}",
+    "unpacked": "Emoji desempacotado"
   },
   "polls": {
     "single_choice": "Escolha única",
@@ -713,7 +834,9 @@
     "expiry": "Tempo para finalizar sondagem",
     "multiple_choices": "Escolha múltipla",
     "type": "Tipo de sondagem",
-    "add_poll": "Adicionar Sondagem"
+    "add_poll": "Adicionar Sondagem",
+    "votes_count": "{count} voto | {count} votos",
+    "people_voted_count": "{count} pessoa votou | {count} pessoas votaram"
   },
   "importer": {
     "error": "Ocorreu um erro ao importar este ficheiro.",
@@ -737,7 +860,9 @@
     "load_older": "Carregar interações mais antigas",
     "follows": "Novos seguidores",
     "favs_repeats": "Gostos e Partilhas",
-    "moves": "O utilizador migra"
+    "moves": "O utilizador migra",
+    "emoji_reactions": "Reações de Emoji",
+    "reports": "Relatórios"
   },
   "errors": {
     "storage_unavailable": "O Pleroma não conseguiu aceder ao armazenamento do navegador. A sua sessão ou definições locais não serão armazenadas e poderá encontrar problemas inesperados. Tente ativar as cookies."
@@ -828,5 +953,35 @@
     "day_short": "{0}d",
     "days": "{0} dias",
     "day": "{0} dia"
+  },
+  "report": {
+    "state_closed": "Fechar",
+    "reported_statuses": "Estado das denúncias:",
+    "reported_user": "Usuário denunciado:",
+    "state_resolved": "Resolvido",
+    "state": "Estado:",
+    "state_open": "Abrir",
+    "notes": "Notas:"
+  },
+  "announcements": {
+    "start_time_display": "Inicia às {time}",
+    "post_form_header": "Enviar anúncio",
+    "post_placeholder": "Digite o conteúdo do seu anúncio aqui...",
+    "page_header": "Anúncios",
+    "title": "Anúncio",
+    "mark_as_read_action": "Marcar como lido",
+    "post_action": "Postar",
+    "post_error": "Erro: {error}",
+    "close_error": "Fechar",
+    "delete_action": "Apagar",
+    "start_time_prompt": "Tempo de início: ",
+    "end_time_prompt": "Tempo de término: ",
+    "all_day_prompt": "Esse é um evento para o dia todo",
+    "published_time_display": "Publicado às {time}",
+    "end_time_display": "Finaliza às {time}",
+    "edit_action": "Editar",
+    "submit_edit_action": "Enviar",
+    "cancel_edit_action": "Cancelar",
+    "inactive_message": "Esse anúncio está inativo"
   }
 }

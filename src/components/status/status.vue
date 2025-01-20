@@ -30,23 +30,8 @@
             :at="false"
           />
         </small>
-        <small
-          v-if="showReasonMutedThread"
-          class="mute-thread"
-        >
-          {{ $t('status.thread_muted') }}
-        </small>
-        <small
-          v-if="showReasonMutedThread && muteWordHits.length > 0"
-          class="mute-thread"
-        >
-          {{ $t('status.thread_muted_and_words') }}
-        </small>
-        <small
-          class="mute-words"
-          :title="muteWordHits.join(', ')"
-        >
-          {{ muteWordHits.join(', ') }}
+        <small class="mute-reason">
+          {{ muteLocalized }}
         </small>
         <button
           class="unmute button-unstyled"
@@ -80,7 +65,6 @@
           v-if="retweet"
           class="left-side repeater-avatar"
           :show-actor-type-indicator="showActorTypeIndicator"
-          :better-shadow="betterShadow"
           :user="statusoid.user"
         />
         <div class="right-side faint">
@@ -135,7 +119,6 @@
                 class="post-avatar"
                 :show-actor-type-indicator="showActorTypeIndicator"
                 :compact="compact"
-                :better-shadow="betterShadow"
                 :user="status.user"
               />
             </UserPopover>
@@ -180,7 +163,7 @@
 
               <span class="heading-right">
                 <router-link
-                  class="timeago faint-link"
+                  class="timeago faint"
                   :to="{ name: 'conversation', params: { id: status.id } }"
                 >
                   <Timeago
@@ -298,44 +281,61 @@
                 v-if="isReply"
                 class="glued-label reply-glued-label"
               >
-                <StatusPopover
-                  v-if="!isPreview"
-                  :status-id="status.parent_visible && status.in_reply_to_status_id"
-                  class="reply-to-popover"
-                  style="min-width: 0;"
-                  :class="{ '-strikethrough': !status.parent_visible }"
+                <i18n-t
+                  keypath="status.reply_to_with_arg"
+                  scope="global"
                 >
-                  <button
-                    class="button-unstyled reply-to"
-                    :aria-label="$t('tool_tip.reply')"
-                    @click.prevent="gotoOriginal(status.in_reply_to_status_id)"
-                  >
-                    <FAIcon
-                      class="fa-scale-110 fa-old-padding"
-                      icon="reply"
-                      flip="horizontal"
-                    />
-                    {{ ' ' }}
-                    <span
-                      class="reply-to-text"
+                  <template #replyToWithIcon>
+                    <StatusPopover
+                      v-if="!isPreview"
+                      :status-id="status.parent_visible && status.in_reply_to_status_id"
+                      class="reply-to-popover"
+                      style="min-width: 0;"
+                      :class="{ '-strikethrough': !status.parent_visible }"
                     >
-                      {{ $t('status.reply_to') }}
-                    </span>
-                  </button>
-                </StatusPopover>
+                      <button
+                        class="button-unstyled reply-to"
+                        :aria-label="$t('tool_tip.reply')"
+                        @click.prevent="gotoOriginal(status.in_reply_to_status_id)"
+                      >
+                        <i18n-t
+                          keypath="status.reply_to_with_icon"
+                          scope="global"
+                        >
+                          <template #icon>
+                            <FAIcon
+                              class="fa-scale-110 fa-old-padding"
+                              icon="reply"
+                              flip="horizontal"
+                            />
+                          </template>
+                          <template #replyTo>
+                            <span
+                              class="reply-to-text"
+                            >
+                              {{ $t('status.reply_to') }}
+                            </span>
+                          </template>
+                        </i18n-t>
+                      </button>
+                    </StatusPopover>
 
-                <span
-                  v-else
-                  class="reply-to-no-popover"
-                >
-                  <span class="reply-to-text">{{ $t('status.reply_to') }}</span>
-                </span>
-                <MentionLink
-                  :content="replyToName"
-                  :url="replyProfileLink"
-                  :user-id="status.in_reply_to_user_id"
-                  :user-screen-name="status.in_reply_to_screen_name"
-                />
+                    <span
+                      v-else
+                      class="reply-to-no-popover"
+                    >
+                      <span class="reply-to-text">{{ $t('status.reply_to') }}</span>
+                    </span>
+                  </template>
+                  <template #user>
+                    <MentionLink
+                      :content="replyToName"
+                      :url="replyProfileLink"
+                      :user-id="status.in_reply_to_user_id"
+                      :user-screen-name="status.in_reply_to_screen_name"
+                    />
+                  </template>
+                </i18n-t>
               </span>
 
               <!-- This little wrapper is made for sole purpose of "gluing" -->
@@ -373,6 +373,7 @@
               class="heading-edited-row"
             >
               <i18n-t
+                scope="global"
                 keypath="status.edited_at"
                 tag="span"
               >
@@ -430,7 +431,10 @@
             v-else-if="hasInvisibleQuote"
             class="quoted-status -unavailable-prompt"
           >
-            <i18n-t keypath="status.invisible_quote">
+            <i18n-t
+              scope="global"
+              keypath="status.invisible_quote"
+            >
               <template #link>
                 <bdi>
                   <a
@@ -450,11 +454,11 @@
           >
             <button
               v-if="showOtherRepliesAsButton && replies.length > 1"
-              class="button-unstyled -link faint"
-              :title="$tc('status.ancestor_follow', replies.length - 1, { numReplies: replies.length - 1 })"
+              class="button-unstyled -link"
+              :title="$t('status.ancestor_follow', { numReplies: replies.length - 1 }, replies.length - 1)"
               @click.prevent="dive"
             >
-              {{ $tc('status.replies_list_with_others', replies.length - 1, { numReplies: replies.length - 1 }) }}
+              {{ $t('status.replies_list_with_others', { numReplies: replies.length - 1 }, replies.length - 1) }}
             </button>
             <span
               v-else
@@ -478,7 +482,7 @@
 
           <transition name="fade">
             <div
-              v-if="!hidePostStats && isFocused && combinedFavsAndRepeatsUsers.length > 0"
+              v-if="shouldDisplayFavsAndRepeats"
               class="favs-repeated-users"
             >
               <div class="stats">
@@ -506,6 +510,19 @@
                     </div>
                   </div>
                 </UserListPopover>
+                <router-link
+                  v-if="statusFromGlobalRepository.quotes_count > 0"
+                  :to="{ name: 'quotes', params: { id: status.id } }"
+                >
+                  <div
+                    class="stat-count"
+                  >
+                    <a class="stat-title">{{ $t('status.quotes') }}</a>
+                    <div class="stat-number">
+                      {{ statusFromGlobalRepository.quotes_count }}
+                    </div>
+                  </div>
+                </router-link>
                 <div class="avatar-row">
                   <AvatarList :users="combinedFavsAndRepeatsUsers" />
                 </div>
@@ -579,13 +596,17 @@
         class="status-container reply-form"
       >
         <PostStatusForm
+          ref="postStatusForm"
           class="reply-body"
+          :closeable="true"
           :reply-to="status.id"
           :attentions="status.attentions"
           :replied-user="status.user"
           :copy-message-scope="status.visibility"
           :subject="replySubject"
-          @posted="toggleReplying"
+          @posted="doToggleReplying"
+          @draft-done="doToggleReplying"
+          @can-close="doToggleReplying"
         />
       </div>
     </template>

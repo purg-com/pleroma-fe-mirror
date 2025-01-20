@@ -64,8 +64,6 @@
 <script src="./scope_selector.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .ScopeSelector {
   .scope {
     display: inline-block;
@@ -73,11 +71,6 @@
     min-width: 1.3em;
     min-height: 1.3em;
     text-align: center;
-
-    &.selected svg {
-      color: $fallback--lightText;
-      color: var(--lightText, $fallback--lightText);
-    }
   }
 }
 </style>

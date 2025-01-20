@@ -38,11 +38,14 @@ lint:
   stage: lint
   script:
     - yarn
-    - npm run lint
-    - npm run stylelint
+    - yarn lint
+    - yarn stylelint
 
 test:
   stage: test
+  tags:
+    - amd64
+    - himem
   variables:
     APT_CACHE_DIR: apt-cache
   script:
@@ -54,9 +57,12 @@ test:
 
 build:
   stage: build
+  tags:
+    - amd64
+    - himem
   script:
     - yarn
-    - npm run build
+    - yarn build
   artifacts:
     paths:
     - dist/

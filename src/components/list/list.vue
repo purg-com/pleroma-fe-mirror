@@ -7,6 +7,7 @@
       v-for="item in items"
       :key="getKey(item)"
       class="list-item"
+      :class="[getClass(item), nonInteractive ? '-non-interactive' : '']"
       role="listitem"
     >
       <slot
@@ -33,24 +34,15 @@ export default {
     getKey: {
       type: Function,
       default: item => item.id
+    },
+    getClass: {
+      type: Function,
+      default: item => ''
+    },
+    nonInteractive: {
+      type: Boolean,
+      default: false
     }
   }
 }
 </script>
-
-<style lang="scss">
-@import "../../variables";
-
-.list {
-  &-item:not(:last-child) {
-    border-bottom: 1px solid;
-    border-bottom-color: $fallback--border;
-    border-bottom-color: var(--border, $fallback--border);
-  }
-
-  &-empty-content {
-    text-align: center;
-    padding: 10px;
-  }
-}
-</style>

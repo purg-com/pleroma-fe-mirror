@@ -1,1 +1,0 @@
-Fix native notifications appearing as many times as there are open tabs. Clicking on notification will focus last focused tab.

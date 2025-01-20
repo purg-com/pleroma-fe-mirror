@@ -80,7 +80,7 @@
               <span
                 v-else-if="backup.state === 'running'"
               >
-                {{ $tc('settings.backup_running', backup.processed_number, { number: backup.processed_number }) }}
+                {{ $t('settings.backup_running', { number: backup.processed_number }, backup.processed_number) }}
               </span>
               <span
                 v-else-if="backup.state === 'failed'"

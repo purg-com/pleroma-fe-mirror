@@ -87,8 +87,6 @@
 <script src='./gallery.js'></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .Gallery {
   .gallery-rows {
     display: flex;

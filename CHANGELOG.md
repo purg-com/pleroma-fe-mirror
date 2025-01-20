@@ -3,6 +3,74 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 2.7.1
+Bugfix release. Added small optimizations to emoji picker that should make it a bit more responsive, however it needs rather large change to make it more performant which might come in a major release.
+
+### Fixed
+- Instance default theme not respected
+- Nested panel header having wrong sticky position if navbar height != panel header height
+- Toggled buttons having bad contrast (when using v2 theme)
+
+### Changed
+- Simplify the OAuth client_name to 'PleromaFE'
+- Small optimizations to emoji picker
+
+
+## 2.7.0
+
+### Known issues
+We got some reports related to emoji picker performance, this hopefully will be fixed in 2.7.1.
+
+### Notes
+This release overhauls how themes work, themes now need to be "compiled", which can cause some delay when loading for the first time and temporarily look "wrong" in some places (popups, menus, dialogs). Please do report any issues, especially if your theme looks wrong or breaks interface when loading. Also report issues if you're experiencing constant performance issues.
+
+To admins: remember that you can update PleromaFE to recent `master` or `develop` in admin dashboard in "Front-ends" tab, scroll down to find PleromaFE box and click "Reinstall `master`" or dropdown and then "Reinstall `develop`". Currently there is no mechanism to check if there is an update or not.
+
+### Changed
+- Overhauled the way themes work, migrating to new Pleroma Interface Style Sheets system aka "Themes 3".
+- Notifications are no longer sorted by "seen" status since interacting with them can change their read status and makes UI jumpy. Old behavior can be restored in settings.
+- Notifications are now shown through a ServiceWorker (since mobile chrome does not allow them otherwise), it's always enabled, even if previously we only enabled it for WebPush notifications only. If you don't like websites "running" while closed, check how to disable them in your browser. Old way to show notifications will be used as a fallback but might not have all the new features.
+- Reorganized Settings modal to move out visual stuff into Appearance tab
+
+### Added
+- Emoji pack management to the admin panel
+- Support `status` notification type (subscriptions/bell, fixes PleromaFE on newer PleromaBE versions)
+- Poll end notifications.
+- Added option to not mark all notifications when closing notifications drawer on mobile, this creates a new button to mark all as seen.
+- Option to always "show" notifications when using web push for better compatibility with some browsers (chrome, edge, safari)
+- Option to toggle what notification types appear in native notifications, by default less important ones (likes, repeats, etc) will no longer show up in native notifications.
+- Option to treat non-interactive notifications (likes, repeats et all) as seen for visual purposes (no read mark, ignored in counters, still can show in native notifications)
+- Ability to resize UI (and certain components) scale independent of browser/text scale
+- Ability to override certain aspects of UI style independent of theme used (UI roundness, fonts, underlay)
+- Theme selector with visual previews of the theme
+- Display loading and error indicator for conversation page
+- Option to only show scrobbles that are recent enough
+- Interacting (opening reply box etc) or simply clicking on non-interactive notifications now marks them as read. Clicking on native notifications for non-interactive ones also marks them as seen.
+- Support group actors
+- Focusing into a tab clears all current desktop notifications
+- Ability to change size of emoji
+- Ability to view APNG (Animated PNG) attachments.
+- Support showing extra notifications in the notifications column
+- Create a link to the URL of the scrobble when it's present
+- Allow hiding custom emojis in picker.
+- Ability to mute sensitive posts (ported from eintei).
+- Native notifications now also have "badge" property that matches instance's favicon (visible in Android Chromium at least)
+- Display public favorites on user profiles
+- Display quotes count on posts and add quotes list page
+- Show a dedicated registration notice page when further action is required after registering
+
+### Fixed
+- Synchronized requested notification types with backend, hopefully should fix missing notifications for polls and follow requests
+- Error that appeared on mobile Chromium (and derivatives) when native notifications are allowed
+- Being unable to set notification visibility for reports and follow requests
+- Native notifications appearing as many times as there are open tabs. Clicking on notification will focus last focused tab.
+- The expiry date indication won't be shown if the poll never expires
+- Profile mentions causing a 422 error on newer PleromaBE versions.
+- Color inputs are less ugly now
+- Unread notifications should now properly catch up between sessions (eventually) in polling mode
+- Video posters on Safari
+
+
 ## 2.6.1
 ### Fixed
 - fix admin dashboard not having any feedback on frontend installation

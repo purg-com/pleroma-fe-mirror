@@ -3,7 +3,8 @@
     <router-link
       v-for="item in pinnedList"
       :key="item.name"
-      class="pinned-item"
+      class="button-unstyled pinned-item"
+      active-class="toggled"
       :to="getRouteTo(item)"
       :title="item.labelRaw || $t(item.label)"
     >
@@ -18,7 +19,8 @@
       >{{ item.iconLetter }}</span>
       <div
         v-if="item.badgeGetter && getters[item.badgeGetter]"
-        class="alert-dot"
+        class="badge -dot"
+        :class="[`-${item.badgeStyle}`]"
       />
     </router-link>
   </span>
@@ -27,23 +29,18 @@
 <script src="./navigation_pins.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .NavigationPins {
   display: flex;
   flex-wrap: wrap;
   overflow: hidden;
   height: 100%;
 
-  .alert-dot {
-    border-radius: 100%;
-    height: 0.5em;
-    width: 0.5em;
-    position: absolute;
-    right: calc(50% - 0.75em);
-    top: calc(50% - 0.5em);
-    background-color: $fallback--cRed;
-    background-color: var(--badgeNotification, $fallback--cRed);
+  &.alert-dot-notification {
+    background-color: var(--badgeNotification);
+  }
+
+  &.alert-dot-neutral {
+    background-color: var(--badgeNeutral);
   }
 
   .pinned-item {
@@ -60,15 +57,9 @@
       margin: 0;
     }
 
-    &.router-link-active {
-      color: $fallback--text;
-      color: var(--panelText, $fallback--text);
+    &.toggled {
+      margin-bottom: -4px;
       border-bottom: 4px solid;
-
-      & .svg-inline--fa,
-      & .iconLetter {
-        color: inherit;
-      }
     }
   }
 }

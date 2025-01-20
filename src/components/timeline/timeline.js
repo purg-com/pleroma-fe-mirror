@@ -25,6 +25,8 @@ const Timeline = {
     'title',
     'userId',
     'listId',
+    'statusId',
+    'bookmarkFolderId',
     'tag',
     'embedded',
     'count',
@@ -77,13 +79,13 @@ const Timeline = {
       }
     },
     classes () {
-      let rootClasses = !this.embedded ? ['panel', 'panel-default'] : ['-nonpanel']
+      let rootClasses = !this.embedded ? ['panel', 'panel-default'] : ['-embedded']
       if (this.blockingClicks) rootClasses = rootClasses.concat(['-blocked', '_misclick-prevention'])
       return {
         root: rootClasses,
-        header: ['timeline-heading'].concat(!this.embedded ? ['panel-heading', '-sticky'] : []),
-        body: ['timeline-body'].concat(!this.embedded ? ['panel-body'] : []),
-        footer: ['timeline-footer'].concat(!this.embedded ? ['panel-footer'] : [])
+        header: ['timeline-heading'].concat(!this.embedded ? ['panel-heading', '-sticky'] : ['panel-body']),
+        body: ['timeline-body'].concat(!this.embedded ? ['panel-body'] : ['panel-body']),
+        footer: ['timeline-footer'].concat(!this.embedded ? ['panel-footer'] : ['panel-body'])
       }
     },
     // id map of statuses which need to be hidden in the main list due to pinning logic
@@ -121,6 +123,8 @@ const Timeline = {
       showImmediately,
       userId: this.userId,
       listId: this.listId,
+      statusId: this.statusId,
+      bookmarkFolderId: this.bookmarkFolderId,
       tag: this.tag
     })
   },
@@ -183,6 +187,8 @@ const Timeline = {
         showImmediately: true,
         userId: this.userId,
         listId: this.listId,
+        statusId: this.statusId,
+        bookmarkFolderId: this.bookmarkFolderId,
         tag: this.tag
       }).then(({ statuses }) => {
         if (statuses && statuses.length === 0) {

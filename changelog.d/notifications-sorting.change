@@ -1,1 +1,0 @@
-Notifications are no longer sorted by "seen" status since interacting with them can change their read status and makes UI jumpy. Old behavior can be restored in settings.
