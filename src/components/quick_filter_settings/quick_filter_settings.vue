@@ -132,16 +132,22 @@
             role="menuitem"
             @click="openTab('filtering')"
           >
-            <FAIcon fixed-width icon="font" />{{ $t('settings.word_filter_and_more') }}
+            <FAIcon
+              fixed-width
+              icon="font"
+            />{{ $t('settings.word_filter_and_more') }}
           </button>
         </div>
       </div>
     </template>
     <template #trigger>
       <div :class="mobileLayout ? 'main-button' : ''">
-        <FAIcon icon="filter" :fixed-width="nested"/>
+        <FAIcon
+          icon="filter"
+          :fixed-width="nested"
+        />
         <template v-if="nested">
-          {{$t('timeline.filter_settings')}}
+          {{ $t('timeline.filter_settings') }}
         </template>
         <FAIcon
           v-if="nested"

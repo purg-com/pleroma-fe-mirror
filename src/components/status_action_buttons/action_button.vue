@@ -67,13 +67,12 @@
     <span
       v-if="!extra && button.name === 'bookmark'"
       class="separator"
-    >
-    </span>
+    />
     <Popover
+      v-if="button.name === 'bookmark'"
       trigger="hover"
       :placement="extra ? 'right' : 'top'"
       :trigger-attrs="{ class: 'extra-button' }"
-      v-if="button.name === 'bookmark'"
     >
       <template #trigger>
         <FAIcon
@@ -84,13 +83,16 @@
         />
       </template>
       <template #content>
-        <StatusBookmarkFolderMenu v-if="button.name === 'bookmark'" :status="status" />
+        <StatusBookmarkFolderMenu
+          v-if="button.name === 'bookmark'"
+          :status="status"
+        />
       </template>
     </Popover>
 
     <EmojiPicker
-      ref="picker"
       v-if="button.name === 'emoji'"
+      ref="picker"
       :enable-sticker-picker="false"
       :hide-custom-emoji="hideCustomEmoji"
       class="emoji-picker-panel"
@@ -99,6 +101,6 @@
   </div>
 </template>
 
-<script src="./action_button.js"/>
+<script src="./action_button.js" />
 
-<style lang="scss" src="./action_button.scss"/>
+<style lang="scss" src="./action_button.scss" />

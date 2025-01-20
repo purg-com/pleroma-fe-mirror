@@ -64,11 +64,11 @@
               <button
                 class="main-button"
                 @click="toggleTag(tags.FORCE_NSFW)"
-                >
+              >
                 <span
                   class="input menu-checkbox"
                   :class="{ 'menu-checkbox-checked': hasTag(tags.FORCE_NSFW) }"
-                  />
+                />
                 {{ $t('user_card.admin_menu.force_nsfw') }}
               </button>
             </div>

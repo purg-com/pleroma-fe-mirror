@@ -2,17 +2,17 @@
   <div class="StatusActionButtons">
     <span class="quick-action-buttons">
       <span
-        class="quick-action"
-        :class="{ '-pin': showPin, '-toggle': button.dropdown?.() }"
         v-for="button in quickButtons"
         :key="button.name"
+        class="quick-action"
+        :class="{ '-pin': showPin, '-toggle': button.dropdown?.() }"
       >
         <ActionButtonContainer
           :class="{ '-pin': showPin }"
           :button="button"
           :status="status"
           :extra="false"
-          :funcArg="funcArg"
+          :func-arg="funcArg"
           :get-class="getClass"
           :get-component="getComponent"
           :close="() => {}"
@@ -80,7 +80,7 @@
                 :button="button"
                 :status="status"
                 :extra="true"
-                :funcArg="funcArg"
+                :func-arg="funcArg"
                 :get-class="getClass"
                 :get-component="getComponent"
                 :close="close"

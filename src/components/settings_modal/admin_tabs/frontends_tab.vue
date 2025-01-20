@@ -182,9 +182,9 @@
                   <template #content="{close}">
                     <div class="dropdown-menu">
                       <div
-                        class="menu-item dropdown-item"
                         v-for="ref in frontend.installedRefs || frontend.refs"
                         :key="ref"
+                        class="menu-item dropdown-item"
                       >
                         <button
                           class="main-button"

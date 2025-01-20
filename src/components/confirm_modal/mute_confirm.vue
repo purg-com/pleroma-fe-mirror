@@ -18,7 +18,10 @@
         <span v-text="user.screen_name_ui" />
       </template>
     </i18n-t>
-    <div class="mute-expiry" v-if="type !== 'domain'">
+    <div
+      v-if="type !== 'domain'"
+      class="mute-expiry"
+    >
       <p>
         <label>
           {{ $t('user_card.mute_duration_prompt') }}
@@ -39,7 +42,7 @@
             v-for="unit in muteExpiryUnits"
             :key="unit"
             :value="unit"
-            >
+          >
             {{ $t(`time.unit.${unit}_short`, ['']) }}
           </option>
         </Select>

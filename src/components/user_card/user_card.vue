@@ -312,9 +312,9 @@
     </div>
     <teleport to="#modal">
       <mute-confirm
-        type="user"
-        :user="this.user"
         ref="confirmation"
+        type="user"
+        :user="user"
       />
     </teleport>
   </div>
