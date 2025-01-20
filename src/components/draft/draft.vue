@@ -34,7 +34,10 @@
             </i>
           </p>
           <p v-if="draft.status">{{ draft.status }}</p>
-          <p v-else class="faint">{{ $t('drafts.empty') }}</p>
+          <p
+            v-else
+            class="faint"
+          >{{ $t('drafts.empty') }}</p>
         </span>
         <gallery
           v-if="draft.files?.length !== 0"

@@ -12,9 +12,9 @@
         <button
           class="button-default theme-preview"
           data-theme-key="stock"
-          @click="resetTheming"
           :class="{ toggled: isStyleActive('stock'), disabled: switchInProgress }"
           :disabled="switchInProgress"
+          @click="resetTheming"
         >
           <!-- eslint-disable vue/no-v-text-v-html-on-component -->
           <!-- eslint-disable vue/no-v-html -->
@@ -58,8 +58,8 @@
           :data-theme-key="style.key"
           class="button-default theme-preview"
           :class="{ toggled: isThemeActive(style.key), disabled: switchInProgress }"
-          @click="style.version === 'v2' ? setTheme(style.key) : setStyle(style.key)"
           :disabled="switchInProgress"
+          @click="style.version === 'v2' ? setTheme(style.key) : setStyle(style.key)"
         >
           <!-- eslint-disable vue/no-v-text-v-html-on-component -->
           <!-- eslint-disable vue/no-v-html -->
@@ -81,9 +81,9 @@
       <div class="import-file-container">
         <button
           class="btn button-default"
-          @click="importFile"
           :class="{ disabled: switchInProgress }"
           :disabled="switchInProgress"
+          @click="importFile"
         >
           <FAIcon icon="folder-open" />
           {{ $t('settings.style.themes3.editor.load_style') }}
@@ -157,8 +157,8 @@
               class="userPalette"
               :compact="true"
               :apply="true"
-              @applyPalette="data => setPaletteCustom(data)"
               :disabled="switchInProgress"
+              @applyPalette="data => setPaletteCustom(data)"
             />
           </template>
           <template v-else-if="customThemeVersion === 'v2'">

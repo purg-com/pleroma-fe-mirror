@@ -1,4 +1,3 @@
-
 const DIRECTION_LEFT = [-1, 0]
 const DIRECTION_RIGHT = [1, 0]
 const DIRECTION_UP = [0, -1]
