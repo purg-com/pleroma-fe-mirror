@@ -10,119 +10,150 @@
     >
       <template #content>
         <div class="dropdown-menu">
-          <span v-if="canGrantRole">
-            <button
-              class="menu-item dropdown-item menu-item"
-              @click="toggleRight(&quot;admin&quot;)"
-            >
-              {{ $t(!!user.rights.admin ? 'user_card.admin_menu.revoke_admin' : 'user_card.admin_menu.grant_admin') }}
-            </button>
-            <button
-              class="menu-item dropdown-item menu-item"
-              @click="toggleRight(&quot;moderator&quot;)"
-            >
-              {{ $t(!!user.rights.moderator ? 'user_card.admin_menu.revoke_moderator' : 'user_card.admin_menu.grant_moderator') }}
-            </button>
+          <template v-if="canGrantRole">
+            <div class="menu-item dropdown-item -icon-space">
+              <button
+                class="main-button"
+                @click="toggleRight(&quot;admin&quot;)"
+              >
+                {{ $t(!!user.rights.admin ? 'user_card.admin_menu.revoke_admin' : 'user_card.admin_menu.grant_admin') }}
+              </button>
+            </div>
+            <div class="menu-item dropdown-item -icon-space">
+              <button
+                class="main-button"
+                @click="toggleRight(&quot;moderator&quot;)"
+              >
+                {{ $t(!!user.rights.moderator ? 'user_card.admin_menu.revoke_moderator' : 'user_card.admin_menu.grant_moderator') }}
+              </button>
+            </div>
             <div
               v-if="canChangeActivationState || canDeleteAccount"
               role="separator"
               class="dropdown-divider"
             />
-          </span>
-          <button
-            v-if="canChangeActivationState"
-            class="menu-item dropdown-item menu-item"
-            @click="toggleActivationStatus()"
-          >
-            {{ $t(!!user.deactivated ? 'user_card.admin_menu.activate_account' : 'user_card.admin_menu.deactivate_account') }}
-          </button>
-          <button
-            v-if="canDeleteAccount"
-            class="menu-item dropdown-item menu-item"
-            @click="deleteUserDialog(true)"
-          >
-            {{ $t('user_card.admin_menu.delete_account') }}
-          </button>
+          </template>
           <div
-            v-if="canUseTagPolicy"
-            role="separator"
-            class="dropdown-divider"
-          />
-          <span v-if="canUseTagPolicy">
+            v-if="canChangeActivationState"
+            class="menu-item dropdown-item -icon-space"
+          >
             <button
-              class="menu-item dropdown-item menu-item"
-              @click="toggleTag(tags.FORCE_NSFW)"
+              class="main-button"
+              @click="toggleActivationStatus()"
             >
-              <span
-                class="input menu-checkbox"
-                :class="{ 'menu-checkbox-checked': hasTag(tags.FORCE_NSFW) }"
-              />
-              {{ $t('user_card.admin_menu.force_nsfw') }}
+              {{ $t(!!user.deactivated ? 'user_card.admin_menu.activate_account' : 'user_card.admin_menu.deactivate_account') }}
             </button>
+          </div>
+          <div
+            v-if="canDeleteAccount"
+            class="menu-item dropdown-item -icon-space"
+          >
             <button
-              class="menu-item dropdown-item menu-item"
-              @click="toggleTag(tags.STRIP_MEDIA)"
+              class="main-button"
+              @click="deleteUserDialog(true)"
             >
-              <span
-                class="input menu-checkbox"
-                :class="{ 'menu-checkbox-checked': hasTag(tags.STRIP_MEDIA) }"
-              />
-              {{ $t('user_card.admin_menu.strip_media') }}
+              {{ $t('user_card.admin_menu.delete_account') }}
             </button>
-            <button
-              class="menu-item dropdown-item menu-item"
-              @click="toggleTag(tags.FORCE_UNLISTED)"
-            >
-              <span
-                class="input menu-checkbox"
-                :class="{ 'menu-checkbox-checked': hasTag(tags.FORCE_UNLISTED) }"
-              />
-              {{ $t('user_card.admin_menu.force_unlisted') }}
-            </button>
-            <button
-              class="menu-item dropdown-item menu-item"
-              @click="toggleTag(tags.SANDBOX)"
-            >
-              <span
-                class="input menu-checkbox"
-                :class="{ 'menu-checkbox-checked': hasTag(tags.SANDBOX) }"
-              />
-              {{ $t('user_card.admin_menu.sandbox') }}
-            </button>
-            <button
+          </div>
+          <template v-if="canUseTagPolicy">
+            <div
+              role="separator"
+              class="dropdown-divider"
+            />
+            <div class="menu-item dropdown-item -icon">
+              <button
+                class="main-button"
+                @click="toggleTag(tags.FORCE_NSFW)"
+              >
+                <span
+                  class="input menu-checkbox"
+                  :class="{ 'menu-checkbox-checked': hasTag(tags.FORCE_NSFW) }"
+                />
+                {{ $t('user_card.admin_menu.force_nsfw') }}
+              </button>
+            </div>
+            <div class="menu-item dropdown-item -icon">
+              <button
+                class="main-button"
+                @click="toggleTag(tags.STRIP_MEDIA)"
+              >
+                <span
+                  class="input menu-checkbox"
+                  :class="{ 'menu-checkbox-checked': hasTag(tags.STRIP_MEDIA) }"
+                />
+                {{ $t('user_card.admin_menu.strip_media') }}
+              </button>
+            </div>
+            <div class="menu-item dropdown-item -icon">
+              <button
+                class="main-button"
+                @click="toggleTag(tags.FORCE_UNLISTED)"
+              >
+                <span
+                  class="input menu-checkbox"
+                  :class="{ 'menu-checkbox-checked': hasTag(tags.FORCE_UNLISTED) }"
+                />
+                {{ $t('user_card.admin_menu.force_unlisted') }}
+              </button>
+            </div>
+            <div class="menu-item dropdown-item -icon">
+              <button
+                class="main-button"
+                @click="toggleTag(tags.SANDBOX)"
+              >
+                <span
+                  class="input menu-checkbox"
+                  :class="{ 'menu-checkbox-checked': hasTag(tags.SANDBOX) }"
+                />
+                {{ $t('user_card.admin_menu.sandbox') }}
+              </button>
+            </div>
+            <div
               v-if="user.is_local"
-              class="menu-item dropdown-item menu-item"
-              @click="toggleTag(tags.DISABLE_REMOTE_SUBSCRIPTION)"
+              class="menu-item dropdown-item -icon"
             >
-              <span
-                class="input menu-checkbox"
-                :class="{ 'menu-checkbox-checked': hasTag(tags.DISABLE_REMOTE_SUBSCRIPTION) }"
-              />
-              {{ $t('user_card.admin_menu.disable_remote_subscription') }}
-            </button>
-            <button
+              <button
+                class="main-button"
+                @click="toggleTag(tags.DISABLE_REMOTE_SUBSCRIPTION)"
+              >
+                <span
+                  class="input menu-checkbox"
+                  :class="{ 'menu-checkbox-checked': hasTag(tags.DISABLE_REMOTE_SUBSCRIPTION) }"
+                />
+                {{ $t('user_card.admin_menu.disable_remote_subscription') }}
+              </button>
+            </div>
+            <div
               v-if="user.is_local"
-              class="menu-item dropdown-item menu-item"
-              @click="toggleTag(tags.DISABLE_ANY_SUBSCRIPTION)"
+              class="menu-item dropdown-item -icon"
             >
-              <span
-                class="input menu-checkbox"
-                :class="{ 'menu-checkbox-checked': hasTag(tags.DISABLE_ANY_SUBSCRIPTION) }"
-              />
-              {{ $t('user_card.admin_menu.disable_any_subscription') }}
-            </button>
-            <button
+              <button
+                class="main-button"
+                @click="toggleTag(tags.DISABLE_ANY_SUBSCRIPTION)"
+              >
+                <span
+                  class="input menu-checkbox"
+                  :class="{ 'menu-checkbox-checked': hasTag(tags.DISABLE_ANY_SUBSCRIPTION) }"
+                />
+                {{ $t('user_card.admin_menu.disable_any_subscription') }}
+              </button>
+            </div>
+            <div
               v-if="user.is_local"
-              class="menu-item dropdown-item menu-item"
-              @click="toggleTag(tags.QUARANTINE)"
+              class="menu-item dropdown-item -icon"
             >
-              <span
-                class="input menu-checkbox"
-                :class="{ 'menu-checkbox-checked': hasTag(tags.QUARANTINE) }"
-              />
-              {{ $t('user_card.admin_menu.quarantine') }}
-            </button>
-          </span>
+              <button
+                class="main-button"
+                @click="toggleTag(tags.QUARANTINE)"
+              >
+                <span
+                  class="input menu-checkbox"
+                  :class="{ 'menu-checkbox-checked': hasTag(tags.QUARANTINE) }"
+                />
+                {{ $t('user_card.admin_menu.quarantine') }}
+              </button>
+            </div>
+          </template>
         </div>
       </template>
       <template #trigger>

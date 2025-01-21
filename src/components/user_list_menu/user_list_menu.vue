@@ -2,34 +2,39 @@
   <div class="UserListMenu">
     <Popover
       trigger="hover"
-      placement="left"
+      placement="right"
+      :trigger-attrs="triggerAttrs"
       remove-padding
     >
       <template #content>
         <div class="dropdown-menu">
-          <button
+          <div
             v-for="list in lists"
             :key="list.id"
-            class="menu-item dropdown-item"
-            @click="toggleList(list.id)"
+            class="menu-item dropdown-item -icon"
           >
-            <span
-              class="input menu-checkbox"
-              :class="{ 'menu-checkbox-checked': list.inList }"
-            />
-            {{ list.title }}
-          </button>
+            <button
+              class="main-button"
+              @click="toggleList(list.id)"
+            >
+              <span
+                class="input menu-checkbox"
+                :class="{ 'menu-checkbox-checked': list.inList }"
+              />
+              {{ list.title }}
+            </button>
+          </div>
         </div>
       </template>
       <template #trigger>
-        <button class="menu-item dropdown-item -has-submenu">
+        <span class="main-button">
           {{ $t('lists.manage_lists') }}
           <FAIcon
             class="chevron-icon"
             size="lg"
             icon="chevron-right"
           />
-        </button>
+        </span>
       </template>
     </Popover>
   </div>

@@ -1,5 +1,16 @@
 import { toRaw } from 'vue'
-import { isEqual, cloneDeep, set, get, clamp, flatten, groupBy, findLastIndex, takeRight, uniqWith } from 'lodash'
+import {
+  isEqual,
+  cloneDeep,
+  set,
+  get,
+  clamp,
+  flatten,
+  groupBy,
+  findLastIndex,
+  takeRight,
+  uniqWith
+} from 'lodash'
 import { CURRENT_UPDATE_COUNTER } from 'src/components/update_notification/update_notification.js'
 
 export const VERSION = 1
@@ -26,6 +37,7 @@ export const defaultState = {
       collapseNav: false
     },
     collections: {
+      pinnedStatusActions: ['reply', 'retweet', 'favorite', 'emoji'],
       pinnedNavItems: ['home', 'dms', 'chats']
     }
   },
@@ -77,7 +89,7 @@ const _verifyPrefs = (state) => {
   })
 }
 
-export const _getRecentData = (cache, live) => {
+export const _getRecentData = (cache, live, isTest) => {
   const result = { recent: null, stale: null, needUpload: false }
   const cacheValid = _checkValidity(cache || {})
   const liveValid = _checkValidity(live || {})
@@ -110,6 +122,23 @@ export const _getRecentData = (cache, live) => {
     console.debug('Both sources are invalid, start from scratch')
     result.needUpload = true
   }
+
+  const merge = (a, b) => ({
+    _version: a._version ?? b._version,
+    _timestamp: a._timestamp ?? b._timestamp,
+    needUpload: b.needUpload ?? a.needUpload,
+    prefsStorage: {
+      ...a.prefsStorage,
+      ...b.prefsStorage
+    },
+    flagStorage: {
+      ...a.flagStorage,
+      ...b.flagStorage
+    }
+  })
+  result.recent = isTest ? result.recent : (result.recent && merge(defaultState, result.recent))
+  result.stale = isTest ? result.stale : (result.stale && merge(defaultState, result.stale))
+
   return result
 }
 
@@ -281,7 +310,7 @@ export const mutations = {
   clearServerSideStorage (state, userData) {
     state = { ...cloneDeep(defaultState) }
   },
-  setServerSideStorage (state, userData) {
+  setServerSideStorage (state, userData, test) {
     const live = userData.storage
     state.raw = live
     let cache = state.cache
@@ -292,7 +321,7 @@ export const mutations = {
 
     cache = _doMigrations(cache)
 
-    let { recent, stale, needsUpload } = _getRecentData(cache, live)
+    let { recent, stale, needUpload } = _getRecentData(cache, live)
 
     const userNew = userData.created_at > NEW_USER_DATE
     const flagsTemplate = userNew ? newUserFlags : defaultState.flagStorage
@@ -306,7 +335,7 @@ export const mutations = {
       })
     }
 
-    if (!needsUpload && recent && stale) {
+    if (!needUpload && recent && stale) {
       console.debug('Checking if data needs merging...')
       // discarding timestamps and versions
       const { _timestamp: _0, _version: _1, ...recentData } = recent
@@ -335,7 +364,7 @@ export const mutations = {
     recent.flagStorage = { ...flagsTemplate, ...totalFlags }
     recent.prefsStorage = { ...defaultState.prefsStorage, ...totalPrefs }
 
-    state.dirty = dirty || needsUpload
+    state.dirty = dirty || needUpload
     state.cache = recent
     // set local timestamp to smaller one if we don't have any changes
     if (stale && recent && !state.dirty) {

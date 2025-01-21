@@ -69,36 +69,42 @@
           </template>
           <template #content="{close}">
             <div class="dropdown-menu">
-              <button
-                class="menu-item dropdown-item dropdown-item-icon"
-                @click.prevent="backup"
-                @click="close"
-              >
-                <FAIcon
-                  icon="file-download"
-                  fixed-width
-                /><span>{{ $t("settings.file_export_import.backup_settings") }}</span>
-              </button>
-              <button
-                class="menu-item dropdown-item dropdown-item-icon"
-                @click.prevent="backupWithTheme"
-                @click="close"
-              >
-                <FAIcon
-                  icon="file-download"
-                  fixed-width
-                /><span>{{ $t("settings.file_export_import.backup_settings_theme") }}</span>
-              </button>
-              <button
-                class="menu-item dropdown-item dropdown-item-icon"
-                @click.prevent="restore"
-                @click="close"
-              >
-                <FAIcon
-                  icon="file-upload"
-                  fixed-width
-                /><span>{{ $t("settings.file_export_import.restore_settings") }}</span>
-              </button>
+              <div class="menu-item dropdown-item -icon">
+                <button
+                  class="main-button"
+                  @click.prevent="backup"
+                  @click="close"
+                >
+                  <FAIcon
+                    icon="file-download"
+                    fixed-width
+                  /><span>{{ $t("settings.file_export_import.backup_settings") }}</span>
+                </button>
+              </div>
+              <div class="menu-item dropdown-item -icon">
+                <button
+                  class="main-button"
+                  @click.prevent="backupWithTheme"
+                  @click="close"
+                >
+                  <FAIcon
+                    icon="file-download"
+                    fixed-width
+                  /><span>{{ $t("settings.file_export_import.backup_settings_theme") }}</span>
+                </button>
+              </div>
+              <div class="menu-item dropdown-item -icon">
+                <button
+                  class="main-button"
+                  @click.prevent="restore"
+                  @click="close"
+                >
+                  <FAIcon
+                    icon="file-upload"
+                    fixed-width
+                  /><span>{{ $t("settings.file_export_import.restore_settings") }}</span>
+                </button>
+              </div>
             </div>
           </template>
         </Popover>

@@ -1,8 +1,3 @@
-import ReplyButton from '../reply_button/reply_button.vue'
-import FavoriteButton from '../favorite_button/favorite_button.vue'
-import ReactButton from '../react_button/react_button.vue'
-import RetweetButton from '../retweet_button/retweet_button.vue'
-import ExtraButtons from '../extra_buttons/extra_buttons.vue'
 import PostStatusForm from '../post_status_form/post_status_form.vue'
 import UserAvatar from '../user_avatar/user_avatar.vue'
 import AvatarList from '../avatar_list/avatar_list.vue'
@@ -16,6 +11,7 @@ import EmojiReactions from '../emoji_reactions/emoji_reactions.vue'
 import UserLink from '../user_link/user_link.vue'
 import MentionsLine from 'src/components/mentions_line/mentions_line.vue'
 import MentionLink from 'src/components/mention_link/mention_link.vue'
+import StatusActionButtons from 'src/components/status_action_buttons/status_action_buttons.vue'
 import generateProfileLink from 'src/services/user_profile_link_generator/user_profile_link_generator'
 import { highlightClass, highlightStyle } from '../../services/user_highlighter/user_highlighter.js'
 import { muteWordHits } from '../../services/status_parser/status_parser.js'
@@ -102,11 +98,6 @@ const controlledOrUncontrolledSet = (obj, name, val) => {
 const Status = {
   name: 'Status',
   components: {
-    ReplyButton,
-    FavoriteButton,
-    ReactButton,
-    RetweetButton,
-    ExtraButtons,
     PostStatusForm,
     UserAvatar,
     AvatarList,
@@ -119,7 +110,8 @@ const Status = {
     MentionLink,
     MentionsLine,
     UserPopover,
-    UserLink
+    UserLink,
+    StatusActionButtons
   },
   props: [
     'statusoid',

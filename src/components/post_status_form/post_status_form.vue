@@ -336,7 +336,7 @@
               >
                 <button
                   v-if="!hideDraft || !disableDraft"
-                  class="menu-item dropdown-item dropdown-item-icon"
+                  class="menu-item dropdown-item"
                   role="menu"
                   :disabled="!safeToSaveDraft && saveable"
                   :class="{ disabled: !safeToSaveDraft }"

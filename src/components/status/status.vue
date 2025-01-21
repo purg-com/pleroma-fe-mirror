@@ -535,37 +535,12 @@
             :status="status"
           />
 
-          <div
+          <StatusActionButtons
             v-if="!noHeading && !isPreview"
-            class="status-actions"
-          >
-            <reply-button
-              :replying="replying"
-              :status="status"
-              @toggle="toggleReplying"
-            />
-            <retweet-button
-              :visibility="status.visibility"
-              :logged-in="loggedIn"
-              :status="status"
-              @click="$emit('interacted')"
-            />
-            <favorite-button
-              :logged-in="loggedIn"
-              :status="status"
-              @click="$emit('interacted')"
-            />
-            <ReactButton
-              v-if="loggedIn"
-              :status="status"
-              @click="$emit('interacted')"
-            />
-            <extra-buttons
-              :status="status"
-              @onError="showError"
-              @onSuccess="clearError"
-            />
-          </div>
+            :status="status"
+            :replying="replying"
+            @toggleReplying="toggleReplying"
+          />
         </div>
       </div>
       <div
@@ -583,12 +558,6 @@
           <div class="deleted-text">
             {{ $t('status.status_deleted') }}
           </div>
-          <reply-button
-            v-if="replying"
-            :replying="replying"
-            :status="status"
-            @toggle="toggleReplying"
-          />
         </div>
       </div>
       <div
