@@ -102,6 +102,9 @@ export default {
           disabled: this.button.interactive ? !this.button.interactive(this.funcArg) : false
         }
       ]
+    },
+    remoteInteractionLink () {
+      return this.$store.getters.remoteInteractionLink({ statusId: this.status.id })
     }
   },
   methods: {
@@ -125,9 +128,6 @@ export default {
         }, 500)
         close()
       }
-    },
-    getRemoteInteractionLink () {
-      return this.$store.getters.remoteInteractionLink({ statusId: this.status.id })
     }
   }
 }

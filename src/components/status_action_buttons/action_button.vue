@@ -12,14 +12,14 @@
       target="_blank"
       :tabindex="0"
       :disabled="buttonClass.disabled"
-      :href="getComponent(button) == 'a' ? button.link?.(funcArg) || getRemoteInteractionLink : undefined"
+      :href="getComponent(button) == 'a' ? button.link?.(funcArg) || remoteInteractionLink : undefined"
       @click="doActionWrap(button, close)"
     >
       <FALayers>
         <FAIcon
           class="fa-scale-110"
           :icon="button.icon(funcArg)"
-          :spin="!extra && button.animated?.() && animationState"
+          :spin="!extra && getComponent(button) == 'button' && button.animated?.() && animationState"
           :style="{ '--fa-animation-duration': '750ms' }"
           fixed-width
         />

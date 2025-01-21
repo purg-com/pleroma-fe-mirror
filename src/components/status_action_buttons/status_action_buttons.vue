@@ -55,7 +55,10 @@
             class="dropdown-menu extra-action-buttons"
             role="menu"
           >
-            <div class="menu-item dropdown-item extra-action -icon">
+            <div
+              v-if="currentUser"
+              class="menu-item dropdown-item extra-action -icon"
+            >
               <button
                 class="main-button"
                 role="menuitem"
