@@ -243,6 +243,14 @@
         <h3>{{ $t('settings.attachments') }}</h3>
         <li>
           <BooleanSetting
+            path="imageCompression"
+            expert="1"
+          >
+            {{ $t('settings.image_compression') }}
+          </BooleanSetting>
+        </li>
+        <li>
+          <BooleanSetting
             path="useContainFit"
             expert="1"
           >

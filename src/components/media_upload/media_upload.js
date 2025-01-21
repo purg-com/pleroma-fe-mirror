@@ -34,6 +34,11 @@ const mediaUpload = {
         return file
       }
 
+      // Skip if image compression is disabled
+      if (!this.$store.getters.mergedConfig.imageCompression) {
+        return file
+      }
+
       // For PNGs, check if animated
       if (file.type === 'image/png') {
         const isAnimated = await this.isAnimatedPng(file)

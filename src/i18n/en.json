@@ -439,6 +439,7 @@
     "allow_following_move": "Allow auto-follow when following account moves",
     "attachmentRadius": "Attachments",
     "attachments": "Attachments",
+    "image_compression": "Compress images before uploading",
     "avatar": "Avatar",
     "avatarAltRadius": "Avatars (notifications)",
     "avatarRadius": "Avatars",

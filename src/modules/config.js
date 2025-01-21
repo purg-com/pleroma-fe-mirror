@@ -190,7 +190,8 @@ export const defaultState = {
   unsavedPostAction: undefined, // instance default
   autoSaveDraft: undefined, // instance default
   useAbsoluteTimeFormat: undefined, // instance default
-  absoluteTimeFormatMinAge: undefined // instance default
+  absoluteTimeFormatMinAge: undefined, // instance default
+  imageCompression: true
 }
 
 // caching the instance default properties
