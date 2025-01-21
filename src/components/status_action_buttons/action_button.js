@@ -125,6 +125,9 @@ export default {
         }, 500)
         close()
       }
+    },
+    getRemoteInteractionLink () {
+      return this.$store.getters.remoteInteractionLink({ statusId: this.status.id })
     }
   }
 }

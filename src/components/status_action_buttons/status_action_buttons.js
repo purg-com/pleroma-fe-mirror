@@ -129,9 +129,6 @@ const StatusActionButtons = {
         '-dropdown': button.dropdown?.(),
         '-active': button.active?.(this.funcArg)
       }
-    },
-    getRemoteInteractionLink () {
-      return this.$store.getters.remoteInteractionLink({ statusId: this.status.id })
     }
   }
 }

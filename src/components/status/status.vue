@@ -558,12 +558,6 @@
           <div class="deleted-text">
             {{ $t('status.status_deleted') }}
           </div>
-          <reply-button
-            v-if="replying"
-            :replying="replying"
-            :status="status"
-            @toggle="toggleReplying"
-          />
         </div>
       </div>
       <div
