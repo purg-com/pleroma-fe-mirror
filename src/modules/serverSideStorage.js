@@ -9,7 +9,8 @@ import {
   groupBy,
   findLastIndex,
   takeRight,
-  uniqWith
+  uniqWith,
+  merge as _merge
 } from 'lodash'
 import { CURRENT_UPDATE_COUNTER } from 'src/components/update_notification/update_notification.js'
 
@@ -127,15 +128,10 @@ export const _getRecentData = (cache, live, isTest) => {
     _version: a._version ?? b._version,
     _timestamp: a._timestamp ?? b._timestamp,
     needUpload: b.needUpload ?? a.needUpload,
-    prefsStorage: {
-      ...a.prefsStorage,
-      ...b.prefsStorage
-    },
-    flagStorage: {
-      ...a.flagStorage,
-      ...b.flagStorage
-    }
+    prefsStorage: _merge(a.prefsStorage, b.prefsStorage),
+    flagStorage: _merge(a.flagStorage, b.flagStorage)
   })
+  console.log(result.recent)
   result.recent = isTest ? result.recent : (result.recent && merge(defaultState, result.recent))
   result.stale = isTest ? result.stale : (result.stale && merge(defaultState, result.stale))
 
