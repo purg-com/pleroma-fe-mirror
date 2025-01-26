@@ -51,9 +51,6 @@ const StatusActionButtons = {
     currentUser () {
       return this.$store.state.users.currentUser
     },
-    hideCustomEmoji () {
-      return !this.$store.state.instance.pleromaCustomEmojiReactionsAvailable
-    },
     funcArg () {
       return {
         status: this.status,
@@ -71,7 +68,6 @@ const StatusActionButtons = {
       return {
         title: this.$t('status.more_actions'),
         'aria-controls': `popup-menu-${this.randomSeed}`,
-        'aria-expanded': this.expanded,
         'aria-haspopup': 'menu'
       }
     }
