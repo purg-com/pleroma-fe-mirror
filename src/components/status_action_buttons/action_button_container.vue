@@ -2,7 +2,7 @@
   <div>
     <Popover
       v-if="button.dropdown?.()"
-      trigger="hover"
+      trigger="click"
       :offset="{ y: 5 }"
       :placement="$attrs.extra ? 'right' : 'top'"
     >

@@ -50,12 +50,6 @@
       >
         {{ $t(button.label(funcArg)) }}
       </span>
-      <span
-        v-if="!extra && button.counter?.(funcArg) > 0"
-        class="action-counter"
-      >
-        {{ button.counter?.(funcArg) }}
-      </span>
       <FAIcon
         v-if="button.dropdown?.()"
         class="chevron-icon"
@@ -65,14 +59,20 @@
       />
     </component>
     <span
+      v-if="!extra && button.counter?.(funcArg) > 0"
+      class="action-counter"
+    >
+      {{ button.counter?.(funcArg) }}
+    </span>
+    <span
       v-if="!extra && button.name === 'bookmark'"
       class="separator"
     />
     <Popover
       v-if="button.name === 'bookmark'"
-      trigger="hover"
+      :trigger="extra ? 'hover' : 'click'"
       :placement="extra ? 'right' : 'top'"
-      :offset="{ y: 5 }"
+      :offset="extra ? { x: 10 } : { y: 10 }"
       :trigger-attrs="{ class: 'extra-button' }"
     >
       <template #trigger>
