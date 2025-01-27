@@ -236,8 +236,8 @@ export const getTextColor = function (bg, text, preserve) {
 
   let contrast = getContrastRatio(bg, text)
   const result = convert(rgb2hex(workColor)).hsl
-  const delta = result.l > 50 ? 1 : -1
-  const multiplier = 10
+  const delta = result.l >= 50 ? 1 : -1
+  const multiplier = 1
   while (contrast < 4.5 && result.l > 20 && result.l < 80) {
     result.l += delta * multiplier
     result.l = Math.min(100, Math.max(0, result.l))
