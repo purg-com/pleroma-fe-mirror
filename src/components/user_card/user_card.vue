@@ -311,7 +311,7 @@
       />
     </div>
     <teleport to="#modal">
-      <mute-confirm
+      <MuteConfirm
         ref="confirmation"
         type="user"
         :user="user"

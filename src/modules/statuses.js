@@ -549,11 +549,11 @@ const statuses = {
       rootState.api.backendInteractor.unpinOwnStatus({ id: statusId })
         .then((status) => dispatch('addNewStatuses', { statuses: [status] }))
     },
-    muteConversation ({ rootState, commit }, statusId) {
+    muteConversation ({ rootState, commit }, { id: statusId }) {
       return rootState.api.backendInteractor.muteConversation({ id: statusId })
         .then((status) => commit('setMutedStatus', status))
     },
-    unmuteConversation ({ rootState, commit }, statusId) {
+    unmuteConversation ({ rootState, commit }, { id: statusId }) {
       return rootState.api.backendInteractor.unmuteConversation({ id: statusId })
         .then((status) => commit('setMutedStatus', status))
     },
