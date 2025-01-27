@@ -249,6 +249,16 @@
               {{ $t('settings.absolute_time_format_min_age') }}
             </UnitSetting>
           </li>
+          <li>
+            <ChoiceSetting
+              id="absoluteTime12h"
+              path="absoluteTime12h"
+              :options="absoluteTime12hOptions"
+              :expert="1"
+            >
+              {{ $t('settings.absolute_time_format_12h') }}
+            </ChoiceSetting>
+          </li>
         </ul>
         <h3>{{ $t('settings.attachments') }}</h3>
         <li>

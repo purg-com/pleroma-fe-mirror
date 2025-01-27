@@ -131,6 +131,7 @@ const defaultState = {
   autoSaveDraft: false,
   useAbsoluteTimeFormat: false,
   absoluteTimeFormatMinAge: '0d',
+  absoluteTime12h: '24h',
 
   // Nasty stuff
   customEmoji: [],

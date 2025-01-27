@@ -28,6 +28,9 @@ export default {
       }
       return DateUtils.durationStrToMs(this.$store.getters.mergedConfig.absoluteTimeFormatMinAge) <= this.relativeTimeMs
     },
+    time12hFormat () {
+      return this.$store.getters.mergedConfig.absoluteTimeFormat12h === '12h'
+    },
     browserLocale () {
       return localeService.internalToBrowserLocale(this.$i18n.locale)
     },
@@ -57,22 +60,26 @@ export default {
         if (DateUtils.isSameDay(this.timeAsDate, now)) {
           return new Intl.DateTimeFormat(this.browserLocale, {
             minute: 'numeric',
-            hour: 'numeric'
+            hour: 'numeric',
+            hour12: this.time12hFormat
           })
         } else if (DateUtils.isSameMonth(this.timeAsDate, now)) {
           return new Intl.DateTimeFormat(this.browserLocale, {
             month: 'short',
-            day: 'numeric'
+            day: 'numeric',
+            hour12: this.time12hFormat
           })
         } else if (DateUtils.isSameYear(this.timeAsDate, now)) {
           return new Intl.DateTimeFormat(this.browserLocale, {
             month: 'short',
-            day: 'numeric'
+            day: 'numeric',
+            hour12: this.time12hFormat
           })
         } else {
           return new Intl.DateTimeFormat(this.browserLocale, {
             year: 'numeric',
-            month: 'short'
+            month: 'short',
+            hour12: this.time12hFormat
           })
         }
       })()

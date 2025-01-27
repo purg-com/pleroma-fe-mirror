@@ -193,6 +193,7 @@ export const defaultState = {
   autoSaveDraft: undefined, // instance default
   useAbsoluteTimeFormat: undefined, // instance default
   absoluteTimeFormatMinAge: undefined, // instance default
+  absoluteTime12h: undefined, // instance default
   imageCompression: true
 }
 
