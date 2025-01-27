@@ -3,7 +3,7 @@ import utf8 from 'utf8'
 export const newExporter = ({
   filename = 'data',
   mime = 'application/json',
-  extension = '.json',
+  extension = 'json',
   getExportedObject
 }) => ({
   exportData () {
