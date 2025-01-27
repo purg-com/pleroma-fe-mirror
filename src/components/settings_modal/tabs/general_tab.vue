@@ -464,22 +464,6 @@
         </li>
         <li>
           <BooleanSetting
-            path="alwaysShowNewPostButton"
-            expert="1"
-          >
-            {{ $t('settings.always_show_post_button') }}
-          </BooleanSetting>
-        </li>
-        <li>
-          <BooleanSetting
-            path="autohideFloatingPostButton"
-            expert="1"
-          >
-            {{ $t('settings.autohide_floating_post_button') }}
-          </BooleanSetting>
-        </li>
-        <li>
-          <BooleanSetting
             path="padEmoji"
             expert="1"
           >
