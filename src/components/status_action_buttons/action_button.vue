@@ -9,6 +9,7 @@
       :class="buttonInnerClass"
       role="menuitem"
       type="button"
+      :title="$t(button.label(funcArg))"
       target="_blank"
       :tabindex="0"
       :disabled="buttonClass.disabled"
