@@ -7,10 +7,12 @@
         label: 'nav.all_bookmarks',
         icon: 'bookmark'
       }"
+      :show-pin="showPin"
     />
     <NavigationEntry
       v-for="item in folders"
       :key="item.id"
+      :show-pin="showPin"
       :item="item"
     />
   </ul>
