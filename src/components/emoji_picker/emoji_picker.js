@@ -162,7 +162,6 @@ const EmojiPicker = {
       } else {
         emojiSizeReal = emojiSizeValue
       }
-      console.log(emojiSizeReal)
 
       const fullEmojiSize = emojiSizeReal + (2 * 0.2 * fontSizeMultiplier * 14)
       this.emojiSize = fullEmojiSize
@@ -319,7 +318,6 @@ const EmojiPicker = {
       return this.emojiSize
     },
     itemPerRow () {
-      console.log('CALC', this.emojiSize, this.width)
       return this.width ? Math.floor(this.width / this.emojiSize) : 6
     },
     activeGroupView () {

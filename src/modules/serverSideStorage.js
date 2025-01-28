@@ -131,7 +131,6 @@ export const _getRecentData = (cache, live, isTest) => {
     prefsStorage: _merge(a.prefsStorage, b.prefsStorage),
     flagStorage: _merge(a.flagStorage, b.flagStorage)
   })
-  console.log(result.recent)
   result.recent = isTest ? result.recent : (result.recent && merge(defaultState, result.recent))
   result.stale = isTest ? result.stale : (result.stale && merge(defaultState, result.stale))
 

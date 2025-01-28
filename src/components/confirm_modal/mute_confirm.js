@@ -61,9 +61,7 @@ export default {
   },
   methods: {
     optionallyPrompt () {
-      console.log('Triggered')
       if (this.shouldConfirm) {
-        console.log('SHAWN!!')
         this.show()
       } else {
         this.doMute()

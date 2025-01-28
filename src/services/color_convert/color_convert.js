@@ -1,7 +1,7 @@
 import { invertLightness, contrastRatio, convert } from 'chromatism'
 
 // useful for visualizing color when debugging
-export const consoleColor = (color) => console.log('%c##########', 'background: ' + color + '; color: ' + color)
+// const consoleColor = (color) => console.debug('%c##########', 'background: ' + color + '; color: ' + color)
 
 /**
  * Convert r, g, b values into hex notation. All components are [0-255]

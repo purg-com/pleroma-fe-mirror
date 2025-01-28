@@ -24,6 +24,6 @@ export const getBookmarkFolderEntries = state => state.bookmarkFolders.allFolder
   routeObject: { name: 'bookmark-folder', params: { id: folder.id } },
   labelRaw: folder.name,
   iconEmoji: folder.emoji,
-  iconEmojiUrl: console.log(folder) || folder.emoji_url,
+  iconEmojiUrl: folder.emoji_url,
   iconLetter: folder.name[0]
 }))

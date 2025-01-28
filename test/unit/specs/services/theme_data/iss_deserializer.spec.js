@@ -21,17 +21,17 @@ describe('ISS (de)serialization', () => {
   const onlyComponent = componentsContext('./components/panel_header.style.js').default
   it.only(`(De)serialization of component ${onlyComponent.name} works`, () => {
     const normalized = onlyComponent.defaultRules.map(x => ({ component: onlyComponent.name, ...x }))
-    console.log('BEGIN INPUT ================')
-    console.log(normalized)
-    console.log('END INPUT ==================')
+    console.debug('BEGIN INPUT ================')
+    console.debug(normalized)
+    console.debug('END INPUT ==================')
     const serialized = serialize(normalized)
-    console.log('BEGIN SERIAL ===============')
-    console.log(serialized)
-    console.log('END SERIAL =================')
+    console.debug('BEGIN SERIAL ===============')
+    console.debug(serialized)
+    console.debug('END SERIAL =================')
     const deserialized = deserialize(serialized)
-    console.log('BEGIN DESERIALIZED =========')
-    console.log(serialized)
-    console.log('END DESERIALIZED ===========')
+    console.debug('BEGIN DESERIALIZED =========')
+    console.debug(serialized)
+    console.debug('END DESERIALIZED ===========')
 
     // for some reason comparing objects directly fails the assert
     expect(JSON.stringify(deserialized, null, 2)).to.equal(JSON.stringify(normalized, null, 2))

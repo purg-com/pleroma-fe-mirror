@@ -280,7 +280,6 @@ const Status = {
           case 'nsfw': return this.$t('status.sensitive_muted')
         }
       }
-      console.log(this.status)
       if (this.muteReasons.length > 1) {
         return this.$t(
           'status.multi_reason_mute',
@@ -306,7 +305,7 @@ const Status = {
       const relationshipReblog = reblog && this.$store.getters.relationship(reblog.user.id)
       return (status.muted && !status.thread_muted) ||
         // Reprööt of a muted post according to BE
-        (reblog && reblog.muted) ||
+        (reblog && reblog.muted && !reblog.thread_muted) ||
         // Muted user
         relationship.muting ||
         // Muted user of a reprööt
