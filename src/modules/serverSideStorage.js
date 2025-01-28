@@ -310,7 +310,7 @@ export const mutations = {
     state.raw = live
     let cache = state.cache
     if (cache && cache._user !== userData.fqn) {
-      console.warn('cache belongs to another user! reinitializing local cache!')
+      console.warn('Cache belongs to another user! reinitializing local cache!')
       cache = null
     }
 
