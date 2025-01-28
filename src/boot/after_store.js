@@ -174,8 +174,7 @@ const getTOS = async ({ store }) => {
       throw (res)
     }
   } catch (e) {
-    console.warn("Can't load TOS")
-    console.warn(e)
+    console.warn("Can't load TOS\n", e)
   }
 }
 
@@ -189,8 +188,7 @@ const getInstancePanel = async ({ store }) => {
       throw (res)
     }
   } catch (e) {
-    console.warn("Can't load instance panel")
-    console.warn(e)
+    console.warn("Can't load instance panel\n", e)
   }
 }
 
@@ -220,8 +218,7 @@ const getStickers = async ({ store }) => {
       throw (res)
     }
   } catch (e) {
-    console.warn("Can't load stickers")
-    console.warn(e)
+    console.warn("Can't load stickers\n", e)
   }
 }
 

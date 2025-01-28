@@ -315,8 +315,7 @@ const instance = {
         }, {})
         commit('setInstanceOption', { name: 'emoji', value: injectRegionalIndicators(emoji) })
       } catch (e) {
-        console.warn("Can't load static emoji")
-        console.warn(e)
+        console.warn("Can't load static emoji\n", e)
       }
     },
 
@@ -383,8 +382,7 @@ const instance = {
           throw (res)
         }
       } catch (e) {
-        console.warn("Can't load custom emojis")
-        console.warn(e)
+        console.warn("Can't load custom emojis\n", e)
       }
     },
     fetchEmoji ({ dispatch, state }) {
@@ -405,8 +403,7 @@ const instance = {
         })
         commit('setKnownDomains', result)
       } catch (e) {
-        console.warn("Can't load known domains")
-        console.warn(e)
+        console.warn("Can't load known domains\n", e)
       }
     }
   }
