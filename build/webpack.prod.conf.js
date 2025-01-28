@@ -50,7 +50,8 @@ var webpackConfig = merge(baseWebpackConfig, {
       'COMMIT_HASH': JSON.stringify(commitHash),
       'DEV_OVERRIDES': JSON.stringify(undefined),
       '__VUE_OPTIONS_API__': true,
-      '__VUE_PROD_DEVTOOLS__': false
+      '__VUE_PROD_DEVTOOLS__': false,
+      '__VUE_PROD_HYDRATION_MISMATCH_DETAILS__': false
     }),
     // extract css into its own file
     new MiniCssExtractPlugin({
