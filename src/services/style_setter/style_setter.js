@@ -95,9 +95,10 @@ export const tryLoadCache = async () => {
   if (!data) return null
   let cache
   try {
-    const decoded = new TextDecoder().decode(pako.inflate(data))
+    const inflated = pako.inflate(data)
+    const decoded = new TextDecoder().decode(inflated)
     cache = JSON.parse(decoded)
-    console.info(`Loaded theme from cache, size=${cache}`)
+    console.info(`Loaded theme from cache, compressed=${Math.ceil(data.length / 1024)}kiB size=${Math.ceil(inflated.length / 1024)}kiB`)
   } catch (e) {
     console.error('Failed to decode theme cache:', e)
     return false
