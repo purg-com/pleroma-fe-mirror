@@ -2,7 +2,7 @@
   <div>
     <Popover
       v-if="button.dropdown?.()"
-      trigger="hover"
+      :trigger="$attrs.extra ? 'hover' : 'click'"
       :offset="{ y: 5 }"
       :placement="$attrs.extra ? 'right' : 'top'"
     >
@@ -40,13 +40,13 @@
           <div class="menu-item dropdown-item extra-action -icon">
             <button
               class="main-button"
-              @click="toggleUserMute"
+              @click="toggleConversationMute"
             >
               <FAIcon
                 icon="folder-tree"
                 fixed-width
               />
-              <template v-if="threadIsMuted">
+              <template v-if="conversationIsMuted">
                 {{ $t('status.unmute_conversation') }}
               </template>
               <template v-else>
@@ -81,19 +81,22 @@
       v-bind="$attrs"
     />
     <teleport to="#modal">
-      <mute-confirm
+      <MuteConfirm
         ref="confirmConversation"
         type="conversation"
         :status="status"
-      />
-      <mute-confirm
-        ref="confirmDomain"
-        type="domain"
         :user="user"
       />
-      <mute-confirm
+      <MuteConfirm
+        ref="confirmDomain"
+        type="domain"
+        :status="status"
+        :user="user"
+      />
+      <MuteConfirm
         ref="confirmUser"
         type="user"
+        :status="status"
         :user="user"
       />
     </teleport>

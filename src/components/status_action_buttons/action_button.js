@@ -92,6 +92,9 @@ export default {
     threadIsMuted () {
       return this.status.thread_muted
     },
+    hideCustomEmoji () {
+      return !this.$store.state.instance.pleromaCustomEmojiReactionsAvailable
+    },
     buttonInnerClass () {
       return [
         this.button.name + '-button',

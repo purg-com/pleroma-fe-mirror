@@ -113,6 +113,7 @@
           :class="{ '-expanded': showBookmarkFolders }"
         >
           <BookmarkFoldersMenuContent
+            :show-pin="editMode || forceEditMode"
             class="timelines"
           />
         </div>

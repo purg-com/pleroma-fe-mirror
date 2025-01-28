@@ -1,6 +1,8 @@
 import { mapState } from 'vuex'
 import { TIMELINES, ROOT_ITEMS, routeTo } from 'src/components/navigation/navigation.js'
-import { getListEntries, filterNavigation } from 'src/components/navigation/filter.js'
+import { getBookmarkFolderEntries, getListEntries, filterNavigation } from 'src/components/navigation/filter.js'
+
+import StillImage from 'src/components/still-image/still-image.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -34,12 +36,16 @@ const NavPanel = {
       return routeTo(item, this.currentUser)
     }
   },
+  components: {
+    StillImage
+  },
   computed: {
     getters () {
       return this.$store.getters
     },
     ...mapState({
       lists: getListEntries,
+      bookmarks: getBookmarkFolderEntries,
       currentUser: state => state.users.currentUser,
       followRequestCount: state => state.api.followRequests.length,
       privateMode: state => state.instance.private,
@@ -70,6 +76,7 @@ const NavPanel = {
             .filter(([k]) => this.pinnedItems.has(k))
             .map(([k, v]) => ({ ...v, name: k })),
           ...this.lists.filter((k) => this.pinnedItems.has(k.name)),
+          ...this.bookmarks.filter((k) => this.pinnedItems.has(k.name)),
           ...Object
             .entries({ ...ROOT_ITEMS })
             .filter(([k]) => this.pinnedItems.has(k))

@@ -8,10 +8,10 @@ try {
     // and that's how actual BE reports its url
     settings.target = settings.target.replace(/\/$/, '')
   }
-  console.log('Using local dev server settings (/config/local.json):')
-  console.log(JSON.stringify(settings, null, 2))
+  console.info('Using local dev server settings (/config/local.json):')
+  console.info(JSON.stringify(settings, null, 2))
 } catch (e) {
-  console.log('Local dev server settings not found (/config/local.json)')
+  console.info('Local dev server settings not found (/config/local.json)')
 }
 
 const target = settings.target || 'http://localhost:4000/'

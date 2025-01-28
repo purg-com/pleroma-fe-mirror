@@ -255,7 +255,7 @@ const Status = {
     muteReasons () {
       return [
         this.userIsMuted ? 'user' : null,
-        status.thread_muted ? 'thread' : null,
+        this.status.thread_muted ? 'thread' : null,
         (this.muteWordHits.length > 0) ? 'wordfilter' : null,
         (this.muteBotStatuses && this.botStatus) ? 'bot' : null,
         (this.muteSensitiveStatuses && this.sensitiveStatus) ? 'nsfw' : null
@@ -280,14 +280,18 @@ const Status = {
           case 'nsfw': return this.$t('status.sensitive_muted')
         }
       }
-      return this.$t(
-        'status.multi_reason_mute',
-        {
-          main: mainReason(),
-          numReasonsMore: this.muteReasons.length - 1
-        },
-        this.muteReasons.length - 1
-      )
+      if (this.muteReasons.length > 1) {
+        return this.$t(
+          'status.multi_reason_mute',
+          {
+            main: mainReason(),
+            numReasonsMore: this.muteReasons.length - 1
+          },
+          this.muteReasons.length - 1
+        )
+      } else {
+        return mainReason()
+      }
     },
     muted () {
       if (this.statusoid.user.id === this.currentUser.id) return false
@@ -299,9 +303,9 @@ const Status = {
       const { reblog } = status
       const relationship = this.$store.getters.relationship(status.user.id)
       const relationshipReblog = reblog && this.$store.getters.relationship(reblog.user.id)
-      return status.muted ||
+      return (status.muted && !status.thread_muted) ||
         // Reprööt of a muted post according to BE
-        (reblog && reblog.muted) ||
+        (reblog && reblog.muted && !reblog.thread_muted) ||
         // Muted user
         relationship.muting ||
         // Muted user of a reprööt

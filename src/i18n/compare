@@ -2,23 +2,23 @@
 const arg = process.argv[2]
 
 if (typeof arg === 'undefined') {
-  console.log('This is a very simple and tiny tool that checks en.json with any other language and')
-  console.log('outputs all the things present in english but missing in foreign language.')
-  console.log('')
-  console.log('Usage: ./compare.js <lang> ')
-  console.log('       or')
-  console.log('       node ./compare.js <lang>')
-  console.log('')
-  console.log('Where <lang> is name of .json file containing language. For ./fi.json it should be:')
-  console.log('      ./compare.js fi ')
-  console.log('')
-  console.log('Limitations: ')
-  console.log('* This program does not work with languages left over in messages.js')
-  console.log('* This program does not check for extra strings present in foreign language but missing')
-  console.log('  in english.js (for now)')
-  console.log('')
-  console.log('There are no other arguments or options. Make an issue if you encounter a bug or want')
-  console.log('some feature to be implemented. Merge requests are welcome as well.')
+  console.info('This is a very simple and tiny tool that checks en.json with any other language and')
+  console.info('outputs all the things present in english but missing in foreign language.')
+  console.info('')
+  console.info('Usage: ./compare.js <lang> ')
+  console.info('       or')
+  console.info('       node ./compare.js <lang>')
+  console.info('')
+  console.info('Where <lang> is name of .json file containing language. For ./fi.json it should be:')
+  console.info('      ./compare.js fi ')
+  console.info('')
+  console.info('Limitations: ')
+  console.info('* This program does not work with languages left over in messages.js')
+  console.info('* This program does not check for extra strings present in foreign language but missing')
+  console.info('  in english.js (for now)')
+  console.info('')
+  console.info('There are no other arguments or options. Make an issue if you encounter a bug or want')
+  console.info('some feature to be implemented. Merge requests are welcome as well.')
   process.exit()
 }
 
@@ -35,10 +35,10 @@ function walker (a, b, path = []) {
     const article = aType[0] === 'o' ? 'an' : 'a'
 
     if (bType === 'undefined') {
-      console.log(`Foreign language is missing ${article} ${aType} at path ${currentPath.join('.')}`)
+      console.warn(`Foreign language is missing ${article} ${aType} at path ${currentPath.join('.')}`)
     } else if (aType === 'object') {
       if (bType !== 'object') {
-        console.log(`Type mismatch! English has ${aType} while foreign has ${bType} at path ${currentPath.join['.']}`)
+        console.warn(`Type mismatch! English has ${aType} while foreign has ${bType} at path ${currentPath.join['.']}`)
       } else {
         walker(aVal, bVal, currentPath)
       }

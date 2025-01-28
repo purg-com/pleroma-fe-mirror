@@ -3,7 +3,6 @@
     trigger="click"
     class="QuickViewSettings"
     :bound-to="{ x: 'container' }"
-    :trigger-attrs="triggerAttrs"
   >
     <template #content>
       <div

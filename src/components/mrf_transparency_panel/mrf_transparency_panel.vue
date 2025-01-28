@@ -32,22 +32,24 @@
             <p>{{ $t("about.mrf.simple.accept_desc") }}</p>
 
             <table>
-              <tr>
-                <th>{{ $t("about.mrf.simple.instance") }}</th>
-                <th>{{ $t("about.mrf.simple.reason") }}</th>
-              </tr>
-              <tr
-                v-for="entry in acceptInstances"
-                :key="entry.instance + '_accept'"
-              >
-                <td>{{ entry.instance }}</td>
-                <td v-if="entry.reason === ''">
-                  {{ $t("about.mrf.simple.not_applicable") }}
-                </td>
-                <td v-else>
-                  {{ entry.reason }}
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <th>{{ $t("about.mrf.simple.instance") }}</th>
+                  <th>{{ $t("about.mrf.simple.reason") }}</th>
+                </tr>
+                <tr
+                  v-for="entry in acceptInstances"
+                  :key="entry.instance + '_accept'"
+                >
+                  <td>{{ entry.instance }}</td>
+                  <td v-if="entry.reason === ''">
+                    {{ $t("about.mrf.simple.not_applicable") }}
+                  </td>
+                  <td v-else>
+                    {{ entry.reason }}
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
 
@@ -57,22 +59,24 @@
             <p>{{ $t("about.mrf.simple.reject_desc") }}</p>
 
             <table>
-              <tr>
-                <th>{{ $t("about.mrf.simple.instance") }}</th>
-                <th>{{ $t("about.mrf.simple.reason") }}</th>
-              </tr>
-              <tr
-                v-for="entry in rejectInstances"
-                :key="entry.instance + '_reject'"
-              >
-                <td>{{ entry.instance }}</td>
-                <td v-if="entry.reason === ''">
-                  {{ $t("about.mrf.simple.not_applicable") }}
-                </td>
-                <td v-else>
-                  {{ entry.reason }}
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <th>{{ $t("about.mrf.simple.instance") }}</th>
+                  <th>{{ $t("about.mrf.simple.reason") }}</th>
+                </tr>
+                <tr
+                  v-for="entry in rejectInstances"
+                  :key="entry.instance + '_reject'"
+                >
+                  <td>{{ entry.instance }}</td>
+                  <td v-if="entry.reason === ''">
+                    {{ $t("about.mrf.simple.not_applicable") }}
+                  </td>
+                  <td v-else>
+                    {{ entry.reason }}
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
 
@@ -82,22 +86,24 @@
             <p>{{ $t("about.mrf.simple.quarantine_desc") }}</p>
 
             <table>
-              <tr>
-                <th>{{ $t("about.mrf.simple.instance") }}</th>
-                <th>{{ $t("about.mrf.simple.reason") }}</th>
-              </tr>
-              <tr
-                v-for="entry in quarantineInstances"
-                :key="entry.instance + '_quarantine'"
-              >
-                <td>{{ entry.instance }}</td>
-                <td v-if="entry.reason === ''">
-                  {{ $t("about.mrf.simple.not_applicable") }}
-                </td>
-                <td v-else>
-                  {{ entry.reason }}
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <th>{{ $t("about.mrf.simple.instance") }}</th>
+                  <th>{{ $t("about.mrf.simple.reason") }}</th>
+                </tr>
+                <tr
+                  v-for="entry in quarantineInstances"
+                  :key="entry.instance + '_quarantine'"
+                >
+                  <td>{{ entry.instance }}</td>
+                  <td v-if="entry.reason === ''">
+                    {{ $t("about.mrf.simple.not_applicable") }}
+                  </td>
+                  <td v-else>
+                    {{ entry.reason }}
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
 
@@ -107,22 +113,24 @@
             <p>{{ $t("about.mrf.simple.ftl_removal_desc") }}</p>
 
             <table>
-              <tr>
-                <th>{{ $t("about.mrf.simple.instance") }}</th>
-                <th>{{ $t("about.mrf.simple.reason") }}</th>
-              </tr>
-              <tr
-                v-for="entry in ftlRemovalInstances"
-                :key="entry.instance + '_ftl_removal'"
-              >
-                <td>{{ entry.instance }}</td>
-                <td v-if="entry.reason === ''">
-                  {{ $t("about.mrf.simple.not_applicable") }}
-                </td>
-                <td v-else>
-                  {{ entry.reason }}
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <th>{{ $t("about.mrf.simple.instance") }}</th>
+                  <th>{{ $t("about.mrf.simple.reason") }}</th>
+                </tr>
+                <tr
+                  v-for="entry in ftlRemovalInstances"
+                  :key="entry.instance + '_ftl_removal'"
+                >
+                  <td>{{ entry.instance }}</td>
+                  <td v-if="entry.reason === ''">
+                    {{ $t("about.mrf.simple.not_applicable") }}
+                  </td>
+                  <td v-else>
+                    {{ entry.reason }}
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
 
@@ -132,22 +140,24 @@
             <p>{{ $t("about.mrf.simple.media_nsfw_desc") }}</p>
 
             <table>
-              <tr>
-                <th>{{ $t("about.mrf.simple.instance") }}</th>
-                <th>{{ $t("about.mrf.simple.reason") }}</th>
-              </tr>
-              <tr
-                v-for="entry in mediaNsfwInstances"
-                :key="entry.instance + '_media_nsfw'"
-              >
-                <td>{{ entry.instance }}</td>
-                <td v-if="entry.reason === ''">
-                  {{ $t("about.mrf.simple.not_applicable") }}
-                </td>
-                <td v-else>
-                  {{ entry.reason }}
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <th>{{ $t("about.mrf.simple.instance") }}</th>
+                  <th>{{ $t("about.mrf.simple.reason") }}</th>
+                </tr>
+                <tr
+                  v-for="entry in mediaNsfwInstances"
+                  :key="entry.instance + '_media_nsfw'"
+                >
+                  <td>{{ entry.instance }}</td>
+                  <td v-if="entry.reason === ''">
+                    {{ $t("about.mrf.simple.not_applicable") }}
+                  </td>
+                  <td v-else>
+                    {{ entry.reason }}
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
 
@@ -157,22 +167,24 @@
             <p>{{ $t("about.mrf.simple.media_removal_desc") }}</p>
 
             <table>
-              <tr>
-                <th>{{ $t("about.mrf.simple.instance") }}</th>
-                <th>{{ $t("about.mrf.simple.reason") }}</th>
-              </tr>
-              <tr
-                v-for="entry in mediaRemovalInstances"
-                :key="entry.instance + '_media_removal'"
-              >
-                <td>{{ entry.instance }}</td>
-                <td v-if="entry.reason === ''">
-                  {{ $t("about.mrf.simple.not_applicable") }}
-                </td>
-                <td v-else>
-                  {{ entry.reason }}
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <th>{{ $t("about.mrf.simple.instance") }}</th>
+                  <th>{{ $t("about.mrf.simple.reason") }}</th>
+                </tr>
+                <tr
+                  v-for="entry in mediaRemovalInstances"
+                  :key="entry.instance + '_media_removal'"
+                >
+                  <td>{{ entry.instance }}</td>
+                  <td v-if="entry.reason === ''">
+                    {{ $t("about.mrf.simple.not_applicable") }}
+                  </td>
+                  <td v-else>
+                    {{ entry.reason }}
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
 

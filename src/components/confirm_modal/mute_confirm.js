@@ -5,7 +5,7 @@ import ConfirmModal from './confirm_modal.vue'
 import Select from 'src/components/select/select.vue'
 
 export default {
-  props: ['type', 'user'],
+  props: ['type', 'user', 'status'],
   emits: ['hide', 'show', 'muted'],
   data: () => ({
     showing: false,
@@ -61,9 +61,7 @@ export default {
   },
   methods: {
     optionallyPrompt () {
-      console.log('Triggered')
       if (this.shouldConfirm) {
-        console.log('SHAWN!!')
         this.show()
       } else {
         this.doMute()

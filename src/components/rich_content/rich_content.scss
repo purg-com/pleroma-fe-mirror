@@ -8,6 +8,10 @@
     --funtextGreentext: var(--funtextGreentextFaint) !important;
     --funtextCyantext: var(--funtextCyantextFaint) !important;
     /* stylelint-enable declaration-no-important */
+
+    a {
+      color: var(--linkFaint);
+    }
   }
 
   blockquote {

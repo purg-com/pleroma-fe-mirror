@@ -14,9 +14,14 @@
         :icon="item.icon"
       />
       <span
-        v-if="item.iconLetter"
+        v-if="item.iconLetter && !item.iconEmoji"
         class="iconLetter fa-scale-110 fa-old-padding"
       >{{ item.iconLetter }}</span>
+      <StillImage
+        v-if="item.iconEmoji"
+        class="bookmark-emoji"
+        :src="item.iconEmojiUrl"
+      />
       <div
         v-if="item.badgeGetter && getters[item.badgeGetter]"
         class="badge -dot"
@@ -52,6 +57,13 @@
     box-sizing: border-box;
     height: 100%;
 
+    .bookmark-emoji {
+      height: 100%;
+      box-sizing: border-box;
+      padding: 0.5em;
+    }
+
+    & .bookmark-emoji,
     & .svg-inline--fa,
     & .iconLetter {
       margin: 0;

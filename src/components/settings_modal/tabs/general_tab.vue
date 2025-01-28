@@ -249,6 +249,16 @@
               {{ $t('settings.absolute_time_format_min_age') }}
             </UnitSetting>
           </li>
+          <li>
+            <ChoiceSetting
+              id="absoluteTime12h"
+              path="absoluteTime12h"
+              :options="absoluteTime12hOptions"
+              :expert="1"
+            >
+              {{ $t('settings.absolute_time_format_12h') }}
+            </ChoiceSetting>
+          </li>
         </ul>
         <h3>{{ $t('settings.attachments') }}</h3>
         <li>
@@ -464,22 +474,6 @@
         </li>
         <li>
           <BooleanSetting
-            path="alwaysShowNewPostButton"
-            expert="1"
-          >
-            {{ $t('settings.always_show_post_button') }}
-          </BooleanSetting>
-        </li>
-        <li>
-          <BooleanSetting
-            path="autohideFloatingPostButton"
-            expert="1"
-          >
-            {{ $t('settings.autohide_floating_post_button') }}
-          </BooleanSetting>
-        </li>
-        <li>
-          <BooleanSetting
             path="padEmoji"
             expert="1"
           >
@@ -501,7 +495,7 @@
             {{ $t('settings.auto_save_draft') }}
           </BooleanSetting>
         </li>
-        <li v-if="!autoSaveDraft">
+        <li v-if="!mergedConfig.autoSaveDraft">
           <ChoiceSetting
             id="unsavedPostAction"
             path="unsavedPostAction"

@@ -276,8 +276,8 @@ const addNewStatuses = (state, { statuses, showImmediately = false, timeline, us
       // NOOP, it is known status but we don't do anything about it for now
     },
     default: (unknown) => {
-      console.log('unknown status type')
-      console.log(unknown)
+      console.warn('unknown status type')
+      console.warn(unknown)
     }
   }
 
@@ -549,11 +549,11 @@ const statuses = {
       rootState.api.backendInteractor.unpinOwnStatus({ id: statusId })
         .then((status) => dispatch('addNewStatuses', { statuses: [status] }))
     },
-    muteConversation ({ rootState, commit }, statusId) {
+    muteConversation ({ rootState, commit }, { id: statusId }) {
       return rootState.api.backendInteractor.muteConversation({ id: statusId })
         .then((status) => commit('setMutedStatus', status))
     },
-    unmuteConversation ({ rootState, commit }, statusId) {
+    unmuteConversation ({ rootState, commit }, { id: statusId }) {
       return rootState.api.backendInteractor.unmuteConversation({ id: statusId })
         .then((status) => commit('setMutedStatus', status))
     },

@@ -30,6 +30,11 @@ const GeneralTab = {
         value: mode,
         label: this.$t(`settings.conversation_display_${mode}`)
       })),
+      absoluteTime12hOptions: ['24h', '12h'].map(mode => ({
+        key: mode,
+        value: mode,
+        label: this.$t(`settings.absolute_time_format_12h_${mode}`)
+      })),
       conversationOtherRepliesButtonOptions: ['below', 'inside'].map(mode => ({
         key: mode,
         value: mode,

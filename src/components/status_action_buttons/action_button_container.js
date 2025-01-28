@@ -58,8 +58,8 @@ export default {
     unmuteUser () {
       return this.$store.dispatch('unmuteUser', this.user.id)
     },
-    unmuteThread () {
-      return this.$store.dispatch('unmuteConversation', this.user.id)
+    unmuteConversation () {
+      return this.$store.dispatch('unmuteConversation', { id: this.status.id })
     },
     unmuteDomain () {
       return this.$store.dispatch('unmuteDomain', this.user.id)
