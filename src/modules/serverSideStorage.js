@@ -125,6 +125,7 @@ export const _getRecentData = (cache, live, isTest) => {
   }
 
   const merge = (a, b) => ({
+    _user: a._user ?? b._user,
     _version: a._version ?? b._version,
     _timestamp: a._timestamp ?? b._timestamp,
     needUpload: b.needUpload ?? a.needUpload,
