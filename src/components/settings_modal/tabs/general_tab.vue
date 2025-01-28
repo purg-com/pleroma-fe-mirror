@@ -495,7 +495,7 @@
             {{ $t('settings.auto_save_draft') }}
           </BooleanSetting>
         </li>
-        <li v-if="!autoSaveDraft">
+        <li v-if="!mergedConfig.autoSaveDraft">
           <ChoiceSetting
             id="unsavedPostAction"
             path="unsavedPostAction"
