@@ -76,9 +76,9 @@ const mediaUpload = {
           const testCanvas = document.createElement('canvas')
           const supportsWebP = testCanvas.toDataURL('image/webp').startsWith('data:image/webp')
 
-          // Convert to WebP if supported, otherwise JPEG
-          const type = supportsWebP ? 'image/webp' : 'image/jpeg'
-          const extension = supportsWebP ? '.webp' : '.jpg'
+          // Convert to WebP if supported and alwaysUseJpeg is false, otherwise JPEG
+          const type = (!this.$store.getters.mergedConfig.alwaysUseJpeg && supportsWebP) ? 'image/webp' : 'image/jpeg'
+          const extension = type === 'image/webp' ? '.webp' : '.jpg'
 
           // Remove the original extension and add new one
           const newFileName = file.name.replace(/\.[^/.]+$/, '') + extension

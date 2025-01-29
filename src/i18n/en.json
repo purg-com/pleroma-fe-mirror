@@ -440,6 +440,7 @@
     "attachmentRadius": "Attachments",
     "attachments": "Attachments",
     "image_compression": "Compress images before uploading",
+    "always_use_jpeg": "Always convert images to JPEG format",
     "avatar": "Avatar",
     "avatarAltRadius": "Avatars (notifications)",
     "avatarRadius": "Avatars",
