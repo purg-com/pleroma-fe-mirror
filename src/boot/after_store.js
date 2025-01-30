@@ -359,7 +359,7 @@ const afterStoreSetup = async ({ pinia, store, storageError, i18n }) => {
 
   await setConfig({ store })
   try {
-    await store.dispatch('applyTheme').catch((e) => { console.error('Error setting theme', e) })
+    await useInterfaceStore().applyTheme().catch((e) => { console.error('Error setting theme', e) })
   } catch (e) {
     window.splashError(e)
     return Promise.reject(e)

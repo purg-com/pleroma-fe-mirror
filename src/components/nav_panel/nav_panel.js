@@ -7,6 +7,7 @@ import { filterNavigation } from 'src/components/navigation/filter.js'
 import NavigationEntry from 'src/components/navigation/navigation_entry.vue'
 import NavigationPins from 'src/components/navigation/navigation_pins.vue'
 import Checkbox from 'src/components/checkbox/checkbox.vue'
+import { useAnnouncementsStore } from 'src/stores/announcements'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -24,7 +25,6 @@ import {
   faBullhorn,
   faFilePen
 } from '@fortawesome/free-solid-svg-icons'
-import { useAnnouncementsStore } from '../../stores/announcements'
 
 library.add(
   faUsers,

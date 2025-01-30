@@ -14,18 +14,11 @@ import configModule from './modules/config.js'
 import profileConfigModule from './modules/profileConfig.js'
 import serverSideStorageModule from './modules/serverSideStorage.js'
 import adminSettingsModule from './modules/adminSettings.js'
-import shoutModule from './modules/shout.js'
 import oauthModule from './modules/oauth.js'
 import authFlowModule from './modules/auth_flow.js'
 import oauthTokensModule from './modules/oauth_tokens.js'
-import reportsModule from './modules/reports.js'
-import pollsModule from './modules/polls.js'
-import postStatusModule from './modules/postStatus.js'
-import editStatusModule from './modules/editStatus.js'
-import statusHistoryModule from './modules/statusHistory.js'
 import draftsModule from './modules/drafts.js'
 import chatsModule from './modules/chats.js'
-import announcementsModule from './modules/announcements.js'
 import bookmarkFoldersModule from './modules/bookmark_folders.js'
 
 import { createI18n } from 'vue-i18n'
@@ -101,6 +94,7 @@ const persistedStateOptions = {
         instance: instanceModule,
         // TODO refactor users/statuses modules, they depend on each other
         users: usersModule,
+        lists: listsModule,
         statuses: statusesModule,
         notifications: notificationsModule,
         api: apiModule,
@@ -122,10 +116,11 @@ const persistedStateOptions = {
       strict: false // Socket modifies itself, let's ignore this for now.
       // strict: process.env.NODE_ENV !== 'production'
     })
+    window.vuex = store
     if (storageError) {
-      // Temporarily passing pinia and vuex stores along with storageError result until migration is fully complete.
       store.dispatch('pushGlobalNotice', { messageKey: 'errors.storage_unavailable', level: 'error' })
     }
+    // Temporarily passing pinia and vuex stores along with storageError result until migration is fully complete.
     return await afterStoreSetup({ pinia, store, storageError, i18n })
   } catch (e) {
     splashError(i18n, e)

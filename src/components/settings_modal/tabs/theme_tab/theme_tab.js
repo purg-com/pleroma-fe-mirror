@@ -297,7 +297,7 @@ export default {
       }
     },
     themeDataUsed () {
-      return this.$store.state.interface.themeDataUsed
+      return useInterfaceStore().themeDataUsed
     },
     shadowsAvailable () {
       return Object.keys(DEFAULT_SHADOWS).sort()

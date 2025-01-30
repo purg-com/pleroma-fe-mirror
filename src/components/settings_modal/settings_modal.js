@@ -7,6 +7,7 @@ import Checkbox from 'src/components/checkbox/checkbox.vue'
 import ConfirmModal from 'src/components/confirm_modal/confirm_modal.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { cloneDeep, isEqual } from 'lodash'
+import { mapState as mapPiniaState } from 'pinia'
 import {
   newImporter,
   newExporter
@@ -167,24 +168,15 @@ const SettingsModal = {
     }
   },
   computed: {
-    currentSaveStateNotice () {
-      return useInterfaceStore().settings.currentSaveStateNotice
-    },
-    modalActivated () {
-      return useInterfaceStore().settingsModalState !== 'hidden'
-    },
-    modalMode () {
-      return useInterfaceStore().settingsModalMode
-    },
-    modalOpenedOnceUser () {
-      return useInterfaceStore().settingsModalLoadedUser
-    },
-    modalOpenedOnceAdmin () {
-      return useInterfaceStore().settingsModalLoadedAdmin
-    },
-    modalPeeked () {
-      return useInterfaceStore().settingsModalState === 'minimized'
-    },
+    ...mapPiniaState(useInterfaceStore, {
+      temporaryChangesTimeoutId: store => store.layoutType === 'mobile',
+      currentSaveStateNotice: store => store.settings.currentSaveStateNotice,
+      modalActivated: store => store.settingsModalState !== 'hidden',
+      modalMode: store => store.settingsModalMode,
+      modalOpenedOnceUser: store => store.settingsModalLoadedUser,
+      modalOpenedOnceAdmin: store => store.settingsModalLoadedAdmin,
+      modalPeeked: store => store.settingsModalState === 'minimized'
+    }),
     expertLevel: {
       get () {
         return this.$store.state.config.expertLevel > 0

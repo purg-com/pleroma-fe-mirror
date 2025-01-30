@@ -25,7 +25,7 @@ import {
   faInfo,
   faWindowRestore
 } from '@fortawesome/free-solid-svg-icons'
-import { useInterfaceStore } from '../../stores/interface'
+import { useInterfaceStore } from 'src/stores/interface'
 
 library.add(
   faWrench,
@@ -70,7 +70,7 @@ const SettingsModalContent = {
       return this.$store.state.config.expertLevel
     },
     isMobileLayout () {
-      return this.$store.state.interface.layoutType === 'mobile'
+      return useInterfaceStore().layoutType === 'mobile'
     }
   },
   methods: {

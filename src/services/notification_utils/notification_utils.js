@@ -1,6 +1,7 @@
 import { muteWordHits } from '../status_parser/status_parser.js'
 import { showDesktopNotification } from '../desktop_notification_utils/desktop_notification_utils.js'
 import { useI18nStore } from '../../stores/i18n.js'
+import { useAnnouncementsStore } from 'src/stores/announcements'
 
 import FaviconService from 'src/services/favicon_service/favicon_service.js'
 
@@ -169,7 +170,7 @@ export const countExtraNotifications = (store) => {
 
   return [
     mergedConfig.showChatsInExtraNotifications ? rootGetters.unreadChatCount : 0,
-    mergedConfig.showAnnouncementsInExtraNotifications ? rootGetters.unreadAnnouncementCount : 0,
+    mergedConfig.showAnnouncementsInExtraNotifications ? useAnnouncementsStore().unreadAnnouncementCount : 0,
     mergedConfig.showFollowRequestsInExtraNotifications ? rootGetters.followRequestCount : 0
   ].reduce((a, c) => a + c, 0)
 }

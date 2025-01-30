@@ -17,7 +17,8 @@ import {
   faStream,
   faList
 } from '@fortawesome/free-solid-svg-icons'
-import { useListsStore } from '../../stores/lists'
+import { useListsStore } from 'src/stores/lists'
+import { useAnnouncementsStore } from 'src/stores/announcements'
 
 library.add(
   faUsers,
@@ -48,6 +49,9 @@ const NavPanel = {
     ...mapPiniaState(useListsStore, {
       lists: getListEntries
     }),
+    ...mapPiniaState(useAnnouncementsStore, {
+      supportsAnnouncements: store => store.supportsAnnouncements
+    }),
     ...mapState({
       bookmarks: getBookmarkFolderEntries,
       currentUser: state => state.users.currentUser,
@@ -55,7 +59,6 @@ const NavPanel = {
       privateMode: state => state.instance.private,
       federating: state => state.instance.federating,
       pleromaChatMessagesAvailable: state => state.instance.pleromaChatMessagesAvailable,
-      supportsAnnouncements: state => state.announcements.supportsAnnouncements,
       pinnedItems: state => new Set(state.serverSideStorage.prefsStorage.collections.pinnedNavItems)
     }),
     pinnedList () {

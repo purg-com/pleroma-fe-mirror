@@ -7,7 +7,7 @@ import PaletteEditor from 'src/components/palette_editor/palette_editor.vue'
 
 import FontControl from 'src/components/font_control/font_control.vue'
 
-import { normalizeThemeData } from 'src/modules/interface'
+import { useInterfaceStore, normalizeThemeData } from 'src/stores/interface'
 
 import { newImporter } from 'src/services/export_import/export_import.js'
 import { convertTheme2To3 } from 'src/services/theme_data/theme2_to_theme3.js'
@@ -131,7 +131,7 @@ const AppearanceTab = {
       }))
     })
 
-    this.userPalette = this.$store.state.interface.paletteDataUsed || {}
+    this.userPalette = useInterfaceStore().paletteDataUsed || {}
 
     updateIndex('palette').then(bundledPalettes => {
       bundledPalettes.forEach(([key, palettePromise]) => palettePromise.then(v => {
@@ -187,10 +187,10 @@ const AppearanceTab = {
   },
   computed: {
     switchInProgress () {
-      return this.$store.state.interface.themeChangeInProgress
+      return useInterfaceStore().themeChangeInProgress
     },
     paletteDataUsed () {
-      return this.$store.state.interface.paletteDataUsed
+      return useInterfaceStore().paletteDataUsed
     },
     availableStyles () {
       return [
@@ -205,7 +205,7 @@ const AppearanceTab = {
       ]
     },
     stylePalettes () {
-      const ruleset = this.$store.state.interface.styleDataUsed || []
+      const ruleset = useInterfaceStore().styleDataUsed || []
       if (!ruleset && ruleset.length === 0) return
       const meta = ruleset.find(x => x.component === '@meta')
       const result = ruleset.filter(x => x.component.startsWith('@palette'))
@@ -273,7 +273,7 @@ const AppearanceTab = {
       }
     },
     customThemeVersion () {
-      const { themeVersion } = this.$store.state.interface
+      const { themeVersion } = useInterfaceStore()
       return themeVersion
     },
     isCustomThemeUsed () {

@@ -3,8 +3,10 @@ import Status from '../status/status.vue'
 import ThreadTree from '../thread_tree/thread_tree.vue'
 import { WSConnectionStatus } from '../../services/api/api.service.js'
 import { mapGetters, mapState } from 'vuex'
+import { mapState as mapPiniaState } from 'pinia'
 import QuickFilterSettings from '../quick_filter_settings/quick_filter_settings.vue'
 import QuickViewSettings from '../quick_view_settings/quick_view_settings.vue'
+import { useInterfaceStore } from 'src/stores/interface'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -350,8 +352,10 @@ const conversation = {
     },
     ...mapGetters(['mergedConfig']),
     ...mapState({
-      mobileLayout: state => state.interface.layoutType === 'mobile',
       mastoUserSocketStatus: state => state.api.mastoUserSocketStatus
+    }),
+    ...mapPiniaState(useInterfaceStore, {
+      mobileLayout: store => store.layoutType === 'mobile'
     })
   },
   components: {

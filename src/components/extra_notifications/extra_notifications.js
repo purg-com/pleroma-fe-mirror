@@ -1,4 +1,6 @@
 import { mapGetters } from 'vuex'
+import { mapState as mapPiniaState } from 'pinia'
+import { useAnnouncementsStore } from '../../stores/announcements'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -33,7 +35,10 @@ const ExtraNotifications = {
     currentUser () {
       return this.$store.state.users.currentUser
     },
-    ...mapGetters(['unreadChatCount', 'unreadAnnouncementCount', 'followRequestCount', 'mergedConfig'])
+    ...mapGetters(['unreadChatCount', 'followRequestCount', 'mergedConfig']),
+    ...mapPiniaState(useAnnouncementsStore, {
+      unreadAnnouncementCount: 'unreadAnnouncementCount'
+    })
   },
   methods: {
     openNotificationSettings () {

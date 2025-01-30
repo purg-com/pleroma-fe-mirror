@@ -62,7 +62,7 @@ export default {
     document.getElementById('modal').classList = ['-' + this.layoutType]
   },
   mounted () {
-    if (this.$store.state.interface.themeApplied) {
+    if (useInterfaceStore().themeApplied) {
       this.removeSplash()
     }
   },
@@ -71,7 +71,7 @@ export default {
   },
   computed: {
     themeApplied () {
-      return this.$store.state.interface.themeApplied
+      return useInterfaceStore().themeApplied
     },
     layoutModalClass () {
       return '-' + this.layoutType

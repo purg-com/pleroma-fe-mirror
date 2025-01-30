@@ -1,4 +1,5 @@
 import StillImage from '../still-image/still-image.vue'
+import { useInterfaceStore } from 'src/stores/interface'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 
@@ -22,7 +23,7 @@ const UserAvatar = {
     return {
       showPlaceholder: false,
       defaultAvatar: `${this.$store.state.instance.server + this.$store.state.instance.defaultAvatar}`,
-      betterShadow: this.$store.state.interface.browserSupport.cssFilter
+      betterShadow: useInterfaceStore().browserSupport.cssFilter
     }
   },
   components: {
