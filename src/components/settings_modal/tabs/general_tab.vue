@@ -271,6 +271,14 @@
         </li>
         <li>
           <BooleanSetting
+            path="alwaysUseJpeg"
+            expert="1"
+          >
+            {{ $t('settings.always_use_jpeg') }}
+          </BooleanSetting>
+        </li>
+        <li>
+          <BooleanSetting
             path="useContainFit"
             expert="1"
           >
