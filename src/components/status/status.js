@@ -1,8 +1,3 @@
-import ReplyButton from '../reply_button/reply_button.vue'
-import FavoriteButton from '../favorite_button/favorite_button.vue'
-import ReactButton from '../react_button/react_button.vue'
-import RetweetButton from '../retweet_button/retweet_button.vue'
-import ExtraButtons from '../extra_buttons/extra_buttons.vue'
 import PostStatusForm from '../post_status_form/post_status_form.vue'
 import UserAvatar from '../user_avatar/user_avatar.vue'
 import AvatarList from '../avatar_list/avatar_list.vue'
@@ -16,11 +11,11 @@ import EmojiReactions from '../emoji_reactions/emoji_reactions.vue'
 import UserLink from '../user_link/user_link.vue'
 import MentionsLine from 'src/components/mentions_line/mentions_line.vue'
 import MentionLink from 'src/components/mention_link/mention_link.vue'
+import StatusActionButtons from 'src/components/status_action_buttons/status_action_buttons.vue'
 import generateProfileLink from 'src/services/user_profile_link_generator/user_profile_link_generator'
 import { highlightClass, highlightStyle } from '../../services/user_highlighter/user_highlighter.js'
 import { muteWordHits } from '../../services/status_parser/status_parser.js'
 import { unescape, uniqBy } from 'lodash'
-import { useInterfaceStore } from '../../stores/interface'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -40,7 +35,8 @@ import {
   faThumbtack,
   faChevronUp,
   faChevronDown,
-  faAngleDoubleRight
+  faAngleDoubleRight,
+  faPlay
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -60,7 +56,8 @@ library.add(
   faThumbtack,
   faChevronUp,
   faChevronDown,
-  faAngleDoubleRight
+  faAngleDoubleRight,
+  faPlay
 )
 
 const camelCase = name => name.charAt(0).toUpperCase() + name.slice(1)
@@ -101,11 +98,6 @@ const controlledOrUncontrolledSet = (obj, name, val) => {
 const Status = {
   name: 'Status',
   components: {
-    ReplyButton,
-    FavoriteButton,
-    ReactButton,
-    RetweetButton,
-    ExtraButtons,
     PostStatusForm,
     UserAvatar,
     AvatarList,
@@ -118,7 +110,8 @@ const Status = {
     MentionLink,
     MentionsLine,
     UserPopover,
-    UserLink
+    UserLink,
+    StatusActionButtons
   },
   props: [
     'statusoid',
@@ -134,6 +127,7 @@ const Status = {
     'showPinned',
     'inProfile',
     'profileUserId',
+    'inQuote',
 
     'simpleTree',
     'controlledThreadDisplayStatus',
@@ -152,6 +146,7 @@ const Status = {
     'controlledSetMediaPlaying',
     'dive'
   ],
+  emits: ['interacted'],
   data () {
     return {
       uncontrolledReplying: false,
@@ -160,7 +155,8 @@ const Status = {
       uncontrolledMediaPlaying: [],
       suspendable: true,
       error: null,
-      headTailLinks: null
+      headTailLinks: null,
+      displayQuote: !this.inQuote
     }
   },
   computed: {
@@ -228,17 +224,14 @@ const Status = {
     muteWordHits () {
       return muteWordHits(this.status, this.muteWords)
     },
-    rtBotStatus () {
-      return this.statusoid.user.bot
-    },
     botStatus () {
-      return this.status.user.bot
+      return this.status.user.actor_type === 'Service'
     },
-    botIndicator () {
-      return this.botStatus && !this.hideBotIndication
+    showActorTypeIndicator () {
+      return !this.hideBotIndication
     },
-    rtBotIndicator () {
-      return this.rtBotStatus && !this.hideBotIndication
+    sensitiveStatus () {
+      return this.status.nsfw
     },
     mentionsLine () {
       if (!this.headTailLinks) return []
@@ -259,16 +252,50 @@ const Status = {
     hasMentionsLine () {
       return this.mentionsLine.length > 0
     },
+    muteReasons () {
+      return [
+        this.userIsMuted ? 'user' : null,
+        this.status.thread_muted ? 'thread' : null,
+        (this.muteWordHits.length > 0) ? 'wordfilter' : null,
+        (this.muteBotStatuses && this.botStatus) ? 'bot' : null,
+        (this.muteSensitiveStatuses && this.sensitiveStatus) ? 'nsfw' : null
+      ].filter(_ => _)
+    },
+    muteLocalized () {
+      if (this.muteReasons.length === 0) return null
+      const mainReason = () => {
+        switch (this.muteReasons[0]) {
+          case 'user': return this.$t('status.muted_user')
+          case 'thread': return this.$t('status.thread_muted')
+          case 'wordfilter':
+            return this.$t(
+              'status.muted_words',
+              {
+                word: this.muteWordHits[0],
+                numWordsMore: this.muteWordHits.length - 1
+              },
+              this.muteWordHits.length
+            )
+          case 'bot': return this.$t('status.bot_muted')
+          case 'nsfw': return this.$t('status.sensitive_muted')
+        }
+      }
+      if (this.muteReasons.length > 1) {
+        return this.$t(
+          'status.multi_reason_mute',
+          {
+            main: mainReason(),
+            numReasonsMore: this.muteReasons.length - 1
+          },
+          this.muteReasons.length - 1
+        )
+      } else {
+        return mainReason()
+      }
+    },
     muted () {
       if (this.statusoid.user.id === this.currentUser.id) return false
-      const reasonsToMute = this.userIsMuted ||
-        // Thread is muted
-        status.thread_muted ||
-        // Wordfiltered
-        this.muteWordHits.length > 0 ||
-        // bot status
-        (this.muteBotStatuses && this.botStatus && !this.compact)
-      return !this.unmuted && !this.shouldNotMute && reasonsToMute
+      return !this.unmuted && !this.shouldNotMute && this.muteReasons.length > 0
     },
     userIsMuted () {
       if (this.statusoid.user.id === this.currentUser.id) return false
@@ -276,9 +303,9 @@ const Status = {
       const { reblog } = status
       const relationship = this.$store.getters.relationship(status.user.id)
       const relationshipReblog = reblog && this.$store.getters.relationship(reblog.user.id)
-      return status.muted ||
+      return (status.muted && !status.thread_muted) ||
         // Reprööt of a muted post according to BE
-        (reblog && reblog.muted) ||
+        (reblog && reblog.muted && !reblog.thread_muted) ||
         // Muted user
         relationship.muting ||
         // Muted user of a reprööt
@@ -370,17 +397,20 @@ const Status = {
     hidePostStats () {
       return this.mergedConfig.hidePostStats
     },
+    shouldDisplayFavsAndRepeats () {
+      return !this.hidePostStats && this.isFocused && (this.combinedFavsAndRepeatsUsers.length > 0 || this.statusFromGlobalRepository.quotes_count)
+    },
     muteBotStatuses () {
       return this.mergedConfig.muteBotStatuses
+    },
+    muteSensitiveStatuses () {
+      return this.mergedConfig.muteSensitiveStatuses
     },
     hideBotIndication () {
       return this.mergedConfig.hideBotIndication
     },
     currentUser () {
       return this.$store.state.users.currentUser
-    },
-    betterShadow () {
-      return useInterfaceStore().browserSupport.cssFilter
     },
     mergedConfig () {
       return this.$store.getters.mergedConfig
@@ -402,6 +432,44 @@ const Status = {
     },
     editingAvailable () {
       return this.$store.state.instance.editingAvailable
+    },
+    hasVisibleQuote () {
+      return this.status.quote_url && this.status.quote_visible
+    },
+    hasInvisibleQuote () {
+      return this.status.quote_url && !this.status.quote_visible
+    },
+    quotedStatus () {
+      return this.status.quote_id ? this.$store.state.statuses.allStatusesObject[this.status.quote_id] : undefined
+    },
+    shouldDisplayQuote () {
+      return this.quotedStatus && this.displayQuote
+    },
+    scrobblePresent () {
+      if (this.mergedConfig.hideScrobbles) return false
+      if (!this.status.user.latestScrobble) return false
+      const value = this.mergedConfig.hideScrobblesAfter.match(/\d+/gs)[0]
+      const unit = this.mergedConfig.hideScrobblesAfter.match(/\D+/gs)[0]
+      let multiplier = 60 * 1000 // minutes is smallest unit
+      switch (unit) {
+        case 'm':
+          break
+        case 'h':
+          multiplier *= 60 // hour
+          break
+        case 'd':
+          multiplier *= 60 // hour
+          multiplier *= 24 // day
+          break
+      }
+      const maxAge = Number(value) * multiplier
+      const createdAt = Date.parse(this.status.user.latestScrobble.created_at)
+      const age = Date.now() - createdAt
+      if (age > maxAge) return false
+      return this.status.user.latestScrobble.artist
+    },
+    scrobble () {
+      return this.status.user.latestScrobble
     }
   },
   methods: {
@@ -421,9 +489,18 @@ const Status = {
       this.error = error
     },
     clearError () {
+      this.$emit('interacted')
       this.error = undefined
     },
     toggleReplying () {
+      this.$emit('interacted')
+      if (this.replying) {
+        this.$refs.postStatusForm.requestClose()
+      } else {
+        this.doToggleReplying()
+      }
+    },
+    doToggleReplying () {
       controlledOrUncontrolledToggle(this, 'replying')
     },
     gotoOriginal (id) {
@@ -469,6 +546,18 @@ const Status = {
           // Post is below screen, match its bottom to screen bottom
           window.scrollBy(0, rect.bottom - window.innerHeight + 50)
         }
+      }
+    },
+    toggleDisplayQuote () {
+      if (this.shouldDisplayQuote) {
+        this.displayQuote = false
+      } else if (!this.quotedStatus) {
+        this.$store.dispatch('fetchStatus', this.status.quote_id)
+          .then(() => {
+            this.displayQuote = true
+          })
+      } else {
+        this.displayQuote = true
       }
     }
   },

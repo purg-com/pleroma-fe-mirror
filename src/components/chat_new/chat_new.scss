@@ -16,11 +16,6 @@
     padding-bottom: 0.7rem;
   }
 
-  .basic-user-card:hover {
-    cursor: pointer;
-    background-color: var(--selectedPost, $fallback--lightBg);
-  }
-
   .go-back-button {
     text-align: center;
     line-height: 1;

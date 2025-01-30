@@ -35,6 +35,11 @@ const UserListMenu = {
         ...list,
         inList: this.inListsSet.has(list.id)
       }))
+    },
+    triggerAttrs () {
+      return {
+        class: 'menu-item dropdown-item -has-submenu'
+      }
     }
   },
   methods: {

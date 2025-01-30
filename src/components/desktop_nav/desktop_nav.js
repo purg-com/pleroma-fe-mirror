@@ -108,7 +108,10 @@ export default {
       this.searchBarHidden = hidden
     },
     openSettingsModal () {
-      useInterfaceStore().openSettingsModal()
+      useInterfaceStore().openSettingsModal('user')
+    },
+    openAdminModal () {
+      useInterfaceStore().openSettingsModal('admin')
     }
   }
 }

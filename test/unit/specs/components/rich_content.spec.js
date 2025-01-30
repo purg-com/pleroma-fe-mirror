@@ -539,7 +539,6 @@ describe('RichContent', () => {
       `,
       props: ['handleLinks', 'attentions', 'vhtml']
     }
-    console.log(1)
 
     const ptest = (handleLinks, vhtml) => {
       const t0 = performance.now()
@@ -562,11 +561,11 @@ describe('RichContent', () => {
       return `Mount: ${t1 - t0}ms, destroy: ${t2 - t1}ms, avg ${(t1 - t0) / amount}ms - ${(t2 - t1) / amount}ms per item`
     }
 
-    console.log(`${amount} items with links handling:`)
-    console.log(ptest(true))
-    console.log(`${amount} items without links handling:`)
-    console.log(ptest(false))
-    console.log(`${amount} items plain v-html:`)
-    console.log(ptest(false, true))
+    console.debug(`${amount} items with links handling:`)
+    console.debug(ptest(true))
+    console.debug(`${amount} items without links handling:`)
+    console.debug(ptest(false))
+    console.debug(`${amount} items plain v-html:`)
+    console.debug(ptest(false, true))
   })
 })

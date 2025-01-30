@@ -1,4 +1,5 @@
 import Timeago from 'components/timeago/timeago.vue'
+import genRandomSeed from '../../services/random_seed/random_seed.service.js'
 import RichContent from 'components/rich_content/rich_content.jsx'
 import { forEach, map } from 'lodash'
 import { usePollsStore } from '../../stores/polls'
@@ -14,7 +15,7 @@ export default {
     return {
       loading: false,
       choices: [],
-      randomSeed: `${Math.random()}`.replace('.', '-')
+      randomSeed: genRandomSeed()
     }
   },
   created () {
@@ -38,7 +39,7 @@ export default {
       return (this.poll && this.poll.options) || []
     },
     expiresAt () {
-      return (this.poll && this.poll.expires_at) || 0
+      return (this.poll && this.poll.expires_at) || null
     },
     expired () {
       return (this.poll && this.poll.expired) || false

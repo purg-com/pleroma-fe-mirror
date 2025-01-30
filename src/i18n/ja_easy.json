@@ -163,7 +163,8 @@
     "search_close": "けんさくバーをとじる",
     "edit_nav_mobile": "ナビゲーションバーのせっていをかえる",
     "mobile_sidebar": "モバイルのサイドバーをきりかえる",
-    "edit_finish": "へんしゅうをおわりにする"
+    "edit_finish": "へんしゅうをおわりにする",
+    "mobile_notifications_mark_as_seen": "ぜんぶ みたことにする"
   },
   "notifications": {
     "broken_favorite": "ステータスがみつかりません。さがしています…",
@@ -179,7 +180,13 @@
     "migrated_to": "インスタンスを、ひっこしました",
     "reacted_with": "{0} でリアクションしました",
     "poll_ended": "とうひょうが、おわりました",
-    "submitted_report": "つうほうしました"
+    "submitted_report": "つうほうしました",
+    "unread_announcements": "まだ よんでいない おしらせが {num}こ あります",
+    "configuration_tip_settings": "せってい",
+    "configuration_tip_dismiss": "つぎは ひょうじしない",
+    "unread_chats": "よんでいない チャットが {num}こ あります",
+    "unread_follow_requests": "フォローリクエストが {num}こ あります",
+    "configuration_tip": "ここに ひょうじする ものを {theSettings}で へんこうできます。 {dismiss}"
   },
   "polls": {
     "add_poll": "とうひょうをはじめる",
@@ -218,7 +225,8 @@
       "symbols": "きごう",
       "travel-and-places": "りょこう・ばしょ"
     },
-    "regional_indicator": "ばしょをしめすきごう {letter}"
+    "regional_indicator": "ばしょをしめすきごう {letter}",
+    "unpacked": "アンパックされた えもじ"
   },
   "stickers": {
     "add_sticker": "ステッカーをふやす"
@@ -269,7 +277,9 @@
     "preview": "プレビュー",
     "preview_empty": "なにもありません",
     "empty_status_error": "とうこうないようを、にゅうりょくしてください",
-    "scope_notice_dismiss": "このつうちをとじる"
+    "scope_notice_dismiss": "このつうちをとじる",
+    "reply_option": "この ステータスに へんしんする",
+    "quote_option": "この ステータスを いんようする"
   },
   "registration": {
     "bio": "プロフィール",
@@ -324,7 +334,7 @@
       "warning_of_generate_new_codes": "あたらしいリカバリーコードをつくったら、ふるいコードはつかえなくなります。",
       "recovery_codes": "リカバリーコード。",
       "waiting_a_recovery_codes": "バックアップコードをうけとっています…",
-      "recovery_codes_warning": "コードをかきうつすか、ひとにみられないところにセーブしてください。そうでなければ、あなたはこのコードをふたたびみることはできません。もしあなたが、2FAアプリのアクセスをうしなって、なおかつ、リカバリーコードもおもいだせないならば、あなたはあなたのアカウントから、しめだされます。",
+      "recovery_codes_warning": "コードを かきうつすか、 ほかのひとが みれないところに ほぞんしてください。 そうしないと、 あなたは このコードを にどと みることができません。 もし あなたが 2FAアプリに アクセスできなくなり、 リカバリーコードも おもいだせないなら、 あなたは あなたの アカウントに はいれなくなります。",
       "authentication_methods": "にんしょうメソッド",
       "scan": {
         "title": "スキャン",
@@ -697,9 +707,9 @@
     "import_mutes_from_a_csv_file": "CSVファイルからミュートをインポートする",
     "reset_avatar": "アバターをリセットする",
     "remove_language": "とりのぞく",
-    "primary_language": "いちばんわかることば:",
+    "primary_language": "さいしょに つかう ことば:",
     "add_language": "よびとしてつかうことばを、ついかする",
-    "fallback_language": "よびとしてつかうことば {index}:",
+    "fallback_language": "よびとして つかう ことば {index}:",
     "lists_navigation": "ナビゲーションにリストをひょうじする",
     "account_alias": "アカウントのエイリアス",
     "mention_link_display_full": "いつも、ながいなまえをひょうじする (れい: {'@'}hoge{'@'}example.org)",
@@ -797,7 +807,11 @@
     "virtual_scrolling": "タイムラインのレンダリングをよくする",
     "use_at_icon": "{'@'} きごうを、もじのかわりに、アイコンでひょうじする",
     "mention_link_display_short": "いつも、みじかいなまえにする (れい: {'@'}hoge)",
-    "mention_link_display": "メンションのリンクをひょうじするけいしき"
+    "mention_link_display": "メンションのリンクをひょうじするけいしき",
+    "url": "URL",
+    "preview": "プレビュー",
+    "emoji_reactions_scale": "リアクションを なんばいの おおきさで ひょうじするか",
+    "autocomplete_select_first": "じどうほかんが あれば、 さいしょの ものを じどうで えらぶ"
   },
   "time": {
     "day": "{0}日",

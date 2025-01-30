@@ -60,7 +60,7 @@ const run = () => {
   }, {})
 
   fs.writeFile(outputFilename, JSON.stringify(sorted, null, 2), 'utf8', (err) => {
-    if (err) console.log('Error writing file', err)
+    if (err) console.error('Error writing file', err)
   })
 }
 

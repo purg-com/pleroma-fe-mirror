@@ -1,3 +1,4 @@
+import BookmarkFoldersMenuContent from 'src/components/bookmark_folders_menu/bookmark_folders_menu_content.vue'
 import ListsMenuContent from 'src/components/lists_menu/lists_menu_content.vue'
 import { mapState, mapGetters } from 'vuex'
 import { mapState as mapPiniaState } from 'pinia'
@@ -20,7 +21,8 @@ import {
   faInfoCircle,
   faStream,
   faList,
-  faBullhorn
+  faBullhorn,
+  faFilePen
 } from '@fortawesome/free-solid-svg-icons'
 import { useAnnouncementsStore } from '../../stores/announcements'
 
@@ -36,13 +38,15 @@ library.add(
   faInfoCircle,
   faStream,
   faList,
-  faBullhorn
+  faBullhorn,
+  faFilePen
 )
 const NavPanel = {
   props: ['forceExpand', 'forceEditMode'],
   created () {
   },
   components: {
+    BookmarkFoldersMenuContent,
     ListsMenuContent,
     NavigationEntry,
     NavigationPins,
@@ -53,6 +57,7 @@ const NavPanel = {
       editMode: false,
       showTimelines: false,
       showLists: false,
+      showBookmarkFolders: false,
       timelinesList: Object.entries(TIMELINES).map(([k, v]) => ({ ...v, name: k })),
       rootList: Object.entries(ROOT_ITEMS).map(([k, v]) => ({ ...v, name: k }))
     }
@@ -63,6 +68,9 @@ const NavPanel = {
     },
     toggleLists () {
       this.showLists = !this.showLists
+    },
+    toggleBookmarkFolders () {
+      this.showBookmarkFolders = !this.showBookmarkFolders
     },
     toggleEditMode () {
       this.editMode = !this.editMode
@@ -95,7 +103,8 @@ const NavPanel = {
       federating: state => state.instance.federating,
       pleromaChatMessagesAvailable: state => state.instance.pleromaChatMessagesAvailable,
       pinnedItems: state => new Set(state.serverSideStorage.prefsStorage.collections.pinnedNavItems),
-      collapsed: state => state.serverSideStorage.prefsStorage.simple.collapseNav
+      collapsed: state => state.serverSideStorage.prefsStorage.simple.collapseNav,
+      bookmarkFolders: state => state.instance.pleromaBookmarkFoldersAvailable
     }),
     timelinesItems () {
       return filterNavigation(
@@ -107,7 +116,8 @@ const NavPanel = {
           hasAnnouncements: this.supportsAnnouncements,
           isFederating: this.federating,
           isPrivate: this.privateMode,
-          currentUser: this.currentUser
+          currentUser: this.currentUser,
+          supportsBookmarkFolders: this.bookmarkFolders
         }
       )
     },
@@ -121,7 +131,8 @@ const NavPanel = {
           hasAnnouncements: this.supportsAnnouncements,
           isFederating: this.federating,
           isPrivate: this.privateMode,
-          currentUser: this.currentUser
+          currentUser: this.currentUser,
+          supportsBookmarkFolders: this.bookmarkFolders
         }
       )
     },

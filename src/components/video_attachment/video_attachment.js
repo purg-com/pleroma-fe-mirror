@@ -1,4 +1,3 @@
-
 const VideoAttachment = {
   props: ['attachment', 'controls'],
   data () {

@@ -1,5 +1,3 @@
-@import "../../variables";
-
 .StatusBody {
   display: flex;
   flex-direction: column;
@@ -14,7 +12,6 @@
 
   & .text,
   & .summary {
-    font-family: var(--postFont, sans-serif);
     white-space: pre-wrap;
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -41,7 +38,7 @@
     margin-bottom: 0.5em;
     border-style: solid;
     border-width: 0 0 1px;
-    border-color: var(--border, $fallback--border);
+    border-color: var(--border);
     flex-grow: 0;
 
     &.-tall {
@@ -112,20 +109,11 @@
     }
   }
 
-  .greentext {
-    color: $fallback--cGreen;
-    color: var(--postGreentext, $fallback--cGreen);
-  }
-
-  .cyantext {
-    color: var(--postCyantext, $fallback--cBlue);
-  }
-
   &.-compact {
     align-items: top;
     flex-direction: row;
 
-    --emoji-size: 16px;
+    --emoji-size: calc(var(--emojiSize, 32px) / 2);
 
     & .body,
     & .attachments {

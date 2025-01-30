@@ -3,17 +3,27 @@
     v-if="matchesExpertLevel"
     class="NumberSetting"
   >
-    <label :for="path">
-      <slot />
+    <label
+      :for="path"
+      :class="{ 'faint': shouldBeDisabled }"
+    >
+      <template v-if="backendDescriptionLabel">
+        {{ backendDescriptionLabel + ' ' }}
+      </template>
+      <template v-else-if="source === 'admin'">
+        MISSING LABEL FOR {{ path }}
+      </template>
+      <slot v-else />
     </label>
+    {{ ' ' }}
     <input
       :id="path"
-      class="number-input"
+      class="input number-input"
       type="number"
       :step="step || 1"
-      :disabled="disabled"
+      :disabled="shouldBeDisabled"
       :min="min || 0"
-      :value="state"
+      :value="realDraftMode ? draft :state"
       @change="update"
     >
     {{ ' ' }}
@@ -21,6 +31,15 @@
       :changed="isChanged"
       :onclick="reset"
     />
+    <ProfileSettingIndicator :is-profile="isProfileSetting" />
+    <DraftButtons />
+    <p
+      v-if="backendDescriptionDescription"
+      class="setting-description"
+      :class="{ 'faint': shouldBeDisabled }"
+    >
+      {{ backendDescriptionDescription + ' ' }}
+    </p>
   </span>
 </template>
 

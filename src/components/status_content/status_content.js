@@ -74,6 +74,10 @@ const StatusContent = {
   },
   computed: {
     ...controlledOrUncontrolledGetters(['showingTall', 'expandingSubject', 'showingLongSubject']),
+    statusCard () {
+      if (!this.status.card) return null
+      return this.status.card.url === this.status.quote_url ? null : this.status.card
+    },
     hideAttachments () {
       return (this.mergedConfig.hideAttachments && !this.inConversation) ||
         (this.mergedConfig.hideAttachmentsInConv && this.inConversation)
@@ -86,6 +90,9 @@ const StatusContent = {
         return false
       }
       return true
+    },
+    localCollapseSubjectDefault () {
+      return this.mergedConfig.collapseMessageWithSubject
     },
     attachmentSize () {
       if (this.compact) {

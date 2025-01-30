@@ -1,5 +1,6 @@
 <template>
   <div
+    v-show="$store.state.interface.themeApplied"
     id="app-loaded"
     :style="bgStyle"
   >
@@ -69,7 +70,7 @@
     <PostStatusModal />
     <EditStatusModal v-if="editingAvailable" />
     <StatusHistoryModal v-if="editingAvailable" />
-    <SettingsModal />
+    <SettingsModal :class="layoutModalClass" />
     <UpdateNotification />
     <GlobalNoticeList />
   </div>

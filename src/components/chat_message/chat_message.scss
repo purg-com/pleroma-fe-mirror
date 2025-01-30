@@ -1,5 +1,3 @@
-@import "../../variables";
-
 .chat-message-wrapper {
   &.hovered-message-chain {
     .animated.Avatar {
@@ -27,12 +25,6 @@
 
   .menu-icon {
     cursor: pointer;
-
-    &:hover,
-    .extra-button-popover.open & {
-      color: $fallback--text;
-      color: var(--text, $fallback--text);
-    }
   }
 
   .popover {
@@ -61,10 +53,12 @@
   }
 
   .status {
-    border-radius: $fallback--chatMessageRadius;
-    border-radius: var(--chatMessageRadius, $fallback--chatMessageRadius);
+    background-color: var(--background);
+    color: var(--text);
+    border-radius: var(--roundness);
     display: flex;
     padding: 0.75em;
+    border: 1px solid var(--border);
   }
 
   .created-at {
@@ -97,8 +91,7 @@
   .error {
     .status-content.media-body,
     .created-at {
-      color: $fallback--cRed;
-      color: var(--badgeNotification, $fallback--cRed);
+      color: var(--badgeNotification);
     }
   }
 
@@ -117,16 +110,6 @@
     align-content: end;
     justify-content: flex-end;
 
-    a {
-      color: var(--chatMessageOutgoingLink, $fallback--link);
-    }
-
-    .status {
-      color: var(--chatMessageOutgoingText, $fallback--text);
-      background-color: var(--chatMessageOutgoingBg, $fallback--lightBg);
-      border: 1px solid var(--chatMessageOutgoingBorder, --lightBg);
-    }
-
     .chat-message-inner {
       align-items: flex-end;
     }
@@ -137,22 +120,6 @@
   }
 
   .incoming {
-    a {
-      color: var(--chatMessageIncomingLink, $fallback--link);
-    }
-
-    .status {
-      color: var(--chatMessageIncomingText, $fallback--text);
-      background-color: var(--chatMessageIncomingBg, $fallback--bg);
-      border: 1px solid var(--chatMessageIncomingBorder, --border);
-    }
-
-    .created-at {
-      a {
-        color: var(--chatMessageIncomingText, $fallback--text);
-      }
-    }
-
     .chat-message-menu {
       left: 0.4rem;
     }
@@ -176,6 +143,5 @@
   margin: 1.4em 0;
   font-size: 0.9em;
   user-select: none;
-  color: $fallback--text;
-  color: var(--faintedText, $fallback--text);
+  color: var(--textFaint);
 }

@@ -17,6 +17,7 @@
         <i18n-t
           v-if="id"
           keypath="lists.editing_list"
+          scope="global"
         >
           <template #listTitle>
             {{ title }}
@@ -25,6 +26,7 @@
         <i18n-t
           v-else
           keypath="lists.creating_list"
+          scope="global"
         />
       </div>
     </div>
@@ -36,6 +38,7 @@
           id="list-edit-title"
           ref="title"
           v-model="titleDraft"
+          class="input"
         >
         <button
           v-if="id"
@@ -164,8 +167,6 @@
 <script src="./lists_edit.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .ListEdit {
   --panel-body-padding: 0.5em;
 

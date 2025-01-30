@@ -1,5 +1,5 @@
 import Popover from '../popover/popover.vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faFilter, faFont, faWrench } from '@fortawesome/free-solid-svg-icons'
 import { useInterfaceStore } from '../../stores/interface'
@@ -12,7 +12,8 @@ library.add(
 
 const QuickFilterSettings = {
   props: {
-    conversation: Boolean
+    conversation: Boolean,
+    nested: Boolean
   },
   components: {
     Popover
@@ -28,6 +29,25 @@ const QuickFilterSettings = {
   },
   computed: {
     ...mapGetters(['mergedConfig']),
+    ...mapState({
+      mobileLayout: state => state.interface.layoutType === 'mobile'
+    }),
+    triggerAttrs () {
+      if (this.mobileLayout) {
+        return {}
+      } else {
+        return {
+          title: this.$t('timeline.quick_filter_settings')
+        }
+      }
+    },
+    mainClass () {
+      if (this.mobileLayout) {
+        return 'main-button'
+      } else {
+        return 'dropdown-item'
+      }
+    },
     loggedIn () {
       return !!this.$store.state.users.currentUser
     },
@@ -63,6 +83,13 @@ const QuickFilterSettings = {
       set () {
         const value = !this.muteBotStatuses
         this.$store.dispatch('setOption', { name: 'muteBotStatuses', value })
+      }
+    },
+    muteSensitiveStatuses: {
+      get () { return this.mergedConfig.muteSensitiveStatuses },
+      set () {
+        const value = !this.muteSensitiveStatuses
+        this.$store.dispatch('setOption', { name: 'muteSensitiveStatuses', value })
       }
     }
   }

@@ -24,7 +24,10 @@
         "media_removal": "Usuwanie multimediów",
         "media_removal_desc": "Ta instancja usuwa multimedia z postów od wymienionych instancji:",
         "media_nsfw": "Multimedia ustawione jako wrażliwe",
-        "media_nsfw_desc": "Ta instancja wymusza, by multimedia z wymienionych instancji były ustawione jako wrażliwe:"
+        "media_nsfw_desc": "Ta instancja wymusza, by multimedia z wymienionych instancji były ustawione jako wrażliwe:",
+        "instance": "Instancja",
+        "reason": "Powód",
+        "not_applicable": "Nie dotyczy"
       }
     },
     "staff": "Administracja"
@@ -861,5 +864,13 @@
   },
   "errors": {
     "storage_unavailable": "Pleroma nie mogła uzyskać dostępu do pamięci masowej przeglądarki. Twój login lub lokalne ustawienia nie zostaną zapisane i możesz napotkać problemy. Spróbuj włączyć ciasteczka."
+  },
+  "announcements": {
+    "page_header": "Ogłoszenia",
+    "title": "Ogłoszenie",
+    "mark_as_read_action": "Oznacz jako przeczytane",
+    "post_placeholder": "Wprowadź treść ogłoszenia…",
+    "close_error": "Zamknij",
+    "delete_action": "Usuń"
   }
 }

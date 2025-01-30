@@ -8,6 +8,7 @@
           v-model="newEmail"
           type="email"
           autocomplete="email"
+          class="input"
         >
       </div>
       <div>
@@ -16,6 +17,7 @@
           v-model="changeEmailPassword"
           type="password"
           autocomplete="current-password"
+          class="input"
         >
       </div>
       <button
@@ -40,6 +42,7 @@
         <input
           v-model="changePasswordInputs[0]"
           type="password"
+          class="input"
         >
       </div>
       <div>
@@ -47,6 +50,7 @@
         <input
           v-model="changePasswordInputs[1]"
           type="password"
+          class="input"
         >
       </div>
       <div>
@@ -54,6 +58,7 @@
         <input
           v-model="changePasswordInputs[2]"
           type="password"
+          class="input"
         >
       </div>
       <button
@@ -143,8 +148,9 @@
         />
       </div>
       <div>
-        <i18n
-          path="settings.new_alias_target"
+        <i18n-t
+          scope="global"
+          keypath="settings.new_alias_target"
           tag="p"
         >
           <code
@@ -152,9 +158,10 @@
           >
             foo@example.org
           </code>
-        </i18n>
+        </i18n-t>
         <input
           v-model="addAliasTarget"
+          class="input"
         >
       </div>
       <button
@@ -175,18 +182,20 @@
       <h2>{{ $t('settings.move_account') }}</h2>
       <p>{{ $t('settings.move_account_notes') }}</p>
       <div>
-        <i18n
-          path="settings.move_account_target"
+        <i18n-t
+          keypath="settings.move_account_target"
           tag="p"
+          scope="global"
         >
-          <code
-            place="example"
-          >
-            foo@example.org
-          </code>
-        </i18n>
+          <template #example>
+            <code>
+              foo@example.org
+            </code>
+          </template>
+        </i18n-t>
         <input
           v-model="moveAccountTarget"
+          class="input"
         >
       </div>
       <div>
@@ -195,6 +204,7 @@
           v-model="moveAccountPassword"
           type="password"
           autocomplete="current-password"
+          class="input"
         >
       </div>
       <button
@@ -222,6 +232,7 @@
         <input
           v-model="deleteAccountConfirmPasswordInput"
           type="password"
+          class="input"
         >
         <button
           class="btn button-default"

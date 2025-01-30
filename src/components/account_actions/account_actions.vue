@@ -9,60 +9,80 @@
       <template #content>
         <div class="dropdown-menu">
           <template v-if="relationship.following">
-            <button
+            <div
               v-if="relationship.showing_reblogs"
-              class="btn button-default dropdown-item"
-              @click="hideRepeats"
+              class="menu-item dropdown-item"
             >
-              {{ $t('user_card.hide_repeats') }}
-            </button>
-            <button
+              <button
+                class="main-button"
+                @click="hideRepeats"
+              >
+                {{ $t('user_card.hide_repeats') }}
+              </button>
+            </div>
+            <div
               v-if="!relationship.showing_reblogs"
-              class="btn button-default dropdown-item"
-              @click="showRepeats"
+              class="menu-item dropdown-item"
             >
-              {{ $t('user_card.show_repeats') }}
-            </button>
+              <button
+                class="main-button"
+                @click="showRepeats"
+              >
+                {{ $t('user_card.show_repeats') }}
+              </button>
+            </div>
             <div
               role="separator"
               class="dropdown-divider"
             />
           </template>
           <UserListMenu :user="user" />
-          <button
+          <div
             v-if="relationship.followed_by"
-            class="btn button-default btn-block dropdown-item"
-            @click="removeUserFromFollowers"
+            class="menu-item dropdown-item"
           >
-            {{ $t('user_card.remove_follower') }}
-          </button>
-          <button
-            v-if="relationship.blocking"
-            class="btn button-default btn-block dropdown-item"
-            @click="unblockUser"
-          >
-            {{ $t('user_card.unblock') }}
-          </button>
-          <button
-            v-else
-            class="btn button-default btn-block dropdown-item"
-            @click="blockUser"
-          >
-            {{ $t('user_card.block') }}
-          </button>
-          <button
-            class="btn button-default btn-block dropdown-item"
-            @click="reportUser"
-          >
-            {{ $t('user_card.report') }}
-          </button>
-          <button
+            <button
+              class="main-button"
+              @click="removeUserFromFollowers"
+            >
+              {{ $t('user_card.remove_follower') }}
+            </button>
+          </div>
+          <div class="menu-item dropdown-item">
+            <button
+              v-if="relationship.blocking"
+              class="main-button"
+              @click="unblockUser"
+            >
+              {{ $t('user_card.unblock') }}
+            </button>
+            <button
+              v-else
+              class="main-button"
+              @click="blockUser"
+            >
+              {{ $t('user_card.block') }}
+            </button>
+          </div>
+          <div class="menu-item dropdown-item">
+            <button
+              class="main-button"
+              @click="reportUser"
+            >
+              {{ $t('user_card.report') }}
+            </button>
+          </div>
+          <div
             v-if="pleromaChatMessagesAvailable"
-            class="btn button-default btn-block dropdown-item"
-            @click="openChat"
+            class="menu-item dropdown-item"
           >
-            {{ $t('user_card.message') }}
-          </button>
+            <button
+              class="main-button"
+              @click="openChat"
+            >
+              {{ $t('user_card.message') }}
+            </button>
+          </div>
         </div>
       </template>
       <template #trigger>
@@ -86,6 +106,7 @@
         <i18n-t
           keypath="user_card.block_confirm"
           tag="span"
+          scope="global"
         >
           <template #user>
             <span
@@ -107,6 +128,7 @@
         <i18n-t
           keypath="user_card.remove_follower_confirm"
           tag="span"
+          scope="global"
         >
           <template #user>
             <span
@@ -122,19 +144,12 @@
 <script src="./account_actions.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .AccountActions {
   .ellipsis-button {
     width: 2.5em;
     margin: -0.5em 0;
     padding: 0.5em 0;
     text-align: center;
-
-    &:not(:hover) .icon {
-      color: $fallback--lightText;
-      color: var(--lightText, $fallback--lightText);
-    }
   }
 }
 </style>

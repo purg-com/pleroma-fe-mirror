@@ -3,6 +3,7 @@
     <form>
       <input
         ref="input"
+        class="input"
         type="file"
         @change="change"
       >

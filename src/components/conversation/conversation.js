@@ -56,7 +56,8 @@ const conversation = {
       expanded: false,
       threadDisplayStatusObject: {}, // id => 'showing' | 'hidden'
       statusContentPropertiesObject: {},
-      inlineDivePosition: null
+      inlineDivePosition: null,
+      loadStatusError: null
     }
   },
   props: [
@@ -349,6 +350,7 @@ const conversation = {
     },
     ...mapGetters(['mergedConfig']),
     ...mapState({
+      mobileLayout: state => state.interface.layoutType === 'mobile',
       mastoUserSocketStatus: state => state.api.mastoUserSocketStatus
     })
   },
@@ -392,10 +394,14 @@ const conversation = {
             this.setHighlight(this.originalStatusId)
           })
       } else {
+        this.loadStatusError = null
         this.$store.state.api.backendInteractor.fetchStatus({ id: this.statusId })
           .then((status) => {
             this.$store.dispatch('addNewStatuses', { statuses: [status] })
             this.fetchConversation()
+          })
+          .catch((error) => {
+            this.loadStatusError = error
           })
       }
     },

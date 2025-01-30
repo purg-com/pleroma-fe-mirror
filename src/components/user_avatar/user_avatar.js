@@ -3,24 +3,26 @@ import StillImage from '../still-image/still-image.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 
 import {
-  faRobot
+  faRobot,
+  faPeopleGroup
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
-  faRobot
+  faRobot,
+  faPeopleGroup
 )
 
 const UserAvatar = {
   props: [
     'user',
-    'betterShadow',
     'compact',
-    'bot'
+    'showActorTypeIndicator'
   ],
   data () {
     return {
       showPlaceholder: false,
-      defaultAvatar: `${this.$store.state.instance.server + this.$store.state.instance.defaultAvatar}`
+      defaultAvatar: `${this.$store.state.instance.server + this.$store.state.instance.defaultAvatar}`,
+      betterShadow: this.$store.state.interface.browserSupport.cssFilter
     }
   },
   components: {

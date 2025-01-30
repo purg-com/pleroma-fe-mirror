@@ -1,7 +1,7 @@
 import merge from 'lodash.merge'
-import localforage from 'localforage'
 import { each, get, set, cloneDeep } from 'lodash'
 import { useInterfaceStore } from '../stores/interface'
+import { storage } from './storage.js'
 
 let loaded = false
 
@@ -27,7 +27,7 @@ const saveImmedeatelyActions = [
 ]
 
 const defaultStorage = (() => {
-  return localforage
+  return storage
 })()
 
 export default function createPersistedState ({
@@ -39,7 +39,7 @@ export default function createPersistedState ({
   },
   setState = (key, state, storage) => {
     if (!loaded) {
-      console.log('waiting for old state to be loaded...')
+      console.info('waiting for old state to be loaded...')
       return Promise.resolve()
     } else {
       return storage.setItem(key, state)
@@ -66,7 +66,7 @@ export default function createPersistedState ({
         }
         loaded = true
       } catch (e) {
-        console.log("Couldn't load state")
+        console.error("Couldn't load state")
         console.error(e)
         loaded = true
       }
@@ -87,8 +87,8 @@ export default function createPersistedState ({
               })
           }
         } catch (e) {
-          console.log("Couldn't persist state:")
-          console.log(e)
+          console.error("Couldn't persist state:")
+          console.error(e)
         }
       })
     }

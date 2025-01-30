@@ -25,7 +25,6 @@ import {
   faExpandAlt,
   faCompressAlt
 } from '@fortawesome/free-solid-svg-icons'
-import { useInterfaceStore } from '../../stores/interface'
 
 library.add(
   faCheck,
@@ -44,13 +43,13 @@ const Notification = {
   data () {
     return {
       statusExpanded: false,
-      betterShadow: useInterfaceStore().browserSupport.cssFilter,
       unmuted: false,
       showingApproveConfirmDialog: false,
       showingDenyConfirmDialog: false
     }
   },
   props: ['notification'],
+  emits: ['interacted'],
   components: {
     StatusContent,
     UserAvatar,
@@ -72,6 +71,9 @@ const Notification = {
     },
     getUser (notification) {
       return this.$store.state.users.usersObject[notification.from_profile.id]
+    },
+    interacted () {
+      this.$emit('interacted')
     },
     toggleMute () {
       this.unmuted = !this.unmuted
@@ -96,6 +98,7 @@ const Notification = {
       }
     },
     doApprove () {
+      this.$emit('interacted')
       this.$store.state.api.backendInteractor.approveUser({ id: this.user.id })
       this.$store.dispatch('removeFollowRequest', this.user)
       this.$store.dispatch('markSingleNotificationAsSeen', { id: this.notification.id })
@@ -115,6 +118,7 @@ const Notification = {
       }
     },
     doDeny () {
+      this.$emit('interacted')
       this.$store.state.api.backendInteractor.denyUser({ id: this.user.id })
         .then(() => {
           this.$store.dispatch('dismissNotificationLocal', { id: this.notification.id })

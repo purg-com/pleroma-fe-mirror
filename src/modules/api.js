@@ -89,6 +89,9 @@ const api = {
           const { state, commit, dispatch, rootState } = store
           const timelineData = rootState.statuses.timelines.friends
           state.mastoUserSocket = state.backendInteractor.startUserSocket({ store })
+          state.mastoUserSocket.addEventListener('pleroma:authenticated', () => {
+            state.mastoUserSocket.subscribe('user')
+          })
           state.mastoUserSocket.addEventListener(
             'message',
             ({ detail: message }) => {
@@ -204,12 +207,14 @@ const api = {
       timeline = 'friends',
       tag = false,
       userId = false,
-      listId = false
+      listId = false,
+      statusId = false,
+      bookmarkFolderId = false
     }) {
       if (store.state.fetchers[timeline]) return
 
       const fetcher = store.state.backendInteractor.startFetchingTimeline({
-        timeline, store, userId, listId, tag
+        timeline, store, userId, listId, statusId, bookmarkFolderId, tag
       })
       store.commit('addFetcher', { fetcherName: timeline, fetcher })
     },
@@ -271,6 +276,18 @@ const api = {
       const fetcher = store.state.fetchers.lists
       if (!fetcher) return
       store.commit('removeFetcher', { fetcherName: 'lists', fetcher })
+    },
+
+    // Bookmark folders
+    startFetchingBookmarkFolders (store) {
+      if (store.state.fetchers.bookmarkFolders) return
+      const fetcher = store.state.backendInteractor.startFetchingBookmarkFolders({ store })
+      store.commit('addFetcher', { fetcherName: 'bookmarkFolders', fetcher })
+    },
+    stopFetchingBookmarkFolders (store) {
+      const fetcher = store.state.fetchers.bookmarkFolders
+      if (!fetcher) return
+      store.commit('removeFetcher', { fetcherName: 'bookmarkFolders', fetcher })
     },
 
     // Pleroma websocket

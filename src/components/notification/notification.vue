@@ -1,11 +1,12 @@
 <template>
   <article
-    v-if="notification.type === 'mention'"
+    v-if="notification.type === 'mention' || notification.type === 'status'"
   >
     <Status
       class="Notification"
       :compact="true"
       :statusoid="notification.status"
+      @interacted="interacted"
     />
   </article>
   <article v-else>
@@ -46,9 +47,7 @@
         >
           <UserAvatar
             class="post-avatar"
-            :bot="botIndicator"
             :compact="true"
-            :better-shadow="betterShadow"
             :user="notification.from_profile"
           />
         </UserPopover>
@@ -125,7 +124,8 @@
                     v-if="notification.emoji_url"
                     class="emoji-reaction-emoji emoji-reaction-emoji-image"
                     :src="notification.emoji_url"
-                    :name="notification.emoji"
+                    :alt="notification.emoji"
+                    :title="notification.emoji"
                   >
                   <span
                     v-else
@@ -153,7 +153,7 @@
             <router-link
               v-if="notification.status"
               :to="{ name: 'conversation', params: { id: notification.status.id } }"
-              class="timeago-link faint-link"
+              class="timeago-link faint"
             >
               <Timeago
                 :time="notification.created_at"
@@ -162,8 +162,8 @@
             </router-link>
             <button
               class="button-unstyled expand-icon"
-              :aria-expanded="statusExpanded"
               :title="$t('tool_tip.toggle_expand')"
+              :aria-expanded="statusExpanded"
               @click.prevent="toggleStatusExpanded"
             >
               <FAIcon
@@ -245,9 +245,8 @@
         />
         <template v-else>
           <StatusContent
-            :class="{ faint: !statusExpanded }"
             :compact="!statusExpanded"
-            :status="notification.action"
+            :status="notification.status"
           />
         </template>
       </div>

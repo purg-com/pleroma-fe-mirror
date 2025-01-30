@@ -23,16 +23,19 @@
     <List
       :items="items"
       :get-key="getKey"
+      :get-class="item => isSelected(item) ? '-active' : ''"
     >
       <template #item="{item}">
         <div
           class="selectable-list-item-inner"
           :class="{ 'selectable-list-item-selected-inner': isSelected(item) }"
+          @click.stop="toggle(!isSelected(item), item)"
         >
           <div class="selectable-list-checkbox-wrapper">
             <Checkbox
               :model-value="isSelected(item)"
               @update:model-value="checked => toggle(checked, item)"
+              @click.stop
             />
           </div>
           <slot
@@ -51,9 +54,11 @@
 <script src="./selectable_list.js"></script>
 
 <style lang="scss">
-@import "../../variables";
-
 .selectable-list {
+  --__line-height: 1.5em;
+  --__horizontal-gap: 0.75em;
+  --__vertical-gap: 0.5em;
+
   &-item-inner {
     display: flex;
     align-items: center;
@@ -63,24 +68,12 @@
     }
   }
 
-  &-item-selected-inner {
-    background-color: $fallback--lightBg;
-    background-color: var(--selectedMenu, $fallback--lightBg);
-    color: var(--selectedMenuText, $fallback--text);
-
-    --faint: var(--selectedMenuFaintText, $fallback--faint);
-    --faintLink: var(--selectedMenuFaintLink, $fallback--faint);
-    --lightText: var(--selectedMenuLightText, $fallback--lightText);
-    --icon: var(--selectedMenuIcon, $fallback--icon);
-  }
-
   &-header {
     display: flex;
     align-items: center;
-    padding: 0.6em 0;
-    border-bottom: 2px solid;
-    border-bottom-color: $fallback--border;
-    border-bottom-color: var(--border, $fallback--border);
+    padding: var(--__vertical-gap) var(--__horizontal-gap);
+    border-bottom: 1px solid;
+    border-bottom-color: var(--border);
 
     &-actions {
       flex: 1;
@@ -88,7 +81,7 @@
   }
 
   &-checkbox-wrapper {
-    padding: 0 10px;
+    padding-right: var(--__horizontal-gap);
     flex: none;
   }
 }

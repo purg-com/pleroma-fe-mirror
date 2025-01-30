@@ -13,9 +13,9 @@ import VBodyScrollLock from 'src/directives/body_scroll_lock'
 import { windowWidth, windowHeight } from '../services/window_utils/window_utils'
 import { getOrCreateApp, getClientToken } from '../services/new_api/oauth.js'
 import backendInteractorService from '../services/backend_interactor_service/backend_interactor_service.js'
-import { CURRENT_VERSION } from '../services/theme_data/theme_data.service.js'
-import { applyTheme, applyConfig } from '../services/style_setter/style_setter.js'
+import { applyConfig } from '../services/style_setter/style_setter.js'
 import FaviconService from '../services/favicon_service/favicon_service.js'
+import { initServiceWorker, updateFocus } from '../services/sw/sw.js'
 
 import { useI18nStore } from '../stores/i18n'
 import { useInterfaceStore } from '../stores/interface'
@@ -126,6 +126,9 @@ const setSettings = async ({ apiConfig, staticConfig, store }) => {
     store.dispatch('setInstanceOption', { name, value: config[name] })
   }
 
+  copyInstanceOption('theme')
+  copyInstanceOption('style')
+  copyInstanceOption('palette')
   copyInstanceOption('nsfwCensorImage')
   copyInstanceOption('background')
   copyInstanceOption('hidePostStats')
@@ -163,8 +166,6 @@ const setSettings = async ({ apiConfig, staticConfig, store }) => {
   copyInstanceOption('showFeaturesPanel')
   copyInstanceOption('hideSitename')
   copyInstanceOption('sidebarRight')
-
-  return store.dispatch('setTheme', config.theme)
 }
 
 const getTOS = async ({ store }) => {
@@ -177,8 +178,7 @@ const getTOS = async ({ store }) => {
       throw (res)
     }
   } catch (e) {
-    console.warn("Can't load TOS")
-    console.warn(e)
+    console.warn("Can't load TOS\n", e)
   }
 }
 
@@ -192,8 +192,7 @@ const getInstancePanel = async ({ store }) => {
       throw (res)
     }
   } catch (e) {
-    console.warn("Can't load instance panel")
-    console.warn(e)
+    console.warn("Can't load instance panel\n", e)
   }
 }
 
@@ -223,8 +222,7 @@ const getStickers = async ({ store }) => {
       throw (res)
     }
   } catch (e) {
-    console.warn("Can't load stickers")
-    console.warn(e)
+    console.warn("Can't load stickers\n", e)
   }
 }
 
@@ -246,7 +244,7 @@ const resolveStaffAccounts = ({ store, accounts }) => {
 
 const getNodeInfo = async ({ store }) => {
   try {
-    const res = await preloadFetch('/nodeinfo/2.0.json')
+    const res = await preloadFetch('/nodeinfo/2.1.json')
     if (res.ok) {
       const data = await res.json()
       const metadata = data.metadata
@@ -258,11 +256,14 @@ const getNodeInfo = async ({ store }) => {
       store.dispatch('setInstanceOption', { name: 'shoutAvailable', value: features.includes('chat') })
       store.dispatch('setInstanceOption', { name: 'pleromaChatMessagesAvailable', value: features.includes('pleroma_chat_messages') })
       store.dispatch('setInstanceOption', { name: 'pleromaCustomEmojiReactionsAvailable', value: features.includes('pleroma_custom_emoji_reactions') })
+      store.dispatch('setInstanceOption', { name: 'pleromaBookmarkFoldersAvailable', value: features.includes('pleroma:bookmark_folders') })
       store.dispatch('setInstanceOption', { name: 'gopherAvailable', value: features.includes('gopher') })
       store.dispatch('setInstanceOption', { name: 'pollsAvailable', value: features.includes('polls') })
       store.dispatch('setInstanceOption', { name: 'editingAvailable', value: features.includes('editing') })
       store.dispatch('setInstanceOption', { name: 'pollLimits', value: metadata.pollLimits })
       store.dispatch('setInstanceOption', { name: 'mailerEnabled', value: metadata.mailerEnabled })
+      store.dispatch('setInstanceOption', { name: 'quotingAvailable', value: features.includes('quote_posting') })
+      store.dispatch('setInstanceOption', { name: 'groupActorAvailable', value: features.includes('pleroma:group_actors') })
 
       const uploadLimits = metadata.uploadLimits
       store.dispatch('setInstanceOption', { name: 'uploadlimit', value: parseInt(uploadLimits.general) })
@@ -280,6 +281,7 @@ const getNodeInfo = async ({ store }) => {
 
       const software = data.software
       store.dispatch('setInstanceOption', { name: 'backendVersion', value: software.version })
+      store.dispatch('setInstanceOption', { name: 'backendRepository', value: software.repository })
       store.dispatch('setInstanceOption', { name: 'pleromaBackend', value: software.name === 'pleroma' })
 
       const priv = metadata.private
@@ -329,17 +331,10 @@ const setConfig = async ({ store }) => {
 }
 
 const checkOAuthToken = async ({ store }) => {
-  // eslint-disable-next-line no-async-promise-executor
-  return new Promise(async (resolve, reject) => {
-    if (store.getters.getUserToken()) {
-      try {
-        await store.dispatch('loginUser', store.getters.getUserToken())
-      } catch (e) {
-        console.error(e)
-      }
-    }
-    resolve()
-  })
+  if (store.getters.getUserToken()) {
+    return store.dispatch('loginUser', store.getters.getUserToken())
+  }
+  return Promise.resolve()
 }
 
 const afterStoreSetup = async ({ pinia, store, storageError, i18n }) => {
@@ -354,30 +349,23 @@ const afterStoreSetup = async ({ pinia, store, storageError, i18n }) => {
   useInterfaceStore().setLayoutHeight(windowHeight())
 
   FaviconService.initFaviconService()
+  initServiceWorker(store)
+
+  window.addEventListener('focus', () => updateFocus())
 
   const overrides = window.___pleromafe_dev_overrides || {}
   const server = (typeof overrides.target !== 'undefined') ? overrides.target : window.location.origin
   store.dispatch('setInstanceOption', { name: 'server', value: server })
 
   await setConfig({ store })
-
-  const { customTheme, customThemeSource } = store.state.config
-  const { theme } = store.state.instance
-  const customThemePresent = customThemeSource || customTheme
-
-  if (customThemePresent) {
-    if (customThemeSource && customThemeSource.themeEngineVersion === CURRENT_VERSION) {
-      applyTheme(customThemeSource)
-    } else {
-      applyTheme(customTheme)
-    }
-  } else if (theme) {
-    // do nothing, it will load asynchronously
-  } else {
-    console.error('Failed to load any theme!')
+  try {
+    await store.dispatch('applyTheme').catch((e) => { console.error('Error setting theme', e) })
+  } catch (e) {
+    window.splashError(e)
+    return Promise.reject(e)
   }
 
-  applyConfig(store.state.config)
+  applyConfig(store.state.config, i18n.global)
 
   // Now we can try getting the server settings and logging in
   // Most of these are preloaded into the index.html so blocking is minimized
@@ -386,7 +374,9 @@ const afterStoreSetup = async ({ pinia, store, storageError, i18n }) => {
     getInstancePanel({ store }),
     getNodeInfo({ store }),
     getInstanceConfig({ store })
-  ])
+  ]).catch(e => Promise.reject(e))
+
+  await store.dispatch('loadDrafts')
 
   // Start fetching things that don't need to block the UI
   store.dispatch('fetchMutes')
@@ -411,6 +401,13 @@ const afterStoreSetup = async ({ pinia, store, storageError, i18n }) => {
   app.use(store)
   app.use(i18n)
 
+  // Little thing to get out of invalid theme state
+  window.resetThemes = () => {
+    store.dispatch('resetThemeV3')
+    store.dispatch('resetThemeV3Palette')
+    store.dispatch('resetThemeV2')
+  }
+
   app.use(vClickOutside)
   app.use(VBodyScrollLock)
   app.use(VueVirtualScroller)
@@ -422,7 +419,6 @@ const afterStoreSetup = async ({ pinia, store, storageError, i18n }) => {
   app.config.unwrapInjectedRef = true
 
   app.mount('#app')
-
   return app
 }
 

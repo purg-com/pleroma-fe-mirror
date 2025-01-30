@@ -97,12 +97,17 @@ const EmojiPicker = {
     enableStickerPicker: {
       required: false,
       type: Boolean,
-      default: false
+      default: true
     },
     hideCustomEmoji: {
       required: false,
       type: Boolean,
       default: false
+    }
+  },
+  inject: {
+    popoversZLayer: {
+      default: ''
     }
   },
   data () {
@@ -113,11 +118,13 @@ const EmojiPicker = {
       groupsScrolledClass: 'scrolled-top',
       keepOpen: false,
       customEmojiTimeout: null,
+      hideCustomEmojiInPicker: false,
       // Lazy-load only after the first time `showing` becomes true.
       contentLoaded: false,
       groupRefs: {},
       emojiRefs: {},
       filteredEmojiGroups: [],
+      emojiSize: 0,
       width: 0
     }
   },
@@ -128,9 +135,42 @@ const EmojiPicker = {
     Popover
   },
   methods: {
+    groupScroll (e) {
+      e.currentTarget.scrollLeft += e.deltaY + e.deltaX
+    },
+    updateEmojiSize () {
+      const css = window.getComputedStyle(this.$refs.popover.$el)
+      const fontSize = css.getPropertyValue('font-size') || '14px'
+      const emojiSize = css.getPropertyValue('--emojiSize') || '2.2rem'
+
+      const fontSizeUnit = fontSize.replace(/[0-9,.]+/, '')
+      const fontSizeValue = Number(fontSize.replace(/[^0-9,.]+/, ''))
+
+      const emojiSizeUnit = emojiSize.replace(/[0-9,.]+/, '')
+      const emojiSizeValue = Number(emojiSize.replace(/[^0-9,.]+/, ''))
+
+      let fontSizeMultiplier
+      if (fontSizeUnit.endsWith('em')) {
+        fontSizeMultiplier = fontSizeValue
+      } else {
+        fontSizeMultiplier = fontSizeValue / 14
+      }
+
+      let emojiSizeReal
+      if (emojiSizeUnit.endsWith('em')) {
+        emojiSizeReal = emojiSizeValue * fontSizeMultiplier * 14
+      } else {
+        emojiSizeReal = emojiSizeValue
+      }
+
+      const fullEmojiSize = emojiSizeReal + (2 * 0.2 * fontSizeMultiplier * 14)
+      this.emojiSize = fullEmojiSize
+    },
     showPicker () {
       this.$refs.popover.showPopover()
-      this.onShowing()
+      this.$nextTick(() => {
+        this.onShowing()
+      })
     },
     hidePicker () {
       this.$refs.popover.hidePopover()
@@ -158,7 +198,7 @@ const EmojiPicker = {
       if (!this.keepOpen) {
         this.$refs.popover.hidePopover()
       }
-      this.$emit('emoji', { insertion: value, keepOpen: this.keepOpen })
+      this.$emit('emoji', { insertion: value, insertionUrl: emoji.imageUrl, keepOpen: this.keepOpen })
     },
     onScroll (startIndex, endIndex, visibleStartIndex, visibleEndIndex) {
       const target = this.$refs['emoji-groups'].$el
@@ -222,6 +262,7 @@ const EmojiPicker = {
     },
     onShowing () {
       const oldContentLoaded = this.contentLoaded
+      this.updateEmojiSize()
       this.recalculateItemPerRow()
       this.$nextTick(() => {
         this.$refs.search.focus()
@@ -264,16 +305,20 @@ const EmojiPicker = {
   },
   computed: {
     minItemSize () {
-      return this.emojiHeight
+      return this.emojiSize
+    },
+    // used to watch it
+    fontSize () {
+      this.$nextTick(() => {
+        this.updateEmojiSize()
+      })
+      return this.$store.getters.mergedConfig.fontSize
     },
     emojiHeight () {
-      return 32 + 4
-    },
-    emojiWidth () {
-      return 32 + 4
+      return this.emojiSize
     },
     itemPerRow () {
-      return this.width ? Math.floor(this.width / this.emojiWidth - 1) : 6
+      return this.width ? Math.floor(this.width / this.emojiSize) : 6
     },
     activeGroupView () {
       return this.showingStickers ? '' : this.activeGroup
@@ -285,7 +330,7 @@ const EmojiPicker = {
       return 0
     },
     allCustomGroups () {
-      if (this.hideCustomEmoji) {
+      if (this.hideCustomEmoji || this.hideCustomEmojiInPicker) {
         return {}
       }
       const emojis = this.$store.getters.groupedCustomEmojis
@@ -350,6 +395,9 @@ const EmojiPicker = {
 
         return emoji.displayText
       }
+    },
+    isInModal () {
+      return this.popoversZLayer === 'modals'
     }
   }
 }

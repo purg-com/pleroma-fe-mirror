@@ -18,7 +18,8 @@ import {
   faCog,
   faInfoCircle,
   faCompass,
-  faList
+  faList,
+  faFilePen
 } from '@fortawesome/free-solid-svg-icons'
 import { useShoutStore } from '../../stores/shout'
 import { useInterfaceStore } from '../../stores/interface'
@@ -37,7 +38,8 @@ library.add(
   faCog,
   faInfoCircle,
   faCompass,
-  faList
+  faList,
+  faFilePen
 )
 
 const SideDrawer = {
@@ -105,7 +107,7 @@ const SideDrawer = {
     ...mapState({
       pleromaChatMessagesAvailable: state => state.instance.pleromaChatMessagesAvailable
     }),
-    ...mapGetters(['unreadChatCount'])
+    ...mapGetters(['unreadChatCount', 'draftCount'])
   },
   methods: {
     toggleDrawer () {
@@ -122,7 +124,10 @@ const SideDrawer = {
       GestureService.updateSwipe(e, this.closeGesture)
     },
     openSettingsModal () {
-      useInterfaceStore().openSettingsModal()
+      useInterfaceStore().openSettingsModal('user')
+    },
+    openAdminModal () {
+      useInterfaceStore().openSettingsModal('admin')
     }
   }
 }

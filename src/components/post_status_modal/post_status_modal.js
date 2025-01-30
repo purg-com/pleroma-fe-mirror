@@ -45,6 +45,10 @@ const PostStatusModal = {
   methods: {
     closeModal () {
       usePostStatusStore().closePostStatusModal()
+    },
+    resetAndClose () {
+      usePostStatusStore().resetPostStatusModal()
+      usePostStatusStore().closePostStatusModal()
     }
   }
 }

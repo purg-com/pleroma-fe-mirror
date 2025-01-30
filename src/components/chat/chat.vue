@@ -26,7 +26,7 @@
           </div>
         </div>
         <div
-          class="message-list"
+          class="chat-message-list message-list"
           :style="{ height: scrollableContainerHeight }"
         >
           <template v-if="!errorLoadingChat">
@@ -61,7 +61,7 @@
               <FAIcon icon="chevron-down" />
               <div
                 v-if="newMessageCount"
-                class="badge badge-notification unread-chat-count unread-message-count"
+                class="badge -notification unread-chat-count unread-message-count"
               >
                 {{ newMessageCount }}
               </div>
@@ -76,6 +76,7 @@
             :disable-sensitivity-checkbox="true"
             :disable-submit="errorLoadingChat || !currentChat"
             :disable-preview="true"
+            :disable-draft="true"
             :optimistic-posting="true"
             :post-handler="sendMessage"
             :submit-on-enter="!mobileLayout"
@@ -95,6 +96,5 @@
 
 <script src="./chat.js"></script>
 <style lang="scss">
-@import "../../variables";
 @import "./chat";
 </style>

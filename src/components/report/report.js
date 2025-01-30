@@ -2,6 +2,7 @@ import { useReportsStore } from '../../stores/reports'
 import Select from '../select/select.vue'
 import StatusContent from '../status_content/status_content.vue'
 import Timeago from '../timeago/timeago.vue'
+import RichContent from 'src/components/rich_content/rich_content.jsx'
 import generateProfileLink from 'src/services/user_profile_link_generator/user_profile_link_generator'
 
 const Report = {
@@ -11,7 +12,8 @@ const Report = {
   components: {
     Select,
     StatusContent,
-    Timeago
+    Timeago,
+    RichContent
   },
   computed: {
     report () {

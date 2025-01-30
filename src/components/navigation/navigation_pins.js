@@ -1,7 +1,9 @@
 import { mapState } from 'vuex'
 import { mapState as mapPiniaState } from 'pinia'
 import { TIMELINES, ROOT_ITEMS, routeTo } from 'src/components/navigation/navigation.js'
-import { getListEntries, filterNavigation } from 'src/components/navigation/filter.js'
+import { getBookmarkFolderEntries, getListEntries, filterNavigation } from 'src/components/navigation/filter.js'
+
+import StillImage from 'src/components/still-image/still-image.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -36,6 +38,9 @@ const NavPanel = {
       return routeTo(item, this.currentUser)
     }
   },
+  components: {
+    StillImage
+  },
   computed: {
     getters () {
       return this.$store.getters
@@ -44,11 +49,13 @@ const NavPanel = {
       lists: getListEntries
     }),
     ...mapState({
+      bookmarks: getBookmarkFolderEntries,
       currentUser: state => state.users.currentUser,
       followRequestCount: state => state.api.followRequests.length,
       privateMode: state => state.instance.private,
       federating: state => state.instance.federating,
       pleromaChatMessagesAvailable: state => state.instance.pleromaChatMessagesAvailable,
+      supportsAnnouncements: state => state.announcements.supportsAnnouncements,
       pinnedItems: state => new Set(state.serverSideStorage.prefsStorage.collections.pinnedNavItems)
     }),
     pinnedList () {
@@ -60,6 +67,7 @@ const NavPanel = {
         ],
         {
           hasChats: this.pleromaChatMessagesAvailable,
+          hasAnnouncements: this.supportsAnnouncements,
           isFederating: this.federating,
           isPrivate: this.privateMode,
           currentUser: this.currentUser
@@ -72,6 +80,7 @@ const NavPanel = {
             .filter(([k]) => this.pinnedItems.has(k))
             .map(([k, v]) => ({ ...v, name: k })),
           ...this.lists.filter((k) => this.pinnedItems.has(k.name)),
+          ...this.bookmarks.filter((k) => this.pinnedItems.has(k.name)),
           ...Object
             .entries({ ...ROOT_ITEMS })
             .filter(([k]) => this.pinnedItems.has(k))
@@ -79,6 +88,7 @@ const NavPanel = {
         ],
         {
           hasChats: this.pleromaChatMessagesAvailable,
+          hasAnnouncements: this.supportsAnnouncements,
           isFederating: this.federating,
           isPrivate: this.privateMode,
           currentUser: this.currentUser

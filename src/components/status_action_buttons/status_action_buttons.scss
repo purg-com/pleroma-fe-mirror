@@ -1,0 +1,26 @@
+@import "../../mixins";
+
+.StatusActionButtons {
+  .quick-action-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 4em);
+    grid-auto-flow: row dense;
+    grid-auto-rows: 1fr;
+    grid-gap: 1.25em 1em;
+    margin-top: var(--status-margin);
+  }
+
+  .pin-action-button {
+    margin: -0.5em;
+    padding: 0.5em;
+  }
+}
+// popover
+.extra-action-buttons {
+  .extra-action {
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-right: 0;
+  }
+}

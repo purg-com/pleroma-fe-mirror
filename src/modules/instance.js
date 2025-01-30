@@ -1,5 +1,3 @@
-import { getPreset, applyTheme } from '../services/style_setter/style_setter.js'
-import { CURRENT_VERSION } from '../services/theme_data/theme_data.service.js'
 import apiService from '../services/api/api.service.js'
 import { instanceDefaultProperties } from './config.js'
 import { langCodeToCldrName, ensureFinalFallback } from '../i18n/languages.js'
@@ -45,7 +43,10 @@ const defaultState = {
   registrationOpen: true,
   server: 'http://localhost:4040/',
   textlimit: 5000,
-  themeData: undefined,
+  themesIndex: undefined,
+  stylesIndex: undefined,
+  palettesIndex: undefined,
+  themeData: undefined, // used for theme editor v2
   vapidPublicKey: undefined,
 
   // Stuff from static/config.json
@@ -72,15 +73,19 @@ const defaultState = {
   hideSitename: false,
   hideUserStats: false,
   muteBotStatuses: false,
+  muteSensitiveStatuses: false,
   modalOnRepeat: false,
   modalOnUnfollow: false,
   modalOnBlock: true,
   modalOnMute: false,
+  modalOnMuteConversation: false,
+  modalOnMuteDomain: true,
   modalOnDelete: true,
   modalOnLogout: true,
   modalOnApproveFollow: false,
   modalOnDenyFollow: false,
   modalOnRemoveUserFromFollowers: false,
+  modalMobileCenter: false,
   loginMethod: 'password',
   logo: '/static/logo.svg',
   logoMargin: '.2em',
@@ -98,14 +103,36 @@ const defaultState = {
   sidebarRight: false,
   subjectLineBehavior: 'email',
   theme: 'pleroma-dark',
+  palette: null,
+  style: null,
+  emojiReactionsScale: 0.5,
+  textSize: '14px',
+  emojiSize: '2.2rem',
+  navbarSize: '3.5rem',
+  panelHeaderSize: '3.2rem',
+  forcedRoundness: -1,
+  fontsOverride: {},
   virtualScrolling: true,
   sensitiveByDefault: false,
   conversationDisplay: 'linear',
   conversationTreeAdvanced: false,
   conversationOtherRepliesButton: 'below',
   conversationTreeFadeAncestors: false,
+  showExtraNotifications: true,
+  showExtraNotificationsTip: true,
+  showChatsInExtraNotifications: true,
+  showAnnouncementsInExtraNotifications: true,
+  showFollowRequestsInExtraNotifications: true,
   maxDepthInThread: 6,
   autocompleteSelect: false,
+  closingDrawerMarksAsSeen: true,
+  unseenAtTop: false,
+  ignoreInactionableSeen: false,
+  unsavedPostAction: 'confirm',
+  autoSaveDraft: false,
+  useAbsoluteTimeFormat: false,
+  absoluteTimeFormatMinAge: '0d',
+  absoluteTime12h: '24h',
 
   // Nasty stuff
   customEmoji: [],
@@ -125,10 +152,13 @@ const defaultState = {
   shoutAvailable: false,
   pleromaChatMessagesAvailable: false,
   pleromaCustomEmojiReactionsAvailable: false,
+  pleromaBookmarkFoldersAvailable: false,
   gopherAvailable: false,
   mediaProxyAvailable: false,
   suggestionsEnabled: false,
   suggestionsWeb: '',
+  quotingAvailable: false,
+  groupActorAvailable: false,
 
   // Html stuff
   instanceSpecificPanelContent: '',
@@ -136,6 +166,7 @@ const defaultState = {
 
   // Version Information
   backendVersion: '',
+  backendRepository: '',
   frontendVersion: '',
 
   pollsAvailable: false,
@@ -269,9 +300,6 @@ const instance = {
             dispatch('initializeSocket')
           }
           break
-        case 'theme':
-          dispatch('setTheme', value)
-          break
       }
     },
     async getStaticEmoji ({ commit }) {
@@ -288,8 +316,7 @@ const instance = {
         }, {})
         commit('setInstanceOption', { name: 'emoji', value: injectRegionalIndicators(emoji) })
       } catch (e) {
-        console.warn("Can't load static emoji")
-        console.warn(e)
+        console.warn("Can't load static emoji\n", e)
       }
     },
 
@@ -356,28 +383,8 @@ const instance = {
           throw (res)
         }
       } catch (e) {
-        console.warn("Can't load custom emojis")
-        console.warn(e)
+        console.warn("Can't load custom emojis\n", e)
       }
-    },
-
-    setTheme ({ commit, rootState }, themeName) {
-      commit('setInstanceOption', { name: 'theme', value: themeName })
-      getPreset(themeName)
-        .then(themeData => {
-          commit('setInstanceOption', { name: 'themeData', value: themeData })
-          // No need to apply theme if there's user theme already
-          const { customTheme } = rootState.config
-          if (customTheme) return
-
-          // New theme presets don't have 'theme' property, they use 'source'
-          const themeSource = themeData.source
-          if (!themeData.theme || (themeSource && themeSource.themeEngineVersion === CURRENT_VERSION)) {
-            applyTheme(themeSource)
-          } else {
-            applyTheme(themeData.theme)
-          }
-        })
     },
     fetchEmoji ({ dispatch, state }) {
       if (!state.customEmojiFetched) {
@@ -397,8 +404,7 @@ const instance = {
         })
         commit('setKnownDomains', result)
       } catch (e) {
-        console.warn("Can't load known domains")
-        console.warn(e)
+        console.warn("Can't load known domains\n", e)
       }
     }
   }

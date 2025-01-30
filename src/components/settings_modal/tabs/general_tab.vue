@@ -15,11 +15,6 @@
             {{ $t('settings.hide_isp') }}
           </BooleanSetting>
         </li>
-        <li v-if="instanceWallpaperUsed">
-          <BooleanSetting path="hideInstanceWallpaper">
-            {{ $t('settings.hide_wallpaper') }}
-          </BooleanSetting>
-        </li>
         <li>
           <BooleanSetting path="stopGifs">
             {{ $t('settings.stop_gifs') }}
@@ -29,14 +24,11 @@
           <BooleanSetting path="streaming">
             {{ $t('settings.streaming') }}
           </BooleanSetting>
-          <ul
-            class="setting-list suboptions"
-            :class="[{disabled: !streaming}]"
-          >
+          <ul class="setting-list suboptions">
             <li>
               <BooleanSetting
                 path="pauseOnUnfocused"
-                :disabled="!streaming"
+                parent-path="streaming"
               >
                 {{ $t('settings.pause_on_unfocused') }}
               </BooleanSetting>
@@ -101,53 +93,6 @@
             {{ $t('settings.hide_shoutbox') }}
           </BooleanSetting>
         </li>
-        <li>
-          <h3>{{ $t('settings.columns') }}</h3>
-        </li>
-        <li>
-          <BooleanSetting path="disableStickyHeaders">
-            {{ $t('settings.disable_sticky_headers') }}
-          </BooleanSetting>
-        </li>
-        <li>
-          <BooleanSetting path="showScrollbars">
-            {{ $t('settings.show_scrollbars') }}
-          </BooleanSetting>
-        </li>
-        <li>
-          <BooleanSetting path="sidebarRight">
-            {{ $t('settings.right_sidebar') }}
-          </BooleanSetting>
-        </li>
-        <li>
-          <BooleanSetting path="navbarColumnStretch">
-            {{ $t('settings.navbar_column_stretch') }}
-          </BooleanSetting>
-        </li>
-        <li>
-          <ChoiceSetting
-            v-if="user"
-            id="thirdColumnMode"
-            path="thirdColumnMode"
-            :options="thirdColumnModeOptions"
-          >
-            {{ $t('settings.third_column_mode') }}
-          </ChoiceSetting>
-        </li>
-        <li v-if="expertLevel > 0">
-          {{ $t('settings.column_sizes') }}
-          <div class="column-settings">
-            <SizeSetting
-              v-for="column in columns"
-              :key="column"
-              :path="column + 'ColumnWidth'"
-              :units="horizontalUnits"
-              expert="1"
-            >
-              {{ $t('settings.column_sizes_' + column) }}
-            </SizeSetting>
-          </div>
-        </li>
         <li class="select-multiple">
           <span class="label">{{ $t('settings.confirm_dialogs') }}</span>
           <ul class="option-list">
@@ -169,6 +114,16 @@
             <li>
               <BooleanSetting path="modalOnMute">
                 {{ $t('settings.confirm_dialogs_mute') }}
+              </BooleanSetting>
+            </li>
+            <li>
+              <BooleanSetting path="modalOnMuteConversation">
+                {{ $t('settings.confirm_dialogs_mute_conversation') }}
+              </BooleanSetting>
+            </li>
+            <li>
+              <BooleanSetting path="modalOnMuteDomain">
+                {{ $t('settings.confirm_dialogs_mute_domain') }}
               </BooleanSetting>
             </li>
             <li>
@@ -213,7 +168,7 @@
           </ChoiceSetting>
         </li>
         <ul
-          v-if="conversationDisplay !== 'linear'"
+          v-if="mergedConfig.conversationDisplay !== 'linear'"
           class="setting-list suboptions"
         >
           <li>
@@ -265,22 +220,55 @@
         <li>
           <BooleanSetting
             v-if="user"
-            path="serverSide_stripRichContent"
+            source="profile"
+            path="stripRichContent"
             expert="1"
           >
             {{ $t('settings.no_rich_text_description') }}
           </BooleanSetting>
         </li>
         <li>
-          <FloatSetting
-            v-if="user"
-            path="emojiReactionsScale"
+          <BooleanSetting
+            path="useAbsoluteTimeFormat"
             expert="1"
           >
-            {{ $t('settings.emoji_reactions_scale') }}
-          </FloatSetting>
+            {{ $t('settings.absolute_time_format') }}
+          </BooleanSetting>
         </li>
+        <ul
+          v-if="mergedConfig.useAbsoluteTimeFormat"
+          class="setting-list suboptions"
+        >
+          <li>
+            <UnitSetting
+              path="absoluteTimeFormatMinAge"
+              unit-set="time"
+              :units="['s', 'm', 'h', 'd']"
+              :min="0"
+            >
+              {{ $t('settings.absolute_time_format_min_age') }}
+            </UnitSetting>
+          </li>
+          <li>
+            <ChoiceSetting
+              id="absoluteTime12h"
+              path="absoluteTime12h"
+              :options="absoluteTime12hOptions"
+              :expert="1"
+            >
+              {{ $t('settings.absolute_time_format_12h') }}
+            </ChoiceSetting>
+          </li>
+        </ul>
         <h3>{{ $t('settings.attachments') }}</h3>
+        <li>
+          <BooleanSetting
+            path="imageCompression"
+            expert="1"
+          >
+            {{ $t('settings.image_compression') }}
+          </BooleanSetting>
+        </li>
         <li>
           <BooleanSetting
             path="useContainFit"
@@ -299,7 +287,7 @@
             <BooleanSetting
               path="preloadImage"
               expert="1"
-              :disabled="!hideNsfw"
+              parent-path="hideNsfw"
             >
               {{ $t('settings.preload_images') }}
             </BooleanSetting>
@@ -308,7 +296,7 @@
             <BooleanSetting
               path="useOneClickNsfw"
               expert="1"
-              :disabled="!hideNsfw"
+              parent-path="hideNsfw"
             >
               {{ $t('settings.use_one_click_nsfw') }}
             </BooleanSetting>
@@ -321,15 +309,13 @@
           >
             {{ $t('settings.loop_video') }}
           </BooleanSetting>
-          <ul
-            class="setting-list suboptions"
-            :class="[{disabled: !streaming}]"
-          >
+          <ul class="setting-list suboptions">
             <li>
               <BooleanSetting
                 path="loopVideoSilentOnly"
                 expert="1"
-                :disabled="!loopVideo || !loopSilentAvailable"
+                parent-path="loopVideo"
+                :disabled="!loopSilentAvailable"
               >
                 {{ $t('settings.loop_video_silent_only') }}
               </BooleanSetting>
@@ -427,18 +413,18 @@
       <ul class="setting-list">
         <li>
           <label for="default-vis">
-            {{ $t('settings.default_vis') }} <ServerSideIndicator :server-side="true" />
+            {{ $t('settings.default_vis') }} <ProfileSettingIndicator :is-profile="true" />
             <ScopeSelector
               class="scope-selector"
               :show-all="true"
-              :user-default="serverSide_defaultScope"
-              :initial-scope="serverSide_defaultScope"
+              :user-default="$store.state.profileConfig.defaultScope"
+              :initial-scope="$store.state.profileConfig.defaultScope"
               :on-scope-change="changeDefaultScope"
             />
           </label>
         </li>
         <li>
-          <!-- <BooleanSetting path="serverSide_defaultNSFW"> -->
+          <!-- <BooleanSetting source="profile" path="defaultNSFW"> -->
           <BooleanSetting path="sensitiveByDefault">
             {{ $t('settings.sensitive_by_default') }}
           </BooleanSetting>
@@ -488,22 +474,6 @@
         </li>
         <li>
           <BooleanSetting
-            path="alwaysShowNewPostButton"
-            expert="1"
-          >
-            {{ $t('settings.always_show_post_button') }}
-          </BooleanSetting>
-        </li>
-        <li>
-          <BooleanSetting
-            path="autohideFloatingPostButton"
-            expert="1"
-          >
-            {{ $t('settings.autohide_floating_post_button') }}
-          </BooleanSetting>
-        </li>
-        <li>
-          <BooleanSetting
             path="padEmoji"
             expert="1"
           >
@@ -518,23 +488,25 @@
             {{ $t('settings.autocomplete_select_first') }}
           </BooleanSetting>
         </li>
+        <li>
+          <BooleanSetting
+            path="autoSaveDraft"
+          >
+            {{ $t('settings.auto_save_draft') }}
+          </BooleanSetting>
+        </li>
+        <li v-if="!mergedConfig.autoSaveDraft">
+          <ChoiceSetting
+            id="unsavedPostAction"
+            path="unsavedPostAction"
+            :options="unsavedPostActionOptions"
+          >
+            {{ $t('settings.unsaved_post_action') }}
+          </ChoiceSetting>
+        </li>
       </ul>
     </div>
   </div>
 </template>
 
 <script src="./general_tab.js"></script>
-
-<style lang="scss">
-.column-settings {
-  display: flex;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-}
-
-.column-settings .size-label {
-  display: block;
-  margin-bottom: 0.5em;
-  margin-top: 0.5em;
-}
-</style>

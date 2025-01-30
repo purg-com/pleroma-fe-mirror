@@ -9,7 +9,7 @@ var ora = require('ora')
 var webpack = require('webpack')
 var webpackConfig = require('./webpack.prod.conf')
 
-console.log(
+console.info(
   '  Tip:\n' +
   '  Built files are meant to be served over an HTTP server.\n' +
   '  Opening index.html over file:// won\'t work.\n'

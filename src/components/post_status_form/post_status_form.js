@@ -1,4 +1,5 @@
 import statusPoster from '../../services/status_poster/status_poster.service.js'
+import genRandomSeed from '../../services/random_seed/random_seed.service.js'
 import MediaUpload from '../media_upload/media_upload.vue'
 import ScopeSelector from '../scope_selector/scope_selector.vue'
 import EmojiInput from '../emoji_input/emoji_input.vue'
@@ -6,15 +7,18 @@ import PollForm from '../poll/poll_form.vue'
 import Attachment from '../attachment/attachment.vue'
 import Gallery from 'src/components/gallery/gallery.vue'
 import StatusContent from '../status_content/status_content.vue'
+import Popover from 'src/components/popover/popover.vue'
 import fileTypeService from '../../services/file_type/file_type.service.js'
 import { findOffset } from '../../services/offset_finder/offset_finder.service.js'
 import { propsToNative } from '../../services/attributes_helper/attributes_helper.service.js'
+import { pollFormToMasto } from 'src/services/poll/poll.service.js'
 import { reject, map, uniqBy, debounce } from 'lodash'
 import suggestor from '../emoji_input/suggestor.js'
 import { mapGetters } from 'vuex'
 import { mapState } from 'pinia'
 import Checkbox from '../checkbox/checkbox.vue'
 import Select from '../select/select.vue'
+import DraftCloser from 'src/components/draft_closer/draft_closer.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -23,7 +27,10 @@ import {
   faUpload,
   faBan,
   faTimes,
-  faCircleNotch
+  faCircleNotch,
+  faChevronDown,
+  faChevronLeft,
+  faChevronRight
 } from '@fortawesome/free-solid-svg-icons'
 import { useInterfaceStore } from '../../stores/interface.js'
 
@@ -33,7 +40,10 @@ library.add(
   faUpload,
   faBan,
   faTimes,
-  faCircleNotch
+  faCircleNotch,
+  faChevronDown,
+  faChevronLeft,
+  faChevronRight
 )
 
 const buildMentionsString = ({ user, attentions = [] }, currentUser) => {
@@ -54,6 +64,18 @@ const buildMentionsString = ({ user, attentions = [] }, currentUser) => {
 // Converts a string with px to a number like '2px' -> 2
 const pxStringToNumber = (str) => {
   return Number(str.substring(0, str.length - 2))
+}
+
+const typeAndRefId = ({ replyTo, profileMention, statusId }) => {
+  if (replyTo) {
+    return ['reply', replyTo]
+  } else if (profileMention) {
+    return ['mention', profileMention]
+  } else if (statusId) {
+    return ['edit', statusId]
+  } else {
+    return ['new', '']
+  }
 }
 
 const PostStatusForm = {
@@ -80,6 +102,9 @@ const PostStatusForm = {
     'disableSensitivityCheckbox',
     'disableSubmit',
     'disablePreview',
+    'disableDraft',
+    'hideDraft',
+    'closeable',
     'placeholder',
     'maxHeight',
     'postHandler',
@@ -88,13 +113,18 @@ const PostStatusForm = {
     'fileLimit',
     'submitOnEnter',
     'emojiPickerPlacement',
-    'optimisticPosting'
+    'optimisticPosting',
+    'profileMention',
+    'draftId'
   ],
   emits: [
     'posted',
+    'draft-done',
     'resize',
     'mediaplay',
-    'mediapause'
+    'mediapause',
+    'can-close',
+    'update'
   ],
   components: {
     MediaUpload,
@@ -105,7 +135,9 @@ const PostStatusForm = {
     Select,
     Attachment,
     StatusContent,
-    Gallery
+    Gallery,
+    DraftCloser,
+    Popover
   },
   mounted () {
     this.updateIdempotencyKey()
@@ -126,43 +158,58 @@ const PostStatusForm = {
 
     const { scopeCopy } = this.$store.getters.mergedConfig
 
-    if (this.replyTo) {
-      const currentUser = this.$store.state.users.currentUser
-      statusText = buildMentionsString({ user: this.repliedUser, attentions: this.attentions }, currentUser)
-    }
+    const [statusType, refId] = typeAndRefId({ replyTo: this.replyTo, profileMention: this.profileMention && this.repliedUser?.id, statusId: this.statusId })
 
-    const scope = ((this.copyMessageScope && scopeCopy) || this.copyMessageScope === 'direct')
-      ? this.copyMessageScope
-      : this.$store.state.users.currentUser.default_scope
+    // If we are starting a new post, do not associate it with old drafts
+    let statusParams = !this.disableDraft && (this.draftId || statusType !== 'new') ? this.getDraft(statusType, refId) : null
 
-    const { postContentType: contentType, sensitiveByDefault } = this.$store.getters.mergedConfig
+    if (!statusParams) {
+      if (statusType === 'reply' || statusType === 'mention') {
+        const currentUser = this.$store.state.users.currentUser
+        statusText = buildMentionsString({ user: this.repliedUser, attentions: this.attentions }, currentUser)
+      }
 
-    let statusParams = {
-      spoilerText: this.subject || '',
-      status: statusText,
-      nsfw: !!sensitiveByDefault,
-      files: [],
-      poll: {},
-      mediaDescriptions: {},
-      visibility: scope,
-      contentType
-    }
+      const scope = ((this.copyMessageScope && scopeCopy) || this.copyMessageScope === 'direct')
+        ? this.copyMessageScope
+        : this.$store.state.users.currentUser.default_scope
 
-    if (this.statusId) {
-      const statusContentType = this.statusContentType || contentType
+      const { postContentType: contentType, sensitiveByDefault } = this.$store.getters.mergedConfig
+
       statusParams = {
+        type: statusType,
+        refId,
         spoilerText: this.subject || '',
-        status: this.statusText || '',
-        nsfw: this.statusIsSensitive || !!sensitiveByDefault,
-        files: this.statusFiles || [],
-        poll: this.statusPoll || {},
-        mediaDescriptions: this.statusMediaDescriptions || {},
-        visibility: this.statusScope || scope,
-        contentType: statusContentType
+        status: statusText,
+        nsfw: !!sensitiveByDefault,
+        files: [],
+        poll: {},
+        hasPoll: false,
+        mediaDescriptions: {},
+        visibility: scope,
+        contentType,
+        quoting: false
+      }
+
+      if (statusType === 'edit') {
+        const statusContentType = this.statusContentType || contentType
+        statusParams = {
+          type: statusType,
+          refId,
+          spoilerText: this.subject || '',
+          status: this.statusText || '',
+          nsfw: this.statusIsSensitive || !!sensitiveByDefault,
+          files: this.statusFiles || [],
+          poll: this.statusPoll || {},
+          hasPoll: false,
+          mediaDescriptions: this.statusMediaDescriptions || {},
+          visibility: this.statusScope || scope,
+          contentType: statusContentType
+        }
       }
     }
 
     return {
+      randomSeed: genRandomSeed(),
       dropFiles: [],
       uploadingFiles: false,
       error: null,
@@ -170,13 +217,14 @@ const PostStatusForm = {
       highlighted: 0,
       newStatus: statusParams,
       caret: 0,
-      pollFormVisible: false,
       showDropIcon: 'hide',
       dropStopTimeout: null,
       preview: null,
       previewLoading: false,
       emojiInputShown: false,
-      idempotencyKey: ''
+      idempotencyKey: '',
+      saveInhibited: true,
+      saveable: false
     }
   },
   computed: {
@@ -188,6 +236,9 @@ const PostStatusForm = {
     },
     showAllScopes () {
       return !this.mergedConfig.minimalScopesMode
+    },
+    hideExtraActions () {
+      return this.disableDraft || this.hideDraft
     },
     emojiUserSuggestor () {
       return suggestor({
@@ -267,6 +318,56 @@ const PostStatusForm = {
     isEdit () {
       return typeof this.statusId !== 'undefined' && this.statusId.trim() !== ''
     },
+    quotable () {
+      if (!this.$store.state.instance.quotingAvailable) {
+        return false
+      }
+
+      if (!this.replyTo) {
+        return false
+      }
+
+      const repliedStatus = this.$store.state.statuses.allStatusesObject[this.replyTo]
+      if (!repliedStatus) {
+        return false
+      }
+
+      if (repliedStatus.visibility === 'public' ||
+          repliedStatus.visibility === 'unlisted' ||
+          repliedStatus.visibility === 'local') {
+        return true
+      } else if (repliedStatus.visibility === 'private') {
+        return repliedStatus.user.id === this.$store.state.users.currentUser.id
+      }
+
+      return false
+    },
+    debouncedMaybeAutoSaveDraft () {
+      return debounce(this.maybeAutoSaveDraft, 3000)
+    },
+    pollFormVisible () {
+      return this.newStatus.hasPoll
+    },
+    shouldAutoSaveDraft () {
+      return this.$store.getters.mergedConfig.autoSaveDraft
+    },
+    autoSaveState () {
+      if (this.saveable) {
+        return this.$t('post_status.auto_save_saving')
+      } else if (this.newStatus.id) {
+        return this.$t('post_status.auto_save_saved')
+      } else {
+        return this.$t('post_status.auto_save_nothing_new')
+      }
+    },
+    safeToSaveDraft () {
+      return (
+        this.newStatus.status ||
+        this.newStatus.spoilerText ||
+        this.newStatus.files?.length ||
+        this.newStatus.hasPoll
+      ) && this.saveable
+    },
     ...mapGetters(['mergedConfig']),
     ...mapState(useInterfaceStore, {
       mobileLayout: store => store.mobileLayout
@@ -278,15 +379,32 @@ const PostStatusForm = {
       handler () {
         this.statusChanged()
       }
+    },
+    saveable (val) {
+      // https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event#usage_notes
+      // MDN says we'd better add the beforeunload event listener only when needed, and remove it when it's no longer needed
+      if (val) {
+        this.addBeforeUnloadListener()
+      } else {
+        this.removeBeforeUnloadListener()
+      }
     }
+  },
+  beforeUnmount () {
+    this.maybeAutoSaveDraft()
+    this.removeBeforeUnloadListener()
   },
   methods: {
     statusChanged () {
       this.autoPreview()
       this.updateIdempotencyKey()
+      this.debouncedMaybeAutoSaveDraft()
+      this.saveable = true
+      this.saveInhibited = false
     },
     clearStatus () {
       const newStatus = this.newStatus
+      this.saveInhibited = true
       this.newStatus = {
         status: '',
         spoilerText: '',
@@ -294,9 +412,10 @@ const PostStatusForm = {
         visibility: newStatus.visibility,
         contentType: newStatus.contentType,
         poll: {},
-        mediaDescriptions: {}
+        hasPoll: false,
+        mediaDescriptions: {},
+        quoting: false
       }
-      this.pollFormVisible = false
       this.$refs.mediaUpload && this.$refs.mediaUpload.clearFile()
       this.clearPollForm()
       if (this.preserveFocus) {
@@ -309,6 +428,7 @@ const PostStatusForm = {
       el.style.height = undefined
       this.error = null
       if (this.preview) this.previewStatus()
+      this.saveable = false
     },
     async postStatus (event, newStatus, opts = {}) {
       if (this.posting && !this.optimisticPosting) { return }
@@ -326,7 +446,7 @@ const PostStatusForm = {
         return
       }
 
-      const poll = this.pollFormVisible ? this.newStatus.poll : {}
+      const poll = this.newStatus.hasPoll ? pollFormToMasto(this.newStatus.poll) : {}
       if (this.pollContentError) {
         this.error = this.pollContentError
         return
@@ -342,6 +462,8 @@ const PostStatusForm = {
         return
       }
 
+      const replyOrQuoteAttr = newStatus.quoting ? 'quoteId' : 'inReplyToStatusId'
+
       const postingOptions = {
         status: newStatus.status,
         spoilerText: newStatus.spoilerText || null,
@@ -349,7 +471,7 @@ const PostStatusForm = {
         sensitive: newStatus.nsfw,
         media: newStatus.files,
         store: this.$store,
-        inReplyToStatusId: this.replyTo,
+        [replyOrQuoteAttr]: this.replyTo,
         contentType: newStatus.contentType,
         poll,
         idempotencyKey: this.idempotencyKey
@@ -359,6 +481,7 @@ const PostStatusForm = {
 
       postHandler(postingOptions).then((data) => {
         if (!data.error) {
+          this.abandonDraft()
           this.clearStatus()
           this.$emit('posted', data)
         } else {
@@ -375,6 +498,7 @@ const PostStatusForm = {
       }
       const newStatus = this.newStatus
       this.previewLoading = true
+      const replyOrQuoteAttr = newStatus.quoting ? 'quoteId' : 'inReplyToStatusId'
       statusPoster.postStatus({
         status: newStatus.status,
         spoilerText: newStatus.spoilerText || null,
@@ -382,7 +506,7 @@ const PostStatusForm = {
         sensitive: newStatus.nsfw,
         media: [],
         store: this.$store,
-        inReplyToStatusId: this.replyTo,
+        [replyOrQuoteAttr]: this.replyTo,
         contentType: newStatus.contentType,
         poll: {},
         preview: true
@@ -602,7 +726,7 @@ const PostStatusForm = {
       this.newStatus.visibility = visibility
     },
     togglePollForm () {
-      this.pollFormVisible = !this.pollFormVisible
+      this.newStatus.hasPoll = !this.newStatus.hasPoll
     },
     setPoll (poll) {
       this.newStatus.poll = poll
@@ -635,6 +759,84 @@ const PostStatusForm = {
     },
     propsToNative (props) {
       return propsToNative(props)
+    },
+    saveDraft () {
+      if (!this.disableDraft &&
+          !this.saveInhibited) {
+        if (this.safeToSaveDraft) {
+          return this.$store.dispatch('addOrSaveDraft', { draft: this.newStatus })
+            .then(id => {
+              if (this.newStatus.id !== id) {
+                this.newStatus.id = id
+              }
+              this.saveable = false
+              if (!this.shouldAutoSaveDraft) {
+                this.clearStatus()
+                this.$emit('draft-done')
+              }
+            })
+        } else if (this.newStatus.id) {
+          // There is a draft, but there is nothing in it, clear it
+          return this.abandonDraft()
+            .then(() => {
+              this.saveable = false
+              if (!this.shouldAutoSaveDraft) {
+                this.clearStatus()
+                this.$emit('draft-done')
+              }
+            })
+        }
+      }
+      return Promise.resolve()
+    },
+    maybeAutoSaveDraft () {
+      if (this.shouldAutoSaveDraft) {
+        this.saveDraft(false)
+      }
+    },
+    abandonDraft () {
+      return this.$store.dispatch('abandonDraft', { id: this.newStatus.id })
+    },
+    getDraft (statusType, refId) {
+      const maybeDraft = this.$store.state.drafts.drafts[this.draftId]
+      if (this.draftId && maybeDraft) {
+        return maybeDraft
+      } else {
+        const existingDrafts = this.$store.getters.draftsByTypeAndRefId(statusType, refId)
+
+        if (existingDrafts.length) {
+          return existingDrafts[0]
+        }
+      }
+      // No draft available, fall back
+    },
+    requestClose () {
+      if (!this.saveable) {
+        this.$emit('can-close')
+      } else {
+        this.$refs.draftCloser.requestClose()
+      }
+    },
+    saveAndCloseDraft () {
+      this.saveDraft().then(() => {
+        this.$emit('can-close')
+      })
+    },
+    discardAndCloseDraft () {
+      this.abandonDraft().then(() => {
+        this.$emit('can-close')
+      })
+    },
+    addBeforeUnloadListener () {
+      this._beforeUnloadListener ||= () => {
+        this.saveDraft()
+      }
+      window.addEventListener('beforeunload', this._beforeUnloadListener)
+    },
+    removeBeforeUnloadListener () {
+      if (this._beforeUnloadListener) {
+        window.removeEventListener('beforeunload', this._beforeUnloadListener)
+      }
     }
   }
 }

@@ -20,7 +20,6 @@
         >
           <UserAvatar
             :compact="true"
-            :better-shadow="betterShadow"
             :user="author"
           />
         </UserPopover>
@@ -52,12 +51,14 @@
               >
                 <template #content>
                   <div class="dropdown-menu">
-                    <button
-                      class="button-default dropdown-item dropdown-item-icon"
-                      @click="deleteMessage"
-                    >
-                      <FAIcon icon="times" /> {{ $t("chats.delete") }}
-                    </button>
+                    <div class="menu-item dropdown-item -icon">
+                      <button
+                        class="main-button"
+                        @click="deleteMessage"
+                      >
+                        <FAIcon icon="times" /> {{ $t("chats.delete") }}
+                      </button>
+                    </div>
                   </div>
                 </template>
                 <template #trigger>

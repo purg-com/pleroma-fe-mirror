@@ -1,5 +1,6 @@
-import Popover from '../popover/popover.vue'
-import { mapGetters } from 'vuex'
+import Popover from 'src/components/popover/popover.vue'
+import QuickFilterSettings from 'src/components/quick_filter_settings/quick_filter_settings.vue'
+import { mapGetters, mapState } from 'vuex'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faList, faFolderTree, faBars, faWrench } from '@fortawesome/free-solid-svg-icons'
 import { useInterfaceStore } from '../../stores/interface'
@@ -16,7 +17,8 @@ const QuickViewSettings = {
     conversation: Boolean
   },
   components: {
-    Popover
+    Popover,
+    QuickFilterSettings
   },
   methods: {
     setConversationDisplay (visibility) {
@@ -28,6 +30,9 @@ const QuickViewSettings = {
   },
   computed: {
     ...mapGetters(['mergedConfig']),
+    ...mapState({
+      mobileLayout: state => state.interface.layoutType === 'mobile'
+    }),
     loggedIn () {
       return !!this.$store.state.users.currentUser
     },
@@ -53,7 +58,6 @@ const QuickViewSettings = {
       get () { return this.mergedConfig.mentionLinkShowAvatar },
       set () {
         const value = !this.showUserAvatars
-        console.log(value)
         this.$store.dispatch('setOption', { name: 'mentionLinkShowAvatar', value })
       }
     },
@@ -62,6 +66,13 @@ const QuickViewSettings = {
       set () {
         const value = !this.muteBotStatuses
         this.$store.dispatch('setOption', { name: 'muteBotStatuses', value })
+      }
+    },
+    muteSensitiveStatuses: {
+      get () { return this.mergedConfig.muteSensitiveStatuses },
+      set () {
+        const value = !this.muteSensitiveStatuses
+        this.$store.dispatch('setOption', { name: 'muteSensitiveStatuses', value })
       }
     }
   }

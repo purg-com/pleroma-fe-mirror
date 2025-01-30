@@ -1,8 +1,15 @@
 <template>
   <label
     class="checkbox"
-    :class="{ disabled, indeterminate }"
+    :class="{ disabled, indeterminate, 'indeterminate-fix': indeterminateTransitionFix }"
   >
+    <span
+      v-if="!!$slots.before"
+      class="label -before"
+      :class="{ faint: disabled }"
+    >
+      <slot name="before" />
+    </span>
     <input
       type="checkbox"
       class="visible-for-screenreader-only"
@@ -12,12 +19,15 @@
       @change="$emit('update:modelValue', $event.target.checked)"
     >
     <i
-      class="checkbox-indicator"
+      class="input -checkbox checkbox-indicator"
       :aria-hidden="true"
+      :class="{ disabled }"
+      @transitionend.capture="onTransitionEnd"
     />
     <span
       v-if="!!$slots.default"
-      class="label"
+      class="label -after"
+      :class="{ faint: disabled }"
     >
       <slot />
     </span>
@@ -31,12 +41,28 @@ export default {
     'indeterminate',
     'disabled'
   ],
-  emits: ['update:modelValue']
+  emits: ['update:modelValue'],
+  data: (vm) => ({
+    indeterminateTransitionFix: vm.indeterminate
+  }),
+  watch: {
+    indeterminate (e) {
+      if (e) {
+        this.indeterminateTransitionFix = true
+      }
+    }
+  },
+  methods: {
+    onTransitionEnd (e) {
+      if (!this.indeterminate) {
+        this.indeterminateTransitionFix = false
+      }
+    }
+  }
 }
 </script>
 
 <style lang="scss">
-@import "../../variables";
 @import "../../mixins";
 
 .checkbox {
@@ -44,26 +70,34 @@ export default {
   display: inline-block;
   min-height: 1.2em;
 
-  &-indicator {
+  &-indicator,
+  & .label {
+    vertical-align: middle;
+  }
+
+  & > &-indicator {
+    /* Reset .input stuff */
+    padding: 0;
+    margin: 0;
     position: relative;
-    padding-left: 1.2em;
+    line-height: inherit;
+    display: inline-block;
+    width: 1.2em;
+    height: 1.2em;
+    box-shadow: none;
   }
 
   &-indicator::before {
     position: absolute;
-    right: 0;
-    top: 0;
+    inset: 0;
     display: block;
     content: "✓";
     transition: color 200ms;
     width: 1.1em;
     height: 1.1em;
-    border-radius: $fallback--checkboxRadius;
-    border-radius: var(--checkboxRadius, $fallback--checkboxRadius);
-    box-shadow: 0 0 2px black inset;
-    box-shadow: var(--inputShadow);
-    background-color: $fallback--fg;
-    background-color: var(--input, $fallback--fg);
+    border-radius: var(--roundness);
+    box-shadow: var(--shadow);
+    background-color: var(--background);
     vertical-align: top;
     text-align: center;
     line-height: 1.1em;
@@ -73,33 +107,37 @@ export default {
     box-sizing: border-box;
   }
 
-  &.disabled {
-    .checkbox-indicator::before,
-    .label {
-      opacity: 0.5;
-    }
-
-    .label {
-      color: $fallback--faint;
-      color: var(--faint, $fallback--faint);
+  .disabled {
+    .checkbox-indicator::before {
+      background-color: var(--background);
     }
   }
 
   input[type="checkbox"] {
     &:checked + .checkbox-indicator::before {
-      color: $fallback--text;
-      color: var(--inputText, $fallback--text);
+      color: var(--text);
     }
 
     &:indeterminate + .checkbox-indicator::before {
       content: "–";
-      color: $fallback--text;
-      color: var(--inputText, $fallback--text);
+      color: var(--text);
     }
   }
 
-  & > span {
-    margin-left: 0.5em;
+  &.indeterminate-fix {
+    input[type="checkbox"] + .checkbox-indicator::before {
+      content: "–";
+    }
+  }
+
+  & > .label {
+    &.-after {
+      margin-left: 0.5em;
+    }
+
+    &.-before {
+      margin-right: 0.5em;
+    }
   }
 }
 </style>

@@ -1,9 +1,14 @@
 <template>
   <div class="settings panel panel-default">
     <div class="panel-heading">
-      {{ $t('registration.registration') }}
+      <h1 class="title">
+        {{ $t('registration.registration') }}
+      </h1>
     </div>
-    <div class="panel-body">
+    <div
+      v-if="!hasSignUpNotice"
+      class="panel-body"
+    >
       <form
         class="registration-form"
         @submit.prevent="submit(user)"
@@ -22,7 +27,7 @@
                 id="sign-up-username"
                 v-model.trim="v$.user.username.$model"
                 :disabled="isPending"
-                class="form-control"
+                class="input form-control"
                 :aria-required="true"
                 :placeholder="$t('registration.username_placeholder')"
               >
@@ -50,7 +55,7 @@
                 id="sign-up-fullname"
                 v-model.trim="v$.user.fullname.$model"
                 :disabled="isPending"
-                class="form-control"
+                class="input form-control"
                 :aria-required="true"
                 :placeholder="$t('registration.fullname_placeholder')"
               >
@@ -78,7 +83,7 @@
                 id="email"
                 v-model="v$.user.email.$model"
                 :disabled="isPending"
-                class="form-control"
+                class="input form-control"
                 type="email"
                 :aria-required="accountActivationRequired"
               >
@@ -103,7 +108,7 @@
                 id="bio"
                 v-model="user.bio"
                 :disabled="isPending"
-                class="form-control"
+                class="input form-control"
                 :placeholder="bioPlaceholder"
               />
             </div>
@@ -120,7 +125,7 @@
                 id="sign-up-password"
                 v-model="user.password"
                 :disabled="isPending"
-                class="form-control"
+                class="input form-control"
                 type="password"
                 :aria-required="true"
               >
@@ -148,7 +153,7 @@
                 id="sign-up-password-confirmation"
                 v-model="user.confirm"
                 :disabled="isPending"
-                class="form-control"
+                class="input form-control"
                 type="password"
                 :aria-required="true"
               >
@@ -181,7 +186,7 @@
                 id="sign-up-birthday"
                 v-model="user.birthday"
                 :disabled="isPending"
-                class="form-control"
+                class="input form-control"
                 type="date"
                 :max="birthdayRequired ? birthdayMinAttr : undefined"
                 :aria-required="birthdayRequired"
@@ -196,7 +201,7 @@
                   <span>{{ $t('registration.validations.birthday_required') }}</span>
                 </li>
                 <li v-if="v$.user.birthday.maxValue.$invalid">
-                  <span>{{ $tc('registration.validations.birthday_min_age', { date: birthdayMinFormatted }) }}</span>
+                  <span>{{ $t('registration.validations.birthday_min_age', { date: birthdayMinFormatted }) }}</span>
                 </li>
               </ul>
             </div>
@@ -226,7 +231,7 @@
                 id="reason"
                 v-model="user.reason"
                 :disabled="isPending"
-                class="form-control"
+                class="input form-control"
                 :placeholder="reasonPlaceholder"
               />
             </div>
@@ -253,7 +258,7 @@
                   id="captcha-answer"
                   v-model="captcha.solution"
                   :disabled="isPending"
-                  class="form-control"
+                  class="input form-control"
                   type="text"
                   autocomplete="off"
                   autocorrect="off"
@@ -272,7 +277,7 @@
                 id="token"
                 v-model="token"
                 disabled="true"
-                class="form-control"
+                class="input form-control"
                 type="text"
               >
             </div>
@@ -307,14 +312,16 @@
         </div>
       </form>
     </div>
+    <div v-else>
+      <p class="registration-notice">
+        {{ signUpNotice.message }}
+      </p>
+    </div>
   </div>
 </template>
 
 <script src="./registration.js"></script>
 <style lang="scss">
-@import "../../variables";
-$validations-cRed: #f04124;
-
 .registration-form {
   display: flex;
   flex-direction: column;
@@ -361,8 +368,7 @@ $validations-cRed: #f04124;
   }
 
   .form-group--error .form--label {
-    color: $validations-cRed;
-    color: var(--cRed, $validations-cRed);
+    color: var(--cRed);
   }
 
   .form-error {
@@ -402,6 +408,10 @@ $validations-cRed: #f04124;
   .error {
     text-align: center;
   }
+}
+
+.registration-notice {
+  margin: 0.6em;
 }
 
 @media all and (max-width: 800px) {

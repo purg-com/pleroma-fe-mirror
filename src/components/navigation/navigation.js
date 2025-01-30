@@ -1,11 +1,16 @@
+// routes that take :username property
 export const USERNAME_ROUTES = new Set([
-  'bookmarks',
   'dms',
   'interactions',
   'notifications',
   'chat',
-  'chats',
-  'user-profile'
+  'chats'
+])
+
+// routes that take :name property
+export const NAME_ROUTES = new Set([
+  'user-profile',
+  'legacy-user-profile'
 ])
 
 export const TIMELINES = {
@@ -32,7 +37,8 @@ export const TIMELINES = {
   bookmarks: {
     route: 'bookmarks',
     icon: 'bookmark',
-    label: 'nav.bookmarks'
+    label: 'nav.bookmarks',
+    criteria: ['!supportsBookmarkFolders']
   },
   favorites: {
     routeObject: { name: 'user-profile', query: { tab: 'favorites' } },
@@ -56,6 +62,7 @@ export const ROOT_ITEMS = {
     route: 'chats',
     icon: 'comments',
     label: 'nav.chats',
+    badgeStyle: 'notification',
     badgeGetter: 'unreadChatCount',
     criteria: ['chats']
   },
@@ -63,6 +70,7 @@ export const ROOT_ITEMS = {
     route: 'friend-requests',
     icon: 'user-plus',
     label: 'nav.friend_requests',
+    badgeStyle: 'notification',
     criteria: ['lockedUser'],
     badgeGetter: 'followRequestCount'
   },
@@ -77,8 +85,16 @@ export const ROOT_ITEMS = {
     icon: 'bullhorn',
     label: 'nav.announcements',
     store: 'announcements',
+    badgeStyle: 'notification',
     badgeGetter: 'unreadAnnouncementCount',
     criteria: ['announcements']
+  },
+  drafts: {
+    route: 'drafts',
+    icon: 'file-pen',
+    label: 'nav.drafts',
+    badgeStyle: 'neutral',
+    badgeGetter: 'draftCount'
   }
 }
 
@@ -94,7 +110,9 @@ export function routeTo (item, currentUser) {
   }
 
   if (USERNAME_ROUTES.has(route.name)) {
-    route.params = { username: currentUser.screen_name, name: currentUser.screen_name }
+    route.params = { username: currentUser.screen_name }
+  } else if (NAME_ROUTES.has(route.name)) {
+    route.params = { name: currentUser.screen_name }
   }
 
   return route

@@ -47,9 +47,8 @@
   display: flex;
   flex: 1 0;
   margin: 0;
-  padding: 0.6em 1em;
 
-  --emoji-size: 14px;
+  --emoji-size: 1em;
 
   &-collapsed-content {
     margin-left: 0.7em;

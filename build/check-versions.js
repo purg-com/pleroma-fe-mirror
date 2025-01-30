@@ -11,11 +11,6 @@ var versionRequirements = [
     name: 'node',
     currentVersion: semver.clean(process.version),
     versionRequirement: packageConfig.engines.node
-  },
-  {
-    name: 'npm',
-    currentVersion: exec('npm --version'),
-    versionRequirement: packageConfig.engines.npm
   }
 ]
 
@@ -32,14 +27,12 @@ module.exports = function () {
   }
 
   if (warnings.length) {
-    console.log('')
-    console.log(chalk.yellow('To use this template, you must update following to modules:'))
-    console.log()
+    console.warn(chalk.yellow('\nTo use this template, you must update following to modules:\n'))
     for (var i = 0; i < warnings.length; i++) {
       var warning = warnings[i]
-      console.log('  ' + warning)
+      console.warn('  ' + warning)
     }
-    console.log()
+    console.warn()
     process.exit(1)
   }
 }

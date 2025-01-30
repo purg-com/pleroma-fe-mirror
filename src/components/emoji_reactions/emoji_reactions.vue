@@ -1,34 +1,63 @@
 <template>
   <div class="EmojiReactions">
-    <UserListPopover
+    <span
       v-for="(reaction) in emojiReactions"
       :key="reaction.url || reaction.name"
-      :users="accountsForEmoji[reaction.name]"
+      class="emoji-reaction-container btn-group"
     >
-      <button
+      <component
+        :is="loggedIn ? 'button' : 'a'"
+        v-bind="!loggedIn ? { href: remoteInteractionLink } : {}"
+        role="button"
         class="emoji-reaction btn button-default"
-        :class="{ '-picked-reaction': reactedWith(reaction.name), 'not-clickable': !loggedIn }"
+        :class="{ '-picked-reaction': reactedWith(reaction.name), toggled: reactedWith(reaction.name) }"
+        :title="reaction.url ? reaction.name : undefined"
+        :aria-pressed="reactedWith(reaction.name)"
         @click="emojiOnClick(reaction.name, $event)"
-        @mouseenter="fetchEmojiReactionsByIfMissing()"
       >
         <span
           class="reaction-emoji"
         >
-          <img
+          <StillImage
             v-if="reaction.url"
             :src="reaction.url"
-            :title="reaction.name"
             class="reaction-emoji-content"
-            width="1em"
-          >
+          />
           <span
             v-else
             class="reaction-emoji reaction-emoji-content"
           >{{ reaction.name }}</span>
         </span>
-        <span>{{ reaction.count }}</span>
-      </button>
-    </UserListPopover>
+        <FALayers>
+          <FAIcon
+            v-if="reactedWith(reaction.name)"
+            class="active-marker"
+            transform="shrink-6 up-9"
+            icon="check"
+          />
+          <FAIcon
+            v-if="!reactedWith(reaction.name)"
+            class="focus-marker"
+            transform="shrink-6 up-9"
+            icon="plus"
+          />
+          <FAIcon
+            v-else
+            class="focus-marker"
+            transform="shrink-6 up-9"
+            icon="minus"
+          />
+        </FALayers>
+      </component>
+      <UserListPopover
+        :users="accountsForEmoji[reaction.name]"
+        class="emoji-reaction-popover"
+        :trigger-attrs="counterTriggerAttrs(reaction)"
+        @show="fetchEmojiReactionsByIfMissing()"
+      >
+        <span class="emoji-reaction-counts">{{ reaction.count }}</span>
+      </UserListPopover>
+    </span>
     <a
       v-if="tooManyReactions"
       class="emoji-reaction-expand faint"
@@ -42,23 +71,47 @@
 
 <script src="./emoji_reactions.js"></script>
 <style lang="scss">
-@import "../../variables";
+@import "../../mixins";
 
 .EmojiReactions {
   display: flex;
   margin-top: 0.25em;
   flex-wrap: wrap;
 
-  --emoji-size: calc(1.25em * var(--emojiReactionsScale, 1));
+  --emoji-size: calc(var(--emojiSize, 1.25em) * var(--emojiReactionsScale, 1));
+
+  .emoji-reaction-container {
+    display: flex;
+    align-items: stretch;
+    margin-top: 0.5em;
+    margin-right: 0.5em;
+
+    .emoji-reaction-popover {
+      padding: 0;
+
+      .emoji-reaction-count-button {
+        margin: 0;
+        height: 100%;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        box-sizing: border-box;
+        min-width: 2em;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
 
   .emoji-reaction {
-    padding: 0 0.5em;
-    margin-right: 0.5em;
-    margin-top: 0.5em;
+    padding-left: 0.5em;
     display: flex;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin: 0;
 
     .reaction-emoji {
       width: var(--emoji-size);
@@ -68,36 +121,61 @@
       display: flex;
       justify-content: center;
       align-items: center;
+
+      --_still_image-label-scale: 0.3;
     }
 
     .reaction-emoji-content {
       max-width: 100%;
       max-height: 100%;
-      width: auto;
-      height: auto;
+      width: var(--emoji-size);
+      height: var(--emoji-size);
       line-height: inherit;
       overflow: hidden;
       font-size: calc(var(--emoji-size) * 0.8);
       margin: 0;
+
+      img {
+        object-fit: contain;
+      }
     }
 
     &:focus {
       outline: none;
     }
 
-    &.not-clickable {
-      cursor: default;
-
-      &:hover {
-        box-shadow: $fallback--buttonShadow;
-        box-shadow: var(--buttonShadow);
-      }
+    .svg-inline--fa {
+      color: var(--text);
     }
 
     &.-picked-reaction {
-      border: 1px solid var(--accent, $fallback--link);
-      margin-left: -1px; // offset the border, can't use inset shadows either
-      margin-right: calc(0.5em - 1px);
+      .svg-inline--fa {
+        color: var(--accent);
+      }
+    }
+
+    @include unfocused-style {
+      .focus-marker {
+        visibility: hidden;
+      }
+
+      .active-marker {
+        visibility: visible;
+      }
+    }
+
+    @include focused-style {
+      .svg-inline--fa {
+        color: var(--accent);
+      }
+
+      .focus-marker {
+        visibility: visible;
+      }
+
+      .active-marker {
+        visibility: hidden;
+      }
     }
   }
 

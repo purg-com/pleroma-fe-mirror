@@ -48,20 +48,19 @@
             icon="cog"
           />
         </button>
-        <a
+        <button
           v-if="currentUser && currentUser.role === 'admin'"
-          href="/pleroma/admin/#/login-pleroma"
-          class="nav-icon"
+          class="button-unstyled nav-icon"
           target="_blank"
           :title="$t('nav.administration')"
-          @click.stop
+          @click.stop="openAdminModal"
         >
           <FAIcon
             fixed-width
             class="fa-scale-110 fa-old-padding"
             icon="tachometer-alt"
           />
-        </a>
+        </button>
         <span class="spacer" />
         <button
           v-if="currentUser"

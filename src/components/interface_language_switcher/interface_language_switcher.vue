@@ -9,7 +9,7 @@
         :key="index"
       >
         <label>
-          {{ index === 0 ? $t('settings.primary_language') : $tc('settings.fallback_language', index, { index }) }}
+          {{ index === 0 ? $t('settings.primary_language') : $t('settings.fallback_language', { index }, index) }}
           <Select
             class="language-select"
             :model-value="controlledLanguage[index]"
@@ -36,7 +36,9 @@
         <button
           class="button-default btn"
           @click="addLanguage"
-        >{{ $t('settings.add_language') }}</button>
+        >
+          {{ $t('settings.add_language') }}
+        </button>
       </li>
     </ul>
   </div>
@@ -102,8 +104,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../../variables";
-
 .interface-language-switcher {
   .language-select {
     margin-right: 1em;

@@ -33,11 +33,11 @@
       "public": "Публічне",
       "unlisted": "Непублічне"
     },
-    "undo": "Відмінити",
+    "undo": "Скасувати",
     "yes": "Так",
     "no": "Ні",
     "unpin": "Відкріпити",
-    "scroll_to_top": "Вгору",
+    "scroll_to_top": "Піднятися вгору",
     "pin": "Прикріпити"
   },
   "finder": {
@@ -88,7 +88,7 @@
         "simple_policies": "Правила поточного інстансу",
         "reason": "Причина",
         "not_applicable": "н/в",
-        "instance": "Інстанс"
+        "instance": "Сервер"
       },
       "mrf_policies_desc": "Правила MRF розповсюджуються на даний  інстанс. Наступні правила активні:",
       "mrf_policies": "Активувати правила MRF (модуль переписування повідомлень)",
@@ -121,7 +121,8 @@
     "placeholder": "напр. stepan",
     "logout_confirm": "Ви дійсно хочете вийти?",
     "logout_confirm_accept_button": "Вийти",
-    "logout_confirm_cancel_button": "Ні, хочу назад!"
+    "logout_confirm_cancel_button": "Ні, хочу назад!",
+    "logout_confirm_title": "Вихід"
   },
   "importer": {
     "error": "Під час імпортування файлу сталася помилка.",
@@ -164,7 +165,13 @@
     "broken_favorite": "Невідомий допис, шукаю його…",
     "error": "Помилка при оновленні сповіщень: {0}",
     "poll_ended": "опитування закінчено",
-    "submitted_report": "подав скаргу"
+    "submitted_report": "подав скаргу",
+    "unread_announcements": "{num} непрочитане оголошення | {num} непрочитаних оголошень",
+    "unread_chats": "{num} непрочитаний чат | {num} непрочитаних чатів",
+    "unread_follow_requests": "{num} новий запит на підписку | {num} нових запитів на підписку",
+    "configuration_tip": "Ви можете налаштувати, що відображати тут у {theSettings}. {dismiss}",
+    "configuration_tip_settings": "налаштування",
+    "configuration_tip_dismiss": "Не показувати знову"
   },
   "nav": {
     "chats": "Чати",
@@ -193,7 +200,9 @@
     "mobile_notifications_close": "Закрити сповіщення",
     "edit_nav_mobile": "Редагувати панель навігації",
     "announcements": "Анонси",
-    "search_close": "Закрити панель пошуку"
+    "search_close": "Закрити панель пошуку",
+    "mobile_notifications_mark_as_seen": "Позначити все прочитаним",
+    "quotes": "Цитування"
   },
   "media_modal": {
     "next": "Наступна",
@@ -267,7 +276,9 @@
       "activities": "Активності",
       "symbols": "Символи",
       "travel-and-places": "Подорожі та Місця"
-    }
+    },
+    "unpacked": "Розпаковані емоджі",
+    "hide_custom_emoji": "Приховати кастомні емодзі"
   },
   "post_status": {
     "content_type": {
@@ -282,7 +293,7 @@
     "new_status": "Створити допис",
     "direct_warning_to_first_only": "Цей допис побачать лише користувачі, що були згадані на початку повідомлення.",
     "direct_warning_to_all": "Цей допис побачать всі згадані користувачі.",
-    "default": "Що нового?",
+    "default": "Щойно приземлились у Борисполі.",
     "content_warning": "Тема (необов'язково)",
     "preview": "Попередній перегляд",
     "posting": "Відправляється",
@@ -304,7 +315,11 @@
     "post": "Опублікувати",
     "edit_unsupported_warning": "Pleroma не підтримує редагування згадувань чи голосувань.",
     "edit_status": "Редагувати допис",
-    "edit_remote_warning": "Інші віддалені інстанси можуть не підтримувати редагування та вони можуть не отримати актуальну версію допису."
+    "edit_remote_warning": "Інші віддалені інстанси можуть не підтримувати редагування та вони можуть не отримати актуальну версію допису.",
+    "content_type_selection": "Форматування допису",
+    "scope_notice_dismiss": "Закрити це сповіщення",
+    "reply_option": "Відповісти на цей допис",
+    "quote_option": "Процитувати допис"
   },
   "settings": {
     "blocks_imported": "Блокування імпортовані! Їх обробка триватиме певний час.",
@@ -529,7 +544,7 @@
         "header": "Попередній перегляд",
         "link": "невеличке посилання",
         "header_faint": "Це нормально",
-        "input": "Що нового?",
+        "input": "Щойно приземлився у Борисполі.",
         "checkbox": "Я переглянув умови використання",
         "fine_print": "Прочитайте наш {0} аби нічого нового не дізнатись!",
         "faint_link": "корисний підручник"
@@ -730,12 +745,12 @@
     "conversation_display_tree_quick": "Вигляд дерева",
     "disable_sticky_headers": "Не закріплювати заголовок колонки зверху на сторінці",
     "third_column_mode_none": "Не показувати третю колонку взагалі",
-    "third_column_mode_notifications": "Колонка сповіщень",
+    "third_column_mode_notifications": "Колонку сповіщень",
     "columns": "Колонки",
     "auto_update": "Автоматично показувати нові дописи",
     "use_websockets": "Використовувати вебсокети (Оновлення в реальному часі)",
     "use_at_icon": "Показувати {'@'} символ як іконку замість тексту",
-    "mute_bot_posts": "Приховати дописи ботів",
+    "mute_bot_posts": "Приховувати дописи ботів",
     "always_show_post_button": "Завжди показувати плаваючу кнопку «Новий Допис»",
     "hide_favorites_description": "Не показувати список моїх вподобань (люди все одно отримують сповіщення)",
     "third_column_mode": "Коли достатньо місця, показувати третю колонку, що містить",
@@ -743,7 +758,100 @@
     "wordfilter": "Фільтр слів",
     "mention_links": "Посилання для згадування",
     "user_profiles": "Профілі користувачів",
-    "notification_visibility_polls": "Закінчення опитувань, в яких ви проголосували"
+    "notification_visibility_polls": "Закінчення опитувань, в яких ви проголосували",
+    "remove_language": "Вилучити",
+    "primary_language": "Основна мова:",
+    "fallback_language": "Резервна мова {index}:",
+    "confirm_dialogs_deny_follow": "тим, як відмовити у запиті на підписку",
+    "confirm_dialogs_remove_follower": "видаленням підписника",
+    "notification_show_extra": "Показувати додаткові сповіщення в панелі сповіщень",
+    "notification_extra_chats": "Показувати непрочитані чати",
+    "notification_extra_announcements": "Показувати непрочитані оголошення",
+    "notification_extra_follow_requests": "Показувати нові запити на підписку",
+    "third_column_mode_postform": "Форму відправки повідомлень та панель навігації",
+    "notification_extra_tip": "Показати пораду з налаштувань для додаткових сповіщень",
+    "backup_running": "Резервне копіювання триває, оброблено {number} записи. | Резервне копіювання триває, оброблено {number} записів.",
+    "backup_failed": "Резервне копіювання не вдалося.",
+    "preview": "Попередній перегляд",
+    "url": "URL",
+    "birthday": {
+      "label": "День народження",
+      "show_birthday": "Показувати мій день народження"
+    },
+    "confirm_dialogs": "Запитувати підтвердження перед",
+    "confirm_dialogs_repeat": "поширенням допису",
+    "confirm_dialogs_unfollow": "скасуванням підписки",
+    "confirm_dialogs_block": "блокуванням користувача",
+    "confirm_dialogs_mute": "тим, як заглушити користувача",
+    "show_scrollbars": "Показувати смугу прокрутки на бічних панелях",
+    "column_sizes": "Розміри панелей",
+    "column_sizes_sidebar": "Бічна панель",
+    "add_language": "Додати резервну мову",
+    "confirm_dialogs_delete": "видаленням допису",
+    "confirm_dialogs_logout": "виходом із системи",
+    "confirm_dialogs_approve_follow": "схваленням запиту на підписку",
+    "mute_sensitive_posts": "Не стежити за чутливими постами",
+    "notification_visibility_follow_requests": "Запити на стеження",
+    "notification_visibility_reports": "Скарги",
+    "conversation_display_linear": "Линійний стиль",
+    "conversation_display_linear_quick": "Линійний вигляд",
+    "conversation_other_replies_button": "Показувати кнопку \"інші відповіді\"",
+    "conversation_other_replies_button_below": "Нижче статусів",
+    "mention_link_bolden_you": "Підсвічувати згадки в яких вас згадано",
+    "notification_setting_ignore_inactionable_seen_tip": "Це насправді не позначить ці сповіщення прочитанними, і ви все одно отримаєте сповіщення на робочому столі",
+    "notification_setting_unseen_at_top": "Показувати непрочитані сповіщення згори",
+    "mention_link_show_avatar": "Показувати світлину користувача поруч з посиланням",
+    "column_sizes_notifs": "Сповіщення",
+    "commit_value": "Зберегти",
+    "commit_value_tooltip": "Значення не збережено, натисніть цю кнопку щоб зберегти зміни",
+    "units": {
+      "time": {
+        "m": "хвилин",
+        "s": "секунд",
+        "h": "годин",
+        "d": "днів"
+      }
+    },
+    "hide_scrobbles_after": "Приховати прослуховування старіші чим",
+    "conversation_other_replies_button_inside": "Всередині статусів",
+    "mention_link_display": "Показувати посилання на згадки",
+    "user_popover_avatar_action": "Дія при натисканні на світлину",
+    "notification_setting_ignore_inactionable_seen": "Ігнорувати прочитаний статус сповіщень, на які неможливо відреагувати (вподобання, репости і тд)",
+    "user_popover_avatar_action_close": "Закрити панель",
+    "reset_value": "Скинути",
+    "enable_web_push_always_show_tip": "Деякі браузери (Chromium, Chrome) потребують щоб push повідомлення завжди були сповіщенням, інакше ви побачите загальне повідомлення \"Сайт було оновлено у фоні\". Увімкніть це налаштування щоб запобігти цьому повідомленню. Може призвести до подвійних сповіщень у інших браузерах.",
+    "autocomplete_select_first": "Автоматично обирати перше значення коли доступні результати автозаповнення",
+    "hide_scrobbles": "Приховати прослуховування",
+    "notification_visibility_in_column": "Показувати в панелі сповіщень",
+    "tree_advanced": "Дозволити більш гнучку навігацію при розгорнутому перегляді",
+    "tree_fade_ancestors": "Показувати похідні статуси більш блідим текстом",
+    "notification_setting_drawer_marks_as_seen": "Закриття панелі в мобільній версії позначає всі сповіщення прочитанними",
+    "user_popover_avatar_overlay": "Показувати картку користувача над світлиною",
+    "show_yous": "Показати (Вас)",
+    "notification_setting_annoyance": "Роздратування",
+    "notification_setting_filters_chrome_push": "У деяких браузерах (Google Chrome) може бути неможливо повністю відфільтрувати сповіщення за типом, коли вони надходять через Push",
+    "enable_web_push_always_show": "Завжди показувати web push сповіщення",
+    "user_popover_avatar_action_zoom": "Збільшити світлину",
+    "actor_type_description": "Позначення вашого акаунту як групового змусить його автоматично повторювати статуси, які вас згадують.",
+    "actor_type_Person": "звичайний користувач",
+    "actor_type_Service": "бот",
+    "actor_type_Group": "група",
+    "actor_type": "Цей акаунт:",
+    "notification_visibility_native_notifications": "Показувати нативне сповіщення",
+    "column_sizes_content": "Зміст",
+    "mention_link_display_full": "завжди повні імена (наприклад {'@'}petro{'@'}poroshenko.org)",
+    "force_theme_recompilation_debug": "Вимкнути кеш теми, увімкнути перекомпіляцію при кожному старті (ВІДЛАДКА)",
+    "mention_link_use_tooltip": "Показувати картку користувача при натисканні згадки",
+    "mention_link_show_avatar_quick": "Показувати світлину користувача поруч зі згадками",
+    "mention_link_fade_domain": "Скорочувати домени (наприклад {'@'}poroshenko.org в {'@'}petro{'@'}poroshenko.org)",
+    "hard_reset_value": "Скинути всі налаштування",
+    "reset_value_tooltip": "Відкинути чернетку",
+    "hard_reset_value_tooltip": "Прибрати налаштування зі сховища, буде використовуватись значення за замовчуванням",
+    "emoji_reactions_scale": "Масштабування реакцій",
+    "max_depth_in_thread": "Максимальна кількість рівнів треду для відображення за замовчуванням",
+    "mention_link_display_full_for_remote": "як повні імена тільки для користувачів з інших серверів (наприклад {'@'}petro{'@'}poroshenko.org)",
+    "mention_link_display_short": "завжди як короткі імена (наприклад {'@'}petro)",
+    "hide_actor_type_indication": "Приховати позначення типу акаунту (бот, група і тд) в постах"
   },
   "selectable_list": {
     "select_all": "Вибрати все"
@@ -760,7 +868,9 @@
       "password_required": "не може бути порожнім",
       "email_required": "не може бути порожнім",
       "fullname_required": "не може бути порожнім",
-      "username_required": "не може бути порожнім"
+      "username_required": "не може бути порожнім",
+      "birthday_required": "не може бути пустим",
+      "birthday_min_age": "має бути в або перед {date}"
     },
     "bio_placeholder": "напр.\nНаш народ завжди прагне волі для себе і бажає її для інших народів. Він боровся і бореться за правду і справедливість. Ми хочемо жити у згоді і взаємному шануванні з усіми народами доброї волі. Такі самі права визнаємо за іншими народами, за які боремося для себе.",
     "fullname_placeholder": "напр. Степан Бандера",
@@ -778,7 +888,9 @@
     "reason": "Причина реєстрації",
     "bio_optional": "Біографія (необов'язково)",
     "email_language": "Якою мовою ви бажаєте отримувати електронні листи від сервера?",
-    "email_optional": "Ел. пошта (необов'язково)"
+    "email_optional": "Ел. пошта (необов'язково)",
+    "birthday": "День народження:",
+    "birthday_optional": "День народження (необов'язково):"
   },
   "who_to_follow": {
     "who_to_follow": "На кого підписатися",
@@ -793,7 +905,10 @@
     "reject_follow_request": "Відхилити запит на підписку",
     "accept_follow_request": "Прийняти запит на підписку",
     "media_upload": "Завантажити медіа",
-    "bookmark": "Додати до закладок"
+    "bookmark": "Додати до закладок",
+    "toggle_expand": "Розгорнути або згорнути сповіщення щоб показати допис повністю",
+    "toggle_mute": "Розгорнути або згорнути сповіщення щоб відкрити заглушений контент",
+    "autocomplete_available": "{number} результат. Використовуйте клавіши зі стрілками для навігації. | {number} результатів доступно. Використовуйте клавіши зі стрілками для навігації."
   },
   "upload": {
     "error": {
@@ -865,7 +980,9 @@
     "hashtags": "Хештеги",
     "people": "Люди",
     "people_talking": "{count} людей говорять про це",
-    "person_talking": "{count} особа говорить про це"
+    "person_talking": "{count} особа говорить про це",
+    "no_more_results": "Більше немає",
+    "load_more": "Завантажити ще"
   },
   "user_card": {
     "statuses": "Дописи",
@@ -890,7 +1007,8 @@
       "grant_moderator": "Надати права модератора",
       "revoke_admin": "Позбавити прав адміністратора",
       "grant_admin": "Надати права адміністратора",
-      "quarantine": "Не розповсюджувати дописи на інших інстансах"
+      "quarantine": "Не розповсюджувати дописи на інших інстансах",
+      "delete_user_data_and_deactivate_confirmation": "Це назовсім видалить дані обліковки й вимкне її. Точно продовжити?"
     },
     "deny": "Відмовити",
     "block": "Заблокувати",
@@ -929,7 +1047,40 @@
     "bot": "Бот",
     "edit_profile": "Редагувати профіль",
     "deactivated": "Деактивований",
-    "follow_cancel": "Скасувати запит"
+    "follow_cancel": "Скасувати запит",
+    "block_confirm_title": "Блокування",
+    "block_confirm": "Точно заблокувати {user}?",
+    "mute_confirm_cancel_button": "Ні, не приглушувати",
+    "note_blank": "(Пусто)",
+    "edit_note_apply": "Застосувати",
+    "edit_note_cancel": "Скасувати",
+    "block_confirm_accept_button": "Так, заблокувати",
+    "block_confirm_cancel_button": "Ні, не блокувати",
+    "deny_confirm_title": "Відхилити запит на підписку",
+    "mute_confirm_accept_button": "Так, приглушити",
+    "mute_confirm": "Точно приглушити {user}?",
+    "edit_note": "Редагувати нотатку",
+    "mute_confirm_title": "Приглушення",
+    "mute_duration_prompt": "Приглушити користувача на (0 якщо назавжди):",
+    "approve_confirm_title": "Дозвіл підписатись",
+    "approve_confirm_accept_button": "Так, дозволити",
+    "approve_confirm_cancel_button": "Ні, скасувати",
+    "deny_confirm_accept_button": "Так, відхилити",
+    "deny_confirm_cancel_button": "Ні, скасувати",
+    "deny_confirm": "Ви точно хочете відхилити запит на підписку від {user}?",
+    "unfollow_confirm_title": "Відписка",
+    "unfollow_confirm": "Точно відписатись від {user}?",
+    "unfollow_confirm_accept_button": "Так, відписатись",
+    "unfollow_confirm_cancel_button": "Ні, не відписуватись",
+    "note": "Приватна нотатка",
+    "group": "Група",
+    "remove_follower_confirm": "Ви дійсно хочете прибрати користувача {user} з ваших фоловерів?",
+    "remove_follower_confirm_title": "Підтверджувати відписку",
+    "remove_follower": "Відписка",
+    "remove_follower_confirm_accept_button": "Прибрати",
+    "remove_follower_confirm_cancel_button": "Зберегти",
+    "birthday": "День народження: {birthday}",
+    "approve_confirm": "Прийняти запит на стеження від {user}?"
   },
   "status": {
     "copy_link": "Скопіювати посилання на допис",
@@ -965,7 +1116,44 @@
     "plus_more": "+{number} більше",
     "thread_show_full_with_icon": "{icon} {text}",
     "show_only_conversation_under_this": "Показати всі відповіді на цей допис",
-    "status_history": "Історія змін"
+    "status_history": "Історія змін",
+    "thread_hide": "Сховати гілку",
+    "open_gallery": "Відкрити галерею",
+    "repeat_confirm": "Точно поширити допис?",
+    "repeat_confirm_title": "Підтвердьте поширення",
+    "repeat_confirm_accept_button": "Так, поширити",
+    "repeat_confirm_cancel_button": "Ні, не поширювати",
+    "delete_error": "Помилка при видаленні допису: {0}",
+    "delete_confirm_accept_button": "Так, видалити",
+    "delete_confirm_cancel_button": "Ні, лишити",
+    "delete_confirm_title": "Підтвердьте видалення",
+    "you": "(ви)",
+    "collapse_attachments": "Згорнути вкладення",
+    "show_all_attachments": "Показати всі вкладення",
+    "hide_attachment": "Сховати вкладення",
+    "many_attachments": "Вкладень: {number} | Вкладень: {number}",
+    "attachment_stop_flash": "Зупинити Flash-плеєр",
+    "thread_follow": "Ще відповідей: {numStatus} | Ще відповідей: {numStatus}",
+    "remove_attachment": "Видалити вкладення",
+    "ancestor_follow": "Переглянути ще {numReplies} під цим дописом | Переглянути ще {numReplies} під цим дописом",
+    "show_all_conversation": "Показати всю розмову (ще дописів: {numStatus}) | Показати всю розмову (ще дописів: {numStatus})",
+    "move_up": "Посунути вкладення ліворуч",
+    "move_down": "Посунути вкладення праворуч",
+    "thread_show": "Показати гілку",
+    "mentions": "Згадки",
+    "thread_show_full": "Показати відповіді: ({numStatus}/{depth}) | Показати відповіді: ({numStatus}/{depth})",
+    "hide_quote": "Сховати процитований допис",
+    "display_quote": "Показати процитований допис",
+    "invisible_quote": "Процитований допис недоступний: {link}",
+    "replies_list_with_others": "Ще відповідей: {numReplies} | Ще відповідей: {numReplies}:",
+    "show_attachment_in_modal": "Показати вкладення у вікні",
+    "show_attachment_description": "Переглянути опис (натисніть саме вкладення, якщо опис не вміщається)",
+    "quotes": "Цитування",
+    "load_error": "Неможливо завантажити статус: {error}",
+    "loading": "Завантаження...",
+    "sensitive_muted": "Заглушення чутливого контенту",
+    "reaction_count_label": "{num} людина відреагувала | {num} людей відреагували",
+    "more_actions": "Більше дій для цього статусу"
   },
   "timeline": {
     "no_more_statuses": "Більше немає дописів",
@@ -980,7 +1168,9 @@
     "repeated": "поширив(-ла)",
     "no_retweet_hint": "Запис, позначено як \"тільки для підписників\" або \"особисте\" і тому не може бути поширений",
     "socket_broke": "Втрачено з'єднання у реальному часі: код {0}",
-    "socket_reconnected": "Встановлено з'єднання у реальному часі"
+    "socket_reconnected": "Встановлено з'єднання у реальному часі",
+    "quick_view_settings": "Налаштування швидкого перегляду",
+    "quick_filter_settings": "Налаштування швидкого фільтру"
   },
   "user_reporting": {
     "submit": "Відправити",
@@ -1026,5 +1216,171 @@
     "submit_edit_action": "Надіслати",
     "cancel_edit_action": "Скасувати",
     "inactive_message": "Це оголошення неактивне"
+  },
+  "lists": {
+    "really_delete": "Дійсно видалити список?",
+    "error": "Помилка при роботі зі списками: {0}",
+    "is_in_list": "Вже є у списку",
+    "editing_list": "Редагування списку {listTitle}",
+    "creating_list": "Створення нового списку",
+    "search": "Знайти користувачів",
+    "create": "Створити",
+    "save": "Зберегти зміни",
+    "manage_members": "Керувати учасниками списку",
+    "new": "Новий список",
+    "title": "Назва списку",
+    "delete": "Видалити список",
+    "following_only": "Лише за ким ви стежите",
+    "lists": "Списки",
+    "manage_lists": "Керувати списками",
+    "remove_from_list": "Видалити зі списку",
+    "add_to_list": "Додати до списку",
+    "update_title": "Зберегти назву",
+    "add_members": "Шукати більше користувачів"
+  },
+  "update": {
+    "update_changelog": "Щоб дізнатись більше інформації, дивіться {theFullChangelog}.",
+    "update_bugs": "Будь ласка, повідомляйте про будь-які проблеми та помилки на {pleromaGitlab}, оскільки ми внесли багато змін, і навіть після ретельно проведених перевірок, ми можемо щось пропустити. Ми заздалегідь вдячні за ваші відгуки щодо проблем, з якими ви можете зіткнутися, а також пропозиції щодо вдосконалення Pleroma та Pleroma-FE.",
+    "update_changelog_here": "повний список змін",
+    "big_update_title": "Хвилинку уваги",
+    "update_bugs_gitlab": "Pleroma GitLab",
+    "big_update_content": "У нас не було оновлень протягом тривалого часу, тому речі можуть мати інакший вигляд, аніж ви звикли.",
+    "art_by": "Арт від {linkToArtist}"
+  },
+  "unicode_domain_indicator": {
+    "tooltip": "Цей домен містить не-ASCII символи."
+  },
+  "admin_dash": {
+    "window_title": "Адміністрування",
+    "tabs": {
+      "instance": "Сервер (Instance)",
+      "frontends": "Фронтенди",
+      "nodb": "Немає конфігурації бази даних",
+      "emoji": "Емодзі",
+      "limits": "Ліміти"
+    },
+    "nodb": {
+      "heading": "Конфіг бази даних вимкнено",
+      "text": "Вам потрібно змінити налаштування бекенду таким чином, щоб {property} дорівнювало {value}, детальніше у {documentation}.",
+      "text2": "Більшість налаштувань будуть недоступні.",
+      "documentation": "документація"
+    },
+    "frontend": {
+      "install": "Встановити",
+      "install_version": "Встановити версію {version}",
+      "success_installing_frontend": "Фронтенд версії {version} успішно встановлено",
+      "failure_installing_frontend": "Не вдалось встановити версію {version}: {reason}",
+      "repository": "Посилання на репозиторій",
+      "versions": "Доступні версії",
+      "is_default_custom": "(За замовчуванням, версія: {version})",
+      "build_url": "URL збірки",
+      "reinstall": "Перевстановити",
+      "default_frontend_unavail": "Налаштування фронтенду недоступні, адже вони потребують конфігурації бази даних",
+      "default_frontend_tip": "Фронтенд за замовчуванням будуть бачити всі користувачі. На сьогоднішній день немає можливості обирати персональний фронтенд під кожного користувача. Якщо ви не користуватиметесь PleromaFE, то, скоріш за все, вам доведеться користуватись старим та забагованим AdminFE для налаштування свого серверу, допоки ми не придумаємо нічого кращого.",
+      "set_default": "Призначити за замовчуванням",
+      "set_default_version": "Призначити версію {version} за замовчуванням",
+      "wip_notice": "Будь ласка майте на увазі що цей розділ знаходиться у процесі розробки та певні функції можуть не працювати.",
+      "default_frontend": "Фронтенд за замовчуванням",
+      "available_frontends": "Доступно для встановлення",
+      "is_default": "(За замовчуванням)",
+      "more_install_options": "Більше варіантів встановлення",
+      "more_default_options": "Більше налаштувань за замовчуванням"
+    },
+    "emoji": {
+      "adding_new": "Додати новий емодзі",
+      "shortcode": "Шорткод",
+      "filename": "Назва файлу",
+      "add_file": "Додати файл",
+      "importFS": "Імпортувати емодзі з файлової системи",
+      "global_actions": "Глобальні дії",
+      "reload": "Перезавантажити емодзі",
+      "error": "Помилка: {0}",
+      "delete_pack": "Видалити набір",
+      "create_pack": "Створити набір",
+      "create": "Створити",
+      "new_pack_name": "Нова назва набору",
+      "emoji_packs": "Набори емодзі",
+      "remote_packs": "Віддалені набори",
+      "do_list": "Список",
+      "remote_pack_instance": "Сервер з віддаленими наборами",
+      "homepage": "Домашня сторінка",
+      "edit_pack": "Редагувати набір",
+      "description": "Опис",
+      "fallback_src": "Джерело заміни",
+      "share": "Поділитись",
+      "fallback_sha256": "Заміна SHA256",
+      "delete_confirm": "Ви впевнені, що хочете видалити {0}?",
+      "download_pack": "Завантажити набір",
+      "downloading_pack": "Завантаження {0}",
+      "download": "Завантажити",
+      "new_filename": "Назва файлу, залиште порожнім для автозаповнення",
+      "download_as_name": "Нове ім'я",
+      "editing": "Редагування {0}",
+      "delete_title": "Видалити?",
+      "download_as_name_full": "Нове ім'я, залиште порожнім для перевикористання",
+      "files": "Файли",
+      "metadata_changed": "Метадані відрізняються від збережених",
+      "replace_warning": "Це ЗАМІНИТЬ локальний набір з такою самою назвою",
+      "emoji_changed": "Незбережені зміни файлу емодзі, перевірте підсвічений емодзі",
+      "emoji_pack": "Набір емодзі",
+      "revert_meta": "Відновити метадані",
+      "save": "Зберегти",
+      "delete": "Видалити",
+      "revert": "Відновити",
+      "save_meta": "Зберегти метадані",
+      "new_shortcode": "Шорткод, залиште порожнім для автозаповнення"
+    },
+    "instance": {
+      "restrict": {
+        "activities": "Доступ до статусів/активностей",
+        "header": "Обмежити доступ для анонімних відвідувачів",
+        "timelines": "Доступ до стрічок",
+        "profiles": "Доступ до профілів користувачів",
+        "description": "Детальне налаштування для контролю доступу до певних розділів API. За замовчуванням (невизначений стан) доступ буде заборонений якщо сервер не публічний, увімкнене налаштування забороняє доступ навіть до публічного серверу, вимкнене налаштування дозволяє доступ навіть до приватного серверу. Неправильні налаштування можуть призвести до небажаних наслідків: наприклад, якщо доступ до профілю обмежений, то пости будуть відображатись без інформації про профіль."
+      },
+      "registrations": "Заявки на реєстрацію",
+      "instance": "Інформація про сервер",
+      "access": "Доступ до серверу",
+      "captcha_header": "CAPTCHA",
+      "kocaptcha": "налаштування KoCaptcha"
+    },
+    "reset_all": "Скинути все",
+    "commit_all": "Зберегти все",
+    "captcha": {
+      "kocaptcha": "KoCaptchа",
+      "native": "Нативний"
+    },
+    "limits": {
+      "uploads": "Ліміти вкладень",
+      "users": "Ліміти користувацьких профілей",
+      "profile_fields": "Ліміти полів у профілі",
+      "arbitrary_limits": "Довільні ліміти",
+      "user_uploads": "Ліміти медіа у профілі",
+      "posts": "Ліміти дописів"
+    },
+    "temp_overrides": {
+      ":pleroma": {
+        ":instance": {
+          ":limit_to_local_content": {
+            "label": "Обмежити пошуки локальним контентом",
+            "description": "Вимикає глобальних пошук по мережі для неавторизованих (за замовчуванням), всіх користувачів або нікого"
+          },
+          ":description_limit": {
+            "description": "Максимальна довжина поля опису вкладень",
+            "label": "Обмеження"
+          },
+          ":public": {
+            "description": "Вимкнення цього зробить API доступним тільки залогіненим користувачам, таким чином Публічна стрічка та стрічка Федерації будуть недоступні неавторизованим користувачам.",
+            "label": "Публічний сервер"
+          },
+          ":background_image": {
+            "label": "Тло",
+            "description": "Тло (використовується PleromaFE)"
+          }
+        }
+      }
+    },
+    "wip_notice": "Ця адмінська панель експериментальна, {adminFeLink}.",
+    "old_ui_link": "старий інтерфейс адмінки доступний тут"
   }
 }
