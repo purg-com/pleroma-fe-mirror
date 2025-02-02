@@ -80,7 +80,7 @@ const SettingsModalAdminContent = {
       }
       // Clear the state of target tab, so that next time settings is opened
       // it doesn't force it.
-      this.$store.dispatch('clearSettingsModalTargetTab')
+      useInterfaceStore().clearSettingsModalTargetTab()
     }
   },
   mounted () {

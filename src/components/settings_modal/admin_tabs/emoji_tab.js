@@ -232,7 +232,7 @@ const EmojiTab = {
         })
     },
     displayError (msg) {
-      this.$store.dispatch('pushGlobalNotice', {
+      this.$store.useInterfaceStore().pushGlobalNotice({
         messageKey: 'admin_dash.emoji.error',
         messageArgs: [msg],
         level: 'error'

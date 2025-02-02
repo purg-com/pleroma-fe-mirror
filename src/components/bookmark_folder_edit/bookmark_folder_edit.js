@@ -63,7 +63,7 @@ const BookmarkFolderEdit = {
           this.$router.push({ name: 'bookmark-folders' })
         })
         .catch((e) => {
-          this.$store.dispatch('pushGlobalNotice', {
+          this.$store.useInterfaceStore().pushGlobalNotice({
             messageKey: 'bookmark_folders.error',
             messageArgs: [e.message],
             level: 'error'

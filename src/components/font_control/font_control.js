@@ -26,7 +26,7 @@ export default {
     'name', 'label', 'modelValue', 'fallback', 'options', 'no-inherit'
   ],
   mounted () {
-    this.$store.dispatch('queryLocalFonts')
+    useInterfaceStore().queryLocalFonts()
   },
   emits: ['update:modelValue'],
   data () {

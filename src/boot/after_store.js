@@ -403,9 +403,9 @@ const afterStoreSetup = async ({ pinia, store, storageError, i18n }) => {
 
   // Little thing to get out of invalid theme state
   window.resetThemes = () => {
-    store.dispatch('resetThemeV3')
-    store.dispatch('resetThemeV3Palette')
-    store.dispatch('resetThemeV2')
+    useInterfaceStore().resetThemeV3()
+    useInterfaceStore().resetThemeV3Palette()
+    useInterfaceStore().resetThemeV2()
   }
 
   app.use(vClickOutside)

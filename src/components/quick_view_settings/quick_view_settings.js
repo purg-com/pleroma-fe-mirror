@@ -1,6 +1,7 @@
 import Popover from 'src/components/popover/popover.vue'
 import QuickFilterSettings from 'src/components/quick_filter_settings/quick_filter_settings.vue'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters } from 'vuex'
+import { mapState } from 'pinia'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faList, faFolderTree, faBars, faWrench } from '@fortawesome/free-solid-svg-icons'
 import { useInterfaceStore } from '../../stores/interface'
@@ -30,8 +31,8 @@ const QuickViewSettings = {
   },
   computed: {
     ...mapGetters(['mergedConfig']),
-    ...mapState({
-      mobileLayout: state => state.interface.layoutType === 'mobile'
+    ...mapState(useInterfaceStore, {
+      mobileLayout: state => state.layoutType === 'mobile'
     }),
     loggedIn () {
       return !!this.$store.state.users.currentUser

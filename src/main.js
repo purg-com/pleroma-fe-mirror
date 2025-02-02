@@ -117,9 +117,6 @@ const persistedStateOptions = {
       // strict: process.env.NODE_ENV !== 'production'
     })
     window.vuex = store
-    if (storageError) {
-      store.dispatch('pushGlobalNotice', { messageKey: 'errors.storage_unavailable', level: 'error' })
-    }
     // Temporarily passing pinia and vuex stores along with storageError result until migration is fully complete.
     return await afterStoreSetup({ pinia, store, storageError, i18n })
   } catch (e) {

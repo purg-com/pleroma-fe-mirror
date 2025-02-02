@@ -35,7 +35,8 @@ export const useInterfaceStore = defineStore('interface', {
       cssFilter: window.CSS && window.CSS.supports && (
         window.CSS.supports('filter', 'drop-shadow(0 0)') ||
         window.CSS.supports('-webkit-filter', 'drop-shadow(0 0)')
-      )
+      ),
+      localFonts: typeof window.queryLocalFonts === 'function'
     },
     layoutType: 'normal',
     globalNotices: [],
@@ -95,9 +96,9 @@ export const useInterfaceStore = defineStore('interface', {
     clearSettingsModalTargetTab () {
       this.settingsModalTargetTab = null
     },
-    openSettingsModalTab (value) {
+    openSettingsModalTab (value, mode = 'user') {
       this.settingsModalTargetTab = value
-      this.openSettingsModal()
+      this.openSettingsModal(mode)
     },
     removeGlobalNotice (notice) {
       this.globalNotices = this.globalNotices.filter(n => n !== notice)
@@ -146,6 +147,31 @@ export const useInterfaceStore = defineStore('interface', {
         const wideLayout = width >= 1300
         this.layoutType = wideLayout ? 'wide' : normalOrMobile
       }
+    },
+    setFontsList (value) {
+      this.localFonts = [...(new Set(value.map(font => font.family))).values()]
+    },
+    queryLocalFonts () {
+      if (this.localFonts !== null) return
+      this.setFontsList([])
+
+      if (!this.browserSupport.localFonts) {
+        return
+      }
+      window
+        .queryLocalFonts()
+        .then((fonts) => {
+          this.setFontsList(fonts)
+        })
+        .catch((e) => {
+          this.pushGlobalNotice({
+            messageKey: 'settings.style.themes3.font.font_list_unavailable',
+            messageArgs: {
+              error: e
+            },
+            level: 'error'
+          })
+        })
     },
     setLastTimeline (value) {
       this.lastTimeline = value

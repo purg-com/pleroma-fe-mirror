@@ -127,7 +127,7 @@ export default {
     if (currentIndex) {
       promise = Promise.resolve(currentIndex)
     } else {
-      promise = this.$store.dispatch('fetchThemesIndex')
+      promise = useInterfaceStore().fetchThemesIndex()
     }
 
     promise.then(themesIndex => {
@@ -493,7 +493,7 @@ export default {
       }
     },
     setCustomTheme () {
-      this.$store.dispatch('setThemeV2', {
+      useInterfaceStore().setThemeV2({
         customTheme: {
           ignore: true,
           themeFileVersion: this.selectedVersion,

@@ -9,6 +9,8 @@ import {
   faBullhorn
 } from '@fortawesome/free-solid-svg-icons'
 
+import { useInterfaceStore } from '../../stores/interface'
+
 library.add(
   faUserPlus,
   faComments,
@@ -42,7 +44,7 @@ const ExtraNotifications = {
   },
   methods: {
     openNotificationSettings () {
-      return this.$store.dispatch('openSettingsModalTab', 'notifications')
+      return useInterfaceStore().openSettingsModalTab('notifications')
     },
     dismissConfigurationTip () {
       return this.$store.dispatch('setOption', { name: 'showExtraNotificationsTip', value: false })
