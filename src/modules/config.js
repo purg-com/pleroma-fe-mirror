@@ -36,8 +36,6 @@ export const multiChoiceProperties = [
   'unsavedPostAction' // save | discard | confirm
 ]
 
-console.log('TEST', defaultState)
-
 // caching the instance default properties
 export const instanceDefaultProperties = Object.entries(defaultState)
   .filter(([key, value]) => value === undefined)

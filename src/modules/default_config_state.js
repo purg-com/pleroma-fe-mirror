@@ -160,5 +160,6 @@ export const defaultState = {
   useAbsoluteTimeFormat: undefined, // instance default
   absoluteTimeFormatMinAge: undefined, // instance default
   absoluteTime12h: undefined, // instance default
-  imageCompression: true
+  imageCompression: true,
+  alwaysUseJpeg: false
 }
