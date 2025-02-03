@@ -1,10 +1,7 @@
-var semver = require('semver')
-var chalk = require('chalk')
-var packageConfig = require('../package.json')
-var exec = function (cmd) {
-  return require('child_process')
-    .execSync(cmd).toString().trim()
-}
+import semver from 'semver'
+import chalk from 'chalk'
+
+import packageConfig from '../package.json' with { type: 'json' }
 
 var versionRequirements = [
   {
@@ -14,10 +11,10 @@ var versionRequirements = [
   }
 ]
 
-module.exports = function () {
-  var warnings = []
-  for (var i = 0; i < versionRequirements.length; i++) {
-    var mod = versionRequirements[i]
+export default function () {
+  const warnings = []
+  for (let i = 0; i < versionRequirements.length; i++) {
+    const mod = versionRequirements[i]
     if (!semver.satisfies(mod.currentVersion, mod.versionRequirement)) {
       warnings.push(mod.name + ': ' +
         chalk.red(mod.currentVersion) + ' should be ' +
@@ -28,8 +25,8 @@ module.exports = function () {
 
   if (warnings.length) {
     console.warn(chalk.yellow('\nTo use this template, you must update following to modules:\n'))
-    for (var i = 0; i < warnings.length; i++) {
-      var warning = warnings[i]
+    for (let i = 0; i < warnings.length; i++) {
+      const warning = warnings[i]
       console.warn('  ' + warning)
     }
     console.warn()
