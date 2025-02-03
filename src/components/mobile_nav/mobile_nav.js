@@ -18,7 +18,7 @@ import {
   faMinus,
   faCheckDouble
 } from '@fortawesome/free-solid-svg-icons'
-import { useAnnouncementsStore } from '../../stores/announcements'
+import { useAnnouncementsStore } from 'src/stores/announcements'
 
 library.add(
   faTimes,

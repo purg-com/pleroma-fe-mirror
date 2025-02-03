@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 
 import filter from 'lodash/filter'
-import { useInterfaceStore } from '../stores/interface'
+import { useInterfaceStore } from 'src/stores/interface'
 
 export const useReportsStore = defineStore('reports', {
   state: () => ({

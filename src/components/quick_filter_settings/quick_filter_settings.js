@@ -3,7 +3,7 @@ import { mapGetters } from 'vuex'
 import { mapState } from 'pinia'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faFilter, faFont, faWrench } from '@fortawesome/free-solid-svg-icons'
-import { useInterfaceStore } from '../../stores/interface'
+import { useInterfaceStore } from 'src/stores/interface'
 
 library.add(
   faFilter,

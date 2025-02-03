@@ -4,7 +4,7 @@ import {
   faBullhorn,
   faTimes
 } from '@fortawesome/free-solid-svg-icons'
-import { useShoutStore } from '../../stores/shout'
+import { useShoutStore } from 'src/stores/shout'
 
 library.add(
   faBullhorn,

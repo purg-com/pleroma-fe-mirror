@@ -14,7 +14,7 @@ import {
   faCog,
   faInfoCircle
 } from '@fortawesome/free-solid-svg-icons'
-import { useInterfaceStore } from '../../stores/interface'
+import { useInterfaceStore } from 'src/stores/interface'
 
 library.add(
   faSignInAlt,

@@ -11,7 +11,7 @@ import {
   closeAllDesktopNotifications
 } from '../services/desktop_notification_utils/desktop_notification_utils.js'
 
-import { useReportsStore } from '../stores/reports.js'
+import { useReportsStore } from 'src/stores/reports.js'
 
 const emptyNotifications = () => ({
   desktopNotificationSilence: true,

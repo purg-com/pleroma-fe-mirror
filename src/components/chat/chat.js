@@ -14,7 +14,7 @@ import {
   faChevronLeft
 } from '@fortawesome/free-solid-svg-icons'
 import { buildFakeMessage } from '../../services/chat_utils/chat_utils.js'
-import { useInterfaceStore } from '../../stores/interface.js'
+import { useInterfaceStore } from 'src/stores/interface.js'
 
 library.add(
   faChevronDown,

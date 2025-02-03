@@ -43,7 +43,7 @@ import Checkbox from 'src/components/checkbox/checkbox.vue'
 import Select from 'src/components/select/select.vue'
 
 import Preview from './theme_preview.vue'
-import { useInterfaceStore } from '../../../../stores/interface'
+import { useInterfaceStore } from 'src/stores/interface'
 
 // List of color values used in v1
 const v1OnlyNames = [

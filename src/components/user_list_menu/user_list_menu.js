@@ -4,7 +4,7 @@ import { mapState } from 'pinia'
 
 import DialogModal from '../dialog_modal/dialog_modal.vue'
 import Popover from '../popover/popover.vue'
-import { useListsStore } from '../../stores/lists'
+import { useListsStore } from 'src/stores/lists'
 
 library.add(faChevronRight)
 

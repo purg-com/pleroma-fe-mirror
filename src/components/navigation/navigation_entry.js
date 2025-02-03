@@ -4,7 +4,7 @@ import OptionalRouterLink from 'src/components/optional_router_link/optional_rou
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faThumbtack } from '@fortawesome/free-solid-svg-icons'
 import { mapStores } from 'pinia'
-import { useAnnouncementsStore } from '../../stores/announcements'
+import { useAnnouncementsStore } from 'src/stores/announcements'
 
 library.add(faThumbtack)
 

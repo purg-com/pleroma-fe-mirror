@@ -1,6 +1,6 @@
 import { mapGetters } from 'vuex'
 import { mapState as mapPiniaState } from 'pinia'
-import { useAnnouncementsStore } from '../../stores/announcements'
+import { useAnnouncementsStore } from 'src/stores/announcements'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -9,7 +9,7 @@ import {
   faBullhorn
 } from '@fortawesome/free-solid-svg-icons'
 
-import { useInterfaceStore } from '../../stores/interface'
+import { useInterfaceStore } from 'src/stores/interface'
 
 library.add(
   faUserPlus,

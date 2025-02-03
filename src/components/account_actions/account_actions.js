@@ -7,7 +7,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faEllipsisV
 } from '@fortawesome/free-solid-svg-icons'
-import { useReportsStore } from '../../stores/reports'
+import { useReportsStore } from 'src/stores/reports'
 
 library.add(
   faEllipsisV

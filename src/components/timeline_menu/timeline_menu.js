@@ -9,8 +9,8 @@ import { filterNavigation } from 'src/components/navigation/filter.js'
 import {
   faChevronDown
 } from '@fortawesome/free-solid-svg-icons'
-import { useInterfaceStore } from '../../stores/interface'
-import { useListsStore } from '../../stores/lists'
+import { useInterfaceStore } from 'src/stores/interface'
+import { useListsStore } from 'src/stores/lists'
 
 library.add(faChevronDown)
 

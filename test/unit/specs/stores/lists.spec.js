@@ -1,5 +1,5 @@
 import { createPinia, setActivePinia } from 'pinia'
-import { useListsStore } from '../../../../src/stores/lists.js'
+import { useListsStore } from 'src/src/stores/lists.js'
 import { createStore } from 'vuex'
 import apiModule from '../../../../src/modules/api.js'
 

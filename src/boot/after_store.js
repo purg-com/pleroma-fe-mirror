@@ -17,9 +17,9 @@ import { applyConfig } from '../services/style_setter/style_setter.js'
 import FaviconService from '../services/favicon_service/favicon_service.js'
 import { initServiceWorker, updateFocus } from '../services/sw/sw.js'
 
-import { useI18nStore } from '../stores/i18n'
-import { useInterfaceStore } from '../stores/interface'
-import { useAnnouncementsStore } from '../stores/announcements'
+import { useI18nStore } from 'src/stores/i18n'
+import { useInterfaceStore } from 'src/stores/interface'
+import { useAnnouncementsStore } from 'src/stores/announcements'
 
 let staticInitialResults = null
 

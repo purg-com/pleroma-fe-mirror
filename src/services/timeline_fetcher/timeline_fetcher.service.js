@@ -2,7 +2,7 @@ import { camelCase } from 'lodash'
 
 import apiService from '../api/api.service.js'
 import { promiseInterval } from '../promise_interval/promise_interval.js'
-import { useInterfaceStore } from '../../stores/interface.js'
+import { useInterfaceStore } from 'src/stores/interface.js'
 
 const update = ({ store, statuses, timeline, showImmediately, userId, listId, pagination }) => {
   const ccTimeline = camelCase(timeline)

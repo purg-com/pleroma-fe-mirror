@@ -1,7 +1,7 @@
 import { get } from 'lodash'
 import Modal from '../modal/modal.vue'
 import Status from '../status/status.vue'
-import { useStatusHistoryStore } from '../../stores/statusHistory'
+import { useStatusHistoryStore } from 'src/stores/statusHistory'
 
 const StatusHistoryModal = {
   components: {

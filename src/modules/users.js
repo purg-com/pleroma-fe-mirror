@@ -3,7 +3,7 @@ import { windowWidth, windowHeight } from '../services/window_utils/window_utils
 import oauthApi from '../services/new_api/oauth.js'
 import { compact, map, each, mergeWith, last, concat, uniq, isArray } from 'lodash'
 import { registerPushNotifications, unregisterPushNotifications } from '../services/sw/sw.js'
-import { useInterfaceStore } from '../stores/interface.js'
+import { useInterfaceStore } from 'src/stores/interface.js'
 
 // TODO: Unify with mergeOrAdd in statuses.js
 export const mergeOrAdd = (arr, obj, item) => {

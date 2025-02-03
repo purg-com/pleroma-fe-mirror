@@ -2,7 +2,7 @@ import { mapState } from 'vuex'
 import { mapState as mapPiniaState } from 'pinia'
 import NavigationEntry from 'src/components/navigation/navigation_entry.vue'
 import { getListEntries } from 'src/components/navigation/filter.js'
-import { useListsStore } from '../../stores/lists'
+import { useListsStore } from 'src/stores/lists'
 
 export const ListsMenuContent = {
   props: [

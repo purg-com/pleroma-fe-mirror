@@ -15,8 +15,8 @@ import {
 import FaviconService from '../../services/favicon_service/favicon_service.js'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCircleNotch, faArrowUp, faMinus } from '@fortawesome/free-solid-svg-icons'
-import { useInterfaceStore } from '../../stores/interface'
-import { useAnnouncementsStore } from '../../stores/announcements'
+import { useInterfaceStore } from 'src/stores/interface'
+import { useAnnouncementsStore } from 'src/stores/announcements'
 
 library.add(
   faCircleNotch,

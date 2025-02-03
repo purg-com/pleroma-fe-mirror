@@ -21,7 +21,7 @@ import {
 import {
   faWindowMinimize
 } from '@fortawesome/free-regular-svg-icons'
-import { useInterfaceStore } from '../../stores/interface'
+import { useInterfaceStore } from 'src/stores/interface'
 
 const PLEROMAFE_SETTINGS_MAJOR_VERSION = 1
 const PLEROMAFE_SETTINGS_MINOR_VERSION = 0

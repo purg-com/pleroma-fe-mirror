@@ -8,7 +8,7 @@ import QuickViewSettings from '../quick_view_settings/quick_view_settings.vue'
 import { debounce, throttle, keyBy } from 'lodash'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCircleNotch, faCirclePlus, faCog, faMinus, faArrowUp, faCheck } from '@fortawesome/free-solid-svg-icons'
-import { useInterfaceStore } from '../../stores/interface'
+import { useInterfaceStore } from 'src/stores/interface'
 
 library.add(
   faCircleNotch,

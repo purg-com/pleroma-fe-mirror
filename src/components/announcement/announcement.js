@@ -2,7 +2,7 @@ import { mapState } from 'vuex'
 import AnnouncementEditor from '../announcement_editor/announcement_editor.vue'
 import RichContent from '../rich_content/rich_content.jsx'
 import localeService from '../../services/locale/locale.service.js'
-import { useAnnouncementsStore } from '../../stores/announcements'
+import { useAnnouncementsStore } from 'src/stores/announcements'
 
 const Announcement = {
   components: {

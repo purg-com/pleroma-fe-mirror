@@ -3,8 +3,8 @@ import { applyConfig } from '../services/style_setter/style_setter.js'
 import messages from '../i18n/messages'
 import { set } from 'lodash'
 import localeService from '../services/locale/locale.service.js'
-import { useI18nStore } from '../stores/i18n.js'
-import { useInterfaceStore } from '../stores/interface.js'
+import { useI18nStore } from 'src/stores/i18n.js'
+import { useInterfaceStore } from 'src/stores/interface.js'
 
 import { defaultState } from './default_config_state.js'
 

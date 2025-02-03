@@ -1,4 +1,4 @@
-import { useListsStore } from '../../stores/lists.js'
+import { useListsStore } from 'src/stores/lists.js'
 import apiService from '../api/api.service.js'
 import { promiseInterval } from '../promise_interval/promise_interval.js'
 

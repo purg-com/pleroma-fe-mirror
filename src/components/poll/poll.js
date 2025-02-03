@@ -2,7 +2,7 @@ import Timeago from 'components/timeago/timeago.vue'
 import genRandomSeed from '../../services/random_seed/random_seed.service.js'
 import RichContent from 'components/rich_content/rich_content.jsx'
 import { forEach, map } from 'lodash'
-import { usePollsStore } from '../../stores/polls'
+import { usePollsStore } from 'src/stores/polls'
 
 export default {
   name: 'Poll',

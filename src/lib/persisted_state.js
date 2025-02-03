@@ -1,6 +1,6 @@
 import merge from 'lodash.merge'
 import { each, get, set, cloneDeep } from 'lodash'
-import { useInterfaceStore } from '../stores/interface'
+import { useInterfaceStore } from 'src/stores/interface'
 import { storage } from './storage.js'
 
 let loaded = false

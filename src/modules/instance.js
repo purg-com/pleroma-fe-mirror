@@ -1,7 +1,7 @@
 import apiService from '../services/api/api.service.js'
 import { instanceDefaultProperties } from './config.js'
 import { langCodeToCldrName, ensureFinalFallback } from '../i18n/languages.js'
-import { useInterfaceStore } from '../stores/interface.js'
+import { useInterfaceStore } from 'src/stores/interface.js'
 
 const SORTED_EMOJI_GROUP_IDS = [
   'smileys-and-emotion',

@@ -21,9 +21,9 @@ import {
   faList,
   faFilePen
 } from '@fortawesome/free-solid-svg-icons'
-import { useShoutStore } from '../../stores/shout'
-import { useInterfaceStore } from '../../stores/interface'
-import { useAnnouncementsStore } from '../../stores/announcements'
+import { useShoutStore } from 'src/stores/shout'
+import { useInterfaceStore } from 'src/stores/interface'
+import { useAnnouncementsStore } from 'src/stores/announcements'
 
 library.add(
   faSignInAlt,

@@ -13,7 +13,7 @@ import {
   faLink,
   faPollH
 } from '@fortawesome/free-solid-svg-icons'
-import { useMediaViewerStore } from '../../stores/media_viewer'
+import { useMediaViewerStore } from 'src/stores/media_viewer'
 
 library.add(
   faCircleNotch,

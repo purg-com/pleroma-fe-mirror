@@ -3,7 +3,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faPen
 } from '@fortawesome/free-solid-svg-icons'
-import { usePostStatusStore } from '../../stores/postStatus'
+import { usePostStatusStore } from 'src/stores/postStatus'
 
 library.add(
   faPen

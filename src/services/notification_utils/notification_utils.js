@@ -1,6 +1,6 @@
 import { muteWordHits } from '../status_parser/status_parser.js'
 import { showDesktopNotification } from '../desktop_notification_utils/desktop_notification_utils.js'
-import { useI18nStore } from '../../stores/i18n.js'
+import { useI18nStore } from 'src/stores/i18n.js'
 import { useAnnouncementsStore } from 'src/stores/announcements'
 
 import FaviconService from 'src/services/favicon_service/favicon_service.js'

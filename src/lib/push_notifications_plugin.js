@@ -1,4 +1,4 @@
-import { useInterfaceStore } from '../stores/interface'
+import { useInterfaceStore } from 'src/stores/interface'
 
 export default (store) => {
   store.subscribe((mutation, state) => {

@@ -4,7 +4,7 @@ import { mapState } from 'pinia'
 import { FontAwesomeIcon as FAIcon } from '@fortawesome/vue-fontawesome'
 
 import './tab_switcher.scss'
-import { useInterfaceStore } from '../../stores/interface'
+import { useInterfaceStore } from 'src/stores/interface'
 
 const findFirstUsable = (slots) => slots.findIndex(_ => _.props)
 
