@@ -48,6 +48,9 @@ export default {
     themeApplied (value) {
       this.removeSplash()
     },
+    currentTheme (value) {
+      this.setThemeBodyClass()
+    },
     layoutType (value) {
       document.getElementById('modal').classList = ['-' + this.layoutType]
     }
@@ -61,6 +64,7 @@ export default {
   },
   mounted () {
     if (this.$store.state.interface.themeApplied) {
+      this.setThemeBodyClass()
       this.removeSplash()
     }
   },
@@ -70,6 +74,9 @@ export default {
   computed: {
     themeApplied () {
       return this.$store.state.interface.themeApplied
+    },
+    currentTheme () {
+      return this.mergedConfig.style || this.$store.state.instance.style
     },
     layoutModalClass () {
       return '-' + this.layoutType
@@ -150,6 +157,25 @@ export default {
     updateMobileState () {
       this.$store.dispatch('setLayoutWidth', windowWidth())
       this.$store.dispatch('setLayoutHeight', windowHeight())
+    },
+    setThemeBodyClass () {
+      const themeName = this.currentTheme
+      const classList = Array.from(document.body.classList)
+      const oldTheme = classList.filter(c => c.startsWith('theme-'))
+
+      if (themeName !== null && themeName !== '') {
+        const newTheme = `theme-${themeName.toLowerCase()}`
+
+        // remove old theme reference if there are any
+        if (oldTheme.length) {
+          document.body.classList.replace(oldTheme[0], newTheme)
+        } else {
+          document.body.classList.add(newTheme)
+        }
+      } else {
+        // remove theme reference if non-V3 theme is used
+        document.body.classList.remove(...oldTheme)
+      }
     },
     removeSplash () {
       document.querySelector('#status').textContent = this.$t('splash.fun_' + Math.ceil(Math.random() * 4))
