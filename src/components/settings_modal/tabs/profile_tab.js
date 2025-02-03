@@ -21,6 +21,7 @@ import {
   faPlus,
   faCircleNotch
 } from '@fortawesome/free-solid-svg-icons'
+import { useInterfaceStore } from 'src/stores/interface'
 
 library.add(
   faTimes,
@@ -175,7 +176,7 @@ const ProfileTab = {
       if (file.size > this.$store.state.instance[slot + 'limit']) {
         const filesize = fileSizeFormatService.fileSizeFormat(file.size)
         const allowedsize = fileSizeFormatService.fileSizeFormat(this.$store.state.instance[slot + 'limit'])
-        this.$store.dispatch('pushGlobalNotice', {
+        useInterfaceStore().pushGlobalNotice({
           messageKey: 'upload.error.message',
           messageArgs: [
             this.$t('upload.error.file_too_big', {
@@ -266,7 +267,7 @@ const ProfileTab = {
         .finally(() => { this.backgroundUploading = false })
     },
     displayUploadError (error) {
-      this.$store.dispatch('pushGlobalNotice', {
+      useInterfaceStore().pushGlobalNotice({
         messageKey: 'upload.error.message',
         messageArgs: [error.message],
         level: 'error'

@@ -4,6 +4,7 @@ import InstanceTab from './admin_tabs/instance_tab.vue'
 import LimitsTab from './admin_tabs/limits_tab.vue'
 import FrontendsTab from './admin_tabs/frontends_tab.vue'
 import EmojiTab from './admin_tabs/emoji_tab.vue'
+import { useInterfaceStore } from 'src/stores/interface'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -45,10 +46,10 @@ const SettingsModalAdminContent = {
       return !!this.$store.state.users.currentUser
     },
     open () {
-      return this.$store.state.interface.settingsModalState !== 'hidden'
+      return useInterfaceStore().settingsModalState !== 'hidden'
     },
     bodyLock () {
-      return this.$store.state.interface.settingsModalState === 'visible'
+      return useInterfaceStore().settingsModalState === 'visible'
     },
     adminDbLoaded () {
       return this.$store.state.adminSettings.loaded
@@ -67,7 +68,7 @@ const SettingsModalAdminContent = {
   },
   methods: {
     onOpen () {
-      const targetTab = this.$store.state.interface.settingsModalTargetTab
+      const targetTab = useInterfaceStore().settingsModalTargetTab
       // We're being told to open in specific tab
       if (targetTab) {
         const tabIndex = this.$refs.tabSwitcher.$slots.default().findIndex(elm => {
@@ -79,7 +80,7 @@ const SettingsModalAdminContent = {
       }
       // Clear the state of target tab, so that next time settings is opened
       // it doesn't force it.
-      this.$store.dispatch('clearSettingsModalTargetTab')
+      useInterfaceStore().clearSettingsModalTargetTab()
     }
   },
   mounted () {

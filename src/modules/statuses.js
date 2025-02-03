@@ -13,6 +13,7 @@ import {
   omitBy
 } from 'lodash'
 import apiService from '../services/api/api.service.js'
+import { useInterfaceStore } from 'src/stores/interface'
 
 const emptyTl = (userId = 0) => ({
   statuses: [],
@@ -510,7 +511,7 @@ const statuses = {
           commit('setDeleted', { status })
         })
         .catch((e) => {
-          dispatch('pushGlobalNotice', {
+          useInterfaceStore().pushGlobalNotice({
             level: 'error',
             messageKey: 'status.delete_error',
             messageArgs: [e.message],

@@ -4,10 +4,8 @@ import IntegerSetting from '../helpers/integer_setting.vue'
 import FloatSetting from '../helpers/float_setting.vue'
 import UnitSetting, { defaultHorizontalUnits } from '../helpers/unit_setting.vue'
 import PaletteEditor from 'src/components/palette_editor/palette_editor.vue'
-
+import Preview from './theme_tab/theme_preview.vue'
 import FontControl from 'src/components/font_control/font_control.vue'
-
-import { normalizeThemeData } from 'src/modules/interface'
 
 import { newImporter } from 'src/services/export_import/export_import.js'
 import { convertTheme2To3 } from 'src/services/theme_data/theme2_to_theme3.js'
@@ -20,16 +18,14 @@ import { deserialize } from 'src/services/theme_data/iss_deserializer.js'
 
 import SharedComputedObject from '../helpers/shared_computed_object.js'
 import ProfileSettingIndicator from '../helpers/profile_setting_indicator.vue'
+
+import { mapActions } from 'pinia'
+import { useInterfaceStore, normalizeThemeData } from 'src/stores/interface'
+
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faGlobe
 } from '@fortawesome/free-solid-svg-icons'
-
-import Preview from './theme_tab/theme_preview.vue'
-
-// helper for debugging
-// eslint-disable-next-line no-unused-vars
-const toValue = (x) => JSON.parse(JSON.stringify(x === undefined ? 'null' : x))
 
 library.add(
   faGlobe
@@ -90,7 +86,7 @@ const AppearanceTab = {
     PaletteEditor
   },
   mounted () {
-    this.$store.dispatch('getThemeData')
+    useInterfaceStore().getThemeData()
 
     const updateIndex = (resource) => {
       const capitalizedResource = resource[0].toUpperCase() + resource.slice(1)
@@ -100,7 +96,7 @@ const AppearanceTab = {
       if (currentIndex) {
         promise = Promise.resolve(currentIndex)
       } else {
-        promise = this.$store.dispatch(`fetch${capitalizedResource}sIndex`)
+        promise = useInterfaceStore()[`fetch${capitalizedResource}sIndex`]()
       }
 
       return promise.then(index => {
@@ -131,7 +127,7 @@ const AppearanceTab = {
       }))
     })
 
-    this.userPalette = this.$store.state.interface.paletteDataUsed || {}
+    this.userPalette = useInterfaceStore().paletteDataUsed || {}
 
     updateIndex('palette').then(bundledPalettes => {
       bundledPalettes.forEach(([key, palettePromise]) => palettePromise.then(v => {
@@ -187,10 +183,10 @@ const AppearanceTab = {
   },
   computed: {
     switchInProgress () {
-      return this.$store.state.interface.themeChangeInProgress
+      return useInterfaceStore().themeChangeInProgress
     },
     paletteDataUsed () {
-      return this.$store.state.interface.paletteDataUsed
+      return useInterfaceStore().paletteDataUsed
     },
     availableStyles () {
       return [
@@ -205,7 +201,7 @@ const AppearanceTab = {
       ]
     },
     stylePalettes () {
-      const ruleset = this.$store.state.interface.styleDataUsed || []
+      const ruleset = useInterfaceStore().styleDataUsed || []
       if (!ruleset && ruleset.length === 0) return
       const meta = ruleset.find(x => x.component === '@meta')
       const result = ruleset.filter(x => x.component.startsWith('@palette'))
@@ -273,7 +269,7 @@ const AppearanceTab = {
       }
     },
     customThemeVersion () {
-      const { themeVersion } = this.$store.state.interface
+      const { themeVersion } = useInterfaceStore()
       return themeVersion
     },
     isCustomThemeUsed () {
@@ -311,14 +307,14 @@ const AppearanceTab = {
     },
     onImport (parsed, filename) {
       if (filename.endsWith('.json')) {
-        this.$store.dispatch('setThemeCustom', parsed.source || parsed.theme)
+        useInterfaceStore().setThemeCustom(parsed.source || parsed.theme)
       } else if (filename.endsWith('.iss')) {
-        this.$store.dispatch('setStyleCustom', parsed)
+        useInterfaceStore().setStyleCustom(parsed)
       }
     },
     onImportFailure (result) {
       console.error('Failure importing theme:', result)
-      this.$store.dispatch('pushGlobalNotice', { messageKey: 'settings.invalid_theme_imported', level: 'error' })
+      this.$store.useInterfaceStore().pushGlobalNotice({ messageKey: 'settings.invalid_theme_imported', level: 'error' })
     },
     importValidator (parsed, filename) {
       if (filename.endsWith('.json')) {
@@ -340,22 +336,20 @@ const AppearanceTab = {
     isPaletteActive (key) {
       return key === (this.mergedConfig.palette || this.$store.state.instance.palette)
     },
-    setStyle (name) {
-      this.$store.dispatch('setStyle', name)
-    },
-    setTheme (name) {
-      this.$store.dispatch('setTheme', name)
-    },
+    ...mapActions(useInterfaceStore, [
+      'setStyle',
+      'setTheme'
+    ]),
     setPalette (name, data) {
-      this.$store.dispatch('setPalette', name)
+      useInterfaceStore().setPalette(name)
       this.userPalette = data
     },
     setPaletteCustom (data) {
-      this.$store.dispatch('setPaletteCustom', data)
+      useInterfaceStore().setPaletteCustom(data)
       this.userPalette = data
     },
     resetTheming (name) {
-      this.$store.dispatch('setStyle', 'stock')
+      useInterfaceStore().setStyle('stock')
     },
     previewTheme (key, version, input) {
       let theme3

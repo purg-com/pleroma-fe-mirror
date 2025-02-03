@@ -43,6 +43,7 @@ import Checkbox from 'src/components/checkbox/checkbox.vue'
 import Select from 'src/components/select/select.vue'
 
 import Preview from './theme_preview.vue'
+import { useInterfaceStore } from 'src/stores/interface'
 
 // List of color values used in v1
 const v1OnlyNames = [
@@ -126,7 +127,7 @@ export default {
     if (currentIndex) {
       promise = Promise.resolve(currentIndex)
     } else {
-      promise = this.$store.dispatch('fetchThemesIndex')
+      promise = useInterfaceStore().fetchThemesIndex()
     }
 
     promise.then(themesIndex => {
@@ -296,7 +297,7 @@ export default {
       }
     },
     themeDataUsed () {
-      return this.$store.state.interface.themeDataUsed
+      return useInterfaceStore().themeDataUsed
     },
     shadowsAvailable () {
       return Object.keys(DEFAULT_SHADOWS).sort()
@@ -492,7 +493,7 @@ export default {
       }
     },
     setCustomTheme () {
-      this.$store.dispatch('setThemeV2', {
+      useInterfaceStore().setThemeV2({
         customTheme: {
           ignore: true,
           themeFileVersion: this.selectedVersion,
@@ -536,7 +537,7 @@ export default {
       this.loadTheme(parsed, 'file', forceSource)
     },
     onImportFailure (result) {
-      this.$store.dispatch('pushGlobalNotice', { messageKey: 'settings.invalid_theme_imported', level: 'error' })
+      useInterfaceStore().pushGlobalNotice({ messageKey: 'settings.invalid_theme_imported', level: 'error' })
     },
     importValidator (parsed) {
       const version = parsed._pleroma_theme_version

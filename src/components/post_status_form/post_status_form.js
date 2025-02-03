@@ -14,7 +14,8 @@ import { propsToNative } from '../../services/attributes_helper/attributes_helpe
 import { pollFormToMasto } from 'src/services/poll/poll.service.js'
 import { reject, map, uniqBy, debounce } from 'lodash'
 import suggestor from '../emoji_input/suggestor.js'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters } from 'vuex'
+import { mapState, mapActions } from 'pinia'
 import Checkbox from '../checkbox/checkbox.vue'
 import Select from '../select/select.vue'
 import DraftCloser from 'src/components/draft_closer/draft_closer.vue'
@@ -31,6 +32,9 @@ import {
   faChevronLeft,
   faChevronRight
 } from '@fortawesome/free-solid-svg-icons'
+
+import { useInterfaceStore } from 'src/stores/interface.js'
+import { useMediaViewerStore } from 'src/stores/media_viewer.js'
 
 library.add(
   faSmileBeam,
@@ -367,8 +371,8 @@ const PostStatusForm = {
       ) && this.saveable
     },
     ...mapGetters(['mergedConfig']),
-    ...mapState({
-      mobileLayout: state => state.interface.mobileLayout
+    ...mapState(useInterfaceStore, {
+      mobileLayout: store => store.mobileLayout
     })
   },
   watch: {
@@ -393,6 +397,7 @@ const PostStatusForm = {
     this.removeBeforeUnloadListener()
   },
   methods: {
+    ...mapActions(useMediaViewerStore, ['increment']),
     statusChanged () {
       this.autoPreview()
       this.updateIdempotencyKey()
@@ -753,7 +758,7 @@ const PostStatusForm = {
       this.idempotencyKey = Date.now().toString()
     },
     openProfileTab () {
-      this.$store.dispatch('openSettingsModalTab', 'profile')
+      useInterfaceStore().openSettingsModalTab('profile')
     },
     propsToNative (props) {
       return propsToNative(props)

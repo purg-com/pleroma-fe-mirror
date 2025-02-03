@@ -1,6 +1,7 @@
 import apiService from '../services/api/api.service.js'
 import { instanceDefaultProperties } from './config.js'
 import { langCodeToCldrName, ensureFinalFallback } from '../i18n/languages.js'
+import { useInterfaceStore } from 'src/stores/interface.js'
 
 const SORTED_EMOJI_GROUP_IDS = [
   'smileys-and-emotion',
@@ -292,7 +293,7 @@ const instance = {
       commit('setInstanceOption', { name, value })
       switch (name) {
         case 'name':
-          dispatch('setPageTitle')
+          useInterfaceStore().setPageTitle()
           break
         case 'shoutAvailable':
           if (value) {

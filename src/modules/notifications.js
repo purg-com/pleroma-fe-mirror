@@ -11,6 +11,8 @@ import {
   closeAllDesktopNotifications
 } from '../services/desktop_notification_utils/desktop_notification_utils.js'
 
+import { useReportsStore } from 'src/stores/reports.js'
+
 const emptyNotifications = () => ({
   desktopNotificationSilence: true,
   maxId: 0,
@@ -94,7 +96,7 @@ export const notifications = {
 
       validNotifications.forEach(notification => {
         if (notification.type === 'pleroma:report') {
-          dispatch('addReport', notification.report)
+          useReportsStore().addReport(notification.report)
         }
 
         if (notification.type === 'pleroma:emoji_reaction') {

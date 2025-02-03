@@ -158,7 +158,7 @@
     </div>
     <teleport to="#modal">
       <ConfirmModal
-        v-if="$store.state.interface.temporaryChangesTimeoutId"
+        v-if="temporaryChangesTimeoutId"
         :title="$t('settings.confirm_new_setting')"
         :cancel-text="$t('settings.revert')"
         :confirm-text="$t('settings.confirm')"

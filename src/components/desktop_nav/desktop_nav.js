@@ -14,6 +14,7 @@ import {
   faCog,
   faInfoCircle
 } from '@fortawesome/free-solid-svg-icons'
+import { useInterfaceStore } from 'src/stores/interface'
 
 library.add(
   faSignInAlt,
@@ -107,10 +108,10 @@ export default {
       this.searchBarHidden = hidden
     },
     openSettingsModal () {
-      this.$store.dispatch('openSettingsModal', 'user')
+      useInterfaceStore().openSettingsModal('user')
     },
     openAdminModal () {
-      this.$store.dispatch('openSettingsModal', 'admin')
+      useInterfaceStore().openSettingsModal('admin')
     }
   }
 }

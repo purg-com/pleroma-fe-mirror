@@ -80,7 +80,7 @@ const FrontendsTab = {
           this.$store.dispatch('loadFrontendsStuff')
           if (response.error) {
             const reason = await response.error.json()
-            this.$store.dispatch('pushGlobalNotice', {
+            this.$store.useInterfaceStore().pushGlobalNotice({
               level: 'error',
               messageKey: 'admin_dash.frontend.failure_installing_frontend',
               messageArgs: {
@@ -90,7 +90,7 @@ const FrontendsTab = {
               timeout: 5000
             })
           } else {
-            this.$store.dispatch('pushGlobalNotice', {
+            this.$store.useInterfaceStore().pushGlobalNotice({
               level: 'success',
               messageKey: 'admin_dash.frontend.success_installing_frontend',
               messageArgs: {

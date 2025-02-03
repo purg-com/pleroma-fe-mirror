@@ -1,9 +1,11 @@
 import { init, getEngineChecksum } from '../theme_data/theme_data_3.service.js'
 import { getCssRules } from '../theme_data/css_utils.js'
-import { defaultState } from '../../modules/config.js'
+import { defaultState } from 'src/modules/default_config_state.js'
 import { chunk } from 'lodash'
 import pako from 'pako'
 import localforage from 'localforage'
+
+console.log('CONFIG', defaultState)
 
 // On platforms where this is not supported, it will return undefined
 // Otherwise it will return an array
@@ -212,6 +214,7 @@ const extractStyleConfig = ({
   return result
 }
 
+console.log(defaultState)
 const defaultStyleConfig = extractStyleConfig(defaultState)
 
 export const applyConfig = (input, i18n) => {

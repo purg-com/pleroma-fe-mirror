@@ -74,7 +74,7 @@ describe('The serverSideStorage module', () => {
         })
       })
 
-      it.only('should reset local timestamp to remote if contents are the same', () => {
+      it('should reset local timestamp to remote if contents are the same', () => {
         const state = {
           ...cloneDeep(defaultState),
           cache: null

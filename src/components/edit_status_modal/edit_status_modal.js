@@ -1,6 +1,7 @@
 import EditStatusForm from '../edit_status_form/edit_status_form.vue'
 import Modal from '../modal/modal.vue'
 import get from 'lodash/get'
+import { useEditStatusStore } from 'src/stores/editStatus'
 
 const EditStatusModal = {
   components: {
@@ -17,13 +18,13 @@ const EditStatusModal = {
       return !!this.$store.state.users.currentUser
     },
     modalActivated () {
-      return this.$store.state.editStatus.modalActivated
+      return useEditStatusStore().modalActivated
     },
     isFormVisible () {
       return this.isLoggedIn && !this.resettingForm && this.modalActivated
     },
     params () {
-      return this.$store.state.editStatus.params || {}
+      return useEditStatusStore().params || {}
     }
   },
   watch: {
@@ -46,7 +47,7 @@ const EditStatusModal = {
       this.$refs.editStatusForm.requestClose()
     },
     doCloseModal () {
-      this.$store.dispatch('closeEditStatusModal')
+      useEditStatusStore().closeEditStatusModal()
     }
   }
 }

@@ -2,6 +2,7 @@ import Timeago from 'components/timeago/timeago.vue'
 import genRandomSeed from '../../services/random_seed/random_seed.service.js'
 import RichContent from 'components/rich_content/rich_content.jsx'
 import { forEach, map } from 'lodash'
+import { usePollsStore } from 'src/stores/polls'
 
 export default {
   name: 'Poll',
@@ -18,20 +19,20 @@ export default {
     }
   },
   created () {
-    if (!this.$store.state.polls.pollsObject[this.pollId]) {
-      this.$store.dispatch('mergeOrAddPoll', this.basePoll)
+    if (!usePollsStore().pollsObject[this.pollId]) {
+      usePollsStore().mergeOrAddPoll(this.basePoll)
     }
-    this.$store.dispatch('trackPoll', this.pollId)
+    usePollsStore().trackPoll(this.pollId)
   },
   unmounted () {
-    this.$store.dispatch('untrackPoll', this.pollId)
+    usePollsStore().untrackPoll(this.pollId)
   },
   computed: {
     pollId () {
       return this.basePoll.id
     },
     poll () {
-      const storePoll = this.$store.state.polls.pollsObject[this.pollId]
+      const storePoll = usePollsStore().pollsObject[this.pollId]
       return storePoll || {}
     },
     options () {
@@ -77,9 +78,6 @@ export default {
     resultTitle (option) {
       return `${option.votes_count}/${this.totalVotesCount} ${this.$t('polls.votes')}`
     },
-    fetchPoll () {
-      this.$store.dispatch('refreshPoll', { id: this.statusId, pollId: this.poll.id })
-    },
     activateOption (index) {
       // forgive me father: doing checking the radio/checkboxes
       // in code because of customized input elements need either
@@ -107,8 +105,7 @@ export default {
     vote () {
       if (this.choiceIndices.length === 0) return
       this.loading = true
-      this.$store.dispatch(
-        'votePoll',
+      usePollsStore().votePoll(
         { id: this.statusId, pollId: this.poll.id, choices: this.choiceIndices }
       ).then(poll => {
         this.loading = false

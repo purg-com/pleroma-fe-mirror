@@ -25,6 +25,7 @@ import {
   faInfo,
   faWindowRestore
 } from '@fortawesome/free-solid-svg-icons'
+import { useInterfaceStore } from 'src/stores/interface'
 
 library.add(
   faWrench,
@@ -60,21 +61,21 @@ const SettingsModalContent = {
       return !!this.$store.state.users.currentUser
     },
     open () {
-      return this.$store.state.interface.settingsModalState !== 'hidden'
+      return useInterfaceStore().settingsModalState !== 'hidden'
     },
     bodyLock () {
-      return this.$store.state.interface.settingsModalState === 'visible'
+      return useInterfaceStore().settingsModalState === 'visible'
     },
     expertLevel () {
       return this.$store.state.config.expertLevel
     },
     isMobileLayout () {
-      return this.$store.state.interface.layoutType === 'mobile'
+      return useInterfaceStore().layoutType === 'mobile'
     }
   },
   methods: {
     onOpen () {
-      const targetTab = this.$store.state.interface.settingsModalTargetTab
+      const targetTab = useInterfaceStore().settingsModalTargetTab
       // We're being told to open in specific tab
       if (targetTab) {
         const tabIndex = this.$refs.tabSwitcher.$slots.default().findIndex(elm => {
@@ -86,7 +87,7 @@ const SettingsModalContent = {
       }
       // Clear the state of target tab, so that next time settings is opened
       // it doesn't force it.
-      this.$store.dispatch('clearSettingsModalTargetTab')
+      useInterfaceStore().clearSettingsModalTargetTab()
     }
   },
   mounted () {

@@ -84,6 +84,7 @@ export const ROOT_ITEMS = {
     route: 'announcements',
     icon: 'bullhorn',
     label: 'nav.announcements',
+    store: 'announcements',
     badgeStyle: 'notification',
     badgeGetter: 'unreadAnnouncementCount',
     criteria: ['announcements']

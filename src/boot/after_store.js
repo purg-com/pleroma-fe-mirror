@@ -17,6 +17,10 @@ import { applyConfig } from '../services/style_setter/style_setter.js'
 import FaviconService from '../services/favicon_service/favicon_service.js'
 import { initServiceWorker, updateFocus } from '../services/sw/sw.js'
 
+import { useI18nStore } from 'src/stores/i18n'
+import { useInterfaceStore } from 'src/stores/interface'
+import { useAnnouncementsStore } from 'src/stores/announcements'
+
 let staticInitialResults = null
 
 const parsedInitialResults = () => {
@@ -333,9 +337,16 @@ const checkOAuthToken = async ({ store }) => {
   return Promise.resolve()
 }
 
-const afterStoreSetup = async ({ store, i18n }) => {
-  store.dispatch('setLayoutWidth', windowWidth())
-  store.dispatch('setLayoutHeight', windowHeight())
+const afterStoreSetup = async ({ pinia, store, storageError, i18n }) => {
+  const app = createApp(App)
+  app.use(pinia)
+
+  if (storageError) {
+    useInterfaceStore().pushGlobalNotice({ messageKey: 'errors.storage_unavailable', level: 'error' })
+  }
+
+  useInterfaceStore().setLayoutWidth(windowWidth())
+  useInterfaceStore().setLayoutHeight(windowHeight())
 
   FaviconService.initFaviconService()
   initServiceWorker(store)
@@ -348,7 +359,7 @@ const afterStoreSetup = async ({ store, i18n }) => {
 
   await setConfig({ store })
   try {
-    await store.dispatch('applyTheme').catch((e) => { console.error('Error setting theme', e) })
+    await useInterfaceStore().applyTheme().catch((e) => { console.error('Error setting theme', e) })
   } catch (e) {
     window.splashError(e)
     return Promise.reject(e)
@@ -369,7 +380,7 @@ const afterStoreSetup = async ({ store, i18n }) => {
 
   // Start fetching things that don't need to block the UI
   store.dispatch('fetchMutes')
-  store.dispatch('startFetchingAnnouncements')
+  useAnnouncementsStore().startFetchingAnnouncements()
   getTOS({ store })
   getStickers({ store })
 
@@ -384,7 +395,7 @@ const afterStoreSetup = async ({ store, i18n }) => {
     }
   })
 
-  const app = createApp(App)
+  useI18nStore().setI18n(i18n)
 
   app.use(router)
   app.use(store)
@@ -392,9 +403,9 @@ const afterStoreSetup = async ({ store, i18n }) => {
 
   // Little thing to get out of invalid theme state
   window.resetThemes = () => {
-    store.dispatch('resetThemeV3')
-    store.dispatch('resetThemeV3Palette')
-    store.dispatch('resetThemeV2')
+    useInterfaceStore().resetThemeV3()
+    useInterfaceStore().resetThemeV3Palette()
+    useInterfaceStore().resetThemeV2()
   }
 
   app.use(vClickOutside)

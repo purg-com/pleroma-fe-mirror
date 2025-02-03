@@ -1,5 +1,5 @@
 import Status from '../status/status.vue'
-import { mapState } from 'vuex'
+import { mapState } from 'pinia'
 import timelineFetcher from '../../services/timeline_fetcher/timeline_fetcher.service.js'
 import Conversation from '../conversation/conversation.vue'
 import TimelineMenu from '../timeline_menu/timeline_menu.vue'
@@ -8,6 +8,7 @@ import QuickViewSettings from '../quick_view_settings/quick_view_settings.vue'
 import { debounce, throttle, keyBy } from 'lodash'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCircleNotch, faCirclePlus, faCog, faMinus, faArrowUp, faCheck } from '@fortawesome/free-solid-svg-icons'
+import { useInterfaceStore } from 'src/stores/interface'
 
 library.add(
   faCircleNotch,
@@ -103,8 +104,8 @@ const Timeline = {
     virtualScrollingEnabled () {
       return this.$store.getters.mergedConfig.virtualScrolling
     },
-    ...mapState({
-      mobileLayout: state => state.interface.layoutType === 'mobile'
+    ...mapState(useInterfaceStore, {
+      mobileLayout: store => store.layoutType === 'mobile'
     })
   },
   created () {

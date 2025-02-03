@@ -8,6 +8,7 @@ import {
 import GestureService from '../../services/gesture_service/gesture_service'
 import NavigationPins from 'src/components/navigation/navigation_pins.vue'
 import { mapGetters } from 'vuex'
+import { mapState } from 'pinia'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faTimes,
@@ -17,6 +18,7 @@ import {
   faMinus,
   faCheckDouble
 } from '@fortawesome/free-solid-svg-icons'
+import { useAnnouncementsStore } from 'src/stores/announcements'
 
 library.add(
   faTimes,
@@ -68,7 +70,8 @@ const MobileNav = {
     isChat () {
       return this.$route.name === 'chat'
     },
-    ...mapGetters(['unreadChatCount', 'unreadAnnouncementCount']),
+    ...mapState(useAnnouncementsStore, ['unreadAnnouncementCount']),
+    ...mapGetters(['unreadChatCount']),
     chatsPinned () {
       return new Set(this.$store.state.serverSideStorage.prefsStorage.collections.pinnedNavItems).has('chats')
     },

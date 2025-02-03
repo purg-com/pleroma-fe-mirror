@@ -1,5 +1,5 @@
 import { ref, reactive, computed, watch, watchEffect, provide, getCurrentInstance } from 'vue'
-import { useStore } from 'vuex'
+import { useInterfaceStore } from 'src/stores/interface'
 import { get, set, unset, throttle } from 'lodash'
 
 import Select from 'src/components/select/select.vue'
@@ -80,13 +80,13 @@ export default {
   },
   setup (props, context) {
     const exports = {}
-    const store = useStore()
+    const interfaceStore = useInterfaceStore()
     // All rules that are made by editor
-    const allEditedRules = ref(store.state.interface.styleDataUsed || {})
-    const styleDataUsed = computed(() => store.state.interface.styleDataUsed)
+    const allEditedRules = ref(interfaceStore.styleDataUsed || {})
+    const styleDataUsed = computed(() => interfaceStore.styleDataUsed)
 
     watch([styleDataUsed], (value) => {
-      onImport(store.state.interface.styleDataUsed)
+      onImport(interfaceStore.styleDataUsed)
     }, { once: true })
 
     exports.isActive = computed(() => {
@@ -640,7 +640,7 @@ export default {
       parser (string) { return deserialize(string) },
       onImportFailure (result) {
         console.error('Failure importing style:', result)
-        this.$store.dispatch('pushGlobalNotice', { messageKey: 'settings.invalid_theme_imported', level: 'error' })
+        this.$store.useInterfaceStore().pushGlobalNotice({ messageKey: 'settings.invalid_theme_imported', level: 'error' })
       },
       onImport
     })
@@ -664,7 +664,7 @@ export default {
     })
 
     exports.clearStyle = () => {
-      onImport(store.state.interface.styleDataUsed)
+      onImport(interfaceStore().styleDataUsed)
     }
 
     exports.exportStyle = () => {
@@ -676,7 +676,7 @@ export default {
     }
 
     exports.applyStyle = () => {
-      store.dispatch('setStyleCustom', exportRules.value)
+      useInterfaceStore().setStyleCustom(exportRules.value)
     }
 
     const overallPreviewRules = ref([])

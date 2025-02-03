@@ -1,4 +1,6 @@
 import { mapGetters } from 'vuex'
+import { mapState as mapPiniaState } from 'pinia'
+import { useAnnouncementsStore } from 'src/stores/announcements'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -6,6 +8,8 @@ import {
   faComments,
   faBullhorn
 } from '@fortawesome/free-solid-svg-icons'
+
+import { useInterfaceStore } from 'src/stores/interface'
 
 library.add(
   faUserPlus,
@@ -33,11 +37,14 @@ const ExtraNotifications = {
     currentUser () {
       return this.$store.state.users.currentUser
     },
-    ...mapGetters(['unreadChatCount', 'unreadAnnouncementCount', 'followRequestCount', 'mergedConfig'])
+    ...mapGetters(['unreadChatCount', 'followRequestCount', 'mergedConfig']),
+    ...mapPiniaState(useAnnouncementsStore, {
+      unreadAnnouncementCount: 'unreadAnnouncementCount'
+    })
   },
   methods: {
     openNotificationSettings () {
-      return this.$store.dispatch('openSettingsModalTab', 'notifications')
+      return useInterfaceStore().openSettingsModalTab('notifications')
     },
     dismissConfigurationTip () {
       return this.$store.dispatch('setOption', { name: 'showExtraNotificationsTip', value: false })

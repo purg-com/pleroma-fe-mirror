@@ -1,163 +1,109 @@
-import { getResourcesIndex, applyTheme, tryLoadCache } from '../services/style_setter/style_setter.js'
+import { defineStore } from 'pinia'
+
 import { CURRENT_VERSION, generatePreset } from 'src/services/theme_data/theme_data.service.js'
+import { getResourcesIndex, applyTheme, tryLoadCache } from '../services/style_setter/style_setter.js'
 import { convertTheme2To3 } from 'src/services/theme_data/theme2_to_theme3.js'
 import { deserialize } from '../services/theme_data/iss_deserializer.js'
 
-// helper for debugging
-// eslint-disable-next-line no-unused-vars
-const toValue = (x) => JSON.parse(JSON.stringify(x === undefined ? 'null' : x))
-
-const defaultState = {
-  localFonts: null,
-  themeApplied: false,
-  themeChangeInProgress: false,
-  themeVersion: 'v3',
-  styleNameUsed: null,
-  styleDataUsed: null,
-  useStylePalette: false, // hack for applying styles from appearance tab
-  paletteNameUsed: null,
-  paletteDataUsed: null,
-  themeNameUsed: null,
-  themeDataUsed: null,
-  temporaryChangesTimeoutId: null, // used for temporary options that revert after a timeout
-  temporaryChangesConfirm: () => {}, // used for applying temporary options
-  temporaryChangesRevert: () => {}, // used for reverting temporary options
-  settingsModalState: 'hidden',
-  settingsModalLoadedUser: false,
-  settingsModalLoadedAdmin: false,
-  settingsModalTargetTab: null,
-  settingsModalMode: 'user',
-  settings: {
-    currentSaveStateNotice: null,
-    noticeClearTimeout: null,
-    notificationPermission: null
-  },
-  browserSupport: {
-    cssFilter: window.CSS && window.CSS.supports && (
-      window.CSS.supports('filter', 'drop-shadow(0 0)') ||
-      window.CSS.supports('-webkit-filter', 'drop-shadow(0 0)')
-    ),
-    localFonts: typeof window.queryLocalFonts === 'function'
-  },
-  layoutType: 'normal',
-  globalNotices: [],
-  layoutHeight: 0,
-  lastTimeline: null
-}
-
-const interfaceMod = {
-  state: defaultState,
-  mutations: {
-    settingsSaved (state, { success, error }) {
-      if (success) {
-        if (state.noticeClearTimeout) {
-          clearTimeout(state.noticeClearTimeout)
-        }
-        state.settings.currentSaveStateNotice = { error: false, data: success }
-        state.settings.noticeClearTimeout = setTimeout(() => delete state.settings.currentSaveStateNotice, 2000)
-      } else {
-        state.settings.currentSaveStateNotice = { error: true, errorData: error }
+export const useInterfaceStore = defineStore('interface', {
+  state: () => ({
+    localFonts: null,
+    themeApplied: false,
+    themeChangeInProgress: false,
+    themeVersion: 'v3',
+    styleNameUsed: null,
+    styleDataUsed: null,
+    useStylePalette: false, // hack for applying styles from appearance tab
+    paletteNameUsed: null,
+    paletteDataUsed: null,
+    themeNameUsed: null,
+    themeDataUsed: null,
+    temporaryChangesTimeoutId: null, // used for temporary options that revert after a timeout
+    temporaryChangesConfirm: () => {}, // used for applying temporary options
+    temporaryChangesRevert: () => {}, // used for reverting temporary options
+    settingsModalState: 'hidden',
+    settingsModalLoadedUser: false,
+    settingsModalLoadedAdmin: false,
+    settingsModalTargetTab: null,
+    settingsModalMode: 'user',
+    settings: {
+      currentSaveStateNotice: null,
+      noticeClearTimeout: null,
+      notificationPermission: null
+    },
+    browserSupport: {
+      cssFilter: window.CSS && window.CSS.supports && (
+        window.CSS.supports('filter', 'drop-shadow(0 0)') ||
+        window.CSS.supports('-webkit-filter', 'drop-shadow(0 0)')
+      ),
+      localFonts: typeof window.queryLocalFonts === 'function'
+    },
+    layoutType: 'normal',
+    globalNotices: [],
+    layoutHeight: 0,
+    lastTimeline: null
+  }),
+  actions: {
+    setPageTitle (option = '') {
+      try {
+        document.title = `${option} ${window.vuex.state.instance.name}`
+      } catch (error) {
+        console.error(`${error}`)
       }
     },
-    setTemporaryChanges (state, { timeoutId, confirm, revert }) {
-      state.temporaryChangesTimeoutId = timeoutId
-      state.temporaryChangesConfirm = confirm
-      state.temporaryChangesRevert = revert
+    settingsSaved ({ success, error }) {
+      if (success) {
+        if (this.noticeClearTimeout) {
+          clearTimeout(this.noticeClearTimeout)
+        }
+        this.settings.currentSaveStateNotice = { error: false, data: success }
+        this.settings.noticeClearTimeout = setTimeout(() => delete this.settings.currentSaveStateNotice, 2000)
+      } else {
+        this.settings.currentSaveStateNotice = { error: true, errorData: error }
+      }
     },
-    clearTemporaryChanges (state) {
-      clearTimeout(state.temporaryChangesTimeoutId)
-      state.temporaryChangesTimeoutId = null
-      state.temporaryChangesConfirm = () => {}
-      state.temporaryChangesRevert = () => {}
+    setNotificationPermission (permission) {
+      this.notificationPermission = permission
     },
-    setThemeApplied (state) {
-      state.themeApplied = true
+    closeSettingsModal () {
+      this.settingsModalState = 'hidden'
     },
-    setNotificationPermission (state, permission) {
-      state.notificationPermission = permission
+    openSettingsModal (value) {
+      this.settingsModalMode = value
+      this.settingsModalState = 'visible'
+      if (value === 'user') {
+        if (!this.settingsModalLoadedUser) {
+          this.settingsModalLoadedUser = true
+        }
+      } else if (value === 'admin') {
+        if (!this.settingsModalLoadedAdmin) {
+          this.settingsModalLoadedAdmin = true
+        }
+      }
     },
-    setLayoutType (state, value) {
-      state.layoutType = value
-    },
-    closeSettingsModal (state) {
-      state.settingsModalState = 'hidden'
-    },
-    togglePeekSettingsModal (state) {
-      switch (state.settingsModalState) {
+    togglePeekSettingsModal () {
+      switch (this.settingsModalState) {
         case 'minimized':
-          state.settingsModalState = 'visible'
+          this.settingsModalState = 'visible'
           return
         case 'visible':
-          state.settingsModalState = 'minimized'
+          this.settingsModalState = 'minimized'
           return
         default:
           throw new Error('Illegal minimization state of settings modal')
       }
     },
-    openSettingsModal (state, value) {
-      state.settingsModalMode = value
-      state.settingsModalState = 'visible'
-      if (value === 'user') {
-        if (!state.settingsModalLoadedUser) {
-          state.settingsModalLoadedUser = true
-        }
-      } else if (value === 'admin') {
-        if (!state.settingsModalLoadedAdmin) {
-          state.settingsModalLoadedAdmin = true
-        }
-      }
+    clearSettingsModalTargetTab () {
+      this.settingsModalTargetTab = null
     },
-    setSettingsModalTargetTab (state, value) {
-      state.settingsModalTargetTab = value
+    openSettingsModalTab (value, mode = 'user') {
+      this.settingsModalTargetTab = value
+      this.openSettingsModal(mode)
     },
-    pushGlobalNotice (state, notice) {
-      state.globalNotices.push(notice)
-    },
-    removeGlobalNotice (state, notice) {
-      state.globalNotices = state.globalNotices.filter(n => n !== notice)
-    },
-    setLayoutHeight (state, value) {
-      state.layoutHeight = value
-    },
-    setLayoutWidth (state, value) {
-      state.layoutWidth = value
-    },
-    setLastTimeline (state, value) {
-      state.lastTimeline = value
-    },
-    setFontsList (state, value) {
-      // Set is used here so that we filter out duplicate fonts (possibly same font but with different weight)
-      state.localFonts = [...(new Set(value.map(font => font.family))).values()]
-    }
-  },
-  actions: {
-    setPageTitle ({ rootState }, option = '') {
-      document.title = `${option} ${rootState.instance.name}`
-    },
-    settingsSaved ({ commit, dispatch }, { success, error }) {
-      commit('settingsSaved', { success, error })
-    },
-    setNotificationPermission ({ commit }, permission) {
-      commit('setNotificationPermission', permission)
-    },
-    closeSettingsModal ({ commit }) {
-      commit('closeSettingsModal')
-    },
-    openSettingsModal ({ commit }, value = 'user') {
-      commit('openSettingsModal', value)
-    },
-    togglePeekSettingsModal ({ commit }) {
-      commit('togglePeekSettingsModal')
-    },
-    clearSettingsModalTargetTab ({ commit }) {
-      commit('setSettingsModalTargetTab', null)
-    },
-    openSettingsModalTab ({ commit }, value) {
-      commit('setSettingsModalTargetTab', value)
-      commit('openSettingsModal', 'user')
+    removeGlobalNotice (notice) {
+      this.globalNotices = this.globalNotices.filter(n => n !== notice)
     },
     pushGlobalNotice (
-      { commit, dispatch, state },
       {
         messageKey,
         messageArgs = {},
@@ -169,52 +115,56 @@ const interfaceMod = {
         messageArgs,
         level
       }
-      commit('pushGlobalNotice', notice)
+
+      this.globalNotices.push(notice)
+
       // Adding a new element to array wraps it in a Proxy, which breaks the comparison
       // TODO: Generate UUID or something instead or relying on !== operator?
-      const newNotice = state.globalNotices[state.globalNotices.length - 1]
+      const newNotice = this.globalNotices[this.globalNotices.length - 1]
       if (timeout) {
-        setTimeout(() => dispatch('removeGlobalNotice', newNotice), timeout)
+        setTimeout(() => this.removeGlobalNotice(newNotice), timeout)
       }
+
       return newNotice
     },
-    removeGlobalNotice ({ commit }, notice) {
-      commit('removeGlobalNotice', notice)
+    setLayoutHeight (value) {
+      this.layoutHeight = value
     },
-    setLayoutHeight ({ commit }, value) {
-      commit('setLayoutHeight', value)
-    },
-    // value is optional, assuming it was cached prior
-    setLayoutWidth ({ commit, state, rootGetters, rootState }, value) {
+    setLayoutWidth (value) {
       let width = value
       if (value !== undefined) {
-        commit('setLayoutWidth', value)
+        this.layoutWidth = value
       } else {
-        width = state.layoutWidth
+        width = this.layoutWidth
       }
+
       const mobileLayout = width <= 800
       const normalOrMobile = mobileLayout ? 'mobile' : 'normal'
-      const { thirdColumnMode } = rootGetters.mergedConfig
-      if (thirdColumnMode === 'none' || !rootState.users.currentUser) {
-        commit('setLayoutType', normalOrMobile)
+      const { thirdColumnMode } = window.vuex.getters.mergedConfig
+      if (thirdColumnMode === 'none' || !window.vuex.state.users.currentUser) {
+        this.layoutType = normalOrMobile
       } else {
         const wideLayout = width >= 1300
-        commit('setLayoutType', wideLayout ? 'wide' : normalOrMobile)
+        this.layoutType = wideLayout ? 'wide' : normalOrMobile
       }
     },
-    queryLocalFonts ({ commit, dispatch, state }) {
-      if (state.localFonts !== null) return
-      commit('setFontsList', [])
-      if (!state.browserSupport.localFonts) {
+    setFontsList (value) {
+      this.localFonts = [...(new Set(value.map(font => font.family))).values()]
+    },
+    queryLocalFonts () {
+      if (this.localFonts !== null) return
+      this.setFontsList([])
+
+      if (!this.browserSupport.localFonts) {
         return
       }
       window
         .queryLocalFonts()
         .then((fonts) => {
-          commit('setFontsList', fonts)
+          this.setFontsList(fonts)
         })
         .catch((e) => {
-          dispatch('pushGlobalNotice', {
+          this.pushGlobalNotice({
             messageKey: 'settings.style.themes3.font.font_list_unavailable',
             messageArgs: {
               error: e
@@ -223,118 +173,118 @@ const interfaceMod = {
           })
         })
     },
-    setLastTimeline ({ commit }, value) {
-      commit('setLastTimeline', value)
+    setLastTimeline (value) {
+      this.lastTimeline = value
     },
-    async fetchPalettesIndex ({ commit, state }) {
+    async fetchPalettesIndex () {
       try {
         const value = await getResourcesIndex('/static/palettes/index.json')
-        commit('setInstanceOption', { name: 'palettesIndex', value })
+        window.vuex.commit('setInstanceOption', { name: 'palettesIndex', value })
         return value
       } catch (e) {
         console.error('Could not fetch palettes index', e)
-        commit('setInstanceOption', { name: 'palettesIndex', value: { _error: e } })
+        window.vuex.commit('setInstanceOption', { name: 'palettesIndex', value: { _error: e } })
         return Promise.resolve({})
       }
     },
-    setPalette ({ dispatch, commit }, value) {
-      dispatch('resetThemeV3Palette')
-      dispatch('resetThemeV2')
+    setPalette (value) {
+      this.resetThemeV3Palette()
+      this.resetThemeV2()
 
-      commit('setOption', { name: 'palette', value })
+      window.vuex.commit('setOption', { name: 'palette', value })
 
-      dispatch('applyTheme', { recompile: true })
+      this.applyTheme({ recompile: true })
     },
-    setPaletteCustom ({ dispatch, commit }, value) {
-      dispatch('resetThemeV3Palette')
-      dispatch('resetThemeV2')
+    setPaletteCustom (value) {
+      this.resetThemeV3Palette()
+      this.resetThemeV2()
 
-      commit('setOption', { name: 'paletteCustomData', value })
+      window.vuex.commit('setOption', { name: 'paletteCustomData', value })
 
-      dispatch('applyTheme', { recompile: true })
+      this.applyTheme({ recompile: true })
     },
-    async fetchStylesIndex ({ commit, state }) {
+    async fetchStylesIndex () {
       try {
         const value = await getResourcesIndex(
           '/static/styles/index.json',
           deserialize
         )
-        commit('setInstanceOption', { name: 'stylesIndex', value })
+        window.vuex.commit('setInstanceOption', { name: 'stylesIndex', value })
         return value
       } catch (e) {
         console.error('Could not fetch styles index', e)
-        commit('setInstanceOption', { name: 'stylesIndex', value: { _error: e } })
+        window.vuex.commit('setInstanceOption', { name: 'stylesIndex', value: { _error: e } })
         return Promise.resolve({})
       }
     },
-    setStyle ({ dispatch, commit, state }, value) {
-      dispatch('resetThemeV3')
-      dispatch('resetThemeV2')
-      dispatch('resetThemeV3Palette')
+    setStyle (value) {
+      this.resetThemeV3()
+      this.resetThemeV2()
+      this.resetThemeV3Palette()
 
-      commit('setOption', { name: 'style', value })
-      state.useStylePalette = true
+      window.vuex.commit('setOption', { name: 'style', value })
+      this.useStylePalette = true
 
-      dispatch('applyTheme', { recompile: true }).then(() => {
-        state.useStylePalette = false
+      this.applyTheme({ recompile: true }).then(() => {
+        this.useStylePalette = false
       })
     },
-    setStyleCustom ({ dispatch, commit, state }, value) {
-      dispatch('resetThemeV3')
-      dispatch('resetThemeV2')
-      dispatch('resetThemeV3Palette')
+    setStyleCustom (value) {
+      this.resetThemeV3()
+      this.resetThemeV2()
+      this.resetThemeV3Palette()
 
-      commit('setOption', { name: 'styleCustomData', value })
+      window.vuex.commit('setOption', { name: 'styleCustomData', value })
 
-      state.useStylePalette = true
-      dispatch('applyTheme', { recompile: true }).then(() => {
-        state.useStylePalette = false
+      this.useStylePalette = true
+      this.applyTheme({ recompile: true }).then(() => {
+        this.useStylePalette = false
       })
     },
-    async fetchThemesIndex ({ commit, state }) {
+    async fetchThemesIndex () {
       try {
         const value = await getResourcesIndex('/static/styles.json')
-        commit('setInstanceOption', { name: 'themesIndex', value })
+        window.vuex.commit('setInstanceOption', { name: 'themesIndex', value })
         return value
       } catch (e) {
         console.error('Could not fetch themes index', e)
-        commit('setInstanceOption', { name: 'themesIndex', value: { _error: e } })
+        window.vuex.commit('setInstanceOption', { name: 'themesIndex', value: { _error: e } })
         return Promise.resolve({})
       }
     },
-    setTheme ({ dispatch, commit }, value) {
-      dispatch('resetThemeV3')
-      dispatch('resetThemeV3Palette')
-      dispatch('resetThemeV2')
+    setTheme (value) {
+      this.resetThemeV3()
+      this.resetThemeV3Palette()
+      this.resetThemeV2()
 
-      commit('setOption', { name: 'theme', value })
+      window.vuex.commit('setOption', { name: 'theme', value })
 
-      dispatch('applyTheme', { recompile: true })
+      this.applyTheme({ recompile: true })
     },
-    setThemeCustom ({ dispatch, commit }, value) {
-      dispatch('resetThemeV3')
-      dispatch('resetThemeV3Palette')
-      dispatch('resetThemeV2')
+    setThemeCustom (value) {
+      this.resetThemeV3()
+      this.resetThemeV3Palette()
+      this.resetThemeV2()
 
-      commit('setOption', { name: 'customTheme', value })
-      commit('setOption', { name: 'customThemeSource', value })
+      window.vuex.commit('setOption', { name: 'customTheme', value })
+      window.vuex.commit('setOption', { name: 'customThemeSource', value })
 
-      dispatch('applyTheme', { recompile: true })
+      this.applyTheme({ recompile: true })
     },
-    resetThemeV3 ({ dispatch, commit }) {
-      commit('setOption', { name: 'style', value: null })
-      commit('setOption', { name: 'styleCustomData', value: null })
+    resetThemeV3 () {
+      window.vuex.commit('setOption', { name: 'style', value: null })
+      window.vuex.commit('setOption', { name: 'styleCustomData', value: null })
     },
-    resetThemeV3Palette ({ dispatch, commit }) {
-      commit('setOption', { name: 'palette', value: null })
-      commit('setOption', { name: 'paletteCustomData', value: null })
+    resetThemeV3Palette () {
+      window.vuex.commit('setOption', { name: 'palette', value: null })
+      window.vuex.commit('setOption', { name: 'paletteCustomData', value: null })
     },
-    resetThemeV2 ({ dispatch, commit }) {
-      commit('setOption', { name: 'theme', value: null })
-      commit('setOption', { name: 'customTheme', value: null })
-      commit('setOption', { name: 'customThemeSource', value: null })
+    resetThemeV2 () {
+      window.vuex.commit('setOption', { name: 'theme', value: null })
+      window.vuex.commit('setOption', { name: 'customTheme', value: null })
+      window.vuex.commit('setOption', { name: 'customThemeSource', value: null })
     },
-    async getThemeData ({ dispatch, commit, rootState, state }) {
+    async getThemeData () {
       const getData = async (resource, index, customData, name) => {
         const capitalizedResource = resource[0].toUpperCase() + resource.slice(1)
         const result = {}
@@ -358,7 +308,7 @@ const interfaceMod = {
             }
             const newName = Object.keys(index)[0]
             fetchFunc = index[newName]
-            console.warn(`${capitalizedResource} with id '${state.styleNameUsed}' not found, trying back to '${newName}'`)
+            console.warn(`${capitalizedResource} with id '${this.styleNameUsed}' not found, trying back to '${newName}'`)
             if (!fetchFunc) {
               console.warn(`${capitalizedResource} doesn't have a fallback, defaulting to stock.`)
               fetchFunc = () => Promise.resolve(null)
@@ -372,27 +322,27 @@ const interfaceMod = {
       const {
         style: instanceStyleName,
         palette: instancePaletteName
-      } = rootState.instance
+      } = window.vuex.state.instance
 
       let {
         theme: instanceThemeV2Name,
         themesIndex,
         stylesIndex,
         palettesIndex
-      } = rootState.instance
+      } = window.vuex.state.instance
 
       const {
         style: userStyleName,
         styleCustomData: userStyleCustomData,
         palette: userPaletteName,
         paletteCustomData: userPaletteCustomData
-      } = rootState.config
+      } = window.vuex.state.config
 
       let {
         theme: userThemeV2Name,
         customTheme: userThemeV2Snapshot,
         customThemeSource: userThemeV2Source
-      } = rootState.config
+      } = window.vuex.state.config
 
       let majorVersionUsed
 
@@ -437,8 +387,8 @@ const interfaceMod = {
 
       if (majorVersionUsed === 'v3') {
         const result = await Promise.all([
-          dispatch('fetchPalettesIndex'),
-          dispatch('fetchStylesIndex')
+          this.fetchPalettesIndex(),
+          this.fetchStylesIndex()
         ])
 
         palettesIndex = result[0]
@@ -446,19 +396,19 @@ const interfaceMod = {
       } else {
         // Promise.all just to be uniform with v3
         const result = await Promise.all([
-          dispatch('fetchThemesIndex')
+          this.fetchThemesIndex()
         ])
 
         themesIndex = result[0]
       }
 
-      state.themeVersion = majorVersionUsed
+      this.themeVersion = majorVersionUsed
 
       console.debug('Version used', majorVersionUsed)
 
       if (majorVersionUsed === 'v3') {
-        state.themeDataUsed = null
-        state.themeNameUsed = null
+        this.themeDataUsed = null
+        this.themeNameUsed = null
 
         const style = await getData(
           'style',
@@ -466,8 +416,8 @@ const interfaceMod = {
           userStyleCustomData,
           userStyleName || instanceStyleName
         )
-        state.styleNameUsed = style.nameUsed
-        state.styleDataUsed = style.dataUsed
+        this.styleNameUsed = style.nameUsed
+        this.styleDataUsed = style.dataUsed
 
         let firstStylePaletteName = null
         style
@@ -492,21 +442,21 @@ const interfaceMod = {
           'palette',
           palettesIndex,
           userPaletteCustomData,
-          state.useStylePalette ? firstStylePaletteName : (userPaletteName || instancePaletteName)
+          this.useStylePalette ? firstStylePaletteName : (userPaletteName || instancePaletteName)
         )
 
-        if (state.useStylePalette) {
-          commit('setOption', { name: 'palette', value: firstStylePaletteName })
+        if (this.useStylePalette) {
+          window.vuex.commit('setOption', { name: 'palette', value: firstStylePaletteName })
         }
 
-        state.paletteNameUsed = palette.nameUsed
-        state.paletteDataUsed = palette.dataUsed
+        this.paletteNameUsed = palette.nameUsed
+        this.paletteDataUsed = palette.dataUsed
 
-        if (state.paletteDataUsed) {
-          state.paletteDataUsed.link = state.paletteDataUsed.link || state.paletteDataUsed.accent
-          state.paletteDataUsed.accent = state.paletteDataUsed.accent || state.paletteDataUsed.link
+        if (this.paletteDataUsed) {
+          this.paletteDataUsed.link = this.paletteDataUsed.link || this.paletteDataUsed.accent
+          this.paletteDataUsed.accent = this.paletteDataUsed.accent || this.paletteDataUsed.link
         }
-        if (Array.isArray(state.paletteDataUsed)) {
+        if (Array.isArray(this.paletteDataUsed)) {
           const [
             name,
             bg,
@@ -518,7 +468,7 @@ const interfaceMod = {
             cBlue = '#0000FF',
             cOrange = '#E3FF00'
           ] = palette.dataUsed
-          state.paletteDataUsed = {
+          this.paletteDataUsed = {
             name,
             bg,
             fg,
@@ -533,10 +483,10 @@ const interfaceMod = {
         }
         console.debug('Palette data used', palette.dataUsed)
       } else {
-        state.styleNameUsed = null
-        state.styleDataUsed = null
-        state.paletteNameUsed = null
-        state.paletteDataUsed = null
+        this.styleNameUsed = null
+        this.styleDataUsed = null
+        this.paletteNameUsed = null
+        this.paletteDataUsed = null
 
         const theme = await getData(
           'theme',
@@ -544,41 +494,43 @@ const interfaceMod = {
           userThemeV2Source || userThemeV2Snapshot,
           userThemeV2Name || instanceThemeV2Name
         )
-        state.themeNameUsed = theme.nameUsed
-        state.themeDataUsed = theme.dataUsed
+        this.themeNameUsed = theme.nameUsed
+        this.themeDataUsed = theme.dataUsed
       }
     },
+    async setThemeApplied () {
+      this.themeApplied = true
+    },
     async applyTheme (
-      { dispatch, commit, rootState, state },
       { recompile = false } = {}
     ) {
       const {
         forceThemeRecompilation,
         themeDebug,
         theme3hacks
-      } = rootState.config
-      state.themeChangeInProgress = true
+      } = window.vuex.state.config
+      this.themeChangeInProgress = true
       // If we're not not forced to recompile try using
       // cache (tryLoadCache return true if load successful)
 
       const forceRecompile = forceThemeRecompilation || recompile
       if (!forceRecompile && !themeDebug && await tryLoadCache()) {
-        state.themeChangeInProgress = false
-        return commit('setThemeApplied')
+        this.themeChangeInProgress = false
+        return this.setThemeApplied()
       }
       window.splashUpdate('splash.theme')
-      await dispatch('getThemeData')
+      await this.getThemeData()
 
       try {
         const paletteIss = (() => {
-          if (!state.paletteDataUsed) return null
+          if (!this.paletteDataUsed) return null
           const result = {
             component: 'Root',
             directives: {}
           }
 
           Object
-            .entries(state.paletteDataUsed)
+            .entries(this.paletteDataUsed)
             .filter(([k]) => k !== 'name')
             .forEach(([k, v]) => {
               let issRootDirectiveName
@@ -597,7 +549,7 @@ const interfaceMod = {
           return result
         })()
 
-        const theme2ruleset = state.themeDataUsed && convertTheme2To3(normalizeThemeData(state.themeDataUsed))
+        const theme2ruleset = this.themeDataUsed && convertTheme2To3(normalizeThemeData(this.themeDataUsed))
         const hacks = []
 
         Object.entries(theme3hacks).forEach(([key, value]) => {
@@ -664,16 +616,16 @@ const interfaceMod = {
 
         const rulesetArray = [
           theme2ruleset,
-          state.styleDataUsed,
+          this.styleDataUsed,
           paletteIss,
           hacks
         ].filter(x => x)
 
         return applyTheme(
           rulesetArray.flat(),
-          () => commit('setThemeApplied'),
+          () => this.setThemeApplied(),
           () => {
-            state.themeChangeInProgress = false
+            this.themeChangeInProgress = false
           },
           themeDebug
         )
@@ -682,9 +634,7 @@ const interfaceMod = {
       }
     }
   }
-}
-
-export default interfaceMod
+})
 
 export const normalizeThemeData = (input) => {
   let themeData, themeSource

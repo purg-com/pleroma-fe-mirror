@@ -1,32 +1,23 @@
 import { createStore } from 'vuex'
+import { createPinia } from 'pinia'
 
 import 'custom-event-polyfill'
 import './lib/event_target_polyfill.js'
 
-import interfaceModule from './modules/interface.js'
 import instanceModule from './modules/instance.js'
 import statusesModule from './modules/statuses.js'
 import notificationsModule from './modules/notifications.js'
-import listsModule from './modules/lists.js'
 import usersModule from './modules/users.js'
 import apiModule from './modules/api.js'
 import configModule from './modules/config.js'
 import profileConfigModule from './modules/profileConfig.js'
 import serverSideStorageModule from './modules/serverSideStorage.js'
 import adminSettingsModule from './modules/adminSettings.js'
-import shoutModule from './modules/shout.js'
 import oauthModule from './modules/oauth.js'
 import authFlowModule from './modules/auth_flow.js'
-import mediaViewerModule from './modules/media_viewer.js'
 import oauthTokensModule from './modules/oauth_tokens.js'
-import reportsModule from './modules/reports.js'
-import pollsModule from './modules/polls.js'
-import postStatusModule from './modules/postStatus.js'
-import editStatusModule from './modules/editStatus.js'
-import statusHistoryModule from './modules/statusHistory.js'
 import draftsModule from './modules/drafts.js'
 import chatsModule from './modules/chats.js'
-import announcementsModule from './modules/announcements.js'
 import bookmarkFoldersModule from './modules/bookmark_folders.js'
 
 import { createI18n } from 'vue-i18n'
@@ -85,6 +76,7 @@ const persistedStateOptions = {
   try {
     let storageError
     const plugins = [pushNotifications]
+    const pinia = createPinia()
     try {
       const persistedState = await createPersistedState(persistedStateOptions)
       plugins.push(persistedState)
@@ -98,36 +90,21 @@ const persistedStateOptions = {
     document.querySelector('#splash-credit').textContent = i18n.global.t('update.art_by', { linkToArtist: 'pipivovott' })
     const store = createStore({
       modules: {
-        i18n: {
-          getters: {
-            i18n: () => i18n.global
-          }
-        },
-        interface: interfaceModule,
         instance: instanceModule,
         // TODO refactor users/statuses modules, they depend on each other
         users: usersModule,
         statuses: statusesModule,
         notifications: notificationsModule,
-        lists: listsModule,
         api: apiModule,
         config: configModule,
         profileConfig: profileConfigModule,
         serverSideStorage: serverSideStorageModule,
         adminSettings: adminSettingsModule,
-        shout: shoutModule,
         oauth: oauthModule,
         authFlow: authFlowModule,
-        mediaViewer: mediaViewerModule,
         oauthTokens: oauthTokensModule,
-        reports: reportsModule,
-        polls: pollsModule,
-        postStatus: postStatusModule,
-        editStatus: editStatusModule,
-        statusHistory: statusHistoryModule,
         drafts: draftsModule,
         chats: chatsModule,
-        announcements: announcementsModule,
         bookmarkFolders: bookmarkFoldersModule
       },
       plugins,
@@ -137,10 +114,9 @@ const persistedStateOptions = {
       strict: false // Socket modifies itself, let's ignore this for now.
       // strict: process.env.NODE_ENV !== 'production'
     })
-    if (storageError) {
-      store.dispatch('pushGlobalNotice', { messageKey: 'errors.storage_unavailable', level: 'error' })
-    }
-    return await afterStoreSetup({ store, i18n })
+    window.vuex = store
+    // Temporarily passing pinia and vuex stores along with storageError result until migration is fully complete.
+    return await afterStoreSetup({ pinia, store, storageError, i18n })
   } catch (e) {
     splashError(i18n, e)
   }

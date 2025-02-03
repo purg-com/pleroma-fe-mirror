@@ -9,6 +9,8 @@ import { filterNavigation } from 'src/components/navigation/filter.js'
 import {
   faChevronDown
 } from '@fortawesome/free-solid-svg-icons'
+import { useInterfaceStore } from 'src/stores/interface'
+import { useListsStore } from 'src/stores/lists'
 
 library.add(faChevronDown)
 
@@ -39,7 +41,7 @@ const TimelineMenu = {
   },
   created () {
     if (timelineNames(this.bookmarkFolders)[this.$route.name]) {
-      this.$store.dispatch('setLastTimeline', this.$route.name)
+      useInterfaceStore().setLastTimeline(this.$route.name)
     }
   },
   computed: {
@@ -95,7 +97,7 @@ const TimelineMenu = {
         return '#' + this.$route.params.tag
       }
       if (route === 'lists-timeline') {
-        return this.$store.getters.findListTitle(this.$route.params.id)
+        return useListsStore().findListTitle(this.$route.params.id)
       }
       if (route === 'bookmark-folder') {
         return this.$store.getters.findBookmarkFolderName(this.$route.params.id)

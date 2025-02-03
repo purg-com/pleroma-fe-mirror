@@ -386,7 +386,7 @@
         :nsfw="false"
         :attachments="newStatus.files"
         :descriptions="newStatus.mediaDescriptions"
-        :set-media="() => $store.dispatch('setMedia', newStatus.files)"
+        :set-media="() => setMedia()"
         :editable="true"
         :edit-attachment="editAttachment"
         :remove-attachment="removeMediaFile"

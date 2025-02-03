@@ -11,6 +11,7 @@ import RichContent from 'src/components/rich_content/rich_content.jsx'
 import MuteConfirm from '../confirm_modal/mute_confirm.vue'
 import generateProfileLink from 'src/services/user_profile_link_generator/user_profile_link_generator'
 import { mapGetters } from 'vuex'
+import { usePostStatusStore } from 'src/stores/postStatus'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faBell,
@@ -21,6 +22,9 @@ import {
   faTimes,
   faExpandAlt
 } from '@fortawesome/free-solid-svg-icons'
+
+import { useMediaViewerStore } from '../../stores/media_viewer'
+import { useInterfaceStore } from '../../stores/interface'
 
 library.add(
   faRss,
@@ -188,18 +192,18 @@ export default {
       )
     },
     openProfileTab () {
-      this.$store.dispatch('openSettingsModalTab', 'profile')
+      useInterfaceStore().openSettingsModalTab('profile')
     },
     zoomAvatar () {
       const attachment = {
         url: this.user.profile_image_url_original,
         mimetype: 'image'
       }
-      this.$store.dispatch('setMedia', [attachment])
-      this.$store.dispatch('setCurrentMedia', attachment)
+      useMediaViewerStore().setMedia([attachment])
+      useMediaViewerStore().setCurrentMedia(attachment)
     },
     mentionUser () {
-      this.$store.dispatch('openPostStatusModal', { profileMention: true, repliedUser: this.user })
+      usePostStatusStore().openPostStatusModal({ profileMention: true, repliedUser: this.user })
     },
     onAvatarClickHandler (e) {
       if (this.onAvatarClick) {

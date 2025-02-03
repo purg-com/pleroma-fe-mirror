@@ -1,5 +1,7 @@
 import { muteWordHits } from '../status_parser/status_parser.js'
 import { showDesktopNotification } from '../desktop_notification_utils/desktop_notification_utils.js'
+import { useI18nStore } from 'src/stores/i18n.js'
+import { useAnnouncementsStore } from 'src/stores/announcements'
 
 import FaviconService from 'src/services/favicon_service/favicon_service.js'
 
@@ -64,13 +66,12 @@ const isMutedNotification = (store, notification) => {
 
 export const maybeShowNotification = (store, notification) => {
   const rootState = store.rootState || store.state
-  const rootGetters = store.rootGetters || store.getters
 
   if (notification.seen) return
   if (!visibleTypes(store).includes(notification.type)) return
   if (notification.type === 'mention' && isMutedNotification(store, notification)) return
 
-  const notificationObject = prepareNotificationObject(notification, rootGetters.i18n)
+  const notificationObject = prepareNotificationObject(notification, useI18nStore().i18n)
   showDesktopNotification(rootState, notificationObject)
 }
 
@@ -169,7 +170,7 @@ export const countExtraNotifications = (store) => {
 
   return [
     mergedConfig.showChatsInExtraNotifications ? rootGetters.unreadChatCount : 0,
-    mergedConfig.showAnnouncementsInExtraNotifications ? rootGetters.unreadAnnouncementCount : 0,
+    mergedConfig.showAnnouncementsInExtraNotifications ? useAnnouncementsStore().unreadAnnouncementCount : 0,
     mergedConfig.showFollowRequestsInExtraNotifications ? rootGetters.followRequestCount : 0
   ].reduce((a, c) => a + c, 0)
 }

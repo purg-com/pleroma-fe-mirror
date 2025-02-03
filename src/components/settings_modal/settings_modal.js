@@ -7,6 +7,7 @@ import Checkbox from 'src/components/checkbox/checkbox.vue'
 import ConfirmModal from 'src/components/confirm_modal/confirm_modal.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { cloneDeep, isEqual } from 'lodash'
+import { mapState as mapPiniaState } from 'pinia'
 import {
   newImporter,
   newExporter
@@ -20,6 +21,7 @@ import {
 import {
   faWindowMinimize
 } from '@fortawesome/free-regular-svg-icons'
+import { useInterfaceStore } from 'src/stores/interface'
 
 const PLEROMAFE_SETTINGS_MAJOR_VERSION = 1
 const PLEROMAFE_SETTINGS_MINOR_VERSION = 0
@@ -74,10 +76,10 @@ const SettingsModal = {
   },
   methods: {
     closeModal () {
-      this.$store.dispatch('closeSettingsModal')
+      useInterfaceStore().closeSettingsModal()
     },
     peekModal () {
-      this.$store.dispatch('togglePeekSettingsModal')
+      useInterfaceStore().togglePeekSettingsModal()
     },
     importValidator (data) {
       if (!Array.isArray(data._pleroma_settings_version)) {
@@ -109,7 +111,7 @@ const SettingsModal = {
       }
 
       if (minor > PLEROMAFE_SETTINGS_MINOR_VERSION) {
-        this.$store.dispatch('pushGlobalNotice', {
+        useInterfaceStore().pushGlobalNotice({
           level: 'warning',
           messageKey: 'settings.file_export_import.errors.file_slightly_new'
         })
@@ -119,9 +121,9 @@ const SettingsModal = {
     },
     onImportFailure (result) {
       if (result.error) {
-        this.$store.dispatch('pushGlobalNotice', { messageKey: 'settings.invalid_settings_imported', level: 'error' })
+        useInterfaceStore().pushGlobalNotice({ messageKey: 'settings.invalid_settings_imported', level: 'error' })
       } else {
-        this.$store.dispatch('pushGlobalNotice', { ...result.validationResult, level: 'error' })
+        useInterfaceStore().pushGlobalNotice({ ...result.validationResult, level: 'error' })
       }
     },
     onImport (data) {
@@ -166,24 +168,15 @@ const SettingsModal = {
     }
   },
   computed: {
-    currentSaveStateNotice () {
-      return this.$store.state.interface.settings.currentSaveStateNotice
-    },
-    modalActivated () {
-      return this.$store.state.interface.settingsModalState !== 'hidden'
-    },
-    modalMode () {
-      return this.$store.state.interface.settingsModalMode
-    },
-    modalOpenedOnceUser () {
-      return this.$store.state.interface.settingsModalLoadedUser
-    },
-    modalOpenedOnceAdmin () {
-      return this.$store.state.interface.settingsModalLoadedAdmin
-    },
-    modalPeeked () {
-      return this.$store.state.interface.settingsModalState === 'minimized'
-    },
+    ...mapPiniaState(useInterfaceStore, {
+      temporaryChangesTimeoutId: store => store.layoutType === 'mobile',
+      currentSaveStateNotice: store => store.settings.currentSaveStateNotice,
+      modalActivated: store => store.settingsModalState !== 'hidden',
+      modalMode: store => store.settingsModalMode,
+      modalOpenedOnceUser: store => store.settingsModalLoadedUser,
+      modalOpenedOnceAdmin: store => store.settingsModalLoadedAdmin,
+      modalPeeked: store => store.settingsModalState === 'minimized'
+    }),
     expertLevel: {
       get () {
         return this.$store.state.config.expertLevel > 0

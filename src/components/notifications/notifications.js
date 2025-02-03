@@ -1,5 +1,6 @@
 import { computed } from 'vue'
 import { mapGetters } from 'vuex'
+import { mapState } from 'pinia'
 import Notification from '../notification/notification.vue'
 import ExtraNotifications from '../extra_notifications/extra_notifications.vue'
 import NotificationFilters from './notification_filters.vue'
@@ -14,6 +15,8 @@ import {
 import FaviconService from '../../services/favicon_service/favicon_service.js'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCircleNotch, faArrowUp, faMinus } from '@fortawesome/free-solid-svg-icons'
+import { useInterfaceStore } from 'src/stores/interface'
+import { useAnnouncementsStore } from 'src/stores/announcements'
 
 library.add(
   faCircleNotch,
@@ -98,11 +101,11 @@ const Notifications = {
       return this.$store.state.notifications.loading
     },
     noHeading () {
-      const { layoutType } = this.$store.state.interface
+      const { layoutType } = useInterfaceStore()
       return this.minimalMode || layoutType === 'mobile'
     },
     teleportTarget () {
-      const { layoutType } = this.$store.state.interface
+      const { layoutType } = useInterfaceStore()
       const map = {
         wide: '#notifs-column',
         mobile: '#mobile-notifications'
@@ -110,7 +113,7 @@ const Notifications = {
       return map[layoutType] || '#notifs-sidebar'
     },
     popoversZLayer () {
-      const { layoutType } = this.$store.state.interface
+      const { layoutType } = useInterfaceStore()
       return layoutType === 'mobile' ? 'navbar' : null
     },
     notificationsToDisplay () {
@@ -121,7 +124,8 @@ const Notifications = {
     showExtraNotifications () {
       return !this.noExtra
     },
-    ...mapGetters(['unreadChatCount', 'unreadAnnouncementCount'])
+    ...mapState(useAnnouncementsStore, ['unreadAnnouncementCount']),
+    ...mapGetters(['unreadChatCount'])
   },
   mounted () {
     this.scrollerRef = this.$refs.root.closest('.column.-scrollable')
@@ -141,10 +145,10 @@ const Notifications = {
     unseenCountTitle (count) {
       if (count > 0) {
         FaviconService.drawFaviconBadge()
-        this.$store.dispatch('setPageTitle', `(${count})`)
+        useInterfaceStore().setPageTitle(`(${count})`)
       } else {
         FaviconService.clearFaviconBadge()
-        this.$store.dispatch('setPageTitle', '')
+        useInterfaceStore().setPageTitle('')
       }
     },
     teleportTarget () {

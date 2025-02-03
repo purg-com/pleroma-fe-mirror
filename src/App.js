@@ -17,6 +17,8 @@ import GlobalNoticeList from './components/global_notice_list/global_notice_list
 import { windowWidth, windowHeight } from './services/window_utils/window_utils'
 import { mapGetters } from 'vuex'
 import { defineAsyncComponent } from 'vue'
+import { useShoutStore } from './stores/shout'
+import { useInterfaceStore } from './stores/interface'
 
 export default {
   name: 'app',
@@ -60,7 +62,7 @@ export default {
     document.getElementById('modal').classList = ['-' + this.layoutType]
   },
   mounted () {
-    if (this.$store.state.interface.themeApplied) {
+    if (useInterfaceStore().themeApplied) {
       this.removeSplash()
     }
   },
@@ -69,7 +71,7 @@ export default {
   },
   computed: {
     themeApplied () {
-      return this.$store.state.interface.themeApplied
+      return useInterfaceStore().themeApplied
     },
     layoutModalClass () {
       return '-' + this.layoutType
@@ -106,7 +108,7 @@ export default {
         }
       }
     },
-    shout () { return this.$store.state.shout.joined },
+    shout () { return useShoutStore().joined },
     suggestionsEnabled () { return this.$store.state.instance.suggestionsEnabled },
     showInstanceSpecificPanel () {
       return this.$store.state.instance.showInstanceSpecificPanel &&
@@ -132,7 +134,7 @@ export default {
     hideShoutbox () {
       return this.$store.getters.mergedConfig.hideShoutbox
     },
-    layoutType () { return this.$store.state.interface.layoutType },
+    layoutType () { return useInterfaceStore().layoutType },
     privateMode () { return this.$store.state.instance.private },
     reverseLayout () {
       const { thirdColumnMode, sidebarRight: reverseSetting } = this.$store.getters.mergedConfig
@@ -148,8 +150,8 @@ export default {
   },
   methods: {
     updateMobileState () {
-      this.$store.dispatch('setLayoutWidth', windowWidth())
-      this.$store.dispatch('setLayoutHeight', windowHeight())
+      useInterfaceStore().setLayoutWidth(windowWidth())
+      useInterfaceStore().setLayoutHeight(windowHeight())
     },
     removeSplash () {
       document.querySelector('#status').textContent = this.$t('splash.fun_' + Math.ceil(Math.random() * 4))

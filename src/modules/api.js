@@ -2,6 +2,8 @@ import backendInteractorService from '../services/backend_interactor_service/bac
 import { WSConnectionStatus } from '../services/api/api.service.js'
 import { maybeShowChatNotification } from '../services/chat_utils/chat_utils.js'
 import { Socket } from 'phoenix'
+import { useShoutStore } from 'src/stores/shout.js'
+import { useInterfaceStore } from 'src/stores/interface.js'
 
 const retryTimeout = (multiplier) => 1000 * multiplier
 
@@ -134,7 +136,7 @@ const api = {
           state.mastoUserSocket.addEventListener('open', () => {
             // Do not show notification when we just opened up the page
             if (state.mastoUserSocketStatus !== WSConnectionStatus.STARTING_INITIAL) {
-              dispatch('pushGlobalNotice', {
+              useInterfaceStore().pushGlobalNotice({
                 level: 'success',
                 messageKey: 'timeline.socket_reconnected',
                 timeout: 5000
@@ -176,7 +178,7 @@ const api = {
                 dispatch('startFetchingTimeline', { timeline: 'friends' })
                 dispatch('startFetchingNotifications')
                 dispatch('startFetchingChats')
-                dispatch('pushGlobalNotice', {
+                useInterfaceStore().pushGlobalNotice({
                   level: 'error',
                   messageKey: 'timeline.socket_broke',
                   messageArgs: [code],
@@ -300,7 +302,7 @@ const api = {
         socket.connect()
 
         commit('setSocket', socket)
-        dispatch('initializeShout', socket)
+        useShoutStore().initializeShout(socket)
       }
     },
     disconnectFromSocket ({ commit, state }) {

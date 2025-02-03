@@ -1,4 +1,5 @@
 import { mapState } from 'vuex'
+import { mapState as mapPiniaState } from 'pinia'
 import { TIMELINES, ROOT_ITEMS, routeTo } from 'src/components/navigation/navigation.js'
 import { getBookmarkFolderEntries, getListEntries, filterNavigation } from 'src/components/navigation/filter.js'
 
@@ -16,6 +17,8 @@ import {
   faStream,
   faList
 } from '@fortawesome/free-solid-svg-icons'
+import { useListsStore } from 'src/stores/lists'
+import { useAnnouncementsStore } from 'src/stores/announcements'
 
 library.add(
   faUsers,
@@ -43,15 +46,19 @@ const NavPanel = {
     getters () {
       return this.$store.getters
     },
+    ...mapPiniaState(useListsStore, {
+      lists: getListEntries
+    }),
+    ...mapPiniaState(useAnnouncementsStore, {
+      supportsAnnouncements: store => store.supportsAnnouncements
+    }),
     ...mapState({
-      lists: getListEntries,
       bookmarks: getBookmarkFolderEntries,
       currentUser: state => state.users.currentUser,
       followRequestCount: state => state.api.followRequests.length,
       privateMode: state => state.instance.private,
       federating: state => state.instance.federating,
       pleromaChatMessagesAvailable: state => state.instance.pleromaChatMessagesAvailable,
-      supportsAnnouncements: state => state.announcements.supportsAnnouncements,
       pinnedItems: state => new Set(state.serverSideStorage.prefsStorage.collections.pinnedNavItems)
     }),
     pinnedList () {

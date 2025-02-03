@@ -1,6 +1,7 @@
 import Select from '../select/select.vue'
 import Checkbox from 'src/components/checkbox/checkbox.vue'
 import Popover from 'src/components/popover/popover.vue'
+import { useInterfaceStore } from 'src/stores/interface'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -25,7 +26,7 @@ export default {
     'name', 'label', 'modelValue', 'fallback', 'options', 'no-inherit'
   ],
   mounted () {
-    this.$store.dispatch('queryLocalFonts')
+    useInterfaceStore().queryLocalFonts()
   },
   emits: ['update:modelValue'],
   data () {
@@ -50,10 +51,10 @@ export default {
       return typeof this.modelValue !== 'undefined'
     },
     localFontsList () {
-      return this.$store.state.interface.localFonts
+      return useInterfaceStore().localFonts
     },
     localFontsSize () {
-      return this.$store.state.interface.localFonts?.length
+      return useInterfaceStore().localFonts?.length
     }
   }
 }
