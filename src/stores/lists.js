@@ -56,7 +56,7 @@ export const useListsStore = defineStore('lists', {
       }
     },
     setListAccounts ({ listId, accountIds }) {
-      const saved = this.allListsObject[listId].accountIds || []
+      const saved = this.allListsObject[listId]?.accountIds || []
       const added = accountIds.filter(id => !saved.includes(id))
       const removed = saved.filter(id => !accountIds.includes(id))
       if (!this.allListsObject[listId]) {

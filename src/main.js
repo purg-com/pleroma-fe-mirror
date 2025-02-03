@@ -7,7 +7,6 @@ import './lib/event_target_polyfill.js'
 import instanceModule from './modules/instance.js'
 import statusesModule from './modules/statuses.js'
 import notificationsModule from './modules/notifications.js'
-import listsModule from './modules/lists.js'
 import usersModule from './modules/users.js'
 import apiModule from './modules/api.js'
 import configModule from './modules/config.js'
@@ -94,7 +93,6 @@ const persistedStateOptions = {
         instance: instanceModule,
         // TODO refactor users/statuses modules, they depend on each other
         users: usersModule,
-        lists: listsModule,
         statuses: statusesModule,
         notifications: notificationsModule,
         api: apiModule,
