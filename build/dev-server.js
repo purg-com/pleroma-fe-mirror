@@ -1,4 +1,4 @@
-require('./check-versions')()
+import('./check-versions.mjs').then(m => m.default())
 var config = require('../config')
 if (!process.env.NODE_ENV) process.env.NODE_ENV = config.dev.env
 var path = require('path')
