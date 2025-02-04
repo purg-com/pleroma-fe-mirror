@@ -52,7 +52,7 @@
           :faint="compact"
           :greentext="mergedConfig.greentext"
           :attentions="status.attentions"
-          @parseReady="onParseReady"
+          @parse-ready="onParseReady"
         />
 
         <button

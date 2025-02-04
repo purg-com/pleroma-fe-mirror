@@ -1,7 +1,7 @@
 <template>
   <Modal
     v-if="isOpen"
-    @backdropClicked="closeModal"
+    @backdrop-clicked="closeModal"
   >
     <div class="user-reporting-panel panel">
       <div class="panel-heading">

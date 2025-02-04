@@ -147,7 +147,7 @@
             >
               <Checkbox
                 :value="selectedState.has(state)"
-                @update:modelValue="(v) => updateSelectedStates(state, v)"
+                @update:model-value="(v) => updateSelectedStates(state, v)"
               >
                 {{ state }}
               </Checkbox>
@@ -337,7 +337,7 @@
               :no-preview="true"
               :compact="true"
               :static-vars="staticVars"
-              @subShadowSelected="onSubShadow"
+              @sub-shadow-selected="onSubShadow"
             />
           </div>
         </tab-switcher>
@@ -373,8 +373,8 @@
           :model-value="palettes"
           :selected-id="selectedPaletteId"
           :get-add-value="getNewPalette"
-          @update:modelValue="onPalettesUpdate"
-          @update:selectedId="e => selectedPaletteId = e"
+          @update:model-value="onPalettesUpdate"
+          @update:selected-id="e => selectedPaletteId = e"
         />
         <div class="list-edit-area">
           <StringSetting
@@ -393,7 +393,7 @@
         key="variables"
         :label="$t('settings.style.themes3.editor.variables_tab')"
         :model-value="virtualDirectives"
-        @update:modelValue="updateVirtualDirectives"
+        @update:model-value="updateVirtualDirectives"
       />
     </tab-switcher>
   </div>

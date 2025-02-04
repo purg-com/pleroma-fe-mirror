@@ -2,7 +2,7 @@
   <Modal
     v-if="modalActivated"
     class="status-history-modal-view"
-    @backdropClicked="closeModal"
+    @backdrop-clicked="closeModal"
   >
     <div class="status-history-modal-panel panel">
       <div class="panel-heading">

@@ -86,7 +86,7 @@
           :id="name + '-local-font-switcher'"
           :model-value="modelValue?.family"
           class="custom-font"
-          @update:modelValue="v => $emit('update:modelValue', { ...(modelValue || {}), family: v })"
+          @update:model-value="v => $emit('update:modelValue', { ...(modelValue || {}), family: v })"
         >
           <optgroup
             :label="$t('settings.style.themes3.font.group-builtin')"

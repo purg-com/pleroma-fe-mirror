@@ -13,7 +13,7 @@
           <Select
             class="language-select"
             :model-value="controlledLanguage[index]"
-            @update:modelValue="val => setLanguageAt(index, val)"
+            @update:model-value="val => setLanguageAt(index, val)"
           >
             <option
               v-for="lang in languages"

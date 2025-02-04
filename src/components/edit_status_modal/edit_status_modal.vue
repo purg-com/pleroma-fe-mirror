@@ -2,7 +2,7 @@
   <Modal
     v-if="isFormVisible"
     class="edit-form-modal-view"
-    @backdropClicked="closeModal"
+    @backdrop-clicked="closeModal"
   >
     <div class="edit-form-modal-panel panel">
       <div class="panel-heading">
