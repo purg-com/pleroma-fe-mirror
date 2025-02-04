@@ -1204,6 +1204,9 @@
     "now": "just now",
     "now_short": "now"
   },
+  "tos_panel": {
+    "title": "Terms of Service"
+  },
   "timeline": {
     "collapse": "Collapse",
     "conversation": "Conversation",
