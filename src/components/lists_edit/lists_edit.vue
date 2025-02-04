@@ -84,7 +84,7 @@
           <ListsUserSearch
             @results="onSearchResults"
             @loading="onSearchLoading"
-            @loadingDone="onSearchLoadingDone"
+            @loading-done="onSearchLoadingDone"
           />
           <div
             v-if="searchLoading"

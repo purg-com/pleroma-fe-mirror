@@ -53,7 +53,7 @@ const chats = {
     stopFetchingChats ({ commit }) {
       commit('setChatListFetcher', { fetcher: undefined })
     },
-    fetchChats ({ dispatch, rootState, commit }, params = {}) {
+    fetchChats ({ dispatch, rootState }) {
       return rootState.api.backendInteractor.chats()
         .then(({ chats }) => {
           dispatch('addNewChats', { chats })
@@ -73,13 +73,13 @@ const chats = {
     },
 
     // Opened Chats
-    startFetchingCurrentChat ({ commit, dispatch }, { fetcher }) {
+    startFetchingCurrentChat ({ dispatch }, { fetcher }) {
       dispatch('setCurrentChatFetcher', { fetcher })
     },
-    setCurrentChatFetcher ({ rootState, commit }, { fetcher }) {
+    setCurrentChatFetcher ({ commit }, { fetcher }) {
       commit('setCurrentChatFetcher', { fetcher })
     },
-    addOpenedChat ({ rootState, commit, dispatch }, { chat }) {
+    addOpenedChat ({ commit, dispatch }, { chat }) {
       commit('addOpenedChat', { dispatch, chat: parseChat(chat) })
       dispatch('addNewUsers', [chat.account])
     },
@@ -89,7 +89,7 @@ const chats = {
     resetChatNewMessageCount ({ commit }, value) {
       commit('resetChatNewMessageCount', value)
     },
-    clearCurrentChat ({ rootState, commit, dispatch }, value) {
+    clearCurrentChat ({ commit }) {
       commit('setCurrentChatId', { chatId: undefined })
       commit('setCurrentChatFetcher', { fetcher: undefined })
     },
@@ -111,7 +111,7 @@ const chats = {
       dispatch('clearCurrentChat')
       commit('resetChats', { commit })
     },
-    clearOpenedChats ({ rootState, commit, dispatch, rootGetters }) {
+    clearOpenedChats ({ commit }) {
       commit('clearOpenedChats', { commit })
     },
     handleMessageError ({ commit }, value) {
@@ -122,7 +122,7 @@ const chats = {
     }
   },
   mutations: {
-    setChatListFetcher (state, { commit, fetcher }) {
+    setChatListFetcher (state, { fetcher }) {
       const prevFetcher = state.chatListFetcher
       if (prevFetcher) {
         prevFetcher.stop()
@@ -136,7 +136,7 @@ const chats = {
       }
       state.fetcher = fetcher && fetcher()
     },
-    addOpenedChat (state, { _dispatch, chat }) {
+    addOpenedChat (state, { chat }) {
       state.currentChatId = chat.id
       state.openedChats[chat.id] = chat
 
@@ -165,7 +165,7 @@ const chats = {
         }
       })
     },
-    updateChat (state, { _dispatch, chat: updatedChat, _rootGetters }) {
+    updateChat (state, { chat: updatedChat }) {
       const chat = getChatById(state, updatedChat.id)
       if (chat) {
         chat.lastMessage = updatedChat.lastMessage
@@ -175,7 +175,7 @@ const chats = {
       if (!chat) { state.chatList.data.unshift(updatedChat) }
       state.chatList.idStore[updatedChat.id] = updatedChat
     },
-    deleteChat (state, { _dispatch, id, _rootGetters }) {
+    deleteChat (state, { id }) {
       state.chats.data = state.chats.data.filter(conversation =>
         conversation.last_status.id !== id
       )
@@ -206,7 +206,7 @@ const chats = {
         chatService.deleteMessage(chatMessageService, messageId)
       }
     },
-    resetChatNewMessageCount (state, _value) {
+    resetChatNewMessageCount (state) {
       const chatMessageService = state.openedChatMessageServices[state.currentChatId]
       chatService.resetNewMessageCount(chatMessageService)
     },

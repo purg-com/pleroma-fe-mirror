@@ -114,7 +114,7 @@ const conversation = {
     suspendable () {
       if (this.isTreeView) {
         return Object.entries(this.statusContentProperties)
-          .every(([k, prop]) => !prop.replying && prop.mediaPlaying.length === 0)
+          .every(([, prop]) => !prop.replying && prop.mediaPlaying.length === 0)
       }
       if (this.$refs.statusComponent && this.$refs.statusComponent[0]) {
         return this.$refs.statusComponent.every(s => s.suspendable)
@@ -272,11 +272,8 @@ const conversation = {
     },
     replies () {
       let i = 1
-      // eslint-disable-next-line camelcase
-      return reduce(this.conversation, (result, { id, in_reply_to_status_id }) => {
-        /* eslint-disable camelcase */
-        const irid = in_reply_to_status_id
-        /* eslint-enable camelcase */
+
+      return reduce(this.conversation, (result, { id, in_reply_to_status_id: irid }) => {
         if (irid) {
           result[irid] = result[irid] || []
           result[irid].push({
@@ -381,7 +378,7 @@ const conversation = {
         this.resetDisplayState()
       }
     },
-    virtualHidden (value) {
+    virtualHidden () {
       this.$store.dispatch(
         'setVirtualHeight',
         { statusId: this.statusId, height: `${this.$el.clientHeight}px` }
@@ -477,7 +474,7 @@ const conversation = {
       // nothing found, fall back to toplevel
       return this.topLevel[0] ? this.topLevel[0].id : undefined
     },
-    diveIntoStatus (id, preventScroll) {
+    diveIntoStatus (id) {
       this.tryScrollTo(id)
     },
     diveToTopLevel () {

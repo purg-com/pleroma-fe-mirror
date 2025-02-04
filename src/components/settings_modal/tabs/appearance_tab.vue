@@ -158,7 +158,7 @@
               :compact="true"
               :apply="true"
               :disabled="switchInProgress"
-              @applyPalette="data => setPaletteCustom(data)"
+              @apply-palette="data => setPaletteCustom(data)"
             />
           </template>
           <template v-else-if="customThemeVersion === 'v2'">
@@ -247,7 +247,7 @@
             :label="$t('settings.style.fonts.components.interface')"
             :fallback="{ family: 'sans-serif' }"
             no-inherit="1"
-            @update:modelValue="v => updateFont('interface', v)"
+            @update:model-value="v => updateFont('interface', v)"
           />
         </li>
         <li>
@@ -257,7 +257,7 @@
             name="input"
             :fallback="{ family: 'inherit' }"
             :label="$t('settings.style.fonts.components.input')"
-            @update:modelValue="v => updateFont('input', v)"
+            @update:model-value="v => updateFont('input', v)"
           />
         </li>
         <li>
@@ -267,7 +267,7 @@
             name="post"
             :fallback="{ family: 'inherit' }"
             :label="$t('settings.style.fonts.components.post')"
-            @update:modelValue="v => updateFont('post', v)"
+            @update:model-value="v => updateFont('post', v)"
           />
         </li>
         <li>
@@ -277,7 +277,7 @@
             name="postCode"
             :fallback="{ family: 'monospace' }"
             :label="$t('settings.style.fonts.components.monospace')"
-            @update:modelValue="v => updateFont('monospace', v)"
+            @update:model-value="v => updateFont('monospace', v)"
           />
         </li>
         <h3>{{ $t('settings.columns') }}</h3>

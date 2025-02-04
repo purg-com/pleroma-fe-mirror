@@ -480,7 +480,7 @@ export default {
       }
       this.dismissWarning()
     },
-    loadThemeFromLocalStorage (confirmLoadSource = false, forceSnapshot = false) {
+    loadThemeFromLocalStorage (confirmLoadSource = false) {
       const theme = this.themeDataUsed?.source
       if (theme) {
         this.loadTheme(
@@ -536,7 +536,7 @@ export default {
       this.tempImportFile = parsed
       this.loadTheme(parsed, 'file', forceSource)
     },
-    onImportFailure (result) {
+    onImportFailure () {
       useInterfaceStore().pushGlobalNotice({ messageKey: 'settings.invalid_theme_imported', level: 'error' })
     },
     importValidator (parsed) {
@@ -757,7 +757,7 @@ export default {
       }
     },
     selected () {
-      this.selectedTheme = Object.entries(this.availableStyles).find(([k, s]) => {
+      this.selectedTheme = Object.entries(this.availableStyles).find(([, s]) => {
         if (Array.isArray(s)) {
           return s[0] === this.selected
         } else {

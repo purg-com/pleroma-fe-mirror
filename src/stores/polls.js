@@ -47,7 +47,7 @@ export const usePollsStore = defineStore('polls', {
         this.trackedPolls[pollId] = 0
       }
     },
-    votePoll ({ id, pollId, choices }) {
+    votePoll ({ pollId, choices }) {
       return window.vuex.state.api.backendInteractor.vote({ pollId, choices }).then(poll => {
         this.mergeOrAddPoll(poll)
         return poll

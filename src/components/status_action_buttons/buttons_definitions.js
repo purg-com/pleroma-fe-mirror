@@ -109,7 +109,7 @@ export const BUTTONS = [{
       status.user.id === currentUser.id &&
       PUBLIC_SCOPES.has(status.visibility)
   },
-  action ({ status, dispatch, emit }) {
+  action ({ status, dispatch }) {
     if (status.pinned) {
       return dispatch('unpinStatus', { id: status.id })
     } else {
@@ -130,7 +130,7 @@ export const BUTTONS = [{
     ? 'status.unbookmark'
     : 'status.bookmark',
   if: ({ loggedIn }) => loggedIn,
-  action ({ status, dispatch, emit }) {
+  action ({ status, dispatch }) {
     if (status.bookmarked) {
       return dispatch('unbookmark', { id: status.id })
     } else {
@@ -175,7 +175,7 @@ export const BUTTONS = [{
         currentUser.privileges.includes('messages_delete')
     )
   },
-  confirm: ({ status, getters }) => getters.mergedConfig.modalOnDelete,
+  confirm: ({ getters }) => getters.mergedConfig.modalOnDelete,
   confirmStrings: {
     title: 'status.delete_confirm_title',
     body: 'status.delete_confirm',

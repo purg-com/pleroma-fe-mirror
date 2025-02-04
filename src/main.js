@@ -1,3 +1,4 @@
+/* global process */
 import { createStore } from 'vuex'
 import { createPinia } from 'pinia'
 

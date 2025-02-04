@@ -1,7 +1,7 @@
 import { unroll } from './iss_utils.js'
 import { deserializeShadow } from './iss_deserializer.js'
 
-export const serializeShadow = (s, throwOnInvalid) => {
+export const serializeShadow = (s) => {
   if (typeof s === 'object') {
     const inset = s.inset ? 'inset ' : ''
     const name = s.name ? ` #${s.name} ` : ''

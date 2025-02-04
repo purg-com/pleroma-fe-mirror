@@ -403,7 +403,7 @@
             :controlled-toggle-showing-long-subject="controlledToggleShowingLongSubject"
             @mediaplay="addMediaPlaying($event)"
             @mediapause="removeMediaPlaying($event)"
-            @parseReady="setHeadTailLinks"
+            @parse-ready="setHeadTailLinks"
           />
 
           <article
@@ -539,7 +539,7 @@
             v-if="!noHeading && !isPreview"
             :status="status"
             :replying="replying"
-            @toggleReplying="toggleReplying"
+            @toggle-replying="toggleReplying"
           />
         </div>
       </div>

@@ -117,7 +117,7 @@ export const findColor = (color, { dynamicVars, staticVars }) => {
 Static:
 ${JSON.stringify(staticVars, null, 2)}
 Dynamic:
-${JSON.stringify(dynamicVars, null, 2)}`)
+${JSON.stringify(dynamicVars, null, 2)}`, e)
   }
 }
 
@@ -417,7 +417,7 @@ export const init = ({
         dynamicVars.stacked = stacked[selector]
         dynamicVars.background = computed[selector].background
 
-        const dynamicSlots = Object.entries(computedDirectives).filter(([k, v]) => k.startsWith('--'))
+        const dynamicSlots = Object.entries(computedDirectives).filter(([k]) => k.startsWith('--'))
 
         dynamicSlots.forEach(([k, v]) => {
           const [type, value] = v.split('|').map(x => x.trim()) // woah, Extreme!

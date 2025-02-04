@@ -123,7 +123,7 @@
               :controlled-set-media-playing="(newVal) => toggleStatusContentProperty(status.id, 'mediaPlaying', newVal)"
 
               @goto="setHighlight"
-              @toggleExpanded="toggleExpanded"
+              @toggle-expanded="toggleExpanded"
             />
             <div
               v-if="showOtherRepliesButtonBelowStatus && getReplies(status.id).length > 1"
@@ -217,7 +217,7 @@
             :toggle-status-content-property="toggleStatusContentProperty"
 
             @goto="setHighlight"
-            @toggleExpanded="toggleExpanded"
+            @toggle-expanded="toggleExpanded"
           />
         </article>
       </div>

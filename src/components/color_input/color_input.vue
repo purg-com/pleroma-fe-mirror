@@ -15,7 +15,7 @@
       :model-value="present"
       :disabled="disabled"
       class="opt"
-      @update:modelValue="updateValue(typeof modelValue === 'undefined' ? fallback : undefined)"
+      @update:model-value="updateValue(typeof modelValue === 'undefined' ? fallback : undefined)"
     />
     <div
       class="input color-input-field"

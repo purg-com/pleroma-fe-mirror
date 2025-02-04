@@ -7,7 +7,7 @@
       :model-value="visibleState"
       :disabled="shouldBeDisabled"
       :indeterminate="isIndeterminate"
-      @update:modelValue="update"
+      @update:model-value="update"
     >
       <span
         class="label"

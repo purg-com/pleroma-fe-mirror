@@ -42,7 +42,7 @@ export const newImporter = ({
     filePicker.addEventListener('change', event => {
       if (event.target.files[0]) {
         const filename = event.target.files[0].name
-        // eslint-disable-next-line no-undef
+
         const reader = new FileReader()
         reader.onload = ({ target }) => {
           try {

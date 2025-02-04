@@ -52,7 +52,7 @@ const ChatListItem = {
     }
   },
   methods: {
-    openChat (_e) {
+    openChat () {
       if (this.chat.id) {
         this.$router.push({
           name: 'chat',

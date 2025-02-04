@@ -13,7 +13,7 @@
     <Select
       :model-value="realDraftMode ? draft :state"
       :disabled="disabled"
-      @update:modelValue="update"
+      @update:model-value="update"
     >
       <option
         v-for="option in realOptions"

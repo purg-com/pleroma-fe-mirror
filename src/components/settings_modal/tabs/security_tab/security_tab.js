@@ -124,7 +124,7 @@ const SecurityTab = {
     },
     addAlias () {
       this.$store.state.api.backendInteractor.addAlias({ alias: this.addAliasTarget })
-        .then((res) => {
+        .then(() => {
           this.addedAlias = true
           this.addAliasError = false
           this.addAliasTarget = ''

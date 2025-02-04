@@ -27,7 +27,7 @@ const api = {
     addFetcher (state, { fetcherName, fetcher }) {
       state.fetchers[fetcherName] = fetcher
     },
-    removeFetcher (state, { fetcherName, fetcher }) {
+    removeFetcher (state, { fetcherName }) {
       state.fetchers[fetcherName].stop()
       delete state.fetchers[fetcherName]
     },
@@ -294,7 +294,7 @@ const api = {
     setWsToken (store, token) {
       store.commit('setWsToken', token)
     },
-    initializeSocket ({ dispatch, commit, state, rootState }) {
+    initializeSocket ({ commit, state, rootState }) {
       // Set up websocket connection
       const token = state.wsToken
       if (rootState.instance.shoutAvailable && typeof token !== 'undefined' && state.socket === null) {

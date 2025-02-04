@@ -15,7 +15,7 @@ const WhoToFollow = {
   },
   methods: {
     showWhoToFollow (reply) {
-      reply.forEach((i, index) => {
+      reply.forEach((i) => {
         this.$store.state.api.backendInteractor.fetchUser({ id: i.acct })
           .then((externalUser) => {
             if (!externalUser.error) {

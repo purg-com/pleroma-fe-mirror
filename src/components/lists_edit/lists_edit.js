@@ -104,10 +104,10 @@ const ListsNew = {
     removeUser (userId) {
       useListsStore().removeListAccount({ accountId: userId, listId: this.id })
     },
-    onSearchLoading (results) {
+    onSearchLoading () {
       this.searchLoading = true
     },
-    onSearchLoadingDone (results) {
+    onSearchLoadingDone () {
       this.searchLoading = false
     },
     onSearchResults (results) {

@@ -133,15 +133,14 @@ const ProfileTab = {
       const params = {
         note: this.newBio,
         locked: this.newLocked,
+
         // Backend notation.
-        /* eslint-disable camelcase */
         display_name: this.newName,
         fields_attributes: this.newFields.filter(el => el != null),
         actor_type: this.actorType,
         show_role: this.showRole,
         birthday: this.newBirthday || '',
         show_birthday: this.showBirthday
-        /* eslint-enable camelcase */
       }
 
       if (this.emailLanguage) {
@@ -167,7 +166,7 @@ const ProfileTab = {
       }
       return false
     },
-    deleteField (index, event) {
+    deleteField (index) {
       this.newFields.splice(index, 1)
     },
     uploadFile (slot, e) {
@@ -190,7 +189,7 @@ const ProfileTab = {
         })
         return
       }
-      // eslint-disable-next-line no-undef
+
       const reader = new FileReader()
       reader.onload = ({ target }) => {
         const img = target.result

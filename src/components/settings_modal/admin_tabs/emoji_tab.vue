@@ -312,8 +312,8 @@
               new-upload
               :title="$t('admin_dash.emoji.adding_new')"
               :pack-name="packName"
-              @updatePackFiles="updatePackFiles"
-              @displayError="displayError"
+              @update-pack-files="updatePackFiles"
+              @display-error="displayError"
             >
               <template #trigger>
                 <FAIcon
@@ -334,8 +334,8 @@
               :shortcode="shortcode"
               :file="file"
               :pack-name="packName"
-              @updatePackFiles="updatePackFiles"
-              @displayError="displayError"
+              @update-pack-files="updatePackFiles"
+              @display-error="displayError"
             >
               <template #trigger>
                 <StillImage

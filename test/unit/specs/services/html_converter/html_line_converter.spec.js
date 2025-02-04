@@ -78,7 +78,7 @@ describe('html_line_converter', () => {
     })
   })
   describe('with processor that replaces lines with word "_" should match expected line when', () => {
-    const processorReplace = (line) => '_'
+    const processorReplace = () => '_'
     it('fed with regular HTML with newlines', () => {
       const input = '1<br/>2<p class="lol">3 4</p> 5 \n 6 <p > 7 <br> 8 </p> <br>\n<br/>'
       const output = '_<br/>_<p class="lol">_</p>_\n_<p >_<br>_</p> <br>\n<br/>'

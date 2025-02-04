@@ -16,7 +16,7 @@ const fetchRelationship = (attempt, userId, store) => new Promise((resolve, reje
   }
 })
 
-export const requestFollow = (userId, store) => new Promise((resolve, reject) => {
+export const requestFollow = (userId, store) => new Promise((resolve) => {
   store.state.api.backendInteractor.followUser({ id: userId })
     .then((updated) => {
       store.commit('updateUserRelationship', [updated])
@@ -41,7 +41,7 @@ export const requestFollow = (userId, store) => new Promise((resolve, reject) =>
     })
 })
 
-export const requestUnfollow = (userId, store) => new Promise((resolve, reject) => {
+export const requestUnfollow = (userId, store) => new Promise((resolve) => {
   store.state.api.backendInteractor.unfollowUser({ id: userId })
     .then((updated) => {
       store.commit('updateUserRelationship', [updated])

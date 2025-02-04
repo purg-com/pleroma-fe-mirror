@@ -107,7 +107,7 @@ export default {
       this.loading = true
       usePollsStore().votePoll(
         { id: this.statusId, pollId: this.poll.id, choices: this.choiceIndices }
-      ).then(poll => {
+      ).then(() => {
         this.loading = false
       })
     }

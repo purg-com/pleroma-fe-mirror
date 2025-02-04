@@ -35,7 +35,7 @@
         :selected-id="selectedId"
         :get-add-value="getNewSubshadow"
         :disabled="disabled"
-        @update:selectedId="onSelectChange"
+        @update:selected-id="onSelectChange"
       />
     </div>
     <div class="shadow-tweak">
@@ -170,12 +170,12 @@
           :fallback="getColorFallback"
           :show-optional-checkbox="false"
           name="shadow"
-          @update:modelValue="e => updateProperty('color', e)"
+          @update:model-value="e => updateProperty('color', e)"
         />
         <OpacityInput
           :model-value="selected?.alpha"
           :disabled="disabled || !present"
-          @update:modelValue="e => updateProperty('alpha', e)"
+          @update:model-value="e => updateProperty('alpha', e)"
         />
         <i18n-t
           scope="global"

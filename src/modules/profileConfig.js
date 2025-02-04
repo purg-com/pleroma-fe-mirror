@@ -118,7 +118,7 @@ const profileConfig = {
     }
   },
   actions: {
-    setProfileOption ({ rootState, state, commit, dispatch }, { name, value }) {
+    setProfileOption ({ rootState, state, commit }, { name, value }) {
       const oldValue = get(state, name)
       const map = settingsMap[name]
       if (!map) throw new Error('Invalid server-side setting')

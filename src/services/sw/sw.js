@@ -138,7 +138,7 @@ export function unregisterPushNotifications (token) {
         .then((registration) => {
           return unsubscribePush(registration).then((result) => [registration, result])
         })
-        .then(([registration, unsubResult]) => {
+        .then(([, unsubResult]) => {
           if (!unsubResult) {
             console.warn('Push subscription cancellation wasn\'t successful')
           }

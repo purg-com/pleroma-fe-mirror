@@ -28,8 +28,8 @@
       :model-value="modelValue"
       :selected-id="selectedVirtualDirectiveId"
       :get-add-value="getNewVirtualDirective"
-      @update:modelValue="e => emit('update:modelValue', e)"
-      @update:selectedId="e => selectedVirtualDirectiveId = e"
+      @update:model-value="e => emit('update:modelValue', e)"
+      @update:selected-id="e => selectedVirtualDirectiveId = e"
     />
     <div class="list-edit-area">
       <div class="variable-selector">

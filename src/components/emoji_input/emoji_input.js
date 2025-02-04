@@ -265,7 +265,7 @@ const EmojiInput = {
     }
   },
   watch: {
-    showSuggestions: function (newValue, oldValue) {
+    showSuggestions: function (newValue) {
       this.$emit('shown', newValue)
       if (newValue) {
         this.$refs.suggestorPopover.showPopover()

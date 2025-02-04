@@ -116,7 +116,6 @@ export const suggestUsers = ({ dispatch, state }) => {
       const screenNameAlphabetically = a.screen_name > b.screen_name ? 1 : -1
 
       return diff + nameAlphabetically + screenNameAlphabetically
-      /* eslint-disable camelcase */
     }).map((user) => ({
       user,
       displayText: user.screen_name_ui,
@@ -124,7 +123,6 @@ export const suggestUsers = ({ dispatch, state }) => {
       imageUrl: user.profile_image_url_original,
       replacement: '@' + user.screen_name + ' '
     }))
-    /* eslint-enable camelcase */
 
     suggestions = newSuggestions || []
     return suggestions

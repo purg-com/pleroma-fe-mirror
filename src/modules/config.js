@@ -38,13 +38,13 @@ export const multiChoiceProperties = [
 
 // caching the instance default properties
 export const instanceDefaultProperties = Object.entries(defaultState)
-  .filter(([key, value]) => value === undefined)
-  .map(([key, value]) => key)
+  .filter(([, value]) => value === undefined)
+  .map(([key]) => key)
 
 const config = {
   state: { ...defaultState },
   getters: {
-    defaultConfig (state, getters, rootState, rootGetters) {
+    defaultConfig (state, getters, rootState) {
       const { instance } = rootState
       return {
         ...defaultState,
@@ -58,7 +58,7 @@ const config = {
       return {
         ...defaultConfig,
         // Do not override with undefined
-        ...Object.fromEntries(Object.entries(state).filter(([k, v]) => v !== undefined))
+        ...Object.fromEntries(Object.entries(state).filter(([, v]) => v !== undefined))
       }
     }
   },
@@ -94,10 +94,10 @@ const config = {
         name => dispatch('setOption', { name, value: data[name] })
       )
     },
-    setHighlight ({ commit, dispatch }, { user, color, type }) {
+    setHighlight ({ commit }, { user, color, type }) {
       commit('setHighlight', { user, color, type })
     },
-    setOptionTemporarily ({ commit, dispatch, state, rootState }, { name, value }) {
+    setOptionTemporarily ({ commit, dispatch, state }, { name, value }) {
       if (useInterfaceStore().temporaryChangesTimeoutId !== null) {
         console.warn('Can\'t track more than one temporary change')
         return

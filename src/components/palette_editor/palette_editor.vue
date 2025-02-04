@@ -10,7 +10,7 @@
       :model-value="props.modelValue[key]"
       :fallback="fallback(key)"
       :label="$t('settings.style.themes3.palette.' + key)"
-      @update:modelValue="value => updatePalette(key, value)"
+      @update:model-value="value => updatePalette(key, value)"
     />
     <button
       class="btn button-default palette-import-button"
@@ -87,7 +87,7 @@ const paletteExporter = newExporter({
 })
 const paletteImporter = newImporter({
   accept: '.json',
-  onImport (parsed, filename) {
+  onImport (parsed) {
     emit('update:modelValue', parsed)
   }
 })
@@ -100,7 +100,7 @@ const importPalette = () => {
   paletteImporter.importData()
 }
 
-const applyPalette = (data) => {
+const applyPalette = () => {
   emit('applyPalette', getExportedObject())
 }
 

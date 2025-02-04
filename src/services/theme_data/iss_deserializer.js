@@ -45,7 +45,7 @@ export const deserializeShadow = string => {
       } else {
         return [mode, result[i]]
       }
-    }).filter(([k, v]) => v !== false).slice(1))
+    }).filter(([, v]) => v !== false).slice(1))
 
     return { x, y, blur, spread, color, alpha, inset, name }
   }

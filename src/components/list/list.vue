@@ -37,7 +37,7 @@ export default {
     },
     getClass: {
       type: Function,
-      default: item => ''
+      default: () => ''
     },
     nonInteractive: {
       type: Boolean,

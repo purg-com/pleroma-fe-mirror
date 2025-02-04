@@ -17,7 +17,7 @@ const testGetters = {
   findUser: state => getters.findUser(state.users),
   findUserByName: state => getters.findUserByName(state.users),
   relationship: state => getters.relationship(state.users),
-  mergedConfig: state => ({
+  mergedConfig: () => ({
     colors: '',
     highlight: {},
     customTheme: {

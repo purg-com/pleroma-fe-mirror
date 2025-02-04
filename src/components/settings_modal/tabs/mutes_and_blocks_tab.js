@@ -85,7 +85,6 @@ const MutesAndBlocks = {
         // check is it's a local user
         if (user && user.is_local) {
           // append the instance address
-          // eslint-disable-next-line no-undef
           return user.screen_name + '@' + location.hostname
         }
         return user.screen_name
@@ -126,7 +125,7 @@ const MutesAndBlocks = {
       return urls.filter(url => !this.user.domainMutes.includes(url))
     },
     queryKnownDomains (query) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         resolve(this.knownDomains.filter(url => url.toLowerCase().includes(query)))
       })
     },

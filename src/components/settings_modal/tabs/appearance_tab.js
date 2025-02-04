@@ -67,7 +67,7 @@ const AppearanceTab = {
         value: i - 1,
         label: this.$t(`settings.style.themes3.hacks.forced_roundness_mode_${mode}`)
       })),
-      underlayOverrideModes: ['none', 'opaque', 'transparent'].map((mode, i) => ({
+      underlayOverrideModes: ['none', 'opaque', 'transparent'].map((mode) => ({
         key: mode,
         value: mode,
         label: this.$t(`settings.style.themes3.hacks.underlay_override_mode_${mode}`)
@@ -234,7 +234,7 @@ const AppearanceTab = {
             cOrange,
             wallpaper
           }
-          return Object.fromEntries(Object.entries(result).filter(([k, v]) => v))
+          return Object.fromEntries(Object.entries(result).filter(([, v]) => v))
         })
       return result
     },
@@ -276,7 +276,7 @@ const AppearanceTab = {
       const { customTheme, customThemeSource } = this.mergedConfig
       return customTheme != null || customThemeSource != null
     },
-    isCustomStyleUsed (name) {
+    isCustomStyleUsed () {
       const { styleCustomData } = this.mergedConfig
       return styleCustomData != null
     },
@@ -348,7 +348,7 @@ const AppearanceTab = {
       useInterfaceStore().setPaletteCustom(data)
       this.userPalette = data
     },
-    resetTheming (name) {
+    resetTheming () {
       useInterfaceStore().setStyle('stock')
     },
     previewTheme (key, version, input) {
@@ -378,7 +378,7 @@ const AppearanceTab = {
               directives: Object.fromEntries(
                 Object
                   .entries(directives)
-                  .filter(([k, v]) => k && k !== 'name')
+                  .filter(([k]) => k && k !== 'name')
                   .map(([k, v]) => ['--' + k, 'color | ' + v])
               )
             }

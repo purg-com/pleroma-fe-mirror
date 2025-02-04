@@ -93,7 +93,7 @@ const EmojiTab = {
           this.displayError(resp.error)
           return Promise.reject(resp)
         }
-      }).then(done => {
+      }).then(() => {
         this.$refs.createPackPopover.hidePopover()
 
         this.packName = this.newPackName
@@ -110,7 +110,7 @@ const EmojiTab = {
           this.displayError(resp.error)
           return Promise.reject(resp)
         }
-      }).then(done => {
+      }).then(() => {
         delete this.editedMetadata[this.packName]
 
         this.deleteModalVisible = false
@@ -167,7 +167,7 @@ const EmojiTab = {
 
           return resultingPromise
         })
-        .then(finished => allPacks)
+        .then(() => allPacks)
         .catch(data => {
           this.displayError(data)
         })
@@ -226,7 +226,7 @@ const EmojiTab = {
             this.displayError(resp.error)
             return Promise.reject(resp)
           }
-        }).then(done => {
+        }).then(() => {
           this.packName = this.remotePackDownloadAs
           this.remotePackDownloadAs = ''
         })

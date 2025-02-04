@@ -60,7 +60,7 @@ const adminSettingsStorage = {
     }
   },
   actions: {
-    loadFrontendsStuff ({ state, rootState, dispatch, commit }) {
+    loadFrontendsStuff ({ rootState, commit }) {
       rootState.api.backendInteractor.fetchAvailableFrontends()
         .then(frontends => commit('setAvailableFrontends', { frontends }))
     },
@@ -84,7 +84,7 @@ const adminSettingsStorage = {
           .then(backendDescriptions => dispatch('setInstanceAdminDescriptions', { backendDescriptions }))
       }
     },
-    setInstanceAdminSettings ({ state, commit, dispatch }, { backendDbConfig }) {
+    setInstanceAdminSettings ({ state, commit }, { backendDbConfig }) {
       const config = state.config || {}
       const modifiedPaths = new Set()
       backendDbConfig.configs.forEach(c => {
@@ -108,7 +108,7 @@ const adminSettingsStorage = {
       commit('updateAdminSettings', { config, modifiedPaths })
       commit('resetAdminDraft')
     },
-    setInstanceAdminDescriptions ({ state, commit, dispatch }, { backendDescriptions }) {
+    setInstanceAdminDescriptions ({ commit }, { backendDescriptions }) {
       const convert = ({ children, description, label, key = '<ROOT>', group, suggestions }, path, acc) => {
         const newPath = group ? [group, key] : [key]
         const obj = { description, label, suggestions }
@@ -127,7 +127,7 @@ const adminSettingsStorage = {
 
     // This action takes draft state, diffs it with live config state and then pushes
     // only differences between the two. Difference detection only work up to subkey (third) level.
-    pushAdminDraft ({ rootState, state, commit, dispatch }) {
+    pushAdminDraft ({ rootState, state, dispatch }) {
       // TODO cleanup paths in modifiedPaths
       const convert = (value) => {
         if (typeof value !== 'object') {
@@ -177,7 +177,7 @@ const adminSettingsStorage = {
         .then(() => rootState.api.backendInteractor.fetchInstanceDBConfig())
         .then(backendDbConfig => dispatch('setInstanceAdminSettings', { backendDbConfig }))
     },
-    pushAdminSetting ({ rootState, state, commit, dispatch }, { path, value }) {
+    pushAdminSetting ({ rootState, dispatch }, { path, value }) {
       const [group, key, ...rest] = Array.isArray(path) ? path : path.split(/\./g)
       const clone = {} // not actually cloning the entire thing to avoid excessive writes
       set(clone, rest, value)
@@ -205,7 +205,7 @@ const adminSettingsStorage = {
         .then(() => rootState.api.backendInteractor.fetchInstanceDBConfig())
         .then(backendDbConfig => dispatch('setInstanceAdminSettings', { backendDbConfig }))
     },
-    resetAdminSetting ({ rootState, state, commit, dispatch }, { path }) {
+    resetAdminSetting ({ rootState, state, dispatch }, { path }) {
       const [group, key, subkey] = path.split(/\./g)
 
       state.modifiedPaths.delete(path)
