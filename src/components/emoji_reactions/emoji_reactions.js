@@ -71,7 +71,7 @@ const EmojiReactions = {
     unreact (emoji) {
       this.$store.dispatch('unreactWithEmoji', { id: this.status.id, emoji })
     },
-    async emojiOnClick (emoji, event) {
+    async emojiOnClick (emoji) {
       if (!this.loggedIn) return
 
       await this.fetchEmojiReactionsByIfMissing()

@@ -100,7 +100,7 @@ export const genericRuleToSelector = components => (rule, ignoreOutOfTreeSelecto
     let arraySelector = Array.isArray(selector) ? selector : [selector]
     if (ignoreOutOfTreeSelector || liteMode) arraySelector = [arraySelector[0]]
     arraySelector
-      .sort((a, b) => {
+      .sort((a) => {
         if (a.startsWith(':')) return 1
         if (/^[a-z]/.exec(a)) return -1
         else return 0

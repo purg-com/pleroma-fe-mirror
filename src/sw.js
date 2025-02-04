@@ -33,7 +33,7 @@ const setSettings = async () => {
 
   state.allowedNotificationTypes = new Set(
     notificationsNativeArray
-      .filter(([k, v]) => v)
+      .filter(([, v]) => v)
       .map(([k]) => {
         switch (k) {
           case 'mentions':

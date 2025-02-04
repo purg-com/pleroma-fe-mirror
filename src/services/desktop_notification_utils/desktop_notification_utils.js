@@ -29,7 +29,7 @@ export const closeDesktopNotification = (rootState, { id }) => {
   }
 }
 
-export const closeAllDesktopNotifications = (rootState) => {
+export const closeAllDesktopNotifications = () => {
   if (!('Notification' in window && window.Notification.permission === 'granted')) return
 
   if (isSWSupported()) {

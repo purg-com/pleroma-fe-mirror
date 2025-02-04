@@ -36,7 +36,10 @@ export const notifications = {
       })
     },
     clearNotifications (state) {
-      state = emptyNotifications()
+      const blankState = defaultState()
+      Object.keys(state).forEach(k => {
+        state[k] = blankState[k]
+      })
     },
     updateNotificationsMinMaxId (state, id) {
       state.maxId = id > state.maxId ? id : state.maxId
@@ -67,7 +70,7 @@ export const notifications = {
     }
   },
   actions: {
-    addNewNotifications (store, { notifications, older }) {
+    addNewNotifications (store, { notifications }) {
       const { commit, dispatch, state, rootState } = store
       const validNotifications = notifications.filter((notification) => {
         // If invalid notification, update ids but don't add it to store
@@ -130,10 +133,10 @@ export const notifications = {
         }
       }
     },
-    setNotificationsLoading ({ rootState, commit }, { value }) {
+    setNotificationsLoading ({ commit }, { value }) {
       commit('setNotificationsLoading', { value })
     },
-    setNotificationsSilence ({ rootState, commit }, { value }) {
+    setNotificationsSilence ({ commit }, { value }) {
       commit('setNotificationsSilence', { value })
     },
     markNotificationsAsSeen ({ rootState, state, commit }) {
@@ -155,14 +158,14 @@ export const notifications = {
         closeDesktopNotification(rootState, { id })
       })
     },
-    dismissNotificationLocal ({ rootState, commit }, { id }) {
+    dismissNotificationLocal ({ commit }, { id }) {
       commit('dismissNotification', { id })
     },
     dismissNotification ({ rootState, commit }, { id }) {
       commit('dismissNotification', { id })
       rootState.api.backendInteractor.dismissNotification({ id })
     },
-    updateNotification ({ rootState, commit }, { id, updater }) {
+    updateNotification ({ commit }, { id, updater }) {
       commit('updateNotification', { id, updater })
     }
   }

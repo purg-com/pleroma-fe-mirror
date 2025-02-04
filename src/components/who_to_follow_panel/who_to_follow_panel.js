@@ -54,7 +54,7 @@ const WhoToFollowPanel = {
     }
   },
   watch: {
-    user: function (user, oldUser) {
+    user: function () {
       if (this.suggestionsEnabled) {
         getWhoToFollow(this)
       }
@@ -62,7 +62,7 @@ const WhoToFollowPanel = {
   },
   mounted:
     function () {
-      this.usersToFollow = new Array(3).fill().map(x => (
+      this.usersToFollow = new Array(3).fill().map(() => (
         {
           img: this.$store.state.instance.defaultAvatar,
           name: '',

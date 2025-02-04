@@ -352,7 +352,7 @@ const EmojiPicker = {
     },
     allEmojiGroups () {
       return Object.entries(this.allCustomGroups)
-        .map(([_, v]) => v)
+        .map(([, v]) => v)
         .concat(this.unicodeEmojiGroups)
     },
     stickerPickerEnabled () {

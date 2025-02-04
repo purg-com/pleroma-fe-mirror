@@ -47,10 +47,10 @@ export default {
     mobileActivePanel: 'timeline'
   }),
   watch: {
-    themeApplied (value) {
+    themeApplied () {
       this.removeSplash()
     },
-    layoutType (value) {
+    layoutType () {
       document.getElementById('modal').classList = ['-' + this.layoutType]
     }
   },

@@ -78,14 +78,14 @@ export default {
     Preview,
     VirtualDirectivesTab
   },
-  setup (props, context) {
+  setup () {
     const exports = {}
     const interfaceStore = useInterfaceStore()
     // All rules that are made by editor
     const allEditedRules = ref(interfaceStore.styleDataUsed || {})
     const styleDataUsed = computed(() => interfaceStore.styleDataUsed)
 
-    watch([styleDataUsed], (value) => {
+    watch([styleDataUsed], () => {
       onImport(interfaceStore.styleDataUsed)
     }, { once: true })
 
@@ -227,7 +227,7 @@ export default {
       componentKeysAll
         .map(
           key => [key, componentsContext(key).default]
-        ).filter(([key, component]) => !component.virtual && !component.notEditable)
+        ).filter(([, component]) => !component.virtual && !component.notEditable)
     )
     exports.componentsMap = componentsMap
     const componentKeys = [...componentsMap.keys()]

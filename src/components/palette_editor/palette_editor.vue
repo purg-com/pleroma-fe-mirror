@@ -87,7 +87,7 @@ const paletteExporter = newExporter({
 })
 const paletteImporter = newImporter({
   accept: '.json',
-  onImport (parsed, filename) {
+  onImport (parsed) {
     emit('update:modelValue', parsed)
   }
 })
@@ -100,7 +100,7 @@ const importPalette = () => {
   paletteImporter.importData()
 }
 
-const applyPalette = (data) => {
+const applyPalette = () => {
   emit('applyPalette', getExportedObject())
 }
 

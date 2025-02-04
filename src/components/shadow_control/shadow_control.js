@@ -151,7 +151,7 @@ export default {
     }
   },
   watch: {
-    selected (value) {
+    selected () {
       this.$emit('subShadowSelected', this.selectedId)
     }
   },

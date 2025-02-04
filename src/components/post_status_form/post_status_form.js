@@ -433,7 +433,7 @@ const PostStatusForm = {
       if (this.preview) this.previewStatus()
       this.saveable = false
     },
-    async postStatus (event, newStatus, opts = {}) {
+    async postStatus (event, newStatus) {
       if (this.posting && !this.optimisticPosting) { return }
       if (this.disableSubmit) { return }
       if (this.emojiInputShown) { return }
@@ -459,7 +459,7 @@ const PostStatusForm = {
 
       try {
         await this.setAllMediaDescriptions()
-      } catch (e) {
+      } catch {
         this.error = this.$t('post_status.media_description_error')
         this.posting = false
         return
@@ -603,7 +603,7 @@ const PostStatusForm = {
         this.showDropIcon = 'hide'
       }
     },
-    fileDragStop (e) {
+    fileDragStop () {
       // The false-setting is done with delay because just using leave-events
       // directly caused unwanted flickering, this is not perfect either but
       // much less noticable.
@@ -618,7 +618,7 @@ const PostStatusForm = {
         this.showDropIcon = 'show'
       }
     },
-    onEmojiInputInput (e) {
+    onEmojiInputInput () {
       this.$nextTick(() => {
         this.resize(this.$refs.textarea)
       })

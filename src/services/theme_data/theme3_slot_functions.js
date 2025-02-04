@@ -131,7 +131,7 @@ export const shadowFunctions = {
       '[alpha]: (Optional) border opacity, defaults to 1 (fully opaque)',
       '[inset]: (Optional) whether border should be on the inside or outside, defaults to inside'
     ],
-    exec: (args, { findColor }) => {
+    exec: (args) => {
       const [color, side, alpha = '1', widthArg = '1', inset = 'inset'] = args
 
       const width = Number(widthArg)

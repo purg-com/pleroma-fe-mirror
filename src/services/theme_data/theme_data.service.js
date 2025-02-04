@@ -218,7 +218,7 @@ export const getLayerSlot = (
  */
 export const SLOT_ORDERED = topoSort(
   Object.entries(SLOT_INHERITANCE)
-    .sort(([aK, aV], [bK, bV]) => ((aV && aV.priority) || 0) - ((bV && bV.priority) || 0))
+    .sort(([, aV], [, bV]) => ((aV && aV.priority) || 0) - ((bV && bV.priority) || 0))
     .reduce((acc, [k, v]) => ({ ...acc, [k]: v }), {})
 )
 
@@ -226,7 +226,7 @@ export const SLOT_ORDERED = topoSort(
  * All opacity slots used in color slots, their default values and affected
  * color slots.
  */
-export const OPACITIES = Object.entries(SLOT_INHERITANCE).reduce((acc, [k, v]) => {
+export const OPACITIES = Object.entries(SLOT_INHERITANCE).reduce((acc, [k]) => {
   const opacity = getOpacitySlot(k, SLOT_INHERITANCE, getDependencies)
   if (opacity) {
     return {
@@ -489,7 +489,7 @@ export const generateColors = (themeData) => {
   return {
     rules: {
       colors: Object.entries(htmlColors.complete)
-        .filter(([k, v]) => v)
+        .filter(([, v]) => v)
         .map(([k, v]) => `--${k}: ${v}`)
         .join(';')
     },
@@ -506,10 +506,10 @@ export const generateRadii = (input) => {
   if (typeof input.btnRadius !== 'undefined') {
     inputRadii = Object
       .entries(input)
-      .filter(([k, v]) => k.endsWith('Radius'))
+      .filter(([k]) => k.endsWith('Radius'))
       .reduce((acc, e) => { acc[e[0].split('Radius')[0]] = e[1]; return acc }, {})
   }
-  const radii = Object.entries(inputRadii).filter(([k, v]) => v).reduce((acc, [k, v]) => {
+  const radii = Object.entries(inputRadii).filter(([, v]) => v).reduce((acc, [k, v]) => {
     acc[k] = v
     return acc
   }, {
@@ -526,7 +526,7 @@ export const generateRadii = (input) => {
 
   return {
     rules: {
-      radii: Object.entries(radii).filter(([k, v]) => v).map(([k, v]) => `--${k}Radius: ${v}px`).join(';')
+      radii: Object.entries(radii).filter(([, v]) => v).map(([k, v]) => `--${k}Radius: ${v}px`).join(';')
     },
     theme: {
       radii
@@ -535,8 +535,8 @@ export const generateRadii = (input) => {
 }
 
 export const generateFonts = (input) => {
-  const fonts = Object.entries(input.fonts || {}).filter(([k, v]) => v).reduce((acc, [k, v]) => {
-    acc[k] = Object.entries(v).filter(([k, v]) => v).reduce((acc, [k, v]) => {
+  const fonts = Object.entries(input.fonts || {}).filter(([, v]) => v).reduce((acc, [k, v]) => {
+    acc[k] = Object.entries(v).filter(([, v]) => v).reduce((acc, [k, v]) => {
       acc[k] = v
       return acc
     }, acc[k])
@@ -560,7 +560,7 @@ export const generateFonts = (input) => {
     rules: {
       fonts: Object
         .entries(fonts)
-        .filter(([k, v]) => v)
+        .filter(([, v]) => v)
         .map(([k, v]) => `--${k}Font: ${v.family}`).join(';')
     },
     theme: {

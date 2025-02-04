@@ -23,7 +23,7 @@ export const getAttrs = (tag, filter) => {
     .replace(/\/?$/, '')
     .trim()
   const attrs = Array.from(innertag.matchAll(/([a-z]+[a-z0-9-]*)(?:=("[^"]+?"|'[^']+?'))?/gi))
-    .map(([trash, key, value]) => [key, value])
+    .map(([, key, value]) => [key, value])
     .map(([k, v]) => {
       if (!v) return [k, true]
       return [k, v.substring(1, v.length - 1)]

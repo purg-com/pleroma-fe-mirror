@@ -8,13 +8,13 @@ export const useListsStore = defineStore('lists', {
     allListsObject: {}
   }),
   getters: {
-    findListTitle (state) {
+    findListTitle () {
       return (id) => {
         if (!this.allListsObject[id]) return
         return this.allListsObject[id].title
       }
     },
-    findListAccounts (state) {
+    findListAccounts () {
       return (id) => [...this.allListsObject[id].accountIds]
     }
   },

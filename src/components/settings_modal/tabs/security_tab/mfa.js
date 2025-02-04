@@ -89,7 +89,7 @@ const Mfa = {
       this.backupCodes.getNewCodes = true
     },
     confirmBackupCodes () { // confirm getting new backup codes
-      this.fetchBackupCodes().then((res) => {
+      this.fetchBackupCodes().then(() => {
         this.backupCodes.getNewCodes = false
       })
     },

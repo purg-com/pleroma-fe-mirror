@@ -38,7 +38,7 @@ const shoutPanel = {
     }
   },
   watch: {
-    messages (newVal) {
+    messages () {
       const scrollEl = this.$el.querySelector('.chat-window')
       if (!scrollEl) return
       if (scrollEl.scrollTop + scrollEl.offsetHeight + 20 > scrollEl.scrollHeight) {

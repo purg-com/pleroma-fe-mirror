@@ -100,7 +100,7 @@ const ModerationTools = {
       const user = this.user
       const { id, name } = user
       store.state.api.backendInteractor.deleteUser({ user })
-        .then(e => {
+        .then(() => {
           this.$store.dispatch('markStatusesAsDeleted', status => user.id === status.user.id)
           const isProfile = this.$route.name === 'external-user-profile' || this.$route.name === 'user-profile'
           const isTargetUser = this.$route.params.name === name || this.$route.params.id === id

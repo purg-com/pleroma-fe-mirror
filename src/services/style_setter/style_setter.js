@@ -48,7 +48,7 @@ const adoptStyleSheets = (styles) => {
 
 export const generateTheme = (inputRuleset, callbacks, debug) => {
   const {
-    onNewRule = (rule, isLazy) => {},
+    onNewRule = () => {},
     onLazyFinished = () => {},
     onEagerFinished = () => {}
   } = callbacks
@@ -123,8 +123,8 @@ export const tryLoadCache = async () => {
 
 export const applyTheme = (
   input,
-  onEagerFinish = data => {},
-  onFinish = data => {},
+  onEagerFinish = () => {},
+  onFinish = () => {},
   debug
 ) => {
   const eagerStyles = createStyleSheet(EAGER_STYLE_ID)
@@ -217,7 +217,7 @@ const extractStyleConfig = ({
 console.log(defaultState)
 const defaultStyleConfig = extractStyleConfig(defaultState)
 
-export const applyConfig = (input, i18n) => {
+export const applyConfig = (input) => {
   const config = extractStyleConfig(input)
 
   if (config === defaultStyleConfig) {
@@ -228,7 +228,7 @@ export const applyConfig = (input, i18n) => {
 
   const rules = Object
     .entries(config)
-    .filter(([k, v]) => v)
+    .filter(([, v]) => v)
     .map(([k, v]) => `--${k}: ${v}`).join(';')
 
   document.getElementById('style-config')?.remove()
@@ -283,7 +283,7 @@ export const getResourcesIndex = async (url, parser = JSON.parse) => {
     const builtinData = await window.fetch(url, { cache })
     const builtinResources = await builtinData.json()
     builtin = resourceTransform(builtinResources)
-  } catch (e) {
+  } catch {
     builtin = []
     console.warn(`Builtin resources at ${url} unavailable`)
   }
@@ -292,7 +292,7 @@ export const getResourcesIndex = async (url, parser = JSON.parse) => {
     const customData = await window.fetch(customUrl, { cache })
     const customResources = await customData.json()
     custom = resourceTransform(customResources)
-  } catch (e) {
+  } catch {
     custom = []
     console.warn(`Custom resources at ${customUrl} unavailable`)
   }

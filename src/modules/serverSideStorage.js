@@ -200,7 +200,7 @@ const _mergeJournal = (...journals) => {
     .sort((a, b) => a.timestamp > b.timestamp ? 1 : -1)
 }
 
-export const _mergePrefs = (recent, stale, allFlagKeys) => {
+export const _mergePrefs = (recent, stale) => {
   if (!stale) return recent
   if (!recent) return stale
   const { _journal: recentJournal, ...recentData } = recent
@@ -217,7 +217,7 @@ export const _mergePrefs = (recent, stale, allFlagKeys) => {
    */
   const resultOutput = { ...recentData }
   const totalJournal = _mergeJournal(staleJournal, recentJournal)
-  totalJournal.forEach(({ path, timestamp, operation, command, args }) => {
+  totalJournal.forEach(({ path, operation, args }) => {
     if (path.startsWith('_')) {
       console.error(`journal contains entry to edit internal (starts with _) field '${path}', something is incorrect here, ignoring.`)
       return
@@ -303,10 +303,13 @@ export const _doMigrations = (cache) => {
 }
 
 export const mutations = {
-  clearServerSideStorage (state, userData) {
-    state = { ...cloneDeep(defaultState) }
+  clearServerSideStorage (state) {
+    const blankState = { ...cloneDeep(defaultState) }
+    Object.keys(state).forEach(k => {
+      state[k] = blankState[k]
+    })
   },
-  setServerSideStorage (state, userData, test) {
+  setServerSideStorage (state, userData) {
     const live = userData.storage
     state.raw = live
     let cache = state.cache
@@ -334,8 +337,10 @@ export const mutations = {
     if (!needUpload && recent && stale) {
       console.debug('Checking if data needs merging...')
       // discarding timestamps and versions
+      /* eslint-disable no-unused-vars */
       const { _timestamp: _0, _version: _1, ...recentData } = recent
       const { _timestamp: _2, _version: _3, ...staleData } = stale
+      /* eslint-enable no-unused-vars */
       dirty = !isEqual(recentData, staleData)
       console.debug(`Data ${dirty ? 'needs' : 'doesn\'t need'} merging`)
     }

@@ -105,7 +105,7 @@ export default {
       }
       return false
     },
-    deleteOption (index, event) {
+    deleteOption (index) {
       if (this.options.length > 2) {
         this.options.splice(index, 1)
       }

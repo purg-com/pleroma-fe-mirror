@@ -223,7 +223,7 @@ const addNewStatuses = (state, { statuses, showImmediately = false, timeline, us
     return status
   }
 
-  const favoriteStatus = (favorite, counter) => {
+  const favoriteStatus = (favorite) => {
     const status = find(allStatuses, { id: favorite.in_reply_to_status_id })
     if (status) {
       // This is our favorite, so the relevant bit.
@@ -273,7 +273,7 @@ const addNewStatuses = (state, { statuses, showImmediately = false, timeline, us
         favoriteStatus(favorite)
       }
     },
-    follow: (follow) => {
+    follow: () => {
       // NOOP, it is known status but we don't do anything about it for now
     },
     default: (unknown) => {
@@ -433,7 +433,7 @@ export const mutations = {
     newStatus.fave_num = newStatus.favoritedBy.length
     newStatus.favorited = !!newStatus.favoritedBy.find(({ id }) => currentUser.id === id)
   },
-  addEmojiReactionsBy (state, { id, emojiReactions, currentUser }) {
+  addEmojiReactionsBy (state, { id, emojiReactions }) {
     const status = state.allStatusesObject[id]
     status.emoji_reactions = emojiReactions
   },
@@ -492,22 +492,22 @@ export const mutations = {
 const statuses = {
   state: defaultState(),
   actions: {
-    addNewStatuses ({ rootState, commit, dispatch, state }, { statuses, showImmediately = false, timeline = false, noIdUpdate = false, userId, pagination }) {
+    addNewStatuses ({ rootState, commit }, { statuses, showImmediately = false, timeline = false, noIdUpdate = false, userId, pagination }) {
       commit('addNewStatuses', { statuses, showImmediately, timeline, noIdUpdate, user: rootState.users.currentUser, userId, pagination })
     },
     fetchStatus ({ rootState, dispatch }, id) {
       return rootState.api.backendInteractor.fetchStatus({ id })
         .then((status) => dispatch('addNewStatuses', { statuses: [status] }))
     },
-    fetchStatusSource ({ rootState, dispatch }, status) {
+    fetchStatusSource ({ rootState }, status) {
       return apiService.fetchStatusSource({ id: status.id, credentials: rootState.users.currentUser.credentials })
     },
-    fetchStatusHistory ({ rootState, dispatch }, status) {
+    fetchStatusHistory (_, status) {
       return apiService.fetchStatusHistory({ status })
     },
-    deleteStatus ({ rootState, commit, dispatch }, status) {
+    deleteStatus ({ rootState, commit }, status) {
       apiService.deleteStatus({ id: status.id, credentials: rootState.users.currentUser.credentials })
-        .then((_) => {
+        .then(() => {
           commit('setDeleted', { status })
         })
         .catch((e) => {
@@ -584,10 +584,10 @@ const statuses = {
           commit('setBookmarkedConfirm', { status })
         })
     },
-    queueFlush ({ rootState, commit }, { timeline, id }) {
+    queueFlush ({ commit }, { timeline, id }) {
       commit('queueFlush', { timeline, id })
     },
-    queueFlushAll ({ rootState, commit }) {
+    queueFlushAll ({ commit }) {
       commit('queueFlushAll')
     },
     fetchFavsAndRepeats ({ rootState, commit }, id) {
@@ -605,7 +605,7 @@ const statuses = {
 
       commit('addOwnReaction', { id, emoji, currentUser })
       rootState.api.backendInteractor.reactWithEmoji({ id, emoji }).then(
-        ok => {
+        () => {
           dispatch('fetchEmojiReactionsBy', id)
         }
       )
@@ -616,7 +616,7 @@ const statuses = {
 
       commit('removeOwnReaction', { id, emoji, currentUser })
       rootState.api.backendInteractor.unreactWithEmoji({ id, emoji }).then(
-        ok => {
+        () => {
           dispatch('fetchEmojiReactionsBy', id)
         }
       )

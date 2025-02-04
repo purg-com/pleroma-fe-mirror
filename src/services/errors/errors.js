@@ -48,7 +48,7 @@ export class RegistrationError extends Error {
       } else {
         this.message = error
       }
-    } catch (e) {
+    } catch {
       // can't parse it, so just treat it like a string
       this.message = error
     }

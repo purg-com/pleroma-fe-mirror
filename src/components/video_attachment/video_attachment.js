@@ -24,7 +24,7 @@ const VideoAttachment = {
       }
       this.$emit('play')
     },
-    onPaused (e) {
+    onPaused () {
       this.$emit('pause')
     },
     setHasAudio (e) {

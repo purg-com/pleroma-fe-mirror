@@ -509,8 +509,8 @@ const users = {
 
       const notificationsObject = store.rootState.notifications.idStore
       const relevantNotifications = Object.entries(notificationsObject)
-        .filter(([k, val]) => notificationIds.includes(k))
-        .map(([k, val]) => val)
+        .filter(([k]) => notificationIds.includes(k))
+        .map(([, val]) => val)
 
       // Reconnect users to notifications
       each(relevantNotifications, (notification) => {

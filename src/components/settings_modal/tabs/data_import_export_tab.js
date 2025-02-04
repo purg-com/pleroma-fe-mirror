@@ -72,7 +72,6 @@ const DataImportExportTab = {
         // check is it's a local user
         if (user && user.is_local) {
           // append the instance address
-           
           return user.screen_name + '@' + location.hostname
         }
         return user.screen_name
@@ -80,7 +79,7 @@ const DataImportExportTab = {
     },
     addBackup () {
       this.$store.state.api.backendInteractor.addBackup()
-        .then((res) => {
+        .then(() => {
           this.addedBackup = true
           this.addBackupError = false
         })

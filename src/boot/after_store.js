@@ -79,7 +79,7 @@ const getInstanceConfig = async ({ store }) => {
   }
 }
 
-const getBackendProvidedConfig = async ({ store }) => {
+const getBackendProvidedConfig = async () => {
   try {
     const res = await window.fetch('/api/pleroma/frontend_configurations')
     if (res.ok) {

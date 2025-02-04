@@ -145,7 +145,7 @@ const Attachment = {
         window.open(target.href, '_blank')
       }
     },
-    openModal (event) {
+    openModal () {
       if (this.useModal) {
         this.$emit('setMedia')
         useMediaViewerStore().setCurrentMedia(this.attachment)
@@ -153,7 +153,7 @@ const Attachment = {
         window.open(this.attachment.url)
       }
     },
-    openModalForce (event) {
+    openModalForce () {
       this.$emit('setMedia')
       useMediaViewerStore().setCurrentMedia(this.attachment)
     },

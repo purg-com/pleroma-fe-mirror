@@ -2,7 +2,7 @@ import { useListsStore } from 'src/stores/lists.js'
 import apiService from '../api/api.service.js'
 import { promiseInterval } from '../promise_interval/promise_interval.js'
 
-const fetchAndUpdate = ({ store, credentials }) => {
+const fetchAndUpdate = ({ credentials }) => {
   return apiService.fetchLists({ credentials })
     .then(lists => {
       useListsStore().setLists(lists)

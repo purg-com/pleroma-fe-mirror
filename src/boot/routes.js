@@ -43,7 +43,7 @@ export default (store) => {
     {
       name: 'root',
       path: '/',
-      redirect: _to => {
+      redirect: () => {
         return (store.state.users.currentUser
           ? store.state.instance.redirectRootLogin
           : store.state.instance.redirectRootNoLogin) || '/main/all'

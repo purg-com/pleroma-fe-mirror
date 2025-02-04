@@ -19,19 +19,19 @@ const resetState = (state) => {
 
 // getters
 const getters = {
-  settings: (state, getters) => {
+  settings: (state) => {
     return state.settings
   },
-  requiredPassword: (state, getters, rootState) => {
+  requiredPassword: (state) => {
     return state.strategy === PASSWORD_STRATEGY
   },
-  requiredToken: (state, getters, rootState) => {
+  requiredToken: (state) => {
     return state.strategy === TOKEN_STRATEGY
   },
-  requiredTOTP: (state, getters, rootState) => {
+  requiredTOTP: (state) => {
     return state.strategy === TOTP_STRATEGY
   },
-  requiredRecovery: (state, getters, rootState) => {
+  requiredRecovery: (state) => {
     return state.strategy === RECOVERY_STRATEGY
   }
 }
@@ -67,10 +67,10 @@ const mutations = {
 
 // actions
 const actions = {
-   
-  async login ({ state, dispatch, commit }, { access_token }) {
-    commit('setToken', access_token, { root: true })
-    await dispatch('loginUser', access_token, { root: true })
+
+  async login ({ state, dispatch, commit }, { access_token: accessToken }) {
+    commit('setToken', accessToken, { root: true })
+    await dispatch('loginUser', accessToken, { root: true })
     resetState(state)
   }
 }

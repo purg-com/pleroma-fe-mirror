@@ -184,7 +184,7 @@ class SwipeAndClickGesture {
     }
   }
 
-  click (event) {
+  click () {
     if (!this._preventNextClick) {
       this.swipelessClickCallback()
     }

@@ -241,7 +241,7 @@ const Timeline = {
       // statuses will be nearby statuses before and after it
       this.virtualScrollIndex = approxIndex
     },
-    scrollLoad (e) {
+    scrollLoad () {
       const bodyBRect = document.body.getBoundingClientRect()
       const height = Math.max(bodyBRect.height, -(bodyBRect.y))
       if (this.timeline.loading === false &&

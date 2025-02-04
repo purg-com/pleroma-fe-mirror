@@ -280,7 +280,7 @@ const Popover = {
         this.updateStyles()
       }, 1)
     },
-    onMouseenter (e) {
+    onMouseenter () {
       if (this.trigger === 'hover') {
         this.lockReEntry = false
         clearTimeout(this.graceTimeout)
@@ -288,12 +288,12 @@ const Popover = {
         this.showPopover()
       }
     },
-    onMouseleave (e) {
+    onMouseleave () {
       if (this.trigger === 'hover' && this.childrenShown.size === 0) {
         this.graceTimeout = setTimeout(() => this.hidePopover(), 1)
       }
     },
-    onMouseenterContent (e) {
+    onMouseenterContent () {
       if (this.trigger === 'hover' && !this.lockReEntry) {
         this.lockReEntry = true
         clearTimeout(this.graceTimeout)
@@ -301,12 +301,12 @@ const Popover = {
         this.showPopover()
       }
     },
-    onMouseleaveContent (e) {
+    onMouseleaveContent () {
       if (this.trigger === 'hover' && this.childrenShown.size === 0) {
         this.graceTimeout = setTimeout(() => this.hidePopover(), 1)
       }
     },
-    onClick (e) {
+    onClick () {
       if (this.trigger === 'click') {
         if (this.hidden) {
           this.showPopover()
@@ -324,10 +324,10 @@ const Popover = {
       this.hidePopover()
       if (this.parentPopover) this.parentPopover.onClickOutside(e)
     },
-    onScroll (e) {
+    onScroll () {
       this.updateStyles()
     },
-    onResize (e) {
+    onResize () {
       const content = this.$refs.content
       if (!content) return
       if (this.oldSize.width !== content.offsetWidth || this.oldSize.height !== content.offsetHeight) {

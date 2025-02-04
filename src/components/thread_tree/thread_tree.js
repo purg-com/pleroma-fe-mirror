@@ -81,7 +81,7 @@ const ThreadTree = {
     toggleCurrentProp (name) {
       this.toggleStatusContentProperty(this.status.id, name)
     },
-    setCurrentProp (name, newVal) {
+    setCurrentProp (name) {
       this.setStatusContentProperty(this.status.id, name)
     }
   }

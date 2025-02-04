@@ -427,7 +427,7 @@ export const useInterfaceStore = defineStore('interface', {
             const cleanDirectives = Object.fromEntries(
               Object
                 .entries(x.directives)
-                .filter(([k, v]) => k)
+                .filter(([k]) => k)
             )
 
             return { name: x.variant, ...cleanDirectives }

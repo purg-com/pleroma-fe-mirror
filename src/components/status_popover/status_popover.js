@@ -34,8 +34,8 @@ const StatusPopover = {
           return
         }
         this.$store.dispatch('fetchStatus', this.statusId)
-          .then(data => (this.error = false))
-          .catch(e => (this.error = true))
+          .then(() => (this.error = false))
+          .catch(() => (this.error = true))
       }
     }
   },
