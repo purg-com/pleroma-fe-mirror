@@ -34,26 +34,18 @@ exports.cssLoaders = function (options) {
       use: generateLoaders(['css-loader', 'postcss-loader', 'less-loader']),
     },
     {
-      test: /\.sass$/,
+      test: /\.scss$/,
       use: generateLoaders([
         'css-loader',
         'postcss-loader',
         {
           loader: 'sass-loader',
           options: {
-            indentedSyntax: true
+            api: 'modern'
           }
         }
       ])
-    },
-    {
-      test: /\.scss$/,
-      use: generateLoaders(['css-loader', 'postcss-loader', 'sass-loader'])
-    },
-    {
-      test: /\.styl(us)?$/,
-      use: generateLoaders(['css-loader', 'postcss-loader', 'stylus-loader']),
-    },
+    }
   ]
 }
 

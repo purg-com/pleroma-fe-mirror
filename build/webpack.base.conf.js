@@ -108,8 +108,9 @@ module.exports = {
       filename: 'sw-pleroma.js'
     }),
     new ESLintPlugin({
-      extensions: ['js', 'vue'],
-      formatter: require('eslint-formatter-friendly')
+      formatter: require('eslint-formatter-friendly'),
+      overrideConfigFile: path.resolve(__dirname, '..', 'eslint.config.mjs'),
+      configType: 'flat'
     }),
     new StylelintPlugin({}),
     new VueLoaderPlugin(),
