@@ -170,7 +170,7 @@ const SettingsModal = {
   },
   computed: {
     ...mapState(useInterfaceStore, {
-      temporaryChangesTimeoutId: store => store.layoutType === 'mobile',
+      temporaryChangesTimeoutId: store => store.temporaryChangesTimeoutId,
       currentSaveStateNotice: store => store.settings.currentSaveStateNotice,
       modalActivated: store => store.settingsModalState !== 'hidden',
       modalMode: store => store.settingsModalMode,

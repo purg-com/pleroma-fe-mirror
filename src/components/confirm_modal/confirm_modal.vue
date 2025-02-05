@@ -1,8 +1,8 @@
 <template>
-  <dialog-modal
+  <DialogModal
     v-body-scroll-lock="true"
     class="confirm-modal"
-    :on-cancel="onCancel"
+    @cancel="onCancel"
   >
     <template #header>
       <span v-text="title" />
@@ -23,7 +23,7 @@
         v-text="cancelText"
       />
     </template>
-  </dialog-modal>
+  </DialogModal>
 </template>
 
 <script src="./confirm_modal.js"></script>
