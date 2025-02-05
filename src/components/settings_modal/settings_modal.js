@@ -7,7 +7,7 @@ import Checkbox from 'src/components/checkbox/checkbox.vue'
 import ConfirmModal from 'src/components/confirm_modal/confirm_modal.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { cloneDeep, isEqual } from 'lodash'
-import { mapState as mapPiniaState } from 'pinia'
+import { mapState, mapActions } from 'pinia'
 import {
   newImporter,
   newExporter
@@ -165,10 +165,11 @@ const SettingsModal = {
     },
     pushAdminDraft () {
       this.$store.dispatch('pushAdminDraft')
-    }
+    },
+    ...mapActions(useInterfaceStore, ['temporaryChangesRevert', 'temporaryChangesConfirm'])
   },
   computed: {
-    ...mapPiniaState(useInterfaceStore, {
+    ...mapState(useInterfaceStore, {
       temporaryChangesTimeoutId: store => store.layoutType === 'mobile',
       currentSaveStateNotice: store => store.settings.currentSaveStateNotice,
       modalActivated: store => store.settingsModalState !== 'hidden',
