@@ -1,3 +1,4 @@
+import { useEditStatusStore } from 'src/stores/editStatus.js'
 const PRIVATE_SCOPES = new Set(['private', 'direct'])
 const PUBLIC_SCOPES = new Set(['public', 'unlisted'])
 export const BUTTONS = [{
@@ -151,7 +152,7 @@ export const BUTTONS = [{
   },
   action ({ dispatch, status }) {
     return dispatch('fetchStatusSource', { id: status.id })
-      .then(data => dispatch('openEditStatusModal', {
+      .then(data => useEditStatusStore().openEditStatusModal({
         statusId: status.id,
         subject: data.spoiler_text,
         statusText: data.text,
