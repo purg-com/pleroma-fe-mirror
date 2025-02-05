@@ -93,31 +93,27 @@ export const generateTheme = (inputRuleset, callbacks, debug) => {
 
 export const tryLoadCache = async () => {
   console.info('Trying to load compiled theme data from cache')
-  const data = await localforage.getItem('pleromafe-theme-cache')
-  if (!data) return null
-  let cache
+  const cache = await localforage.getItem('pleromafe-theme-cache')
+  if (!cache) return null
   try {
-    const inflated = pako.inflate(data)
-    const decoded = new TextDecoder().decode(inflated)
-    cache = JSON.parse(decoded)
-    console.info(`Loaded theme from cache, compressed=${Math.ceil(data.length / 1024)}kiB size=${Math.ceil(inflated.length / 1024)}kiB`)
+    if (cache.engineChecksum === getEngineChecksum()) {
+      const eagerStyles = createStyleSheet(EAGER_STYLE_ID)
+      const lazyStyles = createStyleSheet(LAZY_STYLE_ID)
+
+      cache.data[0].forEach(rule => eagerStyles.sheet.insertRule(rule, 'index-max'))
+      cache.data[1].forEach(rule => lazyStyles.sheet.insertRule(rule, 'index-max'))
+
+      adoptStyleSheets([eagerStyles, lazyStyles])
+
+      console.info(`Loaded theme from cache`)
+      return true
+    } else {
+      console.warn('Engine checksum doesn\'t match, cache not usable, clearing')
+      localStorage.removeItem('pleroma-fe-theme-cache')
+    }
   } catch (e) {
-    console.error('Failed to decode theme cache:', e)
+    console.error('Failed to load theme cache:', e)
     return false
-  }
-  if (cache.engineChecksum === getEngineChecksum()) {
-    const eagerStyles = createStyleSheet(EAGER_STYLE_ID)
-    const lazyStyles = createStyleSheet(LAZY_STYLE_ID)
-
-    cache.data[0].forEach(rule => eagerStyles.sheet.insertRule(rule, 'index-max'))
-    cache.data[1].forEach(rule => lazyStyles.sheet.insertRule(rule, 'index-max'))
-
-    adoptStyleSheets([eagerStyles, lazyStyles])
-
-    return true
-  } else {
-    console.warn('Engine checksum doesn\'t match, cache not usable, clearing')
-    localStorage.removeItem('pleroma-fe-theme-cache')
   }
 }
 
