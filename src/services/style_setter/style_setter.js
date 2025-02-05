@@ -140,6 +140,7 @@ export const applyTheme = (
     }
   }
 
+  let cache
   const { lazyProcessFunc } = generateTheme(
     input,
     {
@@ -152,16 +153,13 @@ export const applyTheme = (
       },
       onEagerFinished () {
         adoptStyleSheets([eagerStyles])
+        cache = { engineChecksum: getEngineChecksum(), data: [eagerStyles.rules, lazyStyles.rules] }
+        localforage.setItem('pleromafe-theme-cache', cache)
         onEagerFinish()
       },
       onLazyFinished () {
         adoptStyleSheets([eagerStyles, lazyStyles])
-        const cache = { engineChecksum: getEngineChecksum(), data: [eagerStyles.rules, lazyStyles.rules] }
         onFinish(cache)
-        const compress = (js) => {
-          return pako.deflate(JSON.stringify(js))
-        }
-        localforage.setItem('pleromafe-theme-cache', compress(cache))
       }
     },
     debug
