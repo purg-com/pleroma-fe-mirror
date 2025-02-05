@@ -198,15 +198,68 @@
         :href="attachment.url"
         @click.stop.prevent="openModal"
       >
-        <audio
-          v-if="type === 'audio'"
-          :src="attachment.url"
-          :alt="attachment.description"
-          :title="attachment.description"
-          controls
-          @play="$emit('play')"
-          @pause="$emit('pause')"
-        />
+        <div 
+          ref="audioContainer"
+          class="audio-player"
+        >
+          <canvas
+            ref="visualizerCanvas"
+            class="audio-visualizer"
+          />
+          
+          <div class="audio-controls">
+            <button
+              type="button"
+              class="button-unstyled play-button"
+              :aria-label="isPlaying ? 'Pause' : 'Play'"
+              @click="togglePlay"
+            >
+              <FAIcon :icon="isPlaying ? 'pause-circle' : 'play-circle'" />
+            </button>
+
+            <div class="audio-info">
+              <div class="audio-title">
+                {{ attachment.description || 'Audio attachment' }}
+              </div>
+              <div class="progress-bar" @click="seek">
+                <div 
+                  class="progress"
+                  :style="{ width: ((currentTime / duration) * 100) + '%' }"
+                />
+              </div>
+              <div class="audio-time-and-volume">
+                <div class="audio-time">
+                  {{ formatTime(currentTime) }} / {{ formatTime(duration) }}
+                </div>
+                <div class="volume-control">
+                  <FAIcon :icon="volume > 0 ? 'volume-up' : 'volume-mute'" />
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    :value="volume"
+                    class="volume-slider"
+                    @input="handleVolumeChange"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <audio
+            ref="audio"
+            :src="attachment.url"
+            crossorigin="anonymous"
+            :title="attachment.description"
+            class="hidden"
+            @timeupdate="onAudioTimeUpdate"
+            @durationchange="onAudioDurationChange"
+            @ended="onAudioEnded"
+            @play="$emit('play')"
+            @pause="$emit('pause')"
+          />
+        </div>
       </span>
 
       <div

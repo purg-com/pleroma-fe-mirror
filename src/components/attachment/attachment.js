@@ -11,12 +11,15 @@ import {
   faImage,
   faVideo,
   faPlayCircle,
+  faPauseCircle,
   faTimes,
   faStop,
   faSearchPlus,
   faTrashAlt,
   faPencilAlt,
-  faAlignRight
+  faAlignRight,
+  faVolumeUp,
+  faVolumeMute
 } from '@fortawesome/free-solid-svg-icons'
 import { useMediaViewerStore } from 'src/stores/media_viewer'
 
@@ -26,12 +29,15 @@ library.add(
   faImage,
   faVideo,
   faPlayCircle,
+  faPauseCircle,
   faTimes,
   faStop,
   faSearchPlus,
   faTrashAlt,
   faPencilAlt,
-  faAlignRight
+  faAlignRight,
+  faVolumeUp,
+  faVolumeMute
 )
 
 const Attachment = {
@@ -59,7 +65,17 @@ const Attachment = {
       modalOpen: false,
       showHidden: false,
       flashLoaded: false,
-      showDescription: false
+      showDescription: false,
+      // Audio player state
+      isPlaying: false,
+      currentTime: 0,
+      duration: 0,
+      volume: 1,
+      audioContext: null,
+      analyser: null,
+      audioSource: null,
+      animationFrame: null,
+      visualizerCanvas: null
     }
   },
   components: {
@@ -205,6 +221,143 @@ const Attachment = {
       const width = image.naturalWidth
       const height = image.naturalHeight
       this.$emit('naturalSizeLoad', { id: this.attachment.id, width, height })
+    },
+    formatTime (seconds) {
+      const mins = Math.floor(seconds / 60)
+      const secs = Math.floor(seconds % 60)
+      return `${mins}:${secs.toString().padStart(2, '0')}`
+    },
+    togglePlay () {
+      const audio = this.$refs.audio
+      if (!audio) return
+
+      if (this.isPlaying) {
+        audio.pause()
+        this.isPlaying = false
+      } else {
+        this.isPlaying = true
+        audio.play()
+        this.setupAudioVisualization()
+      }
+    },
+    handleVolumeChange (event) {
+      const audio = this.$refs.audio
+      if (!audio) return
+
+      this.volume = parseFloat(event.target.value)
+      audio.volume = this.volume
+    },
+    updateCanvasSize () {
+      const canvas = this.$refs.visualizerCanvas
+      const container = this.$refs.audioContainer
+      if (canvas && container) {
+        canvas.width = container.clientWidth
+        canvas.height = container.clientHeight
+      }
+    },
+    setupAudioVisualization () {
+      const audio = this.$refs.audio
+      const canvas = this.$refs.visualizerCanvas
+      if (!audio || !canvas) return
+
+      try {
+        if (!this.audioContext) {
+          this.audioContext = new AudioContext()
+          this.analyser = this.audioContext.createAnalyser()
+          
+          try {
+            this.audioSource = this.audioContext.createMediaElementSource(audio)
+            this.audioSource.connect(this.analyser)
+            this.analyser.connect(this.audioContext.destination)
+            
+            this.analyser.fftSize = 256
+          } catch (error) {
+            console.warn('Audio visualization setup failed:', error)
+            this.cleanupVisualization()
+            return
+          }
+        } else {
+          this.audioContext.resume()
+        }
+        
+        // Update canvas size
+        this.updateCanvasSize()
+        
+        const bufferLength = this.analyser.frequencyBinCount
+        const dataArray = new Uint8Array(bufferLength)
+        
+        const draw = () => {
+          if (!canvas || !this.isPlaying) return
+          
+          const ctx = canvas.getContext('2d')
+          if (!ctx) return
+          
+          const width = canvas.width
+          const height = canvas.height
+          
+          this.analyser.getByteFrequencyData(dataArray)
+          
+          ctx.clearRect(0, 0, width, height)
+          
+          const barWidth = Math.ceil(width / bufferLength)
+          const totalWidth = barWidth * bufferLength
+          const startX = (width - totalWidth) / 2  // Center the visualization
+          let x = startX
+          
+          for (let i = 0; i < bufferLength; i++) {
+            const barHeight = (dataArray[i] / 255) * height
+            
+            ctx.fillStyle = getComputedStyle(canvas).getPropertyValue('--faintText')
+            ctx.globalAlpha = Math.min(0.5, (barHeight / height) + 0.1)
+            
+            ctx.fillRect(x, height - barHeight, barWidth - 1, barHeight)
+            x += barWidth
+          }
+          
+          this.animationFrame = requestAnimationFrame(draw)
+        }
+        
+        draw()
+      } catch (error) {
+        console.error('Audio visualization setup failed:', error)
+      }
+    },
+    cleanupVisualization () {
+      if (this.animationFrame) {
+        cancelAnimationFrame(this.animationFrame)
+      }
+      if (this.audioContext) {
+        this.audioContext.suspend()
+      }
+    },
+    onAudioTimeUpdate (event) {
+      this.currentTime = event.target.currentTime
+    },
+    onAudioDurationChange (event) {
+      this.duration = event.target.duration
+    },
+    onAudioEnded () {
+      this.isPlaying = false
+      this.cleanupVisualization()
+    },
+    seek (event) {
+      const audio = this.$refs.audio
+      if (!audio) return
+      
+      const rect = event.currentTarget.getBoundingClientRect()
+      const x = event.clientX - rect.left
+      const percentage = x / rect.width
+      audio.currentTime = percentage * this.duration
+    }
+  },
+  mounted () {
+    if (this.$refs.audioContainer) {
+      const resizeObserver = new ResizeObserver(this.updateCanvasSize)
+      resizeObserver.observe(this.$refs.audioContainer)
+      
+      return () => {
+        resizeObserver.disconnect()
+      }
     }
   }
 }
