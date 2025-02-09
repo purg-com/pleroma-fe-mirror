@@ -1,4 +1,14 @@
-import { humanizeErrors } from '../../modules/errors'
+import { capitalize } from 'lodash'
+
+function humanizeErrors (errors) {
+  return Object.entries(errors).reduce((errs, [k, val]) => {
+    const message = val.reduce((acc, message) => {
+      const key = capitalize(k.replace(/_/g, ' '))
+      return acc + [key, message].join(' ') + '. '
+    }, '')
+    return [...errs, message]
+  }, [])
+}
 
 export function StatusCodeError (statusCode, body, options, response) {
   this.name = 'StatusCodeError'
