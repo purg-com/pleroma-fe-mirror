@@ -54,6 +54,7 @@ const defaultState = {
   defaultAvatar: '/images/avi.png',
   defaultBanner: '/images/banner.png',
   background: '/static/aurora_borealis.jpg',
+  embeddedToS: true,
   collapseMessageWithSubject: false,
   greentext: false,
   useAtIcon: false,

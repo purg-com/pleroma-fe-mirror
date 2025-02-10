@@ -34,7 +34,7 @@
       </div>
       <div
         v-else
-        class="emtpy-chat-list-alert"
+        class="empty-chat-list-alert"
       >
         <span>{{ $t('chats.empty_chat_list_placeholder') }}</span>
       </div>
@@ -50,7 +50,7 @@
   margin-bottom: 0;
 }
 
-.emtpy-chat-list-alert {
+.empty-chat-list-alert {
   padding: 3em;
   font-size: 1.2em;
   display: flex;

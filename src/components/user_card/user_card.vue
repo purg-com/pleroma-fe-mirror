@@ -275,7 +275,10 @@
         />
       </div>
     </div>
-    <div v-if="!hideBio">
+    <div
+      v-if="!hideBio"
+      class="user-bio"
+    >
       <div
         v-if="!mergedConfig.hideUserStats && switcher"
         class="user-counts"
