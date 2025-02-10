@@ -1,7 +1,7 @@
 <template>
   <div class="staff-panel">
     <div class="panel panel-default base01-background">
-      <div class="panel-heading timeline-heading base02-background">
+      <div class="panel-heading timeline-heading base02-background -sticky">
         <div class="title">
           {{ $t("about.staff") }}
         </div>
@@ -28,8 +28,7 @@
 
 <style lang="scss">
 .staff-group {
-  padding-left: 1em;
-  padding-top: 1em;
+  padding: 1em;
 
   .basic-user-card {
     padding-left: 0;

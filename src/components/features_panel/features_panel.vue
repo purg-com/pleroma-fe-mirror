@@ -1,12 +1,12 @@
 <template>
   <div class="features-panel">
     <div class="panel panel-default base01-background">
-      <div class="panel-heading timeline-heading base02-background base04">
+      <div class="panel-heading timeline-heading base02-background base04 -sticky">
         <h1 class="title">
           {{ $t('features_panel.title') }}
         </h1>
       </div>
-      <div class="panel-body features-panel">
+      <div class="panel-body">
         <ul>
           <li v-if="shout">
             {{ $t('features_panel.shout') }}

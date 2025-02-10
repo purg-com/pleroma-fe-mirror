@@ -4,6 +4,7 @@ import { mapActions, mapState } from 'vuex'
 import InterfaceLanguageSwitcher from '../interface_language_switcher/interface_language_switcher.vue'
 import localeService from '../../services/locale/locale.service.js'
 import { DAY } from 'src/services/date_utils/date_utils.js'
+import TermsOfServicePanel from '../terms_of_service_panel/terms_of_service_panel.vue'
 
 const registration = {
   setup () { return { v$: useVuelidate() } },
@@ -21,7 +22,8 @@ const registration = {
     captcha: {}
   }),
   components: {
-    InterfaceLanguageSwitcher
+    InterfaceLanguageSwitcher,
+    TermsOfServicePanel
   },
   validations () {
     return {
@@ -86,6 +88,7 @@ const registration = {
       signUpNotice: (state) => state.users.signUpNotice,
       hasSignUpNotice: (state) => !!state.users.signUpNotice.message,
       termsOfService: (state) => state.instance.tos,
+      embeddedToS: (state) => state.instance.embeddedToS,
       accountActivationRequired: (state) => state.instance.accountActivationRequired,
       accountApprovalRequired: (state) => state.instance.accountApprovalRequired,
       birthdayRequired: (state) => state.instance.birthdayRequired,

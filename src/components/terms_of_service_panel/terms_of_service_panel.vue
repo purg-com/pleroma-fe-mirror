@@ -1,13 +1,21 @@
 <template>
-  <div>
+  <div class="terms-of-service-panel">
     <div class="panel panel-default">
+      <div
+        v-if="!embedded"
+        class="panel-heading -sticky"
+      >
+        <div class="title">
+          {{ $t("about.terms") }}
+        </div>
+      </div>
       <div class="panel-body">
         <!-- eslint-disable vue/no-v-html -->
         <div
           class="tos-content"
           v-html="content"
         />
-      <!-- eslint-enable vue/no-v-html -->
+        <!-- eslint-enable vue/no-v-html -->
       </div>
     </div>
   </div>
@@ -19,4 +27,5 @@
 .tos-content {
   margin: 1em;
 }
+
 </style>
