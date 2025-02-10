@@ -11,7 +11,7 @@ import RichContent from 'src/components/rich_content/rich_content.jsx'
 import MuteConfirm from '../confirm_modal/mute_confirm.vue'
 import generateProfileLink from 'src/services/user_profile_link_generator/user_profile_link_generator'
 import { mapGetters } from 'vuex'
-import { usePostStatusStore } from 'src/stores/postStatus'
+import { usePostStatusStore } from 'src/stores/post_status'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faBell,

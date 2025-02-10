@@ -1,7 +1,7 @@
 import PostStatusForm from '../post_status_form/post_status_form.vue'
 import Modal from '../modal/modal.vue'
 import get from 'lodash/get'
-import { usePostStatusStore } from 'src/stores/postStatus'
+import { usePostStatusStore } from 'src/stores/post_status'
 
 const PostStatusModal = {
   components: {

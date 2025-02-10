@@ -12,6 +12,9 @@ export const usePostStatusStore = defineStore('postStatus', {
     },
     closePostStatusModal () {
       this.modalActivated = false
+    },
+    resetPostStatusModal () {
+      this.params = null
     }
   }
 })
