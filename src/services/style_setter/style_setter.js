@@ -150,15 +150,14 @@ export const applyTheme = (
       onEagerFinished () {
         adoptStyleSheets([eagerStyles])
         onEagerFinish()
+        console.info('Eager part of theme finished, waiting for lazy part to finish to store cache')
       },
       onLazyFinished () {
         adoptStyleSheets([eagerStyles, lazyStyles])
         const cache = { engineChecksum: getEngineChecksum(), data: [eagerStyles.rules, lazyStyles.rules] }
         onFinish(cache)
-        const compress = (js) => {
-          return pako.deflate(JSON.stringify(js))
-        }
-        localforage.setItem('pleromafe-theme-cache', compress(cache))
+        localforage.setItem('pleromafe-theme-cache', cache)
+        console.info('Theme cache stored')
       }
     },
     debug
