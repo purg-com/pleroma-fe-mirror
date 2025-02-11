@@ -52,10 +52,10 @@
     "vuex": "4.1.0"
   },
   "devDependencies": {
-    "@babel/core": "7.26.7",
-    "@babel/eslint-parser": "7.26.5",
-    "@babel/plugin-transform-runtime": "7.25.9",
-    "@babel/preset-env": "7.26.7",
+    "@babel/core": "7.26.8",
+    "@babel/eslint-parser": "7.26.8",
+    "@babel/plugin-transform-runtime": "7.26.8",
+    "@babel/preset-env": "7.26.8",
     "@babel/register": "7.25.9",
     "@intlify/vue-i18n-loader": "5.0.1",
     "@ungap/event-target": "0.2.4",
