@@ -567,7 +567,13 @@ export const init = ({
       if (!liteMode && combination.state.indexOf('hover') >= 0) {
         combination.lazy = true
       }
-      if (extraCompileComponents.has(component.name)) {
+
+      if (
+        parent?.component !== 'Root' &&
+          !virtualComponents.has(component.name) &&
+          !transparentComponents.has(component.name) &&
+          extraCompileComponents.has(component.name)
+      ) {
         combination.lazy = true
       }
 
