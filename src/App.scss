@@ -498,6 +498,8 @@ nav {
   box-sizing: content-box;
   color: inherit;
 
+  --shadow: none;
+
   &.-link {
     /* stylelint-disable-next-line declaration-no-important */
     color: var(--link) !important;

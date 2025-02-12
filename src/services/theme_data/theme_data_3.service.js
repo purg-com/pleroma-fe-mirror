@@ -567,6 +567,9 @@ export const init = ({
       if (!liteMode && combination.state.indexOf('hover') >= 0) {
         combination.lazy = true
       }
+      if (extraCompileComponents.has(component.name)) {
+        combination.lazy = true
+      }
 
       combinations.push(combination)
 
