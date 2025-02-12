@@ -269,14 +269,17 @@
             {{ $t('settings.image_compression') }}
           </BooleanSetting>
         </li>
-        <li>
-          <BooleanSetting
-            path="alwaysUseJpeg"
-            expert="1"
-          >
-            {{ $t('settings.always_use_jpeg') }}
-          </BooleanSetting>
-        </li>
+        <ul class="setting-list suboptions">
+          <li>
+            <BooleanSetting
+              path="alwaysUseJpeg"
+              expert="1"
+              parent-path="imageCompression"
+            >
+              {{ $t('settings.always_use_jpeg') }}
+            </BooleanSetting>
+          </li>
+        </ul>
         <li>
           <BooleanSetting
             path="useContainFit"
