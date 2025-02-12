@@ -334,22 +334,26 @@
                 class="dropdown-menu"
                 role="menu"
               >
-                <button
-                  v-if="!hideDraft || !disableDraft"
+                <div
                   class="menu-item dropdown-item"
-                  role="menu"
-                  :disabled="!safeToSaveDraft && saveable"
                   :class="{ disabled: !safeToSaveDraft }"
-                  @click.prevent="saveDraft"
-                  @click="close"
                 >
-                  <template v-if="closeable">
-                    {{ $t('post_status.save_to_drafts_and_close_button') }}
-                  </template>
-                  <template v-else>
-                    {{ $t('post_status.save_to_drafts_button') }}
-                  </template>
-                </button>
+                  <button
+                    v-if="!hideDraft || !disableDraft"
+                    class="main-button"
+                    role="menu"
+                    :disabled="!safeToSaveDraft"
+                    @click.prevent="saveDraft"
+                    @click="close"
+                  >
+                    <template v-if="closeable">
+                      {{ $t('post_status.save_to_drafts_and_close_button') }}
+                    </template>
+                    <template v-else>
+                      {{ $t('post_status.save_to_drafts_button') }}
+                    </template>
+                  </button>
+                </div>
               </div>
             </template>
           </Popover>
