@@ -85,6 +85,8 @@ export default {
     width: 1.2em;
     height: 1.2em;
     box-shadow: none;
+
+    --_shadow: var(--shadow);
   }
 
   &-indicator::before {
@@ -96,7 +98,7 @@ export default {
     width: 1.1em;
     height: 1.1em;
     border-radius: var(--roundness);
-    box-shadow: var(--shadow);
+    box-shadow: var(--_shadow);
     background-color: var(--background);
     vertical-align: top;
     text-align: center;
