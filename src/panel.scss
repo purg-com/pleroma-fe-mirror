@@ -2,6 +2,7 @@
 .panel {
   --__panel-background: var(--background);
   --__panel-backdrop-filter: var(--backdrop-filter);
+  --_shadow: var(--shadow);
 
   .tab-switcher .tabs {
     background: var(--__panel-background);
@@ -29,7 +30,7 @@
     left: 0;
     right: 0;
     z-index: 5;
-    box-shadow: var(--shadow);
+    box-shadow: var(--_shadow);
     pointer-events: none;
   }
 }
@@ -154,11 +155,13 @@
     linear-gradient(to bottom, var(--background), var(--background)),
     linear-gradient(to bottom, var(--__panel-background), var(--__panel-background));
 
+  --_shadow: var(--shadow);
+
   &::after {
     background-color: var(--background);
     z-index: -2;
     border-radius: var(--roundness) var(--roundness) 0 0;
-    box-shadow: var(--shadow);
+    box-shadow: var(--_shadow);
   }
 
   &:not(.-flexible-height) {

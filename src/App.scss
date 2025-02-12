@@ -1096,3 +1096,8 @@ option {
     }
   }
 }
+
+@property --shadow {
+  syntax: "*";
+  inherits: false;
+}
