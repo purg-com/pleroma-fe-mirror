@@ -33,9 +33,11 @@ const components = {
   Icon: null,
   Border: null,
   PanelHeader: null,
+  Attachment: null,
   Panel: null,
   Chat: null,
-  ChatMessage: null
+  ChatMessage: null,
+  Button: null
 }
 
 export const findShadow = (shadows, { dynamicVars, staticVars }) => {
