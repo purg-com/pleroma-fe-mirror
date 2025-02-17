@@ -112,9 +112,9 @@ export const BUTTONS = [{
   },
   action ({ status, dispatch }) {
     if (status.pinned) {
-      return dispatch('unpinStatus', { id: status.id })
+      return dispatch('unpinStatus', status.id)
     } else {
-      return dispatch('pinStatus', { id: status.id })
+      return dispatch('pinStatus', status.id)
     }
   }
 }, {
