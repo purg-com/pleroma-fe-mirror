@@ -53,7 +53,8 @@ Object.keys(proxyTable).forEach(function (context) {
   if (typeof options === 'string') {
     options = { target: options }
   }
-  app.use(proxyMiddleware.createProxyMiddleware(context, options))
+  options.pathFilter = context
+  app.use(proxyMiddleware.createProxyMiddleware(options))
 })
 
 // handle fallback for HTML5 history API
