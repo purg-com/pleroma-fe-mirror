@@ -4,7 +4,7 @@
     class="mrf-transparency-panel"
   >
     <div class="panel panel-default base01-background">
-      <div class="panel-heading timeline-heading base02-background">
+      <div class="panel-heading timeline-heading base02-background -sticky">
         <div class="title">
           {{ $t("about.mrf.federation") }}
         </div>

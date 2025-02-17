@@ -30,7 +30,8 @@
         "media_nsfw_desc": "This instance forces media to be set sensitive in posts on the following instances:"
       }
     },
-    "staff": "Staff"
+    "staff": "Staff",
+    "terms": "Terms of Service"
   },
   "announcements": {
     "page_header": "Announcements",
