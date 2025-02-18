@@ -63,8 +63,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../../mixins";
-
 .checkbox {
   position: relative;
   display: inline-block;

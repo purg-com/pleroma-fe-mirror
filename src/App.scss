@@ -1,6 +1,6 @@
 // stylelint-disable rscss/class-format
 /* stylelint-disable no-descending-specificity */
-@import "./panel";
+@use "panel";
 
 :root {
   --status-margin: 0.75em;

@@ -47,6 +47,4 @@
 
 <script src="./chat_list_item.js"></script>
 
-<style lang="scss">
-@import "./chat_list_item";
-</style>
+<style src="./chat_list_item.scss" lang="scss" />
