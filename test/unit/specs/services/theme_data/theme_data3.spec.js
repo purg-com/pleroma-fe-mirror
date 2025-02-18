@@ -1,4 +1,3 @@
-// import { topoSort } from 'src/services/theme_data/theme_data.service.js'
 import {
   getAllPossibleCombinations
 } from 'src/services/theme_data/iss_utils.js'
@@ -120,6 +119,7 @@ describe('Theme Data 3', () => {
             opacity: 0.5
           }
         }],
+        onlyNormalState: true,
         ultimateBackgroundColor: '#DEADAF'
       })
 
@@ -142,9 +142,9 @@ describe('Theme Data 3', () => {
 
       */
 
-      expect(panelRule).to.have.nested.deep.property('dynamicVars.stacked.r').that.is.closeTo(88.8, 0.01)
-      expect(panelRule).to.have.nested.deep.property('dynamicVars.stacked.g').that.is.closeTo(133.2, 0.01)
-      expect(panelRule).to.have.nested.deep.property('dynamicVars.stacked.b').that.is.closeTo(134, 0.01)
+      expect(panelRule).to.have.nested.deep.property('dynamicVars.stacked.r').that.is.closeTo(111, 0.01)
+      expect(panelRule).to.have.nested.deep.property('dynamicVars.stacked.g').that.is.closeTo(150.5, 0.01)
+      expect(panelRule).to.have.nested.deep.property('dynamicVars.stacked.b').that.is.closeTo(151.5, 0.01)
     })
   })
 })

@@ -154,12 +154,12 @@ componentsContext.keys().forEach(key => {
   }
   components[component.name] = component
 })
+
 Object.keys(components).forEach(key => {
   if (key === 'Root') return
   components.Root.validInnerComponents = components.Root.validInnerComponents || []
   components.Root.validInnerComponents.push(key)
 })
-
 
 Object.keys(components).forEach(key => {
   const component = components[key]
@@ -571,6 +571,7 @@ export const init = ({
       }
 
       if (
+        !liteMode &&
         parent?.component !== 'Root' &&
           !virtualComponents.has(component.name) &&
           !transparentComponents.has(component.name) &&
