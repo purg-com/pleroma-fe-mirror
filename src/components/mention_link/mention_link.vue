@@ -34,12 +34,7 @@
             :user="user"
           /><span
             class="shortName"
-          ><FAIcon
-            v-if="useAtIcon"
-            size="sm"
-            icon="at"
-            class="at"
-          />{{ !useAtIcon ? '@' : '' }}<span
+          >@<span
             class="userName"
             v-html="userName"
           /><span
