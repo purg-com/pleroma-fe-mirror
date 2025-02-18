@@ -376,6 +376,14 @@ const PostStatusForm = {
         this.newStatus.hasPoll
       ) && this.saveable
     },
+    hasEmptyDraft () {
+      return this.newStatus.id && !(
+        this.newStatus.status ||
+          this.newStatus.spoilerText ||
+          this.newStatus.files?.length ||
+          this.newStatus.hasPoll
+      )
+    },
     ...mapGetters(['mergedConfig']),
     ...mapState(useInterfaceStore, {
       mobileLayout: store => store.mobileLayout
@@ -784,7 +792,7 @@ const PostStatusForm = {
                 this.$emit('draft-done')
               }
             })
-        } else if (this.newStatus.id) {
+        } else if (this.hasEmptyDraft) {
           // There is a draft, but there is nothing in it, clear it
           return this.abandonDraft()
             .then(() => {

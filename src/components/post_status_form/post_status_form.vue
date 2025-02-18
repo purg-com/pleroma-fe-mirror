@@ -322,6 +322,7 @@
             trigger="click"
             placement="bottom"
             :offset="{ y: 5 }"
+            :trigger-attrs="{ 'aria-label': $t('post_status.more_post_actions') }"
           >
             <template #trigger>
               <FAIcon

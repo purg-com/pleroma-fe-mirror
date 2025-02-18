@@ -323,7 +323,8 @@
     "auto_save_saved": "Saved.",
     "auto_save_saving": "Saving...",
     "save_to_drafts_button": "Save to drafts",
-    "save_to_drafts_and_close_button": "Save to drafts and close"
+    "save_to_drafts_and_close_button": "Save to drafts and close",
+    "more_post_actions": "More post actions..."
   },
   "registration": {
     "bio_optional": "Bio (optional)",
