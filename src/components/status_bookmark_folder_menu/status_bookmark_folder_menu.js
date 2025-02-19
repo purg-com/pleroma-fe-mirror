@@ -2,19 +2,22 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faChevronRight, faFolder } from '@fortawesome/free-solid-svg-icons'
 import { mapState } from 'vuex'
 
-import Popover from '../popover/popover.vue'
+import Popover from 'src/components/popover/popover.vue'
+import StillImage from 'src/components/still-image/still-image.vue'
 
 library.add(faChevronRight, faFolder)
 
 const StatusBookmarkFolderMenu = {
   props: [
-    'status'
+    'status',
+    'close'
   ],
   data () {
     return {}
   },
   components: {
-    Popover
+    Popover,
+    StillImage
   },
   computed: {
     ...mapState({

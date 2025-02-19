@@ -14,7 +14,7 @@
       :tabindex="0"
       :disabled="buttonClass.disabled"
       :href="getComponent(button) == 'a' ? button.link?.(funcArg) || remoteInteractionLink : undefined"
-      @click="doActionWrap(button, close)"
+      @click="doActionWrap(button, outerClose)"
     >
       <FALayers>
         <FAIcon
@@ -84,10 +84,11 @@
           fixed-width
         />
       </template>
-      <template #content>
+      <template #content="{close}">
         <StatusBookmarkFolderMenu
           v-if="button.name === 'bookmark'"
           :status="status"
+          :close="() => { close(); outerClose() }"
         />
       </template>
     </Popover>
