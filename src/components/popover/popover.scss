@@ -7,7 +7,8 @@
   position: fixed;
   min-width: 0;
   max-width: calc(100vw - 20px);
-  box-shadow: var(--shadow);
+
+  --_shadow: var(--shadow);
 }
 
 .popover-default {
@@ -19,7 +20,7 @@
     left: -1px;
     right: -1px;
     z-index: -1px;
-    box-shadow: var(--shadow);
+    box-shadow: var(--_shadow);
     pointer-events: none;
   }
 
