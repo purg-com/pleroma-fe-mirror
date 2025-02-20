@@ -537,7 +537,7 @@ export const init = ({
 
     // Optimization: we only really need combinations without "normal" because all states implicitly have it
     const permutationStateKeys = Object.keys(states).filter(s => s !== 'normal')
-    const stateCombinations = onlyNormalState
+    const stateCombinations = (onlyNormalState && !virtualComponents.has(component.name))
       ? [
           ['normal']
         ]
