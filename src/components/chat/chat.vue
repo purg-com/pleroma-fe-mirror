@@ -95,6 +95,4 @@
 </template>
 
 <script src="./chat.js"></script>
-<style lang="scss">
-@import "./chat";
-</style>
+<style src="./chat.scss" lang="scss" />

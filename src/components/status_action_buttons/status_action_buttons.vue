@@ -86,7 +86,7 @@
                 :func-arg="funcArg"
                 :get-class="getClass"
                 :get-component="getComponent"
-                :close="close"
+                :outerClose="close"
                 :do-action="doAction"
               />
               <button

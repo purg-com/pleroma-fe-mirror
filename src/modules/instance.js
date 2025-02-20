@@ -57,7 +57,6 @@ const defaultState = {
   embeddedToS: true,
   collapseMessageWithSubject: false,
   greentext: false,
-  useAtIcon: false,
   mentionLinkDisplay: 'short',
   mentionLinkShowTooltip: true,
   mentionLinkShowAvatar: false,

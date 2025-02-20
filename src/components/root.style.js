@@ -2,27 +2,6 @@ export default {
   name: 'Root',
   selector: ':root',
   notEditable: true,
-  validInnerComponents: [
-    // These are purely for --parent--text et such to work
-    'Text',
-    'Link',
-    'Border',
-
-    'Underlay',
-    'Modals',
-    'Popover',
-    'TopBar',
-    'Scrollbar',
-    'ScrollbarElement',
-    'MobileDrawer',
-    'Alert',
-    'Button' // mobile post button
-  ],
-  validInnerComponentsLite: [
-    'Underlay',
-    'Scrollbar',
-    'ScrollbarElement'
-  ],
   defaultRules: [
     {
       directives: {

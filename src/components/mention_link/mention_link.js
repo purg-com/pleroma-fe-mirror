@@ -117,9 +117,6 @@ const MentionLink = {
         this.highlightType
       ]
     },
-    useAtIcon () {
-      return this.mergedConfig.useAtIcon
-    },
     isRemote () {
       return this.userName !== this.userNameFull
     },

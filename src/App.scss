@@ -1,6 +1,6 @@
 // stylelint-disable rscss/class-format
 /* stylelint-disable no-descending-specificity */
-@import "./panel";
+@use "panel";
 
 :root {
   --status-margin: 0.75em;
@@ -762,12 +762,6 @@ option {
     margin-left: 0.7em;
     margin-top: -1em;
   }
-
-  &.-neutral {
-    background-color: var(--badgeNeutral);
-    color: white;
-    color: var(--badgeNeutralText, white);
-  }
 }
 
 .alert {
@@ -1099,4 +1093,9 @@ option {
       }
     }
   }
+}
+
+@property --shadow {
+  syntax: "*";
+  inherits: false;
 }

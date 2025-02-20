@@ -22,6 +22,7 @@ const ConfirmModal = {
       type: String
     }
   },
+  emits: ['cancelled', 'accepted'],
   computed: {
   },
   methods: {

@@ -4,7 +4,7 @@ export default {
   notEditable: true,
   validInnerComponents: [
     'Border',
-    'ButtonUnstyled',
+    'Button',
     'Input'
   ],
   defaultRules: [
@@ -14,7 +14,7 @@ export default {
       }
     },
     {
-      component: 'ButtonUnstyled',
+      component: 'Button',
       parent: { component: 'Attachment' },
       directives: {
         background: '#FFFFFF',

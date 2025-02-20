@@ -47,6 +47,5 @@
 </template>
 
 <script src="./chat_new.js"></script>
-<style lang="scss">
-@import "./chat_new";
-</style>
+
+<style src="./chat_new.scss" lang="scss" />

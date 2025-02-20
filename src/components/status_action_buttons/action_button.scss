@@ -1,4 +1,4 @@
-@import "../../mixins";
+@use "../../mixins";
 /* stylelint-disable declaration-no-important */
 
 .quick-action {
@@ -52,7 +52,7 @@
     grid-auto-columns: max-content;
     align-items: center;
 
-    @include unfocused-style {
+    @include mixins.unfocused-style {
       .focus-marker {
         visibility: hidden;
       }
@@ -62,7 +62,7 @@
       }
     }
 
-    @include focused-style {
+    @include mixins.focused-style {
       .focus-marker {
         visibility: visible;
       }

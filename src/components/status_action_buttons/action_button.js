@@ -65,7 +65,7 @@ export default {
     'getClass',
     'getComponent',
     'doAction',
-    'close'
+    'outerClose'
   ],
   components: {
     StatusBookmarkFolderMenu,

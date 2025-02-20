@@ -32,9 +32,12 @@ const components = {
   Link: null,
   Icon: null,
   Border: null,
+  PanelHeader: null,
+  Attachment: null,
   Panel: null,
   Chat: null,
-  ChatMessage: null
+  ChatMessage: null,
+  Button: null
 }
 
 export const findShadow = (shadows, { dynamicVars, staticVars }) => {
@@ -152,6 +155,25 @@ componentsContext.keys().forEach(key => {
   components[component.name] = component
 })
 
+Object.keys(components).forEach(key => {
+  if (key === 'Root') return
+  components.Root.validInnerComponents = components.Root.validInnerComponents || []
+  components.Root.validInnerComponents.push(key)
+})
+
+Object.keys(components).forEach(key => {
+  const component = components[key]
+  const { validInnerComponents = [] } = component
+  validInnerComponents.forEach(inner => {
+    const child = components[inner]
+    component.possibleChildren = component.possibleChildren || []
+    component.possibleChildren.push(child)
+    child.possibleParents = child.possibleParents || []
+    child.possibleParents.push(component)
+  })
+})
+
+
 const engineChecksum = sum(components)
 
 const ruleToSelector = genericRuleToSelector(components)
@@ -244,7 +266,21 @@ export const init = ({
   }
 
   const virtualComponents = new Set(Object.values(components).filter(c => c.virtual).map(c => c.name))
+  const transparentComponents = new Set(Object.values(components).filter(c => c.transparent).map(c => c.name))
   const nonEditableComponents = new Set(Object.values(components).filter(c => c.notEditable).map(c => c.name))
+  const extraCompileComponents = new Set([])
+
+  Object.values(components).forEach(component => {
+    const relevantRules = ruleset.filter(r => r.component === component.name)
+    const backgrounds = relevantRules.map(r => r.directives.background).filter(x => x)
+    const opacities = relevantRules.map(r => r.directives.opacity).filter(x => x)
+    if (
+      backgrounds.some(x => x.match(/--parent/)) ||
+        opacities.some(x => x != null && x < 1))
+    {
+      extraCompileComponents.add(component.name)
+    }
+  })
 
   const processCombination = (combination) => {
     try {
@@ -473,11 +509,21 @@ export const init = ({
     let validInnerComponents
     if (editMode) {
       const temp = (component.validInnerComponentsLite || component.validInnerComponents || [])
-      validInnerComponents = temp.filter(c => virtualComponents.has(c) && !nonEditableComponents.has(c))
+      validInnerComponents = temp
+        .filter(c => virtualComponents.has(c) && !nonEditableComponents.has(c))
     } else if (liteMode) {
       validInnerComponents = (component.validInnerComponentsLite || component.validInnerComponents || [])
-    } else {
+    } else if (component.name === 'Root') {
       validInnerComponents = component.validInnerComponents || []
+    } else {
+      validInnerComponents = component
+        .validInnerComponents
+          ?.filter(
+            c => virtualComponents.has(c)
+              || transparentComponents.has(c)
+              || extraCompileComponents.has(c)
+          )
+          || []
     }
 
     // Normalizing states and variants to always include "normal"
@@ -491,7 +537,7 @@ export const init = ({
 
     // Optimization: we only really need combinations without "normal" because all states implicitly have it
     const permutationStateKeys = Object.keys(states).filter(s => s !== 'normal')
-    const stateCombinations = onlyNormalState
+    const stateCombinations = (onlyNormalState && !virtualComponents.has(component.name))
       ? [
           ['normal']
         ]
@@ -521,6 +567,16 @@ export const init = ({
       combination.lazy = component.lazy || parent?.lazy
       combination.parent = parent
       if (!liteMode && combination.state.indexOf('hover') >= 0) {
+        combination.lazy = true
+      }
+
+      if (
+        !liteMode &&
+        parent?.component !== 'Root' &&
+          !virtualComponents.has(component.name) &&
+          !transparentComponents.has(component.name) &&
+          extraCompileComponents.has(component.name)
+      ) {
         combination.lazy = true
       }
 

@@ -167,3 +167,12 @@ Tab:hover:active {
 TopBar Link {
   textColor: #ffffff
 }
+
+MenuItem:hover {
+  background: --fg
+}
+
+Popover {
+  shadow: --buttonDefaultBevel, 5 5 0 0 #000000 / 0.2;
+  roundness: 0
+}

@@ -1,0 +1,121 @@
+@use "../../mixins";
+
+.EmojiReactions {
+  display: flex;
+  margin-top: 0.25em;
+  flex-wrap: wrap;
+
+  --emoji-size: calc(var(--emojiSize, 1.25em) * var(--emojiReactionsScale, 1));
+
+  .emoji-reaction-container {
+    display: flex;
+    align-items: stretch;
+    margin-top: 0.5em;
+    margin-right: 0.5em;
+
+    .emoji-reaction-popover {
+      padding: 0;
+
+      .emoji-reaction-count-button {
+        margin: 0;
+        height: 100%;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        box-sizing: border-box;
+        min-width: 2em;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+
+  .emoji-reaction {
+    padding-left: 0.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin: 0;
+
+    .reaction-emoji {
+      width: var(--emoji-size);
+      height: var(--emoji-size);
+      margin-right: 0.25em;
+      line-height: var(--emoji-size);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      --_still_image-label-scale: 0.3;
+    }
+
+    .reaction-emoji-content {
+      max-width: 100%;
+      max-height: 100%;
+      width: var(--emoji-size);
+      height: var(--emoji-size);
+      line-height: inherit;
+      overflow: hidden;
+      font-size: calc(var(--emoji-size) * 0.8);
+      margin: 0;
+
+      img {
+        object-fit: contain;
+      }
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    .svg-inline--fa {
+      color: var(--text);
+    }
+
+    &.-picked-reaction {
+      .svg-inline--fa {
+        color: var(--accent);
+      }
+    }
+
+    @include mixins.unfocused-style {
+      .focus-marker {
+        visibility: hidden;
+      }
+
+      .active-marker {
+        visibility: visible;
+      }
+    }
+
+    @include mixins.focused-style {
+      .svg-inline--fa {
+        color: var(--accent);
+      }
+
+      .focus-marker {
+        visibility: visible;
+      }
+
+      .active-marker {
+        visibility: hidden;
+      }
+    }
+  }
+
+  .emoji-reaction-expand {
+    padding: 0 0.5em;
+    margin-right: 0.5em;
+    margin-top: 0.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

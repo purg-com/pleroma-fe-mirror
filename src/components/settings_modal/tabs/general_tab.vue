@@ -269,14 +269,17 @@
             {{ $t('settings.image_compression') }}
           </BooleanSetting>
         </li>
-        <li>
-          <BooleanSetting
-            path="alwaysUseJpeg"
-            expert="1"
-          >
-            {{ $t('settings.always_use_jpeg') }}
-          </BooleanSetting>
-        </li>
+        <ul class="setting-list suboptions">
+          <li>
+            <BooleanSetting
+              path="alwaysUseJpeg"
+              expert="1"
+              parent-path="imageCompression"
+            >
+              {{ $t('settings.always_use_jpeg') }}
+            </BooleanSetting>
+          </li>
+        </ul>
         <li>
           <BooleanSetting
             path="useContainFit"
@@ -360,14 +363,6 @@
             expert="1"
           >
             {{ $t('settings.mention_link_use_tooltip') }}
-          </BooleanSetting>
-        </li>
-        <li>
-          <BooleanSetting
-            path="useAtIcon"
-            expert="1"
-          >
-            {{ $t('settings.use_at_icon') }}
           </BooleanSetting>
         </li>
         <li>

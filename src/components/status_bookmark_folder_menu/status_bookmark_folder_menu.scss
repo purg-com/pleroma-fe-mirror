@@ -1,0 +1,9 @@
+.bookmark-folder-menu {
+  --__horizontal-gap: 0.5em;
+  --_still-image-label-visibility: hidden;
+
+  .emoji {
+    width: var(--__line-height);
+    height: var(--__line-height);
+  }
+}

@@ -129,7 +129,6 @@ export const defaultState = {
   forcedRoundness: undefined, // instance default
   navbarColumnStretch: false,
   greentext: undefined, // instance default
-  useAtIcon: undefined, // instance default
   mentionLinkDisplay: undefined, // instance default
   mentionLinkShowTooltip: undefined, // instance default
   mentionLinkShowAvatar: undefined, // instance default
