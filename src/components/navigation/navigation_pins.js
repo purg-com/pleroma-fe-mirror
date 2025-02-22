@@ -19,6 +19,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { useListsStore } from 'src/stores/lists'
 import { useAnnouncementsStore } from 'src/stores/announcements'
+import { useBookmarkFoldersStore } from 'src/stores/bookmark_folders'
 
 library.add(
   faUsers,
@@ -52,8 +53,10 @@ const NavPanel = {
     ...mapPiniaState(useAnnouncementsStore, {
       supportsAnnouncements: store => store.supportsAnnouncements
     }),
+    ...mapPiniaState(useBookmarkFoldersStore, {
+      bookmarks: getBookmarkFolderEntries
+    }),
     ...mapState({
-      bookmarks: getBookmarkFolderEntries,
       currentUser: state => state.users.currentUser,
       followRequestCount: state => state.api.followRequests.length,
       privateMode: state => state.instance.private,

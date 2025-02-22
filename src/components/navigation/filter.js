@@ -19,7 +19,7 @@ export const getListEntries = store => store.allLists.map(list => ({
   iconLetter: list.title[0]
 }))
 
-export const getBookmarkFolderEntries = state => state.bookmarkFolders.allFolders.map(folder => ({
+export const getBookmarkFolderEntries = store => store.allFolders.map(folder => ({
   name: 'bookmark-folder-' + folder.id,
   routeObject: { name: 'bookmark-folder', params: { id: folder.id } },
   labelRaw: folder.name,

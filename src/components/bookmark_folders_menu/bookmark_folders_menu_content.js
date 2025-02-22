@@ -1,6 +1,7 @@
-import { mapState } from 'vuex'
+import { mapState } from 'pinia'
 import NavigationEntry from 'src/components/navigation/navigation_entry.vue'
 import { getBookmarkFolderEntries } from 'src/components/navigation/filter.js'
+import { useBookmarkFoldersStore } from 'src/stores/bookmark_folders'
 
 export const BookmarkFoldersMenuContent = {
   props: [
@@ -10,7 +11,7 @@ export const BookmarkFoldersMenuContent = {
     NavigationEntry
   },
   computed: {
-    ...mapState({
+    ...mapState(useBookmarkFoldersStore, {
       folders: getBookmarkFolderEntries
     })
   }

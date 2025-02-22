@@ -19,7 +19,6 @@ import authFlowModule from './modules/auth_flow.js'
 import oauthTokensModule from './modules/oauth_tokens.js'
 import draftsModule from './modules/drafts.js'
 import chatsModule from './modules/chats.js'
-import bookmarkFoldersModule from './modules/bookmark_folders.js'
 
 import { createI18n } from 'vue-i18n'
 
@@ -105,8 +104,7 @@ const persistedStateOptions = {
         authFlow: authFlowModule,
         oauthTokens: oauthTokensModule,
         drafts: draftsModule,
-        chats: chatsModule,
-        bookmarkFolders: bookmarkFoldersModule
+        chats: chatsModule
       },
       plugins,
       options: {

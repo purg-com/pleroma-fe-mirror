@@ -1,6 +1,7 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faChevronRight, faFolder } from '@fortawesome/free-solid-svg-icons'
-import { mapState } from 'vuex'
+import { mapState } from 'pinia'
+import { useBookmarkFoldersStore } from 'src/stores/bookmark_folders'
 
 import Popover from 'src/components/popover/popover.vue'
 import StillImage from 'src/components/still-image/still-image.vue'
@@ -20,8 +21,8 @@ const StatusBookmarkFolderMenu = {
     StillImage
   },
   computed: {
-    ...mapState({
-      folders: state => state.bookmarkFolders.allFolders
+    ...mapState(useBookmarkFoldersStore, {
+      folders: store => store.allFolders
     }),
     folderId () {
       return this.status.bookmark_folder_id
