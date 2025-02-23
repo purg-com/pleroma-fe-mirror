@@ -32,7 +32,7 @@
     "click-outside-vue3": "4.0.1",
     "cropperjs": "1.6.2",
     "escape-html": "1.0.3",
-    "globals": "^15.14.0",
+    "globals": "^16.0.0",
     "hash-sum": "^2.0.0",
     "js-cookie": "3.0.5",
     "localforage": "1.10.0",
