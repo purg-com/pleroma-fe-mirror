@@ -230,12 +230,16 @@ const getStickers = async ({ store }) => {
 const getAppSecret = async ({ store }) => {
   const { state, commit } = store
   const { oauth, instance } = state
-  return getOrCreateApp({ ...oauth, instance: instance.server, commit })
-    .then((app) => getClientToken({ ...app, instance: instance.server }))
-    .then((token) => {
-      commit('setAppToken', token.access_token)
-      commit('setBackendInteractor', backendInteractorService(store.getters.getToken()))
-    })
+  if (oauth.userToken) {
+    commit('setBackendInteractor', backendInteractorService(store.getters.getToken()))
+  } else {
+    return getOrCreateApp({ ...oauth, instance: instance.server, commit })
+      .then((app) => getClientToken({ ...app, instance: instance.server }))
+      .then((token) => {
+        commit('setAppToken', token.access_token)
+        commit('setBackendInteractor', backendInteractorService(store.getters.getToken()))
+      })
+  }
 }
 
 const resolveStaffAccounts = ({ store, accounts }) => {
@@ -377,10 +381,9 @@ const afterStoreSetup = async ({ pinia, store, storageError, i18n }) => {
     getInstanceConfig({ store })
   ]).catch(e => Promise.reject(e))
 
-  await store.dispatch('loadDrafts')
-
   // Start fetching things that don't need to block the UI
   store.dispatch('fetchMutes')
+  store.dispatch('loadDrafts')
   useAnnouncementsStore().startFetchingAnnouncements()
   getTOS({ store })
   getStickers({ store })
