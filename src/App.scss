@@ -931,7 +931,7 @@ option {
 
 #splash {
   pointer-events: none;
-  transition: opacity 2s;
+  transition: opacity 0.5s;
   opacity: 1;
 
   &.hidden {
@@ -960,7 +960,7 @@ option {
 
     &.dead {
       animation-name: dead;
-      animation-duration: 2s;
+      animation-duration: 0.5s;
       animation-iteration-count: 1;
       transform: rotateX(90deg) rotateY(0) rotateZ(-45deg);
     }
