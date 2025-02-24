@@ -85,7 +85,7 @@ const persistedStateOptions = {
       console.error('Storage error', e)
       storageError = e
     }
-    document.querySelector('#mascot').src = `/static/pleromatan_apology${isFox}.png`
+    document.querySelector('#mascot').src = `/static/pleromatan_apology${isFox}_small.webp`
     document.querySelector('#status').removeAttribute('class')
     document.querySelector('#status').textContent = i18n.global.t('splash.loading')
     document.querySelector('#splash-credit').textContent = i18n.global.t('update.art_by', { linkToArtist: 'pipivovott' })

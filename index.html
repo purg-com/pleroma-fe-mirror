@@ -3,6 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    <link rel="preload" href="/static/config.json" as="fetch" crossorigin />
+    <link rel="preload" href="/api/pleroma/frontend_configurations" as="fetch" crossorigin />
+    <link rel="preload" href="/nodeinfo/2.1.json" as="fetch" crossorigin />
+    <link rel="preload" href="/api/v1/instance" as="fetch" crossorigin />
+    <link rel="preload" href="/static/pleromatan_apology_fox_small.webp" as="image" />
     <!-- putting styles here to avoid having to wait for styles to load up -->
     <style id="splashscreen">
      #splash {
@@ -148,7 +153,7 @@
             <div class="chunk" id="chunk-E">
             </div>
           </div>
-          <img id="mascot" src="/static/pleromatan_apology.png">
+          <img id="mascot" src="/static/pleromatan_apology_small.webp">
         </div>
         <div id="status" class="css-ok">
           <!-- (｡>﹏<) -->
