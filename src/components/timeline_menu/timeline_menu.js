@@ -11,6 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { useInterfaceStore } from 'src/stores/interface'
 import { useListsStore } from 'src/stores/lists'
+import { useBookmarkFoldersStore } from 'src/stores/bookmark_folders'
 
 library.add(faChevronDown)
 
@@ -100,7 +101,7 @@ const TimelineMenu = {
         return useListsStore().findListTitle(this.$route.params.id)
       }
       if (route === 'bookmark-folder') {
-        return this.$store.getters.findBookmarkFolderName(this.$route.params.id)
+        return useBookmarkFoldersStore().findBookmarkFolderName(this.$route.params.id)
       }
       const i18nkey = timelineNames(this.bookmarkFolders)[this.$route.name]
       return i18nkey ? this.$t(i18nkey) : route

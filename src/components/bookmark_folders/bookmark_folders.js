@@ -1,4 +1,5 @@
 import BookmarkFolderCard from '../bookmark_folder_card/bookmark_folder_card.vue'
+import { useBookmarkFoldersStore } from 'src/stores/bookmark_folders'
 
 const BookmarkFolders = {
   data () {
@@ -11,7 +12,7 @@ const BookmarkFolders = {
   },
   computed: {
     bookmarkFolders () {
-      return this.$store.state.bookmarkFolders.allFolders
+      return useBookmarkFoldersStore().allFolders
     }
   },
   methods: {

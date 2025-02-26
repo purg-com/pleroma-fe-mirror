@@ -1,10 +1,11 @@
 import apiService from '../api/api.service.js'
 import { promiseInterval } from '../promise_interval/promise_interval.js'
+import { useBookmarkFoldersStore } from 'src/stores/bookmark_folders.js'
 
-const fetchAndUpdate = ({ store, credentials }) => {
+const fetchAndUpdate = ({ credentials }) => {
   return apiService.fetchBookmarkFolders({ credentials })
     .then(bookmarkFolders => {
-      store.commit('setBookmarkFolders', bookmarkFolders)
+      useBookmarkFoldersStore().setBookmarkFolders(bookmarkFolders)
     }, () => {})
     .catch(() => {})
 }

@@ -1,5 +1,7 @@
 import EmojiPicker from '../emoji_picker/emoji_picker.vue'
 import apiService from '../../services/api/api.service'
+import { useInterfaceStore } from 'src/stores/interface'
+import { useBookmarkFoldersStore } from 'src/stores/bookmark_folders'
 
 const BookmarkFolderEdit = {
   data () {
@@ -52,18 +54,18 @@ const BookmarkFolderEdit = {
       this.emojiPickerExpanded = false
     },
     updateFolder () {
-      this.$store.dispatch('setBookmarkFolder', { folderId: this.id, name: this.nameDraft, emoji: this.emojiDraft })
+      useBookmarkFoldersStore().updateBookmarkFolder({ folderId: this.id, name: this.nameDraft, emoji: this.emojiDraft })
         .then(() => {
           this.$router.push({ name: 'bookmark-folders' })
         })
     },
     createFolder () {
-      this.$store.dispatch('createBookmarkFolder', { name: this.nameDraft, emoji: this.emojiDraft })
+      useBookmarkFoldersStore().createBookmarkFolder({ name: this.nameDraft, emoji: this.emojiDraft })
         .then(() => {
           this.$router.push({ name: 'bookmark-folders' })
         })
         .catch((e) => {
-          this.$store.useInterfaceStore().pushGlobalNotice({
+          useInterfaceStore().pushGlobalNotice({
             messageKey: 'bookmark_folders.error',
             messageArgs: [e.message],
             level: 'error'
@@ -71,7 +73,7 @@ const BookmarkFolderEdit = {
         })
     },
     deleteFolder () {
-      this.$store.dispatch('deleteBookmarkFolder', { folderId: this.id })
+      useBookmarkFoldersStore().deleteBookmarkFolder({ folderId: this.id })
       this.$router.push({ name: 'bookmark-folders' })
     }
   }
