@@ -1,7 +1,6 @@
 import { config } from '@vue/test-utils'
 import { createRouter, createMemoryHistory } from 'vue-router'
 import VueVirtualScroller from 'vue-virtual-scroller'
-import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome'
 import routes from 'src/boot/routes'
 import makeMockStore from './mock_store'
 

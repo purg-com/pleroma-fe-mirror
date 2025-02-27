@@ -5,20 +5,7 @@ import { createPinia } from 'pinia'
 import 'custom-event-polyfill'
 import './lib/event_target_polyfill.js'
 
-import instanceModule from './modules/instance.js'
-import statusesModule from './modules/statuses.js'
-import notificationsModule from './modules/notifications.js'
-import usersModule from './modules/users.js'
-import apiModule from './modules/api.js'
-import configModule from './modules/config.js'
-import profileConfigModule from './modules/profileConfig.js'
-import serverSideStorageModule from './modules/serverSideStorage.js'
-import adminSettingsModule from './modules/adminSettings.js'
-import oauthModule from './modules/oauth.js'
-import authFlowModule from './modules/auth_flow.js'
-import oauthTokensModule from './modules/oauth_tokens.js'
-import draftsModule from './modules/drafts.js'
-import chatsModule from './modules/chats.js'
+import vuexModules from './modules/index.js'
 
 import { createI18n } from 'vue-i18n'
 
@@ -89,23 +76,7 @@ const persistedStateOptions = {
     document.querySelector('#status').textContent = i18n.global.t('splash.loading')
     document.querySelector('#splash-credit').textContent = i18n.global.t('update.art_by', { linkToArtist: 'pipivovott' })
     const store = createStore({
-      modules: {
-        instance: instanceModule,
-        // TODO refactor users/statuses modules, they depend on each other
-        users: usersModule,
-        statuses: statusesModule,
-        notifications: notificationsModule,
-        api: apiModule,
-        config: configModule,
-        profileConfig: profileConfigModule,
-        serverSideStorage: serverSideStorageModule,
-        adminSettings: adminSettingsModule,
-        oauth: oauthModule,
-        authFlow: authFlowModule,
-        oauthTokens: oauthTokensModule,
-        drafts: draftsModule,
-        chats: chatsModule
-      },
+      modules: vuexModules,
       plugins,
       options: {
         devtools: process.env.NODE_ENV !== 'production'
