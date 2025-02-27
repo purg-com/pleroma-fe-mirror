@@ -1,10 +1,12 @@
 import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
+import { readFile } from 'node:fs/promises'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import { VitePWA } from 'vite-plugin-pwa'
 import { devSwPlugin, buildSwPlugin, swMessagesPlugin } from './build/sw_plugin.js'
+import copyPlugin from './build/copy_plugin.js'
 
 const getLocalDevSettings = async () => {
   try {
@@ -76,7 +78,11 @@ export default defineConfig(async ({ command }) => {
       vueJsx(),
       devSwPlugin({ swSrc, swDest }),
       buildSwPlugin({ swSrc, swDest }),
-      swMessagesPlugin()
+      swMessagesPlugin(),
+      copyPlugin({
+        inUrl: '/static/ruffle',
+        inFs: resolve(projectRoot, 'node_modules/@ruffle-rs/ruffle')
+      })
     ],
     resolve: {
       alias: {

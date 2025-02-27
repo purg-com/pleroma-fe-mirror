@@ -115,6 +115,7 @@
     "sass-loader": "13.3.3",
     "selenium-server": "3.141.59",
     "semver": "7.7.1",
+    "serve-static": "1.16.2",
     "serviceworker-webpack5-plugin": "2.0.0",
     "shelljs": "0.8.5",
     "sinon": "15.2.0",
