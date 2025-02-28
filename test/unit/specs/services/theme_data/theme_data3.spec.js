@@ -62,8 +62,6 @@ describe('Theme Data 3', () => {
   })
 
   describe('init', function () {
-    this.timeout(5000)
-
     it('Test initialization without anything', () => {
       const out = init({ inputRuleset: [], ultimateBackgroundColor: '#DEADAF' })
 

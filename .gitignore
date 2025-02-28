@@ -9,3 +9,4 @@ selenium-debug.log
 config/local.json
 src/assets/emoji.json
 logs/
+__screenshots__/

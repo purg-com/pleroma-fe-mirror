@@ -119,6 +119,8 @@ const getLatestScrobble = (state, user) => {
 
       state.scrobblesNextFetch[user.id] = Date.now() + 60 * 1000
     }
+  }).catch(e => {
+    console.warn('cannot fetch scrobbles', e)
   })
 }
 

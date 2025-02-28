@@ -1,6 +1,5 @@
 import { mount, flushPromises } from '@vue/test-utils'
 import { nextTick } from 'vue'
-import sinon from 'sinon'
 import PostStatusForm from 'src/components/post_status_form/post_status_form.vue'
 import { mountOpts, waitForEvent, $t } from '../../../fixtures/setup_test'
 
@@ -25,7 +24,7 @@ const saveManually = async (wrapper) => {
 const waitSaveTime = 4000
 
 afterEach(() => {
-  sinon.restore()
+  vi.useRealTimers()
 })
 
 describe('Draft saving', () => {
@@ -43,12 +42,10 @@ describe('Draft saving', () => {
     await saveManually(wrapper)
     expect(wrapper.vm.$store.getters.draftCount).to.equal(1)
     expect(wrapper.vm.$store.getters.draftsArray[0].status).to.equal('mew mew')
-    console.log('done')
   })
 
   it('should auto-save if it is enabled', async function () {
-    this.timeout(5000)
-    const clock = sinon.useFakeTimers(Date.now())
+    vi.useFakeTimers()
     const wrapper = mount(PostStatusForm, mountOpts())
     await wrapper.vm.$store.dispatch('setOption', {
       name: 'autoSaveDraft',
@@ -59,10 +56,9 @@ describe('Draft saving', () => {
     await textarea.setValue('mew mew')
 
     expect(wrapper.vm.$store.getters.draftCount).to.equal(0)
-    await clock.tickAsync(waitSaveTime)
+    await vi.advanceTimersByTimeAsync(waitSaveTime)
     expect(wrapper.vm.$store.getters.draftCount).to.equal(1)
     expect(wrapper.vm.$store.getters.draftsArray[0].status).to.equal('mew mew')
-    clock.restore()
   })
 
   it('should auto-save when close if auto-save is on', async () => {
@@ -81,7 +77,6 @@ describe('Draft saving', () => {
     wrapper.vm.requestClose()
     expect(wrapper.vm.$store.getters.draftCount).to.equal(1)
     await waitForEvent(wrapper, 'can-close')
-    console.log('done')
   })
 
   it('should save when close if auto-save is off, and unsavedPostAction is save', async () => {
@@ -104,7 +99,6 @@ describe('Draft saving', () => {
     wrapper.vm.requestClose()
     expect(wrapper.vm.$store.getters.draftCount).to.equal(1)
     await waitForEvent(wrapper, 'can-close')
-    console.log('done')
   })
 
   it('should discard when close if auto-save is off, and unsavedPostAction is discard', async () => {
@@ -127,40 +121,33 @@ describe('Draft saving', () => {
     wrapper.vm.requestClose()
     await waitForEvent(wrapper, 'can-close')
     expect(wrapper.vm.$store.getters.draftCount).to.equal(0)
-    console.log('done')
   })
 
   it('should confirm when close if auto-save is off, and unsavedPostAction is confirm', async () => {
-    try {
-      const wrapper = mount(PostStatusForm, mountOpts({
-        props: {
-          closeable: true
-        }
-      }))
-      await wrapper.vm.$store.dispatch('setOption', {
-        name: 'autoSaveDraft',
-        value: false
-      })
-      await wrapper.vm.$store.dispatch('setOption', {
-        name: 'unsavedPostAction',
-        value: 'confirm'
-      })
-      expect(wrapper.vm.$store.getters.draftCount).to.equal(0)
-      const textarea = wrapper.get('textarea')
-      await textarea.setValue('mew mew')
-      wrapper.vm.requestClose()
-      await nextTick()
-      const saveButton = wrapper.findByText('button', $t('post_status.close_confirm_save_button'))
-      expect(saveButton).to.be.ok
-      await saveButton.trigger('click')
-      console.log('clicked')
-      expect(wrapper.vm.$store.getters.draftCount).to.equal(1)
-      await flushPromises()
-      await waitForEvent(wrapper, 'can-close')
-    console.log('done')
-    } catch (e) {
-      console.log('error:', e)
-      throw e
-    }
+    const wrapper = mount(PostStatusForm, mountOpts({
+      props: {
+        closeable: true
+      }
+    }))
+    await wrapper.vm.$store.dispatch('setOption', {
+      name: 'autoSaveDraft',
+      value: false
+    })
+    await wrapper.vm.$store.dispatch('setOption', {
+      name: 'unsavedPostAction',
+      value: 'confirm'
+    })
+    expect(wrapper.vm.$store.getters.draftCount).to.equal(0)
+    const textarea = wrapper.get('textarea')
+    await textarea.setValue('mew mew')
+    wrapper.vm.requestClose()
+    await nextTick()
+    const saveButton = wrapper.findByText('button', $t('post_status.close_confirm_save_button'))
+    expect(saveButton).to.be.ok
+    await saveButton.trigger('click')
+    console.log('clicked')
+    expect(wrapper.vm.$store.getters.draftCount).to.equal(1)
+    await flushPromises()
+    await waitForEvent(wrapper, 'can-close')
   })
 })

@@ -18,7 +18,13 @@ const generateInput = (value, padEmoji = true) => {
         $t: (msg) => msg
       },
       stubs: {
-        FAIcon: true
+        FAIcon: true,
+        Popover: {
+          template: `<div><slot trigger /></div>`,
+          methods: {
+            updateStyles () {}
+          }
+        }
       },
       directives: {
         'click-outside': vClickOutside
@@ -104,43 +110,37 @@ describe('EmojiInput', () => {
       expect(inputEvents[inputEvents.length - 1][0]).to.eql('Eat some spam!:spam:')
     })
 
-    it('correctly sets caret after insertion at beginning', (done) => {
+    it('correctly sets caret after insertion at beginning', async () => {
       const initialString = '1234'
       const wrapper = generateInput(initialString)
       const input = wrapper.find('input')
       input.setValue(initialString)
       wrapper.setData({ caret: 0 })
       wrapper.vm.insert({ insertion: '1234', keepOpen: false })
-      wrapper.vm.$nextTick(() => {
-        expect(wrapper.vm.caret).to.eql(5)
-        done()
-      })
+      await wrapper.vm.$nextTick()
+      expect(wrapper.vm.caret).to.eql(5)
     })
 
-    it('correctly sets caret after insertion at end', (done) => {
+    it('correctly sets caret after insertion at end', async () => {
       const initialString = '1234'
       const wrapper = generateInput(initialString)
       const input = wrapper.find('input')
       input.setValue(initialString)
       wrapper.setData({ caret: initialString.length })
       wrapper.vm.insert({ insertion: '1234', keepOpen: false })
-      wrapper.vm.$nextTick(() => {
-        expect(wrapper.vm.caret).to.eql(10)
-        done()
-      })
+      await wrapper.vm.$nextTick()
+      expect(wrapper.vm.caret).to.eql(10)
     })
 
-    it('correctly sets caret after insertion if padEmoji setting is set to false', (done) => {
+    it('correctly sets caret after insertion if padEmoji setting is set to false', async () => {
       const initialString = '1234'
       const wrapper = generateInput(initialString, false)
       const input = wrapper.find('input')
       input.setValue(initialString)
       wrapper.setData({ caret: initialString.length })
       wrapper.vm.insert({ insertion: '1234', keepOpen: false })
-      wrapper.vm.$nextTick(() => {
-        expect(wrapper.vm.caret).to.eql(8)
-        done()
-      })
+      await wrapper.vm.$nextTick()
+      expect(wrapper.vm.caret).to.eql(8)
     })
   })
 })

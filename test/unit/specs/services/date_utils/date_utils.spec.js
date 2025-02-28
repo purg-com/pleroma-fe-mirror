@@ -1,5 +1,8 @@
 import * as DateUtils from 'src/services/date_utils/date_utils.js'
 
+beforeEach(() => { vi.useFakeTimers() })
+afterEach(() => { vi.useRealTimers() })
+
 describe('DateUtils', () => {
   describe('relativeTime', () => {
     it('returns now with low enough amount of seconds', () => {

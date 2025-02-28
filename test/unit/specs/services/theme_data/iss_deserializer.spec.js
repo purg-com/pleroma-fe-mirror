@@ -1,10 +1,13 @@
 import { deserialize } from 'src/services/theme_data/iss_deserializer.js'
 import { serialize } from 'src/services/theme_data/iss_serializer.js'
-const componentsContext = require.context('src', true, /\.style.js(on)?$/)
+const componentsContext = import.meta.glob(
+  ['/src/**/*.style.js', '/src/**/*.style.json'],
+  { eager: true }
+)
 
 describe('ISS (de)serialization', () => {
-  componentsContext.keys().forEach(key => {
-    const component = componentsContext(key).default
+  Object.keys(componentsContext).forEach(key => {
+    const component = componentsContext[key].default
 
     it(`(De)serialization of component ${component.name} works`, () => {
       const normalized = component.defaultRules.map(x => ({ component: component.name, ...x }))

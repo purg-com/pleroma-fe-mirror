@@ -109,23 +109,18 @@ export const waitForEvent = (wrapper, event, {
   timesEmitted = 1
 } = {}) => {
   const tick = 10
-  const totalTries = timeout / tick
 
-  return new Promise((resolve, reject) => {
-    let currentTries = 0
-    const wait = () => {
+  return vi.waitFor(
+    () => {
       const e = wrapper.emitted(event)
       if (e && e.length >= timesEmitted) {
-        resolve()
         return
       }
-      if (currentTries >= totalTries) {
-        reject(new Error('Event did not fire'))
-        return
-      }
-      ++currentTries
-      setTimeout(wait, tick)
+      throw new Error('event is not emitted')
+    },
+    {
+      timeout,
+      interval: tick
     }
-    wait()
-  })
+  )
 }

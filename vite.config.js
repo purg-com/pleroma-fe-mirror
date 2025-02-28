@@ -27,7 +27,7 @@ const getLocalDevSettings = async () => {
 
 const projectRoot = dirname(fileURLToPath(import.meta.url))
 
-export default defineConfig(async ({ command }) => {
+export default defineConfig(async ({ mode, command }) => {
   const settings = await getLocalDevSettings()
   const target = settings.target || 'http://localhost:4000/'
   const proxy = {
@@ -87,7 +87,8 @@ export default defineConfig(async ({ command }) => {
     resolve: {
       alias: {
         src: '/src',
-        components: '/src/components'
+        components: '/src/components',
+        ...(mode === 'test' ? { vue: 'vue/dist/vue.esm-bundler.js' } : {})
       }
     },
     define: {
@@ -131,11 +132,21 @@ export default defineConfig(async ({ command }) => {
       },
     },
     server: {
-      proxy,
+      ...(mode === 'test' ? {} : { proxy }),
       port: Number(process.env.PORT) || 8080
     },
     preview: {
       proxy
+    },
+    test: {
+      globals: true,
+      browser: {
+        enabled: true,
+        provider: 'playwright',
+        instances: [
+          { browser: 'firefox' }
+        ]
+      }
     }
   }
 })
