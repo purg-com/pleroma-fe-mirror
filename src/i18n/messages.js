@@ -9,23 +9,23 @@
 
 import { isEqual } from 'lodash'
 import { languages, langCodeToJsonName } from './languages.js'
+import enMessages from './en.json'
 
 const ULTIMATE_FALLBACK_LOCALE = 'en'
 
 const hasLanguageFile = (code) => languages.includes(code)
 
+const languageFileMap = import.meta.glob('./*.json')
+
 const loadLanguageFile = (code) => {
-  return import(
-    /* webpackInclude: /\.json$/ */
-    /* webpackChunkName: "i18n/[request]" */
-    `./${langCodeToJsonName(code)}.json`
-  )
+  const jsonName = langCodeToJsonName(code)
+  return languageFileMap[`./${jsonName}.json`]()
 }
 
 const messages = {
   languages,
   default: {
-    en: require('./en.json').default
+    en: enMessages
   },
   setLanguage: async (i18n, language) => {
     const languages = (Array.isArray(language) ? language : [language]).filter(k => k)

@@ -1,5 +1,3 @@
-import runtime from 'serviceworker-webpack5-plugin/lib/runtime'
-
 function urlBase64ToUint8Array (base64String) {
   const padding = '='.repeat((4 - base64String.length % 4) % 4)
   const base64 = (base64String + padding)
@@ -19,7 +17,8 @@ function isPushSupported () {
 }
 
 function getOrCreateServiceWorker () {
-  return runtime.register()
+  const swType = process.env.HAS_MODULE_SERVICE_WORKER ? 'module' : 'classic'
+  return navigator.serviceWorker.register('/sw-pleroma.js', { type: swType })
     .catch((err) => console.error('Unable to get or create a service worker.', err))
 }
 
@@ -98,14 +97,14 @@ export async function initServiceWorker (store) {
 
 export async function showDesktopNotification (content) {
   if (!isSWSupported) return
-  const { active: sw } = await window.navigator.serviceWorker.getRegistration()
+  const { active: sw } = (await window.navigator.serviceWorker.getRegistration()) || {}
   if (!sw) return console.error('No serviceworker found!')
   sw.postMessage({ type: 'desktopNotification', content })
 }
 
 export async function closeDesktopNotification ({ id }) {
   if (!isSWSupported) return
-  const { active: sw } = await window.navigator.serviceWorker.getRegistration()
+  const { active: sw } = (await window.navigator.serviceWorker.getRegistration()) || {}
   if (!sw) return console.error('No serviceworker found!')
   if (id >= 0) {
     sw.postMessage({ type: 'desktopNotificationClose', content: { id } })
@@ -116,7 +115,7 @@ export async function closeDesktopNotification ({ id }) {
 
 export async function updateFocus () {
   if (!isSWSupported) return
-  const { active: sw } = await window.navigator.serviceWorker.getRegistration()
+  const { active: sw } = (await window.navigator.serviceWorker.getRegistration()) || {}
   if (!sw) return console.error('No serviceworker found!')
   sw.postMessage({ type: 'updateFocus' })
 }

@@ -146,9 +146,12 @@ const getTextColorAlpha = (directives, intendedTextColor, dynamicVars, staticVar
 }
 
 // Loading all style.js[on] files dynamically
-const componentsContext = require.context('src', true, /\.style.js(on)?$/)
-componentsContext.keys().forEach(key => {
-  const component = componentsContext(key).default
+const componentsContext = import.meta.glob(
+  ['/src/**/*.style.js', '/src/**/*.style.json'],
+  { eager: true }
+)
+Object.keys(componentsContext).forEach(key => {
+  const component = componentsContext[key].default
   if (components[component.name] != null) {
     console.warn(`Component in file ${key} is trying to override existing component ${component.name}! You have collisions/duplicates!`)
   }

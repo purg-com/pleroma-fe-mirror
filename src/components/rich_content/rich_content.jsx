@@ -3,7 +3,8 @@ import { getTagName, processTextForEmoji, getAttrs } from 'src/services/html_con
 import { convertHtmlToTree } from 'src/services/html_converter/html_tree_converter.service.js'
 import { convertHtmlToLines } from 'src/services/html_converter/html_line_converter.service.js'
 import StillImage from 'src/components/still-image/still-image.vue'
-import MentionsLine, { MENTIONS_LIMIT } from 'src/components/mentions_line/mentions_line.vue'
+import MentionsLine from 'src/components/mentions_line/mentions_line.vue'
+import { MENTIONS_LIMIT } from 'src/components/mentions_line/mentions_line.js'
 import HashtagLink from 'src/components/hashtag_link/hashtag_link.vue'
 
 import './rich_content.scss'

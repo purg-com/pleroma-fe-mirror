@@ -22,4 +22,4 @@
 </template>
 
 <script src="./status_bookmark_folder_menu.js"></script>
-<stlye src="./status_bookmark_folder_menu.scss" />
+<style src="./status_bookmark_folder_menu.scss" />

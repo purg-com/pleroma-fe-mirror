@@ -1,5 +1,5 @@
 import escape from 'escape-html'
-import parseLinkHeader from 'parse-link-header'
+import { parseLinkHeader } from '@web3-storage/parse-link-header'
 import { isStatusNotification } from '../notification_utils/notification_utils.js'
 import punycode from 'punycode.js'
 
@@ -484,8 +484,8 @@ export const parseLinkHeaderPagination = (linkHeader, opts = {}) => {
   const flakeId = opts.flakeId
   const parsedLinkHeader = parseLinkHeader(linkHeader)
   if (!parsedLinkHeader) return
-  const maxId = parsedLinkHeader.next.max_id
-  const minId = parsedLinkHeader.prev.min_id
+  const maxId = parsedLinkHeader.next?.max_id
+  const minId = parsedLinkHeader.prev?.min_id
 
   return {
     maxId: flakeId ? maxId : parseInt(maxId, 10),

@@ -4,7 +4,7 @@ import { storage } from 'src/lib/storage.js'
 import { parseNotification } from './services/entity_normalizer/entity_normalizer.service.js'
 import { prepareNotificationObject } from './services/notification_utils/notification_utils.js'
 import { createI18n } from 'vue-i18n'
-import messages from './i18n/service_worker_messages.js'
+import messages from 'virtual:pleroma-fe/service_worker_messages'
 
 const i18n = createI18n({
   // By default, use the browser locale, we will update it if neccessary
@@ -139,3 +139,5 @@ self.addEventListener('notificationclick', (event) => {
     if (clients.openWindow) return clients.openWindow('/')
   }))
 })
+
+console.log('sw here')
