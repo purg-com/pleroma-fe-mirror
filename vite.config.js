@@ -1,10 +1,8 @@
 import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
-import { readFile } from 'node:fs/promises'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import { VitePWA } from 'vite-plugin-pwa'
 import stylelint from 'vite-plugin-stylelint'
 import eslint from 'vite-plugin-eslint2'
 import { devSwPlugin, buildSwPlugin, swMessagesPlugin } from './build/sw_plugin.js'
@@ -167,7 +165,7 @@ export default defineConfig(async ({ mode, command }) => {
               return 'static/js/[name].[hash].js'
             }
           },
-          chunkFileNames (chunkInfo) {
+          chunkFileNames () {
             return 'static/js/[name].[hash].js'
           },
           assetFileNames (assetInfo) {

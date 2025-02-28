@@ -110,7 +110,6 @@
     "stylelint-rscss": "0.4.0",
     "vite": "^6.1.0",
     "vite-plugin-eslint2": "^5.0.3",
-    "vite-plugin-pwa": "^0.21.1",
     "vite-plugin-stylelint": "^6.0.0",
     "vitest": "^3.0.7"
   },
