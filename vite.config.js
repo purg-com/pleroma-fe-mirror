@@ -109,6 +109,9 @@ export default defineConfig(async ({ mode, command }) => {
         inFs: resolve(projectRoot, 'node_modules/@ruffle-rs/ruffle')
       })
     ],
+    css: {
+      devSourcemap: true
+    },
     resolve: {
       alias
     },
