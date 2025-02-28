@@ -117,11 +117,14 @@ export default defineConfig(async ({ mode, command }) => {
     },
     define: {
       'process.env': JSON.stringify({
-        NODE_ENV: command === 'serve' ? 'development' : 'production',
+        NODE_ENV: mode === 'test' ? 'testing' : command === 'serve' ? 'development' : 'production',
         HAS_MODULE_SERVICE_WORKER: command === 'serve' && !transformSW
       }),
       'COMMIT_HASH': JSON.stringify(command === 'serve' ? 'DEV' : getCommitHash()),
-      'DEV_OVERRIDES': JSON.stringify({})
+      'DEV_OVERRIDES': JSON.stringify(command === 'serve' ? settings : undefined),
+      '__VUE_OPTIONS_API__': true,
+      '__VUE_PROD_DEVTOOLS__': false,
+      '__VUE_PROD_HYDRATION_MISMATCH_DETAILS__': false
     },
     build: {
       sourcemap: true,
