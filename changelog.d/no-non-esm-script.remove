@@ -1,0 +1,1 @@
+BREAKING: drop support for browsers that do not support `<script type="module">`
