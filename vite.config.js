@@ -5,6 +5,8 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import { VitePWA } from 'vite-plugin-pwa'
+import stylelint from 'vite-plugin-stylelint'
+import eslint from 'vite-plugin-eslint2'
 import { devSwPlugin, buildSwPlugin, swMessagesPlugin } from './build/sw_plugin.js'
 import copyPlugin from './build/copy_plugin.js'
 import { getCommitHash } from './build/commit_hash.js'
@@ -107,6 +109,16 @@ export default defineConfig(async ({ mode, command }) => {
       copyPlugin({
         inUrl: '/static/ruffle',
         inFs: resolve(projectRoot, 'node_modules/@ruffle-rs/ruffle')
+      }),
+      eslint({
+        lintInWorker: true,
+        lintOnStart: true,
+        cacheLocation: resolve(projectRoot, 'node_modules/.cache/eslintcache')
+      }),
+      stylelint({
+        lintInWorker: true,
+        lintOnStart: true,
+        cacheLocation: resolve(projectRoot, 'node_modules/.cache/stylelintcache')
       })
     ],
     css: {
