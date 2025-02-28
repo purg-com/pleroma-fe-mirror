@@ -7,6 +7,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import { VitePWA } from 'vite-plugin-pwa'
 import { devSwPlugin, buildSwPlugin, swMessagesPlugin } from './build/sw_plugin.js'
 import copyPlugin from './build/copy_plugin.js'
+import { getCommitHash } from './build/commit_hash.js'
 
 const localConfigPath = '<projectRoot>/config/local.json'
 const getLocalDevSettings = async () => {
@@ -116,7 +117,7 @@ export default defineConfig(async ({ mode, command }) => {
         NODE_ENV: command === 'serve' ? 'development' : 'production',
         HAS_MODULE_SERVICE_WORKER: command === 'serve' && !transformSW
       }),
-      'COMMIT_HASH': JSON.stringify('DEV'),
+      'COMMIT_HASH': JSON.stringify(command === 'serve' ? 'DEV' : getCommitHash()),
       'DEV_OVERRIDES': JSON.stringify({})
     },
     build: {
