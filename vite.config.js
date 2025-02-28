@@ -121,6 +121,19 @@ export default defineConfig(async ({ mode, command }) => {
         cacheLocation: resolve(projectRoot, 'node_modules/.cache/stylelintcache')
       })
     ],
+    optimizeDeps: {
+      // For unknown reasons, during vitest, vite will re-optimize the following
+      // deps, causing the test to reload, so add them here so that it will not
+      // reload during tests
+      include: [
+        'custom-event-polyfill',
+        'vue-i18n',
+        '@ungap/event-target',
+        'lodash.merge',
+        'body-scroll-lock',
+        '@kazvmoe-infra/pinch-zoom-element'
+      ]
+    },
     css: {
       devSourcemap: true
     },
