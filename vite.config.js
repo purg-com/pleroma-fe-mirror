@@ -8,6 +8,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 import { devSwPlugin, buildSwPlugin, swMessagesPlugin } from './build/sw_plugin.js'
 import copyPlugin from './build/copy_plugin.js'
 
+const localConfigPath = '<projectRoot>/config/local.json'
 const getLocalDevSettings = async () => {
   try {
     const settings = (await import('./config/local.json')).default
@@ -16,20 +17,38 @@ const getLocalDevSettings = async () => {
       // and that's how actual BE reports its url
       settings.target = settings.target.replace(/\/$/, '')
     }
-    console.info('Using local dev server settings (/config/local.json):')
+    console.info(`Using local dev server settings (${localConfigPath}):`)
     console.info(JSON.stringify(settings, null, 2))
     return settings
   } catch (e) {
-    console.info('Local dev server settings not found (/config/local.json)', e)
+    console.info(`Local dev server settings not found (${localConfigPath}), using default`, e)
     return {}
   }
 }
 
 const projectRoot = dirname(fileURLToPath(import.meta.url))
 
+const getTransformSWSettings = (settings) => {
+  if ('transformSW' in settings) {
+    return settings.transformSW
+  } else {
+    console.info(
+      '`transformSW` is not present in your local settings.\n' +
+        'This option controls whether the service worker should be bundled and transformed into iife (immediately-invoked function expression) during development.\n' +
+        'If set to false, the service worker will be served as-is, as an ES Module.\n' +
+        'Some browsers (e.g. Firefox) does not support ESM service workers.\n' +
+        'To avoid surprises, it is defaulted to true, but this can be slow.\n' +
+        'If you are using a browser that supports ESM service workers, you can set this option to false.\n' +
+        `No matter your choice, you can set the transformSW option in ${localConfigPath} in to disable this message.`
+    )
+    return true
+  }
+}
+
 export default defineConfig(async ({ mode, command }) => {
   const settings = await getLocalDevSettings()
   const target = settings.target || 'http://localhost:4000/'
+  const transformSW = getTransformSWSettings(settings)
   const proxy = {
     '/api': {
       target,
@@ -60,6 +79,11 @@ export default defineConfig(async ({ mode, command }) => {
 
   const swSrc = 'src/sw.js'
   const swDest = 'sw-pleroma.js'
+  const alias = {
+    src: '/src',
+    components: '/src/components',
+    ...(mode === 'test' ? { vue: 'vue/dist/vue.esm-bundler.js' } : {})
+  }
 
   return {
     plugins: [
@@ -76,7 +100,7 @@ export default defineConfig(async ({ mode, command }) => {
         }
       }),
       vueJsx(),
-      devSwPlugin({ swSrc, swDest }),
+      devSwPlugin({ swSrc, swDest, transformSW, alias }),
       buildSwPlugin({ swSrc, swDest }),
       swMessagesPlugin(),
       copyPlugin({
@@ -85,16 +109,12 @@ export default defineConfig(async ({ mode, command }) => {
       })
     ],
     resolve: {
-      alias: {
-        src: '/src',
-        components: '/src/components',
-        ...(mode === 'test' ? { vue: 'vue/dist/vue.esm-bundler.js' } : {})
-      }
+      alias
     },
     define: {
       'process.env': JSON.stringify({
         NODE_ENV: command === 'serve' ? 'development' : 'production',
-        HAS_MODULE_SERVICE_WORKER: command === 'serve'
+        HAS_MODULE_SERVICE_WORKER: command === 'serve' && !transformSW
       }),
       'COMMIT_HASH': JSON.stringify('DEV'),
       'DEV_OVERRIDES': JSON.stringify({})

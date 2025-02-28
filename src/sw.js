@@ -4,6 +4,9 @@ import { storage } from 'src/lib/storage.js'
 import { parseNotification } from './services/entity_normalizer/entity_normalizer.service.js'
 import { prepareNotificationObject } from './services/notification_utils/notification_utils.js'
 import { createI18n } from 'vue-i18n'
+// Collects all messages for service workers
+// Needed because service workers cannot use dynamic imports
+// See /build/sw_plugin.js for more information
 import messages from 'virtual:pleroma-fe/service_worker_messages'
 
 const i18n = createI18n({

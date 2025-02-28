@@ -1,28 +1,43 @@
 import { fileURLToPath } from 'node:url'
-import { dirname } from 'node:path'
+import { dirname, resolve } from 'node:path'
 import { readFile } from 'node:fs/promises'
 import { build } from 'vite'
-import { generateServiceWorkerMessages } from './service_worker_messages.js'
+import * as esbuild from 'esbuild'
+import { generateServiceWorkerMessages, i18nFiles } from './service_worker_messages.js'
 
+const getSWMessagesAsText = async () => {
+  const messages = await generateServiceWorkerMessages()
+  return `export default ${JSON.stringify(messages, undefined, 2)}`
+}
 const projectRoot = dirname(dirname(fileURLToPath(import.meta.url)))
 
 export const devSwPlugin = ({
   swSrc,
   swDest,
+  transformSW,
+  alias
 }) => {
+  const swFullSrc = resolve(projectRoot, swSrc)
+  const esbuildAlias = {}
+  Object.entries(alias).forEach(([source, dest]) => {
+    esbuildAlias[source] = dest.startsWith('/') ? projectRoot + dest : dest
+  })
+
   return {
     name: 'dev-sw-plugin',
     apply: 'serve',
+    configResolved (conf) {
+    },
     resolveId (id) {
       const name = id.startsWith('/') ? id.slice(1) : id
       if (name === swDest) {
-        return swSrc
+        return swFullSrc
       }
       return null
     },
     async load (id) {
-      if (id === swSrc) {
-        return readFile(swSrc, 'utf-8')
+      if (id === swFullSrc) {
+        return readFile(swFullSrc, 'utf-8')
       }
       return null
     },
@@ -31,27 +46,45 @@ export const devSwPlugin = ({
      * during dev, and firefox does not support ESM as service worker
      * https://bugzilla.mozilla.org/show_bug.cgi?id=1360870
      */
-    // async transform (code, id) {
-    //   if (id === swSrc) {
-    //     console.log('load virtual')
-    //     const res = await build({
-    //       entryPoints: [swSrc],
-    //       bundle: true,
-    //       write: false,
-    //       outfile: 'sw-pleroma.js',
-    //       alias: {
-    //         'src': projectRoot + '/src',
-    //       },
-    //       define: {
-    //         'import.meta.glob': 'require'
-    //       }
-    //     })
-    //     console.log('res', res)
-    //     const text = res.outputFiles[0].text
-    //     console.log('text', text)
-    //     return text
-    //   }
-    // }
+    async transform (code, id) {
+      if (id === swFullSrc && transformSW) {
+        const res = await esbuild.build({
+          entryPoints: [swSrc],
+          bundle: true,
+          write: false,
+          outfile: 'sw-pleroma.js',
+          alias: esbuildAlias,
+          plugins: [{
+            name: 'vite-like-root-resolve',
+            setup (b) {
+              b.onResolve(
+                { filter: new RegExp(/^\//) },
+                args => ({
+                  path: resolve(projectRoot, args.path.slice(1))
+                })
+              )
+            }
+          }, {
+            name: 'sw-messages',
+            setup (b) {
+              b.onResolve(
+                { filter: new RegExp('^' + swMessagesName + '$') },
+                args => ({
+                  path: args.path,
+                  namespace: 'sw-messages'
+                }))
+              b.onLoad(
+                { filter: /.*/, namespace: 'sw-messages' },
+                async () => ({
+                  contents: await getSWMessagesAsText()
+                }))
+            }
+          }]
+        })
+        const text = res.outputFiles[0].text
+        return text
+      }
+    }
   }
 }
 
@@ -112,6 +145,9 @@ export const swMessagesPlugin = () => {
     name: 'sw-messages-plugin',
     resolveId (id) {
       if (id === swMessagesName) {
+        Object.values(i18nFiles).forEach(f => {
+          this.addWatchFile(f)
+        })
         return swMessagesNameResolved
       } else {
         return null
@@ -119,8 +155,7 @@ export const swMessagesPlugin = () => {
     },
     async load (id) {
       if (id === swMessagesNameResolved) {
-        const messages = await generateServiceWorkerMessages()
-        return `export default ${JSON.stringify(messages, undefined, 2)}`
+        return await getSWMessagesAsText()
       }
       return null
     }
