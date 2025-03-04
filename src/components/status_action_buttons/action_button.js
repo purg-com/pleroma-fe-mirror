@@ -120,7 +120,7 @@ export default {
         this.$store.dispatch('reactWithEmoji', { id: this.status.id, emoji })
       }
     },
-    doActionWrap (button, close) {
+    doActionWrap (button, close = () => {}) {
       if (button.name === 'emoji') {
         this.$refs.picker.showPicker()
       } else {
