@@ -1,5 +1,6 @@
 /* eslint-env serviceworker */
 
+import 'virtual:pleroma-fe/service_worker_env'
 import { storage } from 'src/lib/storage.js'
 import { parseNotification } from './services/entity_normalizer/entity_normalizer.service.js'
 import { prepareNotificationObject } from './services/notification_utils/notification_utils.js'
