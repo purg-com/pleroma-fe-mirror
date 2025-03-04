@@ -50,10 +50,15 @@ test:
     APT_CACHE_DIR: apt-cache
   script:
     - mkdir -pv $APT_CACHE_DIR && apt-get -qq update
-    - apt install firefox-esr -y --no-install-recommends
-    - firefox --version
     - yarn
-    - yarn unit
+    - yarn playwright install firefox
+    - yarn playwright install-deps
+    - yarn unit-ci
+  artifacts:
+    # When the test fails, upload screenshots for better context on why it fails
+    paths:
+      - test/**/__screenshots__
+    when: on_failure
 
 build:
   stage: build

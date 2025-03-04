@@ -16,10 +16,10 @@ const checkColors = (output) => {
 }
 
 describe('Theme Data utility functions', () => {
-  const context = require.context('static/themes/', false, /\.json$/)
-  context.keys().forEach((key) => {
+  const context = import.meta.glob('/public/static/themes/*.json', { import: 'default', eager: true })
+  Object.keys(context).forEach((key) => {
     it(`Should render all colors for ${key} properly`, () => {
-      const { theme, source } = context(key)
+      const { theme, source } = context[key]
       const data = source || theme
       const colors = getColors(data.colors, data.opacity, 1)
       checkColors(colors)

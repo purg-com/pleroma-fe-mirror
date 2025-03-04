@@ -7,5 +7,6 @@ test/e2e/reports
 selenium-debug.log
 .idea/
 config/local.json
-static/emoji.json
+src/assets/emoji.json
 logs/
+__screenshots__/

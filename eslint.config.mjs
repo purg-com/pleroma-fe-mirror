@@ -19,7 +19,7 @@ export default [
       },
       globals: {
         ...globals.browser,
-        ...globals.mocha,
+        ...globals.vitest,
         ...globals.chai,
         ...globals.commonjs,
         ...globals.serviceworker

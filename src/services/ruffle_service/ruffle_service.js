@@ -1,11 +1,12 @@
 const createRuffleService = () => {
   let ruffleInstance = null
 
-  const getRuffle = () => new Promise((resolve, reject) => {
+  const getRuffle = async () => new Promise((resolve, reject) => {
     if (ruffleInstance) {
       resolve(ruffleInstance)
       return
     }
+
     // Ruffle needs these to be set before it's loaded
     // https://github.com/ruffle-rs/ruffle/issues/3952
     window.RufflePlayer = {}

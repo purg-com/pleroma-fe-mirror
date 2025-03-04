@@ -221,12 +221,15 @@ export default {
 
     // ## Components stuff
     // Getting existing components
-    const componentsContext = require.context('src', true, /\.style.js(on)?$/)
-    const componentKeysAll = componentsContext.keys()
+    const componentsContext = import.meta.glob(
+      ['/src/**/*.style.js', '/src/**/*.style.json'],
+      { eager: true }
+    )
+    const componentKeysAll = Object.keys(componentsContext)
     const componentsMap = new Map(
       componentKeysAll
         .map(
-          key => [key, componentsContext(key).default]
+          key => [key, componentsContext[key].default]
         ).filter(([, component]) => !component.virtual && !component.notEditable)
     )
     exports.componentsMap = componentsMap

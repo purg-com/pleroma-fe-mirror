@@ -1,0 +1,1 @@
+BREAKING: css source map does not work in production (see https://github.com/vitejs/vite/issues/2830 )

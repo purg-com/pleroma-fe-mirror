@@ -46,7 +46,7 @@ const ensureFinalFallback = codes => {
   return codeList.includes('en') ? codeList : codeList.concat(['en'])
 }
 
-module.exports = {
+export {
   languages,
   langCodeToJsonName,
   langCodeToCldrName,
