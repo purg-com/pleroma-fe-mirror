@@ -1,4 +1,5 @@
 import { useEditStatusStore } from 'src/stores/editStatus.js'
+import { useReportsStore } from 'src/stores/reports.js'
 const PRIVATE_SCOPES = new Set(['private', 'direct'])
 const PUBLIC_SCOPES = new Set(['public', 'unlisted'])
 export const BUTTONS = [{
@@ -216,8 +217,8 @@ export const BUTTONS = [{
   icon: 'flag',
   label: 'user_card.report',
   if: ({ loggedIn }) => loggedIn,
-  action ({ dispatch, status }) {
-    dispatch('openUserReportingModal', { userId: status.user.id, statusIds: [status.id] })
+  action ({ status }) {
+    return useReportsStore().openUserReportingModal({ userId: status.user.id, statusIds: [status.id] })
   }
 }].map(button => {
   return Object.fromEntries(
