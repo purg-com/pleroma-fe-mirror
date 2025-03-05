@@ -102,7 +102,7 @@ const GeneralTab = {
     },
     clearCache (key) {
       clearCache(key)
-        .then((v) => {
+        .then(() => {
           this.$store.dispatch('settingsSaved', { success: true })
         })
         .catch(error => {
