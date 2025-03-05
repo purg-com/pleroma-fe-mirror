@@ -14,7 +14,10 @@
           class="input menu-checkbox -radio"
           :class="{ 'menu-checkbox-checked': status.bookmark_folder_id == folder.id }"
         />
-        <StillImage :src="folder.emoji_url" class="emoji" />
+        <StillImage
+          :src="folder.emoji_url"
+          class="emoji"
+        />
         {{ ' ' + folder.name }}
       </button>
     </div>
