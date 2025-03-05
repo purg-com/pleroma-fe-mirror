@@ -1,5 +1,7 @@
 import { useEditStatusStore } from 'src/stores/editStatus.js'
 import { useReportsStore } from 'src/stores/reports.js'
+import { useStatusHistoryStore } from 'src/stores/statusHistory.js'
+
 const PRIVATE_SCOPES = new Set(['private', 'direct'])
 const PUBLIC_SCOPES = new Set(['public', 'unlisted'])
 export const BUTTONS = [{
@@ -138,6 +140,34 @@ export const BUTTONS = [{
     } else {
       return dispatch('bookmark', { id: status.id })
     }
+  }
+}, {
+  // =========
+  // EDIT HISTORY
+  // =========
+  name: 'editHistory',
+  icon: 'history',
+  label: 'status.status_history',
+  if ({ status, state }) {
+    return state.instance.editingAvailable &&
+      status.edited_at !== null
+  },
+  action ({ status }) {
+    const originalStatus = { ...status }
+    const stripFieldsList = [
+      'attachments',
+      'created_at',
+      'emojis',
+      'text',
+      'raw_html',
+      'nsfw',
+      'poll',
+      'summary',
+      'summary_raw_html'
+    ]
+    stripFieldsList.forEach(p => delete originalStatus[p])
+    useStatusHistoryStore().openStatusHistoryModal(originalStatus)
+    return Promise.resolve()
   }
 }, {
   // =========
