@@ -18,7 +18,7 @@ library.add(
 
 const StatusActionButtons = {
   props: ['status', 'replying'],
-  emits: ['toggleReplying'],
+  emits: ['toggleReplying', 'interacted'],
   data () {
     return {
       showPin: false,
