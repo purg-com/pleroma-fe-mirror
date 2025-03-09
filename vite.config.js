@@ -8,6 +8,7 @@ import eslint from 'vite-plugin-eslint2'
 import { devSwPlugin, buildSwPlugin, swMessagesPlugin } from './build/sw_plugin.js'
 import copyPlugin from './build/copy_plugin.js'
 import { getCommitHash } from './build/commit_hash.js'
+import mswPlugin from './build/msw_plugin.js'
 
 const localConfigPath = '<projectRoot>/config/local.json'
 const getLocalDevSettings = async () => {
@@ -117,7 +118,8 @@ export default defineConfig(async ({ mode, command }) => {
         lintInWorker: true,
         lintOnStart: true,
         cacheLocation: resolve(projectRoot, 'node_modules/.cache/stylelintcache')
-      })
+      }),
+      ...(mode === 'test' ? [mswPlugin()] : [])
     ],
     optimizeDeps: {
       // For unknown reasons, during vitest, vite will re-optimize the following
