@@ -1,7 +1,9 @@
 import apiService from '../services/api/api.service.js'
 import { instanceDefaultProperties } from './config.js'
-import { langCodeToCldrName, ensureFinalFallback } from '../i18n/languages.js'
+import { ensureFinalFallback } from '../i18n/languages.js'
 import { useInterfaceStore } from 'src/stores/interface.js'
+// See build/emojis_plugin for more details
+import { annotationsLoader } from 'virtual:pleroma-fe/emoji-annotations'
 
 const SORTED_EMOJI_GROUP_IDS = [
   'smileys-and-emotion',
@@ -179,10 +181,7 @@ const defaultState = {
 }
 
 const loadAnnotations = (lang) => {
-  const code = langCodeToCldrName(lang)
-  return import(
-    `../../node_modules/@kazvmoe-infra/unicode-emoji-json/annotations/${code}.json`
-  )
+  return annotationsLoader[lang]()
     .then(k => k.default)
 }
 
