@@ -1,5 +1,6 @@
 import backendInteractorService from '../services/backend_interactor_service/backend_interactor_service.js'
 import { windowWidth, windowHeight } from '../services/window_utils/window_utils'
+import apiService from '../services/api/api.service.js'
 import oauthApi from '../services/new_api/oauth.js'
 import { compact, map, each, mergeWith, last, concat, uniq, isArray } from 'lodash'
 import { registerPushNotifications, unregisterPushNotifications } from '../services/sw/sw.js'
@@ -527,11 +528,10 @@ const users = {
     async signUp (store, userInfo) {
       store.commit('signUpPending')
 
-      const rootState = store.rootState
-
       try {
-        const data = await rootState.api.backendInteractor.register(
-          { params: { ...userInfo } }
+        const token = await store.dispatch('ensureAppToken')
+        const data = await apiService.register(
+          { credentials: token, params: { ...userInfo } }
         )
 
         if (data.access_token) {
@@ -562,7 +562,9 @@ const users = {
         instance: instance.server
       }
 
-      return oauthApi.getOrCreateApp(data)
+      // NOTE: No need to verify the app still exists, because if it doesn't,
+      // the token will be invalid too
+      return store.dispatch('ensureApp')
         .then((app) => {
           const params = {
             app,
