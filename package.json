@@ -64,7 +64,7 @@
     "@vitest/browser": "^3.0.7",
     "@vitest/ui": "^3.0.7",
     "@vue/babel-helper-vue-jsx-merge-props": "1.4.0",
-    "@vue/babel-plugin-jsx": "1.2.5",
+    "@vue/babel-plugin-jsx": "1.4.0",
     "@vue/compiler-sfc": "3.5.13",
     "@vue/test-utils": "2.4.6",
     "autoprefixer": "10.4.20",
