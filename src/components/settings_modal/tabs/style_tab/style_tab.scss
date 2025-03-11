@@ -1,4 +1,6 @@
 .StyleTab {
+  min-width: var(--themeEditorMinWidth, fit-content);
+
   .style-control {
     display: flex;
     flex-wrap: wrap;
