@@ -112,6 +112,7 @@ const defaultState = {
   emojiSize: '2.2rem',
   navbarSize: '3.5rem',
   panelHeaderSize: '3.2rem',
+  themeEditorMinWidth: '0rem',
   forcedRoundness: -1,
   fontsOverride: {},
   virtualScrolling: true,
