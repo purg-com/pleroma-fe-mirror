@@ -1,3 +1,4 @@
+import { defineStore } from 'pinia'
 import { createApp, getClientToken, verifyAppToken } from 'src/services/new_api/oauth.js'
 
 // status codes about verifyAppToken (GET /api/v1/apps/verify_credentials)
@@ -20,7 +21,7 @@ const isClientDataRejected = error => (
   error.statusCode === 400
 )
 
-const oauth = {
+export const useOAuthStore = defineStore('oauth', {
   state: () => ({
     clientId: false,
     clientSecret: false,
@@ -34,82 +35,77 @@ const oauth = {
      */
     userToken: false
   }),
-  mutations: {
-    setClientData (state, { clientId, clientSecret }) {
-      state.clientId = clientId
-      state.clientSecret = clientSecret
-    },
-    setAppToken (state, token) {
-      state.appToken = token
-    },
-    setToken (state, token) {
-      state.userToken = token
-    },
-    clearToken (state) {
-      state.userToken = false
-      // state.token is userToken with older name, coming from persistent state
-      // let's clear it as well, since it is being used as a fallback of state.userToken
-      delete state.token
-    }
-  },
   getters: {
-    getToken: state => () => {
-      // state.token is userToken with older name, coming from persistent state
-      // added here for smoother transition, otherwise user will be logged out
-      return state.userToken || state.token || state.appToken
+    getToken () {
+      return this.userToken || this.appToken
     },
-    getUserToken: state => () => {
-      // state.token is userToken with older name, coming from persistent state
-      // added here for smoother transition, otherwise user will be logged out
-      return state.userToken || state.token
+    getUserToken () {
+      return this.userToken
     }
   },
   actions: {
-    async createApp ({ rootState, commit }) {
-      const instance = rootState.instance.server
+    setClientData ({ clientId, clientSecret }) {
+      this.clientId = clientId
+      this.clientSecret = clientSecret
+    },
+    setAppToken (token) {
+      this.appToken = token
+    },
+    setToken (token) {
+      this.userToken = token
+    },
+    clearToken () {
+      this.userToken = false
+    },
+    async createApp () {
+      const { state } = window.vuex
+      const instance = state.instance.server
       const app = await createApp(instance)
-      commit('setClientData', app)
+      this.setClientData(app)
       return app
     },
     /// Use this if you want to get the client id and secret but are not interested
     /// in whether they are valid.
     /// @return {{ clientId: string, clientSecret: string }} An object representing the app
-    ensureApp ({ state, dispatch }) {
-      if (state.clientId && state.clientSecret) {
+    async ensureApp () {
+      if (this.clientId && this.clientSecret) {
         return {
-          clientId: state.clientId,
-          clientSecret: state.clientSecret
+          clientId: this.clientId,
+          clientSecret: this.clientSecret
         }
       } else {
-        return dispatch('createApp')
+        return this.createApp()
       }
     },
-    async getAppToken ({ state, rootState, commit }) {
+    async getAppToken () {
+      const { state } = window.vuex
+      const instance = state.instance.server
       const res = await getClientToken({
-        clientId: state.clientId,
-        clientSecret: state.clientSecret,
-        instance: rootState.instance.server
+        clientId: this.clientId,
+        clientSecret: this.clientSecret,
+        instance
       })
-      commit('setAppToken', res.access_token)
+      this.setAppToken(res.access_token)
       return res.access_token
     },
     /// Use this if you want to ensure the app is still valid to use.
     /// @return {string} The access token to the app (not attached to any user)
-    async ensureAppToken ({ state, rootState, dispatch, commit }) {
-      if (state.appToken) {
+    async ensureAppToken () {
+      const { state } = window.vuex
+      if (this.appToken) {
         try {
           await verifyAppToken({
-            instance: rootState.instance.server,
-            appToken: state.appToken
+            instance: state.instance.server,
+            appToken: this.appToken
           })
-          return state.appToken
+          return this.appToken
         } catch (e) {
           if (!isAppTokenRejected(e)) {
             // The server did not reject our token, but we encountered other problems. Maybe the server is down.
             throw e
           } else {
             // The app token is rejected, so it is no longer useful.
-            commit('setAppToken', false)
+            this.setAppToken(false)
           }
         }
       }
@@ -117,7 +113,7 @@ const oauth = {
       // appToken is not available, or is rejected: try to get a new one.
       // First, make sure the client id and client secret are filled.
       try {
-        await dispatch('ensureApp')
+        await this.ensureApp()
       } catch (e) {
         console.error('Cannot create app', e)
         throw e
@@ -126,7 +122,7 @@ const oauth = {
       // Note that at this step, the client id and secret may be invalid
       // (because the backend may have already deleted the app due to no user login)
       try {
-        return await dispatch('getAppToken')
+        return await this.getAppToken()
       } catch (e) {
         if (!isClientDataRejected(e)) {
           // Non-credentials problem, fail fast
@@ -135,17 +131,27 @@ const oauth = {
         } else {
           // the client id and secret are invalid, so we should clear them
           // and re-create our app
-          commit('setClientData', {
+          this.setClientData({
             clientId: false,
             clientSecret: false
           })
-          await dispatch('createApp')
+          await this.createApp()
           // try once again to get the token
-          return await dispatch('getAppToken')
+          return await this.getAppToken()
         }
       }
     }
+  },
+  persist: {
+    afterLoad (state) {
+      // state.token is userToken with older name, coming from persistent state
+      if (state.token && !state.userToken) {
+        state.userToken = state.token
+      }
+      if ('token' in state) {
+        delete state.token
+      }
+      return state
+    }
   }
-}
-
-export default oauth
+})
