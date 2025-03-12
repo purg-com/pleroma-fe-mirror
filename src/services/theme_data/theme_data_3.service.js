@@ -516,7 +516,7 @@ export const init = ({
         .filter(c => virtualComponents.has(c) && !nonEditableComponents.has(c))
     } else if (liteMode) {
       validInnerComponents = (component.validInnerComponentsLite || component.validInnerComponents || [])
-    } else if (component.name === 'Root') {
+    } else if (component.name === 'Root' || component.states != null) {
       validInnerComponents = component.validInnerComponents || []
     } else {
       validInnerComponents = component
