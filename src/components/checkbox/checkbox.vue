@@ -1,7 +1,7 @@
 <template>
   <label
     class="checkbox"
-    :class="{ disabled, indeterminate, 'indeterminate-fix': indeterminateTransitionFix }"
+    :class="[{ disabled, indeterminate, 'indeterminate-fix': indeterminateTransitionFix }, radio ? '-radio' : '-checkbox']"
   >
     <span
       v-if="!!$slots.before"
@@ -19,9 +19,9 @@
       @change="$emit('update:modelValue', $event.target.checked)"
     >
     <i
-      class="input -checkbox checkbox-indicator"
+      class="input checkbox-indicator"
       :aria-hidden="true"
-      :class="{ disabled }"
+      :class="[{ disabled }, radio ? '-radio' : '-checkbox']"
       @transitionend.capture="onTransitionEnd"
     />
     <span
@@ -37,6 +37,7 @@
 <script>
 export default {
   props: [
+    'radio',
     'modelValue',
     'indeterminate',
     'disabled'
@@ -67,6 +68,15 @@ export default {
   position: relative;
   display: inline-block;
   min-height: 1.2em;
+
+  &.-radio {
+    .checkbox-indicator {
+      &,
+      &::before {
+        border-radius: 9999px;
+      }
+    }
+  }
 
   &-indicator,
   & .label {
