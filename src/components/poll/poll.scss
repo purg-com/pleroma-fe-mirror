@@ -43,11 +43,6 @@
     transition: width 0.5s;
   }
 
-  .option-vote {
-    display: flex;
-    align-items: center;
-  }
-
   input {
     width: 3.5em;
   }
@@ -55,6 +50,7 @@
   .footer {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
   }
 
   &.loading * {
