@@ -1,38 +1,41 @@
+import { createApp } from 'vue'
 import { createStore } from 'vuex'
+import { createPinia, setActivePinia } from 'pinia'
 import { http, HttpResponse } from 'msw'
-import oauth from 'src/modules/oauth.js'
+import { useOAuthStore } from 'src/stores/oauth.js'
 import { injectMswToTest, authApis, testServer } from '/test/fixtures/mock_api.js'
 
 const test = injectMswToTest(authApis)
 
-const getStore = (defaultStateInjection) => {
-  const stateFunction = defaultStateInjection ? () => {
-    return {
-      ...oauth.state(),
-      ...defaultStateInjection
+const vuexStore = createStore({
+  modules: {
+    instance: {
+      state: () => ({ server: testServer })
     }
-  } : oauth.state
+  }
+})
+const app = createApp({})
+app.use(vuexStore)
+window.vuex = vuexStore
 
-  return createStore({
-    modules: {
-      instance: {
-        state: () => ({ server: testServer })
-      },
-      oauth: {
-        ...oauth,
-        state: stateFunction
-      }
+const getStore = (defaultStateInjection) => {
+  const pinia = createPinia().use(({ store }) => {
+    if (store.$id === 'oauth') {
+      store.$patch(defaultStateInjection)
     }
   })
+  app.use(pinia)
+  setActivePinia(pinia)
+  return useOAuthStore()
 }
 
 
 describe('createApp', () => {
   test('it should use create an app and record client id and secret', async () => {
     const store = getStore()
-    const app = await store.dispatch('createApp')
-    expect(store.state.oauth.clientId).to.eql('test-id')
-    expect(store.state.oauth.clientSecret).to.eql('test-secret')
+    const app = await store.createApp()
+    expect(store.clientId).to.eql('test-id')
+    expect(store.clientSecret).to.eql('test-secret')
     expect(app.clientId).to.eql('test-id')
     expect(app.clientSecret).to.eql('test-secret')
   })
@@ -45,19 +48,19 @@ describe('createApp', () => {
     )
 
     const store = getStore()
-    const res = store.dispatch('createApp')
+    const res = store.createApp()
     await expect(res).rejects.toThrowError('Throttled')
-    expect(store.state.oauth.clientId).to.eql(false)
-    expect(store.state.oauth.clientSecret).to.eql(false)
+    expect(store.clientId).to.eql(false)
+    expect(store.clientSecret).to.eql(false)
   })
 })
 
 describe('ensureApp', () => {
   test('it should create an app if it does not exist', async () => {
     const store = getStore()
-    const app = await store.dispatch('ensureApp')
-    expect(store.state.oauth.clientId).to.eql('test-id')
-    expect(store.state.oauth.clientSecret).to.eql('test-secret')
+    const app = await store.ensureApp()
+    expect(store.clientId).to.eql('test-id')
+    expect(store.clientSecret).to.eql('test-secret')
     expect(app.clientId).to.eql('test-id')
     expect(app.clientSecret).to.eql('test-secret')
   })
@@ -73,9 +76,9 @@ describe('ensureApp', () => {
       clientId: 'another-id',
       clientSecret: 'another-secret'
     })
-    const app = await store.dispatch('ensureApp')
-    expect(store.state.oauth.clientId).to.eql('another-id')
-    expect(store.state.oauth.clientSecret).to.eql('another-secret')
+    const app = await store.ensureApp()
+    expect(store.clientId).to.eql('another-id')
+    expect(store.clientSecret).to.eql('another-secret')
     expect(app.clientId).to.eql('another-id')
     expect(app.clientSecret).to.eql('another-secret')
   })
@@ -87,9 +90,9 @@ describe('getAppToken', () => {
       clientId: 'test-id',
       clientSecret: 'test-secret'
     })
-    const token = await store.dispatch('getAppToken')
+    const token = await store.getAppToken()
     expect(token).to.eql('test-app-token')
-    expect(store.state.oauth.appToken).to.eql('test-app-token')
+    expect(store.appToken).to.eql('test-app-token')
   })
 
   test('it should throw and not set state if it cannot get app token', async () => {
@@ -97,26 +100,26 @@ describe('getAppToken', () => {
       clientId: 'bad-id',
       clientSecret: 'bad-secret'
     })
-    await expect(store.dispatch('getAppToken')).rejects.toThrowError('400')
-    expect(store.state.oauth.appToken).to.eql(false)
+    await expect(store.getAppToken()).rejects.toThrowError('400')
+    expect(store.appToken).to.eql(false)
   })
 })
 
 describe('ensureAppToken', () => {
   test('it should work if the state is empty', async () => {
     const store = getStore()
-    const token = await store.dispatch('ensureAppToken')
+    const token = await store.ensureAppToken()
     expect(token).to.eql('test-app-token')
-    expect(store.state.oauth.appToken).to.eql('test-app-token')
+    expect(store.appToken).to.eql('test-app-token')
   })
 
   test('it should work if we already have a working token', async () => {
     const store = getStore({
       appToken: 'also-good-app-token'
     })
-    const token = await store.dispatch('ensureAppToken')
+    const token = await store.ensureAppToken()
     expect(token).to.eql('also-good-app-token')
-    expect(store.state.oauth.appToken).to.eql('also-good-app-token')
+    expect(store.appToken).to.eql('also-good-app-token')
   })
 
   test('it should work if we have a bad token but good app credentials', async ({ worker }) => {
@@ -130,9 +133,9 @@ describe('ensureAppToken', () => {
       clientId: 'test-id',
       clientSecret: 'test-secret'
     })
-    const token = await store.dispatch('ensureAppToken')
+    const token = await store.ensureAppToken()
     expect(token).to.eql('test-app-token')
-    expect(store.state.oauth.appToken).to.eql('test-app-token')
+    expect(store.appToken).to.eql('test-app-token')
   })
 
   test('it should work if we have no token but good app credentials', async ({ worker }) => {
@@ -145,9 +148,9 @@ describe('ensureAppToken', () => {
       clientId: 'test-id',
       clientSecret: 'test-secret'
     })
-    const token = await store.dispatch('ensureAppToken')
+    const token = await store.ensureAppToken()
     expect(token).to.eql('test-app-token')
-    expect(store.state.oauth.appToken).to.eql('test-app-token')
+    expect(store.appToken).to.eql('test-app-token')
   })
 
   test('it should work if we have no token and bad app credentials', async () => {
@@ -155,11 +158,11 @@ describe('ensureAppToken', () => {
       clientId: 'bad-id',
       clientSecret: 'bad-secret'
     })
-    const token = await store.dispatch('ensureAppToken')
+    const token = await store.ensureAppToken()
     expect(token).to.eql('test-app-token')
-    expect(store.state.oauth.appToken).to.eql('test-app-token')
-    expect(store.state.oauth.clientId).to.eql('test-id')
-    expect(store.state.oauth.clientSecret).to.eql('test-secret')
+    expect(store.appToken).to.eql('test-app-token')
+    expect(store.clientId).to.eql('test-id')
+    expect(store.clientSecret).to.eql('test-secret')
   })
 
   test('it should work if we have bad token and bad app credentials', async () => {
@@ -168,11 +171,11 @@ describe('ensureAppToken', () => {
       clientId: 'bad-id',
       clientSecret: 'bad-secret'
     })
-    const token = await store.dispatch('ensureAppToken')
+    const token = await store.ensureAppToken()
     expect(token).to.eql('test-app-token')
-    expect(store.state.oauth.appToken).to.eql('test-app-token')
-    expect(store.state.oauth.clientId).to.eql('test-id')
-    expect(store.state.oauth.clientSecret).to.eql('test-secret')
+    expect(store.appToken).to.eql('test-app-token')
+    expect(store.clientId).to.eql('test-id')
+    expect(store.clientSecret).to.eql('test-secret')
   })
 
   test('it should throw if we cannot create an app', async ({ worker }) => {
@@ -183,7 +186,7 @@ describe('ensureAppToken', () => {
     )
 
     const store = getStore()
-    await expect(store.dispatch('ensureAppToken')).rejects.toThrowError('Throttled')
+    await expect(store.ensureAppToken()).rejects.toThrowError('Throttled')
   })
 
   test('it should throw if we cannot obtain app token', async ({ worker }) => {
@@ -194,6 +197,6 @@ describe('ensureAppToken', () => {
     )
 
     const store = getStore()
-    await expect(store.dispatch('ensureAppToken')).rejects.toThrowError('Throttled')
+    await expect(store.ensureAppToken()).rejects.toThrowError('Throttled')
   })
 })

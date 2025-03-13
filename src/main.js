@@ -16,7 +16,7 @@ import vuexModules from './modules/index.js'
 
 import { createI18n } from 'vue-i18n'
 
-import createPersistedState from './lib/persisted_state.js'
+import createPersistedState, { piniaPersistPlugin } from './lib/persisted_state.js'
 import pushNotifications from './lib/push_notifications_plugin.js'
 
 import messages from './i18n/messages.js'
@@ -71,6 +71,8 @@ const persistedStateOptions = {
     let storageError
     const plugins = [pushNotifications]
     const pinia = createPinia()
+    pinia.use(piniaPersistPlugin())
+
     try {
       const persistedState = await createPersistedState(persistedStateOptions)
       plugins.push(persistedState)

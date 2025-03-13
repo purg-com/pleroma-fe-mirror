@@ -5,6 +5,7 @@ import oauthApi from '../services/new_api/oauth.js'
 import { compact, map, each, mergeWith, last, concat, uniq, isArray } from 'lodash'
 import { registerPushNotifications, unregisterPushNotifications } from '../services/sw/sw.js'
 import { useInterfaceStore } from 'src/stores/interface.js'
+import { useOAuthStore } from 'src/stores/oauth.js'
 
 // TODO: Unify with mergeOrAdd in statuses.js
 export const mergeOrAdd = (arr, obj, item) => {
@@ -526,17 +527,18 @@ const users = {
         })
     },
     async signUp (store, userInfo) {
+      const oauthStore = useOAuthStore()
       store.commit('signUpPending')
 
       try {
-        const token = await store.dispatch('ensureAppToken')
+        const token = await oauthStore.ensureAppToken()
         const data = await apiService.register(
           { credentials: token, params: { ...userInfo } }
         )
 
         if (data.access_token) {
           store.commit('signUpSuccess')
-          store.commit('setToken', data.access_token)
+          oauthStore.setToken(data.access_token)
           store.dispatch('loginUser', data.access_token)
           return 'ok'
         } else { // Request succeeded, but user cannot login yet.
@@ -554,21 +556,16 @@ const users = {
     },
 
     logout (store) {
-      const { oauth, instance } = store.rootState
-
-      const data = {
-        ...oauth,
-        commit: store.commit,
-        instance: instance.server
-      }
+      const oauth = useOAuthStore()
+      const { instance } = store.rootState
 
       // NOTE: No need to verify the app still exists, because if it doesn't,
       // the token will be invalid too
-      return store.dispatch('ensureApp')
+      return oauth.ensureApp()
         .then((app) => {
           const params = {
             app,
-            instance: data.instance,
+            instance: instance.server,
             token: oauth.userToken
           }
 
@@ -577,9 +574,9 @@ const users = {
         .then(() => {
           store.commit('clearCurrentUser')
           store.dispatch('disconnectFromSocket')
-          store.commit('clearToken')
+          oauth.clearToken()
           store.dispatch('stopFetchingTimeline', 'friends')
-          store.commit('setBackendInteractor', backendInteractorService(store.getters.getToken()))
+          store.commit('setBackendInteractor', backendInteractorService(oauth.getToken))
           store.dispatch('stopFetchingNotifications')
           store.dispatch('stopFetchingLists')
           store.dispatch('stopFetchingBookmarkFolders')
@@ -674,7 +671,7 @@ const users = {
 
               // remove authentication token on client/authentication errors
               if ([400, 401, 403, 422].includes(response.status)) {
-                commit('clearToken')
+                useOAuthStore().clearToken()
               }
 
               if (response.status === 401) {
