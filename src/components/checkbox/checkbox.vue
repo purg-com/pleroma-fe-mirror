@@ -69,15 +69,6 @@ export default {
   display: inline-block;
   min-height: 1.2em;
 
-  &.-radio {
-    .checkbox-indicator {
-      &,
-      &::before {
-        border-radius: 9999px;
-      }
-    }
-  }
-
   &-indicator,
   & .label {
     vertical-align: middle;
@@ -115,6 +106,15 @@ export default {
     color: transparent;
     overflow: hidden;
     box-sizing: border-box;
+  }
+
+  &.-radio {
+    .checkbox-indicator {
+      &,
+      &::before {
+        border-radius: 9999px;
+      }
+    }
   }
 
   .disabled {
