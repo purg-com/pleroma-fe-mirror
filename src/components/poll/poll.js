@@ -45,6 +45,13 @@ export default {
     expired () {
       return (this.poll && this.poll.expired) || false
     },
+    expirationLabel () {
+      if (this.$store.getters.mergedConfig.useAbsoluteTimeFormat) {
+        return this.expired ? 'polls.expired_at' : 'polls.expires_at'
+      } else {
+        return this.expired ? 'polls.expired' : 'polls.expires_in'
+      }
+    },
     loggedIn () {
       return this.$store.state.users.currentUser
     },

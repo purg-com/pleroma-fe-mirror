@@ -47,12 +47,6 @@
     width: 3.5em;
   }
 
-  .footer {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
   &.loading * {
     cursor: progress;
   }

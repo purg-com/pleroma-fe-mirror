@@ -56,6 +56,38 @@
       </div>
     </div>
     <div class="footer faint">
+      <p>
+        <span
+          v-if="poll.pleroma?.non_anonymous"
+          :title="$t('polls.non_anonymous_title')"
+        >
+          {{ $t('polls.non_anonymous') }}
+          &nbsp;·&nbsp;
+        </span>
+        <span class="total">
+          <template v-if="typeof poll.voters_count === 'number'">
+            {{ $t("polls.people_voted_count", { count: poll.voters_count }, poll.voters_count) }}
+          </template>
+          <template v-else>
+            {{ $t("polls.votes_count", { count: poll.votes_count }, poll.votes_count) }}
+          </template>
+          <span v-if="expiresAt !== null">
+            &nbsp;·&nbsp;
+          </span>
+        </span>
+        <span v-if="expiresAt !== null">
+          <i18n-t
+            scope="global"
+            :keypath="expirationLabel"
+          >
+            <Timeago
+              :time="expiresAt"
+              :auto-update="60"
+              :now-threshold="0"
+            />
+          </i18n-t>
+        </span>
+      </p>
       <button
         v-if="!showResults"
         class="btn button-default poll-vote-button"
@@ -65,36 +97,6 @@
       >
         {{ $t('polls.vote') }}
       </button>
-      <span
-        v-if="poll.pleroma?.non_anonymous"
-        :title="$t('polls.non_anonymous_title')"
-      >
-        {{ $t('polls.non_anonymous') }}
-        &nbsp;·&nbsp;
-      </span>
-      <div class="total">
-        <template v-if="typeof poll.voters_count === 'number'">
-          {{ $t("polls.people_voted_count", { count: poll.voters_count }, poll.voters_count) }}
-        </template>
-        <template v-else>
-          {{ $t("polls.votes_count", { count: poll.votes_count }, poll.votes_count) }}
-        </template>
-        <span v-if="expiresAt !== null">
-          &nbsp;·&nbsp;
-        </span>
-      </div>
-      <span v-if="expiresAt !== null">
-        <i18n-t
-          scope="global"
-          :keypath="expired ? 'polls.expired' : 'polls.expires_in'"
-        >
-          <Timeago
-            :time="expiresAt"
-            :auto-update="60"
-            :now-threshold="0"
-          />
-        </i18n-t>
-      </span>
     </div>
   </div>
 </template>
