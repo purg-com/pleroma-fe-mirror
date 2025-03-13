@@ -44,7 +44,6 @@
             :model-value="choices[index]"
             @update:model-value="value => activateOption(index, value)"
           >
-            {{ choices[index] }}
             <RichContent
               :id="`option-vote-${randomSeed}-${index}`"
               :html="option.title_html"
