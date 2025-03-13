@@ -5,6 +5,13 @@ import { createPinia } from 'pinia'
 import 'custom-event-polyfill'
 import './lib/event_target_polyfill.js'
 
+// Polyfill for Array.prototype.toSorted (ES2023)
+if (!Array.prototype.toSorted) {
+  Array.prototype.toSorted = function(compareFn) {
+    return [...this].sort(compareFn)
+  }
+}
+
 import vuexModules from './modules/index.js'
 
 import { createI18n } from 'vue-i18n'

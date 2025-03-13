@@ -709,6 +709,7 @@
     "column_sizes_sidebar": "Sidebar",
     "column_sizes_content": "Content",
     "column_sizes_notifs": "Notifications",
+    "theme_editor_min_width": "Minimum width of theme editor (0 for \"fit-content\")",
     "tree_advanced": "Allow more flexible navigation in tree view",
     "tree_fade_ancestors": "Display ancestors of the current status in faint text",
     "conversation_display_linear": "Linear-style",

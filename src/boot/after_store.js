@@ -11,7 +11,6 @@ import routes from './routes'
 import VBodyScrollLock from 'src/directives/body_scroll_lock'
 
 import { windowWidth, windowHeight } from '../services/window_utils/window_utils'
-import { getOrCreateApp, getClientToken } from '../services/new_api/oauth.js'
 import backendInteractorService from '../services/backend_interactor_service/backend_interactor_service.js'
 import { applyConfig } from '../services/style_setter/style_setter.js'
 import FaviconService from '../services/favicon_service/favicon_service.js'
@@ -228,17 +227,8 @@ const getStickers = async ({ store }) => {
 }
 
 const getAppSecret = async ({ store }) => {
-  const { state, commit } = store
-  const { oauth, instance } = state
-  if (oauth.userToken) {
-    commit('setBackendInteractor', backendInteractorService(store.getters.getToken()))
-  } else {
-    return getOrCreateApp({ ...oauth, instance: instance.server, commit })
-      .then((app) => getClientToken({ ...app, instance: instance.server }))
-      .then((token) => {
-        commit('setAppToken', token.access_token)
-        commit('setBackendInteractor', backendInteractorService(store.getters.getToken()))
-      })
+  if (store.state.oauth.userToken) {
+    store.commit('setBackendInteractor', backendInteractorService(store.getters.getToken()))
   }
 }
 

@@ -13,6 +13,7 @@ const APPEARANCE_SETTINGS_KEYS = new Set([
   'sidebarColumnWidth',
   'contentColumnWidth',
   'notifsColumnWidth',
+  'themeEditorMinWidth',
   'textSize',
   'navbarSize',
   'panelHeaderSize',

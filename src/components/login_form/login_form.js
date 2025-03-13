@@ -34,16 +34,21 @@ const LoginForm = {
       this.isTokenAuth ? this.submitToken() : this.submitPassword()
     },
     submitToken () {
-      const { clientId, clientSecret } = this.oauth
       const data = {
-        clientId,
-        clientSecret,
         instance: this.instance.server,
         commit: this.$store.commit
       }
 
-      oauthApi.getOrCreateApp(data)
-        .then((app) => { oauthApi.login({ ...app, ...data }) })
+      // NOTE: we do not really need the app token, but obtaining a token and
+      // calling verify_credentials is the only way to ensure the app still works.
+      this.$store.dispatch('ensureAppToken')
+        .then(() => {
+          const app = {
+            clientId: this.oauth.clientId,
+            clientSecret: this.oauth.clientSecret,
+          }
+          oauthApi.login({ ...app, ...data })
+        })
     },
     submitPassword () {
       const { clientId } = this.oauth
@@ -55,7 +60,14 @@ const LoginForm = {
       }
       this.error = false
 
-      oauthApi.getOrCreateApp(data).then((app) => {
+      // NOTE: we do not really need the app token, but obtaining a token and
+      // calling verify_credentials is the only way to ensure the app still works.
+      this.$store.dispatch('ensureAppToken').then(() => {
+        const app = {
+          clientId: this.oauth.clientId,
+          clientSecret: this.oauth.clientSecret,
+        }
+
         oauthApi.getTokenWithCredentials(
           {
             ...app,
