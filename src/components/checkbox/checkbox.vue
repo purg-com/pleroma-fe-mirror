@@ -114,6 +114,10 @@ export default {
       &::before {
         border-radius: 9999px;
       }
+
+      &::before {
+        content: "•";
+      }
     }
   }
 
