@@ -67,6 +67,9 @@ export default {
     'doAction',
     'outerClose'
   ],
+  emits: [
+    'interacted'
+  ],
   components: {
     StatusBookmarkFolderMenu,
     EmojiPicker,
@@ -120,7 +123,8 @@ export default {
         this.$store.dispatch('reactWithEmoji', { id: this.status.id, emoji })
       }
     },
-    doActionWrap (button, close) {
+    doActionWrap (button, close = () => {}) {
+      this.$emit('interacted')
       if (button.name === 'emoji') {
         this.$refs.picker.showPicker()
       } else {
