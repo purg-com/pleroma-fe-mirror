@@ -101,4 +101,4 @@
 
 <script src="./poll.js"></script>
 
-<style src="./poll.scss" lang="scss"/>
+<style src="./poll.scss" lang="scss" />
