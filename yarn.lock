@@ -3020,10 +3020,10 @@ chromatism@3.0.0:
   resolved "https://registry.yarnpkg.com/chromatism/-/chromatism-3.0.0.tgz#a7249d353c1e4f3577e444ac41171c4e2e624b12"
   integrity sha512-slVGC45odKFB6KzD/hpXP8XgS/Y+x72X1ckAhxU/9YZecCy8VwCJUSZsn0O4gQUwaTogun6IfrSiK3YuQaADFw==
 
-chromedriver@133.0.3:
-  version "133.0.3"
-  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-133.0.3.tgz#84c314954172cf07dff89485afbe5778c3082b25"
-  integrity sha512-wGZUtrSdyqnbweXEDIbn+ndu7memG4SEqG6/D+mSabKUEic0hveMYepAPAhlYtvyOc0X8JbsARYtEalVD3R/Vg==
+chromedriver@134.0.3:
+  version "134.0.3"
+  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-134.0.3.tgz#185a52526c193cc7ceb0a27d1266858f0f65f0fd"
+  integrity sha512-pRS401K3VRJMhFrK4NNceVE6xdoNOHC0P3sBylkLOb5p4MfrbXkjiCCipXoBD8jvui76t44FS5/taoVQNz9XUg==
   dependencies:
     "@testim/chrome-version" "^1.1.4"
     axios "^1.7.4"
