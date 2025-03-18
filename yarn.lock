@@ -2052,19 +2052,19 @@
     "@vue/babel-plugin-jsx" "^1.2.5"
 
 "@vitejs/plugin-vue@^5.2.1":
-  version "5.2.1"
-  resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-5.2.1.tgz#d1491f678ee3af899f7ae57d9c21dc52a65c7133"
-  integrity sha512-cxh314tzaWwOLqVes2gnnCtvBDcM1UMdn+iFR+UjAn411dPT3tOmqrJjbMd7koZpMAmBM/GqeV4n9ge7JSiJJQ==
+  version "5.2.3"
+  resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-5.2.3.tgz#71a8fc82d4d2e425af304c35bf389506f674d89b"
+  integrity sha512-IYSLEQj4LgZZuoVpdSUCw3dIynTWQgPlaRP6iAvMle4My0HdYwr5g5wQAfwOeHQBmYwEkqF70nRpSilr6PoUDg==
 
 "@vitest/browser@^3.0.7":
-  version "3.0.7"
-  resolved "https://registry.yarnpkg.com/@vitest/browser/-/browser-3.0.7.tgz#1a40ff3eb9faeac2cf0de888bf6716dc612cbe01"
-  integrity sha512-TDzZtnbe37KZLSLhvlO1pUkeRSRzW3rOhPLsshX8agGoPELMlG7EvS4z9GfsdaCxsP7oWLBJpFjNJwLS458Bzg==
+  version "3.0.9"
+  resolved "https://registry.yarnpkg.com/@vitest/browser/-/browser-3.0.9.tgz#9927bbd5923341cf83e56508215b614110728c6a"
+  integrity sha512-P9dcCeMkA3/oYGfUzRFZJLZxiOpApztxhPsQDUiZzAzLoZonWhse2+vPB0xEBP8Q0lX1WCEEmtY7HzBRi4oYBA==
   dependencies:
     "@testing-library/dom" "^10.4.0"
     "@testing-library/user-event" "^14.6.1"
-    "@vitest/mocker" "3.0.7"
-    "@vitest/utils" "3.0.7"
+    "@vitest/mocker" "3.0.9"
+    "@vitest/utils" "3.0.9"
     magic-string "^0.30.17"
     msw "^2.7.3"
     sirv "^3.0.1"
@@ -2090,10 +2090,26 @@
     estree-walker "^3.0.3"
     magic-string "^0.30.17"
 
+"@vitest/mocker@3.0.9":
+  version "3.0.9"
+  resolved "https://registry.yarnpkg.com/@vitest/mocker/-/mocker-3.0.9.tgz#75d176745131caf40810d3a3a73491595fce46e6"
+  integrity sha512-ryERPIBOnvevAkTq+L1lD+DTFBRcjueL9lOUfXsLfwP92h4e+Heb+PjiqS3/OURWPtywfafK0kj++yDFjWUmrA==
+  dependencies:
+    "@vitest/spy" "3.0.9"
+    estree-walker "^3.0.3"
+    magic-string "^0.30.17"
+
 "@vitest/pretty-format@3.0.7", "@vitest/pretty-format@^3.0.7":
   version "3.0.7"
   resolved "https://registry.yarnpkg.com/@vitest/pretty-format/-/pretty-format-3.0.7.tgz#1780516ebb4e40dd89e60b9fc7ffcbd9cba0fc22"
   integrity sha512-CiRY0BViD/V8uwuEzz9Yapyao+M9M008/9oMOSQydwbwb+CMokEq3XVaF3XK/VWaOK0Jm9z7ENhybg70Gtxsmg==
+  dependencies:
+    tinyrainbow "^2.0.0"
+
+"@vitest/pretty-format@3.0.9":
+  version "3.0.9"
+  resolved "https://registry.yarnpkg.com/@vitest/pretty-format/-/pretty-format-3.0.9.tgz#d9c88fe64b4edcdbc88e5bd92c39f9cc8d40930d"
+  integrity sha512-OW9F8t2J3AwFEwENg3yMyKWweF7oRJlMyHOMIhO5F3n0+cgQAJZBjNgrF8dLwFTEXl5jUqBLXd9QyyKv8zEcmA==
   dependencies:
     tinyrainbow "^2.0.0"
 
@@ -2121,6 +2137,13 @@
   dependencies:
     tinyspy "^3.0.2"
 
+"@vitest/spy@3.0.9":
+  version "3.0.9"
+  resolved "https://registry.yarnpkg.com/@vitest/spy/-/spy-3.0.9.tgz#c3e5d47ceff7c1cb9fdfb9b2f168056bbc625534"
+  integrity sha512-/CcK2UDl0aQ2wtkp3YVWldrpLRNCfVcIOFGlVGKO4R5eajsH393Z1yiXLVQ7vWsj26JOEjeZI0x5sm5P4OGUNQ==
+  dependencies:
+    tinyspy "^3.0.2"
+
 "@vitest/ui@^3.0.7":
   version "3.0.7"
   resolved "https://registry.yarnpkg.com/@vitest/ui/-/ui-3.0.7.tgz#ac4c3d0fa4543832f6372e02a82766da3f7ba52f"
@@ -2140,6 +2163,15 @@
   integrity sha512-xePVpCRfooFX3rANQjwoditoXgWb1MaFbzmGuPP59MK6i13mrnDw/yEIyJudLeW6/38mCNcwCiJIGmpDPibAIg==
   dependencies:
     "@vitest/pretty-format" "3.0.7"
+    loupe "^3.1.3"
+    tinyrainbow "^2.0.0"
+
+"@vitest/utils@3.0.9":
+  version "3.0.9"
+  resolved "https://registry.yarnpkg.com/@vitest/utils/-/utils-3.0.9.tgz#15da261d8cacd6035dc28a8d3ba38ee39545f82b"
+  integrity sha512-ilHM5fHhZ89MCp5aAaM9uhfl1c2JdxVxl3McqsdVyVNN6JffnEen8UMCdRTzOhGXNQGo5GNL9QugHrz727Wnng==
+  dependencies:
+    "@vitest/pretty-format" "3.0.9"
     loupe "^3.1.3"
     tinyrainbow "^2.0.0"
 
