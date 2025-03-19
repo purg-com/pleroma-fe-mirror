@@ -44,6 +44,17 @@ export const useInterfaceStore = defineStore('interface', {
     lastTimeline: null
   }),
   actions: {
+    setTemporaryChanges ({ timeoutId, confirm, revert }) {
+      this.temporaryChangesTimeoutId = timeoutId
+      this.temporaryChangesConfirm = confirm
+      this.temporaryChangesRevert = revert
+    },
+    clearTemporaryChanges () {
+      clearTimeout(this.temporaryChangesTimeoutId)
+      this.temporaryChangesTimeoutId = null
+      this.temporaryChangesConfirm = () => {}
+      this.temporaryChangesRevert = () => {}
+    },
     setPageTitle (option = '') {
       try {
         document.title = `${option} ${window.vuex.state.instance.name}`
