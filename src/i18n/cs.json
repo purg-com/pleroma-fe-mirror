@@ -962,7 +962,6 @@
     "single_choice": "Výběr jediné možnosti",
     "option": "Možnost",
     "votes": "hlasy",
-    "people_voted_count": "{count} hlasoval/a | {count} voličů",
     "votes_count": "{count} hlasovat | {count} hlasů",
     "vote": "Hlasovat",
     "type": "Typ ankety",

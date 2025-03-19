@@ -201,7 +201,6 @@
     "expires_in": "とうひょうは {0} で、おわります",
     "expired": "とうひょうは {0} まえに、おわりました",
     "not_enough_options": "ユニークなオプションが、たりません",
-    "people_voted_count": "{count} にんが、とうひょうしました",
     "votes_count": "{count} ひょう"
   },
   "emoji": {

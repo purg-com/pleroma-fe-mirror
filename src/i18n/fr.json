@@ -1131,7 +1131,6 @@
     "not_enough_options": "Trop peu d'options unique au sondage",
     "vote": "Voter",
     "expired": "Sondage terminé il y a {0}",
-    "people_voted_count": "{count} voteur | {count} voteurs",
     "votes_count": "{count} vote | {count} votes",
     "non_anonymous": "Sondage public",
     "non_anonymous_title": "Certaines instances pourraient afficher ce pour quoi vous avez voté"

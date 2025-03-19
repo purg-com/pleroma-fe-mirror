@@ -703,8 +703,7 @@
     "expires_in": "Chiude fra {0}",
     "expired": "Chiuso {0} fa",
     "not_enough_options": "Aggiungi altre risposte",
-    "votes_count": "{count} voto | {count} voti",
-    "people_voted_count": "{count} votante | {count} votanti"
+    "votes_count": "{count} voto | {count} voti"
   },
   "interactions": {
     "favs_repeats": "Condivisi e Graditi",

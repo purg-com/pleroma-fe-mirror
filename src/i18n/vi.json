@@ -155,7 +155,6 @@
     "add_poll": "Tạo bình chọn",
     "option": "Lựa chọn",
     "votes": "người bình chọn",
-    "people_voted_count": "{count} người bình chọn | {count} người bình chọn",
     "vote": "Bình chọn",
     "type": "Kiểu bình chọn",
     "single_choice": "Chỉ được chọn một lựa chọn",

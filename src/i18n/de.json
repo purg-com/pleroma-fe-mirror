@@ -744,8 +744,7 @@
     "expired": "Die Umfrage endete vor {0}",
     "not_enough_options": "Zu wenig einzigartige Auswahlmöglichkeiten in der Umfrage",
     "expires_in": "Die Umfrage endet in {0}",
-    "votes_count": "{count} Stimme | {count} Stimmen",
-    "people_voted_count": "{count} Person hat gewählt | {count} Personen haben gewählt"
+    "votes_count": "{count} Stimme | {count} Stimmen"
   },
   "emoji": {
     "stickers": "Sticker",

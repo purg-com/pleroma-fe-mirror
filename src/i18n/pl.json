@@ -167,7 +167,6 @@
     "expires_in": "Ankieta kończy się za {0}",
     "expired": "Ankieta skończyła się {0} temu",
     "not_enough_options": "Zbyt mało unikalnych opcji w ankiecie",
-    "people_voted_count": "{count} osoba zagłosowała | {count} osoby zagłosowały | {count} osób zagłosowało",
     "votes_count": "{count} głos | {count} głosy | {count} głosów"
   },
   "emoji": {

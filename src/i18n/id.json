@@ -562,7 +562,6 @@
     "type": "Jenis japat",
     "vote": "Pilih",
     "votes_count": "{count} suara | {count} suara",
-    "people_voted_count": "{count} orang memilih | {count} orang memilih",
     "votes": "suara",
     "option": "Opsi",
     "add_option": "Tambahkan opsi",

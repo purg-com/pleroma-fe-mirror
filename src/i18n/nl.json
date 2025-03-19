@@ -811,8 +811,7 @@
     "expired": "Peiling is {0} geleden beëindigd",
     "not_enough_options": "Te weinig opties in peiling",
     "type": "Peiling-type",
-    "votes_count": "{count} stem | {count} stemmen",
-    "people_voted_count": "{count} persoon heeft gestemd | {count} personen hebben gestemd"
+    "votes_count": "{count} stem | {count} stemmen"
   },
   "emoji": {
     "emoji": "Emoji",

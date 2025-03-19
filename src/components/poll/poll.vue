@@ -64,12 +64,7 @@
           &nbsp;·&nbsp;
         </span>
         <span class="total">
-          <template v-if="typeof poll.voters_count === 'number'">
-            {{ $t("polls.people_voted_count", { count: poll.voters_count }, poll.voters_count) }}
-          </template>
-          <template v-else>
-            {{ $t("polls.votes_count", { count: poll.votes_count }, poll.votes_count) }}
-          </template>
+          {{ $t("polls.votes_count", { count: poll.votes_count }, poll.votes_count) }}
           <span v-if="expiresAt !== null">
             &nbsp;·&nbsp;
           </span>

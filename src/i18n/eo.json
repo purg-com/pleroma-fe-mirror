@@ -965,8 +965,7 @@
     "option": "Elekteblo",
     "add_option": "Aldoni elekteblon",
     "add_poll": "Aldoni enketon",
-    "votes_count": "{count} voĉdono | {count} voĉdonoj",
-    "people_voted_count": "{count} persono voĉdonis | {count} personoj voĉdonis"
+    "votes_count": "{count} voĉdono | {count} voĉdonoj"
   },
   "importer": {
     "error": "Eraris enporto de ĉi tiu dosiero.",

@@ -172,8 +172,7 @@
     "expires_in": "投票は {0} で終了します",
     "expired": "投票は {0} 前に終了しました",
     "not_enough_options": "選択肢が少なすぎます",
-    "votes_count": "{count} 票 | {count} 票",
-    "people_voted_count": "{count}人が投票しました | {count}人が投票しました"
+    "votes_count": "{count} 票 | {count} 票"
   },
   "emoji": {
     "stickers": "ステッカー",
