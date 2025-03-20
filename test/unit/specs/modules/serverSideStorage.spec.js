@@ -107,7 +107,7 @@ describe('The serverSideStorage module', () => {
       })
     })
     describe('setPreference', () => {
-      const { setPreference, updateCache, addCollectionPreference, removeCollectionPreference } = mutations
+      const { setPreference, unsetPreference, updateCache, addCollectionPreference, removeCollectionPreference } = mutations
 
       it('should set preference and update journal log accordingly', () => {
         const state = cloneDeep(defaultState)
@@ -159,6 +159,25 @@ describe('The serverSideStorage module', () => {
         expect(state.prefsStorage.simple.testing).to.eql(1)
         expect(state.prefsStorage.collections.testing).to.eql([2])
         expect(state.prefsStorage._journal.length).to.eql(2)
+      })
+
+      it('should remove depth = 3 set/unset entries from journal', () => {
+        const state = cloneDeep(defaultState)
+        setPreference(state, { path: 'simple.object.foo', value: 1 })
+        unsetPreference(state, { path: 'simple.object.foo' })
+        updateCache(state, { username: 'test' })
+        expect(state.prefsStorage.simple.object).to.not.have.property('foo')
+        expect(state.prefsStorage._journal.length).to.eql(1)
+      })
+
+      it('should not allow unsetting depth <= 2', () => {
+        const state = cloneDeep(defaultState)
+        setPreference(state, { path: 'simple.object.foo', value: 1 })
+        unsetPreference(state, { path: 'simple.object' })
+        unsetPreference(state, { path: 'simple' })
+        updateCache(state, { username: 'test' })
+        expect(state.prefsStorage.simple.object).to.have.property('foo')
+        expect(state.prefsStorage._journal.length).to.eql(1)
       })
     })
   })
@@ -312,6 +331,58 @@ describe('The serverSideStorage module', () => {
           simple: { a: 'bar' },
           _journal: [
             { path: 'simple.a', operation: 'set', args: ['bar'], timestamp: 4 }
+          ]
+        })
+      })
+
+      it('should work with objects', () => {
+        expect(
+          _mergePrefs(
+            // RECENT
+            {
+              simple: { lv2: { lv3: 'foo' } },
+              _journal: [
+                { path: 'simple.lv2.lv3', operation: 'set', args: ['foo'], timestamp: 2 }
+              ]
+            },
+            // STALE
+            {
+              simple: { lv2: { lv3: 'bar' } },
+              _journal: [
+                { path: 'simple.lv2.lv3', operation: 'set', args: ['bar'], timestamp: 4 }
+              ]
+            }
+          )
+        ).to.eql({
+          simple: { lv2: { lv3: 'bar' } },
+          _journal: [
+            { path: 'simple.lv2.lv3', operation: 'set', args: ['bar'], timestamp: 4 }
+          ]
+        })
+      })
+
+      it('should work with unset', () => {
+        expect(
+          _mergePrefs(
+            // RECENT
+            {
+              simple: { lv2: { lv3: 'foo' } },
+              _journal: [
+                { path: 'simple.lv2.lv3', operation: 'set', args: ['foo'], timestamp: 2 }
+              ]
+            },
+            // STALE
+            {
+              simple: { lv2: {} },
+              _journal: [
+                { path: 'simple.lv2.lv3', operation: 'unset', args: [], timestamp: 4 }
+              ]
+            }
+          )
+        ).to.eql({
+          simple: { lv2: {} },
+          _journal: [
+            { path: 'simple.lv2.lv3', operation: 'unset', args: [], timestamp: 4 }
           ]
         })
       })

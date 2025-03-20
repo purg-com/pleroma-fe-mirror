@@ -3,6 +3,7 @@ import {
   isEqual,
   cloneDeep,
   set,
+  unset,
   get,
   clamp,
   flatten,
@@ -35,7 +36,8 @@ export const defaultState = {
     _journal: [],
     simple: {
       dontShowUpdateNotifs: false,
-      collapseNav: false
+      collapseNav: false,
+      filters: {}
     },
     collections: {
       pinnedStatusActions: ['reply', 'retweet', 'favorite', 'emoji'],
@@ -78,11 +80,16 @@ const _verifyPrefs = (state) => {
     simple: {},
     collections: {}
   }
+
+  // Simple
   Object.entries(defaultState.prefsStorage.simple).forEach(([k, v]) => {
     if (typeof v === 'number' || typeof v === 'boolean') return
+    if (typeof v === 'object' && v != null) return
     console.warn(`Preference simple.${k} as invalid type, reinitializing`)
     set(state.prefsStorage.simple, k, defaultState.prefsStorage.simple[k])
   })
+
+  // Collections
   Object.entries(defaultState.prefsStorage.collections).forEach(([k, v]) => {
     if (Array.isArray(v)) return
     console.warn(`Preference collections.${k} as invalid type, reinitializing`)
@@ -224,7 +231,26 @@ export const _mergePrefs = (recent, stale) => {
     }
     switch (operation) {
       case 'set':
+        if (path.startsWith('collections') || path.startsWith('objectCollections')) {
+          console.error('Illegal operation "set" on a collection')
+          return
+        }
+        if (path.split(/\./g).length <= 1) {
+          console.error(`Calling set on depth <= 1 (path: ${path}) is not allowed`)
+          return
+        }
         set(resultOutput, path, args[0])
+        break
+      case 'unset':
+        if (path.startsWith('collections') || path.startsWith('objectCollections')) {
+          console.error('Illegal operation "unset" on a collection')
+          return
+        }
+        if (path.split(/\./g).length <= 2) {
+          console.error(`Calling unset on depth <= 2 (path: ${path})  is not allowed`)
+          return
+        }
+        unset(resultOutput, path)
         break
       case 'addToCollection':
         set(resultOutput, path, Array.from(new Set(get(resultOutput, path)).add(args[0])))
@@ -380,7 +406,15 @@ export const mutations = {
   },
   setPreference (state, { path, value }) {
     if (path.startsWith('_')) {
-      console.error(`tried to edit internal (starts with _) field '${path}', ignoring.`)
+      console.error(`Tried to edit internal (starts with _) field '${path}', ignoring.`)
+      return
+    }
+    if (path.startsWith('collections') || path.startsWith('objectCollections')) {
+      console.error(`Invalid operation 'set' for collection field '${path}', ignoring.`)
+      return
+    }
+    if (path.split(/\./g).length <= 1) {
+      console.error(`Calling set on depth <= 1 (path: ${path}) is not allowed`)
       return
     }
     set(state.prefsStorage, path, value)
@@ -390,14 +424,46 @@ export const mutations = {
     ]
     state.dirty = true
   },
+  unsetPreference (state, { path, value }) {
+    if (path.startsWith('_')) {
+      console.error(`Tried to edit internal (starts with _) field '${path}', ignoring.`)
+      return
+    }
+    if (path.startsWith('collections') || path.startsWith('objectCollections')) {
+      console.error(`Invalid operation 'unset' for collection field '${path}', ignoring.`)
+      return
+    }
+    if (path.split(/\./g).length <= 2) {
+      console.error(`Calling unset on depth <= 2 (path: ${path})  is not allowed`)
+      return
+    }
+    unset(state.prefsStorage, path, value)
+    state.prefsStorage._journal = [
+      ...state.prefsStorage._journal,
+      { operation: 'unset', path, args: [], timestamp: Date.now() }
+    ]
+    state.dirty = true
+  },
   addCollectionPreference (state, { path, value }) {
     if (path.startsWith('_')) {
       console.error(`tried to edit internal (starts with _) field '${path}', ignoring.`)
       return
     }
-    const collection = new Set(get(state.prefsStorage, path))
-    collection.add(value)
-    set(state.prefsStorage, path, [...collection])
+    if (path.startsWith('collections')) {
+      const collection = new Set(get(state.prefsStorage, path))
+      collection.add(value)
+      set(state.prefsStorage, path, [...collection])
+    } else if (path.startsWith('objectCollections')) {
+      const { _key } = value
+      if (!_key && typeof _key !== 'string') {
+        console.error('Object for storage is missing _key field! ignoring')
+        return
+      }
+      const collection = new Set(get(state.prefsStorage, path + '.index'))
+      collection.add(_key)
+      set(state.prefsStorage, path + '.index', [...collection])
+      set(state.prefsStorage, path + '.data.' + _key, value)
+    }
     state.prefsStorage._journal = [
       ...state.prefsStorage._journal,
       { operation: 'addToCollection', path, args: [value], timestamp: Date.now() }
