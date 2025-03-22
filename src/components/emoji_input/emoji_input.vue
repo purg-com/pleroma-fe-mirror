@@ -55,7 +55,7 @@
       ref="suggestorPopover"
       class="autocomplete-panel"
       placement="bottom"
-      :trigger-attrs="{ 'aria-hidden': true }"
+      :hide-trigger="true"
     >
       <template #content>
         <div
