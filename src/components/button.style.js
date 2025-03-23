@@ -11,7 +11,7 @@ export default {
     toggled: '.toggled',
     focused: ':focus-within',
     pressed: ':focus:active',
-    hover: ':hover:not(:disabled)',
+    hover: ':is(:hover, :focus-visible):not(:disabled)',
     disabled: ':disabled'
   },
   // Variants are mutually exclusive, each component implicitly has "normal" variant, and all other variants inherit from it.
