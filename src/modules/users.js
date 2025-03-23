@@ -4,8 +4,10 @@ import apiService from '../services/api/api.service.js'
 import oauthApi from '../services/new_api/oauth.js'
 import { compact, map, each, mergeWith, last, concat, uniq, isArray } from 'lodash'
 import { registerPushNotifications, unregisterPushNotifications } from '../services/sw/sw.js'
+
 import { useInterfaceStore } from 'src/stores/interface.js'
 import { useOAuthStore } from 'src/stores/oauth.js'
+import { useServerSideStorageStore } from 'src/stores/serverSideStorage'
 
 // TODO: Unify with mergeOrAdd in statuses.js
 export const mergeOrAdd = (arr, obj, item) => {
@@ -605,7 +607,8 @@ const users = {
               user.muteIds = []
               user.domainMutes = []
               commit('setCurrentUser', user)
-              commit('setServerSideStorage', user)
+
+              useServerSideStorageStore().setServerSideStorage(user)
               commit('addNewUsers', [user])
 
               dispatch('fetchEmoji')
@@ -615,7 +618,7 @@ const users = {
 
               // Set our new backend interactor
               commit('setBackendInteractor', backendInteractorService(accessToken))
-              dispatch('pushServerSideStorage')
+              useServerSideStorageStore().pushServerSideStorage()
 
               if (user.token) {
                 dispatch('setWsToken', user.token)

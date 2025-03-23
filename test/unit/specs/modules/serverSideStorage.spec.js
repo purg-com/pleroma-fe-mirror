@@ -1,4 +1,5 @@
 import { cloneDeep } from 'lodash'
+import { setActivePinia, createPinia } from 'pinia'
 
 import {
   VERSION,
@@ -10,49 +11,50 @@ import {
   _mergeFlags,
   _mergePrefs,
   _resetFlags,
-  mutations,
   defaultState,
-  newUserFlags
-} from 'src/modules/serverSideStorage.js'
+  newUserFlags,
+  useServerSideStorageStore,
+} from 'src/stores/serverSideStorage.js'
 
 describe('The serverSideStorage module', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+  })
+
   describe('mutations', () => {
     describe('setServerSideStorage', () => {
-      const { setServerSideStorage } = mutations
       const user = {
         created_at: new Date('1999-02-09'),
         storage: {}
       }
 
       it('should initialize storage if none present', () => {
-        const state = cloneDeep(defaultState)
-        setServerSideStorage(state, user)
-        expect(state.cache._version).to.eql(VERSION)
-        expect(state.cache._timestamp).to.be.a('number')
-        expect(state.cache.flagStorage).to.eql(defaultState.flagStorage)
-        expect(state.cache.prefsStorage).to.eql(defaultState.prefsStorage)
+        const store = useServerSideStorageStore()
+        store.setServerSideStorage(store, user)
+        expect(store.cache._version).to.eql(VERSION)
+        expect(store.cache._timestamp).to.be.a('number')
+        expect(store.cache.flagStorage).to.eql(defaultState.flagStorage)
+        expect(store.cache.prefsStorage).to.eql(defaultState.prefsStorage)
       })
 
       it('should initialize storage with proper flags for new users if none present', () => {
-        const state = cloneDeep(defaultState)
-        setServerSideStorage(state, { ...user, created_at: new Date() })
-        expect(state.cache._version).to.eql(VERSION)
-        expect(state.cache._timestamp).to.be.a('number')
-        expect(state.cache.flagStorage).to.eql(newUserFlags)
-        expect(state.cache.prefsStorage).to.eql(defaultState.prefsStorage)
+        const store = useServerSideStorageStore()
+        store.setServerSideStorage({ ...user, created_at: new Date() })
+        expect(store.cache._version).to.eql(VERSION)
+        expect(store.cache._timestamp).to.be.a('number')
+        expect(store.cache.flagStorage).to.eql(newUserFlags)
+        expect(store.cache.prefsStorage).to.eql(defaultState.prefsStorage)
       })
 
       it('should merge flags even if remote timestamp is older', () => {
-        const state = {
-          ...cloneDeep(defaultState),
-          cache: {
-            _timestamp: Date.now(),
-            _version: VERSION,
-            ...cloneDeep(defaultState)
-          }
+        const store = useServerSideStorageStore()
+        store.cache = {
+          _timestamp: Date.now(),
+          _version: VERSION,
+          ...cloneDeep(defaultState)
         }
-        setServerSideStorage(
-          state,
+
+        store.setServerSideStorage(
           {
             ...user,
             storage: {
@@ -68,19 +70,18 @@ describe('The serverSideStorage module', () => {
             }
           }
         )
-        expect(state.cache.flagStorage).to.eql({
+
+        expect(store.cache.flagStorage).to.eql({
           ...defaultState.flagStorage,
           updateCounter: 1
         })
       })
 
       it('should reset local timestamp to remote if contents are the same', () => {
-        const state = {
-          ...cloneDeep(defaultState),
-          cache: null
-        }
-        setServerSideStorage(
-          state,
+        const store = useServerSideStorageStore()
+        store.cache = null
+
+        store.setServerSideStorage(
           {
             ...user,
             storage: {
@@ -93,97 +94,95 @@ describe('The serverSideStorage module', () => {
             }
           }
         )
-        expect(state.cache._timestamp).to.eql(123)
-        expect(state.flagStorage.updateCounter).to.eql(999)
-        expect(state.cache.flagStorage.updateCounter).to.eql(999)
+        expect(store.cache._timestamp).to.eql(123)
+        expect(store.flagStorage.updateCounter).to.eql(999)
+        expect(store.cache.flagStorage.updateCounter).to.eql(999)
       })
 
       it('should remote version if local missing', () => {
-        const state = cloneDeep(defaultState)
-        setServerSideStorage(state, user)
-        expect(state.cache._version).to.eql(VERSION)
-        expect(state.cache._timestamp).to.be.a('number')
-        expect(state.cache.flagStorage).to.eql(defaultState.flagStorage)
+        const store = useServerSideStorageStore()
+        store.setServerSideStorage(store, user)
+        expect(store.cache._version).to.eql(VERSION)
+        expect(store.cache._timestamp).to.be.a('number')
+        expect(store.cache.flagStorage).to.eql(defaultState.flagStorage)
       })
     })
     describe('setPreference', () => {
-      const { setPreference, unsetPreference, updateCache, addCollectionPreference, removeCollectionPreference } = mutations
-
       it('should set preference and update journal log accordingly', () => {
-        const state = cloneDeep(defaultState)
-        setPreference(state, { path: 'simple.testing', value: 1 })
-        expect(state.prefsStorage.simple.testing).to.eql(1)
-        expect(state.prefsStorage._journal.length).to.eql(1)
-        expect(state.prefsStorage._journal[0]).to.eql({
+        const store = useServerSideStorageStore()
+        store.setPreference({ path: 'simple.testing', value: 1 })
+        expect(store.prefsStorage.simple.testing).to.eql(1)
+        expect(store.prefsStorage._journal.length).to.eql(1)
+        expect(store.prefsStorage._journal[0]).to.eql({
           path: 'simple.testing',
           operation: 'set',
           args: [1],
           // should have A timestamp, we don't really care what it is
-          timestamp: state.prefsStorage._journal[0].timestamp
+          timestamp: store.prefsStorage._journal[0].timestamp
         })
       })
 
       it('should keep journal to a minimum', () => {
-        const state = cloneDeep(defaultState)
-        setPreference(state, { path: 'simple.testing', value: 1 })
-        setPreference(state, { path: 'simple.testing', value: 2 })
-        addCollectionPreference(state, { path: 'collections.testing', value: 2 })
-        removeCollectionPreference(state, { path: 'collections.testing', value: 2 })
-        updateCache(state, { username: 'test' })
-        expect(state.prefsStorage.simple.testing).to.eql(2)
-        expect(state.prefsStorage.collections.testing).to.eql([])
-        expect(state.prefsStorage._journal.length).to.eql(2)
-        expect(state.prefsStorage._journal[0]).to.eql({
+        const store = useServerSideStorageStore()
+        store.setPreference({ path: 'simple.testing', value: 1 })
+        store.setPreference({ path: 'simple.testing', value: 2 })
+        store.addCollectionPreference({ path: 'collections.testing', value: 2 })
+        store.removeCollectionPreference({ path: 'collections.testing', value: 2 })
+        store.updateCache({ username: 'test' })
+        expect(store.prefsStorage.simple.testing).to.eql(2)
+        expect(store.prefsStorage.collections.testing).to.eql([])
+        expect(store.prefsStorage._journal.length).to.eql(2)
+        expect(store.prefsStorage._journal[0]).to.eql({
           path: 'simple.testing',
           operation: 'set',
           args: [2],
           // should have A timestamp, we don't really care what it is
-          timestamp: state.prefsStorage._journal[0].timestamp
+          timestamp: store.prefsStorage._journal[0].timestamp
         })
-        expect(state.prefsStorage._journal[1]).to.eql({
+        expect(store.prefsStorage._journal[1]).to.eql({
           path: 'collections.testing',
           operation: 'removeFromCollection',
           args: [2],
           // should have A timestamp, we don't really care what it is
-          timestamp: state.prefsStorage._journal[1].timestamp
+          timestamp: store.prefsStorage._journal[1].timestamp
         })
       })
 
       it('should remove duplicate entries from journal', () => {
-        const state = cloneDeep(defaultState)
-        setPreference(state, { path: 'simple.testing', value: 1 })
-        setPreference(state, { path: 'simple.testing', value: 1 })
-        addCollectionPreference(state, { path: 'collections.testing', value: 2 })
-        addCollectionPreference(state, { path: 'collections.testing', value: 2 })
-        updateCache(state, { username: 'test' })
-        expect(state.prefsStorage.simple.testing).to.eql(1)
-        expect(state.prefsStorage.collections.testing).to.eql([2])
-        expect(state.prefsStorage._journal.length).to.eql(2)
+        const store = useServerSideStorageStore()
+        store.setPreference({ path: 'simple.testing', value: 1 })
+        store.setPreference({ path: 'simple.testing', value: 1 })
+        store.addCollectionPreference({ path: 'collections.testing', value: 2 })
+        store.addCollectionPreference({ path: 'collections.testing', value: 2 })
+        store.updateCache({ username: 'test' })
+        expect(store.prefsStorage.simple.testing).to.eql(1)
+        expect(store.prefsStorage.collections.testing).to.eql([2])
+        expect(store.prefsStorage._journal.length).to.eql(2)
       })
 
       it('should remove depth = 3 set/unset entries from journal', () => {
-        const state = cloneDeep(defaultState)
-        setPreference(state, { path: 'simple.object.foo', value: 1 })
-        unsetPreference(state, { path: 'simple.object.foo' })
-        updateCache(state, { username: 'test' })
-        expect(state.prefsStorage.simple.object).to.not.have.property('foo')
-        expect(state.prefsStorage._journal.length).to.eql(1)
+        const store = useServerSideStorageStore()
+        store.setPreference({ path: 'simple.object.foo', value: 1 })
+        store.unsetPreference({ path: 'simple.object.foo' })
+        store.updateCache(store, { username: 'test' })
+        expect(store.prefsStorage.simple.object).to.not.have.property('foo')
+        expect(store.prefsStorage._journal.length).to.eql(1)
       })
 
       it('should not allow unsetting depth <= 2', () => {
-        const state = cloneDeep(defaultState)
-        setPreference(state, { path: 'simple.object.foo', value: 1 })
-        expect(() => unsetPreference(state, { path: 'simple' })).to.throw()
-        expect(() => unsetPreference(state, { path: 'simple.object' })).to.throw()
+        const store = useServerSideStorageStore()
+        store.setPreference({ path: 'simple.object.foo', value: 1 })
+        expect(() => store.unsetPreference({ path: 'simple' })).to.throw()
+        expect(() => store.unsetPreference({ path: 'simple.object' })).to.throw()
       })
 
       it('should not allow (un)setting depth > 3', () => {
-        const state = cloneDeep(defaultState)
-        setPreference(state, { path: 'simple.object', value: {} })
-        expect(() => setPreference(state, { path: 'simple.object.lv3', value: 1 })).to.not.throw()
-        expect(() => setPreference(state, { path: 'simple.object.lv3.lv4', value: 1})).to.throw()
-        expect(() => unsetPreference(state, { path: 'simple.object.lv3', value: 1 })).to.not.throw()
-        expect(() => unsetPreference(state, { path: 'simple.object.lv3.lv4', value: 1})).to.throw()
+        const store = useServerSideStorageStore()
+        store.setPreference({ path: 'simple.object', value: {} })
+        expect(() => store.setPreference({ path: 'simple.object.lv3', value: 1 })).to.not.throw()
+        expect(() => store.setPreference({ path: 'simple.object.lv3.lv4', value: 1})).to.throw()
+        expect(() => store.unsetPreference({ path: 'simple.object.lv3', value: 1 })).to.not.throw()
+        expect(() => store.unsetPreference({ path: 'simple.object.lv3.lv4', value: 1})).to.throw()
       })
     })
   })

@@ -1,3 +1,4 @@
+import { defineStore } from 'pinia'
 import { toRaw } from 'vue'
 import {
   isEqual,
@@ -323,200 +324,194 @@ export const _doMigrations = (cache) => {
   return cache
 }
 
-export const mutations = {
-  clearServerSideStorage (state) {
-    const blankState = { ...cloneDeep(defaultState) }
-    Object.keys(state).forEach(k => {
-      state[k] = blankState[k]
-    })
+export const useServerSideStorageStore = defineStore('serverSideStorage', {
+  state() {
+    return cloneDeep(defaultState)
   },
-  setServerSideStorage (state, userData) {
-    const live = userData.storage
-    state.raw = live
-    let cache = state.cache
-    if (cache && cache._user !== userData.fqn) {
-      console.warn('Cache belongs to another user! reinitializing local cache!')
-      cache = null
-    }
-
-    cache = _doMigrations(cache)
-
-    let { recent, stale, needUpload } = _getRecentData(cache, live)
-
-    const userNew = userData.created_at > NEW_USER_DATE
-    const flagsTemplate = userNew ? newUserFlags : defaultState.flagStorage
-    let dirty = false
-
-    if (recent === null) {
-      console.debug(`Data is empty, initializing for ${userNew ? 'new' : 'existing'} user`)
-      recent = _wrapData({
-        flagStorage: { ...flagsTemplate },
-        prefsStorage: { ...defaultState.prefsStorage }
-      })
-    }
-
-    if (!needUpload && recent && stale) {
-      console.debug('Checking if data needs merging...')
-      // discarding timestamps and versions
-      /* eslint-disable no-unused-vars */
-      const { _timestamp: _0, _version: _1, ...recentData } = recent
-      const { _timestamp: _2, _version: _3, ...staleData } = stale
-      /* eslint-enable no-unused-vars */
-      dirty = !isEqual(recentData, staleData)
-      console.debug(`Data ${dirty ? 'needs' : 'doesn\'t need'} merging`)
-    }
-
-    const allFlagKeys = _getAllFlags(recent, stale)
-    let totalFlags
-    let totalPrefs
-    if (dirty) {
-      // Merge the flags
-      console.debug('Merging the data...')
-      totalFlags = _mergeFlags(recent, stale, allFlagKeys)
-      _verifyPrefs(recent)
-      _verifyPrefs(stale)
-      totalPrefs = _mergePrefs(recent.prefsStorage, stale.prefsStorage)
-    } else {
-      totalFlags = recent.flagStorage
-      totalPrefs = recent.prefsStorage
-    }
-
-    totalFlags = _resetFlags(totalFlags)
-
-    recent.flagStorage = { ...flagsTemplate, ...totalFlags }
-    recent.prefsStorage = { ...defaultState.prefsStorage, ...totalPrefs }
-
-    state.dirty = dirty || needUpload
-    state.cache = recent
-    // set local timestamp to smaller one if we don't have any changes
-    if (stale && recent && !state.dirty) {
-      state.cache._timestamp = Math.min(stale._timestamp, recent._timestamp)
-    }
-    state.flagStorage = state.cache.flagStorage
-    state.prefsStorage = state.cache.prefsStorage
-  },
-  setFlag (state, { flag, value }) {
-    state.flagStorage[flag] = value
-    state.dirty = true
-  },
-  setPreference (state, { path, value }) {
-    if (path.startsWith('_')) {
-      throw new Error(`Tried to edit internal (starts with _) field '${path}', ignoring.`)
-    }
-    if (path.startsWith('collections') || path.startsWith('objectCollections')) {
-      throw new Error(`Invalid operation 'set' for collection field '${path}', ignoring.`)
-    }
-    if (path.split(/\./g).length <= 1) {
-      throw new Error(`Calling set on depth <= 1 (path: ${path}) is not allowed`)
-    }
-    if (path.split(/\./g).length > 3) {
-      throw new Error(`Calling set on depth > 3 (path: ${path})  is not allowed`)
-    }
-    set(state.prefsStorage, path, value)
-    state.prefsStorage._journal = [
-      ...state.prefsStorage._journal,
-      { operation: 'set', path, args: [value], timestamp: Date.now() }
-    ]
-    state.dirty = true
-  },
-  unsetPreference (state, { path, value }) {
-    if (path.startsWith('_')) {
-      throw new Error(`Tried to edit internal (starts with _) field '${path}', ignoring.`)
-    }
-    if (path.startsWith('collections') || path.startsWith('objectCollections')) {
-      throw new Error(`Invalid operation 'unset' for collection field '${path}', ignoring.`)
-    }
-    if (path.split(/\./g).length <= 2) {
-      throw new Error(`Calling unset on depth <= 2 (path: ${path})  is not allowed`)
-    }
-    if (path.split(/\./g).length > 3) {
-      throw new Error(`Calling unset on depth > 3 (path: ${path})  is not allowed`)
-    }
-    unset(state.prefsStorage, path, value)
-    state.prefsStorage._journal = [
-      ...state.prefsStorage._journal,
-      { operation: 'unset', path, args: [], timestamp: Date.now() }
-    ]
-    state.dirty = true
-  },
-  addCollectionPreference (state, { path, value }) {
-    if (path.startsWith('_')) {
-      throw new Error(`tried to edit internal (starts with _) field '${path}'`)
-    }
-    if (path.startsWith('collections')) {
-      const collection = new Set(get(state.prefsStorage, path))
-      collection.add(value)
-      set(state.prefsStorage, path, [...collection])
-    } else if (path.startsWith('objectCollections')) {
-      const { _key } = value
-      if (!_key && typeof _key !== 'string') {
-        throw new Error('Object for storage is missing _key field!')
-      }
-      const collection = new Set(get(state.prefsStorage, path + '.index'))
-      collection.add(_key)
-      set(state.prefsStorage, path + '.index', [...collection])
-      set(state.prefsStorage, path + '.data.' + _key, value)
-    }
-    state.prefsStorage._journal = [
-      ...state.prefsStorage._journal,
-      { operation: 'addToCollection', path, args: [value], timestamp: Date.now() }
-    ]
-    state.dirty = true
-  },
-  removeCollectionPreference (state, { path, value }) {
-    if (path.startsWith('_')) {
-      throw new Error(`tried to edit internal (starts with _) field '${path}', ignoring.`)
-    }
-    const collection = new Set(get(state.prefsStorage, path))
-    collection.delete(value)
-    set(state.prefsStorage, path, [...collection])
-    state.prefsStorage._journal = [
-      ...state.prefsStorage._journal,
-      { operation: 'removeFromCollection', path, args: [value], timestamp: Date.now() }
-    ]
-    state.dirty = true
-  },
-  reorderCollectionPreference (state, { path, value, movement }) {
-    if (path.startsWith('_')) {
-      throw new Error(`tried to edit internal (starts with _) field '${path}', ignoring.`)
-    }
-    const collection = get(state.prefsStorage, path)
-    const newCollection = _moveItemInArray(collection, value, movement)
-    set(state.prefsStorage, path, newCollection)
-    state.prefsStorage._journal = [
-      ...state.prefsStorage._journal,
-      { operation: 'arrangeCollection', path, args: [value], timestamp: Date.now() }
-    ]
-    state.dirty = true
-  },
-  updateCache (state, { username }) {
-    state.prefsStorage._journal = _mergeJournal(state.prefsStorage._journal)
-    state.cache = _wrapData({
-      flagStorage: toRaw(state.flagStorage),
-      prefsStorage: toRaw(state.prefsStorage)
-    }, username)
-  }
-}
-
-const serverSideStorage = {
-  state: {
-    ...cloneDeep(defaultState)
-  },
-  mutations,
   actions: {
-    pushServerSideStorage ({ state, rootState, commit }, { force = false } = {}) {
-      const needPush = state.dirty || force
+    clearServerSideStorage () {
+      const blankState = { ...cloneDeep(defaultState) }
+      Object.keys(this).forEach(k => {
+        this[k] = blankState[k]
+      })
+    },
+    setServerSideStorage (userData) {
+      const live = userData.storage
+      this.raw = live
+      let cache = this.cache
+      if (cache && cache._user !== userData.fqn) {
+        console.warn('Cache belongs to another user! reinitializing local cache!')
+        cache = null
+      }
+
+      cache = _doMigrations(cache)
+
+      let { recent, stale, needUpload } = _getRecentData(cache, live)
+
+      const userNew = userData.created_at > NEW_USER_DATE
+      const flagsTemplate = userNew ? newUserFlags : defaultState.flagStorage
+      let dirty = false
+
+      if (recent === null) {
+        console.debug(`Data is empty, initializing for ${userNew ? 'new' : 'existing'} user`)
+        recent = _wrapData({
+          flagStorage: { ...flagsTemplate },
+          prefsStorage: { ...defaultState.prefsStorage }
+        })
+      }
+
+      if (!needUpload && recent && stale) {
+        console.debug('Checking if data needs merging...')
+        // discarding timestamps and versions
+        /* eslint-disable no-unused-vars */
+        const { _timestamp: _0, _version: _1, ...recentData } = recent
+        const { _timestamp: _2, _version: _3, ...staleData } = stale
+        /* eslint-enable no-unused-vars */
+        dirty = !isEqual(recentData, staleData)
+        console.debug(`Data ${dirty ? 'needs' : 'doesn\'t need'} merging`)
+      }
+
+      const allFlagKeys = _getAllFlags(recent, stale)
+      let totalFlags
+      let totalPrefs
+      if (dirty) {
+        // Merge the flags
+        console.debug('Merging the data...')
+        totalFlags = _mergeFlags(recent, stale, allFlagKeys)
+        _verifyPrefs(recent)
+        _verifyPrefs(stale)
+        totalPrefs = _mergePrefs(recent.prefsStorage, stale.prefsStorage)
+      } else {
+        totalFlags = recent.flagStorage
+        totalPrefs = recent.prefsStorage
+      }
+
+      totalFlags = _resetFlags(totalFlags)
+
+      recent.flagStorage = { ...flagsTemplate, ...totalFlags }
+      recent.prefsStorage = { ...defaultState.prefsStorage, ...totalPrefs }
+
+      this.dirty = dirty || needUpload
+      this.cache = recent
+      // set local timestamp to smaller one if we don't have any changes
+      if (stale && recent && !this.dirty) {
+        this.cache._timestamp = Math.min(stale._timestamp, recent._timestamp)
+      }
+      this.flagStorage = this.cache.flagStorage
+      this.prefsStorage = this.cache.prefsStorage
+    },
+    setFlag ({ flag, value }) {
+      this.flagStorage[flag] = value
+      this.dirty = true
+    },
+    setPreference ({ path, value }) {
+      if (path.startsWith('_')) {
+        throw new Error(`Tried to edit internal (starts with _) field '${path}', ignoring.`)
+      }
+      if (path.startsWith('collections') || path.startsWith('objectCollections')) {
+        throw new Error(`Invalid operation 'set' for collection field '${path}', ignoring.`)
+      }
+      if (path.split(/\./g).length <= 1) {
+        throw new Error(`Calling set on depth <= 1 (path: ${path}) is not allowed`)
+      }
+      if (path.split(/\./g).length > 3) {
+        throw new Error(`Calling set on depth > 3 (path: ${path})  is not allowed`)
+      }
+      set(this.prefsStorage, path, value)
+      this.prefsStorage._journal = [
+        ...this.prefsStorage._journal,
+        { operation: 'set', path, args: [value], timestamp: Date.now() }
+      ]
+      this.dirty = true
+    },
+    unsetPreference ({ path, value }) {
+      if (path.startsWith('_')) {
+        throw new Error(`Tried to edit internal (starts with _) field '${path}', ignoring.`)
+      }
+      if (path.startsWith('collections') || path.startsWith('objectCollections')) {
+        throw new Error(`Invalid operation 'unset' for collection field '${path}', ignoring.`)
+      }
+      if (path.split(/\./g).length <= 2) {
+        throw new Error(`Calling unset on depth <= 2 (path: ${path})  is not allowed`)
+      }
+      if (path.split(/\./g).length > 3) {
+        throw new Error(`Calling unset on depth > 3 (path: ${path})  is not allowed`)
+      }
+      unset(this.prefsStorage, path, value)
+      this.prefsStorage._journal = [
+        ...this.prefsStorage._journal,
+        { operation: 'unset', path, args: [], timestamp: Date.now() }
+      ]
+      this.dirty = true
+    },
+    addCollectionPreference ({ path, value }) {
+      if (path.startsWith('_')) {
+        throw new Error(`tried to edit internal (starts with _) field '${path}'`)
+      }
+      if (path.startsWith('collections')) {
+        const collection = new Set(get(this.prefsStorage, path))
+        collection.add(value)
+        set(this.prefsStorage, path, [...collection])
+      } else if (path.startsWith('objectCollections')) {
+        const { _key } = value
+        if (!_key && typeof _key !== 'string') {
+          throw new Error('Object for storage is missing _key field!')
+        }
+        const collection = new Set(get(this.prefsStorage, path + '.index'))
+        collection.add(_key)
+        set(this.prefsStorage, path + '.index', [...collection])
+        set(this.prefsStorage, path + '.data.' + _key, value)
+      }
+      this.prefsStorage._journal = [
+        ...this.prefsStorage._journal,
+        { operation: 'addToCollection', path, args: [value], timestamp: Date.now() }
+      ]
+      this.dirty = true
+    },
+    removeCollectionPreference ({ path, value }) {
+      if (path.startsWith('_')) {
+        throw new Error(`tried to edit internal (starts with _) field '${path}', ignoring.`)
+      }
+      const collection = new Set(get(this.prefsStorage, path))
+      collection.delete(value)
+      set(this.prefsStorage, path, [...collection])
+      this.prefsStorage._journal = [
+        ...this.prefsStorage._journal,
+        { operation: 'removeFromCollection', path, args: [value], timestamp: Date.now() }
+      ]
+      this.dirty = true
+    },
+    reorderCollectionPreference ({ path, value, movement }) {
+      if (path.startsWith('_')) {
+        throw new Error(`tried to edit internal (starts with _) field '${path}', ignoring.`)
+      }
+      const collection = get(this.prefsStorage, path)
+      const newCollection = _moveItemInArray(collection, value, movement)
+      set(this.prefsStorage, path, newCollection)
+      this.prefsStorage._journal = [
+        ...this.prefsStorage._journal,
+        { operation: 'arrangeCollection', path, args: [value], timestamp: Date.now() }
+      ]
+      this.dirty = true
+    },
+    updateCache ({ username }) {
+      this.prefsStorage._journal = _mergeJournal(this.prefsStorage._journal)
+      this.cache = _wrapData({
+        flagStorage: toRaw(this.flagStorage),
+        prefsStorage: toRaw(this.prefsStorage)
+      }, username)
+    },
+    pushServerSideStorage ({ force = false } = {}) {
+      const needPush = this.dirty || force
       if (!needPush) return
-      commit('updateCache', { username: rootState.users.currentUser.fqn })
-      const params = { pleroma_settings_store: { 'pleroma-fe': state.cache } }
-      rootState.api.backendInteractor
+      this.updateCache({ username: window.vuex.state.users.currentUser.fqn })
+      const params = { pleroma_settings_store: { 'pleroma-fe': this.cache } }
+      window.vuex.state.api.backendInteractor
         .updateProfile({ params })
         .then((user) => {
-          commit('setServerSideStorage', user)
-          state.dirty = false
+          this.setServerSideStorage(user)
+          this.dirty = false
         })
     }
   }
-}
-
-export default serverSideStorage
+})
