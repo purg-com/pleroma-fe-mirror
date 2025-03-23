@@ -329,77 +329,6 @@ export const useServerSideStorageStore = defineStore('serverSideStorage', {
     return cloneDeep(defaultState)
   },
   actions: {
-    clearServerSideStorage () {
-      const blankState = { ...cloneDeep(defaultState) }
-      Object.keys(this).forEach(k => {
-        this[k] = blankState[k]
-      })
-    },
-    setServerSideStorage (userData) {
-      const live = userData.storage
-      this.raw = live
-      let cache = this.cache
-      if (cache && cache._user !== userData.fqn) {
-        console.warn('Cache belongs to another user! reinitializing local cache!')
-        cache = null
-      }
-
-      cache = _doMigrations(cache)
-
-      let { recent, stale, needUpload } = _getRecentData(cache, live)
-
-      const userNew = userData.created_at > NEW_USER_DATE
-      const flagsTemplate = userNew ? newUserFlags : defaultState.flagStorage
-      let dirty = false
-
-      if (recent === null) {
-        console.debug(`Data is empty, initializing for ${userNew ? 'new' : 'existing'} user`)
-        recent = _wrapData({
-          flagStorage: { ...flagsTemplate },
-          prefsStorage: { ...defaultState.prefsStorage }
-        })
-      }
-
-      if (!needUpload && recent && stale) {
-        console.debug('Checking if data needs merging...')
-        // discarding timestamps and versions
-        /* eslint-disable no-unused-vars */
-        const { _timestamp: _0, _version: _1, ...recentData } = recent
-        const { _timestamp: _2, _version: _3, ...staleData } = stale
-        /* eslint-enable no-unused-vars */
-        dirty = !isEqual(recentData, staleData)
-        console.debug(`Data ${dirty ? 'needs' : 'doesn\'t need'} merging`)
-      }
-
-      const allFlagKeys = _getAllFlags(recent, stale)
-      let totalFlags
-      let totalPrefs
-      if (dirty) {
-        // Merge the flags
-        console.debug('Merging the data...')
-        totalFlags = _mergeFlags(recent, stale, allFlagKeys)
-        _verifyPrefs(recent)
-        _verifyPrefs(stale)
-        totalPrefs = _mergePrefs(recent.prefsStorage, stale.prefsStorage)
-      } else {
-        totalFlags = recent.flagStorage
-        totalPrefs = recent.prefsStorage
-      }
-
-      totalFlags = _resetFlags(totalFlags)
-
-      recent.flagStorage = { ...flagsTemplate, ...totalFlags }
-      recent.prefsStorage = { ...defaultState.prefsStorage, ...totalPrefs }
-
-      this.dirty = dirty || needUpload
-      this.cache = recent
-      // set local timestamp to smaller one if we don't have any changes
-      if (stale && recent && !this.dirty) {
-        this.cache._timestamp = Math.min(stale._timestamp, recent._timestamp)
-      }
-      this.flagStorage = this.cache.flagStorage
-      this.prefsStorage = this.cache.prefsStorage
-    },
     setFlag ({ flag, value }) {
       this.flagStorage[flag] = value
       this.dirty = true
@@ -500,6 +429,77 @@ export const useServerSideStorageStore = defineStore('serverSideStorage', {
         flagStorage: toRaw(this.flagStorage),
         prefsStorage: toRaw(this.prefsStorage)
       }, username)
+    },
+    clearServerSideStorage () {
+      const blankState = { ...cloneDeep(defaultState) }
+      Object.keys(this).forEach(k => {
+        this[k] = blankState[k]
+      })
+    },
+    setServerSideStorage (userData) {
+      const live = userData.storage
+      this.raw = live
+      let cache = this.cache
+      if (cache && cache._user !== userData.fqn) {
+        console.warn('Cache belongs to another user! reinitializing local cache!')
+        cache = null
+      }
+
+      cache = _doMigrations(cache)
+
+      let { recent, stale, needUpload } = _getRecentData(cache, live)
+
+      const userNew = userData.created_at > NEW_USER_DATE
+      const flagsTemplate = userNew ? newUserFlags : defaultState.flagStorage
+      let dirty = false
+
+      if (recent === null) {
+        console.debug(`Data is empty, initializing for ${userNew ? 'new' : 'existing'} user`)
+        recent = _wrapData({
+          flagStorage: { ...flagsTemplate },
+          prefsStorage: { ...defaultState.prefsStorage }
+        })
+      }
+
+      if (!needUpload && recent && stale) {
+        console.debug('Checking if data needs merging...')
+        // discarding timestamps and versions
+        /* eslint-disable no-unused-vars */
+        const { _timestamp: _0, _version: _1, ...recentData } = recent
+        const { _timestamp: _2, _version: _3, ...staleData } = stale
+        /* eslint-enable no-unused-vars */
+        dirty = !isEqual(recentData, staleData)
+        console.debug(`Data ${dirty ? 'needs' : 'doesn\'t need'} merging`)
+      }
+
+      const allFlagKeys = _getAllFlags(recent, stale)
+      let totalFlags
+      let totalPrefs
+      if (dirty) {
+        // Merge the flags
+        console.debug('Merging the data...')
+        totalFlags = _mergeFlags(recent, stale, allFlagKeys)
+        _verifyPrefs(recent)
+        _verifyPrefs(stale)
+        totalPrefs = _mergePrefs(recent.prefsStorage, stale.prefsStorage)
+      } else {
+        totalFlags = recent.flagStorage
+        totalPrefs = recent.prefsStorage
+      }
+
+      totalFlags = _resetFlags(totalFlags)
+
+      recent.flagStorage = { ...flagsTemplate, ...totalFlags }
+      recent.prefsStorage = { ...defaultState.prefsStorage, ...totalPrefs }
+
+      this.dirty = dirty || needUpload
+      this.cache = recent
+      // set local timestamp to smaller one if we don't have any changes
+      if (stale && recent && !this.dirty) {
+        this.cache._timestamp = Math.min(stale._timestamp, recent._timestamp)
+      }
+      this.flagStorage = this.cache.flagStorage
+      this.prefsStorage = this.cache.prefsStorage
     },
     pushServerSideStorage ({ force = false } = {}) {
       const needPush = this.dirty || force
