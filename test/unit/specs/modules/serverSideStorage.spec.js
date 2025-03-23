@@ -173,11 +173,17 @@ describe('The serverSideStorage module', () => {
       it('should not allow unsetting depth <= 2', () => {
         const state = cloneDeep(defaultState)
         setPreference(state, { path: 'simple.object.foo', value: 1 })
-        unsetPreference(state, { path: 'simple.object' })
-        unsetPreference(state, { path: 'simple' })
-        updateCache(state, { username: 'test' })
-        expect(state.prefsStorage.simple.object).to.have.property('foo')
-        expect(state.prefsStorage._journal.length).to.eql(1)
+        expect(() => unsetPreference(state, { path: 'simple' })).to.throw()
+        expect(() => unsetPreference(state, { path: 'simple.object' })).to.throw()
+      })
+
+      it('should not allow (un)setting depth > 3', () => {
+        const state = cloneDeep(defaultState)
+        setPreference(state, { path: 'simple.object', value: {} })
+        expect(() => setPreference(state, { path: 'simple.object.lv3', value: 1 })).to.not.throw()
+        expect(() => setPreference(state, { path: 'simple.object.lv3.lv4', value: 1})).to.throw()
+        expect(() => unsetPreference(state, { path: 'simple.object.lv3', value: 1 })).to.not.throw()
+        expect(() => unsetPreference(state, { path: 'simple.object.lv3.lv4', value: 1})).to.throw()
       })
     })
   })

@@ -226,29 +226,24 @@ export const _mergePrefs = (recent, stale) => {
   const totalJournal = _mergeJournal(staleJournal, recentJournal)
   totalJournal.forEach(({ path, operation, args }) => {
     if (path.startsWith('_')) {
-      console.error(`journal contains entry to edit internal (starts with _) field '${path}', something is incorrect here, ignoring.`)
-      return
+      throw new Error(`journal contains entry to edit internal (starts with _) field '${path}', something is incorrect here, ignoring.`)
     }
     switch (operation) {
       case 'set':
         if (path.startsWith('collections') || path.startsWith('objectCollections')) {
-          console.error('Illegal operation "set" on a collection')
-          return
+          throw new Error('Illegal operation "set" on a collection')
         }
         if (path.split(/\./g).length <= 1) {
-          console.error(`Calling set on depth <= 1 (path: ${path}) is not allowed`)
-          return
+          throw new Error(`Calling set on depth <= 1 (path: ${path}) is not allowed`)
         }
         set(resultOutput, path, args[0])
         break
       case 'unset':
         if (path.startsWith('collections') || path.startsWith('objectCollections')) {
-          console.error('Illegal operation "unset" on a collection')
-          return
+          throw new Error('Illegal operation "unset" on a collection')
         }
         if (path.split(/\./g).length <= 2) {
-          console.error(`Calling unset on depth <= 2 (path: ${path})  is not allowed`)
-          return
+          throw new Error(`Calling unset on depth <= 2 (path: ${path})  is not allowed`)
         }
         unset(resultOutput, path)
         break
@@ -267,7 +262,7 @@ export const _mergePrefs = (recent, stale) => {
         break
       }
       default:
-        console.error(`Unknown journal operation: '${operation}', did we forget to run reverse migrations beforehand?`)
+        throw new Error(`Unknown journal operation: '${operation}', did we forget to run reverse migrations beforehand?`)
     }
   })
   return { ...resultOutput, _journal: totalJournal }
@@ -406,16 +401,16 @@ export const mutations = {
   },
   setPreference (state, { path, value }) {
     if (path.startsWith('_')) {
-      console.error(`Tried to edit internal (starts with _) field '${path}', ignoring.`)
-      return
+      throw new Error(`Tried to edit internal (starts with _) field '${path}', ignoring.`)
     }
     if (path.startsWith('collections') || path.startsWith('objectCollections')) {
-      console.error(`Invalid operation 'set' for collection field '${path}', ignoring.`)
-      return
+      throw new Error(`Invalid operation 'set' for collection field '${path}', ignoring.`)
     }
     if (path.split(/\./g).length <= 1) {
-      console.error(`Calling set on depth <= 1 (path: ${path}) is not allowed`)
-      return
+      throw new Error(`Calling set on depth <= 1 (path: ${path}) is not allowed`)
+    }
+    if (path.split(/\./g).length > 3) {
+      throw new Error(`Calling set on depth > 3 (path: ${path})  is not allowed`)
     }
     set(state.prefsStorage, path, value)
     state.prefsStorage._journal = [
@@ -426,16 +421,16 @@ export const mutations = {
   },
   unsetPreference (state, { path, value }) {
     if (path.startsWith('_')) {
-      console.error(`Tried to edit internal (starts with _) field '${path}', ignoring.`)
-      return
+      throw new Error(`Tried to edit internal (starts with _) field '${path}', ignoring.`)
     }
     if (path.startsWith('collections') || path.startsWith('objectCollections')) {
-      console.error(`Invalid operation 'unset' for collection field '${path}', ignoring.`)
-      return
+      throw new Error(`Invalid operation 'unset' for collection field '${path}', ignoring.`)
     }
     if (path.split(/\./g).length <= 2) {
-      console.error(`Calling unset on depth <= 2 (path: ${path})  is not allowed`)
-      return
+      throw new Error(`Calling unset on depth <= 2 (path: ${path})  is not allowed`)
+    }
+    if (path.split(/\./g).length > 3) {
+      throw new Error(`Calling unset on depth > 3 (path: ${path})  is not allowed`)
     }
     unset(state.prefsStorage, path, value)
     state.prefsStorage._journal = [
@@ -446,8 +441,7 @@ export const mutations = {
   },
   addCollectionPreference (state, { path, value }) {
     if (path.startsWith('_')) {
-      console.error(`tried to edit internal (starts with _) field '${path}', ignoring.`)
-      return
+      throw new Error(`tried to edit internal (starts with _) field '${path}'`)
     }
     if (path.startsWith('collections')) {
       const collection = new Set(get(state.prefsStorage, path))
@@ -456,8 +450,7 @@ export const mutations = {
     } else if (path.startsWith('objectCollections')) {
       const { _key } = value
       if (!_key && typeof _key !== 'string') {
-        console.error('Object for storage is missing _key field! ignoring')
-        return
+        throw new Error('Object for storage is missing _key field!')
       }
       const collection = new Set(get(state.prefsStorage, path + '.index'))
       collection.add(_key)
@@ -472,8 +465,7 @@ export const mutations = {
   },
   removeCollectionPreference (state, { path, value }) {
     if (path.startsWith('_')) {
-      console.error(`tried to edit internal (starts with _) field '${path}', ignoring.`)
-      return
+      throw new Error(`tried to edit internal (starts with _) field '${path}', ignoring.`)
     }
     const collection = new Set(get(state.prefsStorage, path))
     collection.delete(value)
@@ -486,8 +478,7 @@ export const mutations = {
   },
   reorderCollectionPreference (state, { path, value, movement }) {
     if (path.startsWith('_')) {
-      console.error(`tried to edit internal (starts with _) field '${path}', ignoring.`)
-      return
+      throw new Error(`tried to edit internal (starts with _) field '${path}', ignoring.`)
     }
     const collection = get(state.prefsStorage, path)
     const newCollection = _moveItemInArray(collection, value, movement)
