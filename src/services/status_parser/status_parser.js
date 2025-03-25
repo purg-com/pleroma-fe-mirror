@@ -7,7 +7,8 @@ export const muteFilterHits = (status) => {
   const muteFilters = Object.values(useServerSideStorageStore().prefsStorage.simple.muteFilters)
 
   return muteFilters.toSorted((a,b) => b.order - a.order).map(filter => {
-    const { hide, expires, name, value, type} = filter
+    const { hide, expires, name, value, type, enabled} = filter
+    if (!enabled) return false
     if (expires !== null && expires < Date.now()) return false
     switch (type) {
       case 'word': {
