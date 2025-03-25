@@ -16,6 +16,7 @@ import generateProfileLink from 'src/services/user_profile_link_generator/user_p
 import { highlightClass, highlightStyle } from '../../services/user_highlighter/user_highlighter.js'
 import { muteFilterHits } from '../../services/status_parser/status_parser.js'
 import { unescape, uniqBy } from 'lodash'
+import { useServerSideStorageStore } from 'src/stores/serverSideStorage'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -219,7 +220,10 @@ const Status = {
       return !!this.currentUser
     },
     muteFilterHits () {
-      return muteFilterHits(this.status)
+      return muteFilterHits(
+        Object.values(useServerSideStorageStore().prefsStorage.simple.muteFilters),
+        this.status
+      )
     },
     botStatus () {
       return this.status.user.actor_type === 'Service'

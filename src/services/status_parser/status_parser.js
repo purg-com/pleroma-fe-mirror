@@ -1,10 +1,6 @@
-import { useServerSideStorageStore } from 'src/stores/serverSideStorage'
-
-export const muteFilterHits = (status) => {
+export const muteFilterHits = (muteFilters, status) => {
   const statusText = status.text.toLowerCase()
   const statusSummary = status.summary.toLowerCase()
-
-  const muteFilters = Object.values(useServerSideStorageStore().prefsStorage.simple.muteFilters)
 
   return muteFilters.toSorted((a,b) => b.order - a.order).map(filter => {
     const { hide, expires, name, value, type, enabled} = filter
