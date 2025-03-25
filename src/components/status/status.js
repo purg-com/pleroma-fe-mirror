@@ -219,7 +219,6 @@ const Status = {
       return !!this.currentUser
     },
     muteFilterHits () {
-      console.log(muteFilterHits(this.status))
       return muteFilterHits(this.status)
     },
     botStatus () {
@@ -339,12 +338,13 @@ const Status = {
       return this.mergedConfig.hideWordFilteredPosts
     },
     hideStatus () {
+      console.log(this.muteFilterHits[0])
       return (!this.shouldNotMute) && (
         (this.muted && this.hideFilteredStatuses) ||
         (this.userIsMuted && this.hideMutedUsers) ||
         (this.status.thread_muted && this.hideMutedThreads) ||
         (this.muteFilterHits.length > 0 && this.hideWordFilteredPosts) ||
-          (this.muteFilterHits[0]?.hide)
+          (this.muteFilterHits.some(x => x.hide))
       )
     },
     isFocused () {

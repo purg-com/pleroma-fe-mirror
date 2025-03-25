@@ -95,7 +95,7 @@
                   :id="'filterHide' + filter[0]"
                   :model-value="filter[1].hide"
                   :name="'filterHide' + filter[0]"
-                  @update:model-value="updateFilter(filter[0], 'hide', $event.target.checked)"
+                  @update:model-value="updateFilter(filter[0], 'hide', $event)"
                 >
                   {{ $t('settings.filter.hide') }}
                 </Checkbox>
@@ -104,7 +104,7 @@
                   :id="'filterEnabled' + filter[0]"
                   :model-value="filter[1].enabled"
                   :name="'filterEnabled' + filter[0]"
-                  @update:model-value="updateFilter(filter[0], 'enabled', $event.target.checked)"
+                  @update:model-value="updateFilter(filter[0], 'enabled', $event)"
                 >
                   {{ $t('settings.enabled') }}
                 </Checkbox>
