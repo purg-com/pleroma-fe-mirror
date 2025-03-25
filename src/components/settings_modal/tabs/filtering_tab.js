@@ -1,3 +1,4 @@
+import { throttle } from 'lodash'
 import { mapState, mapActions } from 'pinia'
 import { useServerSideStorageStore } from 'src/stores/serverSideStorage'
 import { v4 as uuidv4 } from 'uuid';
@@ -40,7 +41,8 @@ const FilteringTab = {
     )
   },
   methods: {
-    ...mapActions(useServerSideStorageStore, ['setPreference', 'unsetPreference', 'pushServerSideStorage']),
+    ...mapActions(useServerSideStorageStore, ['setPreference', 'unsetPreference']),
+    pushServerSideStorage: throttle(() => useServerSideStorageStore().pushServerSideStorage(), 500),
     getDatetimeLocal (timestamp) {
       const date = new Date(timestamp)
       const datetime = [

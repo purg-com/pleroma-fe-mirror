@@ -1281,6 +1281,7 @@
     "copy_link": "Copy link to status",
     "external_source": "External source",
     "muted_words": "Wordfiltered: {word} | Wordfiltered: {word} and {numWordsMore} more words",
+    "muted_filters": "Filtered: {name} | Wordfiltered: {name} and {filtersMore} more words",
     "multi_reason_mute": "{main} + one more reason | {main} + {numReasonsMore} more reasons",
     "muted_user": "User muted",
     "thread_muted": "Thread muted",

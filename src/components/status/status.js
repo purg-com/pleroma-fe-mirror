@@ -14,7 +14,7 @@ import MentionLink from 'src/components/mention_link/mention_link.vue'
 import StatusActionButtons from 'src/components/status_action_buttons/status_action_buttons.vue'
 import generateProfileLink from 'src/services/user_profile_link_generator/user_profile_link_generator'
 import { highlightClass, highlightStyle } from '../../services/user_highlighter/user_highlighter.js'
-import { muteWordHits } from '../../services/status_parser/status_parser.js'
+import { muteFilterHits } from '../../services/status_parser/status_parser.js'
 import { unescape, uniqBy } from 'lodash'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -161,9 +161,6 @@ const Status = {
   },
   computed: {
     ...controlledOrUncontrolledGetters(['replying', 'mediaPlaying']),
-    muteWords () {
-      return this.mergedConfig.muteWords
-    },
     showReasonMutedThread () {
       return (
         this.status.thread_muted ||
@@ -221,8 +218,9 @@ const Status = {
     loggedIn () {
       return !!this.currentUser
     },
-    muteWordHits () {
-      return muteWordHits(this.status, this.muteWords)
+    muteFilterHits () {
+      console.log(muteFilterHits(this.status))
+      return muteFilterHits(this.status)
     },
     botStatus () {
       return this.status.user.actor_type === 'Service'
@@ -256,7 +254,7 @@ const Status = {
       return [
         this.userIsMuted ? 'user' : null,
         this.status.thread_muted ? 'thread' : null,
-        (this.muteWordHits.length > 0) ? 'wordfilter' : null,
+        (this.muteFilterHits.length > 0) ? 'filtered' : null,
         (this.muteBotStatuses && this.botStatus) ? 'bot' : null,
         (this.muteSensitiveStatuses && this.sensitiveStatus) ? 'nsfw' : null
       ].filter(_ => _)
@@ -267,14 +265,14 @@ const Status = {
         switch (this.muteReasons[0]) {
           case 'user': return this.$t('status.muted_user')
           case 'thread': return this.$t('status.thread_muted')
-          case 'wordfilter':
+          case 'filtered':
             return this.$t(
-              'status.muted_words',
+              'status.muted_filters',
               {
-                word: this.muteWordHits[0],
-                numWordsMore: this.muteWordHits.length - 1
+                name: this.muteFilterHits[0].name,
+                filterMore: this.muteFilterHits.length - 1
               },
-              this.muteWordHits.length
+              this.muteFilterHits.length
             )
           case 'bot': return this.$t('status.bot_muted')
           case 'nsfw': return this.$t('status.sensitive_muted')
@@ -326,7 +324,7 @@ const Status = {
         // Don't mute statuses in muted conversation when said conversation is opened
         (this.inConversation && status.thread_muted)
         // No excuses if post has muted words
-      ) && !this.muteWordHits.length > 0
+      ) && !this.muteFilterHits.length > 0
     },
     hideMutedUsers () {
       return this.mergedConfig.hideMutedPosts
@@ -345,7 +343,8 @@ const Status = {
         (this.muted && this.hideFilteredStatuses) ||
         (this.userIsMuted && this.hideMutedUsers) ||
         (this.status.thread_muted && this.hideMutedThreads) ||
-        (this.muteWordHits.length > 0 && this.hideWordFilteredPosts)
+        (this.muteFilterHits.length > 0 && this.hideWordFilteredPosts) ||
+          (this.muteFilterHits[0]?.hide)
       )
     },
     isFocused () {
