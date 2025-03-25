@@ -1,5 +1,8 @@
 <template>
-  <div :label="$t('settings.filtering')" class="filtering-tab">
+  <div
+    :label="$t('settings.filtering')"
+    class="filtering-tab"
+  >
     <div class="setting-item">
       <h2>{{ $t('settings.posts') }}</h2>
       <ul class="setting-list">
@@ -74,7 +77,7 @@
               class="mute-filter"
               :style="{ order: filter[1].order }"
               v-for="filter in muteFilters"
-              key="filter[0]"
+              :key="filter[0]"
             >
               <div class="filter-name">
                 <label

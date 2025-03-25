@@ -15,6 +15,7 @@ export const muteFilterHits = (status) => {
         if (statusText.includes(value) || statusSummary.includes(value)) {
           return { hide, name }
         }
+        break
       }
       case 'regexp': {
         try {
@@ -22,6 +23,7 @@ export const muteFilterHits = (status) => {
           if (re.test(statusText) || re.test(statusSummary)) {
             return { hide, name }
           }
+          return false
         } catch {
           return false
         }

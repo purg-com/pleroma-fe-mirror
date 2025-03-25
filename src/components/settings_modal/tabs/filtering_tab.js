@@ -66,7 +66,7 @@ const FilteringTab = {
       let valid = true
       try {
         new RegExp(value)
-      } catch (e) {
+      } catch {
         valid = false
         console.error('Invalid RegExp: ' + value)
       }
