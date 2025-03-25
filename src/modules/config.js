@@ -109,15 +109,15 @@ const config = {
 
       const confirm = () => {
         dispatch('setOption', { name, value })
-        commit('clearTemporaryChanges')
+        useInterfaceStore().clearTemporaryChanges()
       }
 
       const revert = () => {
         commit('setOptionTemporarily', { name, value: oldValue })
-        commit('clearTemporaryChanges')
+        useInterfaceStore().clearTemporaryChanges()
       }
 
-      commit('setTemporaryChanges', {
+      useInterfaceStore().setTemporaryChanges({
         timeoutId: setTimeout(revert, 10000),
         confirm,
         revert
