@@ -38,7 +38,7 @@ export const defaultState = {
     simple: {
       dontShowUpdateNotifs: false,
       collapseNav: false,
-      filters: {}
+      muteFilters: {}
     },
     collections: {
       pinnedStatusActions: ['reply', 'retweet', 'favorite', 'emoji'],

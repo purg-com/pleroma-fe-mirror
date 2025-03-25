@@ -1,13 +1,15 @@
+import { compact, map, each, mergeWith, last, concat, uniq, isArray } from 'lodash'
+import { v4 as uuidv4 } from 'uuid';
+
 import backendInteractorService from '../services/backend_interactor_service/backend_interactor_service.js'
 import { windowWidth, windowHeight } from '../services/window_utils/window_utils'
 import apiService from '../services/api/api.service.js'
 import oauthApi from '../services/new_api/oauth.js'
-import { compact, map, each, mergeWith, last, concat, uniq, isArray } from 'lodash'
 import { registerPushNotifications, unregisterPushNotifications } from '../services/sw/sw.js'
 
 import { useInterfaceStore } from 'src/stores/interface.js'
 import { useOAuthStore } from 'src/stores/oauth.js'
-import { useServerSideStorageStore } from 'src/stores/serverSideStorage'
+import { useServerSideStorageStore, CONFIG_MIGRATION } from 'src/stores/serverSideStorage'
 
 // TODO: Unify with mergeOrAdd in statuses.js
 export const mergeOrAdd = (arr, obj, item) => {
@@ -618,6 +620,37 @@ const users = {
 
               // Set our new backend interactor
               commit('setBackendInteractor', backendInteractorService(accessToken))
+
+              // Do server-side storage migrations
+
+              const { configMigration } = useServerSideStorageStore().flagStorage
+
+              // Wordfilter migration
+              if (configMigration < 1) {
+                // Debug snippet to clean up storage
+                /*
+                Object.keys(useServerSideStorageStore().prefsStorage.simple.muteFilters).forEach(key => {
+                  useServerSideStorageStore().unsetPreference({ path: 'simple.muteFilters.' + key, value: null })
+                })
+                */
+
+                // Convert existing wordfilter into synced one
+                store.rootState.config.muteWords.forEach(word => {
+                  const uniqueId = uuidv4()
+
+                  useServerSideStorageStore().setPreference({
+                    path: 'simple.muteFilters.' + uniqueId,
+                    value: {
+                      type: 'word',
+                      value: word
+                    }
+                  })
+                })
+              }
+
+
+              // Update the flag
+              useServerSideStorageStore().setflag({ flag: 'configMigration', value: CONFIG_MIGRATION })
               useServerSideStorageStore().pushServerSideStorage()
 
               if (user.token) {
