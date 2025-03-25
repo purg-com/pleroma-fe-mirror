@@ -29,6 +29,13 @@ export default {
     ...mapMutations('authFlow', ['requireRecovery', 'abortMFA']),
     ...mapActions({ login: 'authFlow/login' }),
     clearError () { this.error = false },
+
+    focusOnCodeInput () {
+      const codeInput = this.$refs.codeInput
+      codeInput.focus()
+      codeInput.setSelectionRange(0, codeInput.value.length)
+    },
+
     submit () {
       const { clientId, clientSecret } = this.oauthStore
 
@@ -44,6 +51,7 @@ export default {
         if (result.error) {
           this.error = result.error
           this.code = null
+          this.focusOnCodeInput()
           return
         }
 
