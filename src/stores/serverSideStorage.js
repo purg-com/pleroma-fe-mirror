@@ -17,6 +17,7 @@ import {
 import { CURRENT_UPDATE_COUNTER } from 'src/components/update_notification/update_notification.js'
 
 export const VERSION = 1
+export const CONFIG_MIGRATION = 1
 export const NEW_USER_DATE = new Date('2022-08-04') // date of writing this, basically
 
 export const COMMAND_TRIM_FLAGS = 1000
@@ -28,6 +29,7 @@ export const defaultState = {
   // storage of flags - stuff that can only be set and incremented
   flagStorage: {
     updateCounter: 0, // Counter for most recent update notification seen
+    configMigration: 0, // Counter for config -> server-side migrations
     reset: 0 // special flag that can be used to force-reset all flags, debug purposes only
     // special reset codes:
     // 1000: trim keys to those known by currently running FE

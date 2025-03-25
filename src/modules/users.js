@@ -623,35 +623,47 @@ const users = {
 
               // Do server-side storage migrations
 
+              // Debug snippet to clean up storage and reset migrations
+              /*
+              // Reset wordfilter
+              Object.keys(
+                useServerSideStorageStore().prefsStorage.simple.muteFilters
+              ).forEach(key => {
+                useServerSideStorageStore().unsetPreference({ path: 'simple.muteFilters.' + key, value: null })
+              })
+
+              // Reset flag to 0 to re-run migrations
+              useServerSideStorageStore().setFlag({ flag: 'configMigration', value: 0 })
+              /**/
+
               const { configMigration } = useServerSideStorageStore().flagStorage
 
               // Wordfilter migration
               if (configMigration < 1) {
-                // Debug snippet to clean up storage
-                /*
-                Object.keys(useServerSideStorageStore().prefsStorage.simple.muteFilters).forEach(key => {
-                  useServerSideStorageStore().unsetPreference({ path: 'simple.muteFilters.' + key, value: null })
-                })
-                */
-
                 // Convert existing wordfilter into synced one
-                store.rootState.config.muteWords.forEach(word => {
+                store.rootState.config.muteWords.forEach((word, order) => {
                   const uniqueId = uuidv4()
 
                   useServerSideStorageStore().setPreference({
                     path: 'simple.muteFilters.' + uniqueId,
                     value: {
                       type: 'word',
-                      value: word
+                      value: word,
+                      name: word,
+                      enabled: true,
+                      expires: null,
+                      hide: false,
+                      order
                     }
                   })
                 })
               }
 
-
-              // Update the flag
-              useServerSideStorageStore().setflag({ flag: 'configMigration', value: CONFIG_MIGRATION })
-              useServerSideStorageStore().pushServerSideStorage()
+              if (configMigration < CONFIG_MIGRATION) {
+                // Update the flag
+                useServerSideStorageStore().setFlag({ flag: 'configMigration', value: CONFIG_MIGRATION })
+                useServerSideStorageStore().pushServerSideStorage()
+              }
 
               if (user.token) {
                 dispatch('setWsToken', user.token)

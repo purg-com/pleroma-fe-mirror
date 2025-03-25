@@ -1,5 +1,5 @@
 <template>
-  <div :label="$t('settings.filtering')">
+  <div :label="$t('settings.filtering')" class="filtering-tab">
     <div class="setting-item">
       <h2>{{ $t('settings.posts') }}</h2>
       <ul class="setting-list">
@@ -68,13 +68,148 @@
           {{ $t('settings.replies_in_timeline') }}
         </ChoiceSetting>
         <li>
-          <h3>{{ $t('settings.wordfilter') }}</h3>
-          <textarea
-            id="muteWords"
-            v-model="muteWordsString"
-            class="input resize-height"
-          />
-          <div>{{ $t('settings.filtering_explanation') }}</div>
+          <h3>{{ $t('settings.filter.mute_filter') }}</h3>
+          <div class="muteFilterContainer">
+            <div
+              class="mute-filter"
+              :style="{ order: filter[1].order }"
+              v-for="filter in muteFilters"
+              key="filter[0]"
+            >
+              <div class="filter-name">
+                <label
+                  :for="'filterName' + filter[0]"
+                >
+                  {{ $t('settings.filter.name') }}
+                </label>
+                {{ ' ' }}
+                <input
+                  :id="'filterName' + filter[0]"
+                  class="input"
+                  :value="filter[1].name"
+                  @input="updateFilter(filter[0], 'name', $event.target.value)"
+                >
+              </div>
+              <div class="filter-enabled">
+                <Checkbox
+                  :id="'filterHide' + filter[0]"
+                  :model-value="filter[1].hide"
+                  :name="'filterHide' + filter[0]"
+                  @update:model-value="updateFilter(filter[0], 'hide', $event.target.checked)"
+                >
+                  {{ $t('settings.filter.hide') }}
+                </Checkbox>
+                {{ ' ' }}
+                <Checkbox
+                  :id="'filterEnabled' + filter[0]"
+                  :model-value="filter[1].enabled"
+                  :name="'filterEnabled' + filter[0]"
+                  @update:model-value="updateFilter(filter[0], 'enabled', $event.target.checked)"
+                >
+                  {{ $t('settings.enabled') }}
+                </Checkbox>
+              </div>
+              <div class="filter-type filter-field">
+                <label :for="'filterType' + filter[0]">
+                  {{ $t('settings.filter.type') }}
+                </label>
+                <Select
+                  :id="'filterType' + filter[0]"
+                  class="filter-field-value"
+                  :modelValue="filter[1].type"
+                  @update:model-value="updateFilter(filter[0], 'type', $event)"
+                >
+                  <option value="word">
+                    {{ $t('settings.filter.plain') }}
+                  </option>
+                  <option value="regexp">
+                    {{ $t('settings.filter.regexp') }}
+                  </option>
+                </Select>
+              </div>
+              <div class="filter-value filter-field">
+                <label
+                  :for="'filterValue' + filter[0]"
+                >
+                  {{ $t('settings.filter.value') }}
+                </label>
+                {{ ' ' }}
+                <input
+                  :id="'filterValue' + filter[0]"
+                  class="input filter-field-value"
+                  :value="filter[1].value"
+                  @input="updateFilter(filter[0], 'value', $event.target.value)"
+                >
+              </div>
+              <div class="filter-expires filter-field">
+                <label
+                  :for="'filterExpires' + filter[0]"
+                >
+                  {{ $t('settings.filter.expires') }}
+                </label>
+                {{ ' ' }}
+                <div class="filter-field-value">
+                  <input
+                    :id="'filterExpires' + filter[0]"
+                    class="input"
+                    :class="{ disabled: filter[1].expires === null }"
+                    type="datetime-local"
+                    :disabled="filter[1].expires === null"
+                    :value="filter[1].expires ? getDatetimeLocal(filter[1].expires) : null"
+                    @input="updateFilter(filter[0], 'expires', $event.target.value)"
+                  >
+                  {{ ' ' }}
+                  <Checkbox
+                    :id="'filterExpiresNever' + filter[0]"
+                    :model-value="filter[1].expires === null"
+                    :name="'filterExpiresNever' + filter[0]"
+                    class="input-inset input-boolean"
+                    @update:model-value="updateFilter(filter[0], 'expires-never', $event)"
+                  >
+                    {{ $t('settings.filter.never_expires') }}
+                  </Checkbox>
+                  <span
+                    v-if="filter[1].expires !== null && Date.now() > filter[1].expires"
+                    class="alert neutral"
+                  >
+                    {{ $t('settings.filter.expired') }}
+                  </span>
+                </div>
+              </div>
+              <div class="filter-buttons">
+                <span
+                  v-if="!checkRegexValid(filter[0])"
+                  class="alert error"
+                >
+                  {{ $t('settings.filter.regexp_error') }}
+                </span>
+                <button
+                  class="copy-button button-default"
+                  type="button"
+                  @click="copyFilter(filter[0])"
+                >
+                  {{ $t('settings.filter.copy') }}
+                </button>
+                {{ ' ' }}
+                <button
+                  class="delete-button button-default -danger"
+                  type="button"
+                  @click="deleteFilter(filter[0])"
+                >
+                  {{ $t('settings.filter.delete') }}
+                </button>
+              </div>
+            </div>
+            <div class="mute-filter">
+              <button
+                class="add-button button-default"
+                type="button"
+                @click="createFilter()"
+              >
+                {{ $t('settings.filter.new') }}
+              </button>
+            </div>
+          </div>
         </li>
         <h3>{{ $t('settings.attachments') }}</h3>
         <li>
@@ -130,3 +265,4 @@
   </div>
 </template>
 <script src="./filtering_tab.js"></script>
+<style src="./filtering_tab.scss"></style>

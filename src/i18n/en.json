@@ -409,6 +409,23 @@
     "visual_tweaks": "Minor visual tweaks",
     "theme_debug": "Show what background theme engine assumes when dealing with transparancy (DEBUG)",
     "scale_and_layout": "Interface scale and layout",
+    "enabled": "Enabled",
+    "filter": {
+      "mute_filter": "Mute Filters",
+      "type": "Filter type",
+      "regexp": "RegExp",
+      "plain": "Simple",
+      "hide": "Hide completely",
+      "name": "Name",
+      "value": "Value",
+      "expires": "Expires",
+      "expired": "Expired",
+      "copy": "Copy filter",
+      "delete": "Remove filter",
+      "new": "Create filter",
+      "regexp_error": "Invalid Regular Expression",
+      "never_expires": "Never"
+    },
     "mfa": {
       "otp": "OTP",
       "setup_otp": "Setup OTP",
