@@ -338,7 +338,6 @@ const Status = {
       return this.mergedConfig.hideWordFilteredPosts
     },
     hideStatus () {
-      console.log(this.muteFilterHits[0])
       return (!this.shouldNotMute) && (
         (this.muted && this.hideFilteredStatuses) ||
         (this.userIsMuted && this.hideMutedUsers) ||
