@@ -41,8 +41,9 @@ const FilteringTab = {
     )
   },
   methods: {
-    ...mapActions(useServerSideStorageStore, ['setPreference', 'unsetPreference']),
+    ...mapActions(useServerSideStorageStore, ['unsetPreference']),
     pushServerSideStorage: throttle(() => useServerSideStorageStore().pushServerSideStorage(), 500),
+    setPreference: throttle(x => useServerSideStorageStore().setPreference(x), 500),
     getDatetimeLocal (timestamp) {
       const date = new Date(timestamp)
       const datetime = [
