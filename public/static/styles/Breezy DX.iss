@@ -55,32 +55,33 @@ Root {
   --defaultInputFocusGlow: shadow | 0 0 0 1 --link / 1;
 }
 
+Button {
+  background: --parent;
+}
+
 Button:disabled {
   shadow: --buttonDefaultBevel, --buttonDefaultShadow
 }
 
 Button:hover {
+  background: --inheritedBackground;
   shadow: --buttonDefaultHoverGlow, --buttonDefaultBevel, --buttonDefaultShadow
 }
 
 Button:toggled {
-  background: $blend(--bg 0.3 --accent)
+  background: $blend(--inheritedBackground 0.3 --accent)
 }
 
 Button:pressed {
-  background: $blend(--bg 0.8 --accent)
+  background: $blend(--inheritedBackground 0.8 --accent)
 }
 
 Button:pressed:toggled {
-  background: $blend(--bg 0.2 --accent)
+  background: $blend(--inheritedBackground 0.2 --accent)
 }
 
 Button:toggled:hover {
-  background: $blend(--bg 0.3 --accent)
-}
-
-Button {
-  background: --bg;
+  background: $blend(--inheritedBackground 0.3 --accent)
 }
 
 Input {
