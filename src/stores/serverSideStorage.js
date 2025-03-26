@@ -17,7 +17,6 @@ import {
 import { CURRENT_UPDATE_COUNTER } from 'src/components/update_notification/update_notification.js'
 
 export const VERSION = 1
-export const CONFIG_MIGRATION = 1
 export const NEW_USER_DATE = new Date('2022-08-04') // date of writing this, basically
 
 export const COMMAND_TRIM_FLAGS = 1000

@@ -1,5 +1,4 @@
 import { compact, map, each, mergeWith, last, concat, uniq, isArray } from 'lodash'
-import { v4 as uuidv4 } from 'uuid';
 
 import backendInteractorService from '../services/backend_interactor_service/backend_interactor_service.js'
 import { windowWidth, windowHeight } from '../services/window_utils/window_utils'
@@ -9,7 +8,9 @@ import { registerPushNotifications, unregisterPushNotifications } from '../servi
 
 import { useInterfaceStore } from 'src/stores/interface.js'
 import { useOAuthStore } from 'src/stores/oauth.js'
-import { useServerSideStorageStore, CONFIG_MIGRATION } from 'src/stores/serverSideStorage'
+import { useServerSideStorageStore } from 'src/stores/serverSideStorage'
+
+import { declarations } from 'src/modules/config_declaration'
 
 // TODO: Unify with mergeOrAdd in statuses.js
 export const mergeOrAdd = (arr, obj, item) => {
@@ -637,33 +638,17 @@ const users = {
               /**/
 
               const { configMigration } = useServerSideStorageStore().flagStorage
-
-              // Wordfilter migration
-              if (configMigration < 1) {
-                // Convert existing wordfilter into synced one
-                store.rootState.config.muteWords.forEach((word, order) => {
-                  const uniqueId = uuidv4()
-
-                  useServerSideStorageStore().setPreference({
-                    path: 'simple.muteFilters.' + uniqueId,
-                    value: {
-                      type: 'word',
-                      value: word,
-                      name: word,
-                      enabled: true,
-                      expires: null,
-                      hide: false,
-                      order
-                    }
-                  })
+              declarations
+                .filter(x => {
+                  return x.store === 'server-side' &&
+                    (x.migrationNum ?? x.migrationNum > configMigration)
                 })
-              }
-
-              if (configMigration < CONFIG_MIGRATION) {
-                // Update the flag
-                useServerSideStorageStore().setFlag({ flag: 'configMigration', value: CONFIG_MIGRATION })
-                useServerSideStorageStore().pushServerSideStorage()
-              }
+                .toSorted((a, b) => a.configMigration - b.configMigration)
+                .forEach(value => {
+                  value.migration(useServerSideStorageStore(), store.rootState)
+                  useServerSideStorageStore().setFlag({ flag: 'configMigration', value: value.migrationNum })
+                  useServerSideStorageStore().pushServerSideStorage()
+                })
 
               if (user.token) {
                 dispatch('setWsToken', user.token)
