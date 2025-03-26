@@ -388,6 +388,10 @@ nav {
   &:disabled {
     cursor: not-allowed;
   }
+
+  &:active {
+    transform: translate(1px, 1px);
+  }
 }
 
 .menu-item {
