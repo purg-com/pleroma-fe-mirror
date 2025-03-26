@@ -25,7 +25,7 @@
   accent: #1CA4F3;
   cBlue: #1CA4F3;
   cRed: #f41a51;
-  cGreen: #1af46e;
+  cGreen: #0b6a30;
   cOrange: #f4af1a;
   border: #d8e6f9;
   link: #1CA4F3;
@@ -39,7 +39,7 @@
   accent: #1CA4F3;
   cRed: #f41a51;
   cBlue: #1CA4F3;
-  cGreen: #1af46e;
+  cGreen: #0b6a30;
   cOrange: #f4af1a;
 }
 
@@ -47,10 +47,10 @@ Root {
   --badgeNotification: color | --cRed;
   --buttonDefaultHoverGlow: shadow | inset 0 0 0 1 --accent / 1;
   --buttonDefaultFocusGlow: shadow | inset 0 0 0 1 --accent / 1;
-  --buttonDefaultShadow: shadow | inset 0 0 0 1 --parent--text / 0.35, 0 5 5 -5 #000000 / 0.35;
+  --buttonDefaultShadow: shadow | inset 0 0 0 1 --text / 0.35, 0 5 5 -5 #000000 / 0.35;
   --buttonDefaultBevel: shadow | inset 0 14 14 -14 #FFFFFF / 0.1;
   --buttonPressedBevel: shadow | inset 0 -20 20 -20 #000000 / 0.05;
-  --defaultInputBevel: shadow | inset 0 0 0 1 --parent--text / 0.35;
+  --defaultInputBevel: shadow | inset 0 0 0 1 --text / 0.35;
   --defaultInputHoverGlow: shadow | 0 0 0 1 --accent / 1;
   --defaultInputFocusGlow: shadow | 0 0 0 1 --link / 1;
 }
@@ -80,12 +80,12 @@ Button:toggled:hover {
 }
 
 Button {
-  background: --parent;
+  background: --bg;
 }
 
 Input {
   shadow: --defaultInputBevel;
-  background: --parent;
+  background: $mod(--bg -10);
 }
 
 PanelHeader {
@@ -97,5 +97,5 @@ Tab:hover {
 }
 
 Tab {
-  background: --parent;
+  background: --bg;
 }

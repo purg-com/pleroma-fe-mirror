@@ -109,7 +109,7 @@ export const findColor = (color, { dynamicVars, staticVars }) => {
       try {
         targetColor = process(color, colorFunctions, { findColor }, { dynamicVars, staticVars })
       } catch (e) {
-        console.error('Failure executing color function', e)
+        console.error('Failure executing color function', e ,'\n Function: ' + color)
         targetColor = '#FF00FF'
       }
     }
