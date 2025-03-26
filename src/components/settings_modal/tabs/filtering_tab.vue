@@ -76,7 +76,7 @@
             <div
               class="mute-filter"
               :style="{ order: filter[1].order }"
-              v-for="filter in muteFilters"
+              v-for="filter in muteFiltersDraft"
               :key="filter[0]"
             >
               <div class="filter-name">
@@ -200,6 +200,16 @@
                   @click="deleteFilter(filter[0])"
                 >
                   {{ $t('settings.filter.delete') }}
+                </button>
+                {{ ' ' }}
+                <button
+                  class="save-button button-default"
+                  :class="{ disabled: !muteFiltersDraftDirty[filter[0]] }"
+                  :disabled="!muteFiltersDraftDirty[filter[0]]"
+                  type="button"
+                  @click="saveFilter(filter[0])"
+                >
+                  {{ $t('settings.filter.save') }}
                 </button>
               </div>
             </div>

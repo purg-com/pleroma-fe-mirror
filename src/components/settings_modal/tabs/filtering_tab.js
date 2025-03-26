@@ -1,4 +1,4 @@
-import { throttle } from 'lodash'
+import { throttle, cloneDeep } from 'lodash'
 import { mapState, mapActions } from 'pinia'
 import { useServerSideStorageStore } from 'src/stores/serverSideStorage'
 import { v4 as uuidv4 } from 'uuid';
@@ -14,12 +14,19 @@ import SharedComputedObject from '../helpers/shared_computed_object.js'
 
 const FilteringTab = {
   data () {
+    console.log(cloneDeep(useServerSideStorageStore().prefsStorage.simple.muteFilters))
     return {
       replyVisibilityOptions: ['all', 'following', 'self'].map(mode => ({
         key: mode,
         value: mode,
         label: this.$t(`settings.reply_visibility_${mode}`)
-      }))
+      })),
+      muteFiltersDraftObject: cloneDeep(useServerSideStorageStore().prefsStorage.simple.muteFilters),
+      muteFiltersDraftDirty: Object.fromEntries(
+        Object.entries(
+          useServerSideStorageStore().prefsStorage.simple.muteFilters
+        ).map(([k]) => [k, false])
+      )
     }
   },
   components: {
@@ -38,12 +45,13 @@ const FilteringTab = {
         muteFilters: store => Object.entries(store.prefsStorage.simple.muteFilters),
         muteFiltersObject: store => store.prefsStorage.simple.muteFilters
       }
-    )
+    ),
+    muteFiltersDraft () {
+      return Object.entries(this.muteFiltersDraftObject)
+    }
   },
   methods: {
-    ...mapActions(useServerSideStorageStore, ['unsetPreference']),
-    pushServerSideStorage: throttle(() => useServerSideStorageStore().pushServerSideStorage(), 500),
-    setPreference: throttle(x => useServerSideStorageStore().setPreference(x), 500),
+    ...mapActions(useServerSideStorageStore, ['setPreference', 'unsetPreference', 'pushServerSideStorage']),
     getDatetimeLocal (timestamp) {
       const date = new Date(timestamp)
       const datetime = [
@@ -84,22 +92,25 @@ const FilteringTab = {
       }
       const newId = uuidv4()
 
+      this.muteFiltersDraftObject[newId] = filter
       this.setPreference({ path: 'simple.muteFilters.' + newId , value: filter })
       this.pushServerSideStorage()
     },
     copyFilter (id) {
-      const filter = { ...this.muteFiltersObject[id] }
+      const filter = { ...this.muteFiltersDraftObject[id] }
       const newId = uuidv4()
 
+      this.muteFiltersDraftObject[newId] = filter
       this.setPreference({ path: 'simple.muteFilters.' + newId , value: filter })
       this.pushServerSideStorage()
     },
     deleteFilter (id) {
+      delete this.muteFiltersDraftObject[id]
       this.unsetPreference({ path: 'simple.muteFilters.' + id , value: null })
       this.pushServerSideStorage()
     },
     updateFilter(id, field, value) {
-      const filter = { ...this.muteFiltersObject[id] }
+      const filter = { ...this.muteFiltersDraftObject[id] }
       if (field === 'expires-never') {
         // filter[field] = value
         if (!value) {
@@ -115,8 +126,15 @@ const FilteringTab = {
       } else {
         filter[field] = value
       }
-      this.setPreference({ path: 'simple.muteFilters.' + id , value: filter })
+      this.muteFiltersDraftObject[id] = filter
+      this.muteFiltersDraftDirty[id] = true
+      console.log(this.muteFiltersDraftDirty)
+    },
+    saveFilter(id) {
+      this.setPreference({ path: 'simple.muteFilters.' + id , value: this.muteFiltersDraftObject[id] })
       this.pushServerSideStorage()
+      this.muteFiltersDraftDirty[id] = false
+      console.log(this.muteFiltersDraftDirty)
     }
   },
   // Updating nested properties

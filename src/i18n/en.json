@@ -422,6 +422,7 @@
       "expires": "Expires",
       "expired": "Expired",
       "copy": "Copy filter",
+      "save": "Save filter",
       "delete": "Remove filter",
       "new": "Create filter",
       "regexp_error": "Invalid Regular Expression",
