@@ -15,9 +15,16 @@
           :class="{ 'menu-checkbox-checked': status.bookmark_folder_id == folder.id }"
         />
         <StillImage
+          v-if="folder.emoji_url"
           :src="folder.emoji_url"
           class="emoji"
         />
+        <span
+          v-else
+          class="iconLetter fa-scale-110 fa-old-padding"
+        >
+          {{ folder.name[0] }}
+        </span>
         {{ ' ' + folder.name }}
       </button>
     </div>
