@@ -24,7 +24,7 @@
           :style="{ '--fa-animation-duration': '750ms' }"
           fixed-width
         />
-        <template v-if="!buttonClass.disabled && button.toggleable?.(funcArg) && button.active">
+        <template v-if="!buttonClass.disabled && (!button.interactive || button?.interactive(funcArg)) && button.toggleable?.(funcArg) && button.active">
           <FAIcon
             v-if="button.active(funcArg)"
             class="active-marker"
