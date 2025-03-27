@@ -74,10 +74,10 @@
           <h3>{{ $t('settings.filter.mute_filter') }}</h3>
           <div class="muteFilterContainer">
             <div
-              class="mute-filter"
-              :style="{ order: filter[1].order }"
               v-for="filter in muteFiltersDraft"
               :key="filter[0]"
+              class="mute-filter"
+              :style="{ order: filter[1].order }"
             >
               <div class="filter-name">
                 <label
@@ -119,7 +119,7 @@
                 <Select
                   :id="'filterType' + filter[0]"
                   class="filter-field-value"
-                  :modelValue="filter[1].type"
+                  :model-value="filter[1].type"
                   @update:model-value="updateFilter(filter[0], 'type', $event)"
                 >
                   <option value="word">
