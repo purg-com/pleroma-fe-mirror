@@ -137,6 +137,9 @@ const defaultState = {
   absoluteTimeFormatMinAge: '0d',
   absoluteTime12h: '24h',
 
+  // Scroll parent (window or ref)
+  scrollParentIsWindow: true,
+
   // Nasty stuff
   customEmoji: [],
   customEmojiFetched: false,
