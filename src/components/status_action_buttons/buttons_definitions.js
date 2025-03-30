@@ -30,8 +30,8 @@ export const BUTTONS = [{
   label: ({ status }) => status.repeated
     ? 'tool_tip.unrepeat'
     : 'tool_tip.repeat',
-  icon ({ status }) {
-    if (PRIVATE_SCOPES.has(status.visibility)) {
+  icon ({ status, currentUser }) {
+    if (currentUser.id !== status.user.id && PRIVATE_SCOPES.has(status.visibility)) {
       return 'lock'
     }
     return 'retweet'
@@ -40,7 +40,7 @@ export const BUTTONS = [{
   active: ({ status }) => status.repeated,
   counter: ({ status }) => status.repeat_num,
   anonLink: true,
-  interactive: ({ status, loggedIn }) => loggedIn && !PRIVATE_SCOPES.has(status.visibility),
+  interactive: ({ status, currentUser }) => !!currentUser && (currentUser.id === status.user.id || !PRIVATE_SCOPES.has(status.visibility)),
   toggleable: true,
   confirm: ({ status, getters }) => !status.repeated && getters.mergedConfig.modalOnRepeat,
   confirmStrings: {
