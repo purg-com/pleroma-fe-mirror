@@ -12,7 +12,7 @@
       :title="$t(button.label(funcArg))"
       target="_blank"
       :tabindex="0"
-      :disabled="buttonClass.disabled"
+      :disabled="this.button.interactive ? !this.button.interactive(this.funcArg) : false"
       :href="getComponent(button) == 'a' ? button.link?.(funcArg) || remoteInteractionLink : undefined"
       @click="doActionWrap(button, outerClose)"
     >
