@@ -364,7 +364,7 @@
     }
   }
 
-  @media all and (max-width: 800px) {
+  @media all and (width <= 800px) {
     .repeater-avatar {
       margin-left: 20px;
     }

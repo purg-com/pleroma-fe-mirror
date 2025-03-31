@@ -60,8 +60,7 @@
     &.-tall-status {
       position: relative;
       height: 220px;
-      overflow-x: hidden;
-      overflow-y: hidden;
+      overflow: hidden;
       z-index: 1;
 
       .media-body {
