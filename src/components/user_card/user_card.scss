@@ -26,7 +26,13 @@
       linear-gradient(to top, white, transparent) bottom no-repeat,
       linear-gradient(to top, white, white);
     // Autoprefixer seem to ignore this one, and also syntax is different
+    /* stylelint-disable mask-composite */
+    /* stylelint-disable declaration-property-value-no-unknown */
+
+    /* TODO check if this is still needed */
     mask-composite: xor;
+    /* stylelint-enable declaration-property-value-no-unknown */
+    /* stylelint-enable mask-composite */
     mask-composite: exclude;
     background-size: cover;
     mask-size: 100% 60%;
@@ -155,7 +161,7 @@
   }
 
   .bottom-line {
-    font-weight: light;
+    font-weight: lighter;
     font-size: 1.1em;
     align-items: baseline;
 

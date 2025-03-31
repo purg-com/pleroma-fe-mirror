@@ -43,7 +43,7 @@
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
         padding-bottom: 99px;
-        margin-bottom: 6px - 99px;
+        margin-bottom: calc(6px - 99px);
       }
     }
 
