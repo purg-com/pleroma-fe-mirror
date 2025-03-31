@@ -190,20 +190,15 @@ export default {
 
   .header {
     grid-area: header;
-    justify-self: center;
-    align-self: baseline;
+    place-self: baseline center;
     line-height: 2;
   }
 
   .invalid-container {
     position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    inset: 0;
     display: grid;
-    align-items: center;
-    justify-items: center;
+    place-items: center center;
     background-color: rgba(100 0 0 / 50%);
 
     .alert {
