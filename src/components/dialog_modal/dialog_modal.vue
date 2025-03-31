@@ -106,7 +106,6 @@
     flex-direction: column;
     justify-content: flex-end;
     grid-template-columns: 1fr;
-    grid-auto-columns: none;
     grid-auto-rows: auto;
     grid-auto-flow: row dense;
 

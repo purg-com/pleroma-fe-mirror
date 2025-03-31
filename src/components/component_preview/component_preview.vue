@@ -209,7 +209,7 @@ export default {
   .assists {
     grid-area: assists;
     display: grid;
-    grid-auto-flow: rows;
+    grid-auto-flow: row;
     grid-auto-rows: 2em;
     grid-gap: 0.5em;
   }

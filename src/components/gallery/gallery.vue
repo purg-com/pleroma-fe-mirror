@@ -157,7 +157,13 @@
         linear-gradient(to top, white, white);
 
       /* Autoprefixed seem to ignore this one, and also syntax is different */
+      /* stylelint-disable mask-composite */
+      /* stylelint-disable declaration-property-value-no-unknown */
+
+      /* TODO check if this is still needed */
       mask-composite: xor;
+      /* stylelint-enable declaration-property-value-no-unknown */
+      /* stylelint-enable mask-composite */
       mask-composite: exclude;
     }
   }
