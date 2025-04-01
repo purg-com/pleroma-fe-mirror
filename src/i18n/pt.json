@@ -835,8 +835,7 @@
     "multiple_choices": "Escolha múltipla",
     "type": "Tipo de sondagem",
     "add_poll": "Adicionar Sondagem",
-    "votes_count": "{count} voto | {count} votos",
-    "people_voted_count": "{count} pessoa votou | {count} pessoas votaram"
+    "votes_count": "{count} voto | {count} votos"
   },
   "importer": {
     "error": "Ocorreu um erro ao importar este ficheiro.",

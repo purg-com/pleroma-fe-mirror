@@ -699,8 +699,7 @@
     "option": "Вариант",
     "add_option": "Добавить вариант",
     "add_poll": "Прикрепить опрос",
-    "votes_count": "{count} голос | {count} голосов",
-    "people_voted_count": "{count} человек проголосовал | {count} человек проголосовали"
+    "votes_count": "{count} голос | {count} голосов"
   },
   "media_modal": {
     "next": "Следующая",

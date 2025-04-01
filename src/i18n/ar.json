@@ -708,7 +708,6 @@
     "add_poll": "أضف استطلاعًا",
     "add_option": "أضف خيارًا",
     "option": "خيار",
-    "people_voted_count": "{count} شخص صوّت| {count} شخص صوّت",
     "votes_count": "{count} صوت | {count} صوت"
   },
   "emoji": {

@@ -148,7 +148,6 @@
     "option": "Відповідь",
     "add_poll": "Додати опитування",
     "not_enough_options": "Замало унікальних варіантів в опитуванні",
-    "people_voted_count": "{count} особа проголосувала | {count} осіб проголосувало",
     "votes_count": "{count} голос | {count} голосів"
   },
   "notifications": {

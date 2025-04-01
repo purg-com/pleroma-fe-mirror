@@ -129,7 +129,6 @@
     "expires_in": "La encuesta termina en {0}",
     "expired": "La encuesta terminó hace {0}",
     "not_enough_options": "Muy pocas opciones únicas en la encuesta",
-    "people_voted_count": "{count} persona votó | {count} personas votaron",
     "votes_count": "{count} voto | {count} votos"
   },
   "emoji": {

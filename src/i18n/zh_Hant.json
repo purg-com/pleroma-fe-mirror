@@ -23,8 +23,7 @@
     "option": "選項",
     "add_option": "增加選項",
     "add_poll": "增加投票",
-    "votes_count": "{count} 票 | {count} 票",
-    "people_voted_count": "{count} 人已投票 | {count} 人已投票"
+    "votes_count": "{count} 票 | {count} 票"
   },
   "notifications": {
     "reacted_with": "作出了 {0} 的反應",

@@ -167,7 +167,6 @@
     "add_option": "Pridať možnosť",
     "option": "Možnosť",
     "votes": "hlasy",
-    "people_voted_count": "{count} volič | {count} voličov",
     "votes_count": "{count} hlas | {count} hlasov",
     "vote": "Hlas",
     "type": "Typ ankety",

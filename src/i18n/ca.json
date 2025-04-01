@@ -705,7 +705,6 @@
     "add_option": "Afegeix opció",
     "add_poll": "Afegeix enquesta",
     "expiry": "Temps de vida de l'enquesta",
-    "people_voted_count": "{count} persona ha votat | {count} persones han votat",
     "votes_count": "{count} vot | {count} vots",
     "not_enough_options": "L'enquesta no té suficients opcions úniques"
   },

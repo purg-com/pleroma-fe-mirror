@@ -129,8 +129,7 @@
     "expires_in": "Inkesta {0} bukatzen da",
     "expired": "Inkesta {0} bukatu zen",
     "not_enough_options": "Aukera gutxiegi inkestan",
-    "votes_count": "{count} boto| {count} boto",
-    "people_voted_count": "Pertsona batek bozkatu du | {count} pertsonak bozkatu dute"
+    "votes_count": "{count} boto| {count} boto"
   },
   "emoji": {
     "stickers": "Pegatinak",

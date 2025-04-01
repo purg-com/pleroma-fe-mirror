@@ -170,8 +170,7 @@
     "expires_in": "投票于 {0} 后结束",
     "expired": "投票 {0} 前已结束",
     "not_enough_options": "投票的选项太少",
-    "votes_count": "{count} 票 | {count} 票",
-    "people_voted_count": "{count} 人已投票 | {count} 人已投票"
+    "votes_count": "{count} 票 | {count} 票"
   },
   "stickers": {
     "add_sticker": "添加贴纸"
