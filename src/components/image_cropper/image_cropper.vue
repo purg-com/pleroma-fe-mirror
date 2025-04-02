@@ -1,14 +1,43 @@
 <template>
   <div class="image-cropper">
     <div v-if="dataUrl">
-      <div class="image-cropper-image-container">
-        <img
-          ref="img"
+      <cropper-canvas
+        background
+        class="image-cropper-canvas"
+        ref="cropperCanvas"
+        height="25em"
+      >
+        <cropper-image
           :src="dataUrl"
-          alt=""
-          @load.stop="createCropper"
+          alt="Picture"
+          ref="cropperImage"
+          class="image-cropper-image"
+          translatable
+          scalable
+        />
+        <cropper-shade hidden />
+        <cropper-handle action="select" plain />
+        <cropper-selection
+          ref="cropperSelection"
+          initial-coverage="1"
+          aspect-ratio="1"
+          movable
+          resizable
+          @change="onCropperSelectionChange"
         >
-      </div>
+          <cropper-grid role="grid" covered></cropper-grid>
+          <cropper-crosshair centered></cropper-crosshair>
+          <cropper-handle action="move" theme-color="rgba(255, 255, 255, 0.35)"></cropper-handle>
+          <cropper-handle action="n-resize"></cropper-handle>
+          <cropper-handle action="e-resize"></cropper-handle>
+          <cropper-handle action="s-resize"></cropper-handle>
+          <cropper-handle action="w-resize"></cropper-handle>
+          <cropper-handle action="ne-resize"></cropper-handle>
+          <cropper-handle action="nw-resize"></cropper-handle>
+          <cropper-handle action="se-resize"></cropper-handle>
+          <cropper-handle action="sw-resize"></cropper-handle>
+        </cropper-selection>
+      </cropper-canvas>
       <div class="image-cropper-buttons-wrapper">
         <button
           class="button-default btn"
@@ -55,20 +84,18 @@
     display: none;
   }
 
-  &-image-container {
-    position: relative;
-
-    img {
-      display: block;
-      max-width: 100%;
-    }
+  &-canvas {
+    height: 25em;
+    width: 25em;
   }
 
   &-buttons-wrapper {
-    margin-top: 10px;
+    display: grid;
+    grid-gap: 0.5em;
+    grid-template-columns: 1fr 1fr 1fr;
 
     button {
-      margin-top: 5px;
+      margin-top: 1em;
     }
   }
 }
