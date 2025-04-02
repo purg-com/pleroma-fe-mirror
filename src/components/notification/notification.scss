@@ -3,7 +3,7 @@
   border-bottom: 1px solid;
   border-color: var(--border);
   word-wrap: break-word;
-  word-break: break-word;
+  word-break: break-all;
 
   &.Status {
     /* stylelint-disable-next-line declaration-no-important */

@@ -77,7 +77,7 @@
 
   .hidden {
     display: none;
-    visibility: "hidden";
+    visibility: hidden;
   }
 }
 </style>
