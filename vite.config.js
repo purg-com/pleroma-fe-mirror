@@ -97,6 +97,9 @@ export default defineConfig(async ({ mode, command }) => {
               if (tag === 'pinch-zoom') {
                 return true
               }
+              if (tag.startsWith('cropper-')) {
+                return true
+              }
               return false
             }
           }
