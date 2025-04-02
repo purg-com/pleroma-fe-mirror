@@ -70,6 +70,7 @@ const FilteringTab = {
     checkRegexValid (id) {
       const filter = this.muteFiltersObject[id]
       if (filter.type !== 'regexp') return true
+      if (filter.type !== 'user_regexp') return true
       const { value } = filter
       let valid = true
       try {

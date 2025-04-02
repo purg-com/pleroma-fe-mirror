@@ -416,6 +416,8 @@
       "type": "Filter type",
       "regexp": "RegExp",
       "plain": "Simple",
+      "user": "User (Simple)",
+      "user_regexp": "User (RegExp)",
       "hide": "Hide completely",
       "name": "Name",
       "value": "Value",

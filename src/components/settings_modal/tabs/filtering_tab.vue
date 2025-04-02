@@ -128,6 +128,12 @@
                   <option value="regexp">
                     {{ $t('settings.filter.regexp') }}
                   </option>
+                  <option value="user">
+                    {{ $t('settings.filter.user') }}
+                  </option>
+                  <option value="user_regexp">
+                    {{ $t('settings.filter.user_regexp') }}
+                  </option>
                 </Select>
               </div>
               <div class="filter-value filter-field">
