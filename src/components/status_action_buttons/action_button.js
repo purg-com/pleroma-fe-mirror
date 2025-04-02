@@ -124,6 +124,7 @@ export default {
       }
     },
     doActionWrap (button, close = () => {}) {
+      if (this.button.interactive ? !this.button.interactive(this.funcArg) : false) return
       this.$emit('interacted')
       if (button.name === 'emoji') {
         this.$refs.picker.showPicker()

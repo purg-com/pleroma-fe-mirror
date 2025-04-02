@@ -223,7 +223,7 @@
   .userlist-placeholder {
     display: flex;
     justify-content: center;
-    align-items: middle;
+    align-items: center;
     padding: 2em;
   }
 }
@@ -232,7 +232,7 @@
   .panel-body {
     display: flex;
     justify-content: center;
-    align-items: middle;
+    align-items: center;
     padding: 7em;
   }
 }

@@ -15,7 +15,7 @@
     white-space: pre-wrap;
     overflow-wrap: break-word;
     word-wrap: break-word;
-    word-break: break-word;
+    word-break: break-all;
     line-height: var(--post-line-height);
   }
 
@@ -60,8 +60,7 @@
     &.-tall-status {
       position: relative;
       height: 220px;
-      overflow-x: hidden;
-      overflow-y: hidden;
+      overflow: hidden;
       z-index: 1;
 
       .media-body {
@@ -71,7 +70,13 @@
           linear-gradient(to top, white, white);
 
         /* Autoprefixed seem to ignore this one, and also syntax is different */
+        /* stylelint-disable mask-composite */
+        /* stylelint-disable declaration-property-value-no-unknown */
+
+        /* TODO check if this is still needed */
         mask-composite: xor;
+        /* stylelint-enable declaration-property-value-no-unknown */
+        /* stylelint-enable mask-composite */
         mask-composite: exclude;
       }
     }
@@ -110,7 +115,7 @@
   }
 
   &.-compact {
-    align-items: top;
+    align-items: start;
     flex-direction: row;
 
     --emoji-size: calc(var(--emojiSize, 32px) / 2);
@@ -131,7 +136,13 @@
       mask-image: linear-gradient(to bottom, white 2em, transparent 3em);
 
       /* Autoprefixed seem to ignore this one, and also syntax is different */
+      /* stylelint-disable mask-composite */
+      /* stylelint-disable declaration-property-value-no-unknown */
+
+      /* TODO check if this is still needed */
       mask-composite: xor;
+      /* stylelint-enable declaration-property-value-no-unknown */
+      /* stylelint-enable mask-composite */
       mask-composite: exclude;
     }
 

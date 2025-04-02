@@ -112,7 +112,7 @@ export const colorFunctions = {
       const color = convert(findColor(colorArg, { dynamicVars, staticVars })).rgb
       const amount = Number(amountArg)
 
-      const effectiveBackground = dynamicVars.lowerLevelBackground
+      const effectiveBackground = dynamicVars.lowerLevelBackground ?? color
       const isLightOnDark = relativeLuminance(convert(effectiveBackground).rgb) < 0.5
       const mod = isLightOnDark ? 1 : -1
       return brightness(amount * mod, color).rgb
