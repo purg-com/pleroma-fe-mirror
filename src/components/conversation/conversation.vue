@@ -322,10 +322,7 @@
       content: "";
       display: block;
       position: absolute;
-      top: calc(var(--___margin) * -1);
-      bottom: calc(var(--___margin) * -1);
-      left: calc(var(--___margin) * -1);
-      right: calc(var(--___margin) * -1);
+      inset: calc(var(--___margin) * -1);
       background: var(--background);
       backdrop-filter: var(--__panel-backdrop-filter);
     }
