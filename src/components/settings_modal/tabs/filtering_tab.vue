@@ -4,57 +4,26 @@
     class="filtering-tab"
   >
     <div class="setting-item">
-      <h2>{{ $t('settings.posts') }}</h2>
       <ul class="setting-list">
+        <h2>{{ $t('settings.filter.clutter') }}</h2>
         <li>
-          <BooleanSetting path="hideFilteredStatuses">
-            {{ $t('settings.hide_filtered_statuses') }}
-          </BooleanSetting>
-          <ul class="setting-list suboptions">
-            <li>
-              <BooleanSetting
-                parent-path="hideFilteredStatuses"
-                :parent-invert="true"
-                path="hideWordFilteredPosts"
-              >
-                {{ $t('settings.hide_wordfiltered_statuses') }}
-              </BooleanSetting>
-            </li>
-            <li>
-              <BooleanSetting
-                v-if="user"
-                parent-path="hideFilteredStatuses"
-                :parent-invert="true"
-                path="hideMutedThreads"
-              >
-                {{ $t('settings.hide_muted_threads') }}
-              </BooleanSetting>
-            </li>
-            <li>
-              <BooleanSetting
-                v-if="user"
-                parent-path="hideFilteredStatuses"
-                :parent-invert="true"
-                path="hideMutedPosts"
-              >
-                {{ $t('settings.hide_muted_posts') }}
-              </BooleanSetting>
-            </li>
-          </ul>
+          <ChoiceSetting
+            v-if="user"
+            id="replyVisibility"
+            path="replyVisibility"
+            :options="replyVisibilityOptions"
+          >
+            {{ $t('settings.replies_in_timeline') }}
+          </ChoiceSetting>
         </li>
         <li>
-          <BooleanSetting path="muteBotStatuses">
-            {{ $t('settings.mute_bot_posts') }}
-          </BooleanSetting>
-        </li>
-        <li>
-          <BooleanSetting path="muteSensitiveStatuses">
-            {{ $t('settings.mute_sensitive_posts') }}
-          </BooleanSetting>
-        </li>
-        <li>
-          <BooleanSetting path="hidePostStats">
+          <BooleanSetting expert="1" path="hidePostStats">
             {{ $t('settings.hide_post_stats') }}
+          </BooleanSetting>
+        </li>
+        <li>
+          <BooleanSetting expert="1" path="hideUserStats">
+            {{ $t('settings.hide_user_stats') }}
           </BooleanSetting>
         </li>
         <li>
@@ -62,16 +31,95 @@
             {{ $t('settings.hide_actor_type_indication') }}
           </BooleanSetting>
         </li>
-        <ChoiceSetting
-          v-if="user"
-          id="replyVisibility"
-          path="replyVisibility"
-          :options="replyVisibilityOptions"
-        >
-          {{ $t('settings.replies_in_timeline') }}
-        </ChoiceSetting>
         <li>
-          <h3>{{ $t('settings.filter.mute_filter') }}</h3>
+          <BooleanSetting path="hideScrobbles">
+            {{ $t('settings.hide_scrobbles') }}
+          </BooleanSetting>
+          <ul class="setting-list suboptions">
+            <li>
+              <UnitSetting
+                key="hideScrobblesAfter"
+                path="hideScrobblesAfter"
+                :units="['m', 'h', 'd']"
+                unit-set="time"
+                expert="1"
+              >
+                {{ $t('settings.hide_scrobbles_after') }}
+              </UnitSetting>
+            </li>
+          </ul>
+        </li>
+        <h3>{{ $t('settings.attachments') }}</h3>
+        <li>
+          <IntegerSetting
+            path="maxThumbnails"
+            expert="1"
+            :min="0"
+          >
+            {{ $t('settings.max_thumbnails') }}
+          </IntegerSetting>
+        </li>
+        <li>
+          <BooleanSetting path="hideAttachments">
+            {{ $t('settings.hide_attachments_in_tl') }}
+          </BooleanSetting>
+        </li>
+        <li>
+          <BooleanSetting path="hideAttachmentsInConv">
+            {{ $t('settings.hide_attachments_in_convo') }}
+          </BooleanSetting>
+        </li>
+      </ul>
+      <ul class="setting-list">
+        <h2>{{ $t('settings.filter.mute_filter') }}</h2>
+        <li>
+          <li>
+            <BooleanSetting path="hideFilteredStatuses">
+              {{ $t('settings.hide_muted_statuses') }}
+            </BooleanSetting>
+            <ul class="setting-list suboptions">
+              <li>
+                <BooleanSetting
+                  parent-path="hideFilteredStatuses"
+                  :parent-invert="true"
+                  path="hideWordFilteredPosts"
+                  expert="1"
+                >
+                  {{ $t('settings.hide_filtered_statuses') }}
+                </BooleanSetting>
+              </li>
+              <li>
+                <BooleanSetting
+                  v-if="user"
+                  parent-path="hideFilteredStatuses"
+                  :parent-invert="true"
+                  path="hideMutedThreads"
+                >
+                  {{ $t('settings.hide_muted_threads') }}
+                </BooleanSetting>
+              </li>
+              <li>
+                <BooleanSetting
+                  v-if="user"
+                  parent-path="hideFilteredStatuses"
+                  :parent-invert="true"
+                  path="hideMutedPosts"
+                >
+                  {{ $t('settings.hide_muted_posts') }}
+                </BooleanSetting>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <BooleanSetting path="muteBotStatuses">
+              {{ $t('settings.mute_bot_posts') }}
+            </BooleanSetting>
+          </li>
+          <li>
+            <BooleanSetting path="muteSensitiveStatuses">
+              {{ $t('settings.mute_sensitive_posts') }}
+            </BooleanSetting>
+          </li>
           <div class="muteFilterContainer">
             <div
               v-for="filter in muteFiltersDraft"
@@ -114,6 +162,27 @@
               </div>
               <div class="filter-type filter-field">
                 <label :for="'filterType' + filter[0]">
+                  <HelpIndicator>
+                    <p>
+                      {{ $t('settings.filter.help.word') }}
+                    </p>
+                    <p>
+                      {{ $t('settings.filter.help.user') }}
+                    </p>
+                    <i18n-t
+                      keypath="settings.filter.help.regexp"
+                      tag="p"
+                    >
+                      <template #link>
+                        <a
+                          :href="$t('settings.filter.help.regexp_url')"
+                          target="_blank"
+                        >
+                          {{ $t('settings.filter.help.regexp_link') }}
+                        </a>
+                      </template>
+                    </i18n-t>
+                  </HelpIndicator>
                   {{ $t('settings.filter.type') }}
                 </label>
                 <Select
@@ -229,55 +298,6 @@
               </button>
             </div>
           </div>
-        </li>
-        <h3>{{ $t('settings.attachments') }}</h3>
-        <li>
-          <IntegerSetting
-            path="maxThumbnails"
-            expert="1"
-            :min="0"
-          >
-            {{ $t('settings.max_thumbnails') }}
-          </IntegerSetting>
-        </li>
-        <li>
-          <BooleanSetting path="hideAttachments">
-            {{ $t('settings.hide_attachments_in_tl') }}
-          </BooleanSetting>
-        </li>
-        <li>
-          <BooleanSetting path="hideAttachmentsInConv">
-            {{ $t('settings.hide_attachments_in_convo') }}
-          </BooleanSetting>
-        </li>
-        <li>
-          <BooleanSetting path="hideScrobbles">
-            {{ $t('settings.hide_scrobbles') }}
-          </BooleanSetting>
-        </li>
-        <li>
-          <UnitSetting
-            key="hideScrobblesAfter"
-            path="hideScrobblesAfter"
-            :units="['m', 'h', 'd']"
-            unit-set="time"
-            expert="1"
-          >
-            {{ $t('settings.hide_scrobbles_after') }}
-          </UnitSetting>
-        </li>
-      </ul>
-    </div>
-    <div
-      v-if="expertLevel > 0"
-      class="setting-item"
-    >
-      <h2>{{ $t('settings.user_profiles') }}</h2>
-      <ul class="setting-list">
-        <li>
-          <BooleanSetting path="hideUserStats">
-            {{ $t('settings.hide_user_stats') }}
-          </BooleanSetting>
         </li>
       </ul>
     </div>

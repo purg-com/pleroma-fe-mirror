@@ -7,6 +7,7 @@ import BooleanSetting from '../helpers/boolean_setting.vue'
 import ChoiceSetting from '../helpers/choice_setting.vue'
 import UnitSetting from '../helpers/unit_setting.vue'
 import IntegerSetting from '../helpers/integer_setting.vue'
+import HelpIndicator from '../helpers/help_indicator.vue'
 import Checkbox from 'src/components/checkbox/checkbox.vue'
 import Select from 'src/components/select/select.vue'
 
@@ -35,7 +36,8 @@ const FilteringTab = {
     UnitSetting,
     IntegerSetting,
     Checkbox,
-    Select
+    Select,
+    HelpIndicator
   },
   computed: {
     ...SharedComputedObject(),

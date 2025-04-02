@@ -412,6 +412,7 @@
     "scale_and_layout": "Interface scale and layout",
     "enabled": "Enabled",
     "filter": {
+      "clutter": "Remove clutter",
       "mute_filter": "Mute Filters",
       "type": "Filter type",
       "regexp": "RegExp",
@@ -428,7 +429,14 @@
       "delete": "Remove filter",
       "new": "Create filter",
       "regexp_error": "Invalid Regular Expression",
-      "never_expires": "Never"
+      "never_expires": "Never",
+      "help": {
+        "word": "Simple and RegExp filters test against post's content and subject.",
+        "user": "User filter matches full user handle (user@domain) in the following: author, reply-to and mentions",
+        "regexp": "Regex variants are more advanced and use {link} to match instead of simple substring search.",
+        "regexp_link": "Regular Expressions",
+        "regexp_url": "https://en.wikipedia.org/wiki/Regular_expression"
+      }
     },
     "mfa": {
       "otp": "OTP",
@@ -595,6 +603,7 @@
     "hide_post_stats": "Hide post statistics (e.g. the number of favorites)",
     "hide_user_stats": "Hide user statistics (e.g. the number of followers)",
     "hide_filtered_statuses": "Hide all filtered posts",
+    "hide_muted_statuses": "Completely hide all muted posts",
     "hide_wordfiltered_statuses": "Hide word-filtered statuses",
     "hide_muted_threads": "Hide muted threads",
     "import_blocks_from_a_csv_file": "Import blocks from a csv file",
