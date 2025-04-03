@@ -14,8 +14,7 @@
   & .summary {
     white-space: pre-wrap;
     overflow-wrap: break-word;
-    word-wrap: break-word;
-    word-break: break-all;
+    text-wrap: pretty;
     line-height: var(--post-line-height);
   }
 
@@ -87,7 +86,8 @@
   & .status-unhider,
   & .cw-status-hider {
     display: inline-block;
-    word-break: break-all;
+    overflow-wrap: break-word;
+    text-wrap: pretty;
     width: 100%;
     text-align: center;
   }
@@ -107,7 +107,8 @@
 
   & .status-unhider,
   & .cw-status-hider {
-    word-break: break-all;
+    overflow-wrap: break-word;
+    text-wrap: pretty;
 
     svg {
       color: inherit;
