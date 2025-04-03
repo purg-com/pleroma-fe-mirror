@@ -31,7 +31,10 @@ const EmojiTab = {
       newPackName: '',
       deleteModalVisible: false,
       remotePackInstance: '',
-      remotePackDownloadAs: ''
+      remotePackDownloadAs: '',
+
+      remotePackURL: '',
+      remotePackFile: null
     }
   },
 
@@ -231,6 +234,47 @@ const EmojiTab = {
           this.remotePackDownloadAs = ''
         })
     },
+    dlRemoteURLPack () {
+      this.$store.state.api.backendInteractor.downloadRemoteEmojiPackZIP({
+        url: this.remotePackURL, packName: this.newPackName
+      })
+        .then(data => data.json())
+        .then(resp => {
+          if (resp === 'ok') {
+            this.$refs.additionalRemotePopover.hidePopover()
+
+            return this.refreshPackList()
+          } else {
+            this.displayError(resp.error)
+            return Promise.reject(resp)
+          }
+        }).then(done => {
+          this.packName = this.newPackName
+          this.newPackName = ''
+          this.remotePackURL = ''
+        })
+    },
+    dlRemoteFilePack () {
+      this.$store.state.api.backendInteractor.downloadRemoteEmojiPackZIP({
+        file: this.remotePackFile[0], packName: this.newPackName
+      })
+        .then(data => data.json())
+        .then(resp => {
+          if (resp === 'ok') {
+            this.$refs.additionalRemotePopover.hidePopover()
+
+            return this.refreshPackList()
+          } else {
+            this.displayError(resp.error)
+            return Promise.reject(resp)
+          }
+        }).then(done => {
+          this.packName = this.newPackName
+          this.newPackName = ''
+          this.remotePackURL = ''
+        })
+    },
+
     displayError (msg) {
       this.$store.useInterfaceStore().pushGlobalNotice({
         messageKey: 'admin_dash.emoji.error',
