@@ -53,12 +53,15 @@
   }
 
   .text-wrapper {
+    text-overflow: ellipsis;
+    word-break: break-word;
+    overflow: hidden;
     display: flex;
     flex-flow: column nowrap;
 
     &.-tall-status {
       position: relative;
-      height: 220px;
+      height: 16em;
       overflow: hidden;
       z-index: 1;
 

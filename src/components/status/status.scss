@@ -284,8 +284,6 @@
 
     & .status-username,
     & .mute-reason {
-      
-      word-break: normal;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
